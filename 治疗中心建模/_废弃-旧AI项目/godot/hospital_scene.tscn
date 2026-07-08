@@ -1,0 +1,78 @@
+[gd_scene load_steps=8 format=3 uid="uid://hospital_main"]
+
+[ext_resource type="PackedScene" uid="uid://hospital_model" path="res://models/hospital_phase2.glb" id="1"]
+[ext_resource type="Script" path="res://scenes/player.gd" id="2"]
+[ext_resource type="Script" path="res://scenes/load_hospital.gd" id="3"]
+
+[sub_resource type="BoxShape3D" id="GroundShape"]
+size = Vector3(300, 0.5, 260)
+
+[sub_resource type="CapsuleShape3D" id="PlayerCapsule"]
+radius = 0.25
+height = 1.7
+
+[sub_resource type="StandardMaterial3D" id="PlayerMat"]
+albedo_color = Color(0.85, 0.75, 0.65, 1.0)
+roughness = 0.8
+
+[sub_resource type="CapsuleMesh" id="PlayerMesh"]
+radius = 0.22
+height = 1.5
+material = SubResource("PlayerMat")
+
+[sub_resource type="Sky" id="Sky"]
+
+[node name="HospitalScene" type="Node3D"]
+
+; ============================================================
+; 光照
+; ============================================================
+[node name="SunLight" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866, -0.354, 0.354, 0, 0.707, 0.707, -0.5, -0.612, 0.612, 0, 0, 0)
+light_energy = 0.8
+shadow_enabled = true
+
+[node name="AmbientLight" type="WorldEnvironment" parent="."]
+environment = SubResource("Sky")
+
+; ============================================================
+; 地面 — 防止掉出世界
+; ============================================================
+[node name="Ground" type="StaticBody3D" parent="."]
+[node name="CollisionShape" type="CollisionShape3D" parent="Ground"]
+shape = SubResource("GroundShape")
+
+; ============================================================
+; 医院模型 (从 GLB 导入)
+;  在 Godot 中: 右键 → New Inherited Scene → 选 hospital_phase2.glb
+;  复制所有子节点到本场景 MainModel 下
+; ============================================================
+[node name="MainModel" type="Node3D" parent="."]
+script = ExtResource("3")
+
+; ============================================================
+; 玩家角色
+; ============================================================
+[node name="Player" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 110, 15, 0)
+script = ExtResource("2")
+
+[node name="Body" type="MeshInstance3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.85)
+mesh = SubResource("PlayerMesh")
+
+[node name="CollisionShape" type="CollisionShape3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.85)
+shape = SubResource("PlayerCapsule")
+
+[node name="Camera3D" type="Camera3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 4)
+fov = 50.0
+near = 0.3
+far = 500.0
+
+; ============================================================
+; 马路边界 — 越过触发空间拓扑
+; ============================================================
+[node name="RoadBoundary" type="Area3D" parent="."]
+; 脚本: 检测 body_entered → 传送角色到对面

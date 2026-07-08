@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>态度空间模型 · Attitude Space Model</title>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0d1117; color: #c9d1d9;
+    font-family: 'Segoe UI', 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
+    overflow: hidden; height: 100vh; display: flex;
+  }
+  #sidebar {
+    width: 320px; min-width: 320px;
+    background: #161b22; border-right: 1px solid #30363d;
+    display: flex; flex-direction: column; overflow-y: auto;
+    padding: 20px;
+  }
+  #sidebar h1 {
+    font-size: 20px; font-weight: 800; margin-bottom: 4px;
+    background: linear-gradient(135deg, #ff6b6b, #feca57, #48dbfb, #a29bfe);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  #sidebar .subtitle { font-size: 12px; color: #8b949e; margin-bottom: 16px; }
+  #sidebar h2 { font-size: 14px; color: #e6edf3; margin: 16px 0 8px; border-bottom: 1px solid #30363d; padding-bottom: 4px; }
+  #plot { flex: 1; cursor: grab; }
+  #plot:active { cursor: grabbing; }
+  .stat-row { display: flex; justify-content: space-between; font-size: 12px; padding: 3px 0; }
+  .stat-row .val { color: #58a6ff; font-weight: 600; }
+  .category-list { font-size: 11px; }
+  .category-list .cat-item {
+    display: flex; align-items: center; gap: 6px; padding: 3px 0;
+  }
+  .cat-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  #selected-info {
+    margin-top: 12px; padding: 10px; background: #1c2128;
+    border-radius: 8px; font-size: 11px; line-height: 1.6;
+    border: 1px solid #30363d; min-height: 60px;
+  }
+  #selected-info .sel-name { font-size: 18px; font-weight: 700; }
+  #selected-info .sel-cat  { color: #8b949e; }
+  .legend-row { display: flex; align-items: center; gap: 6px; font-size: 11px; margin: 2px 0; }
+  .legend-swatch { width: 14px; height: 14px; border-radius: 3px; flex-shrink: 0; }
+  .axis-legend { margin-top: 12px; font-size: 10px; color: #8b949e; }
+  .btn-group { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+  .btn-group button {
+    background: #21262d; border: 1px solid #30363d; color: #c9d1d9;
+    padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 11px;
+  }
+  .btn-group button:hover { background: #30363d; }
+  .btn-group button.active { background: #1f6feb; border-color: #1f6feb; color: #fff; }
+</style>
+</head>
+<body>
+
+<div id="sidebar">
+  <h1>态度空间模型</h1>
+  <div class="subtitle">Attitude Space Model<br>认知 × 情绪 × 行为 = 3³ = 27种态度</div>
+
+  <h2>📊 统计概览</h2>
+  <div class="stat-row"><span>正面倾向 (Σ&gt;0)</span><span class="val">10 种</span></div>
+  <div class="stat-row"><span>中性 (Σ=0)</span><span class="val">7 种</span></div>
+  <div class="stat-row"><span>负面倾向 (Σ&lt;0)</span><span class="val">10 种</span></div>
+
+  <h2>🏷️ 按分类</h2>
+  <div class="category-list">
+    <div class="cat-item">
+      <span class="cat-dot" style="background:#e74c3c"></span>
+      <span>一致型</span><span style="color:#58a6ff;margin-left:auto">3种</span>
+    </div>
+    <div style="font-size:10px;color:#8b949e;margin-left:16px;margin-bottom:4px">心悦诚服、随遇而安、深恶痛绝</div>
+    <div class="cat-item">
+      <span class="cat-dot" style="background:#f39c12"></span>
+      <span>行为冲突型</span><span style="color:#58a6ff;margin-left:auto">2种</span>
+    </div>
+    <div style="font-size:10px;color:#8b949e;margin-left:16px;margin-bottom:4px">有心无力、逆流而上</div>
+    <div class="cat-item">
+      <span class="cat-dot" style="background:#2ecc71"></span>
+      <span>情绪冲突型</span><span style="color:#58a6ff;margin-left:auto">2种</span>
+    </div>
+    <div style="font-size:10px;color:#8b949e;margin-left:16px;margin-bottom:4px">忍辱负重、进退两难</div>
+    <div class="cat-item">
+      <span class="cat-dot" style="background:#3498db"></span>
+      <span>认知冲突型</span><span style="color:#58a6ff;margin-left:auto">2种</span>
+    </div>
+    <div style="font-size:10px;color:#8b949e;margin-left:16px;margin-bottom:4px">知难而退、自欺欺人</div>
+    <div class="cat-item">
+      <span class="cat-dot" style="background:#9b59b6"></span>
+      <span>三维冲突型</span><span style="color:#58a6ff;margin-left:auto">18种</span>
+    </div>
+    <div style="font-size:10px;color:#8b949e;margin-left:16px;margin-bottom:4px">跃跃欲试、知行合一、静观其变、望而生畏、貌合神离、感情用事、拭目以待、望而却步、顺势而为、置身事外、勉为其难、冷眼旁观、避而远之、将信将疑、迫不得已、不以为然、敬而远之、黯然神伤</div>
+
+  </div>
+
+  <h2>🔍 强度筛选</h2>
+  <div class="btn-group" id="strength-btns">
+    <button class="active" data-strength="all">全部</button>
+    <button data-strength="0">I=0 (中性)</button>
+    <button data-strength="1">I=1 (单维)</button>
+    <button data-strength="2">I=2 (双维)</button>
+    <button data-strength="3">I=3 (三维)</button>
+  </div>
+
+  <div id="selected-info">
+    <span style="color:#8b949e">🖱️ 点击图中的点查看详情</span>
+  </div>
+
+  <div class="axis-legend">
+    <b>轴颜色编码：</b> R=认知轴 · G=情绪轴 · B=行为轴<br>
+    <b>距离公式：</b> d = √[(C₁−C₂)²+(E₁−E₂)²+(B₁−B₂)²]<br>
+    <b>强度 I</b>=C²+E²+B² &nbsp;
+    <b>冲突度 K</b>=max−min &nbsp;
+    <b>稳定度 S</b>=3−K
+  </div>
+</div>
+
+<div id="plot"></div>
+
+<script>
+const scatterData = [{"x": 1, "y": 1, "z": 1, "name": "心悦诚服", "category": "一致型", "sum": 3, "strength": 3, "conflict": 0, "stability": 3, "color": "rgb(255,255,255)", "label_c": "积极", "label_e": "积极", "label_b": "积极"}, {"x": 1, "y": 1, "z": 0, "name": "跃跃欲试", "category": "三维冲突型", "sum": 2, "strength": 2, "conflict": 1, "stability": 2, "color": "rgb(255,255,127)", "label_c": "积极", "label_e": "积极", "label_b": "中性"}, {"x": 1, "y": 1, "z": -1, "name": "有心无力", "category": "行为冲突型", "sum": 1, "strength": 3, "conflict": 2, "stability": 1, "color": "rgb(255,255,0)", "label_c": "积极", "label_e": "积极", "label_b": "消极"}, {"x": 1, "y": 0, "z": 1, "name": "知行合一", "category": "三维冲突型", "sum": 2, "strength": 2, "conflict": 1, "stability": 2, "color": "rgb(255,127,255)", "label_c": "积极", "label_e": "中性", "label_b": "积极"}, {"x": 1, "y": 0, "z": 0, "name": "静观其变", "category": "三维冲突型", "sum": 1, "strength": 1, "conflict": 1, "stability": 2, "color": "rgb(255,127,127)", "label_c": "积极", "label_e": "中性", "label_b": "中性"}, {"x": 1, "y": 0, "z": -1, "name": "望而生畏", "category": "三维冲突型", "sum": 0, "strength": 2, "conflict": 2, "stability": 1, "color": "rgb(255,127,0)", "label_c": "积极", "label_e": "中性", "label_b": "消极"}, {"x": 1, "y": -1, "z": 1, "name": "忍辱负重", "category": "情绪冲突型", "sum": 1, "strength": 3, "conflict": 2, "stability": 1, "color": "rgb(255,0,255)", "label_c": "积极", "label_e": "消极", "label_b": "积极"}, {"x": 1, "y": -1, "z": 0, "name": "貌合神离", "category": "三维冲突型", "sum": 0, "strength": 2, "conflict": 2, "stability": 1, "color": "rgb(255,0,127)", "label_c": "积极", "label_e": "消极", "label_b": "中性"}, {"x": 1, "y": -1, "z": -1, "name": "知难而退", "category": "认知冲突型", "sum": -1, "strength": 3, "conflict": 2, "stability": 1, "color": "rgb(255,0,0)", "label_c": "积极", "label_e": "消极", "label_b": "消极"}, {"x": 0, "y": 1, "z": 1, "name": "感情用事", "category": "三维冲突型", "sum": 2, "strength": 2, "conflict": 1, "stability": 2, "color": "rgb(127,255,255)", "label_c": "中性", "label_e": "积极", "label_b": "积极"}, {"x": 0, "y": 1, "z": 0, "name": "拭目以待", "category": "三维冲突型", "sum": 1, "strength": 1, "conflict": 1, "stability": 2, "color": "rgb(127,255,127)", "label_c": "中性", "label_e": "积极", "label_b": "中性"}, {"x": 0, "y": 1, "z": -1, "name": "望而却步", "category": "三维冲突型", "sum": 0, "strength": 2, "conflict": 2, "stability": 1, "color": "rgb(127,255,0)", "label_c": "中性", "label_e": "积极", "label_b": "消极"}, {"x": 0, "y": 0, "z": 1, "name": "顺势而为", "category": "三维冲突型", "sum": 1, "strength": 1, "conflict": 1, "stability": 2, "color": "rgb(127,127,255)", "label_c": "中性", "label_e": "中性", "label_b": "积极"}, {"x": 0, "y": 0, "z": 0, "name": "随遇而安", "category": "一致型", "sum": 0, "strength": 0, "conflict": 0, "stability": 3, "color": "rgb(127,127,127)", "label_c": "中性", "label_e": "中性", "label_b": "中性"}, {"x": 0, "y": 0, "z": -1, "name": "置身事外", "category": "三维冲突型", "sum": -1, "strength": 1, "conflict": 1, "stability": 2, "color": "rgb(127,127,0)", "label_c": "中性", "label_e": "中性", "label_b": "消极"}, {"x": 0, "y": -1, "z": 1, "name": "勉为其难", "category": "三维冲突型", "sum": 0, "strength": 2, "conflict": 2, "stability": 1, "color": "rgb(127,0,255)", "label_c": "中性", "label_e": "消极", "label_b": "积极"}, {"x": 0, "y": -1, "z": 0, "name": "冷眼旁观", "category": "三维冲突型", "sum": -1, "strength": 1, "conflict": 1, "stability": 2, "color": "rgb(127,0,127)", "label_c": "中性", "label_e": "消极", "label_b": "中性"}, {"x": 0, "y": -1, "z": -1, "name": "避而远之", "category": "三维冲突型", "sum": -2, "strength": 2, "conflict": 1, "stability": 2, "color": "rgb(127,0,0)", "label_c": "中性", "label_e": "消极", "label_b": "消极"}, {"x": -1, "y": 1, "z": 1, "name": "自欺欺人", "category": "认知冲突型", "sum": 1, "strength": 3, "conflict": 2, "stability": 1, "color": "rgb(0,255,255)", "label_c": "消极", "label_e": "积极", "label_b": "积极"}, {"x": -1, "y": 1, "z": 0, "name": "将信将疑", "category": "三维冲突型", "sum": 0, "strength": 2, "conflict": 2, "stability": 1, "color": "rgb(0,255,127)", "label_c": "消极", "label_e": "积极", "label_b": "中性"}, {"x": -1, "y": 1, "z": -1, "name": "进退两难", "category": "情绪冲突型", "sum": -1, "strength": 3, "conflict": 2, "stability": 1, "color": "rgb(0,255,0)", "label_c": "消极", "label_e": "积极", "label_b": "消极"}, {"x": -1, "y": 0, "z": 1, "name": "迫不得已", "category": "三维冲突型", "sum": 0, "strength": 2, "conflict": 2, "stability": 1, "color": "rgb(0,127,255)", "label_c": "消极", "label_e": "中性", "label_b": "积极"}, {"x": -1, "y": 0, "z": 0, "name": "不以为然", "category": "三维冲突型", "sum": -1, "strength": 1, "conflict": 1, "stability": 2, "color": "rgb(0,127,127)", "label_c": "消极", "label_e": "中性", "label_b": "中性"}, {"x": -1, "y": 0, "z": -1, "name": "敬而远之", "category": "三维冲突型", "sum": -2, "strength": 2, "conflict": 1, "stability": 2, "color": "rgb(0,127,0)", "label_c": "消极", "label_e": "中性", "label_b": "消极"}, {"x": -1, "y": -1, "z": 1, "name": "逆流而上", "category": "行为冲突型", "sum": -1, "strength": 3, "conflict": 2, "stability": 1, "color": "rgb(0,0,255)", "label_c": "消极", "label_e": "消极", "label_b": "积极"}, {"x": -1, "y": -1, "z": 0, "name": "黯然神伤", "category": "三维冲突型", "sum": -2, "strength": 2, "conflict": 1, "stability": 2, "color": "rgb(0,0,127)", "label_c": "消极", "label_e": "消极", "label_b": "中性"}, {"x": -1, "y": -1, "z": -1, "name": "深恶痛绝", "category": "一致型", "sum": -3, "strength": 3, "conflict": 0, "stability": 3, "color": "rgb(0,0,0)", "label_c": "消极", "label_e": "消极", "label_b": "消极"}];
+const edges = [{"x1": 1, "y1": 1, "z1": 1, "x2": 1, "y2": 1, "z2": 0}, {"x1": 1, "y1": 1, "z1": 1, "x2": 1, "y2": 0, "z2": 1}, {"x1": 1, "y1": 1, "z1": 1, "x2": 0, "y2": 1, "z2": 1}, {"x1": 1, "y1": 1, "z1": 0, "x2": 1, "y2": 1, "z2": -1}, {"x1": 1, "y1": 1, "z1": 0, "x2": 1, "y2": 0, "z2": 0}, {"x1": 1, "y1": 1, "z1": 0, "x2": 0, "y2": 1, "z2": 0}, {"x1": 1, "y1": 1, "z1": -1, "x2": 1, "y2": 0, "z2": -1}, {"x1": 1, "y1": 1, "z1": -1, "x2": 0, "y2": 1, "z2": -1}, {"x1": 1, "y1": 0, "z1": 1, "x2": 1, "y2": 0, "z2": 0}, {"x1": 1, "y1": 0, "z1": 1, "x2": 1, "y2": -1, "z2": 1}, {"x1": 1, "y1": 0, "z1": 1, "x2": 0, "y2": 0, "z2": 1}, {"x1": 1, "y1": 0, "z1": 0, "x2": 1, "y2": 0, "z2": -1}, {"x1": 1, "y1": 0, "z1": 0, "x2": 1, "y2": -1, "z2": 0}, {"x1": 1, "y1": 0, "z1": 0, "x2": 0, "y2": 0, "z2": 0}, {"x1": 1, "y1": 0, "z1": -1, "x2": 1, "y2": -1, "z2": -1}, {"x1": 1, "y1": 0, "z1": -1, "x2": 0, "y2": 0, "z2": -1}, {"x1": 1, "y1": -1, "z1": 1, "x2": 1, "y2": -1, "z2": 0}, {"x1": 1, "y1": -1, "z1": 1, "x2": 0, "y2": -1, "z2": 1}, {"x1": 1, "y1": -1, "z1": 0, "x2": 1, "y2": -1, "z2": -1}, {"x1": 1, "y1": -1, "z1": 0, "x2": 0, "y2": -1, "z2": 0}, {"x1": 1, "y1": -1, "z1": -1, "x2": 0, "y2": -1, "z2": -1}, {"x1": 0, "y1": 1, "z1": 1, "x2": 0, "y2": 1, "z2": 0}, {"x1": 0, "y1": 1, "z1": 1, "x2": 0, "y2": 0, "z2": 1}, {"x1": 0, "y1": 1, "z1": 1, "x2": -1, "y2": 1, "z2": 1}, {"x1": 0, "y1": 1, "z1": 0, "x2": 0, "y2": 1, "z2": -1}, {"x1": 0, "y1": 1, "z1": 0, "x2": 0, "y2": 0, "z2": 0}, {"x1": 0, "y1": 1, "z1": 0, "x2": -1, "y2": 1, "z2": 0}, {"x1": 0, "y1": 1, "z1": -1, "x2": 0, "y2": 0, "z2": -1}, {"x1": 0, "y1": 1, "z1": -1, "x2": -1, "y2": 1, "z2": -1}, {"x1": 0, "y1": 0, "z1": 1, "x2": 0, "y2": 0, "z2": 0}, {"x1": 0, "y1": 0, "z1": 1, "x2": 0, "y2": -1, "z2": 1}, {"x1": 0, "y1": 0, "z1": 1, "x2": -1, "y2": 0, "z2": 1}, {"x1": 0, "y1": 0, "z1": 0, "x2": 0, "y2": 0, "z2": -1}, {"x1": 0, "y1": 0, "z1": 0, "x2": 0, "y2": -1, "z2": 0}, {"x1": 0, "y1": 0, "z1": 0, "x2": -1, "y2": 0, "z2": 0}, {"x1": 0, "y1": 0, "z1": -1, "x2": 0, "y2": -1, "z2": -1}, {"x1": 0, "y1": 0, "z1": -1, "x2": -1, "y2": 0, "z2": -1}, {"x1": 0, "y1": -1, "z1": 1, "x2": 0, "y2": -1, "z2": 0}, {"x1": 0, "y1": -1, "z1": 1, "x2": -1, "y2": -1, "z2": 1}, {"x1": 0, "y1": -1, "z1": 0, "x2": 0, "y2": -1, "z2": -1}, {"x1": 0, "y1": -1, "z1": 0, "x2": -1, "y2": -1, "z2": 0}, {"x1": 0, "y1": -1, "z1": -1, "x2": -1, "y2": -1, "z2": -1}, {"x1": -1, "y1": 1, "z1": 1, "x2": -1, "y2": 1, "z2": 0}, {"x1": -1, "y1": 1, "z1": 1, "x2": -1, "y2": 0, "z2": 1}, {"x1": -1, "y1": 1, "z1": 0, "x2": -1, "y2": 1, "z2": -1}, {"x1": -1, "y1": 1, "z1": 0, "x2": -1, "y2": 0, "z2": 0}, {"x1": -1, "y1": 1, "z1": -1, "x2": -1, "y2": 0, "z2": -1}, {"x1": -1, "y1": 0, "z1": 1, "x2": -1, "y2": 0, "z2": 0}, {"x1": -1, "y1": 0, "z1": 1, "x2": -1, "y2": -1, "z2": 1}, {"x1": -1, "y1": 0, "z1": 0, "x2": -1, "y2": 0, "z2": -1}, {"x1": -1, "y1": 0, "z1": 0, "x2": -1, "y2": -1, "z2": 0}, {"x1": -1, "y1": 0, "z1": -1, "x2": -1, "y2": -1, "z2": -1}, {"x1": -1, "y1": -1, "z1": 1, "x2": -1, "y2": -1, "z2": 0}, {"x1": -1, "y1": -1, "z1": 0, "x2": -1, "y2": -1, "z2": -1}];
+
+// 构建 traces
+const traces = [];
+
+// 晶格连线
+const ex = [], ey = [], ez = [];
+edges.forEach(e => { ex.push(e.x1, e.x2, null); ey.push(e.y1, e.y2, null); ez.push(e.z1, e.z2, null); });
+traces.push({
+  type: 'scatter3d', mode: 'lines', x: ex, y: ey, z: ez,
+  line: { color: 'rgba(255,255,255,0.12)', width: 1 },
+  hoverinfo: 'skip', showlegend: false, name: 'lattice'
+});
+
+// 态度点 - 每个强度一组
+[0, 1, 2, 3].forEach(strength => {
+  const pts = scatterData.filter(d => d.strength === strength);
+  if (!pts.length) return;
+  const sizes = {0: 6, 1: 8, 2: 10, 3: 13};
+  traces.push({
+    type: 'scatter3d', mode: 'markers+text',
+    x: pts.map(p => p.x), y: pts.map(p => p.y), z: pts.map(p => p.z),
+    text: pts.map(p => p.name),
+    textposition: 'top center',
+    textfont: { size: strength >= 2 ? 10 : 8, color: '#e6edf3', family: 'Noto Sans SC, Microsoft YaHei, sans-serif' },
+    marker: {
+      color: pts.map(p => p.color),
+      size: sizes[strength],
+      symbol: 'circle',
+      line: { color: 'rgba(255,255,255,0.3)', width: 0.8 }
+    },
+    hovertemplate: (
+      '<b>%{text}</b><br>'
+      + '认知: %{customdata[0]} | 情绪: %{customdata[1]} | 行为: %{customdata[2]}<br>'
+      + '总和倾向: %{customdata[3]}<br>'
+      + '分类: %{customdata[4]}<br>'
+      + '强度 I=%{customdata[5]} · 冲突度 K=%{customdata[6]} · 稳定度 S=%{customdata[7]}'
+      + '<extra></extra>'
+    ),
+    customdata: pts.map(p => [
+      p.label_c, p.label_e, p.label_b,
+      (p.sum > 0 ? '+' : '') + p.sum,
+      p.category, p.strength, p.conflict, p.stability
+    ]),
+    showlegend: false,
+    name: 'strength-' + strength,
+  });
+});
+
+// 分类图例
+const catColors = {"\u4e00\u81f4\u578b": "#e74c3c", "\u884c\u4e3a\u51b2\u7a81\u578b": "#f39c12", "\u60c5\u7eea\u51b2\u7a81\u578b": "#2ecc71", "\u8ba4\u77e5\u51b2\u7a81\u578b": "#3498db", "\u4e09\u7ef4\u51b2\u7a81\u578b": "#9b59b6"};
+const catEntries = Object.entries(catColors);
+catEntries.forEach(([cat, color]) => {
+  traces.push({
+    type: 'scatter3d', mode: 'markers',
+    x: [null], y: [null], z: [null],
+    marker: { color: color, size: 10, symbol: 'circle', line: { width: 1, color: '#fff' } },
+    name: cat,
+  });
+});
+
+// Plotly 配置
+const layout = {
+  scene: {
+    xaxis: {
+      title: { text: '认知 Cognition', font: { color: '#ff6b6b', size: 13 } },
+      tickvals: [-1, 0, 1],
+      ticktext: ['消极 (−1)', '中性 (0)', '积极 (+1)'],
+      gridcolor: 'rgba(255,107,107,0.1)',
+      zerolinecolor: 'rgba(255,255,255,0.2)',
+      color: '#aaa',
+      range: [-1.5, 1.5]
+    },
+    yaxis: {
+      title: { text: '情绪 Emotion', font: { color: '#feca57', size: 13 } },
+      tickvals: [-1, 0, 1],
+      ticktext: ['消极 (−1)', '中性 (0)', '积极 (+1)'],
+      gridcolor: 'rgba(254,202,87,0.1)',
+      zerolinecolor: 'rgba(255,255,255,0.2)',
+      color: '#aaa',
+      range: [-1.5, 1.5]
+    },
+    zaxis: {
+      title: { text: '行为 Behavior', font: { color: '#48dbfb', size: 13 } },
+      tickvals: [-1, 0, 1],
+      ticktext: ['消极 (−1)', '中性 (0)', '积极 (+1)'],
+      gridcolor: 'rgba(72,219,251,0.1)',
+      zerolinecolor: 'rgba(255,255,255,0.2)',
+      color: '#aaa',
+      range: [-1.5, 1.5]
+    },
+    aspectmode: 'cube',
+    camera: { eye: { x: 1.5, y: 1.5, z: 1.5 }, center: { x: 0, y: 0, z: 0 } },
+    bgcolor: 'rgba(0,0,0,0)',
+  },
+  paper_bgcolor: 'rgba(0,0,0,0)',
+  margin: { l: 0, r: 0, t: 0, b: 0 },
+  legend: {
+    x: 0.01, y: 0.99,
+    font: { color: '#c9d1d9', size: 11 },
+    bgcolor: 'rgba(22,27,34,0.85)',
+    bordercolor: '#30363d',
+    borderwidth: 1,
+  },
+  hovermode: 'closest',
+};
+
+const config = {
+  responsive: true,
+  displayModeBar: true,
+  modeBarButtonsToRemove: ['lasso2d', 'select2d'],
+  displaylogo: false,
+  toImageButtonOptions: { format: 'png', filename: 'attitude_space' },
+};
+
+Plotly.newPlot('plot', traces, layout, config).then(() => {
+  const plotEl = document.getElementById('plot');
+
+  // 点击点事件
+  plotEl.on('plotly_click', data => {
+    if (!data.points.length) return;
+    const pt = data.points[0];
+    const cd = pt.customdata;
+    if (!cd) return;
+    document.getElementById('selected-info').innerHTML = `
+      <div class="sel-name">${pt.text || '—'}</div>
+      <div class="sel-cat">${cd[4]}</div>
+      <div>认知: ${cd[0]} · 情绪: ${cd[1]} · 行为: ${cd[2]}</div>
+      <div>总和倾向: ${cd[3]} &nbsp;|&nbsp; 强度 I=${cd[5]} &nbsp; 冲突度 K=${cd[6]} &nbsp; 稳定度 S=${cd[7]}</div>
+    `;
+  });
+
+  // 强度筛选按钮
+  document.querySelectorAll('#strength-btns button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#strength-btns button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const strength = btn.dataset.strength;
+      const update = {};
+      for (let i = 1; i <= 4; i++) {
+        const traceIdx = i;  // traces[1..4] = strength 0..3
+        update[traceIdx] = { visible: strength === 'all' || (traceIdx - 1) == parseInt(strength) };
+      }
+      Plotly.restyle('plot', update);
+    });
+  });
+
+  // 响应式
+  window.addEventListener('resize', () => Plotly.Plots.resize(plotEl));
+});
+</script>
+
+</body>
+</html>

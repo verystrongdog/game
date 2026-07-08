@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# macOS
+__MACOSX/
+.DS_Store
+._*
+
+# Windows
+*:Zone.Identifier
+Thumbs.db
+
+# IDE / Editor
+.claude/
+.vscode/
+.idea/
+
+# Unity (future)
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+*.csproj
+*.unityproj
+*.sln
+*.userprefs
+
+# Godot (if ever used)
+.godot/
+
+# Large reference PDFs — uncomment if you want to exclude them
+# *.pdf

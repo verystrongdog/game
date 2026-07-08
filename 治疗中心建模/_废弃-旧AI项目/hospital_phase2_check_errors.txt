@@ -1,0 +1,684 @@
+ERROR REPORT — 2026-07-03 06:32:18
+============================================================
+
+[3-OverlapDetect] Mesh overlap: Ambulance_Lane <-> Ambulance_Turn
+  Overlap volume ~1.200000m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ambulance_Lane <-> Elev_E
+  Overlap volume ~0.017999m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ambulance_Lane <-> Elev_N
+  Overlap volume ~0.009000m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ambulance_Lane <-> Elev_S
+  Overlap volume ~0.009000m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ambulance_Lane <-> FireLane_S
+  Overlap volume ~0.240000m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Atrium_E <-> FireLane_S
+  Overlap volume ~0.004000m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Atrium_Floor <-> FireLane_S
+  Overlap volume ~0.360000m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Atrium_W <-> FireLane_S
+  Overlap volume ~0.004000m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Basketball_Court <-> ElevADMIN_E
+  Overlap volume ~0.009000m³, 6 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Basketball_Court <-> ElevADMIN_N
+  Overlap volume ~0.007200m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Basketball_Court <-> ElevADMIN_S
+  Overlap volume ~0.007200m³, 6 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Basketball_Court <-> ElevADMIN_W
+  Overlap volume ~0.009000m³, 6 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Basketball_Court <-> Field_Base
+  Overlap volume ~2.100000m³, 4 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Boiler_Roof <-> Boiler_Stack
+  Overlap volume ~0.150000m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Elev2_E <-> FireLane_S
+  Overlap volume ~0.010200m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Elev2_E <-> Ground_Grass
+  Overlap volume ~0.045000m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Elev2_N <-> Ground_Grass
+  Overlap volume ~0.036000m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Elev2_S <-> FireLane_S
+  Overlap volume ~0.014400m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Elev2_S <-> Ground_Grass
+  Overlap volume ~0.036000m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Elev2_W <-> FireLane_S
+  Overlap volume ~0.010200m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Elev2_W <-> Ground_Grass
+  Overlap volume ~0.045000m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Elev_E <-> FireLane_S
+  Overlap volume ~0.010200m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Elev_E <-> Ground_Grass
+  Overlap volume ~0.044998m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Elev_N <-> Ground_Grass
+  Overlap volume ~0.036000m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Elev_S <-> FireLane_S
+  Overlap volume ~0.014400m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Elev_S <-> Ground_Grass
+  Overlap volume ~0.036000m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Elev_W <-> FireLane_S
+  Overlap volume ~0.010200m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Elev_W <-> Ground_Grass
+  Overlap volume ~0.044998m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevADMIN_E <-> ElevADMIN_N
+  Overlap volume ~1.512011m³, 5 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevADMIN_E <-> ElevADMIN_S
+  Overlap volume ~1.512011m³, 5 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevADMIN_E <-> Field_Base
+  Overlap volume ~0.009000m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevADMIN_E <-> Ground_Grass
+  Overlap volume ~0.045000m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevADMIN_N <-> ElevADMIN_W
+  Overlap volume ~1.512031m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevADMIN_N <-> Field_Base
+  Overlap volume ~0.007200m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevADMIN_N <-> Ground_Grass
+  Overlap volume ~0.036000m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevADMIN_S <-> ElevADMIN_W
+  Overlap volume ~1.512031m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevADMIN_S <-> Field_Base
+  Overlap volume ~0.007200m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevADMIN_S <-> Ground_Grass
+  Overlap volume ~0.036000m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevADMIN_W <-> Field_Base
+  Overlap volume ~0.009000m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevADMIN_W <-> Ground_Grass
+  Overlap volume ~0.045000m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevCAFE_E <-> ElevCAFE_N
+  Overlap volume ~1.511877m³, 2 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevCAFE_E <-> ElevCAFE_S
+  Overlap volume ~1.511877m³, 2 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevCAFE_E <-> Ground_Grass
+  Overlap volume ~0.044998m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevCAFE_N <-> ElevCAFE_W
+  Overlap volume ~1.511877m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevCAFE_N <-> Ground_Grass
+  Overlap volume ~0.035998m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevCAFE_S <-> ElevCAFE_W
+  Overlap volume ~1.511877m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevCAFE_S <-> Ground_Grass
+  Overlap volume ~0.035998m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevCAFE_W <-> Ground_Grass
+  Overlap volume ~0.044998m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevDORM_E <-> ElevDORM_N
+  Overlap volume ~1.511935m³, 5 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevDORM_E <-> ElevDORM_S
+  Overlap volume ~1.511935m³, 5 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevDORM_E <-> Ground_Grass
+  Overlap volume ~0.045000m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevDORM_N <-> ElevDORM_W
+  Overlap volume ~1.511935m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevDORM_N <-> Ground_Grass
+  Overlap volume ~0.035999m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevDORM_S <-> ElevDORM_W
+  Overlap volume ~1.511935m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevDORM_S <-> Ground_Grass
+  Overlap volume ~0.035999m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevDORM_W <-> Ground_Grass
+  Overlap volume ~0.045000m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevIPA0_E <-> ElevIPA0_N
+  Overlap volume ~1.512031m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevIPA0_E <-> ElevIPA0_S
+  Overlap volume ~1.512031m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevIPA0_E <-> Ground_Grass
+  Overlap volume ~0.045000m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevIPA0_N <-> ElevIPA0_W
+  Overlap volume ~1.512011m³, 5 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevIPA0_N <-> Ground_Grass
+  Overlap volume ~0.036000m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevIPA0_S <-> ElevIPA0_W
+  Overlap volume ~1.512011m³, 5 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevIPA0_S <-> Ground_Grass
+  Overlap volume ~0.036000m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevIPA0_W <-> Ground_Grass
+  Overlap volume ~0.045000m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevIPA1_E <-> ElevIPA1_N
+  Overlap volume ~1.511992m³, 5 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevIPA1_E <-> ElevIPA1_S
+  Overlap volume ~1.511992m³, 5 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevIPA1_E <-> Ground_Grass
+  Overlap volume ~0.045000m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevIPA1_N <-> ElevIPA1_W
+  Overlap volume ~1.512031m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevIPA1_N <-> Ground_Grass
+  Overlap volume ~0.036000m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevIPA1_S <-> ElevIPA1_W
+  Overlap volume ~1.512031m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevIPA1_S <-> Ground_Grass
+  Overlap volume ~0.036000m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevIPA1_W <-> Ground_Grass
+  Overlap volume ~0.045000m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevIPB0_E <-> ElevIPB0_N
+  Overlap volume ~1.511954m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevIPB0_E <-> ElevIPB0_S
+  Overlap volume ~1.511954m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevIPB0_E <-> Ground_Grass
+  Overlap volume ~0.044998m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevIPB0_N <-> ElevIPB0_W
+  Overlap volume ~1.511954m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevIPB0_N <-> Ground_Grass
+  Overlap volume ~0.036000m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevIPB0_S <-> ElevIPB0_W
+  Overlap volume ~1.511954m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevIPB0_S <-> Ground_Grass
+  Overlap volume ~0.036000m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevIPB0_W <-> Ground_Grass
+  Overlap volume ~0.044998m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevIPB1_E <-> ElevIPB1_N
+  Overlap volume ~1.511954m³, 2 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevIPB1_E <-> ElevIPB1_S
+  Overlap volume ~1.511954m³, 2 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevIPB1_E <-> Ground_Grass
+  Overlap volume ~0.044998m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevIPB1_N <-> ElevIPB1_W
+  Overlap volume ~1.511954m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevIPB1_N <-> Ground_Grass
+  Overlap volume ~0.036000m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevIPB1_S <-> ElevIPB1_W
+  Overlap volume ~1.511954m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevIPB1_S <-> Ground_Grass
+  Overlap volume ~0.036000m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevIPB1_W <-> Ground_Grass
+  Overlap volume ~0.044998m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevREHAB_E <-> ElevREHAB_N
+  Overlap volume ~1.511915m³, 5 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevREHAB_E <-> ElevREHAB_S
+  Overlap volume ~1.511915m³, 5 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevREHAB_E <-> Ground_Grass
+  Overlap volume ~0.045000m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevREHAB_N <-> ElevREHAB_W
+  Overlap volume ~1.511954m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevREHAB_N <-> Ground_Grass
+  Overlap volume ~0.035998m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevREHAB_S <-> ElevREHAB_W
+  Overlap volume ~1.511954m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevREHAB_S <-> Ground_Grass
+  Overlap volume ~0.035998m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: ElevREHAB_W <-> Ground_Grass
+  Overlap volume ~0.045000m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: EntryPlaza <-> Road_South
+  Overlap volume ~1.000000m³, 8 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Fence_E <-> Fence_N
+  Overlap volume ~0.100012m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Fence_E <-> Road_East
+  Overlap volume ~0.720044m³, 2 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Fence_E <-> Road_North
+  Overlap volume ~0.024001m³, 6 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Fence_E <-> Road_South
+  Overlap volume ~0.024001m³, 6 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Fence_N <-> Fence_W
+  Overlap volume ~0.100006m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Fence_N <-> Road_East
+  Overlap volume ~0.024001m³, 6 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Fence_N <-> Road_North
+  Overlap volume ~0.880054m³, 2 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Fence_N <-> Road_West
+  Overlap volume ~0.024001m³, 6 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Fence_W <-> Road_North
+  Overlap volume ~0.024000m³, 6 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Fence_W <-> Road_South
+  Overlap volume ~0.024000m³, 6 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Fence_W <-> Road_West
+  Overlap volume ~0.720000m³, 2 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Field_Base <-> Track_E
+  Overlap volume ~0.300000m³, 5 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Field_Base <-> Track_N
+  Overlap volume ~0.450000m³, 5 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Field_Base <-> Track_S
+  Overlap volume ~0.450000m³, 5 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Field_Base <-> Track_W
+  Overlap volume ~0.300000m³, 5 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: FireLane_E <-> FireLane_S
+  Overlap volume ~0.320000m³, 2 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: FireLane_S <-> FireLane_W
+  Overlap volume ~0.320000m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Road_East <-> Road_North
+  Overlap volume ~0.720000m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Road_East <-> Road_South
+  Overlap volume ~0.720000m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Road_North <-> Road_West
+  Overlap volume ~0.720000m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Road_South <-> Road_West
+  Overlap volume ~0.720000m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Track_E <-> Track_N
+  Overlap volume ~0.022500m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Track_E <-> Track_S
+  Overlap volume ~0.022500m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Track_N <-> Track_W
+  Overlap volume ~0.022500m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Track_S <-> Track_W
+  Overlap volume ~0.022500m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_ADMIN_E <-> Ext_EQ_ADMIN_N
+  Overlap volume ~0.225005m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_ADMIN_E <-> Ext_EQ_ADMIN_S
+  Overlap volume ~0.225005m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_ADMIN_E <-> Slab_EQ_ADMIN
+  Overlap volume ~0.900013m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_ADMIN_N <-> Ext_EQ_ADMIN_W
+  Overlap volume ~0.225002m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_ADMIN_N <-> Slab_EQ_ADMIN
+  Overlap volume ~1.500021m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_ADMIN_S <-> Ext_EQ_ADMIN_W
+  Overlap volume ~0.225002m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_ADMIN_S <-> Slab_EQ_ADMIN
+  Overlap volume ~1.500021m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_ADMIN_W <-> Slab_EQ_ADMIN
+  Overlap volume ~0.900001m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_CAFE_E <-> Ext_EQ_CAFE_N
+  Overlap volume ~0.224982m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_CAFE_E <-> Ext_EQ_CAFE_S
+  Overlap volume ~0.224982m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_CAFE_E <-> Slab_EQ_CAFE
+  Overlap volume ~0.899967m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_CAFE_N <-> Ext_EQ_CAFE_W
+  Overlap volume ~0.224982m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_CAFE_N <-> Slab_EQ_CAFE
+  Overlap volume ~1.199956m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_CAFE_S <-> Ext_EQ_CAFE_W
+  Overlap volume ~0.224982m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_CAFE_S <-> Slab_EQ_CAFE
+  Overlap volume ~1.199956m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_CAFE_W <-> Slab_EQ_CAFE
+  Overlap volume ~0.899967m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_DORM_E <-> Ext_EQ_DORM_N
+  Overlap volume ~0.224993m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_DORM_E <-> Ext_EQ_DORM_S
+  Overlap volume ~0.224993m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_DORM_E <-> Slab_EQ_DORM
+  Overlap volume ~0.900013m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_DORM_N <-> Ext_EQ_DORM_W
+  Overlap volume ~0.224990m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_DORM_N <-> Slab_EQ_DORM
+  Overlap volume ~1.199956m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_DORM_S <-> Ext_EQ_DORM_W
+  Overlap volume ~0.224990m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_DORM_S <-> Slab_EQ_DORM
+  Overlap volume ~1.199956m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_DORM_W <-> Slab_EQ_DORM
+  Overlap volume ~0.900001m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_IPA_E <-> Ext_EQ_IPA_N
+  Overlap volume ~0.225005m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_IPA_E <-> Ext_EQ_IPA_S
+  Overlap volume ~0.225005m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_IPA_E <-> Slab_EQ_IPA
+  Overlap volume ~1.080015m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_IPA_N <-> Ext_EQ_IPA_W
+  Overlap volume ~0.225005m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_IPA_N <-> Slab_EQ_IPA
+  Overlap volume ~2.400034m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_IPA_S <-> Ext_EQ_IPA_W
+  Overlap volume ~0.225005m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_IPA_S <-> Slab_EQ_IPA
+  Overlap volume ~2.400034m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_IPA_W <-> Slab_EQ_IPA
+  Overlap volume ~1.080015m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_IPB_E <-> Ext_EQ_IPB_N
+  Overlap volume ~0.224993m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_IPB_E <-> Ext_EQ_IPB_S
+  Overlap volume ~0.224993m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_IPB_E <-> Slab_EQ_IPB
+  Overlap volume ~1.079960m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_IPB_N <-> Ext_EQ_IPB_W
+  Overlap volume ~0.225005m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_IPB_N <-> Slab_EQ_IPB
+  Overlap volume ~2.400034m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_IPB_S <-> Ext_EQ_IPB_W
+  Overlap volume ~0.225005m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_IPB_S <-> Slab_EQ_IPB
+  Overlap volume ~2.400034m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_IPB_W <-> Slab_EQ_IPB
+  Overlap volume ~1.080015m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_REHAB_E <-> Ext_EQ_REHAB_N
+  Overlap volume ~0.224993m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_REHAB_E <-> Ext_EQ_REHAB_S
+  Overlap volume ~0.225005m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_REHAB_E <-> Slab_EQ_REHAB
+  Overlap volume ~0.900013m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_REHAB_N <-> Ext_EQ_REHAB_W
+  Overlap volume ~0.224993m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_REHAB_N <-> Slab_EQ_REHAB
+  Overlap volume ~1.799934m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_REHAB_S <-> Ext_EQ_REHAB_W
+  Overlap volume ~0.225005m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_REHAB_S <-> Slab_EQ_REHAB
+  Overlap volume ~1.800025m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Ext_EQ_REHAB_W <-> Slab_EQ_REHAB
+  Overlap volume ~0.900013m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Gate_N_Wall_E <-> Gate_N_Wall_N
+  Overlap volume ~0.269992m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Gate_N_Wall_E <-> Gate_N_Wall_S
+  Overlap volume ~0.269992m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Gate_N_Wall_N <-> Gate_N_Wall_W
+  Overlap volume ~0.269992m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Gate_N_Wall_S <-> Gate_N_Wall_W
+  Overlap volume ~0.269992m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Gate_S_Wall_E <-> Gate_S_Wall_N
+  Overlap volume ~0.270003m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Gate_S_Wall_E <-> Gate_S_Wall_S
+  Overlap volume ~0.270003m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Gate_S_Wall_N <-> Gate_S_Wall_W
+  Overlap volume ~0.270003m³, 1 overlapping triangle pairs
+
+[3-OverlapDetect] Mesh overlap: Gate_S_Wall_S <-> Gate_S_Wall_W
+  Overlap volume ~0.270003m³, 1 overlapping triangle pairs
+
+[4-GapDetect] Wall-Floor gap: Wall_Stair_ADMIN_E from Slab_OP_B1top
+  Gap=200.0mm
+
+[4-GapDetect] Wall-Floor gap: Wall_Stair_ADMIN_N from Slab_OP_B1top
+  Gap=200.0mm
+
+[4-GapDetect] Wall-Floor gap: Wall_Stair_ADMIN_S from Slab_OP_B1top
+  Gap=200.0mm
+
+[4-GapDetect] Wall-Floor gap: Wall_Stair_ADMIN_W from Slab_OP_B1top
+  Gap=200.0mm
+
+[4-GapDetect] Wall-Floor gap: Wall_Stair_CAFE_E from Slab_OP_B1top
+  Gap=200.0mm
+
+[4-GapDetect] Wall-Floor gap: Wall_Stair_CAFE_N from Slab_OP_B1top
+  Gap=200.0mm
+
+[4-GapDetect] Wall-Floor gap: Wall_Stair_CAFE_S from Slab_OP_B1top
+  Gap=200.0mm
+
+[4-GapDetect] Wall-Floor gap: Wall_Stair_CAFE_W from Slab_OP_B1top
+  Gap=200.0mm
+
+[4-GapDetect] Wall-Floor gap: Wall_Stair_DORM_E from Slab_OP_B1top
+  Gap=200.0mm
+
+[4-GapDetect] Wall-Floor gap: Wall_Stair_DORM_N from Slab_OP_B1top
+  Gap=200.0mm
+
+[4-GapDetect] Wall-Floor gap: Wall_Stair_DORM_S from Slab_OP_B1top
+  Gap=200.0mm
+
+[4-GapDetect] Wall-Floor gap: Wall_Stair_DORM_W from Slab_OP_B1top
+  Gap=200.0mm
+
+[4-GapDetect] Wall-Floor gap: Wall_Stair_E_E from Slab_OP_B1top
+  Gap=200.0mm
+
+[4-GapDetect] Wall-Floor gap: Wall_Stair_E_Mid from Slab_OP_B1top
+  Gap=200.0mm
+
+[4-GapDetect] Wall-Floor gap: Wall_Stair_E_N from Slab_OP_B1top
+  Gap=200.0mm
+
+[4-GapDetect] Wall-Floor gap: Wall_Stair_E_S from Slab_OP_B1top
+  Gap=200.0mm
+
+[4-GapDetect] Wall-Floor gap: Wall_Stair_E_W from Slab_OP_B1top
+  Gap=200.0mm
+
+[4-GapDetect] Wall-Floor gap: Wall_Stair_IPA_E_E from Slab_OP_B1top
+  Gap=200.0mm
+
+[4-GapDetect] Wall-Floor gap: Wall_Stair_IPA_E_N from Slab_OP_B1top
+  Gap=200.0mm
+
+[4-GapDetect] Wall-Floor gap: Wall_Stair_IPA_E_S from Slab_OP_B1top
+  Gap=200.0mm
+
+[4-GapDetect] Wall-Floor gap: Wall_Stair_IPA_E_W from Slab_OP_B1top
+  Gap=200.0mm
+
+[4-GapDetect] Wall-Floor gap: Wall_Stair_IPA_W_E from Slab_OP_B1top
+  Gap=200.0mm
+
+[4-GapDetect] Wall-Floor gap: Wall_Stair_IPA_W_N from Slab_OP_B1top
+  Gap=200.0mm
+
+[4-GapDetect] Wall-Floor gap: Wall_Stair_IPA_W_S from Slab_OP_B1top
+  Gap=200.0mm
+
+[4-GapDetect] Wall-Floor gap: Wall_Stair_IPA_W_W from Slab_OP_B1top
+  Gap=200.0mm
+
+[4-GapDetect] Wall-Floor gap: Wall_Stair_IPB_E_E from Slab_OP_B1top
+  Gap=200.0mm
+
+[4-GapDetect] Wall-Floor gap: Wall_Stair_IPB_E_N from Slab_OP_B1top
+  Gap=200.0mm
+
+[4-GapDetect] Wall-Floor gap: Wall_Stair_IPB_E_S from Slab_OP_B1top
+  Gap=200.0mm
+
+[4-GapDetect] Wall-Floor gap: Wall_Stair_IPB_E_W from Slab_OP_B1top
+  Gap=200.0mm
+
+[4-GapDetect] Wall-Floor gap: Wall_Stair_IPB_W_E from Slab_OP_B1top
+  Gap=200.0mm
+
+[4-GapDetect] Wall-Floor gap: Wall_Stair_IPB_W_N from Slab_OP_B1top
+  Gap=200.0mm
+
+[4-GapDetect] Wall-Floor gap: Wall_Stair_IPB_W_S from Slab_OP_B1top
+  Gap=200.0mm
+
+[4-GapDetect] Wall-Floor gap: Wall_Stair_IPB_W_W from Slab_OP_B1top
+  Gap=200.0mm
+
+[4-GapDetect] Wall-Floor gap: Wall_Stair_REHAB_E from Slab_OP_B1top
+  Gap=200.0mm
+
+[4-GapDetect] Wall-Floor gap: Wall_Stair_REHAB_N from Slab_OP_B1top
+  Gap=200.0mm
+
+[4-GapDetect] Wall-Floor gap: Wall_Stair_REHAB_S from Slab_OP_B1top
+  Gap=200.0mm
+
+[4-GapDetect] Wall-Floor gap: Wall_Stair_REHAB_W from Slab_OP_B1top
+  Gap=200.0mm
+
+[4-GapDetect] Wall-Floor gap: Wall_Stair_W_E from Slab_OP_B1top
+  Gap=200.0mm
+
+[4-GapDetect] Wall-Floor gap: Wall_Stair_W_Mid from Slab_OP_B1top
+  Gap=200.0mm
+
+[4-GapDetect] Wall-Floor gap: Wall_Stair_W_N from Slab_OP_B1top
+  Gap=200.0mm
+
+[4-GapDetect] Wall-Floor gap: Wall_Stair_W_S from Slab_OP_B1top
+  Gap=200.0mm
+
+[4-GapDetect] Wall-Floor gap: Wall_Stair_W_W from Slab_OP_B1top
+  Gap=200.0mm
+
+[7-CollisionBody] Collision too small: Col_Ext_EQ_ADMIN_N vs Slab_EQ
+  Axis X: collision=25.000m < visual=60.000m (diff > 0.05m)
+
+[7-CollisionBody] Collision too small: Col_Ext_EQ_ADMIN_N vs Slab_EQ_ADMIN
+  Axis Y: collision=0.300m < visual=15.000m (diff > 0.05m)
+
+[7-CollisionBody] Collision too small: Col_Ext_EQ_CAFE_N vs Slab_EQ_CAFE
+  Axis Y: collision=0.300m < visual=15.000m (diff > 0.05m)
+
+[7-CollisionBody] Collision too small: Col_Ext_EQ_DORM_E vs Slab_EQ_DORM
+  Axis X: collision=0.300m < visual=20.000m (diff > 0.05m)
+
+[7-CollisionBody] Collision too small: Col_Ext_EQ_IPA_E vs Slab_EQ_IPA
+  Axis X: collision=0.300m < visual=40.000m (diff > 0.05m)
+
+[7-CollisionBody] Collision too small: Col_Ext_EQ_IPB_S vs Slab_EQ_IPB
+  Axis Y: collision=0.300m < visual=18.000m (diff > 0.05m)
+
+[7-CollisionBody] Collision too small: Col_Ext_EQ_REHAB_N vs Slab_EQ_REHAB
+  Axis Y: collision=0.300m < visual=15.000m (diff > 0.05m)
+
