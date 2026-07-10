@@ -255,40 +255,137 @@ var gUlt=new THREE.DodecahedronGeometry(0.06,1);
 //  BUILD GLASS BRAIN
 // ═══════════════════════════════════════════════════════════
 
-// Brain material — translucent glass
+// ═══════════════════════════════════════════════════════════
+//  PROCEDURAL BRAIN — 3D noise cortical surface
+// ═══════════════════════════════════════════════════════════
+
+// Simple 3D value noise (hash-based, no external deps)
+function hash3D(ix,iy,iz){
+  var h=ix*374761393+iy*668265263+iz*1274126177;
+  h=(h^(h>>13))*1274126177;
+  return (h^(h>>16))/2147483648;
+}
+function smoothNoise3D(x,y,z){
+  var ix=Math.floor(x),iy=Math.floor(y),iz=Math.floor(z);
+  var fx=x-ix,fy=y-iy,fz=z-iz;
+  // Smoothstep
+  var sx=fx*fx*(3-2*fx),sy=fy*fy*(3-2*fy),sz=fz*fz*(3-2*fz);
+  // Trilinear interpolation
+  var n000=hash3D(ix,iy,iz),n100=hash3D(ix+1,iy,iz);
+  var n010=hash3D(ix,iy+1,iz),n110=hash3D(ix+1,iy+1,iz);
+  var n001=hash3D(ix,iy,iz+1),n101=hash3D(ix+1,iy,iz+1);
+  var n011=hash3D(ix,iy+1,iz+1),n111=hash3D(ix+1,iy+1,iz+1);
+  var nx00=n000*(1-sx)+n100*sx,nx10=n010*(1-sx)+n110*sx;
+  var nx01=n001*(1-sx)+n101*sx,nx11=n011*(1-sx)+n111*sx;
+  var nxy0=nx00*(1-sy)+nx10*sy,nxy1=nx01*(1-sy)+nx11*sy;
+  return nxy0*(1-sz)+nxy1*sz;
+}
+function fbm3D(x,y,z,octaves,lacunarity,gain){
+  var val=0,amp=1,freq=1,maxVal=0;
+  for(var o=0;o<octaves;o++){
+    val+=amp*smoothNoise3D(x*freq,y*freq,z*freq);
+    maxVal+=amp; amp*=gain; freq*=lacunarity;
+  }
+  return val/maxVal;
+}
+
+// Build a brain-shaped mesh from a sphere using vertex displacement
+function buildBrainMesh(baseGeo, cx, cy, cz, sx, sy, sz, noiseScale, noiseStr, fissureWidth){
+  var pos=baseGeo.attributes.position;
+  var verts=[];
+  for(var i=0;i<pos.count;i++){
+    var vx=pos.getX(i),vy=pos.getY(i),vz=pos.getZ(i);
+
+    // Scale to brain proportions first
+    var bx=vx*sx, by=vy*sy, bz=vz*sz;
+
+    // Brain elongation: narrow at front (Z>0), wider at back (Z<0)
+    var zfactor=1.0-(bz*0.15); // stretch sides when z is negative (back)
+    bx*=zfactor;
+
+    // Temporal lobe bulge: lower-middle sides
+    var ty=(by-0.55)/0.4; // normalized y for temporal region
+    var temporal=Math.exp(-ty*ty*3)*0.12;
+    bx+=Math.sign(bx)*temporal*Math.abs(bx);
+
+    // Frontal narrowing
+    if(bz>0.3){
+      var fz=(bz-0.3)/0.7;
+      bx*=1.0-fz*0.2;
+    }
+
+    // 3D noise for cortical folds (in world space, after scaling)
+    var nx=(bx+cx)*noiseScale, ny=(by+cy)*noiseScale, nz=(bz+cz)*noiseScale;
+    var noise=fbm3D(nx,ny,nz,4,2.5,0.5);
+    var displacement=noise*noiseStr;
+
+    // Direction of displacement along vertex normal (approximate with direction from center)
+    var len=Math.sqrt(bx*bx+by*by+bz*bz);
+    if(len<0.001)len=0.001;
+    var ndx=bx/len,ndy=by/len,ndz=bz/len;
+
+    // Apply noise displacement along normal
+    var rx=bx+ndx*displacement;
+    var ry=by+ndy*displacement;
+    var rz=bz+ndz*displacement;
+
+    // Carve interhemispheric fissure
+    var absX=Math.abs(rx);
+    if(absX<fissureWidth){
+      var fissureDepth=(1.0-absX/fissureWidth)*0.06;
+      rx-=Math.sign(rx)*fissureDepth;
+    }
+
+    // Final position
+    verts.push(rx+cx, ry+cy, rz+cz);
+  }
+
+  var geo=new THREE.BufferGeometry();
+  geo.setAttribute('position',new THREE.BufferAttribute(new Float32Array(verts),3));
+  geo.setIndex(baseGeo.index);
+  geo.computeVertexNormals();
+  return geo;
+}
+
+// Brain materials
 var brainMat=new THREE.MeshPhongMaterial({
-  color:0x334466, emissive:0x0a0a1a, emissiveIntensity:0.15,
-  specular:0x556688, shininess:25,
-  transparent:true, opacity:0.12, side:THREE.DoubleSide, depthWrite:false
-});
-var brainWire=new THREE.MeshBasicMaterial({
-  color:0x335577, transparent:true, opacity:0.04,
-  wireframe:true, depthWrite:false
+  color:0x445566, emissive:0x0a0a1a, emissiveIntensity:0.1,
+  specular:0x667788, shininess:30,
+  transparent:true, opacity:0.10, side:THREE.DoubleSide, depthWrite:false
 });
 
-// Left hemisphere
-var hemiGeo=new THREE.SphereGeometry(1,48,36);
-var leftHemi=new THREE.Mesh(hemiGeo,brainMat); leftHemi.scale.set(0.55,0.90,0.70); leftHemi.position.set(-0.55,0.55,0.0); G.add(leftHemi);
-var leftWire=new THREE.Mesh(hemiGeo,brainWire); leftWire.scale.copy(leftHemi.scale); leftWire.position.copy(leftHemi.position); G.add(leftWire);
+var brainMatSolid=new THREE.MeshPhongMaterial({
+  color:0x3a4a5a, emissive:0x080810, emissiveIntensity:0.08,
+  specular:0x556677, shininess:20,
+  transparent:true, opacity:0.06, side:THREE.DoubleSide, depthWrite:false
+});
 
+// Build left hemisphere
+var baseGeo=new THREE.SphereGeometry(1,72,48);
+var leftGeo=buildBrainMesh(baseGeo, -0.52, 0.55, -0.02, 0.52, 0.88, 0.72, 4.5, 0.055, 0.06);
+var leftHemi=new THREE.Mesh(leftGeo,brainMat); G.add(leftHemi);
 // Right hemisphere
-var rightHemi=new THREE.Mesh(hemiGeo,brainMat); rightHemi.scale.set(0.55,0.90,0.70); rightHemi.position.set(0.55,0.55,0.0); G.add(rightHemi);
-var rightWire=new THREE.Mesh(hemiGeo,brainWire); rightWire.scale.copy(rightHemi.scale); rightWire.position.copy(rightHemi.position); G.add(rightWire);
+var rightGeo=buildBrainMesh(baseGeo, 0.52, 0.55, -0.02, 0.52, 0.88, 0.72, 4.5, 0.055, 0.06);
+var rightHemi=new THREE.Mesh(rightGeo,brainMat); G.add(rightHemi);
 
-// Cerebellum
-var cerebGeo=new THREE.SphereGeometry(1,24,18);
-var cereb=new THREE.Mesh(cerebGeo,brainMat); cereb.scale.set(0.35,0.20,0.30); cereb.position.set(0,0.15,-0.55); G.add(cereb);
-var cerebW=new THREE.Mesh(cerebGeo,brainWire); cerebW.scale.copy(cereb.scale); cerebW.position.copy(cereb.position); G.add(cerebW);
+// Cerebellum — smaller, at back-bottom, with its own folds
+var cerebBase=new THREE.SphereGeometry(1,32,20);
+var cerebGeo=buildBrainMesh(cerebBase, 0, 0.15, -0.56, 0.32, 0.18, 0.28, 6.0, 0.04, 0.03);
+var cereb=new THREE.Mesh(cerebGeo,brainMatSolid); G.add(cereb);
 
-// Brainstem — tapered cylinder approximated with a cone
-var stemGeo=new THREE.CylinderGeometry(0.12,0.08,0.20,16);
-var stem=new THREE.Mesh(stemGeo,brainMat); stem.position.set(0,0.02,-0.15); G.add(stem);
-var stemW=new THREE.Mesh(stemGeo,brainWire); stemW.position.copy(stem.position); G.add(stemW);
+// Brainstem
+var stemGeo=new THREE.CylinderGeometry(0.10,0.06,0.22,16,4);
+var stemMat=new THREE.MeshPhongMaterial({
+  color:0x3a4a55, emissive:0x0a0a15, emissiveIntensity:0.05,
+  specular:0x445555, shininess:15,
+  transparent:true, opacity:0.13, side:THREE.DoubleSide, depthWrite:false
+});
+var stem=new THREE.Mesh(stemGeo,stemMat); stem.position.set(0,-0.01,-0.14); G.add(stem);
 
-// Interhemispheric fissure line
-var fissureGeo=new THREE.TorusGeometry(0.05,0.003,8,48);
-var fissureMat=new THREE.MeshBasicMaterial({color:0x223344,transparent:true,opacity:0.1,depthWrite:false});
-var fissure=new THREE.Mesh(fissureGeo,fissureMat); fissure.position.set(0,0.55,0); fissure.rotation.y=Math.PI/2; G.add(fissure);
+// Thin wireframe overlay for structure visibility
+var wireframeMat=new THREE.MeshBasicMaterial({color:0x334466,transparent:true,opacity:0.03,wireframe:true,depthWrite:false});
+var wireLeft=new THREE.Mesh(leftGeo,wireframeMat); G.add(wireLeft);
+var wireRight=new THREE.Mesh(rightGeo,wireframeMat); G.add(wireRight);
 
 // ═══════════════════════════════════════════════════════════
 //  HELPERS
@@ -638,8 +735,8 @@ function animate(){
       nodes[n].mesh.material.opacity=pulse;
     }
   }
-  // Slow brain rotation effect (very subtle)
-  leftWire.rotation.y+=0.0001; rightWire.rotation.y-=0.0001;
+  // Subtle ambient motion
+  leftHemi.rotation.y+=0.00005; rightHemi.rotation.y-=0.00005;
   stars.rotation.y+=0.0002;
   ctrl.update();
   R.render(S,Cam);
