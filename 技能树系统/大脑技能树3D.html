@@ -77,41 +77,42 @@ var TIER_COST={1:1,2:2,3:3,4:5,5:8,U:10};
 function costOf(t){return TIER_COST[t]||1;}
 
 // ═══════════════════════════════════════════════════════════
-//  SKILL DATA — coordinates in brain/anatomical space
-//  X=valence(左回避/右趋近), Y=intensity(底脑干/顶皮层), Z=autonomy(后被动/前主动)
+	//  SKILL DATA — coordinates in ATTITUDE SPACE (not anatomical space)
+	//  X=V(valence): 左回避/右趋近, Y=|A|(intensity): 行为强度, Z=D(autonomy): 后被动/前主动
+	//  情绪节点: B_raw=(V,|A|,D) 直接映射 | 行为节点: 驱动质心 B(t) | 认知节点: CPM步骤+深度+偏向
 // ═══════════════════════════════════════════════════════════
 var treeData={
   cognition:[
     // L1 知觉与注意 — 枕叶/顶叶 (后部 Z~-0.6)
-    {id:'cog_0',name:'洞见',tier:1,mod:'知觉与注意',type:'被动',ap:'0',cd:'/',x:0.20,y:0.25,z:-0.60,desc:'永久提升知觉精度 d\'+0.2',region:'枕叶 V1'},
-    {id:'cog_1',name:'凝神',tier:1,mod:'知觉与注意',type:'主动',ap:'0',cd:'3',x:0.10,y:0.25,z:-0.60,desc:'锁定目标 对目标认知效果+30%',region:'顶内沟'},
-    {id:'cog_2',name:'察微',tier:1,mod:'知觉与注意',type:'被动',ap:'0',cd:'/',x:-0.10,y:0.25,z:-0.58,desc:'criterion放宽 更易报告变化',region:'顶叶'},
-    {id:'cog_3',name:'纵观',tier:1,mod:'知觉与注意',type:'主动',ap:'0',cd:'2',x:-0.20,y:0.25,z:-0.55,desc:'揭示敌方1个隐藏属性',region:'枕顶联合'},
-    {id:'cog_4',name:'警觉',tier:1,mod:'知觉与注意',type:'被动',ap:'0',cd:'/',x:0.00,y:0.27,z:-0.62,desc:'入场获警觉标记',region:'丘脑枕'},
+    {id:'cog_0',name:'洞见',tier:1,mod:'知觉与注意',type:'被动',ap:'0',cd:'/',x:0.00,y:0.47,z:-0.60,desc:'永久提升知觉精度 d\'+0.2',region:'枕叶 V1'},
+    {id:'cog_1',name:'凝神',tier:1,mod:'知觉与注意',type:'主动',ap:'0',cd:'3',x:0.36,y:0.56,z:-0.60,desc:'锁定目标 对目标认知效果+30%',region:'顶内沟'},
+    {id:'cog_2',name:'察微',tier:1,mod:'知觉与注意',type:'被动',ap:'0',cd:'/',x:-0.12,y:0.65,z:-0.60,desc:'criterion放宽 更易报告变化',region:'顶叶'},
+    {id:'cog_3',name:'纵观',tier:1,mod:'知觉与注意',type:'主动',ap:'0',cd:'2',x:-0.24,y:0.38,z:-0.60,desc:'揭示敌方1个隐藏属性',region:'枕顶联合'},
+    {id:'cog_4',name:'警觉',tier:1,mod:'知觉与注意',type:'被动',ap:'0',cd:'/',x:-0.30,y:0.43,z:-0.60,desc:'入场获警觉标记',region:'丘脑枕'},
     // L2 记忆 — 颞叶/海马体 (Z~-0.35)
-    {id:'cog_5',name:'拾遗',tier:2,mod:'记忆',type:'主动',ap:'0',cd:'2',x:0.25,y:0.45,z:-0.35,desc:'减随机技能冷却1回合',region:'海马体 CA1'},
-    {id:'cog_6',name:'追忆',tier:2,mod:'记忆',type:'主动',ap:'1',cd:'3',x:0.10,y:0.45,z:-0.33,desc:'复制上回合效果×0.7',region:'内嗅皮层'},
-    {id:'cog_7',name:'闪回',tier:2,mod:'记忆',type:'被动',ap:'0',cd:'/',x:-0.10,y:0.43,z:-0.37,desc:'SAN&lt;40%触发恐惧偏移',region:'杏仁核-海马'},
-    {id:'cog_8',name:'铭刻',tier:2,mod:'记忆',type:'被动',ap:'0',cd:'/',x:-0.25,y:0.45,z:-0.32,desc:'首用技能本场效果+10%',region:'海马体 CA3'},
-    {id:'cog_9',name:'释怀',tier:2,mod:'记忆',type:'主动',ap:'0',cd:'4',x:0.00,y:0.47,z:-0.38,desc:'移除自身负面认知标签',region:'前额叶-海马'},
+    {id:'cog_5',name:'拾遗',tier:2,mod:'记忆',type:'主动',ap:'0',cd:'2',x:0.12,y:0.56,z:-0.35,desc:'减随机技能冷却1回合',region:'海马体 CA1'},
+    {id:'cog_6',name:'追忆',tier:2,mod:'记忆',type:'主动',ap:'1',cd:'3',x:0.06,y:0.70,z:-0.35,desc:'复制上回合效果×0.7',region:'内嗅皮层'},
+    {id:'cog_7',name:'闪回',tier:2,mod:'记忆',type:'被动',ap:'0',cd:'/',x:-0.12,y:0.60,z:-0.35,desc:'SAN&lt;40%触发恐惧偏移',region:'杏仁核-海马'},
+    {id:'cog_8',name:'铭刻',tier:2,mod:'记忆',type:'被动',ap:'0',cd:'/',x:-0.24,y:0.83,z:-0.35,desc:'首用技能本场效果+10%',region:'海马体 CA3'},
+    {id:'cog_9',name:'释怀',tier:2,mod:'记忆',type:'主动',ap:'0',cd:'4',x:-0.42,y:0.74,z:-0.35,desc:'移除自身负面认知标签',region:'前额叶-海马'},
     // L3 知识表征 — TPJ/颞下回 (Z~-0.1)
-    {id:'cog_10',name:'甄别',tier:3,mod:'知识表征',type:'主动',ap:'0',cd:'3',x:0.30,y:0.65,z:-0.10,desc:'改变目标标签',region:'TPJ'},
-    {id:'cog_11',name:'定性',tier:3,mod:'知识表征',type:'主动',ap:'0',cd:'4',x:0.15,y:0.65,z:-0.08,desc:'施加定性标记影响敌方AI',region:'颞下回'},
-    {id:'cog_12',name:'归因',tier:3,mod:'知识表征',type:'主动',ap:'0',cd:'3',x:-0.15,y:0.65,z:-0.12,desc:'揭示敌方技能驱动归属',region:'楔前叶'},
-    {id:'cog_13',name:'正名',tier:3,mod:'知识表征',type:'主动',ap:'0',cd:'5',x:-0.30,y:0.65,z:-0.10,desc:'移除负面标签+替换正面',region:'角回'},
-    {id:'cog_14',name:'类比',tier:3,mod:'知识表征',type:'被动',ap:'0',cd:'/',x:0.00,y:0.67,z:-0.15,desc:'同类敌人认知效果+15%',region:'颞上沟'},
+    {id:'cog_10',name:'甄别',tier:3,mod:'知识表征',type:'主动',ap:'0',cd:'3',x:0.12,y:0.65,z:-0.10,desc:'改变目标标签',region:'TPJ'},
+    {id:'cog_11',name:'定性',tier:3,mod:'知识表征',type:'主动',ap:'0',cd:'4',x:-0.42,y:0.60,z:-0.10,desc:'施加定性标记影响敌方AI',region:'颞下回'},
+    {id:'cog_12',name:'归因',tier:3,mod:'知识表征',type:'主动',ap:'0',cd:'3',x:0.18,y:0.70,z:-0.10,desc:'揭示敌方技能驱动归属',region:'楔前叶'},
+    {id:'cog_13',name:'正名',tier:3,mod:'知识表征',type:'主动',ap:'0',cd:'5',x:0.36,y:0.74,z:-0.10,desc:'移除负面标签+替换正面',region:'角回'},
+    {id:'cog_14',name:'类比',tier:3,mod:'知识表征',type:'被动',ap:'0',cd:'/',x:-0.36,y:0.65,z:-0.10,desc:'同类敌人认知效果+15%',region:'颞上沟'},
     // L4 表象与语言 — Wernicke/Broca/角回 (Z~+0.15)
-    {id:'cog_15',name:'隐喻',tier:4,mod:'表象与语言',type:'被动',ap:'0',cd:'/',x:0.25,y:0.82,z:+0.15,desc:'技能PAD偏移+15%',region:'Broca区'},
-    {id:'cog_16',name:'白描',tier:4,mod:'表象与语言',type:'主动',ap:'0',cd:'5',x:0.10,y:0.82,z:+0.12,desc:'清除幻象/伪装效果',region:'Wernicke区'},
-    {id:'cog_17',name:'构想',tier:4,mod:'表象与语言',type:'被动',ap:'0',cd:'/',x:-0.10,y:0.82,z:+0.18,desc:'行为外观伪装为其他驱动',region:'角回'},
-    {id:'cog_18',name:'转述',tier:4,mod:'表象与语言',type:'主动',ap:'0',cd:'6',x:-0.25,y:0.82,z:+0.14,desc:'翻转敌方PAD偏移方向',region:'弓状束'},
-    {id:'cog_19',name:'命名',tier:4,mod:'表象与语言',type:'主动',ap:'2',cd:'每场1次',x:0.00,y:0.84,z:+0.20,desc:'命名未名实体 效果+30%',region:'前额叶极'},
+    {id:'cog_15',name:'隐喻',tier:4,mod:'表象与语言',type:'被动',ap:'0',cd:'/',x:-0.36,y:0.65,z:0.15,desc:'技能PAD偏移+15%',region:'Broca区'},
+    {id:'cog_16',name:'白描',tier:4,mod:'表象与语言',type:'主动',ap:'0',cd:'5',x:0.30,y:0.79,z:0.15,desc:'清除幻象/伪装效果',region:'Wernicke区'},
+    {id:'cog_17',name:'构想',tier:4,mod:'表象与语言',type:'被动',ap:'0',cd:'/',x:-0.30,y:0.74,z:0.15,desc:'行为外观伪装为其他驱动',region:'角回'},
+    {id:'cog_18',name:'转述',tier:4,mod:'表象与语言',type:'主动',ap:'0',cd:'6',x:0.06,y:0.70,z:0.15,desc:'翻转敌方PAD偏移方向',region:'弓状束'},
+    {id:'cog_19',name:'命名',tier:4,mod:'表象与语言',type:'主动',ap:'2',cd:'每场1次',x:-0.48,y:0.88,z:0.15,desc:'命名未名实体 效果+30%',region:'前额叶极'},
     // L5 推理与决策 — 前额叶 (Z~+0.5)
-    {id:'cog_20',name:'预判',tier:5,mod:'推理与决策',type:'主动',ap:'0',cd:'4',x:0.20,y:0.95,z:+0.50,desc:'预览敌方下回合技能',region:'dlPFC'},
-    {id:'cog_21',name:'决意',tier:5,mod:'推理与决策',type:'被动',ap:'0',cd:'/',x:-0.20,y:0.95,z:+0.48,desc:'HP&lt;30%时主动技冷却-1',region:'vmPFC'},
-    {id:'cog_22',name:'筹算',tier:5,mod:'推理与决策',type:'被动',ap:'0',cd:'/',x:0.30,y:0.95,z:+0.52,desc:'AP≥2的技能AP-1',region:'额极'},
-    {id:'cog_23',name:'推演',tier:5,mod:'推理与决策',type:'主动',ap:'1',cd:'6',x:-0.30,y:0.95,z:+0.45,desc:'可多用1个非行为技能',region:'dlPFC'},
-    {id:'cog_24',name:'权衡',tier:5,mod:'推理与决策',type:'主动',ap:'0',cd:'5',x:0.00,y:0.97,z:+0.55,desc:'牺牲本回合→下回合×1.5',region:'OFC'}
+    {id:'cog_20',name:'预判',tier:5,mod:'推理与决策',type:'主动',ap:'0',cd:'4',x:0.12,y:0.70,z:0.50,desc:'预览敌方下回合技能',region:'dlPFC'},
+    {id:'cog_21',name:'决意',tier:5,mod:'推理与决策',type:'被动',ap:'0',cd:'/',x:-0.42,y:0.83,z:0.50,desc:'HP&lt;30%时主动技冷却-1',region:'vmPFC'},
+    {id:'cog_22',name:'筹算',tier:5,mod:'推理与决策',type:'被动',ap:'0',cd:'/',x:0.18,y:0.70,z:0.50,desc:'AP≥2的技能AP-1',region:'额极'},
+    {id:'cog_23',name:'推演',tier:5,mod:'推理与决策',type:'主动',ap:'1',cd:'6',x:0.06,y:0.74,z:0.50,desc:'可多用1个非行为技能',region:'dlPFC'},
+    {id:'cog_24',name:'权衡',tier:5,mod:'推理与决策',type:'主动',ap:'0',cd:'5',x:0.24,y:0.79,z:0.50,desc:'牺牲本回合→下回合×1.5',region:'OFC'}
   ],
   emotion:[
     // B_raw = (V, |A|, D) — exact attitude space coordinates
@@ -132,28 +133,28 @@ var treeData={
     {id:'emo_14',name:'恐怖',tier:5,x:-0.770,y:0.700,z:-0.124,light:1.0,desc:'被动: 核心情绪 反射×1.2 恐怖+价值C=3.8',region:'mPFC-杏仁核'}
   ],
   behavior:[
-    // Drive centroids + slight offsets
-    {id:'beh_0',name:'逃跑',tier:1,drive:'反射',x:-0.87,y:0.08,z:-0.55,ap:'1',cd:'0',desc:'主动: 闪避1次攻击 恐惧下AP=0',region:'PAG背侧'},
-    {id:'beh_1',name:'僵住',tier:1,drive:'反射',x:-0.83,y:0.06,z:-0.58,ap:'0',cd:'1',desc:'主动: 等待+减伤50% 恐慌自动触发',region:'PAG腹侧'},
-    {id:'beh_2',name:'闪避',tier:1,drive:'反射',x:-0.85,y:0.10,z:-0.50,ap:'1',cd:'1',desc:'主动: 闪避+小位移',region:'上丘'},
-    {id:'beh_3',name:'回避',tier:2,drive:'惩罚机制',x:-0.68,y:0.30,z:-0.32,ap:'2',cd:'3',desc:'主动: 减伤30%×2回合',region:'基底节间接通路'},
-    {id:'beh_4',name:'妥协',tier:2,drive:'惩罚机制',x:-0.62,y:0.28,z:-0.40,ap:'2',cd:'4',desc:'主动: 降敌下回合伤害30%',region:'缰核'},
-    {id:'beh_5',name:'克制',tier:2,drive:'惩罚机制',x:-0.65,y:0.32,z:-0.35,ap:'1',cd:'2',desc:'主动: 跳过行为→意志力+1',region:'纹状体基质'},
-    {id:'beh_6',name:'试探',tier:2,drive:'奖励机制',x:0.58,y:0.35,z:-0.02,ap:'2',cd:'2',desc:'主动: 震慑2+揭示抗性',region:'NAcc壳'},
-    {id:'beh_7',name:'追求',tier:2,drive:'奖励机制',x:0.64,y:0.37,z:0.05,ap:'2',cd:'1',desc:'主动: 震慑4 最直接伤害输出',region:'NAcc核'},
-    {id:'beh_8',name:'坚持',tier:2,drive:'奖励机制',x:0.60,y:0.33,z:0.02,ap:'3',cd:'1',desc:'主动: 震慑3 连用AP递减',region:'VTA-NAcc'},
-    {id:'beh_9',name:'自责',tier:3,drive:'道德驱动',x:0.10,y:0.60,z:0.22,ap:'1',cd:'4',desc:'主动: 意志力+2 SAN-1',region:'vmPFC'},
-    {id:'beh_10',name:'维护',tier:3,drive:'道德驱动',x:0.20,y:0.60,z:0.28,ap:'2',cd:'3',desc:'主动: 移除友方负面标签',region:'TPJ'},
-    {id:'beh_11',name:'坚守',tier:3,drive:'道德驱动',x:0.15,y:0.62,z:0.30,ap:'3',cd:'5',desc:'主动: 抵抗恐慌强制+SAN+2',region:'楔前叶'},
-    {id:'beh_12',name:'遵从',tier:3,drive:'文化习俗',x:-0.05,y:0.55,z:-0.08,ap:'1',cd:'1',desc:'主动: 情境默认行为',region:'mPFC'},
-    {id:'beh_13',name:'从众',tier:3,drive:'文化习俗',x:-0.12,y:0.53,z:-0.02,ap:'1',cd:'2',desc:'主动: 复制友方技能×0.6',region:'颞极'},
-    {id:'beh_14',name:'运用仪式',tier:3,drive:'文化习俗',x:0.00,y:0.57,z:-0.05,ap:'2',cd:'4',desc:'主动: SAN+2 A-0.3 敬畏翻倍',region:'后扣带'},
-    {id:'beh_15',name:'牺牲',tier:4,drive:'价值驱动',x:0.52,y:0.90,z:0.55,ap:'3',cd:'5',desc:'主动: 震慑6+HP-10% C最高3.8',region:'ACC背侧'},
-    {id:'beh_16',name:'对抗',tier:4,drive:'价值驱动',x:0.62,y:0.90,z:0.58,ap:'3',cd:'4',desc:'主动: 震慑5+驱散敌方buff',region:'dlPFC'},
-    {id:'beh_17',name:'突破',tier:4,drive:'价值驱动',x:0.58,y:0.92,z:0.60,ap:'4',cd:'6',desc:'主动: 震慑7+无视防+SAN-2',region:'额顶网络'},
-    {id:'beh_18',name:'安抚',tier:4,drive:'照护',x:0.38,y:0.85,z:0.32,ap:'2',cd:'3',desc:'主动: 目标A-0.3+SAN+2',region:'前脑岛'},
-    {id:'beh_19',name:'保护',tier:4,drive:'照护',x:0.44,y:0.85,z:0.38,ap:'3',cd:'5',desc:'主动: 替友方吸收1次伤害',region:'ACC'},
-    {id:'beh_20',name:'舍身',tier:4,drive:'照护',x:0.40,y:0.87,z:0.35,ap:'5',cd:'10',desc:'主动: 目标免疫1回合+自身受伤+50%',region:'岛叶-ACC-VTA'}
+    // Drive centroids (attitude model B(t) = w_raw*B_raw + w_drive*pole) + slight offsets
+    {id:'beh_0',name:'逃跑',tier:1,drive:'反射',x:-0.87,y:0.73,z:-0.50,ap:'1',cd:'0',desc:'主动: 闪避1次攻击 恐惧下AP=0',region:'PAG背侧'},
+    {id:'beh_1',name:'僵住',tier:1,drive:'反射',x:-0.85,y:0.69,z:-0.54,ap:'0',cd:'1',desc:'主动: 等待+减伤50% 恐慌自动触发',region:'PAG腹侧'},
+    {id:'beh_2',name:'闪避',tier:1,drive:'反射',x:-0.83,y:0.71,z:-0.53,ap:'1',cd:'1',desc:'主动: 闪避+小位移',region:'上丘'},
+    {id:'beh_3',name:'回避',tier:2,drive:'惩罚机制',x:-0.56,y:0.54,z:-0.32,ap:'2',cd:'3',desc:'主动: 减伤30%×2回合',region:'基底节间接通路'},
+    {id:'beh_4',name:'妥协',tier:2,drive:'惩罚机制',x:-0.54,y:0.50,z:-0.36,ap:'2',cd:'4',desc:'主动: 降敌下回合伤害30%',region:'缰核'},
+    {id:'beh_5',name:'克制',tier:2,drive:'惩罚机制',x:-0.52,y:0.52,z:-0.35,ap:'1',cd:'2',desc:'主动: 跳过行为→意志力+1',region:'纹状体基质'},
+    {id:'beh_6',name:'试探',tier:2,drive:'奖励机制',x:0.59,y:0.56,z:0.19,ap:'2',cd:'2',desc:'主动: 震慑2+揭示抗性',region:'NAcc壳'},
+    {id:'beh_7',name:'追求',tier:2,drive:'奖励机制',x:0.61,y:0.52,z:0.15,ap:'2',cd:'1',desc:'主动: 震慑4 最直接伤害输出',region:'NAcc核'},
+    {id:'beh_8',name:'坚持',tier:2,drive:'奖励机制',x:0.63,y:0.54,z:0.16,ap:'3',cd:'1',desc:'主动: 震慑3 连用AP递减',region:'VTA-NAcc'},
+    {id:'beh_9',name:'自责',tier:3,drive:'道德驱动',x:0.15,y:0.48,z:0.41,ap:'1',cd:'4',desc:'主动: 意志力+2 SAN-1',region:'vmPFC'},
+    {id:'beh_10',name:'维护',tier:3,drive:'道德驱动',x:0.17,y:0.44,z:0.37,ap:'2',cd:'3',desc:'主动: 移除友方负面标签',region:'TPJ'},
+    {id:'beh_11',name:'坚守',tier:3,drive:'道德驱动',x:0.18,y:0.46,z:0.38,ap:'3',cd:'5',desc:'主动: 抵抗恐慌强制+SAN+2',region:'楔前叶'},
+    {id:'beh_12',name:'遵从',tier:3,drive:'文化习俗',x:-0.11,y:0.38,z:-0.05,ap:'1',cd:'1',desc:'主动: 情境默认行为',region:'mPFC'},
+    {id:'beh_13',name:'从众',tier:3,drive:'文化习俗',x:-0.09,y:0.34,z:-0.09,ap:'1',cd:'2',desc:'主动: 复制友方技能×0.6',region:'颞极'},
+    {id:'beh_14',name:'运用仪式',tier:3,drive:'文化习俗',x:-0.07,y:0.36,z:-0.08,ap:'2',cd:'4',desc:'主动: SAN+2 A-0.3 敬畏翻倍',region:'后扣带'},
+    {id:'beh_15',name:'牺牲',tier:4,drive:'价值驱动',x:0.56,y:0.80,z:0.60,ap:'3',cd:'5',desc:'主动: 震慑6+HP-10% C最高3.8',region:'ACC背侧'},
+    {id:'beh_16',name:'对抗',tier:4,drive:'价值驱动',x:0.58,y:0.76,z:0.56,ap:'3',cd:'4',desc:'主动: 震慑5+驱散敌方buff',region:'dlPFC'},
+    {id:'beh_17',name:'突破',tier:4,drive:'价值驱动',x:0.60,y:0.78,z:0.57,ap:'4',cd:'6',desc:'主动: 震慑7+无视防+SAN-2',region:'额顶网络'},
+    {id:'beh_18',name:'安抚',tier:4,drive:'照护',x:0.39,y:0.73,z:0.30,ap:'2',cd:'3',desc:'主动: 目标A-0.3+SAN+2',region:'前脑岛'},
+    {id:'beh_19',name:'保护',tier:4,drive:'照护',x:0.41,y:0.69,z:0.26,ap:'3',cd:'5',desc:'主动: 替友方吸收1次伤害',region:'ACC'},
+    {id:'beh_20',name:'舍身',tier:4,drive:'照护',x:0.43,y:0.71,z:0.27,ap:'5',cd:'10',desc:'主动: 目标免疫1回合+自身受伤+50%',region:'岛叶-ACC-VTA'}
   ],
   ultimate:[
     // Behavior output coords from attitudes.json (emotion×drive→behavior_output)
