@@ -293,8 +293,25 @@ G.add(meshFromData(BRAIN_VERTS.slice(rvStart,rvEnd),
 
 // Cerebellum
 var cvStart=(BRAIN_LEFT_COUNT+BRAIN_RIGHT_COUNT)*3;
-G.add(meshFromData(BRAIN_VERTS.slice(cvStart),
-  BRAIN_FACES.filter(function(f){return f>=BRAIN_LEFT_COUNT+BRAIN_RIGHT_COUNT;}).map(function(f){return f-BRAIN_LEFT_COUNT-BRAIN_RIGHT_COUNT;}), brainMat));
+if(BRAIN_CEREB_COUNT>0){
+  G.add(meshFromData(BRAIN_VERTS.slice(cvStart),
+    BRAIN_FACES.filter(function(f){return f>=BRAIN_LEFT_COUNT+BRAIN_RIGHT_COUNT;}).map(function(f){return f-BRAIN_LEFT_COUNT-BRAIN_RIGHT_COUNT;}), brainMat));
+}else{
+  // Add procedural cerebellum (BigBrain surface doesn't include it)
+  var cGeo=new THREE.SphereGeometry(1,24,16);
+  var cPos=cGeo.attributes.position; var cVerts=[];
+  for(var ci=0;ci<cPos.count;ci++){
+    var cx=cPos.getX(ci)*0.26, cy=cPos.getY(ci)*0.14, cz=cPos.getZ(ci)*0.22;
+    // Simple fold texture
+    var cn=Math.sin(cx*12)*Math.cos(cy*10)*Math.sin(cz*11)*0.008;
+    var cl=Math.sqrt(cx*cx+cy*cy+cz*cz)+0.001;
+    cVerts.push(cx+(cx/cl)*cn, cy+0.16+(cy/cl)*cn, cz-0.58+(cz/cl)*cn);
+  }
+  var cGeo2=new THREE.BufferGeometry();
+  cGeo2.setAttribute('position',new THREE.BufferAttribute(new Float32Array(cVerts),3));
+  cGeo2.setIndex(cGeo.index); cGeo2.computeVertexNormals();
+  G.add(new THREE.Mesh(cGeo2,brainMat));
+}
 
 // Brainstem
 var stemGeo=new THREE.CylinderGeometry(0.08,0.05,0.22,16,4);
