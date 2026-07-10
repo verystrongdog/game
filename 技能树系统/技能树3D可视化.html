@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3D 技能树 — 面具 (The Mask)</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#0a0a14;font-family:'Segoe UI','Microsoft YaHei',sans-serif;overflow:hidden;height:100vh}
+  #c{display:block;position:fixed;top:0;left:0;width:100%;height:100%}
+  #top{position:fixed;top:20px;left:24px;z-index:10;pointer-events:none;color:#e0e0f0}
+  #top h1{font-size:1.1rem;font-weight:500;letter-spacing:0.04em}
+  #top p{font-size:0.65rem;color:#8888a0;margin-top:3px}
+  #leg{position:fixed;top:20px;right:24px;z-index:10;display:flex;gap:14px;color:#8888a0;font-size:0.65rem}
+  #leg span{display:flex;align-items:center;gap:5px}
+  #leg i{display:inline-block;width:8px;height:8px;border-radius:50%}
+  #bot{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:10;color:#555;font-size:0.6rem}
+  #tip{position:fixed;pointer-events:none;z-index:20;padding:4px 10px;border-radius:5px;background:rgba(10,10,20,0.9);border:1px solid rgba(255,255,255,0.08);color:#ddd;font-size:0.7rem;display:none}
+  #pnl{position:fixed;right:20px;top:50%;transform:translateY(-50%);width:260px;max-height:55vh;overflow-y:auto;background:rgba(10,10,20,0.94);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:16px;z-index:10;display:none;font-size:0.72rem;color:#ccc}
+  #pnl.on{display:block}
+  #pnl h3{margin:0 0 2px;font-size:0.95rem}
+  #pnl .meta{font-size:0.62rem;color:#888;margin-bottom:6px}
+  #pnl .tags{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px}
+  #pnl .tags em{font-size:0.58rem;padding:2px 6px;border-radius:3px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);font-style:normal}
+  #pnl .desc{line-height:1.5;margin-bottom:8px;color:#bbb}
+  #pnl .stat{display:grid;grid-template-columns:1fr 1fr;gap:1px 12px;font-size:0.65rem}
+  #pnl .stat b{color:#999;font-weight:400}
+  #pnl .stat i{color:#ddd;font-style:normal}
+  #pnl .pre{font-size:0.62rem;color:#777;margin-top:6px}
+  #pnl .x{position:absolute;top:6px;right:8px;background:none;border:none;color:#666;cursor:pointer;font-size:1rem}
+</style>
+</head>
+<body>
+<div id="top"><h1>🌳 3D 技能树</h1><p>认知 · 情绪 · 行为 — 面具 The Mask</p></div>
+<div id="leg">
+  <span><i style="background:#7b8fff;box-shadow:0 0 6px #7b8fff"></i>认知</span>
+  <span><i style="background:#f0a060;box-shadow:0 0 6px #f0a060"></i>情绪</span>
+  <span><i style="background:#4fc3f7;box-shadow:0 0 6px #4fc3f7"></i>行为</span>
+  <span><i style="background:#e8d070;box-shadow:0 0 6px #e8d070"></i>终极</span>
+  <span><i style="background:#3a3a4a"></i>未解锁</span>
+</div>
+<div id="bot">🖱 拖拽旋转 &nbsp;|&nbsp; 滚轮缩放 &nbsp;|&nbsp; 右键平移 &nbsp;|&nbsp; 点击节点 &nbsp;|&nbsp; R/F/T/1/2/3 视角</div>
+<div id="tip"></div>
+<div id="pnl"><button class="x" onclick="document.getElementById('pnl').classList.remove('on')">✕</button><h3 id="pn"></h3><div class="meta" id="pm"></div><div class="tags" id="pt"></div><div class="desc" id="pd"></div><div class="stat" id="ps"></div><div class="pre" id="pp"></div></div>
+<canvas id="c"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+(function(){
+var C=document.getElementById('c');
+var R=new THREE.WebGLRenderer({canvas:C,antialias:true,alpha:false});
+R.setPixelRatio(Math.min(window.devicePixelRatio,2));
+R.setSize(window.innerWidth,window.innerHeight);
+R.setClearColor(0x0a0a14);
+
+var S=new THREE.Scene();
+var Cam=new THREE.PerspectiveCamera(45,window.innerWidth/window.innerHeight,0.3,80);
+Cam.position.set(7,4.5,10);
+
+var ctrl=new THREE.OrbitControls(Cam,R.domElement);
+ctrl.target.set(0,3,0);
+ctrl.enableDamping=true;ctrl.dampingFactor=0.06;
+ctrl.minDistance=3;ctrl.maxDistance=22;
+ctrl.maxPolarAngle=Math.PI*0.78;
+ctrl.update();
+
+// Lighting - softer, more atmospheric
+S.add(new THREE.AmbientLight(0x223344,0.9));
+var sun=new THREE.DirectionalLight(0xffeedd,2.2);
+sun.position.set(6,10,3);S.add(sun);
+var rim=new THREE.DirectionalLight(0x8899cc,1.0);
+rim.position.set(-4,2,-3);S.add(rim);
+// Ground fill
+var up=new THREE.DirectionalLight(0x334455,0.6);
+up.position.set(0,-2,0);S.add(up);
+
+// Materials - crystalline
+function mat(hex,emitHex){
+  return new THREE.MeshPhongMaterial({
+    color:hex,emissive:emitHex,emissiveIntensity:0.4,
+    specular:0x444466,shininess:60,
+    transparent:true,opacity:0.9
+  });
+}
+function lmat(){
+  return new THREE.MeshPhongMaterial({
+    color:0x2a2a38,emissive:0x0a0a14,emissiveIntensity:0.1,
+    specular:0x111122,shininess:10,
+    transparent:true,opacity:0.5
+  });
+}
+var mCog=mat(0x7b8fff,0x2a2266);
+var mEmo=mat(0xf0a060,0x441800);
+var mBeh=mat(0x4fc3f7,0x0a3344);
+var mUlt=mat(0xe8d070,0x443300);
+var mLock=lmat();
+var mTrunk=new THREE.MeshPhongMaterial({color:0x334466,emissive:0x111122,emissiveIntensity:0.2,specular:0x222244,shininess:40,transparent:true,opacity:0.7});
+
+var G= new THREE.Group(); S.add(G);
+var nodes=[];  // flat list for raycaster
+
+// ── Geometry ────────────────────────────────────────────
+var gS=new THREE.SphereGeometry(0.09,24,24);
+var gM=new THREE.SphereGeometry(0.12,24,24);
+var gU=new THREE.SphereGeometry(0.16,32,32);
+
+// ── ROOT ─────────────────────────────────────────────────
+var rootG=new THREE.SphereGeometry(0.22,32,32);
+var rootM=new THREE.MeshPhongMaterial({color:0xffffff,emissive:0xffffff,emissiveIntensity:0.9,specular:0xffffff,shininess:100});
+var rootMesh=new THREE.Mesh(rootG,rootM);
+rootMesh.position.set(0,0.3,0);G.add(rootMesh);
+
+// Root glow rings
+for(var ri=0;ri<3;ri++){
+  var rg=new THREE.TorusGeometry(0.28+ri*0.08,0.015,8,36);
+  var rm=new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:0.45-ri*0.12});
+  var rmesh=new THREE.Mesh(rg,rm);
+  rmesh.rotation.x=Math.PI/2+ri*0.3;rmesh.rotation.y=ri*1.2;
+  rmesh.position.y=0.3;G.add(rmesh);
+}
+
+// ── Helpers ──────────────────────────────────────────────
+// Create a curved branch segment (bezier-like using quadratic)
+function branch(from, to, colorHex, thickness){
+  thickness=thickness||0.03;
+  var mid=new THREE.Vector3().addVectors(from,to).multiplyScalar(0.5);
+  // offset midpoint outward for organic curve
+  var dir=new THREE.Vector3().subVectors(to,from).normalize();
+  var perp=new THREE.Vector3(-dir.z,0,dir.x).normalize();
+  mid.add(perp.multiplyScalar(0.2));
+
+  // Draw as series of small cylinders along a quadratic bezier
+  var steps=16;
+  for(var i=0;i<steps;i++){
+    var t0=i/steps, t1=(i+1)/steps;
+    var p0=bezier(from,mid,to,t0);
+    var p1=bezier(from,mid,to,t1);
+    addCyl(p0,p1,colorHex,thickness);
+  }
+}
+function bezier(a,b,c,t){
+  var u=1-t;
+  return new THREE.Vector3(
+    u*u*a.x+2*u*t*b.x+t*t*c.x,
+    u*u*a.y+2*u*t*b.y+t*t*c.y,
+    u*u*a.z+2*u*t*b.z+t*t*c.z
+  );
+}
+function addCyl(from,to,colorHex,r){
+  var d=new THREE.Vector3().subVectors(to,from);
+  var len=d.length();
+  if(len<0.001)return;
+  var mid2=new THREE.Vector3().addVectors(from,to).multiplyScalar(0.5);
+  var cg=new THREE.CylinderGeometry(r,r,len,6);
+  var cm=new THREE.MeshPhongMaterial({color:colorHex,emissive:colorHex,emissiveIntensity:0.25,specular:0x222233,shininess:30,transparent:true,opacity:0.6});
+  var cmesh=new THREE.Mesh(cg,cm);
+  cmesh.position.copy(mid2);
+  cmesh.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d.normalize());
+  G.add(cmesh);
+}
+
+// Straight connection line for prerequisites
+var lineMat=new THREE.LineBasicMaterial({color:0x444466,transparent:true,opacity:0.25});
+function addLine(a,b){
+  var g=new THREE.BufferGeometry().setFromPoints([a,b]);
+  G.add(new THREE.Line(g,lineMat));
+}
+
+// Add a skill node
+function addNode(id,name,branch,tier,pos,prereq,info){
+  var useMat;
+  if(tier===1){
+    if(branch==='cog')useMat=mCog;else if(branch==='emo')useMat=mEmo;else if(branch==='beh')useMat=mBeh;else useMat=mUlt;
+  }else{useMat=mLock;}
+  var geo=(branch==='ultimate')?gU:(tier>=4?gM:gS);
+  var m=new THREE.Mesh(geo,useMat);
+  m.position.copy(pos);
+  m.userData={nd:{id:id,name:name,branch:branch,tier:tier,pos:pos.toArray(),prereq:prereq||[],info:info||{}}};
+  G.add(m);
+  nodes.push(m);
+  return m;
+}
+
+// ── THREE MAIN TRUNKS ────────────────────────────────────
+var O=new THREE.Vector3(0,0.3,0);
+// Approximate trunk endpoints
+var cogTop=new THREE.Vector3(-2.5,5.5,-1.5);
+var emoTop=new THREE.Vector3(0.2,5.5,2.0);
+var behTop=new THREE.Vector3(2.5,5.5,-0.6);
+
+branch(O,cogTop,0x5566aa,0.06);
+branch(O,emoTop,0x996644,0.06);
+branch(O,behTop,0x336688,0.06);
+
+// ── 3D labels on trunks ──────────────────────────────────
+function label(text,pos,color){
+  var cv=document.createElement('canvas');cv.width=256;cv.height=64;
+  var cx=cv.getContext('2d');
+  cx.fillStyle=color;cx.font='bold 26px "Segoe UI","Microsoft YaHei",sans-serif';
+  cx.textAlign='center';cx.fillText(text,128,36);
+  var tx=new THREE.CanvasTexture(cv);tx.minFilter=THREE.LinearFilter;
+  var sp=new THREE.Sprite(new THREE.SpriteMaterial({map:tx,transparent:true,opacity:0.6,depthTest:false}));
+  sp.position.copy(pos);sp.scale.set(2.0,0.5,1);G.add(sp);
+}
+label('认 知',new THREE.Vector3(-2.5,5.9,-1.5),'#b8c8ff');
+label('情 绪',new THREE.Vector3(0.2,5.9,2.0),'#ffe0c0');
+label('行 为',new THREE.Vector3(2.5,5.9,-0.6),'#a0e0ff');
+
+// ══════════════════════════════════════════════════════════
+//  COGNITION: 5 sub-branches spiraling up the trunk
+// ══════════════════════════════════════════════════════════
+var cogModules=['知觉与注意','记忆','知识表征','表象与语言','推理与决策'];
+var cogNames=[
+  ['洞见','察微','纵观','警觉','凝神'],
+  ['拾遗','追忆','闪回','铭刻','释怀'],
+  ['甄别','归因','类比','定性','正名'],
+  ['转述','白描','构想','隐喻','命名'],
+  ['预判','筹算','推演','权衡','决意']
+];
+var cogDescs={
+  '洞见':'被动: 知觉精度 d-prime +0.2','察微':'被动: criterion放宽 更易报告变化',
+  '纵观':'主动: 揭示敌方1个隐藏属性 CD2','警觉':'被动: 入场获警觉标记',
+  '凝神':'主动: 锁定目标 认知效果+30% CD3',
+  '拾遗':'主动: 减随机技能冷却1回合','追忆':'主动: 复制上回合效果×0.7',
+  '闪回':'被动: SAN<40%触发恐惧偏移','铭刻':'被动: 首用技能本场效果+10%',
+  '释怀':'主动: 移除自身负面认知标签',
+  '甄别':'主动: 改变目标标签','归因':'主动: 揭示敌方技能驱动归属',
+  '类比':'被动: 同类敌人认知效果+15%','定性':'主动: 施加定性标记影响敌方AI',
+  '正名':'主动: 移除负面标签+替换正面',
+  '转述':'主动: 翻转敌方PAD偏移方向','白描':'主动: 清除幻象/伪装',
+  '构想':'被动: 行为外观伪装为其他驱动','隐喻':'被动: 技能PAD偏移+15%',
+  '命名':'主动: 命名未名实体 效果+30% 每场1次',
+  '预判':'主动: 预览敌方下回合技能','筹算':'被动: 所有技能AP消耗-1',
+  '推演':'主动: 可多用1个非行为技能','权衡':'主动: 牺牲本回合→下回合×1.5',
+  '决意':'被动: HP<30%时主动技冷却-1'
+};
+
+// Each module is a sub-branch splitting off the main cognition trunk
+// at different heights, at different angles
+for(var t=0;t<5;t++){
+  // Branch-off point on the cog trunk
+  var frac=(t+0.5)/5.5;
+  var branchPt=new THREE.Vector3().lerpVectors(O,cogTop,frac);
+
+  // Direction of this sub-branch: rotate around the trunk axis
+  var angle=t*0.7+0.3; // spiral
+  var subLength=1.0+t*0.3;
+  var subDir=new THREE.Vector3(
+    Math.cos(angle)*subLength*0.5,
+    0.2,
+    Math.sin(angle)*subLength*0.5
+  );
+  var subEnd=branchPt.clone().add(subDir);
+
+  // Draw sub-branch
+  branch(branchPt,subEnd,0x5566aa,0.025);
+
+  // Place 5 nodes along this sub-branch
+  for(var i=0;i<5;i++){
+    var nf=(i+0.5)/5.5;
+    var npos=new THREE.Vector3().lerpVectors(branchPt,subEnd,nf);
+    // spread slightly perpendicular
+    npos.x+=(i-2)*0.12;
+    npos.z+=(i-2)*0.08;
+
+    var nm=cogNames[t][i];
+    var pre=t===0?[]:['cog_'+((t-1)*5+Math.min(i,4))];
+    addNode('cog_'+(t*5+i),nm,'cog',t+1,npos,pre,{
+      module:cogModules[t],
+      type:t<=1||i!==2?'被动':'主动',
+      ap:t<=2?'0':(t==4?'0~2':'0'),
+      cd:t<=1?'/':((t+1)+'回合'),
+      cost:t+1,
+      desc:cogDescs[nm]||''
+    });
+  }
+}
+
+// ══════════════════════════════════════════════════════════
+//  EMOTION: 15 nodes in PAD-space, connected to trunk
+// ══════════════════════════════════════════════════════════
+var emoData=[
+  ['快乐',1,0.96,0.65,0.59],['恐惧',1,-0.85,0.68,-0.41],['平静',1,0.60,-0.76,0.11],
+  ['希望',2,0.85,-0.37,0.48],['愤怒',2,-0.67,0.73,0.31],['悲痛',2,-0.90,-0.42,-0.67],
+  ['共情',3,0.46,-0.30,0.09],['爱',3,1.00,0.04,0.35],['焦虑',3,-0.71,0.73,-0.32],
+  ['厌恶',3,-0.90,0.55,-0.37],
+  ['绝望',4,-0.77,0.59,-0.51],['内疚',4,-0.58,0.13,-0.59],
+  ['敬畏',4,-0.06,0.48,-0.40],['孤独',4,-0.50,-0.55,-0.52],
+  ['恐怖',5,-0.77,0.70,-0.12]
+];
+var emoDescs={
+  '快乐':'被动: 惩罚门槛↑ 扩展PAD至P+区','恐惧':'被动: 反射门槛↓ 扩展PAD至P-D-区',
+  '平静':'被动: PAD衰减率×0.8','希望':'被动: P+区情绪效果×1.1',
+  '愤怒':'被动: 唯一主动靠近威胁源的情绪 C_control=0','悲痛':'被动: 奖励门槛↑ 照护仍可激活',
+  '共情':'被动: 可读取敌方PAD Attachment+0.1','爱':'被动: 价值门槛↓ 为所爱坚守',
+  '焦虑':'被动: 惩罚门槛↓ 恐惧的"未来版"','厌恶':'被动: 排斥效果×1.2',
+  '绝望':'被动: 绝望+价值伤害随已损HP增长','内疚':'被动: 短路激活道德 C_control降至1.5',
+  '敬畏':'被动: 敬畏+文化效果×1.5','孤独':'被动: 孤独+价值C_control≈3.4',
+  '恐怖':'被动: 核心情绪 反射×1.2 恐怖+价值C=3.8'
+};
+
+var emoNodes=[];
+for(var e=0;e<emoData.length;e++){
+  var ed=emoData[e];
+  var nm=ed[0],tier=ed[1],V=ed[2],A=ed[3],D=ed[4];
+
+  // Position: PAD mapped to 3D, but anchored near the emotion trunk
+  var frac=(tier-0.3)/5.5;
+  var trunkPt=new THREE.Vector3().lerpVectors(O,emoTop,frac);
+
+  // Offset based on PAD: D→X, V→Y, A→Z
+  var px=trunkPt.x+D*0.8;
+  var py=trunkPt.y+V*0.5;
+  var pz=trunkPt.z+A*0.6;
+  var pos=new THREE.Vector3(px,py,pz);
+
+  // Connect to trunk with thin line
+  addCyl(trunkPt,pos,0x996644,0.012);
+
+  var nd=addNode('emo_'+nm,nm,'emo',tier,pos,[],{
+    pad:'V='+V.toFixed(2)+' A='+A.toFixed(2)+' D='+D.toFixed(2),
+    type:'被动',ap:'0',cd:'/',cost:tier===5?8:tier,
+    desc:emoDescs[nm]||''
+  });
+  emoNodes.push({node:nd,trunkPt:trunkPt});
+}
+
+// ══════════════════════════════════════════════════════════
+//  BEHAVIOR: 7 sub-branches (drives) from behavior trunk
+// ══════════════════════════════════════════════════════════
+var behDrives=['反射','惩罚','奖励','道德','文化','价值','照护'];
+var behTiers=[1,2,2,3,3,4,4];
+var behNames=[
+  ['逃跑','僵住','闪避'],['回避','妥协','克制'],['试探','追求','坚持'],
+  ['自责','维护','坚守'],['遵从','从众','仪式'],['牺牲','对抗','突破'],
+  ['安抚','保护','舍身']
+];
+var behDescs={
+  '逃跑':'主动: 闪避1次攻击 恐惧下AP=0 CD0','僵住':'主动: 等待+减伤50% 恐慌自动触发',
+  '闪避':'主动: 闪避+小位移 CD1','回避':'主动: 减伤30%×2回合 CD3',
+  '妥协':'主动: 降敌下回合伤害30% CD4','克制':'主动: 跳过行为→意志力+1 CD2',
+  '试探':'主动: 震慑2+揭示抗性 CD2','追求':'主动: 震慑4 CD1',
+  '坚持':'主动: 震慑3 连用AP递减 CD1','自责':'主动: 意志力+2 SAN-1 CD4',
+  '维护':'主动: 移除友方负面标签 CD3','坚守':'主动: 抵抗恐慌强制+SAN+2 CD5',
+  '遵从':'主动: 情境默认行为 CD1','从众':'主动: 复制友方技能×0.6 CD2',
+  '仪式':'主动: SAN+2 A-0.3 敬畏翻倍 CD4','牺牲':'主动: 震慑6+HP-10% C最高3.8 CD5',
+  '对抗':'主动: 震慑5+驱散敌方buff CD4','突破':'主动: 震慑7+无视防+SAN-2 CD6',
+  '安抚':'主动: 目标A-0.3+SAN+2 CD3','保护':'主动: 替友方吸收1次伤害 CD5',
+  '舍身':'主动: 目标免疫1回合+自身受伤+50% CD10'
+};
+var apMap={'反射':'1','惩罚':'1~2','奖励':'2~3','道德':'1~3','文化':'1~2','价值':'3~4','照护':'2~5'};
+
+for(var d=0;d<7;d++){
+  var tier=behTiers[d];
+  var frac=(d+0.5)/7.5;
+  var branchPt=new THREE.Vector3().lerpVectors(O,behTop,frac);
+
+  // Sub-branch direction: fan out from trunk
+  var angle=(d-3)*0.35;
+  var subLen=0.8+tier*0.3;
+  var subDir=new THREE.Vector3(
+    Math.cos(angle)*subLen,
+    0.15,
+    Math.sin(angle)*subLen*0.7
+  );
+  var subEnd=branchPt.clone().add(subDir);
+  branch(branchPt,subEnd,0x336688,0.025);
+
+  for(var i=0;i<3;i++){
+    var nf=(i+0.5)/3.5;
+    var npos=new THREE.Vector3().lerpVectors(branchPt,subEnd,nf);
+    npos.y+= (i-1)*0.1;
+
+    var nm=behNames[d][i];
+    addNode('beh_'+d+'_'+i,nm,'beh',tier,npos,[],{
+      drive:behDrives[d],type:'主动',
+      ap:apMap[behDrives[d]],
+      cd:tier<=1?'0~1':(tier<=2?'2~3':(tier<=3?'3~5':'5~10')),
+      cost:tier,
+      desc:behDescs[nm]||''
+    });
+  }
+}
+
+// ══════════════════════════════════════════════════════════
+//  ULTIMATE: 12 nodes at the confluence of the 3 trunks
+// ══════════════════════════════════════════════════════════
+var ultData=[
+  ['逆流而上','恐惧+价值','震慑8+意志力+1 C=3.8 CD10',         2.8,1.5,0],
+  ['奋起',   '愤怒+价值','震慑6+驱散防御 C=0 CD6',            2.0,1.4,0.3],
+  ['献身',   '爱+价值',  '震慑5+保护队友+HP-10% CD10',       1.0,1.5,0.6],
+  ['背水',   '绝望+价值','伤害随已损HP增长+无视防御 CD12',     3.2,1.6,-0.2],
+  ['净除',   '厌恶+价值','震慑5+移除幻象 CD5',               2.5,1.35,-0.4],
+  ['独行',   '孤独+价值','重定义标签+意志力+1 CD8',          -0.5,1.5,-0.6],
+  ['赎罪',   '内疚+道德','意志力+2+道德激活+0.3 CD5',        0.5,1.25,-0.3,],
+  ['义愤',   '愤怒+道德','震慑4+敌方道德推迟 CD6',            1.8,1.3,0.1],
+  ['溃逃',   '恐惧+反射','闪避+D轴-0.2 CD3',                2.3,1.05,-0.5],
+  ['共悲',   '悲痛+照护','双方A-0.3+各回复SAN1 CD5',         0,1.15,0.9],
+  ['抚慰',   '共情+照护','目标A-0.3+SAN+2 CD3',             0.8,1.2,1.0],
+  ['赴汤蹈火','恐怖+照护','绝对保护目标1回合 CD12',            1.5,1.7,0.8]
+];
+// Ultimate nodes positioned near the convergence of the three trunks
+var ultCenter=new THREE.Vector3(0,6.2,0);
+// Draw convergence point
+var convGeo=new THREE.SphereGeometry(0.1,20,20);
+var convMat=new THREE.MeshPhongMaterial({color:0xffffff,emissive:0xffffff,emissiveIntensity:0.5,transparent:true,opacity:0.3});
+var convMesh=new THREE.Mesh(convGeo,convMat);
+convMesh.position.copy(ultCenter);G.add(convMesh);
+
+// Thin lines from trunk tops to convergence
+addCyl(cogTop,ultCenter,0x556688,0.015);
+addCyl(emoTop,ultCenter,0x886644,0.015);
+addCyl(behTop,ultCenter,0x446688,0.015);
+
+for(var u=0;u<ultData.length;u++){
+  var ud=ultData[u];
+  var angle=u/12*Math.PI*2;
+  var radius=1.2;
+  var pos=new THREE.Vector3(
+    ultCenter.x+Math.cos(angle)*radius,
+    ultCenter.y+0.2*(u-5.5),
+    ultCenter.z+Math.sin(angle)*radius
+  );
+  addNode('ult_'+ud[0],ud[0],'ultimate','U',pos,[],{
+    attitude:ud[1],type:'终极',ap:'3~5',cd:'8~12',cost:10,
+    desc:ud[2]
+  });
+}
+
+// ── Cog prerequisite connection lines ──────────────────
+for(var n=0;n<nodes.length;n++){
+  var nd=nodes[n].userData.nd;
+  if(!nd.prereq||nd.prereq.length===0)continue;
+  for(var p=0;p<nd.prereq.length;p++){
+    var preId=nd.prereq[p];
+    for(var m=0;m<nodes.length;m++){
+      if(nodes[m].userData.nd.id===preId){
+        addLine(nodes[n].position,nodes[m].position);
+        break;
+      }
+    }
+  }
+}
+
+// ── Starfield ──────────────────────────────────────────
+var sGeo=new THREE.BufferGeometry();
+var sPos=new Float32Array(800*3);
+for(var i=0;i<800;i++){sPos[i*3]=(Math.random()-0.5)*24;sPos[i*3+1]=(Math.random()-0.5)*24;sPos[i*3+2]=(Math.random()-0.5)*24;}
+sGeo.setAttribute('position',new THREE.BufferAttribute(sPos,3));
+var stars=new THREE.Points(sGeo,new THREE.PointsMaterial({color:0x445566,size:0.022,transparent:true,opacity:0.5}));
+S.add(stars);
+
+// ── Ground glow plane ──────────────────────────────────
+var planeG=new THREE.PlaneGeometry(12,12);
+var planeM=new THREE.MeshBasicMaterial({color:0x1a1a2e,transparent:true,opacity:0.3,side:THREE.DoubleSide,depthWrite:false});
+var plane=new THREE.Mesh(planeG,planeM);
+plane.rotation.x=-Math.PI/2;plane.position.y=-0.5;S.add(plane);
+
+// ── Interaction ────────────────────────────────────────
+var raycaster=new THREE.Raycaster();
+var mouse=new THREE.Vector2();
+var hovered=null,selected=null;
+var tip=document.getElementById('tip');
+var pnl=document.getElementById('pnl');
+
+function showPanel(nd,info){
+  var b=nd.branch;
+  var bName=b==='cog'?'认知':(b==='emo'?'情绪':(b==='beh'?'行为':'终极技能'));
+  var bColor=b==='cog'?'#a0b0ff':(b==='emo'?'#ffb878':(b==='beh'?'#80d8ff':'#ffe888'));
+  document.getElementById('pn').textContent=nd.name;
+  document.getElementById('pn').style.color=bColor;
+  document.getElementById('pm').textContent=bName+' · '+(info.type||'')+' · 层级 '+nd.tier;
+
+  var t='';
+  if(info.module)t+='<em>'+info.module+'</em>';
+  if(info.drive)t+='<em>'+info.drive+'驱动</em>';
+  if(info.pad)t+='<em>'+info.pad+'</em>';
+  if(info.attitude)t+='<em>'+info.attitude+'</em>';
+  t+='<em>'+info.cost+'点</em>';
+  document.getElementById('pt').innerHTML=t;
+  document.getElementById('pd').textContent=info.desc||'';
+  document.getElementById('ps').innerHTML=
+    '<div><b>AP</b> <i>'+info.ap+'</i></div>'+
+    '<div><b>冷却</b> <i>'+info.cd+'</i></div>'+
+    '<div><b>类型</b> <i>'+info.type+'</i></div>'+
+    '<div><b>层级</b> <i>'+nd.tier+'</i></div>';
+  var pre='';
+  if(nd.prereq&&nd.prereq.length>0){
+    var names=[];
+    for(var pi=0;pi<nd.prereq.length;pi++){
+      for(var m=0;m<nodes.length;m++){
+        if(nodes[m].userData.nd.id===nd.prereq[pi]){names.push(nodes[m].userData.nd.name);break;}
+      }
+    }
+    pre='前置: '+names.join(' → ');
+  }
+  document.getElementById('pp').textContent=pre;
+  pnl.classList.add('on');
+}
+
+function onMove(ev){
+  mouse.x=(ev.clientX/window.innerWidth)*2-1;
+  mouse.y=-(ev.clientY/window.innerHeight)*2+1;
+  raycaster.setFromCamera(mouse,Cam);
+  var hits=raycaster.intersectObjects(nodes);
+  if(hits.length>0){
+    var obj=hits[0].object;
+    if(hovered!==obj){
+      if(hovered&&hovered!==selected)hovered.material.emissiveIntensity=hovered.userData.nd.tier<=1?0.4:0.1;
+      hovered=obj;
+      if(hovered!==selected)hovered.material.emissiveIntensity=1.2;
+    }
+    tip.style.display='block';
+    tip.style.left=(ev.clientX+16)+'px';
+    tip.style.top=(ev.clientY-28)+'px';
+    tip.textContent=obj.userData.nd.name;
+    document.body.style.cursor='pointer';
+  }else{
+    if(hovered&&hovered!==selected)hovered.material.emissiveIntensity=hovered.userData.nd.tier<=1?0.4:0.1;
+    hovered=null;tip.style.display='none';document.body.style.cursor='default';
+  }
+}
+function onClick(ev){
+  raycaster.setFromCamera(mouse,Cam);
+  var hits=raycaster.intersectObjects(nodes);
+  if(hits.length>0){
+    var obj=hits[0].object;
+    if(selected&&selected!==obj)selected.material.emissiveIntensity=selected.userData.nd.tier<=1?0.4:0.1;
+    selected=obj;selected.material.emissiveIntensity=1.5;
+    showPanel(obj.userData.nd,obj.userData.nd.info);
+  }
+}
+window.addEventListener('mousemove',onMove);
+window.addEventListener('click',onClick);
+window.addEventListener('resize',function(){
+  Cam.aspect=window.innerWidth/window.innerHeight;Cam.updateProjectionMatrix();
+  R.setSize(window.innerWidth,window.innerHeight);
+});
+window.addEventListener('keydown',function(e){
+  switch(e.key.toLowerCase()){
+    case'r':Cam.position.set(7,4.5,10);ctrl.target.set(0,3,0);break;
+    case'f':Cam.position.set(0,4,9);ctrl.target.set(0,3,0);break;
+    case't':Cam.position.set(0,9,1);ctrl.target.set(0,3,0);break;
+    case'1':ctrl.target.set(-2.5,3,-1.5);break;
+    case'2':ctrl.target.set(0,3,2);break;
+    case'3':ctrl.target.set(2.5,3,-0.6);break;
+  }
+  ctrl.update();
+});
+
+// ── Animate ────────────────────────────────────────────
+var clock=new THREE.Clock();
+function animate(){
+  requestAnimationFrame(animate);
+  var t=clock.getElapsedTime();
+  for(var i=0;i<nodes.length;i++){
+    var nd=nodes[i].userData.nd;
+    if(nd.tier<=1){
+      nodes[i].scale.setScalar(1+Math.sin(t*1.8+nd.pos[0]*2+nd.pos[1]*3)*0.05);
+    }
+  }
+  // Root ring rotation
+  var rings=G.children.filter(function(c){return c.geometry&&c.geometry.type==='TorusGeometry';});
+  for(var ri=0;ri<rings.length;ri++){
+    if(ri<3){
+      rings[ri].rotation.z+=0.002*(ri+1);
+      rings[ri].scale.setScalar(1+Math.sin(t*0.7+ri)*0.06);
+    }
+  }
+  stars.rotation.y+=0.00025;
+  ctrl.update();
+  R.render(S,Cam);
+}
+animate();
+
+console.log('3D技能树: '+nodes.length+'节点 (认知:'+nodes.filter(function(n){return n.userData.nd.branch==='cog'}).length+' 情绪:'+nodes.filter(function(n){return n.userData.nd.branch==='emo'}).length+' 行为:'+nodes.filter(function(n){return n.userData.nd.branch==='beh'}).length+' 终极:'+nodes.filter(function(n){return n.userData.nd.branch==='ultimate'}).length+')');
+
+})();
+</script>
+</body>
+</html>
