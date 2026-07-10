@@ -134,9 +134,9 @@ var treeData={
   ],
   behavior:[
     // Drive centroids (attitude model B(t) = w_raw*B_raw + w_drive*pole) + slight offsets
-    {id:'beh_0',name:'逃跑',tier:1,drive:'反射',x:-0.87,y:0.73,z:-0.50,ap:'1',cd:'0',desc:'主动: 闪避1次攻击 恐惧下AP=0',region:'PAG背侧'},
-    {id:'beh_1',name:'僵住',tier:1,drive:'反射',x:-0.85,y:0.69,z:-0.54,ap:'0',cd:'1',desc:'主动: 等待+减伤50% 恐慌自动触发',region:'PAG腹侧'},
-    {id:'beh_2',name:'闪避',tier:1,drive:'反射',x:-0.83,y:0.71,z:-0.53,ap:'1',cd:'1',desc:'主动: 闪避+小位移',region:'上丘'},
+    {id:'beh_0',name:'逃跑',tier:1,drive:'反射',x:-0.87,y:0.73,z:-0.50,ap:'1',cd:'0',desc:'主动: 闪避1次攻击 恐惧下AP=0',region:'反射环路·PAG→杏仁核'},
+    {id:'beh_1',name:'僵住',tier:1,drive:'反射',x:-0.85,y:0.69,z:-0.54,ap:'0',cd:'1',desc:'主动: 等待+减伤50% 恐慌自动触发',region:'反射环路·冻结反应'},
+    {id:'beh_2',name:'闪避',tier:1,drive:'反射',x:-0.83,y:0.71,z:-0.53,ap:'1',cd:'1',desc:'主动: 闪避+小位移',region:'反射环路·快速闪避'},
     {id:'beh_3',name:'回避',tier:2,drive:'惩罚机制',x:-0.56,y:0.54,z:-0.32,ap:'2',cd:'3',desc:'主动: 减伤30%×2回合',region:'基底节间接通路'},
     {id:'beh_4',name:'妥协',tier:2,drive:'惩罚机制',x:-0.54,y:0.50,z:-0.36,ap:'2',cd:'4',desc:'主动: 降敌下回合伤害30%',region:'缰核'},
     {id:'beh_5',name:'克制',tier:2,drive:'惩罚机制',x:-0.52,y:0.52,z:-0.35,ap:'1',cd:'2',desc:'主动: 跳过行为→意志力+1',region:'纹状体基质'},
