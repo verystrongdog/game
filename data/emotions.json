@@ -1,0 +1,196 @@
+{
+  "_description": "15 个游戏情绪锚点的 PAD 三维坐标。数据来源：NRC VAD Lexicon (Mohammad, ACL 2018)，19,971 词 Best-Worst Scaling，归一化到 [-1, +1]。信度：V=0.99, A=0.98, D=0.96。",
+  "_source": "情绪系统/PAD-情绪参考表.md",
+  "_updated": "2026-07-09",
+
+  "dimensions": {
+    "V": { "name": "Valence / 效价", "range": [-1, 1], "+": "愉悦/舒适", "-": "不悦/痛苦" },
+    "A": { "name": "Arousal / 唤醒", "range": [-1, 1], "+": "兴奋/紧张", "-": "平静/困倦" },
+    "D": { "name": "Dominance / 控制", "range": [-1, 1], "+": "掌控/主动", "-": "被控/顺从" }
+  },
+
+  "emotions": [
+    {
+      "id": "joy",
+      "name": "快乐",
+      "valence_group": "positive",
+      "pad": { "V": 0.960, "A": 0.648, "D": 0.588 },
+      "behavior_thrust": { "direction": "approach", "intensity": "high", "autonomy": "active" },
+      "octant": "+P+A+D",
+      "nrc_words": ["happiness", "happy", "joy"],
+      "activates_drives": ["奖励机制", "道德驱动"]
+    },
+    {
+      "id": "love",
+      "name": "爱",
+      "valence_group": "positive",
+      "pad": { "V": 1.000, "A": 0.038, "D": 0.346 },
+      "behavior_thrust": { "direction": "approach", "intensity": "moderate", "autonomy": "semi-passive" },
+      "octant": "+P+A+D",
+      "nrc_words": ["love", "loving"],
+      "activates_drives": ["奖励机制", "价值驱动", "照护"]
+    },
+    {
+      "id": "empathy",
+      "name": "共情",
+      "valence_group": "mixed",
+      "pad": { "V": 0.458, "A": -0.302, "D": 0.090 },
+      "behavior_thrust": { "direction": "slight_approach", "intensity": "low", "autonomy": "neutral" },
+      "octant": "neutral",
+      "nrc_words": ["compassion", "empathy"],
+      "activates_drives": [],
+      "note": "推力接近零——共情本身不给行为方向，它传递的是被共情情绪的方向"
+    },
+    {
+      "id": "calm",
+      "name": "平静",
+      "valence_group": "positive",
+      "pad": { "V": 0.600, "A": -0.756, "D": 0.114 },
+      "behavior_thrust": { "direction": "slight_approach", "intensity": "low", "autonomy": "neutral" },
+      "octant": "+P-A-D",
+      "nrc_words": ["calm", "peaceful", "serene"],
+      "activates_drives": [],
+      "note": "治疗目标象限——最低唤醒安宁"
+    },
+    {
+      "id": "hope",
+      "name": "希望",
+      "valence_group": "positive",
+      "pad": { "V": 0.854, "A": -0.366, "D": 0.478 },
+      "behavior_thrust": { "direction": "approach", "intensity": "low", "autonomy": "active" },
+      "octant": "+P-A+D",
+      "nrc_words": ["hope", "hopeful"],
+      "activates_drives": ["奖励机制", "价值驱动"]
+    },
+    {
+      "id": "awe",
+      "name": "敬畏",
+      "valence_group": "mixed",
+      "pad": { "V": -0.062, "A": 0.480, "D": -0.400 },
+      "behavior_thrust": { "direction": "neutral", "intensity": "moderate", "autonomy": "passive" },
+      "octant": "+P+A-D",
+      "nrc_words": ["awe", "wonder"],
+      "activates_drives": ["反射"],
+      "note": "稀有区（NRC仅26词）——对应顿悟/超越体验"
+    },
+    {
+      "id": "anger",
+      "name": "愤怒",
+      "valence_group": "negative",
+      "pad": { "V": -0.666, "A": 0.730, "D": 0.314 },
+      "behavior_thrust": { "direction": "approach_threat", "intensity": "high", "autonomy": "active" },
+      "octant": "-P+A+D",
+      "nrc_words": ["anger", "rage", "angry"],
+      "activates_drives": ["惩罚机制", "奖励机制", "道德驱动"],
+      "note": "唯一使人主动靠近威胁源的情绪——P<0但D>0的矛盾"
+    },
+    {
+      "id": "fear",
+      "name": "恐惧",
+      "valence_group": "negative",
+      "pad": { "V": -0.854, "A": 0.680, "D": -0.414 },
+      "behavior_thrust": { "direction": "avoid", "intensity": "high", "autonomy": "passive" },
+      "octant": "-P+A-D",
+      "nrc_words": ["fear", "afraid", "scared"],
+      "activates_drives": ["反射", "惩罚机制"],
+      "note": "人类最古老的情绪——杏仁核-PAG短路通道"
+    },
+    {
+      "id": "anxiety",
+      "name": "焦虑",
+      "valence_group": "negative",
+      "pad": { "V": -0.708, "A": 0.730, "D": -0.316 },
+      "behavior_thrust": { "direction": "avoid", "intensity": "high", "autonomy": "passive" },
+      "octant": "-P+A-D",
+      "nrc_words": ["anxiety", "worried", "worry"],
+      "activates_drives": ["惩罚机制"],
+      "note": "对未来的恐惧——A≈恐惧但D稍高于恐惧"
+    },
+    {
+      "id": "disgust",
+      "name": "厌恶",
+      "valence_group": "negative",
+      "pad": { "V": -0.896, "A": 0.550, "D": -0.366 },
+      "behavior_thrust": { "direction": "avoid", "intensity": "moderate", "autonomy": "passive" },
+      "octant": "-P+A-D",
+      "nrc_words": ["disgust", "hatred", "disgusted"],
+      "activates_drives": ["惩罚机制", "文化习俗"],
+      "note": "要清除而非避开——'你不该存在'"
+    },
+    {
+      "id": "terror",
+      "name": "恐怖",
+      "valence_group": "negative",
+      "pad": { "V": -0.770, "A": 0.700, "D": -0.124 },
+      "behavior_thrust": { "direction": "avoid", "intensity": "high", "autonomy": "semi-passive" },
+      "octant": "-P+A-D",
+      "nrc_words": ["terror", "panic"],
+      "activates_drives": ["反射", "惩罚机制"],
+      "note": "见证不可名状——'不该存在的'。D轴高于恐惧（-0.124 vs -0.414）"
+    },
+    {
+      "id": "despair",
+      "name": "绝望",
+      "valence_group": "negative",
+      "pad": { "V": -0.770, "A": 0.588, "D": -0.510 },
+      "behavior_thrust": { "direction": "avoid", "intensity": "moderate", "autonomy": "passive" },
+      "octant": "-P+A-D",
+      "nrc_words": ["despair", "hopeless"],
+      "activates_drives": ["惩罚机制"],
+      "note": "认知闭合——'没有出路'。D轴最低（-0.510）"
+    },
+    {
+      "id": "guilt",
+      "name": "内疚",
+      "valence_group": "negative",
+      "pad": { "V": -0.584, "A": 0.134, "D": -0.588 },
+      "behavior_thrust": { "direction": "avoid", "intensity": "low", "autonomy": "passive" },
+      "octant": "neutral",
+      "nrc_words": ["guilt", "shame", "ashamed"],
+      "activates_drives": ["道德驱动"],
+      "note": "道德情绪——内疚耦合直接短路激活道德驱动"
+    },
+    {
+      "id": "sorrow",
+      "name": "悲痛",
+      "valence_group": "negative",
+      "pad": { "V": -0.896, "A": -0.424, "D": -0.672 },
+      "behavior_thrust": { "direction": "avoid", "intensity": "low", "autonomy": "passive" },
+      "octant": "-P-A-D",
+      "nrc_words": ["sorrow", "depression", "depressed", "mourning"],
+      "activates_drives": [],
+      "note": "丧失——'有意义的消失了'。所有驱动激活不足→行为冻结"
+    },
+    {
+      "id": "loneliness",
+      "name": "孤独",
+      "valence_group": "negative",
+      "pad": { "V": -0.500, "A": -0.548, "D": -0.524 },
+      "behavior_thrust": { "direction": "avoid", "intensity": "low", "autonomy": "passive" },
+      "octant": "-P-A-D",
+      "nrc_words": ["lonely", "abandoned"],
+      "activates_drives": [],
+      "note": "隔离——'我是独自一人'。区别于悲痛（丧失vs隔离）"
+    }
+  ],
+
+  "distance_formula": "dist(E1, E2) = sqrt((V1-V2)^2 + (A1-A2)^2 + (D1-D2)^2)",
+  "blend_formula": "V_current = Σ(V_i × w_i) / Σw_i  (same for A, D)",
+  "pad_to_behavior": {
+    "direction": "sign(V) — 正=趋近, 负=回避",
+    "intensity": "|A| — 绝对值越大行为越强",
+    "autonomy": "sign(D) — 正=主动, 负=被动"
+  },
+
+  "octant_coverage": {
+    "+P+A+D": { "covered": true, "emotions": ["快乐"] },
+    "+P+A-D": { "covered": true, "emotions": ["敬畏"] },
+    "+P-A+D": { "covered": true, "emotions": ["希望"] },
+    "+P-A-D": { "covered": true, "emotions": ["平静"] },
+    "-P+A+D": { "covered": true, "emotions": ["愤怒"] },
+    "-P+A-D": { "covered": true, "emotions": ["恐惧", "焦虑", "厌恶", "恐怖", "绝望"] },
+    "-P-A+D": { "covered": false, "note": "4词（轻蔑/冷漠/无聊）——临床场景不需要，不作" },
+    "-P-A-D": { "covered": true, "emotions": ["悲痛", "孤独"] },
+    "neutral": { "covered": true, "emotions": ["共情", "内疚", "爱"] }
+  }
+}

@@ -1,0 +1,210 @@
+{
+  "_description": "7 种行为驱动的完整参数定义。包含 PAD→激活函数、θ_play 阈值、β/γ 系数、φ 认知门控、τ 惯性时程、驱动向量极点。基于 RST (Gray & McNaughton 2000)、EVC (Shenhav et al. 2017)、催产素-多巴胺通路 (Preston & de Waal 2002)。",
+  "_source": "行为系统/行为系统.md, 态度系统/态度系统.md",
+  "_updated": "2026-07-09",
+
+  "drives": [
+    {
+      "id": "reflex",
+      "name": "反射",
+      "system": "S1 (FFFS)",
+      "default_valence": -1,
+      "core_semantic": "身体替你做决定。不经过认知-情绪-行为链，直接从刺激到反应。",
+      "activation": {
+        "sigmoid": "σ(2.0·max(0,A-0.3) + 1.5·max(0,0.5-D) - 0.5)",
+        "natural_condition": "A > 0.5 且 D < -0.3",
+        "hard_unlock": "不可意志控制（反射不能被意志力压制/激活）"
+      },
+      "cost_sensitivity_beta": 0.5,
+      "effect_gain_gamma": 0.2,
+      "theta_play": 0.15,
+      "theta_force": 0.85,
+      "cognitive_gate_phi": { "condition": "无前置", "value": 1.0, "note": "短路通道——认知不参与" },
+      "inertia": {
+        "rise_half_life": 0.3,
+        "decay_half_life": 0.5,
+        "note": "最快激活，最快衰减"
+      },
+      "drive_pole": { "valence": -1.0, "intensity": 1.0, "autonomy": -1.0 },
+      "example_cards": ["逃跑", "僵住", "闪避"]
+    },
+    {
+      "id": "punish",
+      "name": "惩罚机制",
+      "system": "S1 (BIS)",
+      "default_valence": -1,
+      "core_semantic": "对负面结果的预判驱动行为修正。不需要惩罚已发生——只需要预期。",
+      "activation": {
+        "sigmoid": "σ(2.5·min(0,V) + 1.0·max(0,A-0.2) - 0.3)",
+        "natural_condition": "V < 0",
+        "hard_unlock": "V > 0（意志力强制激活）"
+      },
+      "cost_sensitivity_beta": 1.0,
+      "effect_gain_gamma": 0.5,
+      "theta_play": 0.20,
+      "theta_force": null,
+      "cognitive_gate_phi": { "condition": "知识表征完成", "value": 1.0, "fallback": 0.3 },
+      "inertia": {
+        "rise_half_life": 1.0,
+        "decay_half_life": 1.5,
+        "note": "中等速度——需要认知确认威胁"
+      },
+      "drive_pole": { "valence": -0.7, "intensity": 0.5, "autonomy": -0.5 },
+      "example_cards": ["回避", "妥协", "克制"]
+    },
+    {
+      "id": "reward",
+      "name": "奖励机制",
+      "system": "S1 (BAS)",
+      "default_valence": 1,
+      "core_semantic": "对正面结果的预判驱动行为趋近。多巴胺通路——重要的不是获得奖励，是预期奖励。",
+      "activation": {
+        "sigmoid": "σ(2.5·max(0,V) + 0.8·max(0,A-0.2) - 0.35)",
+        "natural_condition": "V > 0",
+        "hard_unlock": "V < 0（意志力强制激活）"
+      },
+      "cost_sensitivity_beta": 1.2,
+      "effect_gain_gamma": 0.6,
+      "theta_play": 0.25,
+      "theta_force": null,
+      "cognitive_gate_phi": { "condition": "知识表征 ∧ 推理完成", "value": 1.0, "fallback": 0.2 },
+      "inertia": {
+        "rise_half_life": 1.5,
+        "decay_half_life": 2.0,
+        "note": "较慢——需要确认'值得追'"
+      },
+      "drive_pole": { "valence": 1.0, "intensity": 0.6, "autonomy": 0.3 },
+      "example_cards": ["追求", "坚持", "试探"]
+    },
+    {
+      "id": "moral",
+      "name": "道德驱动",
+      "system": "S2",
+      "default_valence": 0,
+      "core_semantic": "内化的对错标准。唯一可以在无外部奖惩时改变行为的驱动力。",
+      "activation": {
+        "sigmoid": "σ(2.0·max(0,D-0.1) + 1.0·(1-|A|) - 0.4)",
+        "natural_condition": "D > -0.3",
+        "hard_unlock": "D ≤ -0.3（意志力坚守）"
+      },
+      "cost_sensitivity_beta": 0.8,
+      "effect_gain_gamma": 0.7,
+      "theta_play": 0.35,
+      "theta_force": null,
+      "cognitive_gate_phi": { "condition": "规范性评估完成", "value": 1.0, "fallback": 0.1 },
+      "inertia": {
+        "rise_half_life": 2.0,
+        "decay_half_life": 3.0,
+        "note": "慢速——规范性推演需要时间"
+      },
+      "drive_pole": { "valence": 0.3, "intensity": 0.4, "autonomy": 0.8 },
+      "example_cards": ["坚守", "维护", "自责"],
+      "special": "与内疚耦合——内疚可短路激活道德驱动（不经过规范性评估）"
+    },
+    {
+      "id": "culture",
+      "name": "文化习俗",
+      "system": "外部脚本",
+      "default_valence": 0,
+      "core_semantic": "从文化环境借用的行为模板。个体不一定是思考者/感受者，只是执行者。",
+      "activation": {
+        "sigmoid": "σ(1.5·(1-|D|) + 2.0·C_score - 0.3)",
+        "natural_condition": "C_score 门控（非 PAD D 门控）",
+        "hard_unlock": "全情绪可走",
+        "note": "唯一不读 PAD D 阈值的驱动——用情境 C_score 门控（见 memory/文化驱动-cscore门控.md）"
+      },
+      "cost_sensitivity_beta": 0.3,
+      "effect_gain_gamma": 0.2,
+      "theta_play": 0.15,
+      "theta_force": null,
+      "cognitive_gate_phi": { "condition": "知识表征完成", "value": 1.0, "fallback": 0.4 },
+      "inertia": {
+        "rise_half_life": 0.5,
+        "decay_half_life": 0.5,
+        "note": "快速——社会脚本执行成本低且稳定"
+      },
+      "drive_pole": { "valence": 0.0, "intensity": 0.2, "autonomy": 0.0 },
+      "example_cards": ["遵从", "从众", "运用仪式"],
+      "special": "情境驱动（situational）——行为输出混合权重 0.5/0.5"
+    },
+    {
+      "id": "value",
+      "name": "价值驱动",
+      "system": "S2 override",
+      "default_valence": null,
+      "core_semantic": "王牌。可以违背生理反应、拒绝奖励、接受惩罚、抛弃道德和文化。",
+      "activation": {
+        "sigmoid": "σ(1.5·max(0,D-0.4) + 3.0·Override_signal - 0.7)",
+        "natural_condition": "D > 0.3",
+        "hard_unlock": "D ≤ 0.3（意志力覆盖）"
+      },
+      "cost_sensitivity_beta": 1.5,
+      "effect_gain_gamma": 1.0,
+      "theta_play": 0.50,
+      "theta_force": null,
+      "cognitive_gate_phi": { "condition": "五模块全部完成", "value": 1.0, "fallback": 0.05 },
+      "inertia": {
+        "rise_half_life": 3.0,
+        "decay_half_life": 5.0,
+        "note": "最慢激活，最持久——信念不轻易改变"
+      },
+      "drive_pole": { "valence": 1.0, "intensity": 1.0, "autonomy": 1.0 },
+      "example_cards": ["牺牲", "突破", "对抗"],
+      "special": "唯一可突破向量限制的驱动——可取任意valence方向"
+    },
+    {
+      "id": "care",
+      "name": "照护",
+      "system": "催产素-多巴胺通路",
+      "default_valence": 1,
+      "core_semantic": "快速趋近脆弱对象、给予保护。不读自身PAD——读被共情传递的他人PAD。",
+      "activation": {
+        "sigmoid": "σ(w_vuln · Vulnerability_signal + w_attach · Attachment_strength - θ_care)",
+        "natural_condition": "Vulnerability_signal × Attachment_strength > θ_care",
+        "hard_unlock": "不可意志控制",
+        "parameters": {
+          "w_vuln": 2.5,
+          "w_attach": 1.5,
+          "theta_care": 0.3
+        }
+      },
+      "cost_sensitivity_beta": 0.6,
+      "effect_gain_gamma": 0.5,
+      "theta_play": 0.30,
+      "theta_force": null,
+      "cognitive_gate_phi": { "condition": "知觉与注意(注意到他人) + 知识表征(归为需要帮助)", "value": 1.0 },
+      "inertia": {
+        "rise_half_life": 0.3,
+        "decay_half_life": "随 Vulnerability_signal 消退",
+        "note": "接近反射速度（看到→已经跳了）。照护完成→快速衰减；被阻止→持续高激活+Arousal上升"
+      },
+      "drive_pole": { "valence": 1.0, "intensity": 0.9, "autonomy": 0.7 },
+      "example_cards": ["安抚", "保护", "舍身"],
+      "special": "情境驱动（situational）——读取被共情的他人PAD，不读自身PAD。自身在恐惧中仍可照护。D < -0.7时无力照护。"
+    }
+  ],
+
+  "behavior_output_model": {
+    "description": "B(t) = λ_raw · B_raw + λ_drive · B_drive",
+    "natural_mix": { "w_raw": 0.8, "w_drive": 0.2, "description": "情绪主导——身体冲动为主" },
+    "forced_mix": { "w_raw": 0.3, "w_drive": 0.7, "description": "意志力覆盖——驱动加工为主" },
+    "situational_mix": { "w_raw": 0.5, "w_drive": 0.5, "description": "情境驱动（文化、照护）" },
+    "lambda_decay": "λ_raw = exp(-cog_progress), λ_drive = 1 - λ_raw"
+  },
+
+  "cognitive_gating_timeline": {
+    "description": "S1驱动激活快→早期可用；S2驱动需要认知推进→后期解锁",
+    "turn_1": { "available": ["反射", "文化习俗"], "note": "惩罚可能可用（φ只需知识表征）" },
+    "turn_2": { "available": ["奖励机制"], "note": "φ需要推理模块" },
+    "turn_3": { "available": ["道德驱动"], "note": "φ需要规范性评估" },
+    "turn_4_plus": { "available": ["价值驱动"], "note": "φ需要全部五个模块" }
+  },
+
+  "illness_distortions": {
+    "抑郁症": { "g_reward": "↓↓", "g_punish": "↑", "effect": "奖励卡难解锁；惩罚卡易解锁且成本低" },
+    "PTSD": { "theta_reflex": "↓", "tau_decay_reflex": "↑↑", "effect": "反射卡几乎总可用；'不逃'需主动压制" },
+    "OCD": { "g_moral": "↑↑", "g_moral_coupled_g_punish": true, "effect": "道德卡总是高亮；可能被惩罚压制折扣" },
+    "躁狂": { "g_reward": "↑↑", "theta_value": "↓↓", "cognitive_gate_shorted": true, "effect": "奖励和价值卡过早解锁" },
+    "焦虑": { "theta_punish": "↓↓", "false_positive": "↑", "effect": "惩罚卡在安全情境中也亮着" }
+  }
+}

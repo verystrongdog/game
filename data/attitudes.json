@@ -1,0 +1,3790 @@
+{
+  "_description": "90 种态度的完整生成数据。每个态度 = 情绪 × 驱动 × 状态（自然/硬解锁/情境），行为输出 B = w_raw·B_raw + w_drive·drive_pole。",
+  "_source": "态度系统/态度模型可视化.html, 态度系统/态度系统.md",
+  "_updated": "2026-07-09",
+  "_count": 90,
+  "_count_note": "15 情绪 × 7 驱动 = 105 理论组合，90 有效（15 无效）。此前文档中提到的 75 种态度为旧版（较少情绪锚点），90 为当前正确数值。",
+  "behavior_output_model": {
+    "formula": "B = w_raw · B_raw(emo.V, |emo.A|, emo.D) + w_drive · drive_pole",
+    "B_raw": "情绪原始推力——Frijda 行为输出空间",
+    "drive_pole": "驱动向量极点——RST + 催产素-多巴胺通路",
+    "mix_weights": {
+      "natural": {
+        "w_raw": 0.8,
+        "w_drive": 0.2,
+        "desc": "情绪主导——身体冲动为主"
+      },
+      "forced": {
+        "w_raw": 0.3,
+        "w_drive": 0.7,
+        "desc": "意志力覆盖——驱动加工为主"
+      },
+      "situational": {
+        "w_raw": 0.5,
+        "w_drive": 0.5,
+        "desc": "情境驱动（文化/照护）——外部脚本或外部信号"
+      }
+    }
+  },
+  "summary_matrix": {
+    "快乐": {
+      "反射": "invalid",
+      "惩罚": "invalid",
+      "奖励": "natural",
+      "道德": "natural",
+      "文化": "situational",
+      "价值": "natural",
+      "照护": "situational"
+    },
+    "爱": {
+      "反射": "invalid",
+      "惩罚": "invalid",
+      "奖励": "natural",
+      "道德": "natural",
+      "文化": "situational",
+      "价值": "natural",
+      "照护": "situational"
+    },
+    "共情": {
+      "反射": "invalid",
+      "惩罚": "forced",
+      "奖励": "natural",
+      "道德": "natural",
+      "文化": "situational",
+      "价值": "forced",
+      "照护": "situational"
+    },
+    "平静": {
+      "反射": "invalid",
+      "惩罚": "invalid",
+      "奖励": "natural",
+      "道德": "natural",
+      "文化": "situational",
+      "价值": "forced",
+      "照护": "situational"
+    },
+    "希望": {
+      "反射": "invalid",
+      "惩罚": "invalid",
+      "奖励": "natural",
+      "道德": "natural",
+      "文化": "situational",
+      "价值": "natural",
+      "照护": "situational"
+    },
+    "敬畏": {
+      "反射": "invalid",
+      "惩罚": "natural",
+      "奖励": "forced",
+      "道德": "forced",
+      "文化": "situational",
+      "价值": "forced",
+      "照护": "situational"
+    },
+    "愤怒": {
+      "反射": "invalid",
+      "惩罚": "natural",
+      "奖励": "forced",
+      "道德": "natural",
+      "文化": "situational",
+      "价值": "natural",
+      "照护": "situational"
+    },
+    "恐惧": {
+      "反射": "natural",
+      "惩罚": "natural",
+      "奖励": "forced",
+      "道德": "forced",
+      "文化": "situational",
+      "价值": "forced",
+      "照护": "situational"
+    },
+    "焦虑": {
+      "反射": "natural",
+      "惩罚": "natural",
+      "奖励": "forced",
+      "道德": "forced",
+      "文化": "situational",
+      "价值": "forced",
+      "照护": "situational"
+    },
+    "厌恶": {
+      "反射": "natural",
+      "惩罚": "natural",
+      "奖励": "forced",
+      "道德": "forced",
+      "文化": "situational",
+      "价值": "forced",
+      "照护": "situational"
+    },
+    "恐怖": {
+      "反射": "invalid",
+      "惩罚": "natural",
+      "奖励": "forced",
+      "道德": "natural",
+      "文化": "situational",
+      "价值": "forced",
+      "照护": "situational"
+    },
+    "绝望": {
+      "反射": "natural",
+      "惩罚": "natural",
+      "奖励": "forced",
+      "道德": "forced",
+      "文化": "situational",
+      "价值": "forced",
+      "照护": "situational"
+    },
+    "内疚": {
+      "反射": "invalid",
+      "惩罚": "natural",
+      "奖励": "forced",
+      "道德": "forced",
+      "文化": "situational",
+      "价值": "forced",
+      "照护": "situational"
+    },
+    "悲痛": {
+      "反射": "invalid",
+      "惩罚": "natural",
+      "奖励": "forced",
+      "道德": "forced",
+      "文化": "situational",
+      "价值": "forced",
+      "照护": "situational"
+    },
+    "孤独": {
+      "反射": "invalid",
+      "惩罚": "natural",
+      "奖励": "forced",
+      "道德": "forced",
+      "文化": "situational",
+      "价值": "forced",
+      "照护": "situational"
+    }
+  },
+  "attitudes": [
+    {
+      "id": "快乐+奖励",
+      "emotion": "快乐",
+      "drive": "奖励",
+      "state": "natural",
+      "state_desc": "情绪主导——身体冲动为主",
+      "b_raw": {
+        "valence": 0.96,
+        "intensity": 0.648,
+        "autonomy": 0.588
+      },
+      "drive_pole": {
+        "valence": 1.0,
+        "intensity": 0.6,
+        "autonomy": 0.3
+      },
+      "behavior_output": {
+        "valence": 0.968,
+        "intensity": 0.6384,
+        "autonomy": 0.5304
+      },
+      "narrative_name": "欢欣",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 6,
+          "scale_with": "intensity"
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.0,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "心灵震慑 6 点"
+      }
+    },
+    {
+      "id": "快乐+道德",
+      "emotion": "快乐",
+      "drive": "道德",
+      "state": "natural",
+      "state_desc": "情绪主导——身体冲动为主",
+      "b_raw": {
+        "valence": 0.96,
+        "intensity": 0.648,
+        "autonomy": 0.588
+      },
+      "drive_pole": {
+        "valence": 0.3,
+        "intensity": 0.4,
+        "autonomy": 0.8
+      },
+      "behavior_output": {
+        "valence": 0.828,
+        "intensity": 0.5984,
+        "autonomy": 0.6304
+      },
+      "narrative_name": "慷慨",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 5,
+          "scale_with": "intensity"
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.0,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "心灵震慑 5 点"
+      }
+    },
+    {
+      "id": "快乐+文化",
+      "emotion": "快乐",
+      "drive": "文化",
+      "state": "situational",
+      "state_desc": "情境驱动（文化/照护）——外部脚本或外部信号",
+      "b_raw": {
+        "valence": 0.96,
+        "intensity": 0.648,
+        "autonomy": 0.588
+      },
+      "drive_pole": {
+        "valence": 0.0,
+        "intensity": 0.2,
+        "autonomy": 0.0
+      },
+      "behavior_output": {
+        "valence": 0.48,
+        "intensity": 0.424,
+        "autonomy": 0.294
+      },
+      "narrative_name": "同乐",
+      "game_effect": {
+        "effect_type": "bolster",
+        "target": "self",
+        "primary": {
+          "stat": "willpower",
+          "amount": 1
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.0,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "意志力 +1"
+      }
+    },
+    {
+      "id": "快乐+价值",
+      "emotion": "快乐",
+      "drive": "价值",
+      "state": "natural",
+      "state_desc": "情绪主导——身体冲动为主",
+      "b_raw": {
+        "valence": 0.96,
+        "intensity": 0.648,
+        "autonomy": 0.588
+      },
+      "drive_pole": {
+        "valence": 1.0,
+        "intensity": 1.0,
+        "autonomy": 1.0
+      },
+      "behavior_output": {
+        "valence": 0.968,
+        "intensity": 0.7184,
+        "autonomy": 0.6704
+      },
+      "narrative_name": "坚信",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 7,
+          "scale_with": "intensity"
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.0,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "心灵震慑 7 点"
+      }
+    },
+    {
+      "id": "快乐+照护",
+      "emotion": "快乐",
+      "drive": "照护",
+      "state": "situational",
+      "state_desc": "情境驱动（文化/照护）——外部脚本或外部信号",
+      "b_raw": {
+        "valence": 0.96,
+        "intensity": 0.648,
+        "autonomy": 0.588
+      },
+      "drive_pole": {
+        "valence": 1.0,
+        "intensity": 0.9,
+        "autonomy": 0.7
+      },
+      "behavior_output": {
+        "valence": 0.98,
+        "intensity": 0.774,
+        "autonomy": 0.644
+      },
+      "narrative_name": "分享",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 8,
+          "scale_with": "intensity"
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.3,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "心灵震慑 8 点"
+      }
+    },
+    {
+      "id": "爱+奖励",
+      "emotion": "爱",
+      "drive": "奖励",
+      "state": "natural",
+      "state_desc": "情绪主导——身体冲动为主",
+      "b_raw": {
+        "valence": 1.0,
+        "intensity": 0.038,
+        "autonomy": 0.346
+      },
+      "drive_pole": {
+        "valence": 1.0,
+        "intensity": 0.6,
+        "autonomy": 0.3
+      },
+      "behavior_output": {
+        "valence": 1.0,
+        "intensity": 0.1504,
+        "autonomy": 0.3368
+      },
+      "narrative_name": "沉浸",
+      "game_effect": {
+        "effect_type": "bolster",
+        "target": "self",
+        "primary": {
+          "stat": "persistent_heal",
+          "amount": 1,
+          "duration": 3
+        },
+        "secondary": {
+          "stat": "willpower",
+          "amount": 1
+        },
+        "self_cost": {
+          "san_wear": 0.0,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": "沉浸——持续3回合每回合回复1 SAN + 意志力+1。爱的奖励不是爆发, 是持续滋养。",
+        "flavor": "持续3回合回复SAN 1/回合 + 意志力+1"
+      }
+    },
+    {
+      "id": "爱+道德",
+      "emotion": "爱",
+      "drive": "道德",
+      "state": "natural",
+      "state_desc": "情绪主导——身体冲动为主",
+      "b_raw": {
+        "valence": 1.0,
+        "intensity": 0.038,
+        "autonomy": 0.346
+      },
+      "drive_pole": {
+        "valence": 0.3,
+        "intensity": 0.4,
+        "autonomy": 0.8
+      },
+      "behavior_output": {
+        "valence": 0.86,
+        "intensity": 0.1104,
+        "autonomy": 0.4368
+      },
+      "narrative_name": "忠诚",
+      "game_effect": {
+        "effect_type": "bolster",
+        "target": "ally",
+        "primary": {
+          "stat": "grant_tenacity",
+          "amount": 2,
+          "duration": 3
+        },
+        "secondary": {
+          "stat": "san_restore",
+          "amount": 1
+        },
+        "self_cost": {
+          "san_wear": 0.0,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": "忠诚——给队友'韧性'2层(持续3回合) + 回复1 SAN。爱中的道德: 不是因为应该, 是因为在乎。",
+        "flavor": "队友韧性+2层(3回合) + 回复SAN 1"
+      }
+    },
+    {
+      "id": "爱+文化",
+      "emotion": "爱",
+      "drive": "文化",
+      "state": "situational",
+      "state_desc": "情境驱动（文化/照护）——外部脚本或外部信号",
+      "b_raw": {
+        "valence": 1.0,
+        "intensity": 0.038,
+        "autonomy": 0.346
+      },
+      "drive_pole": {
+        "valence": 0.0,
+        "intensity": 0.2,
+        "autonomy": 0.0
+      },
+      "behavior_output": {
+        "valence": 0.5,
+        "intensity": 0.119,
+        "autonomy": 0.173
+      },
+      "narrative_name": "依礼",
+      "game_effect": {
+        "effect_type": "bolster",
+        "target": "ally",
+        "primary": {
+          "stat": "bond_strengthen",
+          "amount": 0.2
+        },
+        "secondary": {
+          "stat": "draw",
+          "amount": 1
+        },
+        "self_cost": {
+          "san_wear": 0.0,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": "依礼——强化与目标的Attachment_strength +0.2 + 抽牌+1。文化赋予了爱的表达形式。",
+        "flavor": "情感纽带+0.2 + 抽牌+1"
+      }
+    },
+    {
+      "id": "爱+价值",
+      "emotion": "爱",
+      "drive": "价值",
+      "state": "natural",
+      "state_desc": "情绪主导——身体冲动为主",
+      "b_raw": {
+        "valence": 1.0,
+        "intensity": 0.038,
+        "autonomy": 0.346
+      },
+      "drive_pole": {
+        "valence": 1.0,
+        "intensity": 1.0,
+        "autonomy": 1.0
+      },
+      "behavior_output": {
+        "valence": 1.0,
+        "intensity": 0.2304,
+        "autonomy": 0.4768
+      },
+      "narrative_name": "献身",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 5,
+          "scale_with": "intensity"
+        },
+        "secondary": {
+          "stat": "protect_ally",
+          "amount": 1
+        },
+        "self_cost": {
+          "san_wear": 0.5,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.1
+        },
+        "special": "献身——为所爱之人承受。自身HP-10%, 同时保护1个队友本回合不受伤害。C_control=0 (爱让价值驱动自然流动)。",
+        "flavor": "心灵震慑 5 点 + 保护队友 + 自身HP-10%"
+      }
+    },
+    {
+      "id": "爱+照护",
+      "emotion": "爱",
+      "drive": "照护",
+      "state": "situational",
+      "state_desc": "情境驱动（文化/照护）——外部脚本或外部信号",
+      "b_raw": {
+        "valence": 1.0,
+        "intensity": 0.038,
+        "autonomy": 0.346
+      },
+      "drive_pole": {
+        "valence": 1.0,
+        "intensity": 0.9,
+        "autonomy": 0.7
+      },
+      "behavior_output": {
+        "valence": 1.0,
+        "intensity": 0.469,
+        "autonomy": 0.523
+      },
+      "narrative_name": "守护",
+      "game_effect": {
+        "effect_type": "bolster",
+        "target": "self",
+        "primary": {
+          "stat": "san_restore",
+          "amount": 1
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.3,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "回复 SAN 1 点"
+      }
+    },
+    {
+      "id": "共情+惩罚",
+      "emotion": "共情",
+      "drive": "惩罚",
+      "state": "forced",
+      "state_desc": "意志力覆盖——驱动加工为主",
+      "b_raw": {
+        "valence": 0.458,
+        "intensity": 0.302,
+        "autonomy": 0.09
+      },
+      "drive_pole": {
+        "valence": -0.7,
+        "intensity": 0.5,
+        "autonomy": -0.5
+      },
+      "behavior_output": {
+        "valence": -0.3526,
+        "intensity": 0.4406,
+        "autonomy": -0.323
+      },
+      "narrative_name": "共痛",
+      "game_effect": {
+        "effect_type": "defend",
+        "target": "self",
+        "primary": {
+          "stat": "damage_reduce",
+          "amount": 0.22,
+          "duration": 2
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.4,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "减伤 22% (2回合)"
+      }
+    },
+    {
+      "id": "共情+奖励",
+      "emotion": "共情",
+      "drive": "奖励",
+      "state": "natural",
+      "state_desc": "情绪主导——身体冲动为主",
+      "b_raw": {
+        "valence": 0.458,
+        "intensity": 0.302,
+        "autonomy": 0.09
+      },
+      "drive_pole": {
+        "valence": 1.0,
+        "intensity": 0.6,
+        "autonomy": 0.3
+      },
+      "behavior_output": {
+        "valence": 0.5664,
+        "intensity": 0.3616,
+        "autonomy": 0.132
+      },
+      "narrative_name": "理解",
+      "game_effect": {
+        "effect_type": "bolster",
+        "target": "self",
+        "primary": {
+          "stat": "san_restore",
+          "amount": 1
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.0,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "回复 SAN 1 点"
+      }
+    },
+    {
+      "id": "共情+道德",
+      "emotion": "共情",
+      "drive": "道德",
+      "state": "natural",
+      "state_desc": "情绪主导——身体冲动为主",
+      "b_raw": {
+        "valence": 0.458,
+        "intensity": 0.302,
+        "autonomy": 0.09
+      },
+      "drive_pole": {
+        "valence": 0.3,
+        "intensity": 0.4,
+        "autonomy": 0.8
+      },
+      "behavior_output": {
+        "valence": 0.4264,
+        "intensity": 0.3216,
+        "autonomy": 0.232
+      },
+      "narrative_name": "体谅",
+      "game_effect": {
+        "effect_type": "bolster",
+        "target": "self",
+        "primary": {
+          "stat": "willpower",
+          "amount": 1
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.0,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "意志力 +1"
+      }
+    },
+    {
+      "id": "共情+文化",
+      "emotion": "共情",
+      "drive": "文化",
+      "state": "situational",
+      "state_desc": "情境驱动（文化/照护）——外部脚本或外部信号",
+      "b_raw": {
+        "valence": 0.458,
+        "intensity": 0.302,
+        "autonomy": 0.09
+      },
+      "drive_pole": {
+        "valence": 0.0,
+        "intensity": 0.2,
+        "autonomy": 0.0
+      },
+      "behavior_output": {
+        "valence": 0.229,
+        "intensity": 0.251,
+        "autonomy": 0.045
+      },
+      "narrative_name": "合群",
+      "game_effect": {
+        "effect_type": "freeze",
+        "target": "self",
+        "primary": {
+          "stat": "none",
+          "amount": 0
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.0,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "态度冻结——行为输出过低，无实质效果"
+      }
+    },
+    {
+      "id": "共情+价值",
+      "emotion": "共情",
+      "drive": "价值",
+      "state": "forced",
+      "state_desc": "意志力覆盖——驱动加工为主",
+      "b_raw": {
+        "valence": 0.458,
+        "intensity": 0.302,
+        "autonomy": 0.09
+      },
+      "drive_pole": {
+        "valence": 1.0,
+        "intensity": 1.0,
+        "autonomy": 1.0
+      },
+      "behavior_output": {
+        "valence": 0.8374,
+        "intensity": 0.7906,
+        "autonomy": 0.727
+      },
+      "narrative_name": "见义",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 7,
+          "scale_with": "intensity"
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 1.2,
+          "wp_cost": 2,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "心灵震慑 7 点"
+      }
+    },
+    {
+      "id": "共情+照护",
+      "emotion": "共情",
+      "drive": "照护",
+      "state": "situational",
+      "state_desc": "情境驱动（文化/照护）——外部脚本或外部信号",
+      "b_raw": {
+        "valence": 0.458,
+        "intensity": 0.302,
+        "autonomy": 0.09
+      },
+      "drive_pole": {
+        "valence": 1.0,
+        "intensity": 0.9,
+        "autonomy": 0.7
+      },
+      "behavior_output": {
+        "valence": 0.729,
+        "intensity": 0.601,
+        "autonomy": 0.395
+      },
+      "narrative_name": "抚慰",
+      "game_effect": {
+        "effect_type": "bolster",
+        "target": "ally",
+        "primary": {
+          "stat": "calm_and_heal",
+          "amount": 0.3,
+          "scale_with": "intensity"
+        },
+        "secondary": {
+          "stat": "san_restore",
+          "amount": 2
+        },
+        "self_cost": {
+          "san_wear": 0.3,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": "抚慰——降低目标|A| 0.3 +回复SAN 2。共情先传递再照护: 你理解她的痛苦, 所以你的安抚是真实的。",
+        "flavor": "目标唤醒-0.3 + 回复SAN 2"
+      }
+    },
+    {
+      "id": "平静+奖励",
+      "emotion": "平静",
+      "drive": "奖励",
+      "state": "natural",
+      "state_desc": "情绪主导——身体冲动为主",
+      "b_raw": {
+        "valence": 0.6,
+        "intensity": 0.756,
+        "autonomy": 0.114
+      },
+      "drive_pole": {
+        "valence": 1.0,
+        "intensity": 0.6,
+        "autonomy": 0.3
+      },
+      "behavior_output": {
+        "valence": 0.68,
+        "intensity": 0.7248,
+        "autonomy": 0.1512
+      },
+      "narrative_name": "怡然",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 4,
+          "scale_with": "intensity"
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.0,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "心灵震慑 4 点"
+      }
+    },
+    {
+      "id": "平静+道德",
+      "emotion": "平静",
+      "drive": "道德",
+      "state": "natural",
+      "state_desc": "情绪主导——身体冲动为主",
+      "b_raw": {
+        "valence": 0.6,
+        "intensity": 0.756,
+        "autonomy": 0.114
+      },
+      "drive_pole": {
+        "valence": 0.3,
+        "intensity": 0.4,
+        "autonomy": 0.8
+      },
+      "behavior_output": {
+        "valence": 0.54,
+        "intensity": 0.6848,
+        "autonomy": 0.2512
+      },
+      "narrative_name": "持守",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 3,
+          "scale_with": "intensity"
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.0,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "心灵震慑 3 点"
+      }
+    },
+    {
+      "id": "平静+文化",
+      "emotion": "平静",
+      "drive": "文化",
+      "state": "situational",
+      "state_desc": "情境驱动（文化/照护）——外部脚本或外部信号",
+      "b_raw": {
+        "valence": 0.6,
+        "intensity": 0.756,
+        "autonomy": 0.114
+      },
+      "drive_pole": {
+        "valence": 0.0,
+        "intensity": 0.2,
+        "autonomy": 0.0
+      },
+      "behavior_output": {
+        "valence": 0.3,
+        "intensity": 0.478,
+        "autonomy": 0.057
+      },
+      "narrative_name": "随俗",
+      "game_effect": {
+        "effect_type": "bolster",
+        "target": "self",
+        "primary": {
+          "stat": "draw",
+          "amount": 1
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.0,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "抽牌 +1"
+      }
+    },
+    {
+      "id": "平静+价值",
+      "emotion": "平静",
+      "drive": "价值",
+      "state": "forced",
+      "state_desc": "意志力覆盖——驱动加工为主",
+      "b_raw": {
+        "valence": 0.6,
+        "intensity": 0.756,
+        "autonomy": 0.114
+      },
+      "drive_pole": {
+        "valence": 1.0,
+        "intensity": 1.0,
+        "autonomy": 1.0
+      },
+      "behavior_output": {
+        "valence": 0.88,
+        "intensity": 0.9268,
+        "autonomy": 0.7342
+      },
+      "narrative_name": "淡定",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 9,
+          "scale_with": "intensity"
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 1.4,
+          "wp_cost": 2,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "心灵震慑 9 点"
+      }
+    },
+    {
+      "id": "平静+照护",
+      "emotion": "平静",
+      "drive": "照护",
+      "state": "situational",
+      "state_desc": "情境驱动（文化/照护）——外部脚本或外部信号",
+      "b_raw": {
+        "valence": 0.6,
+        "intensity": 0.756,
+        "autonomy": 0.114
+      },
+      "drive_pole": {
+        "valence": 1.0,
+        "intensity": 0.9,
+        "autonomy": 0.7
+      },
+      "behavior_output": {
+        "valence": 0.8,
+        "intensity": 0.828,
+        "autonomy": 0.407
+      },
+      "narrative_name": "安护",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 6,
+          "scale_with": "intensity"
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.3,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "心灵震慑 6 点"
+      }
+    },
+    {
+      "id": "希望+奖励",
+      "emotion": "希望",
+      "drive": "奖励",
+      "state": "natural",
+      "state_desc": "情绪主导——身体冲动为主",
+      "b_raw": {
+        "valence": 0.854,
+        "intensity": 0.366,
+        "autonomy": 0.478
+      },
+      "drive_pole": {
+        "valence": 1.0,
+        "intensity": 0.6,
+        "autonomy": 0.3
+      },
+      "behavior_output": {
+        "valence": 0.8832,
+        "intensity": 0.4128,
+        "autonomy": 0.4424
+      },
+      "narrative_name": "追寻",
+      "game_effect": {
+        "effect_type": "bolster",
+        "target": "self",
+        "primary": {
+          "stat": "san_restore",
+          "amount": 1
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.0,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "回复 SAN 1 点"
+      }
+    },
+    {
+      "id": "希望+道德",
+      "emotion": "希望",
+      "drive": "道德",
+      "state": "natural",
+      "state_desc": "情绪主导——身体冲动为主",
+      "b_raw": {
+        "valence": 0.854,
+        "intensity": 0.366,
+        "autonomy": 0.478
+      },
+      "drive_pole": {
+        "valence": 0.3,
+        "intensity": 0.4,
+        "autonomy": 0.8
+      },
+      "behavior_output": {
+        "valence": 0.7432,
+        "intensity": 0.3728,
+        "autonomy": 0.5424
+      },
+      "narrative_name": "守志",
+      "game_effect": {
+        "effect_type": "bolster",
+        "target": "self",
+        "primary": {
+          "stat": "san_restore",
+          "amount": 1
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.0,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "回复 SAN 1 点"
+      }
+    },
+    {
+      "id": "希望+文化",
+      "emotion": "希望",
+      "drive": "文化",
+      "state": "situational",
+      "state_desc": "情境驱动（文化/照护）——外部脚本或外部信号",
+      "b_raw": {
+        "valence": 0.854,
+        "intensity": 0.366,
+        "autonomy": 0.478
+      },
+      "drive_pole": {
+        "valence": 0.0,
+        "intensity": 0.2,
+        "autonomy": 0.0
+      },
+      "behavior_output": {
+        "valence": 0.427,
+        "intensity": 0.283,
+        "autonomy": 0.239
+      },
+      "narrative_name": "从善",
+      "game_effect": {
+        "effect_type": "freeze",
+        "target": "self",
+        "primary": {
+          "stat": "none",
+          "amount": 0
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.0,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "态度冻结——行为输出过低，无实质效果"
+      }
+    },
+    {
+      "id": "希望+价值",
+      "emotion": "希望",
+      "drive": "价值",
+      "state": "natural",
+      "state_desc": "情绪主导——身体冲动为主",
+      "b_raw": {
+        "valence": 0.854,
+        "intensity": 0.366,
+        "autonomy": 0.478
+      },
+      "drive_pole": {
+        "valence": 1.0,
+        "intensity": 1.0,
+        "autonomy": 1.0
+      },
+      "behavior_output": {
+        "valence": 0.8832,
+        "intensity": 0.4928,
+        "autonomy": 0.5824
+      },
+      "narrative_name": "笃信",
+      "game_effect": {
+        "effect_type": "bolster",
+        "target": "self",
+        "primary": {
+          "stat": "san_restore",
+          "amount": 1
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.0,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "回复 SAN 1 点"
+      }
+    },
+    {
+      "id": "希望+照护",
+      "emotion": "希望",
+      "drive": "照护",
+      "state": "situational",
+      "state_desc": "情境驱动（文化/照护）——外部脚本或外部信号",
+      "b_raw": {
+        "valence": 0.854,
+        "intensity": 0.366,
+        "autonomy": 0.478
+      },
+      "drive_pole": {
+        "valence": 1.0,
+        "intensity": 0.9,
+        "autonomy": 0.7
+      },
+      "behavior_output": {
+        "valence": 0.927,
+        "intensity": 0.633,
+        "autonomy": 0.589
+      },
+      "narrative_name": "鼓励",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 6,
+          "scale_with": "intensity"
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.3,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "心灵震慑 6 点"
+      }
+    },
+    {
+      "id": "敬畏+惩罚",
+      "emotion": "敬畏",
+      "drive": "惩罚",
+      "state": "natural",
+      "state_desc": "情绪主导——身体冲动为主",
+      "b_raw": {
+        "valence": -0.062,
+        "intensity": 0.48,
+        "autonomy": -0.4
+      },
+      "drive_pole": {
+        "valence": -0.7,
+        "intensity": 0.5,
+        "autonomy": -0.5
+      },
+      "behavior_output": {
+        "valence": -0.1896,
+        "intensity": 0.484,
+        "autonomy": -0.42
+      },
+      "narrative_name": "肃避",
+      "game_effect": {
+        "effect_type": "defend",
+        "target": "self",
+        "primary": {
+          "stat": "damage_reduce",
+          "amount": 0.24,
+          "duration": 2
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.0,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "减伤 24% (2回合)"
+      }
+    },
+    {
+      "id": "敬畏+奖励",
+      "emotion": "敬畏",
+      "drive": "奖励",
+      "state": "forced",
+      "state_desc": "意志力覆盖——驱动加工为主",
+      "b_raw": {
+        "valence": -0.062,
+        "intensity": 0.48,
+        "autonomy": -0.4
+      },
+      "drive_pole": {
+        "valence": 1.0,
+        "intensity": 0.6,
+        "autonomy": 0.3
+      },
+      "behavior_output": {
+        "valence": 0.6814,
+        "intensity": 0.564,
+        "autonomy": 0.09
+      },
+      "narrative_name": "向往",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 3,
+          "scale_with": "intensity"
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 1.0,
+          "wp_cost": 2,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "心灵震慑 3 点"
+      }
+    },
+    {
+      "id": "敬畏+道德",
+      "emotion": "敬畏",
+      "drive": "道德",
+      "state": "forced",
+      "state_desc": "意志力覆盖——驱动加工为主",
+      "b_raw": {
+        "valence": -0.062,
+        "intensity": 0.48,
+        "autonomy": -0.4
+      },
+      "drive_pole": {
+        "valence": 0.3,
+        "intensity": 0.4,
+        "autonomy": 0.8
+      },
+      "behavior_output": {
+        "valence": 0.1914,
+        "intensity": 0.424,
+        "autonomy": 0.44
+      },
+      "narrative_name": "虔诚",
+      "game_effect": {
+        "effect_type": "control",
+        "target": "enemy",
+        "primary": {
+          "stat": "reveal_or_tag",
+          "amount": 1
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.8,
+          "wp_cost": 1,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "揭示/标签 1 个属性"
+      }
+    },
+    {
+      "id": "敬畏+文化",
+      "emotion": "敬畏",
+      "drive": "文化",
+      "state": "situational",
+      "state_desc": "情境驱动（文化/照护）——外部脚本或外部信号",
+      "b_raw": {
+        "valence": -0.062,
+        "intensity": 0.48,
+        "autonomy": -0.4
+      },
+      "drive_pole": {
+        "valence": 0.0,
+        "intensity": 0.2,
+        "autonomy": 0.0
+      },
+      "behavior_output": {
+        "valence": -0.031,
+        "intensity": 0.34,
+        "autonomy": -0.2
+      },
+      "narrative_name": "虔敬",
+      "game_effect": {
+        "effect_type": "bolster",
+        "target": "self",
+        "primary": {
+          "stat": "ritual_boost",
+          "amount": 2.0,
+          "scale_with": "intensity"
+        },
+        "secondary": {
+          "stat": "san_restore",
+          "amount": 2
+        },
+        "self_cost": {
+          "san_wear": 0.0,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": "虔敬——仪式效果翻倍(×2.0)。在宏大存在面前, 文化脚本获得了额外的重量。",
+        "flavor": "本场仪式效果翻倍 + 回复SAN 2"
+      }
+    },
+    {
+      "id": "敬畏+价值",
+      "emotion": "敬畏",
+      "drive": "价值",
+      "state": "forced",
+      "state_desc": "意志力覆盖——驱动加工为主",
+      "b_raw": {
+        "valence": -0.062,
+        "intensity": 0.48,
+        "autonomy": -0.4
+      },
+      "drive_pole": {
+        "valence": 1.0,
+        "intensity": 1.0,
+        "autonomy": 1.0
+      },
+      "behavior_output": {
+        "valence": 0.6814,
+        "intensity": 0.844,
+        "autonomy": 0.58
+      },
+      "narrative_name": "超越",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 6,
+          "scale_with": "intensity"
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 1.5,
+          "wp_cost": 3,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "心灵震慑 6 点"
+      }
+    },
+    {
+      "id": "敬畏+照护",
+      "emotion": "敬畏",
+      "drive": "照护",
+      "state": "situational",
+      "state_desc": "情境驱动（文化/照护）——外部脚本或外部信号",
+      "b_raw": {
+        "valence": -0.062,
+        "intensity": 0.48,
+        "autonomy": -0.4
+      },
+      "drive_pole": {
+        "valence": 1.0,
+        "intensity": 0.9,
+        "autonomy": 0.7
+      },
+      "behavior_output": {
+        "valence": 0.469,
+        "intensity": 0.69,
+        "autonomy": 0.15
+      },
+      "narrative_name": "肃护",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 3,
+          "scale_with": "intensity"
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.3,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "心灵震慑 3 点"
+      }
+    },
+    {
+      "id": "愤怒+惩罚",
+      "emotion": "愤怒",
+      "drive": "惩罚",
+      "state": "natural",
+      "state_desc": "情绪主导——身体冲动为主",
+      "b_raw": {
+        "valence": -0.666,
+        "intensity": 0.73,
+        "autonomy": 0.314
+      },
+      "drive_pole": {
+        "valence": -0.7,
+        "intensity": 0.5,
+        "autonomy": -0.5
+      },
+      "behavior_output": {
+        "valence": -0.6728,
+        "intensity": 0.684,
+        "autonomy": 0.1512
+      },
+      "narrative_name": "反击",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 4,
+          "scale_with": "intensity"
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.0,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "心灵震慑 4 点"
+      }
+    },
+    {
+      "id": "愤怒+奖励",
+      "emotion": "愤怒",
+      "drive": "奖励",
+      "state": "forced",
+      "state_desc": "意志力覆盖——驱动加工为主",
+      "b_raw": {
+        "valence": -0.666,
+        "intensity": 0.73,
+        "autonomy": 0.314
+      },
+      "drive_pole": {
+        "valence": 1.0,
+        "intensity": 0.6,
+        "autonomy": 0.3
+      },
+      "behavior_output": {
+        "valence": 0.5002,
+        "intensity": 0.639,
+        "autonomy": 0.3042
+      },
+      "narrative_name": "征服",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 3,
+          "scale_with": "intensity"
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 1.4,
+          "wp_cost": 2,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "心灵震慑 3 点"
+      }
+    },
+    {
+      "id": "愤怒+道德",
+      "emotion": "愤怒",
+      "drive": "道德",
+      "state": "natural",
+      "state_desc": "情绪主导——身体冲动为主",
+      "b_raw": {
+        "valence": -0.666,
+        "intensity": 0.73,
+        "autonomy": 0.314
+      },
+      "drive_pole": {
+        "valence": 0.3,
+        "intensity": 0.4,
+        "autonomy": 0.8
+      },
+      "behavior_output": {
+        "valence": -0.4728,
+        "intensity": 0.664,
+        "autonomy": 0.4112
+      },
+      "narrative_name": "义愤",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 4,
+          "scale_with": "intensity"
+        },
+        "secondary": {
+          "stat": "moral_intimidate",
+          "amount": 1
+        },
+        "self_cost": {
+          "san_wear": 0.0,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": "义愤——愤怒时道德驱动免费(C=0)。额外: 敌方下回合道德驱动φ推迟1回合。",
+        "flavor": "心灵震慑 4 点 + 敌方道德驱动推迟"
+      }
+    },
+    {
+      "id": "愤怒+文化",
+      "emotion": "愤怒",
+      "drive": "文化",
+      "state": "situational",
+      "state_desc": "情境驱动（文化/照护）——外部脚本或外部信号",
+      "b_raw": {
+        "valence": -0.666,
+        "intensity": 0.73,
+        "autonomy": 0.314
+      },
+      "drive_pole": {
+        "valence": 0.0,
+        "intensity": 0.2,
+        "autonomy": 0.0
+      },
+      "behavior_output": {
+        "valence": -0.333,
+        "intensity": 0.465,
+        "autonomy": 0.157
+      },
+      "narrative_name": "怒仪",
+      "game_effect": {
+        "effect_type": "defend",
+        "target": "self",
+        "primary": {
+          "stat": "damage_reduce",
+          "amount": 0.23,
+          "duration": 2
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.0,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "减伤 23% (2回合)"
+      }
+    },
+    {
+      "id": "愤怒+价值",
+      "emotion": "愤怒",
+      "drive": "价值",
+      "state": "natural",
+      "state_desc": "情绪主导——身体冲动为主",
+      "b_raw": {
+        "valence": -0.666,
+        "intensity": 0.73,
+        "autonomy": 0.314
+      },
+      "drive_pole": {
+        "valence": 1.0,
+        "intensity": 1.0,
+        "autonomy": 1.0
+      },
+      "behavior_output": {
+        "valence": -0.3328,
+        "intensity": 0.784,
+        "autonomy": 0.4512
+      },
+      "narrative_name": "奋起",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 6,
+          "scale_with": "intensity"
+        },
+        "secondary": {
+          "stat": "remove_defense",
+          "amount": 1
+        },
+        "self_cost": {
+          "san_wear": 0.0,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": "奋起——C_control=0，愤怒时价值驱动免费用。无视敌方1个防御效果。",
+        "flavor": "心灵震慑 6 点 + 驱散1个敌方防御"
+      }
+    },
+    {
+      "id": "愤怒+照护",
+      "emotion": "愤怒",
+      "drive": "照护",
+      "state": "situational",
+      "state_desc": "情境驱动（文化/照护）——外部脚本或外部信号",
+      "b_raw": {
+        "valence": -0.666,
+        "intensity": 0.73,
+        "autonomy": 0.314
+      },
+      "drive_pole": {
+        "valence": 1.0,
+        "intensity": 0.9,
+        "autonomy": 0.7
+      },
+      "behavior_output": {
+        "valence": 0.167,
+        "intensity": 0.815,
+        "autonomy": 0.507
+      },
+      "narrative_name": "悍卫",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 1,
+          "scale_with": "intensity"
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.3,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "心灵震慑 1 点"
+      }
+    },
+    {
+      "id": "恐惧+反射",
+      "emotion": "恐惧",
+      "drive": "反射",
+      "state": "natural",
+      "state_desc": "情绪主导——身体冲动为主",
+      "b_raw": {
+        "valence": -0.854,
+        "intensity": 0.68,
+        "autonomy": -0.414
+      },
+      "drive_pole": {
+        "valence": -1.0,
+        "intensity": 1.0,
+        "autonomy": -1.0
+      },
+      "behavior_output": {
+        "valence": -0.8832,
+        "intensity": 0.744,
+        "autonomy": -0.5312
+      },
+      "narrative_name": "溃逃",
+      "game_effect": {
+        "effect_type": "defend",
+        "target": "self",
+        "primary": {
+          "stat": "dodge",
+          "amount": 1,
+          "duration": 1
+        },
+        "secondary": {
+          "stat": "control_loss",
+          "amount": 0.2
+        },
+        "self_cost": {
+          "san_wear": 0.0,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": "溃逃——获得闪避但D轴降低0.2。身体替你做了决定, 控制感流失。",
+        "flavor": "闪避1回合 + D轴-0.2"
+      }
+    },
+    {
+      "id": "恐惧+惩罚",
+      "emotion": "恐惧",
+      "drive": "惩罚",
+      "state": "natural",
+      "state_desc": "情绪主导——身体冲动为主",
+      "b_raw": {
+        "valence": -0.854,
+        "intensity": 0.68,
+        "autonomy": -0.414
+      },
+      "drive_pole": {
+        "valence": -0.7,
+        "intensity": 0.5,
+        "autonomy": -0.5
+      },
+      "behavior_output": {
+        "valence": -0.8232,
+        "intensity": 0.644,
+        "autonomy": -0.4312
+      },
+      "narrative_name": "畏避",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 4,
+          "scale_with": "intensity"
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.0,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "心灵震慑 4 点"
+      }
+    },
+    {
+      "id": "恐惧+奖励",
+      "emotion": "恐惧",
+      "drive": "奖励",
+      "state": "forced",
+      "state_desc": "意志力覆盖——驱动加工为主",
+      "b_raw": {
+        "valence": -0.854,
+        "intensity": 0.68,
+        "autonomy": -0.414
+      },
+      "drive_pole": {
+        "valence": 1.0,
+        "intensity": 0.6,
+        "autonomy": 0.3
+      },
+      "behavior_output": {
+        "valence": 0.4438,
+        "intensity": 0.624,
+        "autonomy": 0.0858
+      },
+      "narrative_name": "强求",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 2,
+          "scale_with": "intensity"
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 1.4,
+          "wp_cost": 2,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "心灵震慑 2 点"
+      }
+    },
+    {
+      "id": "恐惧+道德",
+      "emotion": "恐惧",
+      "drive": "道德",
+      "state": "forced",
+      "state_desc": "意志力覆盖——驱动加工为主",
+      "b_raw": {
+        "valence": -0.854,
+        "intensity": 0.68,
+        "autonomy": -0.414
+      },
+      "drive_pole": {
+        "valence": 0.3,
+        "intensity": 0.4,
+        "autonomy": 0.8
+      },
+      "behavior_output": {
+        "valence": -0.0462,
+        "intensity": 0.484,
+        "autonomy": 0.4358
+      },
+      "narrative_name": "畏义",
+      "game_effect": {
+        "effect_type": "control",
+        "target": "enemy",
+        "primary": {
+          "stat": "reveal_or_tag",
+          "amount": 1
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 1.2,
+          "wp_cost": 2,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "揭示/标签 1 个属性"
+      }
+    },
+    {
+      "id": "恐惧+文化",
+      "emotion": "恐惧",
+      "drive": "文化",
+      "state": "situational",
+      "state_desc": "情境驱动（文化/照护）——外部脚本或外部信号",
+      "b_raw": {
+        "valence": -0.854,
+        "intensity": 0.68,
+        "autonomy": -0.414
+      },
+      "drive_pole": {
+        "valence": 0.0,
+        "intensity": 0.2,
+        "autonomy": 0.0
+      },
+      "behavior_output": {
+        "valence": -0.427,
+        "intensity": 0.44,
+        "autonomy": -0.207
+      },
+      "narrative_name": "从众避",
+      "game_effect": {
+        "effect_type": "defend",
+        "target": "self",
+        "primary": {
+          "stat": "damage_reduce",
+          "amount": 0.22,
+          "duration": 2
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.0,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "减伤 22% (2回合)"
+      }
+    },
+    {
+      "id": "恐惧+价值",
+      "emotion": "恐惧",
+      "drive": "价值",
+      "state": "forced",
+      "state_desc": "意志力覆盖——驱动加工为主",
+      "b_raw": {
+        "valence": -0.854,
+        "intensity": 0.68,
+        "autonomy": -0.414
+      },
+      "drive_pole": {
+        "valence": 1.0,
+        "intensity": 1.0,
+        "autonomy": 1.0
+      },
+      "behavior_output": {
+        "valence": 0.4438,
+        "intensity": 0.904,
+        "autonomy": 0.5758
+      },
+      "narrative_name": "逆流而上",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 8,
+          "scale_with": "intensity"
+        },
+        "secondary": {
+          "stat": "willpower",
+          "amount": 1
+        },
+        "self_cost": {
+          "san_wear": 1.9,
+          "wp_cost": 3,
+          "hp_cost_pct": 0.0
+        },
+        "special": "逆流而上——全游戏最贵硬解锁(C=3.8)。恐惧中坚守价值: 巨额心灵震慑 + 回收1意志力。",
+        "flavor": "心灵震慑 8 点 + 意志力 +1"
+      }
+    },
+    {
+      "id": "恐惧+照护",
+      "emotion": "恐惧",
+      "drive": "照护",
+      "state": "situational",
+      "state_desc": "情境驱动（文化/照护）——外部脚本或外部信号",
+      "b_raw": {
+        "valence": -0.854,
+        "intensity": 0.68,
+        "autonomy": -0.414
+      },
+      "drive_pole": {
+        "valence": 1.0,
+        "intensity": 0.9,
+        "autonomy": 0.7
+      },
+      "behavior_output": {
+        "valence": 0.073,
+        "intensity": 0.79,
+        "autonomy": 0.143
+      },
+      "narrative_name": "以身护",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 1,
+          "scale_with": "intensity"
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.3,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "心灵震慑 1 点"
+      }
+    },
+    {
+      "id": "焦虑+反射",
+      "emotion": "焦虑",
+      "drive": "反射",
+      "state": "natural",
+      "state_desc": "情绪主导——身体冲动为主",
+      "b_raw": {
+        "valence": -0.708,
+        "intensity": 0.73,
+        "autonomy": -0.316
+      },
+      "drive_pole": {
+        "valence": -1.0,
+        "intensity": 1.0,
+        "autonomy": -1.0
+      },
+      "behavior_output": {
+        "valence": -0.7664,
+        "intensity": 0.784,
+        "autonomy": -0.4528
+      },
+      "narrative_name": "惊避",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 5,
+          "scale_with": "intensity"
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.0,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "心灵震慑 5 点"
+      }
+    },
+    {
+      "id": "焦虑+惩罚",
+      "emotion": "焦虑",
+      "drive": "惩罚",
+      "state": "natural",
+      "state_desc": "情绪主导——身体冲动为主",
+      "b_raw": {
+        "valence": -0.708,
+        "intensity": 0.73,
+        "autonomy": -0.316
+      },
+      "drive_pole": {
+        "valence": -0.7,
+        "intensity": 0.5,
+        "autonomy": -0.5
+      },
+      "behavior_output": {
+        "valence": -0.7064,
+        "intensity": 0.684,
+        "autonomy": -0.3528
+      },
+      "narrative_name": "预避",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 4,
+          "scale_with": "intensity"
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.0,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "心灵震慑 4 点"
+      }
+    },
+    {
+      "id": "焦虑+奖励",
+      "emotion": "焦虑",
+      "drive": "奖励",
+      "state": "forced",
+      "state_desc": "意志力覆盖——驱动加工为主",
+      "b_raw": {
+        "valence": -0.708,
+        "intensity": 0.73,
+        "autonomy": -0.316
+      },
+      "drive_pole": {
+        "valence": 1.0,
+        "intensity": 0.6,
+        "autonomy": 0.3
+      },
+      "behavior_output": {
+        "valence": 0.4876,
+        "intensity": 0.639,
+        "autonomy": 0.1152
+      },
+      "narrative_name": "强趋",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 3,
+          "scale_with": "intensity"
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 1.4,
+          "wp_cost": 2,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "心灵震慑 3 点"
+      }
+    },
+    {
+      "id": "焦虑+道德",
+      "emotion": "焦虑",
+      "drive": "道德",
+      "state": "forced",
+      "state_desc": "意志力覆盖——驱动加工为主",
+      "b_raw": {
+        "valence": -0.708,
+        "intensity": 0.73,
+        "autonomy": -0.316
+      },
+      "drive_pole": {
+        "valence": 0.3,
+        "intensity": 0.4,
+        "autonomy": 0.8
+      },
+      "behavior_output": {
+        "valence": -0.0024,
+        "intensity": 0.499,
+        "autonomy": 0.4652
+      },
+      "narrative_name": "焦守",
+      "game_effect": {
+        "effect_type": "control",
+        "target": "enemy",
+        "primary": {
+          "stat": "reveal_or_tag",
+          "amount": 1
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 1.1,
+          "wp_cost": 2,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "揭示/标签 1 个属性"
+      }
+    },
+    {
+      "id": "焦虑+文化",
+      "emotion": "焦虑",
+      "drive": "文化",
+      "state": "situational",
+      "state_desc": "情境驱动（文化/照护）——外部脚本或外部信号",
+      "b_raw": {
+        "valence": -0.708,
+        "intensity": 0.73,
+        "autonomy": -0.316
+      },
+      "drive_pole": {
+        "valence": 0.0,
+        "intensity": 0.2,
+        "autonomy": 0.0
+      },
+      "behavior_output": {
+        "valence": -0.354,
+        "intensity": 0.465,
+        "autonomy": -0.158
+      },
+      "narrative_name": "随流",
+      "game_effect": {
+        "effect_type": "defend",
+        "target": "self",
+        "primary": {
+          "stat": "damage_reduce",
+          "amount": 0.23,
+          "duration": 2
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.0,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "减伤 23% (2回合)"
+      }
+    },
+    {
+      "id": "焦虑+价值",
+      "emotion": "焦虑",
+      "drive": "价值",
+      "state": "forced",
+      "state_desc": "意志力覆盖——驱动加工为主",
+      "b_raw": {
+        "valence": -0.708,
+        "intensity": 0.73,
+        "autonomy": -0.316
+      },
+      "drive_pole": {
+        "valence": 1.0,
+        "intensity": 1.0,
+        "autonomy": 1.0
+      },
+      "behavior_output": {
+        "valence": 0.4876,
+        "intensity": 0.919,
+        "autonomy": 0.6052
+      },
+      "narrative_name": "逆焦",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 5,
+          "scale_with": "intensity"
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 1.9,
+          "wp_cost": 3,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "心灵震慑 5 点"
+      }
+    },
+    {
+      "id": "焦虑+照护",
+      "emotion": "焦虑",
+      "drive": "照护",
+      "state": "situational",
+      "state_desc": "情境驱动（文化/照护）——外部脚本或外部信号",
+      "b_raw": {
+        "valence": -0.708,
+        "intensity": 0.73,
+        "autonomy": -0.316
+      },
+      "drive_pole": {
+        "valence": 1.0,
+        "intensity": 0.9,
+        "autonomy": 0.7
+      },
+      "behavior_output": {
+        "valence": 0.146,
+        "intensity": 0.815,
+        "autonomy": 0.192
+      },
+      "narrative_name": "焦护",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 1,
+          "scale_with": "intensity"
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.3,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "心灵震慑 1 点"
+      }
+    },
+    {
+      "id": "厌恶+反射",
+      "emotion": "厌恶",
+      "drive": "反射",
+      "state": "natural",
+      "state_desc": "情绪主导——身体冲动为主",
+      "b_raw": {
+        "valence": -0.896,
+        "intensity": 0.55,
+        "autonomy": -0.366
+      },
+      "drive_pole": {
+        "valence": -1.0,
+        "intensity": 1.0,
+        "autonomy": -1.0
+      },
+      "behavior_output": {
+        "valence": -0.9168,
+        "intensity": 0.64,
+        "autonomy": -0.4928
+      },
+      "narrative_name": "缩退",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 5,
+          "scale_with": "intensity"
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.0,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "心灵震慑 5 点"
+      }
+    },
+    {
+      "id": "厌恶+惩罚",
+      "emotion": "厌恶",
+      "drive": "惩罚",
+      "state": "natural",
+      "state_desc": "情绪主导——身体冲动为主",
+      "b_raw": {
+        "valence": -0.896,
+        "intensity": 0.55,
+        "autonomy": -0.366
+      },
+      "drive_pole": {
+        "valence": -0.7,
+        "intensity": 0.5,
+        "autonomy": -0.5
+      },
+      "behavior_output": {
+        "valence": -0.8568,
+        "intensity": 0.54,
+        "autonomy": -0.3928
+      },
+      "narrative_name": "排斥",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 4,
+          "scale_with": "intensity"
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.0,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "心灵震慑 4 点"
+      }
+    },
+    {
+      "id": "厌恶+奖励",
+      "emotion": "厌恶",
+      "drive": "奖励",
+      "state": "forced",
+      "state_desc": "意志力覆盖——驱动加工为主",
+      "b_raw": {
+        "valence": -0.896,
+        "intensity": 0.55,
+        "autonomy": -0.366
+      },
+      "drive_pole": {
+        "valence": 1.0,
+        "intensity": 0.6,
+        "autonomy": 0.3
+      },
+      "behavior_output": {
+        "valence": 0.4312,
+        "intensity": 0.585,
+        "autonomy": 0.1002
+      },
+      "narrative_name": "强忍",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 2,
+          "scale_with": "intensity"
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 1.4,
+          "wp_cost": 2,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "心灵震慑 2 点"
+      }
+    },
+    {
+      "id": "厌恶+道德",
+      "emotion": "厌恶",
+      "drive": "道德",
+      "state": "forced",
+      "state_desc": "意志力覆盖——驱动加工为主",
+      "b_raw": {
+        "valence": -0.896,
+        "intensity": 0.55,
+        "autonomy": -0.366
+      },
+      "drive_pole": {
+        "valence": 0.3,
+        "intensity": 0.4,
+        "autonomy": 0.8
+      },
+      "behavior_output": {
+        "valence": -0.0588,
+        "intensity": 0.445,
+        "autonomy": 0.4502
+      },
+      "narrative_name": "厌正",
+      "game_effect": {
+        "effect_type": "control",
+        "target": "enemy",
+        "primary": {
+          "stat": "reveal_or_tag",
+          "amount": 1
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 1.1,
+          "wp_cost": 2,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "揭示/标签 1 个属性"
+      }
+    },
+    {
+      "id": "厌恶+文化",
+      "emotion": "厌恶",
+      "drive": "文化",
+      "state": "situational",
+      "state_desc": "情境驱动（文化/照护）——外部脚本或外部信号",
+      "b_raw": {
+        "valence": -0.896,
+        "intensity": 0.55,
+        "autonomy": -0.366
+      },
+      "drive_pole": {
+        "valence": 0.0,
+        "intensity": 0.2,
+        "autonomy": 0.0
+      },
+      "behavior_output": {
+        "valence": -0.448,
+        "intensity": 0.375,
+        "autonomy": -0.183
+      },
+      "narrative_name": "排异",
+      "game_effect": {
+        "effect_type": "defend",
+        "target": "self",
+        "primary": {
+          "stat": "damage_reduce",
+          "amount": 0.19,
+          "duration": 2
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.0,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "减伤 19% (2回合)"
+      }
+    },
+    {
+      "id": "厌恶+价值",
+      "emotion": "厌恶",
+      "drive": "价值",
+      "state": "forced",
+      "state_desc": "意志力覆盖——驱动加工为主",
+      "b_raw": {
+        "valence": -0.896,
+        "intensity": 0.55,
+        "autonomy": -0.366
+      },
+      "drive_pole": {
+        "valence": 1.0,
+        "intensity": 1.0,
+        "autonomy": 1.0
+      },
+      "behavior_output": {
+        "valence": 0.4312,
+        "intensity": 0.865,
+        "autonomy": 0.5902
+      },
+      "narrative_name": "净除",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 5,
+          "scale_with": "intensity"
+        },
+        "secondary": {
+          "stat": "purge_illusion",
+          "amount": 1
+        },
+        "self_cost": {
+          "san_wear": 1.0,
+          "wp_cost": 2,
+          "hp_cost_pct": 0.0
+        },
+        "special": "净除——额外移除敌方1个观察者效应幻象。厌恶的'要清除而非避开'在价值驱动下获得正当性。",
+        "flavor": "心灵震慑 5 点 + 移除敌方1个幻象"
+      }
+    },
+    {
+      "id": "厌恶+照护",
+      "emotion": "厌恶",
+      "drive": "照护",
+      "state": "situational",
+      "state_desc": "情境驱动（文化/照护）——外部脚本或外部信号",
+      "b_raw": {
+        "valence": -0.896,
+        "intensity": 0.55,
+        "autonomy": -0.366
+      },
+      "drive_pole": {
+        "valence": 1.0,
+        "intensity": 0.9,
+        "autonomy": 0.7
+      },
+      "behavior_output": {
+        "valence": 0.052,
+        "intensity": 0.725,
+        "autonomy": 0.167
+      },
+      "narrative_name": "隔护",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 1,
+          "scale_with": "intensity"
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.3,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "心灵震慑 1 点"
+      }
+    },
+    {
+      "id": "恐怖+惩罚",
+      "emotion": "恐怖",
+      "drive": "惩罚",
+      "state": "natural",
+      "state_desc": "情绪主导——身体冲动为主",
+      "b_raw": {
+        "valence": -0.77,
+        "intensity": 0.7,
+        "autonomy": -0.124
+      },
+      "drive_pole": {
+        "valence": -0.7,
+        "intensity": 0.5,
+        "autonomy": -0.5
+      },
+      "behavior_output": {
+        "valence": -0.756,
+        "intensity": 0.66,
+        "autonomy": -0.1992
+      },
+      "narrative_name": "骇避",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 4,
+          "scale_with": "intensity"
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.0,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "心灵震慑 4 点"
+      }
+    },
+    {
+      "id": "恐怖+奖励",
+      "emotion": "恐怖",
+      "drive": "奖励",
+      "state": "forced",
+      "state_desc": "意志力覆盖——驱动加工为主",
+      "b_raw": {
+        "valence": -0.77,
+        "intensity": 0.7,
+        "autonomy": -0.124
+      },
+      "drive_pole": {
+        "valence": 1.0,
+        "intensity": 0.6,
+        "autonomy": 0.3
+      },
+      "behavior_output": {
+        "valence": 0.469,
+        "intensity": 0.63,
+        "autonomy": 0.1728
+      },
+      "narrative_name": "强定",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 3,
+          "scale_with": "intensity"
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 1.4,
+          "wp_cost": 2,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "心灵震慑 3 点"
+      }
+    },
+    {
+      "id": "恐怖+道德",
+      "emotion": "恐怖",
+      "drive": "道德",
+      "state": "natural",
+      "state_desc": "情绪主导——身体冲动为主",
+      "b_raw": {
+        "valence": -0.77,
+        "intensity": 0.7,
+        "autonomy": -0.124
+      },
+      "drive_pole": {
+        "valence": 0.3,
+        "intensity": 0.4,
+        "autonomy": 0.8
+      },
+      "behavior_output": {
+        "valence": -0.556,
+        "intensity": 0.64,
+        "autonomy": 0.0608
+      },
+      "narrative_name": "怖守",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 3,
+          "scale_with": "intensity"
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.0,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "心灵震慑 3 点"
+      }
+    },
+    {
+      "id": "恐怖+文化",
+      "emotion": "恐怖",
+      "drive": "文化",
+      "state": "situational",
+      "state_desc": "情境驱动（文化/照护）——外部脚本或外部信号",
+      "b_raw": {
+        "valence": -0.77,
+        "intensity": 0.7,
+        "autonomy": -0.124
+      },
+      "drive_pole": {
+        "valence": 0.0,
+        "intensity": 0.2,
+        "autonomy": 0.0
+      },
+      "behavior_output": {
+        "valence": -0.385,
+        "intensity": 0.45,
+        "autonomy": -0.062
+      },
+      "narrative_name": "骇从",
+      "game_effect": {
+        "effect_type": "defend",
+        "target": "self",
+        "primary": {
+          "stat": "damage_reduce",
+          "amount": 0.23,
+          "duration": 2
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.0,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "减伤 22% (2回合)"
+      }
+    },
+    {
+      "id": "恐怖+价值",
+      "emotion": "恐怖",
+      "drive": "价值",
+      "state": "forced",
+      "state_desc": "意志力覆盖——驱动加工为主",
+      "b_raw": {
+        "valence": -0.77,
+        "intensity": 0.7,
+        "autonomy": -0.124
+      },
+      "drive_pole": {
+        "valence": 1.0,
+        "intensity": 1.0,
+        "autonomy": 1.0
+      },
+      "behavior_output": {
+        "valence": 0.469,
+        "intensity": 0.91,
+        "autonomy": 0.6628
+      },
+      "narrative_name": "破怖",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 5,
+          "scale_with": "intensity"
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 1.9,
+          "wp_cost": 3,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "心灵震慑 5 点"
+      }
+    },
+    {
+      "id": "恐怖+照护",
+      "emotion": "恐怖",
+      "drive": "照护",
+      "state": "situational",
+      "state_desc": "情境驱动（文化/照护）——外部脚本或外部信号",
+      "b_raw": {
+        "valence": -0.77,
+        "intensity": 0.7,
+        "autonomy": -0.124
+      },
+      "drive_pole": {
+        "valence": 1.0,
+        "intensity": 0.9,
+        "autonomy": 0.7
+      },
+      "behavior_output": {
+        "valence": 0.115,
+        "intensity": 0.8,
+        "autonomy": 0.288
+      },
+      "narrative_name": "骇护",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 1,
+          "scale_with": "intensity"
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.3,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "心灵震慑 1 点"
+      }
+    },
+    {
+      "id": "绝望+反射",
+      "emotion": "绝望",
+      "drive": "反射",
+      "state": "natural",
+      "state_desc": "情绪主导——身体冲动为主",
+      "b_raw": {
+        "valence": -0.77,
+        "intensity": 0.588,
+        "autonomy": -0.51
+      },
+      "drive_pole": {
+        "valence": -1.0,
+        "intensity": 1.0,
+        "autonomy": -1.0
+      },
+      "behavior_output": {
+        "valence": -0.816,
+        "intensity": 0.6704,
+        "autonomy": -0.608
+      },
+      "narrative_name": "僵冻",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 4,
+          "scale_with": "intensity"
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.0,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "心灵震慑 4 点"
+      }
+    },
+    {
+      "id": "绝望+惩罚",
+      "emotion": "绝望",
+      "drive": "惩罚",
+      "state": "natural",
+      "state_desc": "情绪主导——身体冲动为主",
+      "b_raw": {
+        "valence": -0.77,
+        "intensity": 0.588,
+        "autonomy": -0.51
+      },
+      "drive_pole": {
+        "valence": -0.7,
+        "intensity": 0.5,
+        "autonomy": -0.5
+      },
+      "behavior_output": {
+        "valence": -0.756,
+        "intensity": 0.5704,
+        "autonomy": -0.508
+      },
+      "narrative_name": "退缩",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 3,
+          "scale_with": "intensity"
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.0,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "心灵震慑 3 点"
+      }
+    },
+    {
+      "id": "绝望+奖励",
+      "emotion": "绝望",
+      "drive": "奖励",
+      "state": "forced",
+      "state_desc": "意志力覆盖——驱动加工为主",
+      "b_raw": {
+        "valence": -0.77,
+        "intensity": 0.588,
+        "autonomy": -0.51
+      },
+      "drive_pole": {
+        "valence": 1.0,
+        "intensity": 0.6,
+        "autonomy": 0.3
+      },
+      "behavior_output": {
+        "valence": 0.469,
+        "intensity": 0.5964,
+        "autonomy": 0.057
+      },
+      "narrative_name": "强撑",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 2,
+          "scale_with": "intensity"
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 1.4,
+          "wp_cost": 2,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "心灵震慑 2 点"
+      }
+    },
+    {
+      "id": "绝望+道德",
+      "emotion": "绝望",
+      "drive": "道德",
+      "state": "forced",
+      "state_desc": "意志力覆盖——驱动加工为主",
+      "b_raw": {
+        "valence": -0.77,
+        "intensity": 0.588,
+        "autonomy": -0.51
+      },
+      "drive_pole": {
+        "valence": 0.3,
+        "intensity": 0.4,
+        "autonomy": 0.8
+      },
+      "behavior_output": {
+        "valence": -0.021,
+        "intensity": 0.4564,
+        "autonomy": 0.407
+      },
+      "narrative_name": "绝守",
+      "game_effect": {
+        "effect_type": "control",
+        "target": "enemy",
+        "primary": {
+          "stat": "reveal_or_tag",
+          "amount": 1
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 1.1,
+          "wp_cost": 2,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "揭示/标签 1 个属性"
+      }
+    },
+    {
+      "id": "绝望+文化",
+      "emotion": "绝望",
+      "drive": "文化",
+      "state": "situational",
+      "state_desc": "情境驱动（文化/照护）——外部脚本或外部信号",
+      "b_raw": {
+        "valence": -0.77,
+        "intensity": 0.588,
+        "autonomy": -0.51
+      },
+      "drive_pole": {
+        "valence": 0.0,
+        "intensity": 0.2,
+        "autonomy": 0.0
+      },
+      "behavior_output": {
+        "valence": -0.385,
+        "intensity": 0.394,
+        "autonomy": -0.255
+      },
+      "narrative_name": "沉寂",
+      "game_effect": {
+        "effect_type": "defend",
+        "target": "self",
+        "primary": {
+          "stat": "damage_reduce",
+          "amount": 0.2,
+          "duration": 2
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.0,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "减伤 20% (2回合)"
+      }
+    },
+    {
+      "id": "绝望+价值",
+      "emotion": "绝望",
+      "drive": "价值",
+      "state": "forced",
+      "state_desc": "意志力覆盖——驱动加工为主",
+      "b_raw": {
+        "valence": -0.77,
+        "intensity": 0.588,
+        "autonomy": -0.51
+      },
+      "drive_pole": {
+        "valence": 1.0,
+        "intensity": 1.0,
+        "autonomy": 1.0
+      },
+      "behavior_output": {
+        "valence": 0.469,
+        "intensity": 0.8764,
+        "autonomy": 0.547
+      },
+      "narrative_name": "背水",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 6,
+          "scale_with": "hp_lost"
+        },
+        "secondary": {
+          "stat": "ignore_defense",
+          "amount": 1
+        },
+        "self_cost": {
+          "san_wear": 1.0,
+          "wp_cost": 2,
+          "hp_cost_pct": 0.0
+        },
+        "special": "背水——己方已损失HP比例越高伤害越大。无视敌方常规防御。绝望中唯一的出路。",
+        "flavor": "心灵震慑(随已损HP增长) + 无视防御"
+      }
+    },
+    {
+      "id": "绝望+照护",
+      "emotion": "绝望",
+      "drive": "照护",
+      "state": "situational",
+      "state_desc": "情境驱动（文化/照护）——外部脚本或外部信号",
+      "b_raw": {
+        "valence": -0.77,
+        "intensity": 0.588,
+        "autonomy": -0.51
+      },
+      "drive_pole": {
+        "valence": 1.0,
+        "intensity": 0.9,
+        "autonomy": 0.7
+      },
+      "behavior_output": {
+        "valence": 0.115,
+        "intensity": 0.744,
+        "autonomy": 0.095
+      },
+      "narrative_name": "绝护",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 1,
+          "scale_with": "intensity"
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.3,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "心灵震慑 1 点"
+      }
+    },
+    {
+      "id": "内疚+惩罚",
+      "emotion": "内疚",
+      "drive": "惩罚",
+      "state": "natural",
+      "state_desc": "情绪主导——身体冲动为主",
+      "b_raw": {
+        "valence": -0.584,
+        "intensity": 0.134,
+        "autonomy": -0.588
+      },
+      "drive_pole": {
+        "valence": -0.7,
+        "intensity": 0.5,
+        "autonomy": -0.5
+      },
+      "behavior_output": {
+        "valence": -0.6072,
+        "intensity": 0.2072,
+        "autonomy": -0.5704
+      },
+      "narrative_name": "自责",
+      "game_effect": {
+        "effect_type": "freeze",
+        "target": "self",
+        "primary": {
+          "stat": "none",
+          "amount": 0
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.0,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "态度冻结——行为输出过低，无实质效果"
+      }
+    },
+    {
+      "id": "内疚+奖励",
+      "emotion": "内疚",
+      "drive": "奖励",
+      "state": "forced",
+      "state_desc": "意志力覆盖——驱动加工为主",
+      "b_raw": {
+        "valence": -0.584,
+        "intensity": 0.134,
+        "autonomy": -0.588
+      },
+      "drive_pole": {
+        "valence": 1.0,
+        "intensity": 0.6,
+        "autonomy": 0.3
+      },
+      "behavior_output": {
+        "valence": 0.5248,
+        "intensity": 0.4602,
+        "autonomy": 0.0336
+      },
+      "narrative_name": "强欢",
+      "game_effect": {
+        "effect_type": "bolster",
+        "target": "self",
+        "primary": {
+          "stat": "san_restore",
+          "amount": 1
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.8,
+          "wp_cost": 1,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "回复 SAN 1 点"
+      }
+    },
+    {
+      "id": "内疚+道德",
+      "emotion": "内疚",
+      "drive": "道德",
+      "state": "forced",
+      "state_desc": "意志力覆盖——驱动加工为主",
+      "b_raw": {
+        "valence": -0.584,
+        "intensity": 0.134,
+        "autonomy": -0.588
+      },
+      "drive_pole": {
+        "valence": 0.3,
+        "intensity": 0.4,
+        "autonomy": 0.8
+      },
+      "behavior_output": {
+        "valence": 0.0348,
+        "intensity": 0.3202,
+        "autonomy": 0.3836
+      },
+      "narrative_name": "赎罪",
+      "game_effect": {
+        "effect_type": "bolster",
+        "target": "self",
+        "primary": {
+          "stat": "willpower",
+          "amount": 2
+        },
+        "secondary": {
+          "stat": "moral_activation",
+          "amount": 0.3
+        },
+        "self_cost": {
+          "san_wear": 0.5,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": "赎罪——意志力+2, 道德驱动激活度+0.3。内疚短路激活道德: 不需要规范性评估。",
+        "flavor": "意志力+2 + 道德驱动激活+0.3"
+      }
+    },
+    {
+      "id": "内疚+文化",
+      "emotion": "内疚",
+      "drive": "文化",
+      "state": "situational",
+      "state_desc": "情境驱动（文化/照护）——外部脚本或外部信号",
+      "b_raw": {
+        "valence": -0.584,
+        "intensity": 0.134,
+        "autonomy": -0.588
+      },
+      "drive_pole": {
+        "valence": 0.0,
+        "intensity": 0.2,
+        "autonomy": 0.0
+      },
+      "behavior_output": {
+        "valence": -0.292,
+        "intensity": 0.167,
+        "autonomy": -0.294
+      },
+      "narrative_name": "谢罪",
+      "game_effect": {
+        "effect_type": "freeze",
+        "target": "self",
+        "primary": {
+          "stat": "none",
+          "amount": 0
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.0,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "态度冻结——行为输出过低，无实质效果"
+      }
+    },
+    {
+      "id": "内疚+价值",
+      "emotion": "内疚",
+      "drive": "价值",
+      "state": "forced",
+      "state_desc": "意志力覆盖——驱动加工为主",
+      "b_raw": {
+        "valence": -0.584,
+        "intensity": 0.134,
+        "autonomy": -0.588
+      },
+      "drive_pole": {
+        "valence": 1.0,
+        "intensity": 1.0,
+        "autonomy": 1.0
+      },
+      "behavior_output": {
+        "valence": 0.5248,
+        "intensity": 0.7402,
+        "autonomy": 0.5236
+      },
+      "narrative_name": "补过",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 4,
+          "scale_with": "intensity"
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 1.3,
+          "wp_cost": 2,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "心灵震慑 4 点"
+      }
+    },
+    {
+      "id": "内疚+照护",
+      "emotion": "内疚",
+      "drive": "照护",
+      "state": "situational",
+      "state_desc": "情境驱动（文化/照护）——外部脚本或外部信号",
+      "b_raw": {
+        "valence": -0.584,
+        "intensity": 0.134,
+        "autonomy": -0.588
+      },
+      "drive_pole": {
+        "valence": 1.0,
+        "intensity": 0.9,
+        "autonomy": 0.7
+      },
+      "behavior_output": {
+        "valence": 0.208,
+        "intensity": 0.517,
+        "autonomy": 0.056
+      },
+      "narrative_name": "歉护",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 1,
+          "scale_with": "intensity"
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.3,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "心灵震慑 1 点"
+      }
+    },
+    {
+      "id": "悲痛+惩罚",
+      "emotion": "悲痛",
+      "drive": "惩罚",
+      "state": "natural",
+      "state_desc": "情绪主导——身体冲动为主",
+      "b_raw": {
+        "valence": -0.896,
+        "intensity": 0.424,
+        "autonomy": -0.672
+      },
+      "drive_pole": {
+        "valence": -0.7,
+        "intensity": 0.5,
+        "autonomy": -0.5
+      },
+      "behavior_output": {
+        "valence": -0.8568,
+        "intensity": 0.4392,
+        "autonomy": -0.6376
+      },
+      "narrative_name": "隐忍",
+      "game_effect": {
+        "effect_type": "defend",
+        "target": "self",
+        "primary": {
+          "stat": "damage_reduce",
+          "amount": 0.22,
+          "duration": 2
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.0,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "减伤 22% (2回合)"
+      }
+    },
+    {
+      "id": "悲痛+奖励",
+      "emotion": "悲痛",
+      "drive": "奖励",
+      "state": "forced",
+      "state_desc": "意志力覆盖——驱动加工为主",
+      "b_raw": {
+        "valence": -0.896,
+        "intensity": 0.424,
+        "autonomy": -0.672
+      },
+      "drive_pole": {
+        "valence": 1.0,
+        "intensity": 0.6,
+        "autonomy": 0.3
+      },
+      "behavior_output": {
+        "valence": 0.4312,
+        "intensity": 0.5472,
+        "autonomy": 0.0084
+      },
+      "narrative_name": "强笑",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 2,
+          "scale_with": "intensity"
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 1.2,
+          "wp_cost": 2,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "心灵震慑 2 点"
+      }
+    },
+    {
+      "id": "悲痛+道德",
+      "emotion": "悲痛",
+      "drive": "道德",
+      "state": "forced",
+      "state_desc": "意志力覆盖——驱动加工为主",
+      "b_raw": {
+        "valence": -0.896,
+        "intensity": 0.424,
+        "autonomy": -0.672
+      },
+      "drive_pole": {
+        "valence": 0.3,
+        "intensity": 0.4,
+        "autonomy": 0.8
+      },
+      "behavior_output": {
+        "valence": -0.0588,
+        "intensity": 0.4072,
+        "autonomy": 0.3584
+      },
+      "narrative_name": "悲守",
+      "game_effect": {
+        "effect_type": "control",
+        "target": "enemy",
+        "primary": {
+          "stat": "reveal_or_tag",
+          "amount": 1
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 1.0,
+          "wp_cost": 2,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "揭示/标签 1 个属性"
+      }
+    },
+    {
+      "id": "悲痛+文化",
+      "emotion": "悲痛",
+      "drive": "文化",
+      "state": "situational",
+      "state_desc": "情境驱动（文化/照护）——外部脚本或外部信号",
+      "b_raw": {
+        "valence": -0.896,
+        "intensity": 0.424,
+        "autonomy": -0.672
+      },
+      "drive_pole": {
+        "valence": 0.0,
+        "intensity": 0.2,
+        "autonomy": 0.0
+      },
+      "behavior_output": {
+        "valence": -0.448,
+        "intensity": 0.312,
+        "autonomy": -0.336
+      },
+      "narrative_name": "哀仪",
+      "game_effect": {
+        "effect_type": "defend",
+        "target": "self",
+        "primary": {
+          "stat": "damage_reduce",
+          "amount": 0.16,
+          "duration": 2
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.0,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "减伤 16% (2回合)"
+      }
+    },
+    {
+      "id": "悲痛+价值",
+      "emotion": "悲痛",
+      "drive": "价值",
+      "state": "forced",
+      "state_desc": "意志力覆盖——驱动加工为主",
+      "b_raw": {
+        "valence": -0.896,
+        "intensity": 0.424,
+        "autonomy": -0.672
+      },
+      "drive_pole": {
+        "valence": 1.0,
+        "intensity": 1.0,
+        "autonomy": 1.0
+      },
+      "behavior_output": {
+        "valence": 0.4312,
+        "intensity": 0.8272,
+        "autonomy": 0.4984
+      },
+      "narrative_name": "化悲",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 4,
+          "scale_with": "intensity"
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 1.7,
+          "wp_cost": 3,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "心灵震慑 4 点"
+      }
+    },
+    {
+      "id": "悲痛+照护",
+      "emotion": "悲痛",
+      "drive": "照护",
+      "state": "situational",
+      "state_desc": "情境驱动（文化/照护）——外部脚本或外部信号",
+      "b_raw": {
+        "valence": -0.896,
+        "intensity": 0.424,
+        "autonomy": -0.672
+      },
+      "drive_pole": {
+        "valence": 1.0,
+        "intensity": 0.9,
+        "autonomy": 0.7
+      },
+      "behavior_output": {
+        "valence": 0.052,
+        "intensity": 0.662,
+        "autonomy": 0.014
+      },
+      "narrative_name": "共悲",
+      "game_effect": {
+        "effect_type": "defend",
+        "target": "ally",
+        "primary": {
+          "stat": "shared_calm",
+          "amount": 0.3,
+          "scale_with": "intensity"
+        },
+        "secondary": {
+          "stat": "san_restore",
+          "amount": 1
+        },
+        "self_cost": {
+          "san_wear": 0.3,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": "共悲——两个人扛。降低双方|A| 0.3, 双方各回复1 SAN。悲痛中的照护不是救对方, 是陪对方。",
+        "flavor": "双方唤醒-0.3 + 各回复SAN 1"
+      }
+    },
+    {
+      "id": "孤独+惩罚",
+      "emotion": "孤独",
+      "drive": "惩罚",
+      "state": "natural",
+      "state_desc": "情绪主导——身体冲动为主",
+      "b_raw": {
+        "valence": -0.5,
+        "intensity": 0.548,
+        "autonomy": -0.524
+      },
+      "drive_pole": {
+        "valence": -0.7,
+        "intensity": 0.5,
+        "autonomy": -0.5
+      },
+      "behavior_output": {
+        "valence": -0.54,
+        "intensity": 0.5384,
+        "autonomy": -0.5192
+      },
+      "narrative_name": "自避",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 2,
+          "scale_with": "intensity"
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.0,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "心灵震慑 2 点"
+      }
+    },
+    {
+      "id": "孤独+奖励",
+      "emotion": "孤独",
+      "drive": "奖励",
+      "state": "forced",
+      "state_desc": "意志力覆盖——驱动加工为主",
+      "b_raw": {
+        "valence": -0.5,
+        "intensity": 0.548,
+        "autonomy": -0.524
+      },
+      "drive_pole": {
+        "valence": 1.0,
+        "intensity": 0.6,
+        "autonomy": 0.3
+      },
+      "behavior_output": {
+        "valence": 0.55,
+        "intensity": 0.5844,
+        "autonomy": 0.0528
+      },
+      "narrative_name": "强寻",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 3,
+          "scale_with": "intensity"
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 1.2,
+          "wp_cost": 2,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "心灵震慑 3 点"
+      }
+    },
+    {
+      "id": "孤独+道德",
+      "emotion": "孤独",
+      "drive": "道德",
+      "state": "forced",
+      "state_desc": "意志力覆盖——驱动加工为主",
+      "b_raw": {
+        "valence": -0.5,
+        "intensity": 0.548,
+        "autonomy": -0.524
+      },
+      "drive_pole": {
+        "valence": 0.3,
+        "intensity": 0.4,
+        "autonomy": 0.8
+      },
+      "behavior_output": {
+        "valence": 0.06,
+        "intensity": 0.4444,
+        "autonomy": 0.4028
+      },
+      "narrative_name": "独守",
+      "game_effect": {
+        "effect_type": "control",
+        "target": "enemy",
+        "primary": {
+          "stat": "reveal_or_tag",
+          "amount": 1
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.9,
+          "wp_cost": 1,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "揭示/标签 1 个属性"
+      }
+    },
+    {
+      "id": "孤独+文化",
+      "emotion": "孤独",
+      "drive": "文化",
+      "state": "situational",
+      "state_desc": "情境驱动（文化/照护）——外部脚本或外部信号",
+      "b_raw": {
+        "valence": -0.5,
+        "intensity": 0.548,
+        "autonomy": -0.524
+      },
+      "drive_pole": {
+        "valence": 0.0,
+        "intensity": 0.2,
+        "autonomy": 0.0
+      },
+      "behavior_output": {
+        "valence": -0.25,
+        "intensity": 0.374,
+        "autonomy": -0.262
+      },
+      "narrative_name": "独处",
+      "game_effect": {
+        "effect_type": "defend",
+        "target": "self",
+        "primary": {
+          "stat": "damage_reduce",
+          "amount": 0.19,
+          "duration": 2
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.0,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "减伤 19% (2回合)"
+      }
+    },
+    {
+      "id": "孤独+价值",
+      "emotion": "孤独",
+      "drive": "价值",
+      "state": "forced",
+      "state_desc": "意志力覆盖——驱动加工为主",
+      "b_raw": {
+        "valence": -0.5,
+        "intensity": 0.548,
+        "autonomy": -0.524
+      },
+      "drive_pole": {
+        "valence": 1.0,
+        "intensity": 1.0,
+        "autonomy": 1.0
+      },
+      "behavior_output": {
+        "valence": 0.55,
+        "intensity": 0.8644,
+        "autonomy": 0.5428
+      },
+      "narrative_name": "独行",
+      "game_effect": {
+        "effect_type": "control",
+        "target": "self",
+        "primary": {
+          "stat": "self_redefinition",
+          "amount": 1
+        },
+        "secondary": {
+          "stat": "willpower",
+          "amount": 1
+        },
+        "self_cost": {
+          "san_wear": 0.8,
+          "wp_cost": 1,
+          "hp_cost_pct": 0.0
+        },
+        "special": "独行——重新定义自身1个标签(移除负面/添加新标签)。孤独让价值驱动不是因为有人在看, 而是因为自己相信。",
+        "flavor": "重新定义自身1个标签 + 意志力+1"
+      }
+    },
+    {
+      "id": "孤独+照护",
+      "emotion": "孤独",
+      "drive": "照护",
+      "state": "situational",
+      "state_desc": "情境驱动（文化/照护）——外部脚本或外部信号",
+      "b_raw": {
+        "valence": -0.5,
+        "intensity": 0.548,
+        "autonomy": -0.524
+      },
+      "drive_pole": {
+        "valence": 1.0,
+        "intensity": 0.9,
+        "autonomy": 0.7
+      },
+      "behavior_output": {
+        "valence": 0.25,
+        "intensity": 0.724,
+        "autonomy": 0.088
+      },
+      "narrative_name": "孤护",
+      "game_effect": {
+        "effect_type": "strike",
+        "target": "enemy",
+        "primary": {
+          "stat": "san_damage",
+          "amount": 2,
+          "scale_with": "intensity"
+        },
+        "secondary": {},
+        "self_cost": {
+          "san_wear": 0.3,
+          "wp_cost": 0,
+          "hp_cost_pct": 0.0
+        },
+        "special": null,
+        "flavor": "心灵震慑 2 点"
+      }
+    }
+  ]
+}
