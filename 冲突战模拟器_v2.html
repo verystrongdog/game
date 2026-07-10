@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>冲突战模拟器 v2 — 61张卡池</title>
+<style>
+:root{--bg:#0f1117;--s:#1a1d27;--s2:#22263a;--b:#2a2d38;--t:#e1e4ed;--t2:#b0b5c6;--m:#6b7094;--cog:#4fc3f7;--emo:#ef5350;--beh:#66bb6a;--san:#7e57c2;--hp:#ef5350;--pl:#42a5f5;--en:#ff7043;--wp:#ffd54f}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--t);font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',-apple-system,sans-serif;min-height:100vh;padding:8px;display:flex;flex-direction:column;gap:6px}
+header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;padding:8px 14px;background:var(--s);border-radius:8px;border:1px solid var(--b)}
+h1{font-size:0.95rem}.btn{padding:5px 12px;border-radius:5px;border:1px solid var(--b);background:var(--s2);color:var(--t);cursor:pointer;font-size:0.72rem;font-family:inherit}.btn:hover{background:#2e3350}.btn.primary{background:#3d5af1;border-color:#3d5af1;color:#fff}.btn.sm{padding:3px 7px;font-size:0.62rem}.btn.danger{background:#c62828;border-color:#c62828;color:#fff}
+main{display:grid;grid-template-columns:1fr 1fr;gap:6px;flex:1}@media(max-width:960px){main{grid-template-columns:1fr}}
+.panel{background:var(--s);border-radius:8px;border:1px solid var(--b);padding:8px;display:flex;flex-direction:column;gap:4px}
+.panel.pl{border-top:3px solid var(--pl)}.panel.en{border-top:3px solid var(--en)}
+h2{font-size:0.78rem}.row{display:flex;align-items:center;gap:6px;font-size:0.64rem;flex-wrap:wrap}
+.bar{display:flex;align-items:center;gap:4px}.bar .lb{width:26px;font-weight:600;font-size:0.62rem}
+.bar .bw{flex:1;height:9px;background:#11131c;border-radius:4px;overflow:hidden}
+.bar .bf{height:100%;border-radius:4px;transition:width 0.4s}.bf.san{background:linear-gradient(90deg,#5c3d99,#7e57c2)}.bf.hp{background:linear-gradient(90deg,#c62828,#ef5350)}
+.bar .val{width:50px;text-align:right;font-family:monospace;font-size:0.6rem}
+.stat{font-size:0.6rem;font-family:monospace;color:var(--t2)}
+.pad{display:flex;gap:3px;justify-content:center;font-size:0.62rem;font-family:monospace;padding:3px 6px;background:#11131c;border-radius:4px}
+.pad .pi{flex:1;text-align:center;padding:2px 3px;border-radius:3px}.pad .pl{color:var(--m);font-size:0.54rem}.pad .pv{font-weight:700;font-size:0.7rem}
+.slots{display:flex;gap:4px}
+.slot{flex:1;min-width:85px;min-height:78px;background:var(--s2);border:2px dashed var(--b);border-radius:6px;padding:5px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;transition:all 0.1s}
+.slot:hover{border-color:var(--m)}.slot.set{border-style:solid}.slot.sc{border-color:rgba(79,195,247,0.3)}.slot.se{border-color:rgba(239,83,80,0.3)}.slot.sb{border-color:rgba(102,187,138,0.3)}
+.slot.set.sc{background:rgba(79,195,247,0.06);border-color:var(--cog)}.slot.set.se{background:rgba(239,83,80,0.06);border-color:var(--emo)}.slot.set.sb{background:rgba(102,187,138,0.06);border-color:var(--beh)}
+.slot .lb{font-size:0.56rem;color:var(--m)}.slot .mt{font-size:0.54rem;color:var(--m)}
+.slot .cn{font-size:0.68rem;font-weight:600;text-align:center}.slot .cv{font-size:0.5rem;color:var(--t2);font-family:monospace}
+.slot .apc{font-size:0.52rem;color:var(--wp)}
+.bottom{background:var(--s);border-radius:8px;border:1px solid var(--b);padding:8px}
+.tabs{display:flex;gap:2px;margin-bottom:5px}.tab{padding:3px 10px;border-radius:4px 4px 0 0;background:var(--s2);color:var(--m);cursor:pointer;font-size:0.64rem}.tab.on{background:var(--s);color:var(--t);border:1px solid var(--b);border-bottom:none}
+.tc{display:none}.tc.on{display:block}
+.grid{display:flex;flex-wrap:wrap;gap:4px;max-height:240px;overflow-y:auto}
+.card{width:108px;padding:5px 7px;background:var(--s2);border:1px solid var(--b);border-radius:4px;cursor:pointer;font-size:0.62rem;transition:all 0.1s;display:flex;flex-direction:column;gap:1px}
+.card:hover{border-color:var(--m)}.card.sel{border-color:var(--wp);box-shadow:0 0 6px rgba(255,213,79,0.25)}
+.card .cn{font-weight:600}.card .ct{font-size:0.52rem;color:var(--m)}.card .cv{font-size:0.5rem;font-family:monospace;color:var(--t2)}.card .cd{font-size:0.48rem;color:var(--m);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.card.cog{border-left:2px solid var(--cog)}.card.emo{border-left:2px solid var(--emo)}.card.beh{border-left:2px solid var(--beh)}
+.log{max-height:150px;overflow-y:auto;font-size:0.6rem;font-family:monospace}
+.log .l{padding:1px 4px;border-radius:2px}.log .lr{color:var(--wp);font-weight:600}.log .lp{background:rgba(66,165,245,0.05)}.log .le{background:rgba(255,112,67,0.05)}.log .lw{color:#66bb6a}.log .ll{color:var(--hp)}.log .li{color:var(--m);font-style:italic}
+.filter{display:flex;gap:4px;align-items:center;flex-wrap:wrap;margin-bottom:4px;font-size:0.6rem}
+.filter select,.filter input{padding:2px 6px;border-radius:3px;border:1px solid var(--b);background:var(--s2);color:var(--t);font-size:0.6rem;font-family:inherit}
+@keyframes fw{50%{box-shadow:0 0 14px rgba(102,187,138,0.35)}}@keyframes fl{50%{box-shadow:0 0 14px rgba(239,83,80,0.35)}}.rw{animation:fw 0.5s}.rl{animation:fl 0.5s}
+.combo-badge{font-size:0.54rem;padding:1px 5px;border-radius:3px;font-weight:600}
+.combo-badge.cfull{background:rgba(255,213,79,0.15);color:var(--wp)}
+.combo-badge.cnone{color:var(--m)}
+</style>
+</head>
+<body>
+
+<header>
+  <div><h1>⚔️ 冲突战模拟器 v2</h1><div style="font-size:0.56rem;color:var(--m)">61张卡池 &nbsp;|&nbsp; D轴碰撞 &nbsp;|&nbsp; 空格=结算 &nbsp; 1-6=选槽 &nbsp; ESC=取消选中</div></div>
+  <div style="display:flex;gap:4px;flex-wrap:wrap">
+    <button class="btn primary" onclick="round()">⚡ 结算回合</button>
+    <button class="btn" onclick="autoN(5)">×5</button>
+    <button class="btn" onclick="autoN(10)">×10</button>
+    <button class="btn" onclick="reset()">↺ 重置</button>
+    <button class="btn sm" onclick="rnd()">🎲 随机配牌</button>
+    <button class="btn sm" onclick="rndEmo()">🎭 随机情绪</button>
+  </div>
+</header>
+
+<main>
+  <div class="panel pl" id="pp">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <h2>🧑 角色</h2>
+      <span class="stat">AP:<span id="pap">6</span> &nbsp;WP:<span id="pwp" style="color:var(--wp)">5</span></span>
+    </div>
+    <div class="bar"><span class="lb" style="color:var(--san)">SAN</span><div class="bw"><div class="bf san" id="psb" style="width:100%"></div></div><span class="val" id="psv">100</span></div>
+    <div class="bar"><span class="lb" style="color:var(--hp)">HP</span><div class="bw"><div class="bf hp" id="phb" style="width:100%"></div></div><span class="val" id="phv">100</span></div>
+    <div class="pad" id="ppd"></div>
+    <div class="slots" id="ps"></div>
+    <div id="pcombo" style="text-align:center;min-height:14px"></div>
+  </div>
+  <div class="panel en" id="ep">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <h2>👤 敌方</h2>
+      <span class="stat">AP:<span id="eap">6</span> &nbsp;WP:<span id="ewp" style="color:var(--wp)">5</span></span>
+    </div>
+    <div class="bar"><span class="lb" style="color:var(--san)">SAN</span><div class="bw"><div class="bf san" id="esb" style="width:100%"></div></div><span class="val" id="esv">100</span></div>
+    <div class="bar"><span class="lb" style="color:var(--hp)">HP</span><div class="bw"><div class="bf hp" id="ehb" style="width:100%"></div></div><span class="val" id="ehv">100</span></div>
+    <div class="pad" id="epd"></div>
+    <div class="slots" id="es"></div>
+    <div id="ecombo" style="text-align:center;min-height:14px"></div>
+  </div>
+</main>
+
+<div class="bottom">
+  <div class="tabs">
+    <div class="tab on" onclick="st('lib')">📚 卡牌库 (61张)</div>
+    <div class="tab" onclick="st('log')">📜 战斗日志</div>
+  </div>
+  <div class="tc on" id="t-lib">
+    <div class="filter">
+      <select id="fcat" onchange="rc()"><option value="">全部类型</option><option>认知</option><option>情绪</option><option>行为</option></select>
+      <select id="fsub" onchange="rc()"><option value="">全部子类</option></select>
+      <input id="fq" placeholder="搜索卡名..." oninput="rc()" style="width:100px">
+      <span style="color:var(--m)">点击选中 → 按 1-6 放入卡槽</span>
+    </div>
+    <div class="grid" id="cg"></div>
+  </div>
+  <div class="tc" id="t-log"><div class="log" id="bl"></div></div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// CARD DATA (generated from JSON)
+// ═══════════════════════════════════════════════════════
+const CARDS = [
+  {
+    "id": "e_joy",
+    "n": "快乐",
+    "cat": "情绪",
+    "sub": "positive",
+    "pad": [
+      0.288,
+      0.194,
+      0.176
+    ],
+    "ap": 0,
+    "desc": "快乐绽放——一瞬间，世界变得明亮而广阔。",
+    "link": "奖励机制, 道德驱动"
+  },
+  {
+    "id": "e_love",
+    "n": "爱",
+    "cat": "情绪",
+    "sub": "positive",
+    "pad": [
+      0.3,
+      0.011,
+      0.104
+    ],
+    "ap": 0,
+    "desc": "爱意涌动——你清楚为什么而站在这里。",
+    "link": "奖励机制, 价值驱动, 照护"
+  },
+  {
+    "id": "e_empathy",
+    "n": "共情",
+    "cat": "情绪",
+    "sub": "mixed",
+    "pad": [
+      0.137,
+      -0.091,
+      0.027
+    ],
+    "ap": 0,
+    "desc": "你感受到对方的感受——那情绪穿过你的边界，仿佛是你自己的。",
+    "link": ""
+  },
+  {
+    "id": "e_calm",
+    "n": "平静",
+    "cat": "情绪",
+    "sub": "positive",
+    "pad": [
+      0.18,
+      -0.227,
+      0.034
+    ],
+    "ap": 0,
+    "desc": "平静安住——你不需要去任何地方，不需要变成任何人。",
+    "link": ""
+  },
+  {
+    "id": "e_hope",
+    "n": "希望",
+    "cat": "情绪",
+    "sub": "positive",
+    "pad": [
+      0.256,
+      -0.11,
+      0.143
+    ],
+    "ap": 0,
+    "desc": "希望浮现——你不知道会好起来，但你亲眼见过午夜之后的黎明。",
+    "link": "奖励机制, 价值驱动"
+  },
+  {
+    "id": "e_awe",
+    "n": "敬畏",
+    "cat": "情绪",
+    "sub": "mixed",
+    "pad": [
+      -0.019,
+      0.144,
+      -0.12
+    ],
+    "ap": 0,
+    "desc": "敬畏降临——你被某种远超自身理解的存在压得说不出话。",
+    "link": "反射"
+  },
+  {
+    "id": "e_anger",
+    "n": "愤怒",
+    "cat": "情绪",
+    "sub": "negative",
+    "pad": [
+      -0.2,
+      0.219,
+      0.094
+    ],
+    "ap": 0,
+    "desc": "怒火喷涌——血液冲上头顶，所有选项收窄为一个：向前。",
+    "link": "惩罚机制, 奖励机制, 道德驱动"
+  },
+  {
+    "id": "e_fear",
+    "n": "恐惧",
+    "cat": "情绪",
+    "sub": "negative",
+    "pad": [
+      -0.256,
+      0.204,
+      -0.124
+    ],
+    "ap": 0,
+    "desc": "强烈恐惧爆发——心跳骤停，世界收窄为一条逃生通道。",
+    "link": "反射, 惩罚机制"
+  },
+  {
+    "id": "e_anxiety",
+    "n": "焦虑",
+    "cat": "情绪",
+    "sub": "negative",
+    "pad": [
+      -0.212,
+      0.219,
+      -0.095
+    ],
+    "ap": 0,
+    "desc": "焦虑蔓延——所有可能性中最坏的那一个被无限放大。",
+    "link": "惩罚机制"
+  },
+  {
+    "id": "e_disgust",
+    "n": "厌恶",
+    "cat": "情绪",
+    "sub": "negative",
+    "pad": [
+      -0.269,
+      0.165,
+      -0.11
+    ],
+    "ap": 0,
+    "desc": "厌恶翻涌——这东西不应该存在于世界上。",
+    "link": "惩罚机制, 文化习俗"
+  },
+  {
+    "id": "e_terror",
+    "n": "恐怖",
+    "cat": "情绪",
+    "sub": "negative",
+    "pad": [
+      -0.231,
+      0.21,
+      -0.037
+    ],
+    "ap": 0,
+    "desc": "恐怖撕裂心智——你见证的不可名状之物动摇了存在的根基。",
+    "link": "反射, 惩罚机制"
+  },
+  {
+    "id": "e_despair",
+    "n": "绝望",
+    "cat": "情绪",
+    "sub": "negative",
+    "pad": [
+      -0.231,
+      0.176,
+      -0.153
+    ],
+    "ap": 0,
+    "desc": "绝望蔓延——没有出口。所有路径通向同一堵墙。",
+    "link": "惩罚机制"
+  },
+  {
+    "id": "e_guilt",
+    "n": "内疚",
+    "cat": "情绪",
+    "sub": "negative",
+    "pad": [
+      -0.175,
+      0.04,
+      -0.176
+    ],
+    "ap": 0,
+    "desc": "内疚如潮水涌来——你无法停止回想那个瞬间，如果当初……",
+    "link": "道德驱动"
+  },
+  {
+    "id": "e_sorrow",
+    "n": "悲痛",
+    "cat": "情绪",
+    "sub": "negative",
+    "pad": [
+      -0.269,
+      -0.127,
+      -0.202
+    ],
+    "ap": 0,
+    "desc": "悲痛袭来——看不见的伤口裂开，世界褪色。",
+    "link": ""
+  },
+  {
+    "id": "e_loneliness",
+    "n": "孤独",
+    "cat": "情绪",
+    "sub": "negative",
+    "pad": [
+      -0.15,
+      -0.164,
+      -0.157
+    ],
+    "ap": 0,
+    "desc": "孤独如墙——你站在透明的屏障后面，世界在另一边继续。",
+    "link": ""
+  },
+  {
+    "id": "c_insight",
+    "n": "洞见",
+    "cat": "认知",
+    "sub": "知觉与注意",
+    "pad": [
+      0.12,
+      0.24,
+      0.25
+    ],
+    "ap": 0,
+    "desc": "揭示敌人一个隐藏属性。",
+    "link": "唯物"
+  },
+  {
+    "id": "c_focus",
+    "n": "凝神",
+    "cat": "认知",
+    "sub": "知觉与注意",
+    "pad": [
+      0.06,
+      0.32,
+      0.1
+    ],
+    "ap": 0,
+    "desc": "忽略负面情绪的干扰，保持注意清晰。",
+    "link": "唯心"
+  },
+  {
+    "id": "c_scrutinize",
+    "n": "察微",
+    "cat": "认知",
+    "sub": "知觉与注意",
+    "pad": [
+      0.18,
+      0.4,
+      0.3
+    ],
+    "ap": 0,
+    "desc": "发现环境中隐藏的线索或物件。",
+    "link": "唯物"
+  },
+  {
+    "id": "c_survey",
+    "n": "纵观",
+    "cat": "认知",
+    "sub": "知觉与注意",
+    "pad": [
+      0.03,
+      0.16,
+      0.35
+    ],
+    "ap": 0,
+    "desc": "拓宽注意范围，同时观察多个目标。",
+    "link": "唯物"
+  },
+  {
+    "id": "c_alert",
+    "n": "警觉",
+    "cat": "认知",
+    "sub": "知觉与注意",
+    "pad": [
+      0.09,
+      0.2,
+      0.375
+    ],
+    "ap": 0,
+    "desc": "提前发现敌方的威胁意图。",
+    "link": "唯心"
+  },
+  {
+    "id": "c_reclaim",
+    "n": "拾遗",
+    "cat": "认知",
+    "sub": "记忆",
+    "pad": [
+      0.06,
+      0.32,
+      0.2
+    ],
+    "ap": 0,
+    "desc": "从弃牌堆回收一张卡牌加入手牌。",
+    "link": "唯物"
+  },
+  {
+    "id": "c_recall",
+    "n": "追忆",
+    "cat": "认知",
+    "sub": "记忆",
+    "pad": [
+      0.12,
+      0.44,
+      0.225
+    ],
+    "ap": 0,
+    "desc": "检索牌库中一张特定类型的卡加入手牌。",
+    "link": "唯物"
+  },
+  {
+    "id": "c_letgo",
+    "n": "释怀",
+    "cat": "认知",
+    "sub": "记忆",
+    "pad": [
+      0.0,
+      0.48,
+      0.425
+    ],
+    "ap": 0,
+    "desc": "移除手牌中一张负面情绪卡。",
+    "link": "唯心"
+  },
+  {
+    "id": "c_flashback",
+    "n": "闪回",
+    "cat": "认知",
+    "sub": "记忆",
+    "pad": [
+      0.09,
+      0.36,
+      0.3
+    ],
+    "ap": 0,
+    "desc": "重复结算上回合一张卡的效果。",
+    "link": "唯物"
+  },
+  {
+    "id": "c_etch",
+    "n": "铭刻",
+    "cat": "认知",
+    "sub": "记忆",
+    "pad": [
+      0.06,
+      0.56,
+      0.35
+    ],
+    "ap": 0,
+    "desc": "将当前一张卡的效果保留至下回合。",
+    "link": "唯心"
+  },
+  {
+    "id": "c_discern",
+    "n": "甄别",
+    "cat": "认知",
+    "sub": "知识表征与分类",
+    "pad": [
+      0.21,
+      0.4,
+      0.2
+    ],
+    "ap": 0,
+    "desc": "揭示对象的完整标签和属性。",
+    "link": "唯物"
+  },
+  {
+    "id": "c_label",
+    "n": "定性",
+    "cat": "认知",
+    "sub": "知识表征与分类",
+    "pad": [
+      -0.03,
+      0.36,
+      0.425
+    ],
+    "ap": 0,
+    "desc": "为对象添加或改写一个临时标签。",
+    "link": "唯心"
+  },
+  {
+    "id": "c_attribute",
+    "n": "归因",
+    "cat": "认知",
+    "sub": "知识表征与分类",
+    "pad": [
+      0.15,
+      0.44,
+      0.175
+    ],
+    "ap": 0,
+    "desc": "判断敌方行为的真实动机，降低其行为的威胁评估。",
+    "link": "唯物"
+  },
+  {
+    "id": "c_rectify",
+    "n": "正名",
+    "cat": "认知",
+    "sub": "知识表征与分类",
+    "pad": [
+      0.24,
+      0.48,
+      0.1
+    ],
+    "ap": 0,
+    "desc": "移除对象身上的虚假标签或幻象。",
+    "link": "唯物"
+  },
+  {
+    "id": "c_analogy",
+    "n": "类比",
+    "cat": "认知",
+    "sub": "知识表征与分类",
+    "pad": [
+      0.03,
+      0.4,
+      0.4
+    ],
+    "ap": 0,
+    "desc": "将陌生的对象或情境匹配到已有经验图式。",
+    "link": "唯心"
+  },
+  {
+    "id": "c_metaphor",
+    "n": "隐喻",
+    "cat": "认知",
+    "sub": "表象与语言",
+    "pad": [
+      0.0,
+      0.4,
+      0.4
+    ],
+    "ap": 0,
+    "desc": "重新框定对象的意义，改变其行为倾向。",
+    "link": "唯心"
+  },
+  {
+    "id": "c_depict",
+    "n": "白描",
+    "cat": "认知",
+    "sub": "表象与语言",
+    "pad": [
+      0.21,
+      0.52,
+      0.125
+    ],
+    "ap": 0,
+    "desc": "剥离对象的虚假表象和幻象，看清其本来面目。",
+    "link": "唯物"
+  },
+  {
+    "id": "c_envision",
+    "n": "构想",
+    "cat": "认知",
+    "sub": "表象与语言",
+    "pad": [
+      0.03,
+      0.48,
+      0.375
+    ],
+    "ap": 0,
+    "desc": "在脑海中预演一个可能的未来场景。",
+    "link": "唯心"
+  },
+  {
+    "id": "c_rephrase",
+    "n": "转述",
+    "cat": "认知",
+    "sub": "表象与语言",
+    "pad": [
+      0.09,
+      0.44,
+      0.225
+    ],
+    "ap": 0,
+    "desc": "改变事件的语言描述方式，缓和对情绪的冲击。",
+    "link": "唯物"
+  },
+  {
+    "id": "c_naming",
+    "n": "命名",
+    "cat": "认知",
+    "sub": "表象与语言",
+    "pad": [
+      -0.06,
+      0.6,
+      0.45
+    ],
+    "ap": 0,
+    "desc": "在月光下赋予对象一个名字——这个名字可能变成真的。",
+    "link": "唯心"
+  },
+  {
+    "id": "c_predict",
+    "n": "预判",
+    "cat": "认知",
+    "sub": "推理问题解决与决策",
+    "pad": [
+      0.15,
+      0.44,
+      0.2
+    ],
+    "ap": 0,
+    "desc": "预览敌方下回合最可能采取的行为及其概率分布。",
+    "link": "唯物"
+  },
+  {
+    "id": "c_decide",
+    "n": "决意",
+    "cat": "认知",
+    "sub": "推理问题解决与决策",
+    "pad": [
+      0.03,
+      0.56,
+      0.425
+    ],
+    "ap": 0,
+    "desc": "从多个可能的未来分支中，选择相信其中一个并将其拉近。",
+    "link": "唯心"
+  },
+  {
+    "id": "c_calculate",
+    "n": "筹算",
+    "cat": "认知",
+    "sub": "推理问题解决与决策",
+    "pad": [
+      0.12,
+      0.44,
+      0.175
+    ],
+    "ap": 0,
+    "desc": "优化行动方案，降低下张行为卡的 AP 消耗。",
+    "link": "唯物"
+  },
+  {
+    "id": "c_extend",
+    "n": "推演",
+    "cat": "认知",
+    "sub": "推理问题解决与决策",
+    "pad": [
+      0.09,
+      0.48,
+      0.225
+    ],
+    "ap": 0,
+    "desc": "延长一张效果卡牌的持续时间。",
+    "link": "唯物"
+  },
+  {
+    "id": "c_weigh",
+    "n": "权衡",
+    "cat": "认知",
+    "sub": "推理问题解决与决策",
+    "pad": [
+      0.06,
+      0.52,
+      0.15
+    ],
+    "ap": 0,
+    "desc": "比较两个选项的得失，放弃其中一个以强化另一个。",
+    "link": "唯心"
+  },
+  {
+    "id": "b_flee",
+    "n": "逃跑",
+    "cat": "行为",
+    "sub": "反射",
+    "pad": [
+      -1.0,
+      0.7,
+      -0.7
+    ],
+    "ap": 1,
+    "desc": "避开下一次敌方攻击。",
+    "link": "reflex"
+  },
+  {
+    "id": "b_freeze",
+    "n": "僵住",
+    "cat": "行为",
+    "sub": "反射",
+    "pad": [
+      -0.7,
+      0.7,
+      -0.7
+    ],
+    "ap": 0,
+    "desc": "僵在原地，跳过本回合行动，获得短暂无敌。",
+    "link": "reflex"
+  },
+  {
+    "id": "b_dodge",
+    "n": "闪避",
+    "cat": "行为",
+    "sub": "反射",
+    "pad": [
+      -1.0,
+      0.7,
+      -0.7
+    ],
+    "ap": 1,
+    "desc": "闪开攻击，同时创造反击窗口。",
+    "link": "reflex"
+  },
+  {
+    "id": "b_withdraw",
+    "n": "回避",
+    "cat": "行为",
+    "sub": "惩罚机制",
+    "pad": [
+      -0.79,
+      0.35,
+      -0.35
+    ],
+    "ap": 2,
+    "desc": "远离威胁源，降低后续受伤害概率。",
+    "link": "punish"
+  },
+  {
+    "id": "b_concede",
+    "n": "妥协",
+    "cat": "行为",
+    "sub": "惩罚机制",
+    "pad": [
+      -0.49,
+      0.35,
+      -0.35
+    ],
+    "ap": 2,
+    "desc": "接受部分损失，换取避免更大伤害。",
+    "link": "punish"
+  },
+  {
+    "id": "b_restrain",
+    "n": "克制",
+    "cat": "行为",
+    "sub": "惩罚机制",
+    "pad": [
+      -0.49,
+      0.35,
+      -0.35
+    ],
+    "ap": 2,
+    "desc": "主动抑制冲动或念头，回收意志力。",
+    "link": "punish"
+  },
+  {
+    "id": "b_pursue",
+    "n": "追求",
+    "cat": "行为",
+    "sub": "奖励机制",
+    "pad": [
+      1.0,
+      0.42,
+      0.21
+    ],
+    "ap": 2,
+    "desc": "主动趋近目标，获取资源增益。",
+    "link": "reward"
+  },
+  {
+    "id": "b_persist",
+    "n": "坚持",
+    "cat": "行为",
+    "sub": "奖励机制",
+    "pad": [
+      1.0,
+      0.42,
+      0.21
+    ],
+    "ap": 3,
+    "desc": "面对阻碍不放弃，累积增益。",
+    "link": "reward"
+  },
+  {
+    "id": "b_probe",
+    "n": "试探",
+    "cat": "行为",
+    "sub": "奖励机制",
+    "pad": [
+      1.0,
+      0.42,
+      0.21
+    ],
+    "ap": 1,
+    "desc": "低成本探测敌方弱点或环境机会。",
+    "link": "reward"
+  },
+  {
+    "id": "b_hold_fast",
+    "n": "坚守",
+    "cat": "行为",
+    "sub": "道德驱动",
+    "pad": [
+      0.21,
+      0.28,
+      0.56
+    ],
+    "ap": 3,
+    "desc": "在压力中守住立场，稳定自身状态。",
+    "link": "moral"
+  },
+  {
+    "id": "b_uphold",
+    "n": "维护",
+    "cat": "行为",
+    "sub": "道德驱动",
+    "pad": [
+      0.21,
+      0.28,
+      0.56
+    ],
+    "ap": 2,
+    "desc": "为受威胁的他人或原则辩护。",
+    "link": "moral"
+  },
+  {
+    "id": "b_self_reproach",
+    "n": "自责",
+    "cat": "行为",
+    "sub": "道德驱动",
+    "pad": [
+      -0.09,
+      0.28,
+      0.56
+    ],
+    "ap": 2,
+    "desc": "将内疚转化为行动力，重新确认道德标准。",
+    "link": "moral"
+  },
+  {
+    "id": "b_conform",
+    "n": "遵从",
+    "cat": "行为",
+    "sub": "文化习俗",
+    "pad": [
+      0.0,
+      0.14,
+      0.0
+    ],
+    "ap": 1,
+    "desc": "按照当前情境的社会脚本行事，低消耗稳定局面。",
+    "link": "culture"
+  },
+  {
+    "id": "b_follow",
+    "n": "从众",
+    "cat": "行为",
+    "sub": "文化习俗",
+    "pad": [
+      0.0,
+      0.14,
+      0.0
+    ],
+    "ap": 1,
+    "desc": "与群体保持一致，共享风险和收益。",
+    "link": "culture"
+  },
+  {
+    "id": "b_ritual",
+    "n": "运用仪式",
+    "cat": "行为",
+    "sub": "文化习俗",
+    "pad": [
+      0.0,
+      0.14,
+      0.0
+    ],
+    "ap": 2,
+    "desc": "通过仪式行为获得净化或增益效果。",
+    "link": "culture"
+  },
+  {
+    "id": "b_sacrifice",
+    "n": "牺牲",
+    "cat": "行为",
+    "sub": "价值驱动",
+    "pad": [
+      1.0,
+      0.7,
+      0.7
+    ],
+    "ap": 3,
+    "desc": "放弃自身一项重要资源，对敌人造成重创。",
+    "link": "value"
+  },
+  {
+    "id": "b_breakthrough",
+    "n": "突破",
+    "cat": "行为",
+    "sub": "价值驱动",
+    "pad": [
+      1.0,
+      0.7,
+      0.7
+    ],
+    "ap": 4,
+    "desc": "打破自身或敌方的极限，创造不可能的结果。",
+    "link": "value"
+  },
+  {
+    "id": "b_confront",
+    "n": "对抗",
+    "cat": "行为",
+    "sub": "价值驱动",
+    "pad": [
+      1.0,
+      0.7,
+      0.7
+    ],
+    "ap": 3,
+    "desc": "正面挑战敌方或系统，可能改变战斗规则。",
+    "link": "value"
+  },
+  {
+    "id": "b_soothe",
+    "n": "安抚",
+    "cat": "行为",
+    "sub": "照护",
+    "pad": [
+      1.0,
+      0.63,
+      0.49
+    ],
+    "ap": 2,
+    "desc": "平复目标的恐惧或焦虑情绪，给予安全感。",
+    "link": "care"
+  },
+  {
+    "id": "b_shield",
+    "n": "保护",
+    "cat": "行为",
+    "sub": "照护",
+    "pad": [
+      1.0,
+      0.63,
+      0.49
+    ],
+    "ap": 2,
+    "desc": "为队友抵挡下一次攻击。",
+    "link": "care"
+  },
+  {
+    "id": "b_body_block",
+    "n": "舍身",
+    "cat": "行为",
+    "sub": "照护",
+    "pad": [
+      1.0,
+      0.63,
+      0.49
+    ],
+    "ap": 4,
+    "desc": "以自身承受致命伤害为代价，换目标的绝对安全。",
+    "link": "care"
+  }
+];
+
+// ═══════════════════════════════════════════════════════
+// ATTITUDES LOOKUP — key: "emoName|behSub" → {name, flavor}
+// ═══════════════════════════════════════════════════════
+const ATTITUDES={"快乐|奖励机制":{"name":"欢欣","flavor":"心灵震慑 6 点","fx":"strike"},"快乐|道德驱动":{"name":"慷慨","flavor":"心灵震慑 5 点","fx":"strike"},"快乐|文化习俗":{"name":"同乐","flavor":"意志力 +1","fx":"bolster"},"快乐|价值驱动":{"name":"坚信","flavor":"心灵震慑 7 点","fx":"strike"},"快乐|照护":{"name":"分享","flavor":"心灵震慑 8 点","fx":"strike"},"爱|奖励机制":{"name":"沉浸","flavor":"持续3回合回复SAN 1/回合 + 意志力+1","fx":"bolster"},"爱|道德驱动":{"name":"忠诚","flavor":"队友韧性+2层(3回合) + 回复SAN 1","fx":"bolster"},"爱|文化习俗":{"name":"依礼","flavor":"情感纽带+0.2 + 抽牌+1","fx":"bolster"},"爱|价值驱动":{"name":"至死不渝","flavor":"心灵震慑 5 点 + 保护队友 + 自身HP-10%","fx":"strike"},"爱|照护":{"name":"守护","flavor":"回复 SAN 1 点","fx":"bolster"},"共情|惩罚机制":{"name":"共痛","flavor":"减伤 22% (2回合)","fx":"defend"},"共情|奖励机制":{"name":"理解","flavor":"回复 SAN 1 点","fx":"bolster"},"共情|道德驱动":{"name":"体谅","flavor":"意志力 +1","fx":"bolster"},"共情|文化习俗":{"name":"合群","flavor":"态度冻结——行为输出过低，无实质效果","fx":"freeze"},"共情|价值驱动":{"name":"见义","flavor":"心灵震慑 7 点","fx":"strike"},"共情|照护":{"name":"抚慰","flavor":"目标唤醒-0.3 + 回复SAN 2","fx":"bolster"},"平静|奖励机制":{"name":"怡然","flavor":"心灵震慑 4 点","fx":"strike"},"平静|道德驱动":{"name":"持守","flavor":"心灵震慑 3 点","fx":"strike"},"平静|文化习俗":{"name":"随俗","flavor":"抽牌 +1","fx":"bolster"},"平静|价值驱动":{"name":"开门见山","flavor":"心灵震慑 9 点","fx":"strike"},"平静|照护":{"name":"安护","flavor":"心灵震慑 6 点","fx":"strike"},"希望|奖励机制":{"name":"追寻","flavor":"回复 SAN 1 点","fx":"bolster"},"希望|道德驱动":{"name":"守志","flavor":"回复 SAN 1 点","fx":"bolster"},"希望|文化习俗":{"name":"从善","flavor":"态度冻结——行为输出过低，无实质效果","fx":"freeze"},"希望|价值驱动":{"name":"笃信","flavor":"回复 SAN 1 点","fx":"bolster"},"希望|照护":{"name":"鼓励","flavor":"心灵震慑 6 点","fx":"strike"},"敬畏|惩罚机制":{"name":"肃避","flavor":"减伤 24% (2回合)","fx":"defend"},"敬畏|奖励机制":{"name":"向往","flavor":"心灵震慑 3 点","fx":"strike"},"敬畏|道德驱动":{"name":"虔诚","flavor":"揭示/标签 1 个属性","fx":"control"},"敬畏|文化习俗":{"name":"肃穆","flavor":"本场仪式效果翻倍 + 回复SAN 2","fx":"bolster"},"敬畏|价值驱动":{"name":"超越","flavor":"心灵震慑 6 点","fx":"strike"},"敬畏|照护":{"name":"肃护","flavor":"心灵震慑 3 点","fx":"strike"},"愤怒|惩罚机制":{"name":"反击","flavor":"心灵震慑 4 点","fx":"strike"},"愤怒|奖励机制":{"name":"征服","flavor":"心灵震慑 3 点","fx":"strike"},"愤怒|道德驱动":{"name":"理直气壮","flavor":"心灵震慑 4 点 + 敌方道德驱动推迟","fx":"strike"},"愤怒|文化习俗":{"name":"怒仪","flavor":"减伤 23% (2回合)","fx":"defend"},"愤怒|价值驱动":{"name":"奋起","flavor":"心灵震慑 6 点 + 驱散1个敌方防御","fx":"strike"},"愤怒|照护":{"name":"悍卫","flavor":"心灵震慑 1 点","fx":"strike"},"恐惧|反射":{"name":"溃逃","flavor":"闪避1回合 + D轴-0.2","fx":"defend"},"恐惧|惩罚机制":{"name":"畏避","flavor":"心灵震慑 4 点","fx":"strike"},"恐惧|奖励机制":{"name":"强求","flavor":"心灵震慑 2 点","fx":"strike"},"恐惧|道德驱动":{"name":"畏义","flavor":"揭示/标签 1 个属性","fx":"control"},"恐惧|文化习俗":{"name":"从众避","flavor":"减伤 22% (2回合)","fx":"defend"},"恐惧|价值驱动":{"name":"逆流而上","flavor":"心灵震慑 8 点 + 意志力 +1","fx":"strike"},"恐惧|照护":{"name":"以身护","flavor":"心灵震慑 1 点","fx":"strike"},"焦虑|反射":{"name":"惊避","flavor":"心灵震慑 5 点","fx":"strike"},"焦虑|惩罚机制":{"name":"预避","flavor":"心灵震慑 4 点","fx":"strike"},"焦虑|奖励机制":{"name":"强趋","flavor":"心灵震慑 3 点","fx":"strike"},"焦虑|道德驱动":{"name":"焦守","flavor":"揭示/标签 1 个属性","fx":"control"},"焦虑|文化习俗":{"name":"随流","flavor":"减伤 23% (2回合)","fx":"defend"},"焦虑|价值驱动":{"name":"事不宜迟","flavor":"心灵震慑 5 点","fx":"strike"},"焦虑|照护":{"name":"焦护","flavor":"心灵震慑 1 点","fx":"strike"},"厌恶|反射":{"name":"缩退","flavor":"心灵震慑 5 点","fx":"strike"},"厌恶|惩罚机制":{"name":"排斥","flavor":"心灵震慑 4 点","fx":"strike"},"厌恶|奖励机制":{"name":"强忍","flavor":"心灵震慑 2 点","fx":"strike"},"厌恶|道德驱动":{"name":"嫉恶如仇","flavor":"揭示/标签 1 个属性","fx":"control"},"厌恶|文化习俗":{"name":"排异","flavor":"减伤 19% (2回合)","fx":"defend"},"厌恶|价值驱动":{"name":"斩草除根","flavor":"心灵震慑 5 点 + 移除敌方1个幻象","fx":"strike"},"厌恶|照护":{"name":"隔护","flavor":"心灵震慑 1 点","fx":"strike"},"恐怖|惩罚机制":{"name":"骇避","flavor":"心灵震慑 4 点","fx":"strike"},"恐怖|奖励机制":{"name":"强定","flavor":"心灵震慑 3 点","fx":"strike"},"恐怖|道德驱动":{"name":"怖守","flavor":"心灵震慑 3 点","fx":"strike"},"恐怖|文化习俗":{"name":"骇从","flavor":"减伤 22% (2回合)","fx":"defend"},"恐怖|价值驱动":{"name":"破怖","flavor":"心灵震慑 5 点","fx":"strike"},"恐怖|照护":{"name":"骇护","flavor":"心灵震慑 1 点","fx":"strike"},"绝望|反射":{"name":"僵冻","flavor":"心灵震慑 4 点","fx":"strike"},"绝望|惩罚机制":{"name":"退缩","flavor":"心灵震慑 3 点","fx":"strike"},"绝望|奖励机制":{"name":"强撑","flavor":"心灵震慑 2 点","fx":"strike"},"绝望|道德驱动":{"name":"绝守","flavor":"揭示/标签 1 个属性","fx":"control"},"绝望|文化习俗":{"name":"沉寂","flavor":"减伤 20% (2回合)","fx":"defend"},"绝望|价值驱动":{"name":"背水","flavor":"心灵震慑(随已损HP增长) + 无视防御","fx":"strike"},"绝望|照护":{"name":"绝护","flavor":"心灵震慑 1 点","fx":"strike"},"内疚|惩罚机制":{"name":"自责","flavor":"态度冻结——行为输出过低，无实质效果","fx":"freeze"},"内疚|奖励机制":{"name":"强欢","flavor":"回复 SAN 1 点","fx":"bolster"},"内疚|道德驱动":{"name":"赎罪","flavor":"意志力+2 + 道德驱动激活+0.3","fx":"bolster"},"内疚|文化习俗":{"name":"谢罪","flavor":"态度冻结——行为输出过低，无实质效果","fx":"freeze"},"内疚|价值驱动":{"name":"补过","flavor":"心灵震慑 4 点","fx":"strike"},"内疚|照护":{"name":"歉护","flavor":"心灵震慑 1 点","fx":"strike"},"悲痛|惩罚机制":{"name":"隐忍","flavor":"减伤 22% (2回合)","fx":"defend"},"悲痛|奖励机制":{"name":"强笑","flavor":"心灵震慑 2 点","fx":"strike"},"悲痛|道德驱动":{"name":"悲守","flavor":"揭示/标签 1 个属性","fx":"control"},"悲痛|文化习俗":{"name":"哀仪","flavor":"减伤 16% (2回合)","fx":"defend"},"悲痛|价值驱动":{"name":"化悲","flavor":"心灵震慑 4 点","fx":"strike"},"悲痛|照护":{"name":"共悲","flavor":"双方唤醒-0.3 + 各回复SAN 1","fx":"defend"},"孤独|惩罚机制":{"name":"自避","flavor":"心灵震慑 2 点","fx":"strike"},"孤独|奖励机制":{"name":"强寻","flavor":"心灵震慑 3 点","fx":"strike"},"孤独|道德驱动":{"name":"独守","flavor":"揭示/标签 1 个属性","fx":"control"},"孤独|文化习俗":{"name":"独处","flavor":"减伤 19% (2回合)","fx":"defend"},"孤独|价值驱动":{"name":"独行","flavor":"重新定义自身1个标签 + 意志力+1","fx":"control"},"孤独|照护":{"name":"孤护","flavor":"心灵震慑 2 点","fx":"strike"}};
+// 认知模块名映射 (卡片sub → 灵感表简称)
+const COG_MOD_MAP = {'知识表征与分类':'知识表征','推理问题解决与决策':'推理'};
+// 酝酿名: "认知模块|情绪名" → 子类成语
+const COG_EMO_NAMES={"知觉与注意|快乐":"闻风而动","知觉与注意|共情":"顺水推舟","知识表征|恐惧":"视为畏途","表象与语言|快乐":"得意洋洋","记忆|快乐":"悠然神往","表象与语言|共情":"言传身教","表象与语言|恐惧":"硬着头皮","推理|恐惧":"惊恐失色","记忆|共情":"推己及人","知觉与注意|恐惧":"虎口夺食","记忆|恐惧":"魂飞魄散","知觉与注意|愤怒":"怒目切齿","记忆|愤怒":"怒火中烧","知识表征|愤怒":"义愤填膺","表象与语言|愤怒":"怒不可遏","推理|愤怒":"怒发冲冠","知觉与注意|内疚":"面红耳赤","记忆|内疚":"改过自新","知识表征|内疚":"羞愧满面","表象与语言|内疚":"吞吞吐吐","推理|内疚":"羞愧难当","知觉与注意|焦虑":"惊惶失措","记忆|焦虑":"惶恐不安","知识表征|焦虑":"心神不宁","表象与语言|焦虑":"张口结舌","推理|焦虑":"忧心如捣","知觉与注意|悲痛":"呆若木鸡","记忆|悲痛":"悲从中来","知识表征|悲痛":"痛不欲生","表象与语言|悲痛":"泣不成声","推理|悲痛":"肝肠寸断","知识表征|共情":"趋利避害","推理|共情":"明哲保身","知识表征|快乐":"心有余悸","推理|快乐":"临渊羡鱼","知觉与注意|爱":"投鼠忌器","记忆|爱":"一朝被蛇咬","知识表征|爱":"投鼠忌器","表象与语言|爱":"畏葸不前","推理|爱":"瞻前顾后","知觉与注意|厌恶":"嫉恶如仇","记忆|厌恶":"深恶痛绝","知识表征|厌恶":"不寒而栗","表象与语言|厌恶":"万念俱灰","推理|厌恶":"不屑一顾"};
+// 执行名: "认知模块|行为驱动" → 子类成语
+const COG_BEH_NAMES={"知觉与注意|奖励机制":"闻风而动","知觉与注意|道德驱动":"助人为乐","知觉与注意|惩罚机制":"临阵退缩","知识表征|奖励机制":"铤而走险","知识表征|反射":"视为畏途","知识表征|惩罚机制":"视为畏途","表象与语言|价值驱动":"得意洋洋","记忆|文化习俗":"悠然神往","表象与语言|惩罚机制":"欲言又止","知觉与注意|文化习俗":"静观默察","表象与语言|奖励机制":"硬着头皮","推理|反射":"惊恐失色","推理|惩罚机制":"趋利避害","记忆|奖励机制":"黄粱美梦","记忆|道德驱动":"乐道安贫","记忆|惩罚机制":"患得患失","知觉与注意|反射":"噤若寒蝉","记忆|反射":"魂飞魄散","表象与语言|反射":"张口结舌","推理|奖励机制":"铤而走险","知识表征|道德驱动":"临危不惧","表象与语言|道德驱动":"责无旁贷","推理|道德驱动":"赴汤蹈火","知识表征|文化习俗":"讳疾忌医","表象与语言|文化习俗":"战战兢兢","推理|文化习俗":"未雨绸缪","知觉与注意|价值驱动":"视死如归","记忆|价值驱动":"惊涛骇浪","知识表征|价值驱动":"赴汤蹈火","推理|价值驱动":"背水一战"};
+
+function normCog(sub){ return COG_MOD_MAP[sub] || sub; }
+
+// ═══════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════
+let S = {
+  p: {san:100,ms:100,hp:100,mh:100,pad:[0,0,0],sl:[null,null,null],ap:6,wp:5},
+  e: {san:100,ms:100,hp:100,mh:100,pad:[0,0,0],sl:[null,null,null],ap:6,wp:5},
+  r: 0, sel: null, log: []
+};
+
+// ═══════════════════════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════════════════════
+function rc(){
+  let cat = document.getElementById('fcat').value;
+  let sub = document.getElementById('fsub').value;
+  let q = document.getElementById('fq').value.toLowerCase();
+  let subs = new Set();
+  CARDS.forEach(c => { if(c.sub) subs.add(c.sub); });
+
+  // update sub filter
+  let sel = document.getElementById('fsub');
+  let csv = sel.value;
+  sel.innerHTML = '<option value="">全部子类</option>' + [...subs].sort().map(s => `<option${s===csv?' selected':''}>${s}</option>`).join('');
+
+  let filtered = CARDS.filter(c => {
+    if(cat && c.cat !== cat) return false;
+    if(sub && c.sub !== sub) return false;
+    if(q && !c.n.toLowerCase().includes(q) && !c.sub.toLowerCase().includes(q)) return false;
+    return true;
+  });
+
+  document.getElementById('cg').innerHTML = filtered.map(c => {
+    let s = S.sel && S.sel.id === c.id ? 'sel' : '';
+    let cls = c.cat === '认知' ? 'cog' : c.cat === '情绪' ? 'emo' : 'beh';
+    let apStr = c.ap > 0 ? ` AP:${c.ap}` : '';
+    return `<div class="card ${cls} ${s}" onclick="sel('${c.id}')" title="${c.desc||''}${apStr} | ${c.link||''}">
+      <div class="cn">${c.n}</div><div class="ct">${c.cat}·${c.sub}</div>
+      <div class="cv">V${c.pad[0].toFixed(1)} A${c.pad[1].toFixed(1)} D${c.pad[2].toFixed(1)}${apStr}</div>
+      <div class="cd">${c.desc||''}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderAll(){
+  ['p','e'].forEach(s => { rs(s); rpd(s); rb(s); });
+  rc();
+}
+
+function rs(s){
+  let c = S[s], co = document.getElementById(s==='p'?'ps':'es');
+  let cats = ['认知','情绪','行为'], cls = ['sc','se','sb'];
+  co.innerHTML = cats.map((t,i) => {
+    let x = c.sl[i];
+    if(x) {
+      let apStr = x.ap > 0 ? `<div class="apc">AP:${x.ap}</div>` : '';
+      return `<div class="slot set ${cls[i]}" onclick="clr('${s}',${i})" title="点击清空">
+        <div class="cn">${x.n}</div>
+        <div class="cv">V${x.pad[0].toFixed(1)} A${x.pad[1].toFixed(1)} D${x.pad[2].toFixed(1)}</div>
+        ${apStr}
+      </div>`;
+    }
+    return `<div class="slot ${cls[i]}" onclick="asn('${s}',${i})"><span class="lb">${t}</span><span class="mt">点击选牌</span></div>`;
+  }).join('');
+
+  // Update AP / WP display
+  document.getElementById(s==='p'?'pap':'eap').textContent = c.ap;
+  document.getElementById(s==='p'?'pwp':'ewp').textContent = c.wp;
+
+  // Combo badge
+  updateCombo(s);
+}
+
+function updateCombo(s){
+  let c = S[s];
+  let hasCog = c.sl[0] !== null, hasEmo = c.sl[1] !== null, hasBeh = c.sl[2] !== null;
+  let comboEl = document.getElementById(s==='p'?'pcombo':'ecombo');
+  let html = '';
+
+  if(hasCog && hasEmo && hasBeh) {
+    html = '<span class="combo-badge cfull">完整态度</span>';
+    if(c.sl[1] && c.sl[2]) {
+      let att = lookupAttitude(c.sl[1].n, c.sl[2].sub);
+      if(att) html += ` <span style="font-size:0.64rem;font-weight:600;color:#ffd54f">「${att.name}」</span> <span style="font-size:0.52rem;color:var(--t2)">${att.flavor}</span>`;
+    }
+  } else if(hasCog && hasEmo) {
+    html = '<span class="combo-badge" style="color:var(--cog)">酝酿</span>';
+    let cName = lookupCogEmo(c.sl[0], c.sl[1]);
+    if(cName) html += ` <span style="font-size:0.64rem;font-weight:600;color:#4fc3f7">「${cName}」</span>`;
+    html += ' <span style="font-size:0.5rem;color:var(--m)">PAD衰减减半 · 产情绪卡</span>';
+  } else if(hasEmo && hasBeh) {
+    html = '<span class="combo-badge" style="color:var(--emo)">冲动</span>';
+    if(c.sl[1] && c.sl[2]) {
+      let att = lookupAttitude(c.sl[1].n, c.sl[2].sub);
+      if(att) html += ` <span style="font-size:0.64rem;font-weight:600;color:#ef5350">「${att.name}」</span> <span style="font-size:0.52rem;color:var(--t2)">${att.flavor}</span>`;
+    }
+    html += ' <span style="font-size:0.5rem;color:var(--m)">(情绪×1.5 行为×1.2)</span>';
+  } else if(hasCog && hasBeh) {
+    html = '<span class="combo-badge" style="color:var(--beh)">执行</span>';
+    let cName = lookupCogBeh(c.sl[0], c.sl[2]);
+    if(cName) html += ` <span style="font-size:0.64rem;font-weight:600;color:#66bb6a">「${cName}」</span>`;
+    html += ' <span style="font-size:0.5rem;color:var(--m)">意志力+1 · 情感压制</span>';
+  } else if(hasEmo) {
+    html = '<span class="combo-badge cnone">仅情绪</span>';
+    html += ' <span style="font-size:0.5rem;color:var(--m)">调整PAD · 无碰撞</span>';
+  } else if(hasCog) {
+    html = '<span class="combo-badge cnone">仅认知</span>';
+    html += ' <span style="font-size:0.5rem;color:var(--m)">推进CPM φ门控</span>';
+  } else if(hasBeh) {
+    html = '<span class="combo-badge cnone">仅行为</span>';
+    html += ' <span style="font-size:0.5rem;color:var(--m)">无态度 · 效果减弱</span>';
+  } else {
+    html = '<span class="combo-badge cnone">空</span>';
+  }
+
+  comboEl.innerHTML = html;
+}
+
+function lookupAttitude(emoName, behSub){
+  if(!emoName || !behSub) return null;
+  return ATTITUDES[emoName + '|' + behSub] || null;
+}
+
+function lookupCogEmo(cogCard, emoCard){
+  if(!cogCard || !emoCard) return null;
+  let cogMod = normCog(cogCard.sub);
+  return COG_EMO_NAMES[cogMod + '|' + emoCard.n] || null;
+}
+
+function lookupCogBeh(cogCard, behCard){
+  if(!cogCard || !behCard) return null;
+  let cogMod = normCog(cogCard.sub);
+  return COG_BEH_NAMES[cogMod + '|' + behCard.sub] || null;
+}
+
+function rpd(s){
+  let c = S[s], el = document.getElementById(s==='p'?'ppd':'epd'), p = c.pad;
+  el.innerHTML = 'VAD'.split('').map((l,i) => {
+    let color = i===0 ? (p[0]>0.1?'#66bb6a':p[0]<-0.1?'#ef5350':'#b0b5c6')
+             : i===2 ? (p[2]>0.1?'#66bb6a':p[2]<-0.1?'#ef5350':'#b0b5c6')
+             : '#ffd54f';
+    return `<div class="pi"><div class="pl">${l}</div><div class="pv" style="color:${color}">${p[i].toFixed(2)}</div></div>`;
+  }).join('');
+}
+
+function rb(s){
+  let c = S[s], pre = s==='p'?'p':'e';
+  document.getElementById(pre+'sb').style.width = (c.san/c.ms*100)+'%';
+  document.getElementById(pre+'sv').textContent = Math.round(c.san);
+  document.getElementById(pre+'hb').style.width = (c.hp/c.mh*100)+'%';
+  document.getElementById(pre+'hv').textContent = Math.round(c.hp);
+}
+
+// ═══════════════════════════════════════════════════════
+// ACTIONS
+// ═══════════════════════════════════════════════════════
+function sel(id){ S.sel = CARDS.find(c => c.id === id); rc(); }
+function asn(s, i){
+  if(!S.sel) return log('⚠ 请先在卡牌库中点击选中一张卡牌', 'i');
+  let cats = ['认知','情绪','行为'];
+  if(S.sel.cat !== cats[i]) return log('⚠ 类别不匹配: 槽位需要【'+cats[i]+'】, 你选的是【'+S.sel.cat+'】', 'i');
+  // Check AP for behavior cards
+  if(S.sel.cat === '行为' && S.sel.ap > S[s].ap) return log('⚠ AP不足: 需要 '+S.sel.ap+' 当前仅有 '+S[s].ap, 'i');
+  S[s].sl[i] = {...S.sel};
+  S.sel = null;
+  renderAll();
+}
+function clr(s,i){ S[s].sl[i] = null; renderAll(); }
+
+// ═══════════════════════════════════════════════════════
+// BATTLE ENGINE
+// ═══════════════════════════════════════════════════════
+function att(sl){
+  let ps = sl.filter(x => x).map(x => x.pad);
+  if(ps.length === 0) return [0,0,0];
+  return [ps.reduce((s,v) => s+v[0], 0)/ps.length, ps.reduce((s,v) => s+v[1], 0)/ps.length, ps.reduce((s,v) => s+v[2], 0)/ps.length];
+}
+function mg(v){ return Math.sqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2]); }
+
+function detectCombo(sl){
+  let hasCog = sl[0] !== null, hasEmo = sl[1] !== null, hasBeh = sl[2] !== null;
+  if(hasCog && hasEmo && hasBeh) return {type:'完整态度', emoM:1.0, behM:1.0};
+  if(hasCog && hasEmo) return {type:'酝酿', emoM:1.0, behM:1.0};
+  if(hasEmo && hasBeh) return {type:'冲动', emoM:1.5, behM:1.2};
+  if(hasCog && hasBeh) return {type:'执行', emoM:1.0, behM:1.0, wpB:1};
+  return {type:null, emoM:1.0, behM:1.0};
+}
+
+function round(){
+  S.r++;
+  log('━━━ 第 '+S.r+' 回合 ━━━', 'lr');
+
+  let results = [];
+  ['p','e'].forEach(s => {
+    let c = S[s];
+    // Apply emotion card PAD offset
+    if(c.sl[1]) {
+      let emo = c.sl[1];
+      let combo = detectCombo(c.sl);
+      c.pad = [
+        Math.max(-1, Math.min(1, c.pad[0] + emo.pad[0] * combo.emoM)),
+        Math.max(-1, Math.min(1, c.pad[1] + emo.pad[1] * combo.emoM)),
+        Math.max(-1, Math.min(1, c.pad[2] + emo.pad[2] * combo.emoM))
+      ];
+    }
+    // Deduct AP for behavior card
+    if(c.sl[2]) {
+      let apCost = c.sl[2].ap || 0;
+      c.ap = Math.max(0, c.ap - apCost);
+    }
+    // Willpower bonus for 执行
+    let combo = detectCombo(c.sl);
+    if(combo.wpB) c.wp = Math.min(5, c.wp + combo.wpB);
+
+    results.push({s, pad:c.pad, combo, name:s==='p'?'角色':'敌方'});
+  });
+
+  let pa = S.p.pad, ea = S.e.pad;
+  // Build combo description with attitude name
+  function comboDesc(sl){
+    let t = detectCombo(sl).type || '';
+    if(!t) return '无组合';
+    if(t==='完整态度' && sl[1] && sl[2]){
+      let att = lookupAttitude(sl[1].n, sl[2].sub);
+      if(att) return t + '「'+att.name+'」';
+    }
+    if(t==='冲动' && sl[1] && sl[2]){
+      let att = lookupAttitude(sl[1].n, sl[2].sub);
+      if(att) return t + '「'+att.name+'」';
+    }
+    if(t==='酝酿' && sl[0] && sl[1]){
+      let cn = lookupCogEmo(sl[0], sl[1]);
+      if(cn) return t + '「'+cn+'」';
+    }
+    if(t==='执行' && sl[0] && sl[2]){
+      let cn = lookupCogBeh(sl[0], sl[2]);
+      if(cn) return t + '「'+cn+'」';
+    }
+    return t;
+  }
+  log('角色 PAD: V'+pa[0].toFixed(2)+' A'+pa[1].toFixed(2)+' D'+pa[2].toFixed(2) + '  '+comboDesc(S.p.sl), 'lp');
+  log('敌方 PAD: V'+ea[0].toFixed(2)+' A'+ea[1].toFixed(2)+' D'+ea[2].toFixed(2) + '  '+comboDesc(S.e.sl), 'le');
+
+  // ── D-axis collision (v4 formula) ──
+  let dd = pa[2] - ea[2], pm = mg(pa), em = mg(ea);
+  const SCALE = 5.0;
+  let w = null, sd = 0;
+
+  if(Math.abs(dd) > 0.2){
+    w = dd > 0 ? 'p' : 'e';
+    sd = Math.round((w==='p'?pm:em) * (1 + Math.abs(dd)) * SCALE);
+    let wname = w==='p'?'角色':'敌方';
+    let lname = w==='p'?'敌方':'角色';
+    log(wname+' 主导碰撞 ΔD='+dd.toFixed(2)+' → '+lname+' SAN-'+sd, w==='p'?'lw':'ll');
+  } else {
+    sd = Math.round((pm+em)/4 * SCALE);
+    log('势均力敌 → 双方各 SAN-'+sd, 'li');
+  }
+
+  if(w === 'p'){ S.e.san = Math.max(0, S.e.san - sd); fl('e','l'); fl('p','w'); }
+  else if(w === 'e'){ S.p.san = Math.max(0, S.p.san - sd); fl('p','l'); fl('e','w'); }
+  else { S.p.san = Math.max(0, S.p.san - sd); S.e.san = Math.max(0, S.e.san - sd); }
+
+  // SAN overflow to HP
+  ['p','e'].forEach(s => {
+    let c = S[s];
+    if(c.san <= 0){ c.hp = Math.max(0, c.hp - Math.abs(c.san)); c.san = 0; }
+    if(c.san < 30 && c.hp > 0){ let b = Math.round((30-c.san)*0.15); c.hp = Math.max(0, c.hp-b); }
+    // Reset AP, clear slots
+    c.ap = 6;
+    c.sl = [null, null, null];
+    // PAD decay
+    c.pad = [c.pad[0]*0.85, c.pad[1]*0.85, c.pad[2]*0.85];
+  });
+
+  if(S.p.hp <= 0) log('💀 角色崩溃 —— 敌方胜利', 'll');
+  if(S.e.hp <= 0) log('🏆 敌方崩溃 —— 角色胜利', 'lw');
+
+  renderAll();
+}
+
+function fl(s,r){
+  let e = document.getElementById(s==='p'?'pp':'ep');
+  e.classList.remove('rw','rl'); void e.offsetWidth;
+  e.classList.add(r==='w'?'rw':'rl');
+  setTimeout(() => e.classList.remove('rw','rl'), 500);
+}
+
+// ═══════════════════════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════════════════════
+function log(m,c){
+  S.log.push({m,c});
+  let el = document.getElementById('bl');
+  el.innerHTML += `<div class="l ${c||''}">[${S.r}] ${m}</div>`;
+  el.scrollTop = el.scrollHeight;
+}
+
+function reset(){
+  S = {
+    p: {san:100,ms:100,hp:100,mh:100,pad:[0,0,0],sl:[null,null,null],ap:6,wp:5},
+    e: {san:100,ms:100,hp:100,mh:100,pad:[0,0,0],sl:[null,null,null],ap:6,wp:5},
+    r: 0, sel: null, log: []
+  };
+  document.getElementById('bl').innerHTML = '';
+  renderAll();
+  log('🔄 已重置', 'i');
+}
+
+function rnd(){
+  ['p','e'].forEach(s => {
+    // Clear all slots first
+    S[s].sl = [null, null, null];
+    // Randomly fill 2-3 slots of different categories for variety
+    let categories = ['认知','情绪','行为'];
+    let numToFill = 2 + Math.floor(Math.random() * 2); // 2 or 3
+    // Shuffle and pick first numToFill categories
+    let shuffled = [...categories].sort(() => Math.random() - 0.5);
+    let toFill = shuffled.slice(0, numToFill);
+    for(let cat of toFill) {
+      let idx = categories.indexOf(cat);
+      let pool = CARDS.filter(x => x.cat === cat);
+      if(idx === 2) pool = pool.filter(c => (c.ap||0) <= S[s].ap); // behavior: must afford AP
+      if(pool.length) S[s].sl[idx] = {...pool[Math.floor(Math.random()*pool.length)]};
+    }
+  });
+  let combos = ['p','e'].map(s => {
+    let c = S[s].sl;
+    let hasCog = c[0] !== null, hasEmo = c[1] !== null, hasBeh = c[2] !== null;
+    if(hasCog && hasEmo && hasBeh) return '完整态度';
+    if(hasCog && hasEmo) return '酝酿';
+    if(hasEmo && hasBeh) return '冲动';
+    if(hasCog && hasBeh) return '执行';
+    if(hasEmo) return '仅情绪';
+    if(hasCog) return '仅认知';
+    if(hasBeh) return '仅行为';
+    return '空';
+  });
+  log('🎲 随机配牌 → 角色: '+combos[0]+' | 敌方: '+combos[1], 'i');
+  renderAll();
+}
+
+function rndEmo(){
+  ['p','e'].forEach(s => {
+    let pool = CARDS.filter(x => x.cat === '情绪');
+    S[s].sl[1] = pool.length ? {...pool[Math.floor(Math.random()*pool.length)]} : null;
+    S[s].sl[0] = null; S[s].sl[2] = null;
+  });
+  log('🎭 随机情绪开局', 'i');
+  renderAll();
+}
+
+function autoN(n){
+  for(let i=0; i<n; i++){
+    // Auto-fill empty slots
+    ['p','e'].forEach(s => {
+      S[s].sl = S[s].sl.map((x,j) => {
+        if(x) return x;
+        let pool = CARDS.filter(c => c.cat === ['认知','情绪','行为'][j]);
+        if(j === 2) pool = pool.filter(c => (c.ap||0) <= S[s].ap); // only affordable behavior cards
+        return pool.length ? {...pool[Math.floor(Math.random()*pool.length)]} : null;
+      });
+    });
+    round();
+    if(S.p.hp <= 0 || S.e.hp <= 0) break;
+  }
+  renderAll();
+}
+
+// Tabs
+function st(n){
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+  document.querySelectorAll('.tc').forEach(t => t.classList.remove('on'));
+  document.querySelector(`.tab[onclick="st('${n}')"]`).classList.add('on');
+  document.getElementById('t-'+n).classList.add('on');
+}
+
+// Keyboard
+document.addEventListener('keydown', e => {
+  if(e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
+  if(e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); round(); }
+  if(e.key === '1') asn('p', 0);
+  if(e.key === '2') asn('p', 1);
+  if(e.key === '3') asn('p', 2);
+  if(e.key === '4') asn('e', 0);
+  if(e.key === '5') asn('e', 1);
+  if(e.key === '6') asn('e', 2);
+  if(e.key === 'Escape'){ S.sel = null; rc(); }
+});
+
+reset();
+</script>
+</body>
+</html>
