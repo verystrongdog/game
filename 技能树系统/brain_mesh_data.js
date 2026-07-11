@@ -1,4 +1,4 @@
-// BigBrain 3D Print Model (CC BY-SA 4.0)
+// BigBrain 3D Print Model (CC BY-SA 4.0) — 数据源保留\n// 转换脚本: 原始STL→JS的脚本已遗失，需从BigBrain STL重新生成\n// 迁移管线: 此文件作为历史数据保留，新管线用brain-for-blender OBJ (见脑图谱数据管线.md)\n// BigBrain 3D Print Model (CC BY-SA 4.0)
 // Source: bigbrainproject.org → official 3D print STL files
 // 16,000 verts (8,000L + 8,000R) | 12,969 faces | 9 brain regions
 
