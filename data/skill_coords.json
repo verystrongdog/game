@@ -1,0 +1,1786 @@
+{
+  "_description": "74技能节点坐标映射: PAD推导(旧) → MNI解剖(新)",
+  "_source": "Phase 2: tools/map_skills_to_regions.py",
+  "_created": "2026-07-11",
+  "_stats": {
+    "total_skills": 74,
+    "matched": 74,
+    "unmatched": 0,
+    "unmatched_list": []
+  },
+  "skills": [
+    {
+      "id": "cog_0",
+      "name": "洞见",
+      "branch": "cognition",
+      "tier": 1,
+      "region": "枕叶 V1",
+      "region_matched": "枕叶 V1",
+      "pad_xyz": [
+        0.0,
+        0.47,
+        -0.6
+      ],
+      "mni_xyz": [
+        0,
+        -85,
+        2
+      ],
+      "game_xyz_new": [
+        0.0,
+        0.5722,
+        -0.5734
+      ],
+      "module": "知觉与注意",
+      "type": "被动"
+    },
+    {
+      "id": "cog_1",
+      "name": "凝神",
+      "branch": "cognition",
+      "tier": 1,
+      "region": "顶内沟",
+      "region_matched": "顶内沟",
+      "pad_xyz": [
+        0.36,
+        0.56,
+        -0.6
+      ],
+      "mni_xyz": [
+        30,
+        -55,
+        45
+      ],
+      "game_xyz_new": [
+        0.3333,
+        1.05,
+        -0.371
+      ],
+      "module": "知觉与注意",
+      "type": "主动"
+    },
+    {
+      "id": "cog_2",
+      "name": "察微",
+      "branch": "cognition",
+      "tier": 1,
+      "region": "顶叶",
+      "region_matched": "顶叶",
+      "pad_xyz": [
+        -0.12,
+        0.65,
+        -0.6
+      ],
+      "mni_xyz": [
+        -35,
+        -60,
+        40
+      ],
+      "game_xyz_new": [
+        -0.3889,
+        0.9944,
+        -0.4048
+      ],
+      "module": "知觉与注意",
+      "type": "被动"
+    },
+    {
+      "id": "cog_3",
+      "name": "纵观",
+      "branch": "cognition",
+      "tier": 1,
+      "region": "枕顶联合",
+      "region_matched": "枕顶联合",
+      "pad_xyz": [
+        -0.24,
+        0.38,
+        -0.6
+      ],
+      "mni_xyz": [
+        -20,
+        -75,
+        30
+      ],
+      "game_xyz_new": [
+        -0.2222,
+        0.8833,
+        -0.506
+      ],
+      "module": "知觉与注意",
+      "type": "主动"
+    },
+    {
+      "id": "cog_4",
+      "name": "警觉",
+      "branch": "cognition",
+      "tier": 1,
+      "region": "丘脑枕",
+      "region_matched": "丘脑枕",
+      "pad_xyz": [
+        -0.3,
+        0.43,
+        -0.6
+      ],
+      "mni_xyz": [
+        -15,
+        -28,
+        5
+      ],
+      "game_xyz_new": [
+        -0.1667,
+        0.6056,
+        -0.1889
+      ],
+      "module": "知觉与注意",
+      "type": "被动"
+    },
+    {
+      "id": "cog_5",
+      "name": "拾遗",
+      "branch": "cognition",
+      "tier": 2,
+      "region": "海马体 CA1",
+      "region_matched": "海马体 CA1",
+      "pad_xyz": [
+        0.12,
+        0.56,
+        -0.35
+      ],
+      "mni_xyz": [
+        26,
+        -18,
+        -18
+      ],
+      "game_xyz_new": [
+        0.2889,
+        0.35,
+        -0.1214
+      ],
+      "module": "记忆",
+      "type": "主动"
+    },
+    {
+      "id": "cog_6",
+      "name": "追忆",
+      "branch": "cognition",
+      "tier": 2,
+      "region": "内嗅皮层",
+      "region_matched": "内嗅皮层",
+      "pad_xyz": [
+        0.06,
+        0.7,
+        -0.35
+      ],
+      "mni_xyz": [
+        24,
+        -10,
+        -30
+      ],
+      "game_xyz_new": [
+        0.2667,
+        0.2167,
+        -0.0675
+      ],
+      "module": "记忆",
+      "type": "主动"
+    },
+    {
+      "id": "cog_7",
+      "name": "闪回",
+      "branch": "cognition",
+      "tier": 2,
+      "region": "杏仁核-海马",
+      "region_matched": "杏仁核-海马",
+      "pad_xyz": [
+        -0.12,
+        0.6,
+        -0.35
+      ],
+      "mni_xyz": [
+        -22,
+        -8,
+        -22
+      ],
+      "game_xyz_new": [
+        -0.2444,
+        0.3056,
+        -0.054
+      ],
+      "module": "记忆",
+      "type": "被动"
+    },
+    {
+      "id": "cog_8",
+      "name": "铭刻",
+      "branch": "cognition",
+      "tier": 2,
+      "region": "海马体 CA3",
+      "region_matched": "海马体 CA3",
+      "pad_xyz": [
+        -0.24,
+        0.83,
+        -0.35
+      ],
+      "mni_xyz": [
+        -28,
+        -22,
+        -16
+      ],
+      "game_xyz_new": [
+        -0.3111,
+        0.3722,
+        -0.1484
+      ],
+      "module": "记忆",
+      "type": "被动"
+    },
+    {
+      "id": "cog_9",
+      "name": "释怀",
+      "branch": "cognition",
+      "tier": 2,
+      "region": "前额叶-海马",
+      "region_matched": "前额叶-海马",
+      "pad_xyz": [
+        -0.42,
+        0.74,
+        -0.35
+      ],
+      "mni_xyz": [
+        -18,
+        20,
+        -12
+      ],
+      "game_xyz_new": [
+        -0.2,
+        0.4167,
+        0.1349
+      ],
+      "module": "记忆",
+      "type": "主动"
+    },
+    {
+      "id": "cog_10",
+      "name": "甄别",
+      "branch": "cognition",
+      "tier": 3,
+      "region": "TPJ",
+      "region_matched": "TPJ",
+      "pad_xyz": [
+        0.12,
+        0.65,
+        -0.1
+      ],
+      "mni_xyz": [
+        52,
+        -50,
+        28
+      ],
+      "game_xyz_new": [
+        0.5778,
+        0.8611,
+        -0.3373
+      ],
+      "module": "知识表征",
+      "type": "主动"
+    },
+    {
+      "id": "cog_11",
+      "name": "定性",
+      "branch": "cognition",
+      "tier": 3,
+      "region": "颞下回",
+      "region_matched": "颞下回",
+      "pad_xyz": [
+        -0.42,
+        0.6,
+        -0.1
+      ],
+      "mni_xyz": [
+        -48,
+        -50,
+        -18
+      ],
+      "game_xyz_new": [
+        -0.5333,
+        0.35,
+        -0.3373
+      ],
+      "module": "知识表征",
+      "type": "主动"
+    },
+    {
+      "id": "cog_12",
+      "name": "归因",
+      "branch": "cognition",
+      "tier": 3,
+      "region": "楔前叶",
+      "region_matched": "楔前叶",
+      "pad_xyz": [
+        0.18,
+        0.7,
+        -0.1
+      ],
+      "mni_xyz": [
+        8,
+        -60,
+        40
+      ],
+      "game_xyz_new": [
+        0.0889,
+        0.9944,
+        -0.4048
+      ],
+      "module": "知识表征",
+      "type": "主动"
+    },
+    {
+      "id": "cog_13",
+      "name": "正名",
+      "branch": "cognition",
+      "tier": 3,
+      "region": "角回",
+      "region_matched": "角回",
+      "pad_xyz": [
+        0.36,
+        0.74,
+        -0.1
+      ],
+      "mni_xyz": [
+        44,
+        -62,
+        36
+      ],
+      "game_xyz_new": [
+        0.4889,
+        0.95,
+        -0.4183
+      ],
+      "module": "知识表征",
+      "type": "主动"
+    },
+    {
+      "id": "cog_14",
+      "name": "类比",
+      "branch": "cognition",
+      "tier": 3,
+      "region": "颞上沟",
+      "region_matched": "颞上沟",
+      "pad_xyz": [
+        -0.36,
+        0.65,
+        -0.1
+      ],
+      "mni_xyz": [
+        -54,
+        -38,
+        4
+      ],
+      "game_xyz_new": [
+        -0.6,
+        0.5944,
+        -0.2563
+      ],
+      "module": "知识表征",
+      "type": "被动"
+    },
+    {
+      "id": "cog_15",
+      "name": "隐喻",
+      "branch": "cognition",
+      "tier": 4,
+      "region": "Broca区",
+      "region_matched": "Broca区",
+      "pad_xyz": [
+        -0.36,
+        0.65,
+        0.15
+      ],
+      "mni_xyz": [
+        -48,
+        14,
+        18
+      ],
+      "game_xyz_new": [
+        -0.5333,
+        0.75,
+        0.0944
+      ],
+      "module": "表象与语言",
+      "type": "被动"
+    },
+    {
+      "id": "cog_16",
+      "name": "白描",
+      "branch": "cognition",
+      "tier": 4,
+      "region": "Wernicke区",
+      "region_matched": "Wernicke区",
+      "pad_xyz": [
+        0.3,
+        0.79,
+        0.15
+      ],
+      "mni_xyz": [
+        56,
+        -42,
+        8
+      ],
+      "game_xyz_new": [
+        0.6222,
+        0.6389,
+        -0.2833
+      ],
+      "module": "表象与语言",
+      "type": "主动"
+    },
+    {
+      "id": "cog_17",
+      "name": "构想",
+      "branch": "cognition",
+      "tier": 4,
+      "region": "角回",
+      "region_matched": "角回",
+      "pad_xyz": [
+        -0.3,
+        0.74,
+        0.15
+      ],
+      "mni_xyz": [
+        -44,
+        -62,
+        36
+      ],
+      "game_xyz_new": [
+        -0.4889,
+        0.95,
+        -0.4183
+      ],
+      "module": "表象与语言",
+      "type": "被动"
+    },
+    {
+      "id": "cog_18",
+      "name": "转述",
+      "branch": "cognition",
+      "tier": 4,
+      "region": "弓状束",
+      "region_matched": "弓状束",
+      "pad_xyz": [
+        0.06,
+        0.7,
+        0.15
+      ],
+      "mni_xyz": [
+        40,
+        -10,
+        24
+      ],
+      "game_xyz_new": [
+        0.4444,
+        0.8167,
+        -0.0675
+      ],
+      "module": "表象与语言",
+      "type": "主动"
+    },
+    {
+      "id": "cog_19",
+      "name": "命名",
+      "branch": "cognition",
+      "tier": 4,
+      "region": "前额叶极",
+      "region_matched": "前额叶极",
+      "pad_xyz": [
+        -0.48,
+        0.88,
+        0.15
+      ],
+      "mni_xyz": [
+        -10,
+        58,
+        8
+      ],
+      "game_xyz_new": [
+        -0.1111,
+        0.6389,
+        0.3913
+      ],
+      "module": "表象与语言",
+      "type": "主动"
+    },
+    {
+      "id": "cog_20",
+      "name": "预判",
+      "branch": "cognition",
+      "tier": 5,
+      "region": "dlPFC",
+      "region_matched": "dlPFC",
+      "pad_xyz": [
+        0.12,
+        0.7,
+        0.5
+      ],
+      "mni_xyz": [
+        38,
+        32,
+        34
+      ],
+      "game_xyz_new": [
+        0.4222,
+        0.9278,
+        0.2159
+      ],
+      "module": "推理与决策",
+      "type": "主动"
+    },
+    {
+      "id": "cog_21",
+      "name": "决意",
+      "branch": "cognition",
+      "tier": 5,
+      "region": "vmPFC",
+      "region_matched": "vmPFC",
+      "pad_xyz": [
+        -0.42,
+        0.83,
+        0.5
+      ],
+      "mni_xyz": [
+        -4,
+        42,
+        -14
+      ],
+      "game_xyz_new": [
+        -0.0444,
+        0.3944,
+        0.2833
+      ],
+      "module": "推理与决策",
+      "type": "被动"
+    },
+    {
+      "id": "cog_22",
+      "name": "筹算",
+      "branch": "cognition",
+      "tier": 5,
+      "region": "额极",
+      "region_matched": "额极",
+      "pad_xyz": [
+        0.18,
+        0.7,
+        0.5
+      ],
+      "mni_xyz": [
+        8,
+        60,
+        4
+      ],
+      "game_xyz_new": [
+        0.0889,
+        0.5944,
+        0.4048
+      ],
+      "module": "推理与决策",
+      "type": "被动"
+    },
+    {
+      "id": "cog_23",
+      "name": "推演",
+      "branch": "cognition",
+      "tier": 5,
+      "region": "dlPFC",
+      "region_matched": "dlPFC",
+      "pad_xyz": [
+        0.06,
+        0.74,
+        0.5
+      ],
+      "mni_xyz": [
+        38,
+        32,
+        34
+      ],
+      "game_xyz_new": [
+        0.4222,
+        0.9278,
+        0.2159
+      ],
+      "module": "推理与决策",
+      "type": "主动"
+    },
+    {
+      "id": "cog_24",
+      "name": "权衡",
+      "branch": "cognition",
+      "tier": 5,
+      "region": "OFC",
+      "region_matched": "OFC",
+      "pad_xyz": [
+        0.24,
+        0.79,
+        0.5
+      ],
+      "mni_xyz": [
+        22,
+        34,
+        -16
+      ],
+      "game_xyz_new": [
+        0.2444,
+        0.3722,
+        0.2294
+      ],
+      "module": "推理与决策",
+      "type": "主动"
+    },
+    {
+      "id": "emo_0",
+      "name": "快乐",
+      "branch": "emotion",
+      "tier": 1,
+      "region": "伏隔核/NAcc",
+      "region_matched": "伏隔核/NAcc",
+      "pad_xyz": [
+        0.96,
+        0.648,
+        0.588
+      ],
+      "mni_xyz": [
+        10,
+        10,
+        -8
+      ],
+      "game_xyz_new": [
+        0.1111,
+        0.4611,
+        0.0675
+      ]
+    },
+    {
+      "id": "emo_1",
+      "name": "恐惧",
+      "branch": "emotion",
+      "tier": 1,
+      "region": "杏仁核",
+      "region_matched": "杏仁核",
+      "pad_xyz": [
+        -0.854,
+        0.68,
+        -0.414
+      ],
+      "mni_xyz": [
+        -22,
+        -4,
+        -18
+      ],
+      "game_xyz_new": [
+        -0.2444,
+        0.35,
+        -0.027
+      ]
+    },
+    {
+      "id": "emo_2",
+      "name": "平静",
+      "branch": "emotion",
+      "tier": 1,
+      "region": "下丘脑",
+      "region_matched": "下丘脑",
+      "pad_xyz": [
+        0.6,
+        0.756,
+        0.114
+      ],
+      "mni_xyz": [
+        0,
+        -4,
+        -8
+      ],
+      "game_xyz_new": [
+        0.0,
+        0.4611,
+        -0.027
+      ]
+    },
+    {
+      "id": "emo_3",
+      "name": "希望",
+      "branch": "emotion",
+      "tier": 2,
+      "region": "腹侧纹状体",
+      "region_matched": "腹侧纹状体",
+      "pad_xyz": [
+        0.854,
+        0.366,
+        0.478
+      ],
+      "mni_xyz": [
+        12,
+        12,
+        -6
+      ],
+      "game_xyz_new": [
+        0.1333,
+        0.4833,
+        0.081
+      ]
+    },
+    {
+      "id": "emo_4",
+      "name": "愤怒",
+      "branch": "emotion",
+      "tier": 2,
+      "region": "BNST",
+      "region_matched": "BNST",
+      "pad_xyz": [
+        -0.666,
+        0.73,
+        0.314
+      ],
+      "mni_xyz": [
+        -6,
+        2,
+        0
+      ],
+      "game_xyz_new": [
+        -0.0667,
+        0.55,
+        0.0135
+      ]
+    },
+    {
+      "id": "emo_5",
+      "name": "悲痛",
+      "branch": "emotion",
+      "tier": 2,
+      "region": "隔区",
+      "region_matched": "隔区",
+      "pad_xyz": [
+        -0.896,
+        0.424,
+        -0.672
+      ],
+      "mni_xyz": [
+        0,
+        4,
+        -2
+      ],
+      "game_xyz_new": [
+        0.0,
+        0.5278,
+        0.027
+      ]
+    },
+    {
+      "id": "emo_6",
+      "name": "共情",
+      "branch": "emotion",
+      "tier": 3,
+      "region": "前脑岛",
+      "region_matched": "前脑岛",
+      "pad_xyz": [
+        0.458,
+        0.302,
+        0.09
+      ],
+      "mni_xyz": [
+        34,
+        16,
+        6
+      ],
+      "game_xyz_new": [
+        0.3778,
+        0.6167,
+        0.1079
+      ]
+    },
+    {
+      "id": "emo_7",
+      "name": "爱",
+      "branch": "emotion",
+      "tier": 3,
+      "region": "ACC吻侧",
+      "region_matched": "ACC",
+      "pad_xyz": [
+        1.0,
+        0.038,
+        0.346
+      ],
+      "mni_xyz": [
+        5,
+        22,
+        28
+      ],
+      "game_xyz_new": [
+        0.0556,
+        0.8611,
+        0.1484
+      ]
+    },
+    {
+      "id": "emo_8",
+      "name": "焦虑",
+      "branch": "emotion",
+      "tier": 3,
+      "region": "终纹床核",
+      "region_matched": "终纹床核",
+      "pad_xyz": [
+        -0.708,
+        0.73,
+        -0.316
+      ],
+      "mni_xyz": [
+        -6,
+        2,
+        0
+      ],
+      "game_xyz_new": [
+        -0.0667,
+        0.55,
+        0.0135
+      ]
+    },
+    {
+      "id": "emo_9",
+      "name": "厌恶",
+      "branch": "emotion",
+      "tier": 3,
+      "region": "前脑岛",
+      "region_matched": "前脑岛",
+      "pad_xyz": [
+        -0.896,
+        0.55,
+        -0.366
+      ],
+      "mni_xyz": [
+        -34,
+        16,
+        6
+      ],
+      "game_xyz_new": [
+        -0.3778,
+        0.6167,
+        0.1079
+      ]
+    },
+    {
+      "id": "emo_10",
+      "name": "绝望",
+      "branch": "emotion",
+      "tier": 4,
+      "region": "OFC",
+      "region_matched": "OFC",
+      "pad_xyz": [
+        -0.77,
+        0.588,
+        -0.51
+      ],
+      "mni_xyz": [
+        -22,
+        34,
+        -16
+      ],
+      "game_xyz_new": [
+        -0.2444,
+        0.3722,
+        0.2294
+      ]
+    },
+    {
+      "id": "emo_11",
+      "name": "内疚",
+      "branch": "emotion",
+      "tier": 4,
+      "region": "vmPFC",
+      "region_matched": "vmPFC",
+      "pad_xyz": [
+        -0.584,
+        0.134,
+        -0.588
+      ],
+      "mni_xyz": [
+        -4,
+        42,
+        -14
+      ],
+      "game_xyz_new": [
+        -0.0444,
+        0.3944,
+        0.2833
+      ]
+    },
+    {
+      "id": "emo_12",
+      "name": "敬畏",
+      "branch": "emotion",
+      "tier": 4,
+      "region": "mPFC",
+      "region_matched": "mPFC",
+      "pad_xyz": [
+        -0.062,
+        0.48,
+        -0.4
+      ],
+      "mni_xyz": [
+        -4,
+        48,
+        10
+      ],
+      "game_xyz_new": [
+        -0.0444,
+        0.6611,
+        0.3238
+      ]
+    },
+    {
+      "id": "emo_13",
+      "name": "孤独",
+      "branch": "emotion",
+      "tier": 4,
+      "region": "颞极",
+      "region_matched": "颞极",
+      "pad_xyz": [
+        -0.5,
+        0.548,
+        -0.524
+      ],
+      "mni_xyz": [
+        -36,
+        10,
+        -34
+      ],
+      "game_xyz_new": [
+        -0.4,
+        0.1722,
+        0.0675
+      ]
+    },
+    {
+      "id": "emo_14",
+      "name": "恐怖",
+      "branch": "emotion",
+      "tier": 5,
+      "region": "mPFC-杏仁核",
+      "region_matched": "mPFC-杏仁核",
+      "pad_xyz": [
+        -0.77,
+        0.7,
+        -0.124
+      ],
+      "mni_xyz": [
+        -10,
+        20,
+        -10
+      ],
+      "game_xyz_new": [
+        -0.1111,
+        0.4389,
+        0.1349
+      ]
+    },
+    {
+      "id": "beh_0",
+      "name": "逃跑",
+      "branch": "behavior",
+      "tier": 1,
+      "region": "反射环路·PAG→杏仁核",
+      "region_matched": "杏仁核",
+      "pad_xyz": [
+        -0.87,
+        0.73,
+        -0.5
+      ],
+      "mni_xyz": [
+        -22,
+        -4,
+        -18
+      ],
+      "game_xyz_new": [
+        -0.2444,
+        0.35,
+        -0.027
+      ],
+      "drive": "反射"
+    },
+    {
+      "id": "beh_1",
+      "name": "僵住",
+      "branch": "behavior",
+      "tier": 1,
+      "region": "反射环路·冻结反应",
+      "region_matched": "反射环路·冻结反应",
+      "pad_xyz": [
+        -0.85,
+        0.69,
+        -0.54
+      ],
+      "mni_xyz": [
+        -2,
+        -30,
+        -6
+      ],
+      "game_xyz_new": [
+        -0.0222,
+        0.4833,
+        -0.2024
+      ],
+      "drive": "反射"
+    },
+    {
+      "id": "beh_2",
+      "name": "闪避",
+      "branch": "behavior",
+      "tier": 1,
+      "region": "反射环路·快速闪避",
+      "region_matched": "反射环路·快速闪避",
+      "pad_xyz": [
+        -0.83,
+        0.71,
+        -0.53
+      ],
+      "mni_xyz": [
+        -2,
+        -29,
+        -10
+      ],
+      "game_xyz_new": [
+        -0.0222,
+        0.4389,
+        -0.1956
+      ],
+      "drive": "反射"
+    },
+    {
+      "id": "beh_3",
+      "name": "回避",
+      "branch": "behavior",
+      "tier": 2,
+      "region": "基底节间接通路",
+      "region_matched": "基底节间接通路",
+      "pad_xyz": [
+        -0.56,
+        0.54,
+        -0.32
+      ],
+      "mni_xyz": [
+        -26,
+        0,
+        4
+      ],
+      "game_xyz_new": [
+        -0.2889,
+        0.5944,
+        0.0
+      ],
+      "drive": "惩罚机制"
+    },
+    {
+      "id": "beh_4",
+      "name": "妥协",
+      "branch": "behavior",
+      "tier": 2,
+      "region": "缰核",
+      "region_matched": "缰核",
+      "pad_xyz": [
+        -0.54,
+        0.5,
+        -0.36
+      ],
+      "mni_xyz": [
+        -4,
+        -24,
+        2
+      ],
+      "game_xyz_new": [
+        -0.0444,
+        0.5722,
+        -0.1619
+      ],
+      "drive": "惩罚机制"
+    },
+    {
+      "id": "beh_5",
+      "name": "克制",
+      "branch": "behavior",
+      "tier": 2,
+      "region": "纹状体基质",
+      "region_matched": "纹状体基质",
+      "pad_xyz": [
+        -0.52,
+        0.52,
+        -0.35
+      ],
+      "mni_xyz": [
+        -14,
+        8,
+        10
+      ],
+      "game_xyz_new": [
+        -0.1556,
+        0.6611,
+        0.054
+      ],
+      "drive": "惩罚机制"
+    },
+    {
+      "id": "beh_6",
+      "name": "试探",
+      "branch": "behavior",
+      "tier": 2,
+      "region": "NAcc壳",
+      "region_matched": "NAcc壳",
+      "pad_xyz": [
+        0.59,
+        0.56,
+        0.19
+      ],
+      "mni_xyz": [
+        8,
+        12,
+        -8
+      ],
+      "game_xyz_new": [
+        0.0889,
+        0.4611,
+        0.081
+      ],
+      "drive": "奖励机制"
+    },
+    {
+      "id": "beh_7",
+      "name": "追求",
+      "branch": "behavior",
+      "tier": 2,
+      "region": "NAcc核",
+      "region_matched": "NAcc核",
+      "pad_xyz": [
+        0.61,
+        0.52,
+        0.15
+      ],
+      "mni_xyz": [
+        11,
+        10,
+        -6
+      ],
+      "game_xyz_new": [
+        0.1222,
+        0.4833,
+        0.0675
+      ],
+      "drive": "奖励机制"
+    },
+    {
+      "id": "beh_8",
+      "name": "坚持",
+      "branch": "behavior",
+      "tier": 2,
+      "region": "VTA-NAcc",
+      "region_matched": "VTA-NAcc",
+      "pad_xyz": [
+        0.63,
+        0.54,
+        0.16
+      ],
+      "mni_xyz": [
+        4,
+        -16,
+        -12
+      ],
+      "game_xyz_new": [
+        0.0444,
+        0.4167,
+        -0.1079
+      ],
+      "drive": "奖励机制"
+    },
+    {
+      "id": "beh_9",
+      "name": "自责",
+      "branch": "behavior",
+      "tier": 3,
+      "region": "vmPFC",
+      "region_matched": "vmPFC",
+      "pad_xyz": [
+        0.15,
+        0.48,
+        0.41
+      ],
+      "mni_xyz": [
+        4,
+        42,
+        -14
+      ],
+      "game_xyz_new": [
+        0.0444,
+        0.3944,
+        0.2833
+      ],
+      "drive": "道德驱动"
+    },
+    {
+      "id": "beh_10",
+      "name": "维护",
+      "branch": "behavior",
+      "tier": 3,
+      "region": "TPJ",
+      "region_matched": "TPJ",
+      "pad_xyz": [
+        0.17,
+        0.44,
+        0.37
+      ],
+      "mni_xyz": [
+        52,
+        -50,
+        28
+      ],
+      "game_xyz_new": [
+        0.5778,
+        0.8611,
+        -0.3373
+      ],
+      "drive": "道德驱动"
+    },
+    {
+      "id": "beh_11",
+      "name": "坚守",
+      "branch": "behavior",
+      "tier": 3,
+      "region": "楔前叶",
+      "region_matched": "楔前叶",
+      "pad_xyz": [
+        0.18,
+        0.46,
+        0.38
+      ],
+      "mni_xyz": [
+        8,
+        -60,
+        40
+      ],
+      "game_xyz_new": [
+        0.0889,
+        0.9944,
+        -0.4048
+      ],
+      "drive": "道德驱动"
+    },
+    {
+      "id": "beh_12",
+      "name": "遵从",
+      "branch": "behavior",
+      "tier": 3,
+      "region": "mPFC",
+      "region_matched": "mPFC",
+      "pad_xyz": [
+        -0.11,
+        0.38,
+        -0.05
+      ],
+      "mni_xyz": [
+        -4,
+        48,
+        10
+      ],
+      "game_xyz_new": [
+        -0.0444,
+        0.6611,
+        0.3238
+      ],
+      "drive": "文化习俗"
+    },
+    {
+      "id": "beh_13",
+      "name": "从众",
+      "branch": "behavior",
+      "tier": 3,
+      "region": "颞极",
+      "region_matched": "颞极",
+      "pad_xyz": [
+        -0.09,
+        0.34,
+        -0.09
+      ],
+      "mni_xyz": [
+        -36,
+        10,
+        -34
+      ],
+      "game_xyz_new": [
+        -0.4,
+        0.1722,
+        0.0675
+      ],
+      "drive": "文化习俗"
+    },
+    {
+      "id": "beh_14",
+      "name": "运用仪式",
+      "branch": "behavior",
+      "tier": 3,
+      "region": "后扣带",
+      "region_matched": "后扣带",
+      "pad_xyz": [
+        -0.07,
+        0.36,
+        -0.08
+      ],
+      "mni_xyz": [
+        -4,
+        -44,
+        28
+      ],
+      "game_xyz_new": [
+        -0.0444,
+        0.8611,
+        -0.2968
+      ],
+      "drive": "文化习俗"
+    },
+    {
+      "id": "beh_15",
+      "name": "牺牲",
+      "branch": "behavior",
+      "tier": 4,
+      "region": "ACC背侧",
+      "region_matched": "ACC",
+      "pad_xyz": [
+        0.56,
+        0.8,
+        0.6
+      ],
+      "mni_xyz": [
+        5,
+        22,
+        28
+      ],
+      "game_xyz_new": [
+        0.0556,
+        0.8611,
+        0.1484
+      ],
+      "drive": "价值驱动"
+    },
+    {
+      "id": "beh_16",
+      "name": "对抗",
+      "branch": "behavior",
+      "tier": 4,
+      "region": "dlPFC",
+      "region_matched": "dlPFC",
+      "pad_xyz": [
+        0.58,
+        0.76,
+        0.56
+      ],
+      "mni_xyz": [
+        38,
+        32,
+        34
+      ],
+      "game_xyz_new": [
+        0.4222,
+        0.9278,
+        0.2159
+      ],
+      "drive": "价值驱动"
+    },
+    {
+      "id": "beh_17",
+      "name": "突破",
+      "branch": "behavior",
+      "tier": 4,
+      "region": "额顶网络",
+      "region_matched": "额顶网络",
+      "pad_xyz": [
+        0.6,
+        0.78,
+        0.57
+      ],
+      "mni_xyz": [
+        34,
+        42,
+        36
+      ],
+      "game_xyz_new": [
+        0.3778,
+        0.95,
+        0.2833
+      ],
+      "drive": "价值驱动"
+    },
+    {
+      "id": "beh_18",
+      "name": "安抚",
+      "branch": "behavior",
+      "tier": 4,
+      "region": "前脑岛",
+      "region_matched": "前脑岛",
+      "pad_xyz": [
+        0.39,
+        0.73,
+        0.3
+      ],
+      "mni_xyz": [
+        34,
+        16,
+        6
+      ],
+      "game_xyz_new": [
+        0.3778,
+        0.6167,
+        0.1079
+      ],
+      "drive": "照护"
+    },
+    {
+      "id": "beh_19",
+      "name": "保护",
+      "branch": "behavior",
+      "tier": 4,
+      "region": "ACC",
+      "region_matched": "ACC",
+      "pad_xyz": [
+        0.41,
+        0.69,
+        0.26
+      ],
+      "mni_xyz": [
+        5,
+        22,
+        28
+      ],
+      "game_xyz_new": [
+        0.0556,
+        0.8611,
+        0.1484
+      ],
+      "drive": "照护"
+    },
+    {
+      "id": "beh_20",
+      "name": "舍身",
+      "branch": "behavior",
+      "tier": 4,
+      "region": "岛叶-ACC-VTA",
+      "region_matched": "岛叶-ACC-VTA",
+      "pad_xyz": [
+        0.43,
+        0.71,
+        0.27
+      ],
+      "mni_xyz": [
+        14,
+        4,
+        6
+      ],
+      "game_xyz_new": [
+        0.1556,
+        0.6167,
+        0.027
+      ],
+      "drive": "照护"
+    },
+    {
+      "id": "ult_0",
+      "name": "逆流而上",
+      "branch": "ultimate",
+      "tier": "U",
+      "region": "前额叶极·DMN",
+      "region_matched": "前额叶极·DMN",
+      "pad_xyz": [
+        0.444,
+        0.904,
+        0.576
+      ],
+      "mni_xyz": [
+        4,
+        50,
+        -8
+      ],
+      "game_xyz_new": [
+        0.0444,
+        0.4611,
+        0.3373
+      ]
+    },
+    {
+      "id": "ult_1",
+      "name": "奋起",
+      "branch": "ultimate",
+      "tier": "U",
+      "region": "前额叶极·FPN",
+      "region_matched": "前额叶极·FPN",
+      "pad_xyz": [
+        -0.333,
+        0.784,
+        0.451
+      ],
+      "mni_xyz": [
+        -36,
+        46,
+        28
+      ],
+      "game_xyz_new": [
+        -0.4,
+        0.8611,
+        0.3103
+      ]
+    },
+    {
+      "id": "ult_2",
+      "name": "献身",
+      "branch": "ultimate",
+      "tier": "U",
+      "region": "前额叶极·DMN",
+      "region_matched": "前额叶极·DMN",
+      "pad_xyz": [
+        1.0,
+        0.23,
+        0.477
+      ],
+      "mni_xyz": [
+        4,
+        50,
+        -8
+      ],
+      "game_xyz_new": [
+        0.0444,
+        0.4611,
+        0.3373
+      ]
+    },
+    {
+      "id": "ult_3",
+      "name": "背水",
+      "branch": "ultimate",
+      "tier": "U",
+      "region": "前额叶极·SN",
+      "region_matched": "前额叶极·SN",
+      "pad_xyz": [
+        0.469,
+        0.876,
+        0.547
+      ],
+      "mni_xyz": [
+        6,
+        28,
+        28
+      ],
+      "game_xyz_new": [
+        0.0667,
+        0.8611,
+        0.1889
+      ]
+    },
+    {
+      "id": "ult_4",
+      "name": "净除",
+      "branch": "ultimate",
+      "tier": "U",
+      "region": "前额叶极·FPN",
+      "region_matched": "前额叶极·FPN",
+      "pad_xyz": [
+        0.431,
+        0.865,
+        0.59
+      ],
+      "mni_xyz": [
+        36,
+        46,
+        28
+      ],
+      "game_xyz_new": [
+        0.4,
+        0.8611,
+        0.3103
+      ]
+    },
+    {
+      "id": "ult_5",
+      "name": "独行",
+      "branch": "ultimate",
+      "tier": "U",
+      "region": "前额叶极·DMN",
+      "region_matched": "前额叶极·DMN",
+      "pad_xyz": [
+        0.55,
+        0.864,
+        0.543
+      ],
+      "mni_xyz": [
+        4,
+        50,
+        -8
+      ],
+      "game_xyz_new": [
+        0.0444,
+        0.4611,
+        0.3373
+      ]
+    },
+    {
+      "id": "ult_6",
+      "name": "赎罪",
+      "branch": "ultimate",
+      "tier": "U",
+      "region": "vmPFC-TPJ",
+      "region_matched": "vmPFC-TPJ",
+      "pad_xyz": [
+        0.035,
+        0.32,
+        0.384
+      ],
+      "mni_xyz": [
+        0,
+        8,
+        48
+      ],
+      "game_xyz_new": [
+        0.0,
+        1.0833,
+        0.054
+      ]
+    },
+    {
+      "id": "ult_7",
+      "name": "义愤",
+      "branch": "ultimate",
+      "tier": "U",
+      "region": "岛叶-PFC-杏仁核",
+      "region_matched": "岛叶-PFC-杏仁核",
+      "pad_xyz": [
+        -0.473,
+        0.664,
+        0.411
+      ],
+      "mni_xyz": [
+        -28,
+        12,
+        -6
+      ],
+      "game_xyz_new": [
+        -0.3111,
+        0.4833,
+        0.081
+      ]
+    },
+    {
+      "id": "ult_8",
+      "name": "溃逃",
+      "branch": "ultimate",
+      "tier": "U",
+      "region": "杏仁核-PAG",
+      "region_matched": "杏仁核-PAG",
+      "pad_xyz": [
+        -0.883,
+        0.744,
+        -0.531
+      ],
+      "mni_xyz": [
+        -12,
+        -16,
+        -14
+      ],
+      "game_xyz_new": [
+        -0.1333,
+        0.3944,
+        -0.1079
+      ]
+    },
+    {
+      "id": "ult_9",
+      "name": "共悲",
+      "branch": "ultimate",
+      "tier": "U",
+      "region": "岛叶-ACC",
+      "region_matched": "岛叶-ACC",
+      "pad_xyz": [
+        0.052,
+        0.662,
+        0.014
+      ],
+      "mni_xyz": [
+        20,
+        20,
+        14
+      ],
+      "game_xyz_new": [
+        0.2222,
+        0.7056,
+        0.1349
+      ]
+    },
+    {
+      "id": "ult_10",
+      "name": "抚慰",
+      "branch": "ultimate",
+      "tier": "U",
+      "region": "岛叶-vmPFC",
+      "region_matched": "岛叶-vmPFC",
+      "pad_xyz": [
+        0.729,
+        0.601,
+        0.395
+      ],
+      "mni_xyz": [
+        20,
+        28,
+        -4
+      ],
+      "game_xyz_new": [
+        0.2222,
+        0.5056,
+        0.1889
+      ]
+    },
+    {
+      "id": "ult_11",
+      "name": "虔敬",
+      "branch": "ultimate",
+      "tier": "U",
+      "region": "DMN+OFC",
+      "region_matched": "DMN+OFC",
+      "pad_xyz": [
+        -0.031,
+        0.34,
+        -0.2
+      ],
+      "mni_xyz": [
+        0,
+        44,
+        -12
+      ],
+      "game_xyz_new": [
+        0.0,
+        0.4167,
+        0.2968
+      ]
+    },
+    {
+      "id": "ult_12",
+      "name": "赴汤蹈火",
+      "branch": "ultimate",
+      "tier": "U",
+      "region": "全脑整合",
+      "region_matched": "全脑整合",
+      "pad_xyz": [
+        0.115,
+        0.8,
+        0.288
+      ],
+      "mni_xyz": [
+        0,
+        -10,
+        -2
+      ],
+      "game_xyz_new": [
+        0.0,
+        0.5278,
+        -0.0675
+      ]
+    }
+  ]
+}

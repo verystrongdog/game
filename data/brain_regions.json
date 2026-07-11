@@ -1,0 +1,964 @@
+{
+  "_description": "技能树57脑区的标准MNI解剖坐标与游戏空间坐标映射",
+  "_source": "brain-for-blender (brainder.org, CC BY-SA 3.0), MNI152, Harvard-Oxford Atlas, literature values",
+  "_created": "2026-07-11",
+  "_note": "白质束/功能网络节点 (category=white_matter) 的坐标是近似中点值，精度低于解剖ROI",
+  "_coordinate_system": {
+    "mni": "MNI152 (mm, RAS+): X=右, Y=前, Z=上",
+    "game": "游戏世界空间: X=右, Y=上, Z=前; 范围见包围盒",
+    "transform": "game_X = mni_X/90*1.0; game_Y = mni_Z/90*1.0+0.55; game_Z = mni_Y/126*0.85"
+  },
+  "_stats": {
+    "total_regions": 59,
+    "cortical": 29,
+    "subcortical": 17,
+    "brainstem": 5,
+    "white_matter": 8
+  },
+  "regions": {
+    "枕叶 V1": {
+      "std_name": "V1 (Primary Visual Cortex)",
+      "bfb_region": "pericalcarine",
+      "category": "cortical",
+      "lobe": "occipital",
+      "mni_xyz": [
+        -12,
+        -85,
+        2
+      ],
+      "game_xyz": [
+        -0.1333,
+        0.5722,
+        -0.5734
+      ]
+    },
+    "顶内沟": {
+      "std_name": "Intraparietal Sulcus",
+      "bfb_region": "superiorparietal",
+      "category": "cortical",
+      "lobe": "parietal",
+      "mni_xyz": [
+        -30,
+        -55,
+        45
+      ],
+      "game_xyz": [
+        -0.3333,
+        1.05,
+        -0.371
+      ]
+    },
+    "顶叶": {
+      "std_name": "Parietal Lobe",
+      "bfb_region": "inferiorparietal",
+      "category": "cortical",
+      "lobe": "parietal",
+      "mni_xyz": [
+        -35,
+        -60,
+        40
+      ],
+      "game_xyz": [
+        -0.3889,
+        0.9944,
+        -0.4048
+      ]
+    },
+    "枕顶联合": {
+      "std_name": "Parieto-Occipital Junction",
+      "bfb_region": "lateraloccipital",
+      "category": "cortical",
+      "lobe": "parieto-occipital",
+      "mni_xyz": [
+        -20,
+        -75,
+        30
+      ],
+      "game_xyz": [
+        -0.2222,
+        0.8833,
+        -0.506
+      ]
+    },
+    "丘脑枕": {
+      "std_name": "Pulvinar (Thalamus)",
+      "bfb_region": "Thalamus-Proper",
+      "category": "subcortical",
+      "lobe": "diencephalon",
+      "mni_xyz": [
+        -15,
+        -28,
+        5
+      ],
+      "game_xyz": [
+        -0.1667,
+        0.6056,
+        -0.1889
+      ]
+    },
+    "海马体 CA1": {
+      "std_name": "Hippocampus CA1",
+      "bfb_region": "Hippocampus",
+      "category": "subcortical",
+      "lobe": "temporal",
+      "mni_xyz": [
+        -26,
+        -18,
+        -18
+      ],
+      "game_xyz": [
+        -0.2889,
+        0.35,
+        -0.1214
+      ]
+    },
+    "内嗅皮层": {
+      "std_name": "Entorhinal Cortex",
+      "bfb_region": "entorhinal",
+      "category": "cortical",
+      "lobe": "temporal",
+      "mni_xyz": [
+        -24,
+        -10,
+        -30
+      ],
+      "game_xyz": [
+        -0.2667,
+        0.2167,
+        -0.0675
+      ]
+    },
+    "杏仁核-海马": {
+      "std_name": "Amygdala-Hippocampal Junction",
+      "bfb_region": "Amygdala",
+      "category": "subcortical",
+      "lobe": "temporal",
+      "mni_xyz": [
+        -22,
+        -8,
+        -22
+      ],
+      "game_xyz": [
+        -0.2444,
+        0.3056,
+        -0.054
+      ]
+    },
+    "海马体 CA3": {
+      "std_name": "Hippocampus CA3",
+      "bfb_region": "Hippocampus",
+      "category": "subcortical",
+      "lobe": "temporal",
+      "mni_xyz": [
+        -28,
+        -22,
+        -16
+      ],
+      "game_xyz": [
+        -0.3111,
+        0.3722,
+        -0.1484
+      ]
+    },
+    "前额叶-海马": {
+      "std_name": "Prefrontal-Hippocampal Pathway",
+      "bfb_region": null,
+      "category": "white_matter",
+      "lobe": "frontal-temporal",
+      "mni_xyz": [
+        -18,
+        20,
+        -12
+      ],
+      "game_xyz": [
+        -0.2,
+        0.4167,
+        0.1349
+      ]
+    },
+    "TPJ": {
+      "std_name": "Temporo-Parietal Junction",
+      "bfb_region": "supramarginal",
+      "category": "cortical",
+      "lobe": "temporo-parietal",
+      "mni_xyz": [
+        -52,
+        -50,
+        28
+      ],
+      "game_xyz": [
+        -0.5778,
+        0.8611,
+        -0.3373
+      ]
+    },
+    "颞下回": {
+      "std_name": "Inferior Temporal Gyrus",
+      "bfb_region": "inferiortemporal",
+      "category": "cortical",
+      "lobe": "temporal",
+      "mni_xyz": [
+        -48,
+        -50,
+        -18
+      ],
+      "game_xyz": [
+        -0.5333,
+        0.35,
+        -0.3373
+      ]
+    },
+    "楔前叶": {
+      "std_name": "Precuneus",
+      "bfb_region": "precuneus",
+      "category": "cortical",
+      "lobe": "parietal",
+      "mni_xyz": [
+        -8,
+        -60,
+        40
+      ],
+      "game_xyz": [
+        -0.0889,
+        0.9944,
+        -0.4048
+      ]
+    },
+    "角回": {
+      "std_name": "Angular Gyrus",
+      "bfb_region": "inferiorparietal",
+      "category": "cortical",
+      "lobe": "parietal",
+      "mni_xyz": [
+        -44,
+        -62,
+        36
+      ],
+      "game_xyz": [
+        -0.4889,
+        0.95,
+        -0.4183
+      ]
+    },
+    "颞上沟": {
+      "std_name": "Superior Temporal Sulcus",
+      "bfb_region": "superiortemporal",
+      "category": "cortical",
+      "lobe": "temporal",
+      "mni_xyz": [
+        -54,
+        -38,
+        4
+      ],
+      "game_xyz": [
+        -0.6,
+        0.5944,
+        -0.2563
+      ]
+    },
+    "Broca区": {
+      "std_name": "Broca's Area (BA44/45)",
+      "bfb_region": "parsopercularis",
+      "category": "cortical",
+      "lobe": "frontal",
+      "mni_xyz": [
+        -48,
+        14,
+        18
+      ],
+      "game_xyz": [
+        -0.5333,
+        0.75,
+        0.0944
+      ]
+    },
+    "Wernicke区": {
+      "std_name": "Wernicke's Area (BA22)",
+      "bfb_region": "superiortemporal",
+      "category": "cortical",
+      "lobe": "temporal",
+      "mni_xyz": [
+        -56,
+        -42,
+        8
+      ],
+      "game_xyz": [
+        -0.6222,
+        0.6389,
+        -0.2833
+      ]
+    },
+    "弓状束": {
+      "std_name": "Arcuate Fasciculus",
+      "bfb_region": null,
+      "category": "white_matter",
+      "lobe": "frontal-temporal",
+      "mni_xyz": [
+        -40,
+        -10,
+        24
+      ],
+      "game_xyz": [
+        -0.4444,
+        0.8167,
+        -0.0675
+      ]
+    },
+    "前额叶极": {
+      "std_name": "Frontal Pole (BA10)",
+      "bfb_region": "rostralmiddlefrontal",
+      "category": "cortical",
+      "lobe": "frontal",
+      "mni_xyz": [
+        -10,
+        58,
+        8
+      ],
+      "game_xyz": [
+        -0.1111,
+        0.6389,
+        0.3913
+      ]
+    },
+    "dlPFC": {
+      "std_name": "Dorsolateral Prefrontal Cortex",
+      "bfb_region": "rostralmiddlefrontal",
+      "category": "cortical",
+      "lobe": "frontal",
+      "mni_xyz": [
+        -38,
+        32,
+        34
+      ],
+      "game_xyz": [
+        -0.4222,
+        0.9278,
+        0.2159
+      ]
+    },
+    "vmPFC": {
+      "std_name": "Ventromedial Prefrontal Cortex",
+      "bfb_region": "medialorbitofrontal",
+      "category": "cortical",
+      "lobe": "frontal",
+      "mni_xyz": [
+        -4,
+        42,
+        -14
+      ],
+      "game_xyz": [
+        -0.0444,
+        0.3944,
+        0.2833
+      ]
+    },
+    "额极": {
+      "std_name": "Frontal Pole",
+      "bfb_region": "frontalpole",
+      "category": "cortical",
+      "lobe": "frontal",
+      "mni_xyz": [
+        -8,
+        60,
+        4
+      ],
+      "game_xyz": [
+        -0.0889,
+        0.5944,
+        0.4048
+      ]
+    },
+    "OFC": {
+      "std_name": "Orbitofrontal Cortex",
+      "bfb_region": "lateralorbitofrontal",
+      "category": "cortical",
+      "lobe": "frontal",
+      "mni_xyz": [
+        -22,
+        34,
+        -16
+      ],
+      "game_xyz": [
+        -0.2444,
+        0.3722,
+        0.2294
+      ]
+    },
+    "伏隔核/NAcc": {
+      "std_name": "Nucleus Accumbens",
+      "bfb_region": "Accumbens-area",
+      "category": "subcortical",
+      "lobe": "basal_ganglia",
+      "mni_xyz": [
+        -10,
+        10,
+        -8
+      ],
+      "game_xyz": [
+        -0.1111,
+        0.4611,
+        0.0675
+      ]
+    },
+    "杏仁核": {
+      "std_name": "Amygdala",
+      "bfb_region": "Amygdala",
+      "category": "subcortical",
+      "lobe": "temporal",
+      "mni_xyz": [
+        -22,
+        -4,
+        -18
+      ],
+      "game_xyz": [
+        -0.2444,
+        0.35,
+        -0.027
+      ]
+    },
+    "下丘脑": {
+      "std_name": "Hypothalamus",
+      "bfb_region": null,
+      "category": "subcortical",
+      "lobe": "diencephalon",
+      "mni_xyz": [
+        0,
+        -4,
+        -8
+      ],
+      "game_xyz": [
+        0.0,
+        0.4611,
+        -0.027
+      ]
+    },
+    "腹侧纹状体": {
+      "std_name": "Ventral Striatum",
+      "bfb_region": "Accumbens-area",
+      "category": "subcortical",
+      "lobe": "basal_ganglia",
+      "mni_xyz": [
+        -12,
+        12,
+        -6
+      ],
+      "game_xyz": [
+        -0.1333,
+        0.4833,
+        0.081
+      ]
+    },
+    "BNST": {
+      "std_name": "Bed Nucleus of Stria Terminalis",
+      "bfb_region": null,
+      "category": "subcortical",
+      "lobe": "basal_ganglia",
+      "mni_xyz": [
+        -6,
+        2,
+        0
+      ],
+      "game_xyz": [
+        -0.0667,
+        0.55,
+        0.0135
+      ]
+    },
+    "隔区": {
+      "std_name": "Septal Region",
+      "bfb_region": null,
+      "category": "subcortical",
+      "lobe": "basal_ganglia",
+      "mni_xyz": [
+        0,
+        4,
+        -2
+      ],
+      "game_xyz": [
+        0.0,
+        0.5278,
+        0.027
+      ]
+    },
+    "前脑岛": {
+      "std_name": "Anterior Insula",
+      "bfb_region": "insula",
+      "category": "cortical",
+      "lobe": "insula",
+      "mni_xyz": [
+        -34,
+        16,
+        6
+      ],
+      "game_xyz": [
+        -0.3778,
+        0.6167,
+        0.1079
+      ]
+    },
+    "ACC吻侧": {
+      "std_name": "Rostral Anterior Cingulate Cortex",
+      "bfb_region": "rostralanteriorcingulate",
+      "category": "cortical",
+      "lobe": "cingulate",
+      "mni_xyz": [
+        -6,
+        36,
+        14
+      ],
+      "game_xyz": [
+        -0.0667,
+        0.7056,
+        0.2429
+      ]
+    },
+    "ACC背侧": {
+      "std_name": "Dorsal Anterior Cingulate Cortex",
+      "bfb_region": "caudalanteriorcingulate",
+      "category": "cortical",
+      "lobe": "cingulate",
+      "mni_xyz": [
+        -6,
+        16,
+        32
+      ],
+      "game_xyz": [
+        -0.0667,
+        0.9056,
+        0.1079
+      ]
+    },
+    "ACC": {
+      "std_name": "Anterior Cingulate Cortex",
+      "bfb_region": "caudalanteriorcingulate",
+      "category": "cortical",
+      "lobe": "cingulate",
+      "mni_xyz": [
+        -5,
+        22,
+        28
+      ],
+      "game_xyz": [
+        -0.0556,
+        0.8611,
+        0.1484
+      ]
+    },
+    "终纹床核": {
+      "std_name": "Bed Nucleus of Stria Terminalis",
+      "bfb_region": null,
+      "category": "subcortical",
+      "lobe": "basal_ganglia",
+      "mni_xyz": [
+        -6,
+        2,
+        0
+      ],
+      "game_xyz": [
+        -0.0667,
+        0.55,
+        0.0135
+      ]
+    },
+    "mPFC": {
+      "std_name": "Medial Prefrontal Cortex",
+      "bfb_region": "superiorfrontal",
+      "category": "cortical",
+      "lobe": "frontal",
+      "mni_xyz": [
+        -4,
+        48,
+        10
+      ],
+      "game_xyz": [
+        -0.0444,
+        0.6611,
+        0.3238
+      ]
+    },
+    "mPFC-杏仁核": {
+      "std_name": "mPFC-Amygdala Circuit",
+      "bfb_region": null,
+      "category": "white_matter",
+      "lobe": "frontal-temporal",
+      "mni_xyz": [
+        -10,
+        20,
+        -10
+      ],
+      "game_xyz": [
+        -0.1111,
+        0.4389,
+        0.1349
+      ]
+    },
+    "颞极": {
+      "std_name": "Temporal Pole",
+      "bfb_region": "temporalpole",
+      "category": "cortical",
+      "lobe": "temporal",
+      "mni_xyz": [
+        -36,
+        10,
+        -34
+      ],
+      "game_xyz": [
+        -0.4,
+        0.1722,
+        0.0675
+      ]
+    },
+    "反射环路·PAG→杏仁核": {
+      "std_name": "PAG-Amygdala Pathway",
+      "bfb_region": null,
+      "category": "brainstem",
+      "lobe": "brainstem",
+      "mni_xyz": [
+        -4,
+        -28,
+        -8
+      ],
+      "game_xyz": [
+        -0.0444,
+        0.4611,
+        -0.1889
+      ]
+    },
+    "反射环路·冻结反应": {
+      "std_name": "Freezing Circuit (PAG→Amygdala)",
+      "bfb_region": null,
+      "category": "brainstem",
+      "lobe": "brainstem",
+      "mni_xyz": [
+        -2,
+        -30,
+        -6
+      ],
+      "game_xyz": [
+        -0.0222,
+        0.4833,
+        -0.2024
+      ]
+    },
+    "反射环路·快速闪避": {
+      "std_name": "Escape Circuit (PAG→Motor)",
+      "bfb_region": null,
+      "category": "brainstem",
+      "lobe": "brainstem",
+      "mni_xyz": [
+        2,
+        -29,
+        -10
+      ],
+      "game_xyz": [
+        0.0222,
+        0.4389,
+        -0.1956
+      ]
+    },
+    "基底节间接通路": {
+      "std_name": "Basal Ganglia Indirect Pathway",
+      "bfb_region": "Putamen",
+      "category": "subcortical",
+      "lobe": "basal_ganglia",
+      "mni_xyz": [
+        -26,
+        0,
+        4
+      ],
+      "game_xyz": [
+        -0.2889,
+        0.5944,
+        0.0
+      ]
+    },
+    "缰核": {
+      "std_name": "Habenula",
+      "bfb_region": null,
+      "category": "subcortical",
+      "lobe": "diencephalon",
+      "mni_xyz": [
+        -4,
+        -24,
+        2
+      ],
+      "game_xyz": [
+        -0.0444,
+        0.5722,
+        -0.1619
+      ]
+    },
+    "纹状体基质": {
+      "std_name": "Striatum (Matrix)",
+      "bfb_region": "Caudate",
+      "category": "subcortical",
+      "lobe": "basal_ganglia",
+      "mni_xyz": [
+        -14,
+        8,
+        10
+      ],
+      "game_xyz": [
+        -0.1556,
+        0.6611,
+        0.054
+      ]
+    },
+    "NAcc壳": {
+      "std_name": "NAcc Shell",
+      "bfb_region": "Accumbens-area",
+      "category": "subcortical",
+      "lobe": "basal_ganglia",
+      "mni_xyz": [
+        -8,
+        12,
+        -8
+      ],
+      "game_xyz": [
+        -0.0889,
+        0.4611,
+        0.081
+      ]
+    },
+    "NAcc核": {
+      "std_name": "NAcc Core",
+      "bfb_region": "Accumbens-area",
+      "category": "subcortical",
+      "lobe": "basal_ganglia",
+      "mni_xyz": [
+        -11,
+        10,
+        -6
+      ],
+      "game_xyz": [
+        -0.1222,
+        0.4833,
+        0.0675
+      ]
+    },
+    "VTA-NAcc": {
+      "std_name": "VTA-NAcc Dopamine Pathway",
+      "bfb_region": null,
+      "category": "brainstem",
+      "lobe": "midbrain",
+      "mni_xyz": [
+        -4,
+        -16,
+        -12
+      ],
+      "game_xyz": [
+        -0.0444,
+        0.4167,
+        -0.1079
+      ]
+    },
+    "vmPFC-TPJ": {
+      "std_name": "vmPFC-TPJ Connectivity",
+      "bfb_region": null,
+      "category": "white_matter",
+      "lobe": "frontal-parietal",
+      "mni_xyz": [
+        -20,
+        8,
+        48
+      ],
+      "game_xyz": [
+        -0.2222,
+        1.0833,
+        0.054
+      ]
+    },
+    "后扣带": {
+      "std_name": "Posterior Cingulate Cortex",
+      "bfb_region": "posteriorcingulate",
+      "category": "cortical",
+      "lobe": "cingulate",
+      "mni_xyz": [
+        -4,
+        -44,
+        28
+      ],
+      "game_xyz": [
+        -0.0444,
+        0.8611,
+        -0.2968
+      ]
+    },
+    "岛叶-ACC": {
+      "std_name": "Insula-ACC Salience Network",
+      "bfb_region": null,
+      "category": "white_matter",
+      "lobe": "cingulate-insula",
+      "mni_xyz": [
+        -20,
+        20,
+        14
+      ],
+      "game_xyz": [
+        -0.2222,
+        0.7056,
+        0.1349
+      ]
+    },
+    "岛叶-ACC-VTA": {
+      "std_name": "Insula-ACC-VTA Circuit",
+      "bfb_region": null,
+      "category": "white_matter",
+      "lobe": "limbic",
+      "mni_xyz": [
+        -14,
+        4,
+        6
+      ],
+      "game_xyz": [
+        -0.1556,
+        0.6167,
+        0.027
+      ]
+    },
+    "岛叶-PFC-杏仁核": {
+      "std_name": "Insula-PFC-Amygdala Circuit",
+      "bfb_region": null,
+      "category": "white_matter",
+      "lobe": "frontal-temporal",
+      "mni_xyz": [
+        -28,
+        12,
+        -6
+      ],
+      "game_xyz": [
+        -0.3111,
+        0.4833,
+        0.081
+      ]
+    },
+    "岛叶-vmPFC": {
+      "std_name": "Insula-vmPFC Connectivity",
+      "bfb_region": null,
+      "category": "white_matter",
+      "lobe": "frontal-insula",
+      "mni_xyz": [
+        -20,
+        28,
+        -4
+      ],
+      "game_xyz": [
+        -0.2222,
+        0.5056,
+        0.1889
+      ]
+    },
+    "额顶网络": {
+      "std_name": "Frontoparietal Control Network",
+      "bfb_region": null,
+      "category": "cortical",
+      "lobe": "frontal-parietal",
+      "mni_xyz": [
+        -34,
+        42,
+        36
+      ],
+      "game_xyz": [
+        -0.3778,
+        0.95,
+        0.2833
+      ]
+    },
+    "前额叶极·DMN": {
+      "std_name": "Prefrontal Pole (DMN hub)",
+      "bfb_region": "medialorbitofrontal",
+      "category": "cortical",
+      "lobe": "frontal",
+      "mni_xyz": [
+        -4,
+        50,
+        -8
+      ],
+      "game_xyz": [
+        -0.0444,
+        0.4611,
+        0.3373
+      ]
+    },
+    "前额叶极·FPN": {
+      "std_name": "Prefrontal Pole (FPN hub)",
+      "bfb_region": "rostralmiddlefrontal",
+      "category": "cortical",
+      "lobe": "frontal",
+      "mni_xyz": [
+        -36,
+        46,
+        28
+      ],
+      "game_xyz": [
+        -0.4,
+        0.8611,
+        0.3103
+      ]
+    },
+    "前额叶极·SN": {
+      "std_name": "Prefrontal Pole (Salience Network)",
+      "bfb_region": "caudalanteriorcingulate",
+      "category": "cortical",
+      "lobe": "cingulate",
+      "mni_xyz": [
+        -6,
+        28,
+        28
+      ],
+      "game_xyz": [
+        -0.0667,
+        0.8611,
+        0.1889
+      ]
+    },
+    "DMN+OFC": {
+      "std_name": "DMN-OFC Convergence",
+      "bfb_region": "medialorbitofrontal",
+      "category": "cortical",
+      "lobe": "frontal",
+      "mni_xyz": [
+        -4,
+        44,
+        -12
+      ],
+      "game_xyz": [
+        -0.0444,
+        0.4167,
+        0.2968
+      ]
+    },
+    "杏仁核-PAG": {
+      "std_name": "Amygdala-PAG Pathway",
+      "bfb_region": null,
+      "category": "brainstem",
+      "lobe": "midbrain-temporal",
+      "mni_xyz": [
+        -12,
+        -16,
+        -14
+      ],
+      "game_xyz": [
+        -0.1333,
+        0.3944,
+        -0.1079
+      ]
+    },
+    "全脑整合": {
+      "std_name": "Whole-Brain Integration (Rich Club)",
+      "bfb_region": null,
+      "category": "subcortical",
+      "lobe": "diencephalon",
+      "mni_xyz": [
+        0,
+        -10,
+        -2
+      ],
+      "game_xyz": [
+        0.0,
+        0.5278,
+        -0.0675
+      ]
+    }
+  }
+}
