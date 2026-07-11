@@ -22,14 +22,32 @@
       "category": "cortical",
       "lobe": "occipital",
       "mni_xyz": [
+        7.895,
+        -74.044,
+        1.637
+      ],
+      "game_xyz": [
+        -0.1378,
+        0.5563,
+        -0.5418
+      ],
+      "mni_xyz_source": "obj_centroid",
+      "mni_xyz_literature": [
         -12,
         -85,
         2
       ],
-      "game_xyz": [
-        -0.1333,
-        0.5722,
-        -0.5734
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.pericalcarine.obj",
+      "fs_xyz": [
+        -9.646,
+        -76.489,
+        0.472
+      ],
+      "coord_source": "obj_centroid_fs",
+      "mni_literature": [
+        7.895,
+        -74.044,
+        1.637
       ]
     },
     "顶内沟": {
@@ -38,14 +56,32 @@
       "category": "cortical",
       "lobe": "parietal",
       "mni_xyz": [
+        19.978,
+        -50.804,
+        33.692
+      ],
+      "game_xyz": [
+        -0.2803,
+        0.9868,
+        -0.3829
+      ],
+      "mni_xyz_source": "obj_centroid",
+      "mni_xyz_literature": [
         -30,
         -55,
         45
       ],
-      "game_xyz": [
-        -0.3333,
-        1.05,
-        -0.371
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.superiorparietal.obj",
+      "fs_xyz": [
+        -19.62,
+        -54.056,
+        32.762
+      ],
+      "coord_source": "obj_centroid_fs",
+      "mni_literature": [
+        19.978,
+        -50.804,
+        33.692
       ]
     },
     "顶叶": {
@@ -54,14 +90,32 @@
       "category": "cortical",
       "lobe": "parietal",
       "mni_xyz": [
+        38.355,
+        -52.31,
+        21.302
+      ],
+      "game_xyz": [
+        -0.5097,
+        0.835,
+        -0.4297
+      ],
+      "mni_xyz_source": "obj_centroid",
+      "mni_xyz_literature": [
         -35,
         -60,
         40
       ],
-      "game_xyz": [
-        -0.3889,
-        0.9944,
-        -0.4048
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.inferiorparietal.obj",
+      "fs_xyz": [
+        -35.678,
+        -60.668,
+        21.375
+      ],
+      "coord_source": "obj_centroid_fs",
+      "mni_literature": [
+        38.355,
+        -52.31,
+        21.302
       ]
     },
     "枕顶联合": {
@@ -70,14 +124,32 @@
       "category": "cortical",
       "lobe": "parieto-occipital",
       "mni_xyz": [
+        30.974,
+        -75.721,
+        -5.6
+      ],
+      "game_xyz": [
+        -0.4317,
+        0.4694,
+        -0.5862
+      ],
+      "mni_xyz_source": "obj_centroid",
+      "mni_xyz_literature": [
         -20,
         -75,
         30
       ],
-      "game_xyz": [
-        -0.2222,
-        0.8833,
-        -0.506
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.lateraloccipital.obj",
+      "fs_xyz": [
+        -30.219,
+        -82.762,
+        -6.044
+      ],
+      "coord_source": "obj_centroid_fs",
+      "mni_literature": [
+        30.974,
+        -75.721,
+        -5.6
       ]
     },
     "丘脑枕": {
@@ -86,14 +158,32 @@
       "category": "subcortical",
       "lobe": "diencephalon",
       "mni_xyz": [
+        12.196,
+        -16.747,
+        -6.331
+      ],
+      "game_xyz": [
+        -0.2073,
+        0.4699,
+        -0.1299
+      ],
+      "mni_xyz_source": "obj_centroid",
+      "mni_xyz_literature": [
         -15,
         -28,
         5
       ],
-      "game_xyz": [
-        -0.1667,
-        0.6056,
-        -0.1889
+      "obj_file": "技能树系统/blender_assets/all_obj/subcortical/Left-Thalamus-Proper.obj",
+      "fs_xyz": [
+        -14.51,
+        -18.337,
+        -6.004
+      ],
+      "coord_source": "obj_centroid_fs",
+      "mni_literature": [
+        12.196,
+        -16.747,
+        -6.331
       ]
     },
     "海马体 CA1": {
@@ -102,14 +192,32 @@
       "category": "subcortical",
       "lobe": "temporal",
       "mni_xyz": [
+        24.903,
+        -25.251,
+        -22.186
+      ],
+      "game_xyz": [
+        -0.3721,
+        0.261,
+        -0.1875
+      ],
+      "mni_xyz_source": "obj_centroid",
+      "mni_xyz_literature": [
         -26,
         -18,
         -18
       ],
-      "game_xyz": [
-        -0.2889,
-        0.35,
-        -0.1214
+      "obj_file": "技能树系统/blender_assets/all_obj/subcortical/Left-Hippocampus.obj",
+      "fs_xyz": [
+        -26.047,
+        -26.473,
+        -21.672
+      ],
+      "coord_source": "obj_centroid_fs",
+      "mni_literature": [
+        24.903,
+        -25.251,
+        -22.186
       ]
     },
     "内嗅皮层": {
@@ -118,14 +226,32 @@
       "category": "cortical",
       "lobe": "temporal",
       "mni_xyz": [
+        21.674,
+        -14.841,
+        -41.798
+      ],
+      "game_xyz": [
+        -0.3701,
+        -0.0009,
+        -0.0711
+      ],
+      "mni_xyz_source": "obj_centroid",
+      "mni_xyz_literature": [
         -24,
         -10,
         -30
       ],
-      "game_xyz": [
-        -0.2667,
-        0.2167,
-        -0.0675
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.entorhinal.obj",
+      "fs_xyz": [
+        -25.91,
+        -10.032,
+        -41.316
+      ],
+      "coord_source": "obj_centroid_fs",
+      "mni_literature": [
+        21.674,
+        -14.841,
+        -41.798
       ]
     },
     "杏仁核-海马": {
@@ -134,14 +260,32 @@
       "category": "subcortical",
       "lobe": "temporal",
       "mni_xyz": [
+        23.5,
+        -9.628,
+        -30.642
+      ],
+      "game_xyz": [
+        -0.3665,
+        0.16,
+        -0.0737
+      ],
+      "mni_xyz_source": "obj_centroid",
+      "mni_xyz_literature": [
         -22,
         -8,
         -22
       ],
-      "game_xyz": [
-        -0.2444,
-        0.3056,
-        -0.054
+      "obj_file": "技能树系统/blender_assets/all_obj/subcortical/Left-Amygdala.obj",
+      "fs_xyz": [
+        -25.655,
+        -10.398,
+        -29.247
+      ],
+      "coord_source": "obj_centroid_fs",
+      "mni_literature": [
+        23.5,
+        -9.628,
+        -30.642
       ]
     },
     "海马体 CA3": {
@@ -150,14 +294,32 @@
       "category": "subcortical",
       "lobe": "temporal",
       "mni_xyz": [
+        24.903,
+        -25.251,
+        -22.186
+      ],
+      "game_xyz": [
+        -0.3721,
+        0.261,
+        -0.1875
+      ],
+      "mni_xyz_source": "obj_centroid",
+      "mni_xyz_literature": [
         -28,
         -22,
         -16
       ],
-      "game_xyz": [
-        -0.3111,
-        0.3722,
-        -0.1484
+      "obj_file": "技能树系统/blender_assets/all_obj/subcortical/Left-Hippocampus.obj",
+      "fs_xyz": [
+        -26.047,
+        -26.473,
+        -21.672
+      ],
+      "coord_source": "obj_centroid_fs",
+      "mni_literature": [
+        24.903,
+        -25.251,
+        -22.186
       ]
     },
     "前额叶-海马": {
@@ -182,14 +344,32 @@
       "category": "cortical",
       "lobe": "temporo-parietal",
       "mni_xyz": [
+        -48.268,
+        -32.254,
+        20.481
+      ],
+      "game_xyz": [
+        -0.6895,
+        0.8231,
+        -0.2285
+      ],
+      "mni_xyz_source": "obj_centroid",
+      "mni_xyz_literature": [
         -52,
         -50,
         28
       ],
-      "game_xyz": [
-        -0.5778,
-        0.8611,
-        -0.3373
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.supramarginal.obj",
+      "fs_xyz": [
+        -48.268,
+        -32.254,
+        20.481
+      ],
+      "coord_source": "obj_centroid_fs",
+      "mni_literature": [
+        -48.268,
+        -32.254,
+        20.481
       ]
     },
     "颞下回": {
@@ -198,14 +378,32 @@
       "category": "cortical",
       "lobe": "temporal",
       "mni_xyz": [
+        47.481,
+        -34.137,
+        -32.303
+      ],
+      "game_xyz": [
+        -0.7217,
+        0.1828,
+        -0.2733
+      ],
+      "mni_xyz_source": "obj_centroid",
+      "mni_xyz_literature": [
         -48,
         -50,
         -18
       ],
-      "game_xyz": [
-        -0.5333,
-        0.35,
-        -0.3373
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.inferiortemporal.obj",
+      "fs_xyz": [
+        -50.522,
+        -38.584,
+        -27.54
+      ],
+      "coord_source": "obj_centroid_fs",
+      "mni_literature": [
+        47.481,
+        -34.137,
+        -32.303
       ]
     },
     "楔前叶": {
@@ -214,14 +412,32 @@
       "category": "cortical",
       "lobe": "parietal",
       "mni_xyz": [
+        8.26,
+        -47.577,
+        25.373
+      ],
+      "game_xyz": [
+        -0.1159,
+        0.8773,
+        -0.3531
+      ],
+      "mni_xyz_source": "obj_centroid",
+      "mni_xyz_literature": [
         -8,
         -60,
         40
       ],
-      "game_xyz": [
-        -0.0889,
-        0.9944,
-        -0.4048
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.precuneus.obj",
+      "fs_xyz": [
+        -8.115,
+        -49.852,
+        24.55
+      ],
+      "coord_source": "obj_centroid_fs",
+      "mni_literature": [
+        8.26,
+        -47.577,
+        25.373
       ]
     },
     "角回": {
@@ -230,14 +446,32 @@
       "category": "cortical",
       "lobe": "parietal",
       "mni_xyz": [
+        38.355,
+        -52.31,
+        21.302
+      ],
+      "game_xyz": [
+        -0.5097,
+        0.835,
+        -0.4297
+      ],
+      "mni_xyz_source": "obj_centroid",
+      "mni_xyz_literature": [
         -44,
         -62,
         36
       ],
-      "game_xyz": [
-        -0.4889,
-        0.95,
-        -0.4183
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.inferiorparietal.obj",
+      "fs_xyz": [
+        -35.678,
+        -60.668,
+        21.375
+      ],
+      "coord_source": "obj_centroid_fs",
+      "mni_literature": [
+        38.355,
+        -52.31,
+        21.302
       ]
     },
     "颞上沟": {
@@ -246,14 +480,32 @@
       "category": "cortical",
       "lobe": "temporal",
       "mni_xyz": [
+        -52.561,
+        -15.297,
+        -14.654
+      ],
+      "game_xyz": [
+        -0.7509,
+        0.3546,
+        -0.1084
+      ],
+      "mni_xyz_source": "obj_centroid",
+      "mni_xyz_literature": [
         -54,
         -38,
         4
       ],
-      "game_xyz": [
-        -0.6,
-        0.5944,
-        -0.2563
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.superiortemporal.obj",
+      "fs_xyz": [
+        -52.561,
+        -15.297,
+        -14.654
+      ],
+      "coord_source": "obj_centroid_fs",
+      "mni_literature": [
+        -52.561,
+        -15.297,
+        -14.654
       ]
     },
     "Broca区": {
@@ -262,14 +514,32 @@
       "category": "cortical",
       "lobe": "frontal",
       "mni_xyz": [
+        48.454,
+        17.327,
+        -7.565
+      ],
+      "game_xyz": [
+        -0.6345,
+        0.5255,
+        0.1483
+      ],
+      "mni_xyz_source": "obj_centroid",
+      "mni_xyz_literature": [
         -48,
         14,
         18
       ],
-      "game_xyz": [
-        -0.5333,
-        0.75,
-        0.0944
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.parsopercularis.obj",
+      "fs_xyz": [
+        -44.418,
+        20.936,
+        -1.841
+      ],
+      "coord_source": "obj_centroid_fs",
+      "mni_literature": [
+        48.454,
+        17.327,
+        -7.565
       ]
     },
     "Wernicke区": {
@@ -278,14 +548,32 @@
       "category": "cortical",
       "lobe": "temporal",
       "mni_xyz": [
+        -52.561,
+        -15.297,
+        -14.654
+      ],
+      "game_xyz": [
+        -0.7509,
+        0.3546,
+        -0.1084
+      ],
+      "mni_xyz_source": "obj_centroid",
+      "mni_xyz_literature": [
         -56,
         -42,
         8
       ],
-      "game_xyz": [
-        -0.6222,
-        0.6389,
-        -0.2833
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.superiortemporal.obj",
+      "fs_xyz": [
+        -52.561,
+        -15.297,
+        -14.654
+      ],
+      "coord_source": "obj_centroid_fs",
+      "mni_literature": [
+        -52.561,
+        -15.297,
+        -14.654
       ]
     },
     "弓状束": {
@@ -310,14 +598,32 @@
       "category": "cortical",
       "lobe": "frontal",
       "mni_xyz": [
+        -31.121,
+        46.689,
+        -8.23
+      ],
+      "game_xyz": [
+        -0.4446,
+        0.4403,
+        0.3307
+      ],
+      "mni_xyz_source": "obj_centroid",
+      "mni_xyz_literature": [
         -10,
         58,
         8
       ],
-      "game_xyz": [
-        -0.1111,
-        0.6389,
-        0.3913
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.rostralmiddlefrontal.obj",
+      "fs_xyz": [
+        -31.121,
+        46.689,
+        -8.23
+      ],
+      "coord_source": "obj_centroid_fs",
+      "mni_literature": [
+        -31.121,
+        46.689,
+        -8.23
       ]
     },
     "dlPFC": {
@@ -326,14 +632,32 @@
       "category": "cortical",
       "lobe": "frontal",
       "mni_xyz": [
+        -31.121,
+        46.689,
+        -8.23
+      ],
+      "game_xyz": [
+        -0.4446,
+        0.4403,
+        0.3307
+      ],
+      "mni_xyz_source": "obj_centroid",
+      "mni_xyz_literature": [
         -38,
         32,
         34
       ],
-      "game_xyz": [
-        -0.4222,
-        0.9278,
-        0.2159
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.rostralmiddlefrontal.obj",
+      "fs_xyz": [
+        -31.121,
+        46.689,
+        -8.23
+      ],
+      "coord_source": "obj_centroid_fs",
+      "mni_literature": [
+        -31.121,
+        46.689,
+        -8.23
       ]
     },
     "vmPFC": {
@@ -342,14 +666,32 @@
       "category": "cortical",
       "lobe": "frontal",
       "mni_xyz": [
+        4.739,
+        28.263,
+        -29.603
+      ],
+      "game_xyz": [
+        -0.1346,
+        0.1343,
+        0.1789
+      ],
+      "mni_xyz_source": "obj_centroid",
+      "mni_xyz_literature": [
         -4,
         42,
         -14
       ],
-      "game_xyz": [
-        -0.0444,
-        0.3944,
-        0.2833
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.medialorbitofrontal.obj",
+      "fs_xyz": [
+        -9.423,
+        25.251,
+        -31.18
+      ],
+      "coord_source": "obj_centroid_fs",
+      "mni_literature": [
+        4.739,
+        28.263,
+        -29.603
       ]
     },
     "额极": {
@@ -358,14 +700,32 @@
       "category": "cortical",
       "lobe": "frontal",
       "mni_xyz": [
+        -8.185,
+        60.177,
+        -31.229
+      ],
+      "game_xyz": [
+        -0.1169,
+        0.1336,
+        0.4263
+      ],
+      "mni_xyz_source": "obj_centroid",
+      "mni_xyz_literature": [
         -8,
         60,
         4
       ],
-      "game_xyz": [
-        -0.0889,
-        0.5944,
-        0.4048
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.frontalpole.obj",
+      "fs_xyz": [
+        -8.185,
+        60.177,
+        -31.229
+      ],
+      "coord_source": "obj_centroid_fs",
+      "mni_literature": [
+        -8.185,
+        60.177,
+        -31.229
       ]
     },
     "OFC": {
@@ -374,14 +734,32 @@
       "category": "cortical",
       "lobe": "frontal",
       "mni_xyz": [
+        -24.419,
+        28.528,
+        -31.949
+      ],
+      "game_xyz": [
+        -0.3488,
+        0.124,
+        0.2021
+      ],
+      "mni_xyz_source": "obj_centroid",
+      "mni_xyz_literature": [
         -22,
         34,
         -16
       ],
-      "game_xyz": [
-        -0.2444,
-        0.3722,
-        0.2294
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.lateralorbitofrontal.obj",
+      "fs_xyz": [
+        -24.419,
+        28.528,
+        -31.949
+      ],
+      "coord_source": "obj_centroid_fs",
+      "mni_literature": [
+        -24.419,
+        28.528,
+        -31.949
       ]
     },
     "伏隔核/NAcc": {
@@ -390,14 +768,32 @@
       "category": "subcortical",
       "lobe": "basal_ganglia",
       "mni_xyz": [
+        8.377,
+        7.176,
+        -21.418
+      ],
+      "game_xyz": [
+        -0.1424,
+        0.2842,
+        0.0458
+      ],
+      "mni_xyz_source": "obj_centroid",
+      "mni_xyz_literature": [
         -10,
         10,
         -8
       ],
-      "game_xyz": [
-        -0.1111,
-        0.4611,
-        0.0675
+      "obj_file": "技能树系统/blender_assets/all_obj/subcortical/Left-Accumbens-area.obj",
+      "fs_xyz": [
+        -9.966,
+        6.459,
+        -19.934
+      ],
+      "coord_source": "obj_centroid_fs",
+      "mni_literature": [
+        8.377,
+        7.176,
+        -21.418
       ]
     },
     "杏仁核": {
@@ -406,14 +802,32 @@
       "category": "subcortical",
       "lobe": "temporal",
       "mni_xyz": [
+        23.5,
+        -9.628,
+        -30.642
+      ],
+      "game_xyz": [
+        -0.3665,
+        0.16,
+        -0.0737
+      ],
+      "mni_xyz_source": "obj_centroid",
+      "mni_xyz_literature": [
         -22,
         -4,
         -18
       ],
-      "game_xyz": [
-        -0.2444,
-        0.35,
-        -0.027
+      "obj_file": "技能树系统/blender_assets/all_obj/subcortical/Left-Amygdala.obj",
+      "fs_xyz": [
+        -25.655,
+        -10.398,
+        -29.247
+      ],
+      "coord_source": "obj_centroid_fs",
+      "mni_literature": [
+        23.5,
+        -9.628,
+        -30.642
       ]
     },
     "下丘脑": {
@@ -438,14 +852,32 @@
       "category": "subcortical",
       "lobe": "basal_ganglia",
       "mni_xyz": [
+        8.377,
+        7.176,
+        -21.418
+      ],
+      "game_xyz": [
+        -0.1424,
+        0.2842,
+        0.0458
+      ],
+      "mni_xyz_source": "obj_centroid",
+      "mni_xyz_literature": [
         -12,
         12,
         -6
       ],
-      "game_xyz": [
-        -0.1333,
-        0.4833,
-        0.081
+      "obj_file": "技能树系统/blender_assets/all_obj/subcortical/Left-Accumbens-area.obj",
+      "fs_xyz": [
+        -9.966,
+        6.459,
+        -19.934
+      ],
+      "coord_source": "obj_centroid_fs",
+      "mni_literature": [
+        8.377,
+        7.176,
+        -21.418
       ]
     },
     "BNST": {
@@ -486,14 +918,32 @@
       "category": "cortical",
       "lobe": "insula",
       "mni_xyz": [
+        -37.19,
+        -2.272,
+        -12.175
+      ],
+      "game_xyz": [
+        -0.5313,
+        0.3877,
+        -0.0161
+      ],
+      "mni_xyz_source": "obj_centroid",
+      "mni_xyz_literature": [
         -34,
         16,
         6
       ],
-      "game_xyz": [
-        -0.3778,
-        0.6167,
-        0.1079
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.insula.obj",
+      "fs_xyz": [
+        -37.19,
+        -2.272,
+        -12.175
+      ],
+      "coord_source": "obj_centroid_fs",
+      "mni_literature": [
+        -37.19,
+        -2.272,
+        -12.175
       ]
     },
     "ACC吻侧": {
@@ -502,14 +952,32 @@
       "category": "cortical",
       "lobe": "cingulate",
       "mni_xyz": [
+        -4.547,
+        29.591,
+        -19.945
+      ],
+      "game_xyz": [
+        -0.065,
+        0.2841,
+        0.2096
+      ],
+      "mni_xyz_source": "obj_centroid",
+      "mni_xyz_literature": [
         -6,
         36,
         14
       ],
-      "game_xyz": [
-        -0.0667,
-        0.7056,
-        0.2429
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.rostralanteriorcingulate.obj",
+      "fs_xyz": [
+        -4.547,
+        29.591,
+        -19.945
+      ],
+      "coord_source": "obj_centroid_fs",
+      "mni_literature": [
+        -4.547,
+        29.591,
+        -19.945
       ]
     },
     "ACC背侧": {
@@ -518,14 +986,32 @@
       "category": "cortical",
       "lobe": "cingulate",
       "mni_xyz": [
+        4.416,
+        23.64,
+        2.159
+      ],
+      "game_xyz": [
+        -0.0832,
+        0.5865,
+        0.1503
+      ],
+      "mni_xyz_source": "obj_centroid",
+      "mni_xyz_literature": [
         -6,
         16,
         32
       ],
-      "game_xyz": [
-        -0.0667,
-        0.9056,
-        0.1079
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.caudalanteriorcingulate.obj",
+      "fs_xyz": [
+        -5.822,
+        21.212,
+        2.739
+      ],
+      "coord_source": "obj_centroid_fs",
+      "mni_literature": [
+        4.416,
+        23.64,
+        2.159
       ]
     },
     "ACC": {
@@ -534,14 +1020,32 @@
       "category": "cortical",
       "lobe": "cingulate",
       "mni_xyz": [
+        4.416,
+        23.64,
+        2.159
+      ],
+      "game_xyz": [
+        -0.0832,
+        0.5865,
+        0.1503
+      ],
+      "mni_xyz_source": "obj_centroid",
+      "mni_xyz_literature": [
         -5,
         22,
         28
       ],
-      "game_xyz": [
-        -0.0556,
-        0.8611,
-        0.1484
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.caudalanteriorcingulate.obj",
+      "fs_xyz": [
+        -5.822,
+        21.212,
+        2.739
+      ],
+      "coord_source": "obj_centroid_fs",
+      "mni_literature": [
+        4.416,
+        23.64,
+        2.159
       ]
     },
     "终纹床核": {
@@ -566,14 +1070,32 @@
       "category": "cortical",
       "lobe": "frontal",
       "mni_xyz": [
+        11.888,
+        35.226,
+        13.382
+      ],
+      "game_xyz": [
+        -0.1382,
+        0.7736,
+        0.2147
+      ],
+      "mni_xyz_source": "obj_centroid",
+      "mni_xyz_literature": [
         -4,
         48,
         10
       ],
-      "game_xyz": [
-        -0.0444,
-        0.6611,
-        0.3238
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.superiorfrontal.obj",
+      "fs_xyz": [
+        -9.673,
+        30.315,
+        16.771
+      ],
+      "coord_source": "obj_centroid_fs",
+      "mni_literature": [
+        11.888,
+        35.226,
+        13.382
       ]
     },
     "mPFC-杏仁核": {
@@ -598,14 +1120,32 @@
       "category": "cortical",
       "lobe": "temporal",
       "mni_xyz": [
+        -33.25,
+        5.25,
+        -45.329
+      ],
+      "game_xyz": [
+        -0.475,
+        -0.0544,
+        0.0372
+      ],
+      "mni_xyz_source": "obj_centroid",
+      "mni_xyz_literature": [
         -36,
         10,
         -34
       ],
-      "game_xyz": [
-        -0.4,
-        0.1722,
-        0.0675
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.temporalpole.obj",
+      "fs_xyz": [
+        -33.25,
+        5.25,
+        -45.329
+      ],
+      "coord_source": "obj_centroid_fs",
+      "mni_literature": [
+        -33.25,
+        5.25,
+        -45.329
       ]
     },
     "反射环路·PAG→杏仁核": {
@@ -662,14 +1202,32 @@
       "category": "subcortical",
       "lobe": "basal_ganglia",
       "mni_xyz": [
+        -27.366,
+        -2.288,
+        -14.278
+      ],
+      "game_xyz": [
+        -0.3909,
+        0.3596,
+        -0.0162
+      ],
+      "mni_xyz_source": "obj_centroid",
+      "mni_xyz_literature": [
         -26,
         0,
         4
       ],
-      "game_xyz": [
-        -0.2889,
-        0.5944,
-        0.0
+      "obj_file": "技能树系统/blender_assets/all_obj/subcortical/Left-Putamen.obj",
+      "fs_xyz": [
+        -27.366,
+        -2.288,
+        -14.278
+      ],
+      "coord_source": "obj_centroid_fs",
+      "mni_literature": [
+        -27.366,
+        -2.288,
+        -14.278
       ]
     },
     "缰核": {
@@ -694,14 +1252,32 @@
       "category": "subcortical",
       "lobe": "basal_ganglia",
       "mni_xyz": [
+        -14.326,
+        5.482,
+        -5.453
+      ],
+      "game_xyz": [
+        -0.2047,
+        0.4773,
+        0.0388
+      ],
+      "mni_xyz_source": "obj_centroid",
+      "mni_xyz_literature": [
         -14,
         8,
         10
       ],
-      "game_xyz": [
-        -0.1556,
-        0.6611,
-        0.054
+      "obj_file": "技能树系统/blender_assets/all_obj/subcortical/Left-Caudate.obj",
+      "fs_xyz": [
+        -14.326,
+        5.482,
+        -5.453
+      ],
+      "coord_source": "obj_centroid_fs",
+      "mni_literature": [
+        -14.326,
+        5.482,
+        -5.453
       ]
     },
     "NAcc壳": {
@@ -710,14 +1286,32 @@
       "category": "subcortical",
       "lobe": "basal_ganglia",
       "mni_xyz": [
+        8.377,
+        7.176,
+        -21.418
+      ],
+      "game_xyz": [
+        -0.1424,
+        0.2842,
+        0.0458
+      ],
+      "mni_xyz_source": "obj_centroid",
+      "mni_xyz_literature": [
         -8,
         12,
         -8
       ],
-      "game_xyz": [
-        -0.0889,
-        0.4611,
-        0.081
+      "obj_file": "技能树系统/blender_assets/all_obj/subcortical/Left-Accumbens-area.obj",
+      "fs_xyz": [
+        -9.966,
+        6.459,
+        -19.934
+      ],
+      "coord_source": "obj_centroid_fs",
+      "mni_literature": [
+        8.377,
+        7.176,
+        -21.418
       ]
     },
     "NAcc核": {
@@ -726,14 +1320,32 @@
       "category": "subcortical",
       "lobe": "basal_ganglia",
       "mni_xyz": [
+        8.377,
+        7.176,
+        -21.418
+      ],
+      "game_xyz": [
+        -0.1424,
+        0.2842,
+        0.0458
+      ],
+      "mni_xyz_source": "obj_centroid",
+      "mni_xyz_literature": [
         -11,
         10,
         -6
       ],
-      "game_xyz": [
-        -0.1222,
-        0.4833,
-        0.0675
+      "obj_file": "技能树系统/blender_assets/all_obj/subcortical/Left-Accumbens-area.obj",
+      "fs_xyz": [
+        -9.966,
+        6.459,
+        -19.934
+      ],
+      "coord_source": "obj_centroid_fs",
+      "mni_literature": [
+        8.377,
+        7.176,
+        -21.418
       ]
     },
     "VTA-NAcc": {
@@ -774,14 +1386,32 @@
       "category": "cortical",
       "lobe": "cingulate",
       "mni_xyz": [
+        -6.489,
+        -14.686,
+        20.494
+      ],
+      "game_xyz": [
+        -0.0927,
+        0.8233,
+        -0.104
+      ],
+      "mni_xyz_source": "obj_centroid",
+      "mni_xyz_literature": [
         -4,
         -44,
         28
       ],
-      "game_xyz": [
-        -0.0444,
-        0.8611,
-        -0.2968
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.posteriorcingulate.obj",
+      "fs_xyz": [
+        -6.489,
+        -14.686,
+        20.494
+      ],
+      "coord_source": "obj_centroid_fs",
+      "mni_literature": [
+        -6.489,
+        -14.686,
+        20.494
       ]
     },
     "岛叶-ACC": {
@@ -870,14 +1500,32 @@
       "category": "cortical",
       "lobe": "frontal",
       "mni_xyz": [
+        4.739,
+        28.263,
+        -29.603
+      ],
+      "game_xyz": [
+        -0.1346,
+        0.1343,
+        0.1789
+      ],
+      "mni_xyz_source": "obj_centroid",
+      "mni_xyz_literature": [
         -4,
         50,
         -8
       ],
-      "game_xyz": [
-        -0.0444,
-        0.4611,
-        0.3373
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.medialorbitofrontal.obj",
+      "fs_xyz": [
+        -9.423,
+        25.251,
+        -31.18
+      ],
+      "coord_source": "obj_centroid_fs",
+      "mni_literature": [
+        4.739,
+        28.263,
+        -29.603
       ]
     },
     "前额叶极·FPN": {
@@ -886,14 +1534,32 @@
       "category": "cortical",
       "lobe": "frontal",
       "mni_xyz": [
+        -31.121,
+        46.689,
+        -8.23
+      ],
+      "game_xyz": [
+        -0.4446,
+        0.4403,
+        0.3307
+      ],
+      "mni_xyz_source": "obj_centroid",
+      "mni_xyz_literature": [
         -36,
         46,
         28
       ],
-      "game_xyz": [
-        -0.4,
-        0.8611,
-        0.3103
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.rostralmiddlefrontal.obj",
+      "fs_xyz": [
+        -31.121,
+        46.689,
+        -8.23
+      ],
+      "coord_source": "obj_centroid_fs",
+      "mni_literature": [
+        -31.121,
+        46.689,
+        -8.23
       ]
     },
     "前额叶极·SN": {
@@ -902,14 +1568,32 @@
       "category": "cortical",
       "lobe": "cingulate",
       "mni_xyz": [
+        4.416,
+        23.64,
+        2.159
+      ],
+      "game_xyz": [
+        -0.0832,
+        0.5865,
+        0.1503
+      ],
+      "mni_xyz_source": "obj_centroid",
+      "mni_xyz_literature": [
         -6,
         28,
         28
       ],
-      "game_xyz": [
-        -0.0667,
-        0.8611,
-        0.1889
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.caudalanteriorcingulate.obj",
+      "fs_xyz": [
+        -5.822,
+        21.212,
+        2.739
+      ],
+      "coord_source": "obj_centroid_fs",
+      "mni_literature": [
+        4.416,
+        23.64,
+        2.159
       ]
     },
     "DMN+OFC": {
@@ -918,14 +1602,32 @@
       "category": "cortical",
       "lobe": "frontal",
       "mni_xyz": [
+        4.739,
+        28.263,
+        -29.603
+      ],
+      "game_xyz": [
+        -0.1346,
+        0.1343,
+        0.1789
+      ],
+      "mni_xyz_source": "obj_centroid",
+      "mni_xyz_literature": [
         -4,
         44,
         -12
       ],
-      "game_xyz": [
-        -0.0444,
-        0.4167,
-        0.2968
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.medialorbitofrontal.obj",
+      "fs_xyz": [
+        -9.423,
+        25.251,
+        -31.18
+      ],
+      "coord_source": "obj_centroid_fs",
+      "mni_literature": [
+        4.739,
+        28.263,
+        -29.603
       ]
     },
     "杏仁核-PAG": {
@@ -960,5 +1662,6 @@
         -0.0675
       ]
     }
-  }
+  },
+  "_updated": "2026-07-11: OBJ质心精炼"
 }
