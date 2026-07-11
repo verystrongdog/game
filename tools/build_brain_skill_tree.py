@@ -43,11 +43,11 @@ GLB_OUT = str(PROJECT_DIR / "技能树系统" / "blender_assets" / "brain_skill_
 IMPORT_PIAL_DK = True       # DK 皮层表面 (pial, 含脑沟)
 IMPORT_SUBCORTICAL = True   # 皮层下结构
 IMPORT_PIAL_FULL = True     # 完整半球 (玻璃脑外壳)
-MAX_CORTEX_FILES = 20       # 导入皮层文件数上限 (0=全部, 设限加速测试)
+MAX_CORTEX_FILES = 0       # 导入皮层文件数上限 (0=全部)
 MAX_SUBCORT_FILES = 0       # 导入皮层下文件上限 (0=全部)
 
 # 是否导出
-EXPORT_GLB = False          # 导出 GLB (耗内存, 默认关)
+EXPORT_GLB = True           # 导出 GLB
 EXPORT_BLEND = True         # 保存 .blend
 
 # ═══════════════════════════════════════════════════════════
@@ -587,30 +587,36 @@ def setup_lighting_and_camera():
 # ═══════════════════════════════════════════════════════════
 
 def setup_render():
-    """配置渲染设置"""
+    """配置渲染设置 (Blender 3.0 兼容)"""
     log("=" * 50)
     log("Section 6: Render Settings")
     log("=" * 50)
 
     scene = bpy.context.scene
 
-    # EEVEE 设置 (快速预览)
+    # EEVEE 设置
     scene.render.engine = 'BLENDER_EEVEE'
-    scene.eevee.use_bloom = True
-    scene.eevee.bloom_threshold = 0.8
-    scene.eevee.bloom_intensity = 0.3
-    scene.eevee.bloom_radius = 6.0
+    try:
+        scene.eevee.use_bloom = True
+        scene.eevee.bloom_threshold = 0.8
+        scene.eevee.bloom_intensity = 0.3
+        scene.eevee.bloom_radius = 6.0
+    except Exception:
+        log("  Bloom not available (may need Blender >= 3.2)")
 
-    # 屏幕空间反射 (玻璃效果)
-    scene.eevee.use_ssr = True
-    scene.eevee.ssr_quality = 0.5
+    # 屏幕空间反射
+    try:
+        scene.eevee.use_ssr = True
+        scene.eevee.ssr_quality = 0.5
+    except Exception:
+        log("  SSR not available")
 
     # 分辨率
     scene.render.resolution_x = 1920
     scene.render.resolution_y = 1080
     scene.render.resolution_percentage = 100
 
-    log("EEVEE with Bloom + SSR")
+    log("EEVEE render settings applied")
 
 
 # ═══════════════════════════════════════════════════════════
@@ -625,7 +631,6 @@ def export():
 
     if EXPORT_GLB:
         log(f"Exporting .glb → {GLB_OUT}")
-        # 选中所有需要导出的对象
         bpy.ops.object.select_all(action='DESELECT')
         for coll_name in ["BrainMesh", "SkillNodes", "Tracts"]:
             coll = bpy.data.collections.get(coll_name)
@@ -633,13 +638,24 @@ def export():
                 for obj in coll.all_objects:
                     obj.select_set(True)
 
-        bpy.ops.export_scene.gltf(
-            filepath=GLB_OUT,
-            use_selection=True,
-            export_format='GLB',
-            export_materials='EXPORT',
-        )
-        log("GLB export complete")
+        try:
+            bpy.ops.export_scene.gltf(
+                filepath=GLB_OUT,
+                use_selection=True,
+                export_format='GLB',
+            )
+            log("GLB export complete")
+        except Exception as e:
+            log(f"GLB export failed: {e}")
+            # 尝试没有 use_selection
+            try:
+                bpy.ops.export_scene.gltf(
+                    filepath=GLB_OUT,
+                    export_format='GLB',
+                )
+                log("GLB export complete (all objects)")
+            except Exception as e2:
+                log(f"GLB export also failed: {e2}")
 
 
 # ═══════════════════════════════════════════════════════════
