@@ -20,24 +20,13 @@ import os
 #  SECTION 1: 从 HTML 提取技能数据
 # ═══════════════════════════════════════════════════════════
 
-def extract_skills_from_html(html_path):
+def extract_skills_from_html(content):
     """
-    从 大脑技能树3D.html 解析 treeData, 提取所有技能节点.
+    从 HTML 内容解析 treeData, 提取所有技能节点.
 
     返回: dict with keys: cognition[], emotion[], behavior[], ultimate[]
-    每个条目: {id, name, tier, mod/drive, type, ap, cd, x, y, z, light, desc, region}
     """
     import subprocess
-
-    # 用 Python 正则从 HTML 提取 treeData
-    with open(html_path, "r", encoding="utf-8") as f:
-        content = f.read()
-
-    # 找到 treeData 定义 (var treeData={...};)
-    match = re.search(r"var treeData=\{([^}]*\{[^}]*\}[^}]*\}[^}]*\}[^}]*\})", content, re.DOTALL)
-    if not match:
-        # 尝试更宽松的匹配
-        match = re.search(r"var treeData=(\{.*?\}\s*;)", content, re.DOTALL)
 
     skills = {"cognition": [], "emotion": [], "behavior": [], "ultimate": []}
 
@@ -220,6 +209,14 @@ def apply_hemisphere(mni_coords, pad_x):
 #  SECTION 4: 主程序
 # ═══════════════════════════════════════════════════════════
 
+def extract_prereqs_from_html(html_content):
+    """从 HTML 提取前置关系数组"""
+    prereqs = []
+    prereq_match = re.findall(r"\['([^']+)'\s*,\s*'([^']+)'\]", html_content)
+    prereqs = [[a, b] for a, b in prereq_match if a != b]
+    return prereqs
+
+
 def main():
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     html_path = os.path.join(base_dir, "技能树系统", "大脑技能树3D.html")
@@ -231,8 +228,12 @@ def main():
         regions_data = json.load(f)
     brain_regions = regions_data["regions"]
 
+    # 读取 HTML 内容 (用于提取技能+前置关系)
+    with open(html_path, "r", encoding="utf-8") as f:
+        html_content = f.read()
+
     # 提取技能
-    skills = extract_skills_from_html(html_path)
+    skills = extract_skills_from_html(html_content)
 
     # 映射 + 计算新坐标
     def game_from_mni(mni):
@@ -291,6 +292,9 @@ def main():
 
             output_skills.append(entry)
 
+    # 提取前置关系
+    prereqs = extract_prereqs_from_html(html_content)
+
     # 输出
     output = {
         "_description": "74技能节点坐标映射: PAD推导(旧) → MNI解剖(新)",
@@ -301,8 +305,10 @@ def main():
             "matched": matched,
             "unmatched": len(unmatched),
             "unmatched_list": unmatched,
+            "prereq_pairs": len(prereqs),
         },
         "skills": output_skills,
+        "prereqs": prereqs,
     }
 
     with open(output_path, "w", encoding="utf-8") as f:
