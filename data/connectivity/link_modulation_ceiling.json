@@ -1,0 +1,1182 @@
+{
+  "_metadata": {
+    "description": "链路调制上限 — 从 ENIGMA SC + Hansen 2024 推导",
+    "formula": "modulation_ceiling = sc_norm × layer_weight × direction_factor",
+    "sc_normalization": {
+      "enigma_p95": 10.48,
+      "enigma_max": 12.615,
+      "hansen_max": 0.9
+    },
+    "layer_weights": {
+      "L0": 0.5,
+      "L1": 0.6,
+      "L2": 0.7,
+      "L3": 0.8,
+      "L4": 0.9,
+      "L5": 1.0,
+      "L6": 1.1
+    },
+    "direction_factors": {
+      "feedforward": 1.0,
+      "feedback": 0.7,
+      "broadcast": 1.0,
+      "modulation": 0.7,
+      "internal": 0.5,
+      "global": 1.0
+    },
+    "myelination_note": "actual_modulation = ceiling × myelination (myelination ∈ [0,1])",
+    "generated": "2026-07-27"
+  },
+  "links": [
+    {
+      "link_name": "应激反应_被动",
+      "effect_type": "defense",
+      "source_regions": [
+        "PAG"
+      ],
+      "target_regions": [
+        "M1"
+      ],
+      "direction": "feedforward",
+      "source_layer": 0,
+      "modulation_ceiling": 0.5,
+      "myelination_range": {
+        "none (0.0)": 0.0,
+        "light (0.3)": 0.15,
+        "moderate (0.6)": 0.3,
+        "full (1.0)": 0.5
+      },
+      "data_source": "Hansen2024_brainstem",
+      "raw_sc_mean": 2.55,
+      "raw_sc_max": 2.55,
+      "sc_details": [
+        "Hansen2024:PAG↔M1"
+      ]
+    },
+    {
+      "link_name": "应激反应_被动",
+      "effect_type": "defense",
+      "source_regions": [
+        "杏仁核-PAG"
+      ],
+      "target_regions": [
+        "PAG"
+      ],
+      "direction": "feedforward",
+      "source_layer": 0,
+      "modulation_ceiling": 0.5,
+      "myelination_range": {
+        "none (0.0)": 0.0,
+        "light (0.3)": 0.15,
+        "moderate (0.6)": 0.3,
+        "full (1.0)": 0.5
+      },
+      "data_source": "Hansen2024_brainstem",
+      "raw_sc_mean": 2.55,
+      "raw_sc_max": 2.55,
+      "sc_details": [
+        "Hansen2024:杏仁核-PAG↔PAG"
+      ]
+    },
+    {
+      "link_name": "警觉",
+      "effect_type": "detection",
+      "source_regions": [
+        "上丘"
+      ],
+      "target_regions": [
+        "PAG"
+      ],
+      "direction": "feedforward",
+      "source_layer": 0,
+      "modulation_ceiling": 0.5,
+      "myelination_range": {
+        "none (0.0)": 0.0,
+        "light (0.3)": 0.15,
+        "moderate (0.6)": 0.3,
+        "full (1.0)": 0.5
+      },
+      "data_source": "Hansen2024_brainstem",
+      "raw_sc_mean": 2.55,
+      "raw_sc_max": 2.55,
+      "sc_details": [
+        "Hansen2024:上丘↔PAG"
+      ]
+    },
+    {
+      "link_name": "忍耐_被动",
+      "effect_type": "san_shield",
+      "source_regions": [
+        "中缝背核"
+      ],
+      "target_regions": [],
+      "direction": "modulation",
+      "source_layer": 0,
+      "modulation_ceiling": 0.105,
+      "myelination_range": {
+        "none (0.0)": 0.0,
+        "light (0.3)": 0.032,
+        "moderate (0.6)": 0.063,
+        "full (1.0)": 0.105
+      },
+      "data_source": "estimated",
+      "raw_sc_mean": 1.048,
+      "raw_sc_max": 1.048,
+      "sc_details": [
+        "fallback"
+      ]
+    },
+    {
+      "link_name": "忍耐_主动",
+      "effect_type": "panic_suppress",
+      "source_regions": [
+        "中缝背核"
+      ],
+      "target_regions": [
+        "ACC"
+      ],
+      "direction": "feedback",
+      "source_layer": 0,
+      "modulation_ceiling": 0.35,
+      "myelination_range": {
+        "none (0.0)": 0.0,
+        "light (0.3)": 0.105,
+        "moderate (0.6)": 0.21,
+        "full (1.0)": 0.35
+      },
+      "data_source": "Hansen2024_brainstem",
+      "raw_sc_mean": 2.25,
+      "raw_sc_max": 2.25,
+      "sc_details": [
+        "Hansen2024:中缝背核↔ACC"
+      ]
+    },
+    {
+      "link_name": "激活",
+      "effect_type": "arousal",
+      "source_regions": [
+        "蓝斑"
+      ],
+      "target_regions": [],
+      "direction": "broadcast",
+      "source_layer": 0,
+      "modulation_ceiling": 0.105,
+      "myelination_range": {
+        "none (0.0)": 0.0,
+        "light (0.3)": 0.032,
+        "moderate (0.6)": 0.063,
+        "full (1.0)": 0.105
+      },
+      "data_source": "estimated",
+      "raw_sc_mean": 1.048,
+      "raw_sc_max": 1.048,
+      "sc_details": [
+        "fallback"
+      ]
+    },
+    {
+      "link_name": "趋向",
+      "effect_type": "motivation",
+      "source_regions": [
+        "VTA"
+      ],
+      "target_regions": [
+        "NAcc壳"
+      ],
+      "direction": "feedforward",
+      "source_layer": 0,
+      "modulation_ceiling": 0.5,
+      "myelination_range": {
+        "none (0.0)": 0.0,
+        "light (0.3)": 0.15,
+        "moderate (0.6)": 0.3,
+        "full (1.0)": 0.5
+      },
+      "data_source": "Hansen2024_brainstem",
+      "raw_sc_mean": 2.4,
+      "raw_sc_max": 2.4,
+      "sc_details": [
+        "Hansen2024:VTA↔NAcc壳"
+      ]
+    },
+    {
+      "link_name": "熟练",
+      "effect_type": "automation",
+      "source_regions": [
+        "小脑皮层"
+      ],
+      "target_regions": [
+        "壳核"
+      ],
+      "direction": "feedforward",
+      "source_layer": 0,
+      "modulation_ceiling": 0.5,
+      "myelination_range": {
+        "none (0.0)": 0.0,
+        "light (0.3)": 0.15,
+        "moderate (0.6)": 0.3,
+        "full (1.0)": 0.5
+      },
+      "data_source": "Hansen2024_brainstem",
+      "raw_sc_mean": 1.65,
+      "raw_sc_max": 1.65,
+      "sc_details": [
+        "Hansen2024:小脑皮层↔壳核"
+      ]
+    },
+    {
+      "link_name": "恐惧条件化",
+      "effect_type": "threshold_mod",
+      "source_regions": [
+        "杏仁核"
+      ],
+      "target_regions": [
+        "PAG"
+      ],
+      "direction": "feedback",
+      "source_layer": 1,
+      "modulation_ceiling": 0.42,
+      "myelination_range": {
+        "none (0.0)": 0.0,
+        "light (0.3)": 0.126,
+        "moderate (0.6)": 0.252,
+        "full (1.0)": 0.42
+      },
+      "data_source": "Hansen2024_brainstem",
+      "raw_sc_mean": 2.55,
+      "raw_sc_max": 2.55,
+      "sc_details": [
+        "Hansen2024:杏仁核↔PAG"
+      ]
+    },
+    {
+      "link_name": "恐惧条件化_BNST",
+      "effect_type": "anxiety",
+      "source_regions": [
+        "BNST"
+      ],
+      "target_regions": [
+        "蓝斑"
+      ],
+      "direction": "feedback",
+      "source_layer": 1,
+      "modulation_ceiling": 0.42,
+      "myelination_range": {
+        "none (0.0)": 0.0,
+        "light (0.3)": 0.126,
+        "moderate (0.6)": 0.252,
+        "full (1.0)": 0.42
+      },
+      "data_source": "Hansen2024_brainstem",
+      "raw_sc_mean": 2.7,
+      "raw_sc_max": 2.7,
+      "sc_details": [
+        "Hansen2024:BNST↔蓝斑"
+      ]
+    },
+    {
+      "link_name": "回忆",
+      "effect_type": "detection_boost",
+      "source_regions": [
+        "海马体 CA1"
+      ],
+      "target_regions": [
+        "上丘"
+      ],
+      "direction": "feedback",
+      "source_layer": 1,
+      "modulation_ceiling": 0.42,
+      "myelination_range": {
+        "none (0.0)": 0.0,
+        "light (0.3)": 0.126,
+        "moderate (0.6)": 0.252,
+        "full (1.0)": 0.42
+      },
+      "data_source": "Hansen2024_brainstem",
+      "raw_sc_mean": 2.1,
+      "raw_sc_max": 2.1,
+      "sc_details": [
+        "Hansen2024:海马体 CA1↔上丘"
+      ]
+    },
+    {
+      "link_name": "辨别",
+      "effect_type": "false_alarm_reduce",
+      "source_regions": [
+        "海马体 CA3"
+      ],
+      "target_regions": [
+        "杏仁核"
+      ],
+      "direction": "feedback",
+      "source_layer": 1,
+      "modulation_ceiling": 0.42,
+      "myelination_range": {
+        "none (0.0)": 0.0,
+        "light (0.3)": 0.126,
+        "moderate (0.6)": 0.252,
+        "full (1.0)": 0.42
+      },
+      "data_source": "ENIGMA_subcortical",
+      "raw_sc_mean": 106.078,
+      "raw_sc_max": 106.078,
+      "sc_details": [
+        "ENIGMA:ENIGMA_sctx_indirect:Lhippo↔Lamyg(via ctx)"
+      ]
+    },
+    {
+      "link_name": "识景",
+      "effect_type": "context_mod",
+      "source_regions": [
+        "海马旁回"
+      ],
+      "target_regions": [
+        "PAG"
+      ],
+      "direction": "feedback",
+      "source_layer": 1,
+      "modulation_ceiling": 0.42,
+      "myelination_range": {
+        "none (0.0)": 0.0,
+        "light (0.3)": 0.126,
+        "moderate (0.6)": 0.252,
+        "full (1.0)": 0.42
+      },
+      "data_source": "Hansen2024_brainstem",
+      "raw_sc_mean": 2.55,
+      "raw_sc_max": 2.55,
+      "sc_details": [
+        "Hansen2024:海马旁回↔PAG"
+      ]
+    },
+    {
+      "link_name": "期待",
+      "effect_type": "approach_boost",
+      "source_regions": [
+        "伏隔核/NAcc",
+        "腹侧纹状体"
+      ],
+      "target_regions": [
+        "VTA"
+      ],
+      "direction": "feedback",
+      "source_layer": 1,
+      "modulation_ceiling": 0.42,
+      "myelination_range": {
+        "none (0.0)": 0.0,
+        "light (0.3)": 0.126,
+        "moderate (0.6)": 0.252,
+        "full (1.0)": 0.42
+      },
+      "data_source": "Hansen2024_brainstem",
+      "raw_sc_mean": 2.4,
+      "raw_sc_max": 2.4,
+      "sc_details": [
+        "Hansen2024:伏隔核/NAcc↔VTA",
+        "Hansen2024:腹侧纹状体↔VTA"
+      ]
+    },
+    {
+      "link_name": "失望",
+      "effect_type": "avoidance_boost",
+      "source_regions": [
+        "缰核"
+      ],
+      "target_regions": [
+        "VTA"
+      ],
+      "direction": "feedback",
+      "source_layer": 1,
+      "modulation_ceiling": 0.42,
+      "myelination_range": {
+        "none (0.0)": 0.0,
+        "light (0.3)": 0.126,
+        "moderate (0.6)": 0.252,
+        "full (1.0)": 0.42
+      },
+      "data_source": "Hansen2024_brainstem",
+      "raw_sc_mean": 2.4,
+      "raw_sc_max": 2.4,
+      "sc_details": [
+        "Hansen2024:缰核↔VTA"
+      ]
+    },
+    {
+      "link_name": "满足",
+      "effect_type": "san_boost",
+      "source_regions": [
+        "隔区"
+      ],
+      "target_regions": [
+        "中缝背核"
+      ],
+      "direction": "feedback",
+      "source_layer": 1,
+      "modulation_ceiling": 0.42,
+      "myelination_range": {
+        "none (0.0)": 0.0,
+        "light (0.3)": 0.126,
+        "moderate (0.6)": 0.252,
+        "full (1.0)": 0.42
+      },
+      "data_source": "Hansen2024_brainstem",
+      "raw_sc_mean": 2.25,
+      "raw_sc_max": 2.25,
+      "sc_details": [
+        "Hansen2024:隔区↔中缝背核"
+      ]
+    },
+    {
+      "link_name": "习惯化",
+      "effect_type": "ap_reduce",
+      "source_regions": [
+        "壳核",
+        "苍白球"
+      ],
+      "target_regions": [
+        "小脑皮层"
+      ],
+      "direction": "feedback",
+      "source_layer": 1,
+      "modulation_ceiling": 0.42,
+      "myelination_range": {
+        "none (0.0)": 0.0,
+        "light (0.3)": 0.126,
+        "moderate (0.6)": 0.252,
+        "full (1.0)": 0.42
+      },
+      "data_source": "Hansen2024_brainstem",
+      "raw_sc_mean": 1.65,
+      "raw_sc_max": 1.65,
+      "sc_details": [
+        "Hansen2024:壳核↔小脑皮层",
+        "Hansen2024:苍白球↔小脑皮层"
+      ]
+    },
+    {
+      "link_name": "内感受",
+      "effect_type": "threshold_info",
+      "source_regions": [
+        "前脑岛"
+      ],
+      "target_regions": [
+        "杏仁核"
+      ],
+      "direction": "feedback",
+      "source_layer": 2,
+      "modulation_ceiling": 0.362,
+      "myelination_range": {
+        "none (0.0)": 0.0,
+        "light (0.3)": 0.109,
+        "moderate (0.6)": 0.217,
+        "full (1.0)": 0.362
+      },
+      "data_source": "ENIGMA_subcortical",
+      "raw_sc_mean": 7.733,
+      "raw_sc_max": 7.733,
+      "sc_details": [
+        "ENIGMA:ENIGMA_sctx:Lamyg→L_insula"
+      ]
+    },
+    {
+      "link_name": "共感",
+      "effect_type": "empathy",
+      "source_regions": [
+        "前脑岛"
+      ],
+      "target_regions": [
+        "ACC"
+      ],
+      "direction": "feedback",
+      "source_layer": 2,
+      "modulation_ceiling": 0.261,
+      "myelination_range": {
+        "none (0.0)": 0.0,
+        "light (0.3)": 0.078,
+        "moderate (0.6)": 0.157,
+        "full (1.0)": 0.261
+      },
+      "data_source": "ENIGMA_cortical",
+      "raw_sc_mean": 5.585,
+      "raw_sc_max": 5.585,
+      "sc_details": [
+        "ENIGMA:ENIGMA_ctx:L_insula↔L_caudalanteriorcingulate"
+      ]
+    },
+    {
+      "link_name": "冲突感知",
+      "effect_type": "conflict_detect",
+      "source_regions": [
+        "ACC",
+        "ACC背侧"
+      ],
+      "target_regions": [
+        "杏仁核"
+      ],
+      "direction": "feedback",
+      "source_layer": 2,
+      "modulation_ceiling": 0.147,
+      "myelination_range": {
+        "none (0.0)": 0.0,
+        "light (0.3)": 0.044,
+        "moderate (0.6)": 0.088,
+        "full (1.0)": 0.147
+      },
+      "data_source": "estimated",
+      "raw_sc_mean": 1.572,
+      "raw_sc_max": 1.572,
+      "sc_details": [
+        "estimated",
+        "estimated"
+      ]
+    },
+    {
+      "link_name": "价值直觉",
+      "effect_type": "value_compare",
+      "source_regions": [
+        "OFC"
+      ],
+      "target_regions": [
+        "腹侧纹状体"
+      ],
+      "direction": "feedback",
+      "source_layer": 2,
+      "modulation_ceiling": 0.408,
+      "myelination_range": {
+        "none (0.0)": 0.0,
+        "light (0.3)": 0.122,
+        "moderate (0.6)": 0.245,
+        "full (1.0)": 0.408
+      },
+      "data_source": "ENIGMA_subcortical",
+      "raw_sc_mean": 8.721,
+      "raw_sc_max": 8.721,
+      "sc_details": [
+        "ENIGMA:ENIGMA_sctx:Laccumb→L_lateralorbitofrontal"
+      ]
+    },
+    {
+      "link_name": "内省",
+      "effect_type": "san_recover",
+      "source_regions": [
+        "后扣带",
+        "峡部扣带"
+      ],
+      "target_regions": [],
+      "direction": "internal",
+      "source_layer": 2,
+      "modulation_ceiling": 0.147,
+      "myelination_range": {
+        "none (0.0)": 0.0,
+        "light (0.3)": 0.044,
+        "moderate (0.6)": 0.088,
+        "full (1.0)": 0.147
+      },
+      "data_source": "estimated",
+      "raw_sc_mean": 1.048,
+      "raw_sc_max": 1.048,
+      "sc_details": [
+        "fallback"
+      ]
+    },
+    {
+      "link_name": "识人",
+      "effect_type": "social_read",
+      "source_regions": [
+        "颞极",
+        "ACC吻侧"
+      ],
+      "target_regions": [
+        "杏仁核"
+      ],
+      "direction": "feedback",
+      "source_layer": 2,
+      "modulation_ceiling": 0.256,
+      "myelination_range": {
+        "none (0.0)": 0.0,
+        "light (0.3)": 0.077,
+        "moderate (0.6)": 0.154,
+        "full (1.0)": 0.256
+      },
+      "data_source": "ENIGMA_subcortical",
+      "raw_sc_mean": 5.481,
+      "raw_sc_max": 9.39,
+      "sc_details": [
+        "ENIGMA:ENIGMA_sctx:Lamyg→L_temporalpole",
+        "estimated"
+      ]
+    },
+    {
+      "link_name": "注视",
+      "effect_type": "info_gather",
+      "source_regions": [
+        "枕叶 V1",
+        "枕顶联合",
+        "楔叶"
+      ],
+      "target_regions": [
+        "上丘"
+      ],
+      "direction": "feedforward",
+      "source_layer": 3,
+      "modulation_ceiling": 0.8,
+      "myelination_range": {
+        "none (0.0)": 0.0,
+        "light (0.3)": 0.24,
+        "moderate (0.6)": 0.48,
+        "full (1.0)": 0.8
+      },
+      "data_source": "Hansen2024_brainstem",
+      "raw_sc_mean": 2.1,
+      "raw_sc_max": 2.1,
+      "sc_details": [
+        "Hansen2024:枕叶 V1↔上丘",
+        "Hansen2024:枕顶联合↔上丘",
+        "Hansen2024:楔叶↔上丘"
+      ]
+    },
+    {
+      "link_name": "聆听",
+      "effect_type": "info_gather",
+      "source_regions": [
+        "A1"
+      ],
+      "target_regions": [
+        "上丘"
+      ],
+      "direction": "feedforward",
+      "source_layer": 3,
+      "modulation_ceiling": 0.8,
+      "myelination_range": {
+        "none (0.0)": 0.0,
+        "light (0.3)": 0.24,
+        "moderate (0.6)": 0.48,
+        "full (1.0)": 0.8
+      },
+      "data_source": "Hansen2024_brainstem",
+      "raw_sc_mean": 2.1,
+      "raw_sc_max": 2.1,
+      "sc_details": [
+        "Hansen2024:A1↔上丘"
+      ]
+    },
+    {
+      "link_name": "身体感知",
+      "effect_type": "body_info",
+      "source_regions": [
+        "S1",
+        "旁中央小叶"
+      ],
+      "target_regions": [
+        "前脑岛"
+      ],
+      "direction": "feedforward",
+      "source_layer": 3,
+      "modulation_ceiling": 0.455,
+      "myelination_range": {
+        "none (0.0)": 0.0,
+        "light (0.3)": 0.136,
+        "moderate (0.6)": 0.273,
+        "full (1.0)": 0.455
+      },
+      "data_source": "ENIGMA_cortical",
+      "raw_sc_mean": 5.963,
+      "raw_sc_max": 10.354,
+      "sc_details": [
+        "ENIGMA:ENIGMA_ctx:L_postcentral↔L_insula",
+        "estimated"
+      ]
+    },
+    {
+      "link_name": "执行动作",
+      "effect_type": "precision",
+      "source_regions": [
+        "M1"
+      ],
+      "target_regions": [],
+      "direction": "feedforward",
+      "source_layer": 3,
+      "modulation_ceiling": 0.24,
+      "myelination_range": {
+        "none (0.0)": 0.0,
+        "light (0.3)": 0.072,
+        "moderate (0.6)": 0.144,
+        "full (1.0)": 0.24
+      },
+      "data_source": "estimated",
+      "raw_sc_mean": 1.048,
+      "raw_sc_max": 1.048,
+      "sc_details": [
+        "fallback"
+      ]
+    },
+    {
+      "link_name": "识别",
+      "effect_type": "classify",
+      "source_regions": [
+        "颞下回",
+        "纺锤体回",
+        "外侧枕叶",
+        "舌回"
+      ],
+      "target_regions": [
+        "枕叶 V1",
+        "杏仁核"
+      ],
+      "direction": "feedback",
+      "source_layer": 4,
+      "modulation_ceiling": 0.442,
+      "myelination_range": {
+        "none (0.0)": 0.0,
+        "light (0.3)": 0.133,
+        "moderate (0.6)": 0.265,
+        "full (1.0)": 0.442
+      },
+      "data_source": "ENIGMA_cortical",
+      "raw_sc_mean": 7.358,
+      "raw_sc_max": 10.444,
+      "sc_details": [
+        "ENIGMA:ENIGMA_ctx:L_inferiortemporal↔L_pericalcarine",
+        "ENIGMA:ENIGMA_sctx:Lamyg→L_inferiortemporal",
+        "ENIGMA:ENIGMA_ctx:L_fusiform↔L_pericalcarine",
+        "ENIGMA:ENIGMA_sctx:Lamyg→L_fusiform",
+        "ENIGMA:ENIGMA_ctx:L_lateraloccipital↔L_pericalcarine",
+        "ENIGMA:ENIGMA_sctx:Lamyg→L_lateraloccipital",
+        "ENIGMA:ENIGMA_ctx:L_lingual↔L_pericalcarine",
+        "ENIGMA:ENIGMA_sctx:Lamyg→L_lingual"
+      ]
+    },
+    {
+      "link_name": "读意图",
+      "effect_type": "intent_read",
+      "source_regions": [
+        "颞上沟岸",
+        "颞中回"
+      ],
+      "target_regions": [
+        "上丘"
+      ],
+      "direction": "feedforward",
+      "source_layer": 4,
+      "modulation_ceiling": 0.9,
+      "myelination_range": {
+        "none (0.0)": 0.0,
+        "light (0.3)": 0.27,
+        "moderate (0.6)": 0.54,
+        "full (1.0)": 0.9
+      },
+      "data_source": "Hansen2024_brainstem",
+      "raw_sc_mean": 2.1,
+      "raw_sc_max": 2.1,
+      "sc_details": [
+        "Hansen2024:颞上沟岸↔上丘",
+        "Hansen2024:颞中回↔上丘"
+      ]
+    },
+    {
+      "link_name": "比喻",
+      "effect_type": "cross_domain",
+      "source_regions": [
+        "角回"
+      ],
+      "target_regions": [
+        "dlPFC"
+      ],
+      "direction": "feedback",
+      "source_layer": 4,
+      "modulation_ceiling": 0.534,
+      "myelination_range": {
+        "none (0.0)": 0.0,
+        "light (0.3)": 0.16,
+        "moderate (0.6)": 0.32,
+        "full (1.0)": 0.534
+      },
+      "data_source": "ENIGMA_cortical",
+      "raw_sc_mean": 8.886,
+      "raw_sc_max": 8.886,
+      "sc_details": [
+        "ENIGMA:ENIGMA_ctx:L_inferiorparietal↔L_rostralmiddlefrontal"
+      ]
+    },
+    {
+      "link_name": "想象",
+      "effect_type": "simulate",
+      "source_regions": [
+        "楔前叶",
+        "顶内沟",
+        "顶叶"
+      ],
+      "target_regions": [
+        "dlPFC"
+      ],
+      "direction": "feedback",
+      "source_layer": 4,
+      "modulation_ceiling": 0.479,
+      "myelination_range": {
+        "none (0.0)": 0.0,
+        "light (0.3)": 0.144,
+        "moderate (0.6)": 0.287,
+        "full (1.0)": 0.479
+      },
+      "data_source": "ENIGMA_cortical",
+      "raw_sc_mean": 7.966,
+      "raw_sc_max": 8.886,
+      "sc_details": [
+        "ENIGMA:ENIGMA_ctx:L_precuneus↔L_rostralmiddlefrontal",
+        "ENIGMA:ENIGMA_ctx:L_superiorparietal↔L_rostralmiddlefrontal",
+        "ENIGMA:ENIGMA_ctx:L_inferiorparietal↔L_rostralmiddlefrontal"
+      ]
+    },
+    {
+      "link_name": "计划",
+      "effect_type": "plan",
+      "source_regions": [
+        "dlPFC",
+        "额极",
+        "额上回",
+        "额中回尾部"
+      ],
+      "target_regions": [
+        "M1",
+        "壳核"
+      ],
+      "direction": "feedback",
+      "source_layer": 5,
+      "modulation_ceiling": 0.558,
+      "myelination_range": {
+        "none (0.0)": 0.0,
+        "light (0.3)": 0.167,
+        "moderate (0.6)": 0.335,
+        "full (1.0)": 0.558
+      },
+      "data_source": "ENIGMA_cortical",
+      "raw_sc_mean": 8.36,
+      "raw_sc_max": 11.09,
+      "sc_details": [
+        "ENIGMA:ENIGMA_ctx:L_rostralmiddlefrontal↔L_precentral",
+        "ENIGMA:ENIGMA_sctx:Lput→L_rostralmiddlefrontal",
+        "estimated",
+        "ENIGMA:ENIGMA_sctx:Lput→L_frontalpole",
+        "ENIGMA:ENIGMA_ctx:L_superiorfrontal↔L_precentral",
+        "ENIGMA:ENIGMA_sctx:Lput→L_superiorfrontal",
+        "ENIGMA:ENIGMA_ctx:L_caudalmiddlefrontal↔L_precentral",
+        "ENIGMA:ENIGMA_sctx:Lput→L_caudalmiddlefrontal"
+      ]
+    },
+    {
+      "link_name": "命名",
+      "effect_type": "naming",
+      "source_regions": [
+        "Broca区",
+        "Wernicke区",
+        "弓状束",
+        "颞上回"
+      ],
+      "target_regions": [
+        "纺锤体回"
+      ],
+      "direction": "feedback",
+      "source_layer": 5,
+      "modulation_ceiling": 0.356,
+      "myelination_range": {
+        "none (0.0)": 0.0,
+        "light (0.3)": 0.107,
+        "moderate (0.6)": 0.214,
+        "full (1.0)": 0.356
+      },
+      "data_source": "ENIGMA_cortical",
+      "raw_sc_mean": 5.334,
+      "raw_sc_max": 6.93,
+      "sc_details": [
+        "ENIGMA:ENIGMA_ctx:L_parsopercularis↔L_fusiform",
+        "ENIGMA:ENIGMA_ctx:L_superiortemporal↔L_fusiform",
+        "estimated",
+        "ENIGMA:ENIGMA_ctx:L_superiortemporal↔L_fusiform"
+      ]
+    },
+    {
+      "link_name": "换位",
+      "effect_type": "perspective",
+      "source_regions": [
+        "TPJ",
+        "缘上回",
+        "mPFC"
+      ],
+      "target_regions": [
+        "颞上沟岸",
+        "ACC吻侧"
+      ],
+      "direction": "feedback",
+      "source_layer": 5,
+      "modulation_ceiling": 0.353,
+      "myelination_range": {
+        "none (0.0)": 0.0,
+        "light (0.3)": 0.106,
+        "moderate (0.6)": 0.212,
+        "full (1.0)": 0.353
+      },
+      "data_source": "ENIGMA_cortical",
+      "raw_sc_mean": 5.283,
+      "raw_sc_max": 9.871,
+      "sc_details": [
+        "ENIGMA:ENIGMA_ctx:L_supramarginal↔L_bankssts",
+        "estimated",
+        "ENIGMA:ENIGMA_ctx:L_supramarginal↔L_bankssts",
+        "estimated",
+        "estimated",
+        "ENIGMA:ENIGMA_ctx:L_superiorfrontal↔L_rostralanteriorcingulate"
+      ]
+    },
+    {
+      "link_name": "决策",
+      "effect_type": "decide",
+      "source_regions": [
+        "vmPFC",
+        "OFC"
+      ],
+      "target_regions": [
+        "壳核",
+        "腹侧纹状体"
+      ],
+      "direction": "feedback",
+      "source_layer": 5,
+      "modulation_ceiling": 0.604,
+      "myelination_range": {
+        "none (0.0)": 0.0,
+        "light (0.3)": 0.181,
+        "moderate (0.6)": 0.362,
+        "full (1.0)": 0.604
+      },
+      "data_source": "ENIGMA_subcortical",
+      "raw_sc_mean": 9.037,
+      "raw_sc_max": 9.518,
+      "sc_details": [
+        "ENIGMA:ENIGMA_sctx:Lput→L_medialorbitofrontal",
+        "ENIGMA:ENIGMA_sctx:Laccumb→L_medialorbitofrontal",
+        "ENIGMA:ENIGMA_sctx:Lput→L_lateralorbitofrontal",
+        "ENIGMA:ENIGMA_sctx:Laccumb→L_lateralorbitofrontal"
+      ]
+    },
+    {
+      "link_name": "控制",
+      "effect_type": "suppress",
+      "source_regions": [
+        "dlPFC",
+        "额顶网络",
+        "ACC背侧"
+      ],
+      "target_regions": [
+        "杏仁核",
+        "PAG"
+      ],
+      "direction": "feedback",
+      "source_layer": 5,
+      "modulation_ceiling": 0.7,
+      "myelination_range": {
+        "none (0.0)": 0.0,
+        "light (0.3)": 0.21,
+        "moderate (0.6)": 0.42,
+        "full (1.0)": 0.7
+      },
+      "data_source": "Hansen2024_brainstem",
+      "raw_sc_mean": 2.061,
+      "raw_sc_max": 2.55,
+      "sc_details": [
+        "estimated",
+        "Hansen2024:dlPFC↔PAG",
+        "estimated",
+        "Hansen2024:额顶网络↔PAG",
+        "estimated",
+        "Hansen2024:ACC背侧↔PAG"
+      ]
+    },
+    {
+      "link_name": "自省",
+      "effect_type": "metacog",
+      "source_regions": [
+        "mPFC",
+        "额上回"
+      ],
+      "target_regions": [
+        "后扣带"
+      ],
+      "direction": "feedback",
+      "source_layer": 5,
+      "modulation_ceiling": 0.652,
+      "myelination_range": {
+        "none (0.0)": 0.0,
+        "light (0.3)": 0.196,
+        "moderate (0.6)": 0.391,
+        "full (1.0)": 0.652
+      },
+      "data_source": "ENIGMA_cortical",
+      "raw_sc_mean": 9.756,
+      "raw_sc_max": 9.756,
+      "sc_details": [
+        "ENIGMA:ENIGMA_ctx:L_superiorfrontal↔L_posteriorcingulate",
+        "ENIGMA:ENIGMA_ctx:L_superiorfrontal↔L_posteriorcingulate"
+      ]
+    },
+    {
+      "link_name": "叙事重构",
+      "effect_type": "narrative",
+      "source_regions": [
+        "前额叶极·DMN",
+        "DMN+OFC"
+      ],
+      "target_regions": [],
+      "direction": "global",
+      "source_layer": 5,
+      "modulation_ceiling": 0.21,
+      "myelination_range": {
+        "none (0.0)": 0.0,
+        "light (0.3)": 0.063,
+        "moderate (0.6)": 0.126,
+        "full (1.0)": 0.21
+      },
+      "data_source": "estimated",
+      "raw_sc_mean": 1.048,
+      "raw_sc_max": 1.048,
+      "sc_details": [
+        "fallback"
+      ]
+    },
+    {
+      "link_name": "全脑协调",
+      "effect_type": "coordinate",
+      "source_regions": [
+        "前额叶极·FPN",
+        "全脑整合"
+      ],
+      "target_regions": [],
+      "direction": "global",
+      "source_layer": 5,
+      "modulation_ceiling": 0.21,
+      "myelination_range": {
+        "none (0.0)": 0.0,
+        "light (0.3)": 0.063,
+        "moderate (0.6)": 0.126,
+        "full (1.0)": 0.21
+      },
+      "data_source": "estimated",
+      "raw_sc_mean": 1.048,
+      "raw_sc_max": 1.048,
+      "sc_details": [
+        "fallback"
+      ]
+    },
+    {
+      "link_name": "裁决",
+      "effect_type": "arbitrate",
+      "source_regions": [
+        "前额叶极·SN"
+      ],
+      "target_regions": [],
+      "direction": "global",
+      "source_layer": 5,
+      "modulation_ceiling": 0.21,
+      "myelination_range": {
+        "none (0.0)": 0.0,
+        "light (0.3)": 0.063,
+        "moderate (0.6)": 0.126,
+        "full (1.0)": 0.21
+      },
+      "data_source": "estimated",
+      "raw_sc_mean": 1.048,
+      "raw_sc_max": 1.048,
+      "sc_details": [
+        "fallback"
+      ]
+    }
+  ],
+  "effect_type_groups": {
+    "damage_physical": {
+      "description": "物理伤害加成",
+      "target_actions": [
+        "物理攻击"
+      ],
+      "links": [
+        "期待",
+        "价值直觉",
+        "决策",
+        "命名",
+        "叙事重构B"
+      ]
+    },
+    "damage_mental": {
+      "description": "精神伤害加成",
+      "target_actions": [
+        "精神攻击"
+      ],
+      "links": [
+        "激活",
+        "期待",
+        "决策",
+        "命名"
+      ]
+    },
+    "defense_physical": {
+      "description": "物理防御加成",
+      "target_actions": [
+        "防御"
+      ],
+      "links": [
+        "身体感知",
+        "决策",
+        "想象"
+      ]
+    },
+    "hit_rate": {
+      "description": "命中率加成",
+      "target_actions": [
+        "物理攻击",
+        "精神攻击"
+      ],
+      "links": [
+        "执行动作",
+        "读意图"
+      ]
+    },
+    "dodge": {
+      "description": "闪避率加成",
+      "target_actions": [
+        "防御"
+      ],
+      "links": [
+        "应激反应_被动",
+        "警觉",
+        "回忆",
+        "读意图"
+      ]
+    },
+    "san_recovery": {
+      "description": "SAN 恢复",
+      "target_actions": [],
+      "links": [
+        "满足",
+        "内省",
+        "叙事重构A"
+      ]
+    },
+    "threshold_mod": {
+      "description": "触发阈值偏移",
+      "target_actions": [],
+      "links": [
+        "恐惧条件化",
+        "识景",
+        "辨别",
+        "自省"
+      ]
+    },
+    "ap_reduction": {
+      "description": "AP 消耗减免",
+      "target_actions": [],
+      "links": [
+        "熟练",
+        "习惯化",
+        "期待",
+        "比喻"
+      ]
+    }
+  }
+}

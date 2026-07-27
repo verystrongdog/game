@@ -1,0 +1,1299 @@
+{
+  "_metadata": {
+    "title": "Situation Primitives — Cross-Framework Mapping Table",
+    "version": "1.0",
+    "created": "2026-07-26",
+    "project": "Mask (面具) — Psychiatric Hospital Supernatural Observer-Effect Game",
+    "purpose": "Bridge RDoC domains, appraisal dimensions, Kroell14 networks, and game levels (L0-L6) into composable situation archetypes for NPC AI and combat design.",
+    "sources": [
+      "RDoC 2024 Matrix (NIMH): 6 domains, 32 sub-constructs",
+      "Scherer (2001, 2009); Lazarus (1991); Smith & Ellsworth (1985): 7 appraisal dimensions",
+      "Kroell et al. (2024): 14 meta-analytically derived functional networks",
+      "Hansen et al. (2024) Nat Neurosci: brainstem-cortical FC hierarchy",
+      "Mesulam (1998): 7-level cortical hierarchy (L0-L6)",
+      "Desikan-Killiany atlas via brain-for-blender (89 regions)"
+    ],
+    "how_to_use": "Each situation archetype defines a game-relevant scenario. NPC AI uses the rdoc_profile + appraisal_profile to select which skills to activate. The primary_networks and levels_involved determine which brain-region skill tree nodes are relevant. auto_activated_links define reflex neural links that fire immediately upon entering the situation."
+  },
+
+  "rdoc_domains": {
+    "negative_valence": {
+      "display_name": "负价系统",
+      "description": "Responses to aversive stimuli or contexts (threat, loss, frustration).",
+      "sub_constructs": {
+        "acute_threat": {
+          "display_name": "急性威胁（恐惧）",
+          "definition": "Active defensive response to imminent danger. Fast, short-lived, high arousal.",
+          "key_brain_regions": ["杏仁核", "PAG背外侧", "上丘", "下丘脑", "ACC背侧", "前脑岛"],
+          "primary_kroell_networks": ["EmoSF", "ER", "VigAtt"],
+          "levels_involved": ["L0", "L1", "L2"],
+          "game_notes": "恐慌强制——月光下威胁感知放大，PAG防御阈值降低"
+        },
+        "potential_threat": {
+          "display_name": "潜在威胁（焦虑）",
+          "definition": "Hypervigilance in ambiguous contexts. Sustained readiness for possible danger.",
+          "key_brain_regions": ["BNST", "ACC吻侧", "前脑岛", "蓝斑", "vmPFC", "海马体 CA1"],
+          "primary_kroell_networks": ["VigAtt", "CogAC", "eSAD"],
+          "levels_involved": ["L0", "L1", "L2", "L5"],
+          "game_notes": "持续警觉状态——探索扭曲医院走廊时的默认背景状态"
+        },
+        "sustained_threat": {
+          "display_name": "持续威胁",
+          "definition": "Prolonged exposure to danger. Leads to chronic stress, HPA-axis dysregulation.",
+          "key_brain_regions": ["BNST", "下丘脑", "杏仁核", "蓝斑", "前脑岛", "ACC"],
+          "primary_kroell_networks": ["eSAD", "EmoSF", "VigAtt"],
+          "levels_involved": ["L0", "L1", "L2"],
+          "game_notes": "长期暴露在污染月光区后的SAN持续下降状态"
+        },
+        "loss": {
+          "display_name": "丧失",
+          "definition": "Response to the absence of a valued person, object, or opportunity. Grief, sadness.",
+          "key_brain_regions": ["隔区", "海马旁回", "前扣带膝下区", "前脑岛", "vmPFC", "NAcc"],
+          "primary_kroell_networks": ["eSAD", "AM", "Empathy"],
+          "levels_involved": ["L1", "L2", "L5"],
+          "game_notes": "NPC同伴死亡或重要道具损毁后的情绪状态"
+        },
+        "frustrative_nonreward": {
+          "display_name": "挫败性无奖赏",
+          "definition": "Response when expected reward is omitted. Anger, aggression, extinction burst.",
+          "key_brain_regions": ["缰核", "ACC", "前脑岛", "OFC", "VTA", "NAcc壳"],
+          "primary_kroell_networks": ["Rew", "ER", "CogAC"],
+          "levels_involved": ["L1", "L2"],
+          "game_notes": "解谜失败、被NPC拒绝、预期奖励落空后的愤怒加成"
+        }
+      }
+    },
+    "positive_valence": {
+      "display_name": "正价系统",
+      "description": "Responses to rewarding stimuli and contexts. Approach motivation.",
+      "sub_constructs": {
+        "reward_responsiveness": {
+          "display_name": "奖赏响应",
+          "definition": "Initial hedonic response to reward receipt. Liking.",
+          "key_brain_regions": ["NAcc核", "腹侧纹状体", "VTA", "OFC", "前脑岛", "隔区"],
+          "primary_kroell_networks": ["Rew", "EmoSF", "eSAD"],
+          "levels_involved": ["L0", "L1", "L2"],
+          "game_notes": "发现关键道具、解开谜题、成功说服NPC时的即时满足"
+        },
+        "reward_learning": {
+          "display_name": "奖赏学习",
+          "definition": "Process of associating cues/stimuli/actions with future reward. Wanting.",
+          "key_brain_regions": ["VTA", "NAcc壳", "海马体 CA1", "杏仁核", "壳核", "尾状核", "OFC"],
+          "primary_kroell_networks": ["Rew", "SM", "eMDN"],
+          "levels_involved": ["L0", "L1", "L4"],
+          "game_notes": "学习哪些NPC值得信任、哪些区域安全——形成情境-奖赏关联"
+        },
+        "reward_valuation": {
+          "display_name": "奖赏估值",
+          "definition": "Comparing and choosing among reward options. Cost-benefit computation.",
+          "key_brain_regions": ["OFC", "vmPFC", "ACC", "dlPFC", "前脑岛", "纹状体基质"],
+          "primary_kroell_networks": ["Rew", "eMDN", "WM", "CogAC"],
+          "levels_involved": ["L2", "L5"],
+          "game_notes": "二选一抉择——救哪个NPC、信任哪个线索、走哪条路"
+        }
+      }
+    },
+    "cognitive_systems": {
+      "display_name": "认知系统",
+      "description": "Systems supporting attention, memory, language, and cognitive control.",
+      "sub_constructs": {
+        "attention": {
+          "display_name": "注意",
+          "definition": "Selective allocation of processing resources to relevant stimuli.",
+          "key_brain_regions": ["上丘", "顶内沟", "前脑岛", "ACC背侧", "dlPFC", "蓝斑", "枕顶联合"],
+          "primary_kroell_networks": ["CogAC", "VigAtt", "WM"],
+          "levels_involved": ["L0", "L2", "L3", "L4", "L5"],
+          "game_notes": "扫描环境、发现隐藏线索、在战斗中锁定目标"
+        },
+        "perception": {
+          "display_name": "知觉",
+          "definition": "Sensory processing and pattern recognition of internal/external stimuli.",
+          "key_brain_regions": ["枕叶 V1", "A1", "S1", "纺锤体回", "外侧枕叶", "颞上沟岸", "楔叶"],
+          "primary_kroell_networks": ["EmoSF", "MNS", "SM"],
+          "levels_involved": ["L3", "L4"],
+          "game_notes": "识别扭曲后的医院环境——观察者效应导致感知失真"
+        },
+        "declarative_memory": {
+          "display_name": "陈述性记忆",
+          "definition": "Encoding, consolidation, and retrieval of facts and events.",
+          "key_brain_regions": ["海马体 CA1", "海马体 CA3", "内嗅皮层", "海马旁回", "后扣带", "楔前叶", "前额叶-海马"],
+          "primary_kroell_networks": ["AM", "SM", "eSAD"],
+          "levels_involved": ["L1", "L2", "L4"],
+          "game_notes": "记忆闪回——月光触发被压抑的患者记忆"
+        },
+        "language": {
+          "display_name": "语言",
+          "definition": "Production and comprehension of spoken/written/signed communication.",
+          "key_brain_regions": ["Broca区", "Wernicke区", "颞上回", "缘上回", "角回", "弓状束", "颞中回"],
+          "primary_kroell_networks": ["SM", "ToM", "AM"],
+          "levels_involved": ["L4", "L5"],
+          "game_notes": "命名是核心机制——在月光下给事物命名改变现实"
+        },
+        "cognitive_control": {
+          "display_name": "认知控制",
+          "definition": "Regulation of thought and behavior through inhibition, switching, and updating.",
+          "key_brain_regions": ["dlPFC", "ACC背侧", "前脑岛", "额上回", "额中回尾部", "岛叶-ACC", "额顶网络"],
+          "primary_kroell_networks": ["CogAC", "eMDN", "WM"],
+          "levels_involved": ["L2", "L5"],
+          "game_notes": "压制恐慌、维持策略、在混乱中保持专注——消耗认知槽"
+        },
+        "working_memory": {
+          "display_name": "工作记忆",
+          "definition": "Online maintenance and manipulation of information for cognition.",
+          "key_brain_regions": ["dlPFC", "额中回尾部", "顶内沟", "缘上回", "丘脑", "尾状核"],
+          "primary_kroell_networks": ["WM", "CogAC", "eMDN"],
+          "levels_involved": ["L4", "L5"],
+          "game_notes": "跟踪多步计划——月光下工作记忆容量下降"
+        }
+      }
+    },
+    "social_processes": {
+      "display_name": "社会过程",
+      "description": "Processing of social stimuli and regulation of interpersonal behavior.",
+      "sub_constructs": {
+        "affiliation_attachment": {
+          "display_name": "亲和与依恋",
+          "definition": "Formation and maintenance of social bonds. Tend-and-befriend.",
+          "key_brain_regions": ["隔区", "腹侧纹状体", "NAcc", "mPFC", "ACC吻侧", "颞极", "下丘脑"],
+          "primary_kroell_networks": ["ToM", "eSAD", "Rew"],
+          "levels_involved": ["L1", "L2", "L5"],
+          "game_notes": "与NPC建立信任关系——影响其在月光下的行为"
+        },
+        "social_communication": {
+          "display_name": "社会沟通",
+          "definition": "Interpretation and production of communicative signals (facial, vocal, gestural).",
+          "key_brain_regions": ["纺锤体回", "颞上沟岸", "TPJ", "Broca区", "Wernicke区", "缘上回", "MNS区域"],
+          "primary_kroell_networks": ["ToM", "MNS", "EmoSF", "SM"],
+          "levels_involved": ["L4", "L5"],
+          "game_notes": "识别NPC的欺骗信号、读懂敌意——或者伪装自己的意图"
+        },
+        "perception_of_self": {
+          "display_name": "自我知觉",
+          "definition": "Awareness of one's own traits, history, and agency.",
+          "key_brain_regions": ["楔前叶", "mPFC", "后扣带", "TPJ", "前脑岛", "dmPFC"],
+          "primary_kroell_networks": ["eSAD", "AM", "ToM"],
+          "levels_involved": ["L2", "L4", "L5"],
+          "game_notes": "面具系统——玩家角色在月光下反思自己是谁，技能树L6叙事框架的入口"
+        },
+        "perception_of_others": {
+          "display_name": "他人知觉",
+          "definition": "Inferring others' traits, intentions, and mental states. Theory of Mind.",
+          "key_brain_regions": ["TPJ", "mPFC", "颞上沟岸", "颞极", "vmPFC", "楔前叶", "前脑岛"],
+          "primary_kroell_networks": ["ToM", "Empathy", "eSAD"],
+          "levels_involved": ["L4", "L5"],
+          "game_notes": "读心——在月光下他人的真实想法可能具象化"
+        }
+      }
+    },
+    "arousal_regulatory": {
+      "display_name": "唤起与调节",
+      "description": "Systems regulating arousal, circadian rhythms, and sleep-wake states.",
+      "sub_constructs": {
+        "arousal": {
+          "display_name": "唤起",
+          "definition": "General level of alertness and readiness to process stimuli.",
+          "key_brain_regions": ["蓝斑", "中缝背核", "脑桥网状核", "丘脑", "上丘", "PAG"],
+          "primary_kroell_networks": ["VigAtt", "CogAC", "MOT"],
+          "levels_involved": ["L0"],
+          "game_notes": "蓝斑NE广播——月光提高全局唤醒，但过度唤醒导致恐慌易发"
+        },
+        "circadian_rhythms": {
+          "display_name": "昼夜节律",
+          "definition": "Endogenous 24-hour cycles regulating physiology and behavior.",
+          "key_brain_regions": ["下丘脑视交叉上核", "蓝斑", "松果体", "丘脑"],
+          "primary_kroell_networks": ["VigAtt", "Rew"],
+          "levels_involved": ["L0", "L1"],
+          "game_notes": "月相系统——满月时观察者效应最强，NPC行为最不可预测"
+        },
+        "sleep_wakefulness": {
+          "display_name": "睡眠-觉醒",
+          "definition": "Regulation of vigilance states and sleep homeostasis.",
+          "key_brain_regions": ["蓝斑", "中缝背核", "脑桥网状核", "下丘脑", "丘脑"],
+          "primary_kroell_networks": ["VigAtt", "eSAD"],
+          "levels_involved": ["L0", "L1"],
+          "game_notes": "医院中睡眠被剥夺 → SAN恢复受损 → 认知槽上限下降"
+        }
+      }
+    },
+    "sensorimotor": {
+      "display_name": "感觉运动",
+      "description": "Control and monitoring of motor output, agency, and habit formation.",
+      "sub_constructs": {
+        "motor_actions": {
+          "display_name": "运动动作",
+          "definition": "Voluntary and involuntary movement execution.",
+          "key_brain_regions": ["M1", "S1", "旁中央小叶", "壳核", "苍白球", "小脑皮层", "黑质致密部"],
+          "primary_kroell_networks": ["MOT", "MNS", "eMDN"],
+          "levels_involved": ["L0", "L1", "L3"],
+          "game_notes": "闪避、逃跑、攻击动作的执行——基础物理战斗"
+        },
+        "agency_ownership": {
+          "display_name": "主体感与拥有感",
+          "definition": "Sense that one controls one's own actions and body.",
+          "key_brain_regions": ["前脑岛", "TPJ", "S1", "M1", "顶叶", "楔前叶", "ACC"],
+          "primary_kroell_networks": ["MNS", "eSAD", "Empathy"],
+          "levels_involved": ["L2", "L3", "L4", "L5"],
+          "game_notes": "观察者效应核心——月光模糊自我-他者边界，行动归属感被扭曲"
+        },
+        "habits": {
+          "display_name": "习惯",
+          "definition": "Automatized stimulus-response associations. Chunked action sequences.",
+          "key_brain_regions": ["壳核", "黑质致密部", "小脑皮层", "苍白球", "M1", "SMA前区"],
+          "primary_kroell_networks": ["MOT", "eMDN", "Rew"],
+          "levels_involved": ["L0", "L1"],
+          "game_notes": "熟练技能不消耗认知槽——训练后的反射性动作"
+        },
+        "innate_motor_patterns": {
+          "display_name": "先天运动模式",
+          "definition": "Species-typical fixed action patterns. Startle, flinch, orienting.",
+          "key_brain_regions": ["上丘", "PAG", "脑桥网状核", "反射环路·快速闪避", "反射环路·冻结反应", "杏仁核-PAG"],
+          "primary_kroell_networks": ["MOT", "VigAtt"],
+          "levels_involved": ["L0"],
+          "game_notes": "惊吓反射、闪避、冻结——不可压制的L0原子操作"
+        }
+      }
+    }
+  },
+
+  "appraisal_dimensions": {
+    "novelty": {
+      "display_name": "新颖性",
+      "description": "Is this new or familiar? Unexpected? Sudden onset? Neural: hippocampus, SC, SN.",
+      "sub_checks": ["suddenness", "familiarity", "predictability"],
+      "key_brain_regions": ["上丘", "海马体 CA1", "海马体 CA3", "前脑岛", "蓝斑", "ACC"],
+      "primary_kroell_networks": ["VigAtt", "CogAC", "AM"],
+      "levels_involved": ["L0", "L1", "L2"],
+      "game_mechanics": "熟悉场景安全(低新颖性→低防御激活)；从未见过的扭曲怪物(高新颖性→强制警觉)"
+    },
+    "intrinsic_pleasantness": {
+      "display_name": "内在愉悦性/效价",
+      "description": "Is this good or bad in itself? Neural: NAcc, amygdala, OFC, insula.",
+      "sub_checks": ["innate_valence", "learned_valence"],
+      "key_brain_regions": ["杏仁核", "NAcc核", "OFC", "前脑岛", "隔区", "VTA"],
+      "primary_kroell_networks": ["Rew", "EmoSF", "eSAD"],
+      "levels_involved": ["L0", "L1", "L2"],
+      "game_mechanics": "天生厌恶(血腥、腐烂)→自动负效价；习得性偏好(白色制服→NPC友好度)→条件性效价"
+    },
+    "goal_relevance": {
+      "display_name": "目标相关性",
+      "description": "Does this matter to my current goals? Neural: ACC, OFC, insula, dlPFC.",
+      "sub_checks": ["goal_importance", "urgency", "centrality"],
+      "key_brain_regions": ["ACC背侧", "OFC", "前脑岛", "dlPFC", "额顶网络", "VTA"],
+      "primary_kroell_networks": ["CogAC", "eMDN", "Rew", "WM"],
+      "levels_involved": ["L2", "L5"],
+      "game_mechanics": "高相关性→占据认知槽；低相关性→被SN过滤忽略"
+    },
+    "coping_potential": {
+      "display_name": "应对潜力",
+      "description": "Can I handle/control this? Power, control, resources. Neural: dlPFC, vmPFC, ACC.",
+      "sub_checks": ["control_assessment", "power_assessment", "resource_check"],
+      "key_brain_regions": ["dlPFC", "vmPFC", "ACC", "前脑岛", "PAG", "蓝斑"],
+      "primary_kroell_networks": ["ER", "CogAC", "eMDN", "eSAD"],
+      "levels_involved": ["L0", "L2", "L5"],
+      "game_mechanics": "低应对潜力→PAG防御激活(逃跑/冻结)；高应对潜力→dlPFC策略规划"
+    },
+    "agency_causation": {
+      "display_name": "主体/归因",
+      "description": "Who caused this? Self / Other / Circumstance. Neural: TPJ, insula, precuneus, mPFC.",
+      "sub_checks": ["self_caused", "other_caused", "circumstance_caused"],
+      "key_brain_regions": ["TPJ", "前脑岛", "楔前叶", "mPFC", "ACC", "vmPFC"],
+      "primary_kroell_networks": ["ToM", "eSAD", "AM", "Empathy"],
+      "levels_involved": ["L2", "L4", "L5"],
+      "game_mechanics": "归因他人→社会认知网络激活(ToM)；归因环境→突显网络；归因自我→自我参照网络。月光下归因错误频发"
+    },
+    "certainty_predictability": {
+      "display_name": "确定性/可预测性",
+      "description": "Do I know what will happen next? Certain vs. uncertain outcome. Neural: dlPFC, ACC, striatum.",
+      "sub_checks": ["outcome_known", "outcome_ambiguous", "outcome_unknown"],
+      "key_brain_regions": ["dlPFC", "ACC", "尾状核", "OFC", "前脑岛", "海马体 CA1"],
+      "primary_kroell_networks": ["CogAC", "eMDN", "WM", "Rew"],
+      "levels_involved": ["L2", "L5"],
+      "game_mechanics": "高不确定性→焦虑(BNST持续激活)；完全不可预测→恐慌强制检查。确定性→OFC价值计算"
+    },
+    "norm_standard_compatibility": {
+      "display_name": "规范/标准兼容性",
+      "description": "Does this match my internal and external standards? Neural: mPFC, TPJ, OFC, insula.",
+      "sub_checks": ["internal_standard_match", "external_norm_match", "moral_consistency"],
+      "key_brain_regions": ["mPFC", "TPJ", "OFC", "前脑岛", "ACC吻侧", "vmPFC"],
+      "primary_kroell_networks": ["ToM", "eSAD", "EmoSF", "Empathy"],
+      "levels_involved": ["L2", "L5"],
+      "game_mechanics": "违反规范→前脑岛+ACC冲突信号→认知负荷增加。道德抉择的核心维度"
+    }
+  },
+
+  "functional_networks": {
+    "_note": "Full Kroell14 network definitions with constituent brain regions from the game atlas. See kroell14_networks.md for complete literature references.",
+    "networks": [
+      {
+        "id": 1,
+        "name": "Autobiographical Memory",
+        "abbreviation": "AM",
+        "node_count": 22,
+        "constituent_game_regions": ["海马体 CA1", "海马体 CA3", "内嗅皮层", "海马旁回", "后扣带", "楔前叶", "TPJ", "dlPFC", "外侧枕叶", "mPFC"],
+        "core_functions": ["Episodic memory retrieval", "Self-projection", "Scene construction", "Mental time travel"],
+        "game_level_span": "L1→L5 (L1 hippocampus encoding → L5 mPFC/TPJ retrieval)",
+        "auto_links": ["海马体 CA1→后扣带", "海马旁回→楔前叶", "tpj→mpfc"]
+      },
+      {
+        "id": 2,
+        "name": "Cognitive Attention Control",
+        "abbreviation": "CogAC",
+        "node_count": 19,
+        "constituent_game_regions": ["前脑岛", "ACC背侧", "dlPFC", "顶内沟", "上丘", "缘上回", "额中回尾部", "丘脑", "尾状核"],
+        "core_functions": ["Goal-directed attention", "Cognitive control", "Task switching", "Error monitoring"],
+        "game_level_span": "L0→L5 (L0 SC/LC arousal → L5 dlPFC control)",
+        "auto_links": ["前脑岛→ACC背侧", "dlpfc→顶内沟", "蓝斑→前脑岛→ACC背侧"]
+      },
+      {
+        "id": 3,
+        "name": "Extended Multiple Demand Network",
+        "abbreviation": "eMDN",
+        "node_count": 17,
+        "constituent_game_regions": ["dlPFC", "前脑岛", "壳核", "丘脑", "额中回尾部", "颞中回", "额顶网络"],
+        "core_functions": ["Executive functions", "Cognitive flexibility", "Task-demand adaptation"],
+        "game_level_span": "L1→L5 (basal ganglia loops to prefrontal control)",
+        "auto_links": ["dlpfc→壳核", "前脑岛→丘脑", "额中回尾部→额顶网络"]
+      },
+      {
+        "id": 4,
+        "name": "Emotional Scene & Face Processing",
+        "abbreviation": "EmoSF",
+        "node_count": 24,
+        "constituent_game_regions": ["mPFC", "杏仁核", "海马旁回", "纺锤体回", "OFC", "外侧枕叶", "丘脑", "颞中回", "ACC"],
+        "core_functions": ["Emotional face/scene perception", "Affective salience detection"],
+        "game_level_span": "L1→L4 (L1 amygdala → L4 fusiform face recognition)",
+        "auto_links": ["杏仁核→纺锤体回", "ofc→杏仁核", "外侧枕叶→海马旁回"]
+      },
+      {
+        "id": 5,
+        "name": "Empathy",
+        "abbreviation": "EMP",
+        "node_count": 18,
+        "constituent_game_regions": ["mPFC", "前脑岛", "ACC", "TPJ", "杏仁核", "颞中回", "颞上沟岸", "海马体 CA1"],
+        "core_functions": ["Empathic understanding", "Affective sharing", "Mentalizing others' pain"],
+        "game_level_span": "L1→L5 (L1 shared affect → L5 perspective-taking)",
+        "auto_links": ["前脑岛→ACC", "杏仁核→tpj", "颞上沟岸→mPFC"]
+      },
+      {
+        "id": 6,
+        "name": "Emotion Regulation",
+        "abbreviation": "ER",
+        "node_count": 14,
+        "constituent_game_regions": ["dlPFC", "额上回", "缘上回", "杏仁核", "ACC", "前脑岛", "颞中回", "颞上回"],
+        "core_functions": ["Cognitive reappraisal", "Emotion suppression", "Affective regulation"],
+        "game_level_span": "L1→L5 (L1 amygdala activation → L5 dlPFC reappraisal)",
+        "auto_links": ["dlpfc→杏仁核", "ACC→前脑岛", "额上回→杏仁核"]
+      },
+      {
+        "id": 7,
+        "name": "Extended Socio-Affective Default Network",
+        "abbreviation": "eSAD",
+        "node_count": 12,
+        "constituent_game_regions": ["ACC", "杏仁核", "海马体 CA1", "TPJ", "腹侧纹状体", "楔前叶", "vmPFC", "mPFC", "颞中回"],
+        "core_functions": ["Self-referential thought", "Social cognition", "Affective processing", "Introspection"],
+        "game_level_span": "L1→L6 (L1 affect → L6 self-narrative)",
+        "auto_links": ["vmPFC→杏仁核", "tpj→楔前叶", "mpfc→后扣带", "ACC→腹侧纹状体"]
+      },
+      {
+        "id": 8,
+        "name": "Mirror Neuron System",
+        "abbreviation": "MNS",
+        "node_count": 11,
+        "constituent_game_regions": ["Broca区", "S1", "外侧枕叶", "纺锤体回", "M1前区", "颞中回", "顶叶"],
+        "core_functions": ["Action observation", "Imitation", "Understanding others' actions"],
+        "game_level_span": "L3→L5 (L3 S1/M1 → L5 Broca action understanding)",
+        "auto_links": ["M1→S1", "外侧枕叶→纺锤体回", "颞中回→Broca区"]
+      },
+      {
+        "id": 9,
+        "name": "Motor",
+        "abbreviation": "MOT",
+        "node_count": 9,
+        "constituent_game_regions": ["M1", "S1", "壳核", "苍白球", "小脑皮层", "顶叶", "旁中央小叶"],
+        "core_functions": ["Motor execution", "Movement planning", "Coordination"],
+        "game_level_span": "L0→L3 (L0 basal ganglia → L3 M1)",
+        "auto_links": ["M1→壳核→苍白球", "小脑皮层→M1", "S1→M1"]
+      },
+      {
+        "id": 10,
+        "name": "Reward",
+        "abbreviation": "Rew",
+        "node_count": 23,
+        "constituent_game_regions": ["前脑岛", "丘脑", "VTA", "黑质致密部", "OFC", "NAcc核", "NAcc壳", "杏仁核", "ACC", "后扣带", "角回", "额极"],
+        "core_functions": ["Reward processing", "Motivation", "Hedonic evaluation"],
+        "game_level_span": "L0→L5 (L0 VTA/SNc → L5 OFC valuation)",
+        "auto_links": ["VTA→NAcc→OFC", "杏仁核→腹侧纹状体", "前脑岛→ACC→VTA"]
+      },
+      {
+        "id": 11,
+        "name": "Semantic Memory",
+        "abbreviation": "SM",
+        "node_count": 23,
+        "constituent_game_regions": ["角回", "缘上回", "颞中回", "颞下回", "纺锤体回", "海马旁回", "mPFC", "vmPFC", "OFC", "额上回", "后扣带", "楔前叶"],
+        "core_functions": ["Conceptual knowledge", "Word meaning", "Factual memory"],
+        "game_level_span": "L1→L5 (L1 encoding → L5 conceptual network)",
+        "auto_links": ["角回→颞中回", "纺锤体回→海马旁回", "vmPFC→后扣带", "缘上回→Broca区"]
+      },
+      {
+        "id": 12,
+        "name": "Theory of Mind",
+        "abbreviation": "ToM",
+        "node_count": 15,
+        "constituent_game_regions": ["vmPFC", "mPFC", "额极", "楔前叶", "TPJ", "颞极", "颞中回", "颞上沟岸", "Broca区"],
+        "core_functions": ["Mentalizing", "Belief attribution", "Understanding intentions"],
+        "game_level_span": "L4→L5 (L4 STS biological motion → L5 TPJ intention inference)",
+        "auto_links": ["tpj→mpfc", "颞上沟岸→TPJ", "vmPFC→额极", "楔前叶→tpj"]
+      },
+      {
+        "id": 13,
+        "name": "Vigilant Attention",
+        "abbreviation": "VigAtt",
+        "node_count": 16,
+        "constituent_game_regions": ["ACC背侧", "前脑岛", "丘脑", "蓝斑", "上丘", "缘上回", "外侧枕叶", "小脑皮层", "旁中央小叶"],
+        "core_functions": ["Sustained attention", "Alertness", "Vigilance decrement resistance"],
+        "game_level_span": "L0→L3 (L0 LC → L3 sensory vigilance)",
+        "auto_links": ["蓝斑→前脑岛→ACC背侧", "上丘→丘脑", "ACC背侧→外侧枕叶"]
+      },
+      {
+        "id": 14,
+        "name": "Working Memory",
+        "abbreviation": "WM",
+        "node_count": 23,
+        "constituent_game_regions": ["前脑岛", "dlPFC", "额中回尾部", "顶内沟", "缘上回", "丘脑", "小脑皮层", "尾状核", "苍白球"],
+        "core_functions": ["Information maintenance", "Manipulation online", "Executive control"],
+        "game_level_span": "L1→L5 (L1 thalamus relay → L5 dlPFC manipulation)",
+        "auto_links": ["dlpfc→顶内沟", "前脑岛→额中回尾部", "丘脑→dlpfc", "尾状核→苍白球→丘脑→dlpfc"]
+      }
+    ]
+  },
+
+  "game_levels": {
+    "_description": "Maps the 7-level Mesulam/Hansen hierarchy (L0-L6) to brain regions, Kroell networks, and RDoC domains.",
+    "L0": {
+      "display_name": "脑干反射 (Brainstem Reflexes)",
+      "description": "Survival atoms. Fastest (~10-30ms), most mandatory, cannot be fully suppressed.",
+      "region_count": 16,
+      "example_regions": ["PAG", "上丘", "中缝背核", "蓝斑", "VTA", "黑质致密部", "反射环路·PAG→杏仁核", "反射环路·冻结反应", "反射环路·快速闪避", "小脑皮层"],
+      "associated_kroell_networks": ["VigAtt (LC/SC)", "MOT (basal ganglia)", "Rew (VTA/SNc)"],
+      "associated_rdoc": ["Arousal → arousal", "Sensorimotor → innate_motor_patterns", "Negative Valence → acute_threat"],
+      "game_role": "原子操作——被动技能，自动触发。L0技能不消耗认知槽"
+    },
+    "L1": {
+      "display_name": "边缘系统 (Limbic)",
+      "description": "Core emotion and memory. ~20-80ms. Experience-dependent modulation of L0.",
+      "region_count": 21,
+      "example_regions": ["杏仁核", "海马体 CA1", "海马体 CA3", "NAcc核", "NAcc壳", "腹侧纹状体", "BNST", "下丘脑", "隔区", "缰核", "苍白球", "尾状核", "壳核", "丘脑"],
+      "associated_kroell_networks": ["AM (hippocampus)", "Rew (NAcc/VP)", "EmoSF (amygdala)", "eSAD (amygdala/hippocampus)"],
+      "associated_rdoc": ["Negative Valence → all subconstructs", "Positive Valence → reward_responsiveness, reward_learning", "Cognitive Systems → declarative_memory"],
+      "game_role": "情绪学习+记忆形成。调制L0防御阈值。消耗0-1认知槽"
+    },
+    "L2": {
+      "display_name": "旁边缘 (Paralimbic / Salience)",
+      "description": "Interoception and salience detection. ~50-120ms. Decides 'what matters'.",
+      "region_count": 8,
+      "example_regions": ["前脑岛", "ACC", "ACC吻侧", "ACC背侧", "OFC", "后扣带", "颞极", "峡部扣带"],
+      "associated_kroell_networks": ["CogAC (aIns/aMCC)", "eSAD (ACC)", "Empathy (aIns)", "ER (aIns/ACC)", "VigAtt (aMCC/aIns)"],
+      "associated_rdoc": ["Cognitive Systems → attention, cognitive_control", "Social Processes → perception_of_self", "Arousal/Regulatory → arousal"],
+      "game_role": "该不该在意——突显标记。直觉决策但尚未语言化。混合主动/被动"
+    },
+    "L3": {
+      "display_name": "初级感觉皮层 (Primary Sensory)",
+      "description": "Raw external input. ~30-80ms. Passive reception of light, sound, touch, motion.",
+      "region_count": 7,
+      "example_regions": ["枕叶 V1", "A1", "S1", "M1", "旁中央小叶", "枕顶联合", "楔叶"],
+      "associated_kroell_networks": ["MOT (M1/S1)", "MNS (S1/premotor)", "VigAtt (sensory cortex)"],
+      "associated_rdoc": ["Sensorimotor → motor_actions, agency", "Cognitive Systems → perception"],
+      "game_role": "信息获取——扫描/观察类主动技能。被L0唤醒度调制"
+    },
+    "L4": {
+      "display_name": "高级单模态 (Higher Unimodal)",
+      "description": "Pattern recognition and classification. ~80-150ms. Labels the world.",
+      "region_count": 14,
+      "example_regions": ["颞下回", "纺锤体回", "颞上沟岸", "颞中回", "外侧枕叶", "舌回", "角回", "楔前叶", "顶内沟", "顶叶", "颞上沟", "Wernicke区"],
+      "associated_kroell_networks": ["EmoSF (fusiform)", "SM (MTG/AG)", "ToM (pSTS)", "MNS (fusiform/MTG)"],
+      "associated_rdoc": ["Cognitive Systems → perception", "Social Processes → social_communication", "Sensorimotor → agency"],
+      "game_role": "贴标签——识别分类。自动识别(被动)与仔细辨认(主动)混合。中等AP消耗"
+    },
+    "L5": {
+      "display_name": "跨模态皮层 (Transmodal / Cognitive)",
+      "description": "Language, reasoning, social cognition, multi-modal integration. ~150-300ms.",
+      "region_count": 23,
+      "example_regions": ["dlPFC", "vmPFC", "mPFC", "TPJ", "Broca区", "额极", "额上回", "额中回尾部", "缘上回", "颞上回", "弓状束", "岛叶-ACC", "岛叶-vmPFC"],
+      "associated_kroell_networks": ["WM (dlPFC)", "ER (dlPFC)", "ToM (TPJ/dmPFC)", "eMDN (dlPFC)", "CogAC (dlPFC)"],
+      "associated_rdoc": ["Cognitive Systems → cognitive_control, working_memory, language", "Social Processes → perception_of_others", "Appraisal → coping_potential, certainty"],
+      "game_role": "最灵活但最贵——高AP消耗，长冷却。命名是核心机制(观察者效应)。消耗1-2认知槽"
+    },
+    "L6": {
+      "display_name": "跨模态整合 (Whole-Brain Integration)",
+      "description": "Self-narrative, highest decision-making, frame-changing. ~300ms+ recursive.",
+      "region_count": 5,
+      "example_regions": ["前额叶极·DMN", "前额叶极·FPN", "前额叶极·SN", "DMN+OFC", "全脑整合"],
+      "associated_kroell_networks": ["eSAD (DMN hub)", "AM (DMN)", "ToM (DMN)", "Rew (vmPFC/OFC)"],
+      "associated_rdoc": ["Social Processes → perception_of_self", "Cognitive Systems → cognitive_control"],
+      "game_role": "终极技能层——长冷却(8-12回合)。一场战斗1-2次。月光下效果最强。消耗2-3认知槽"
+    }
+  },
+
+  "situation_archetypes": [
+    {
+      "name": "social_confrontation",
+      "display_name": "社交冲突",
+      "summary": "NPC confronts the player about a contradiction in their story or actions.",
+      "rdoc_profile": {
+        "social_processes": 0.7,
+        "negative_valence": 0.2,
+        "cognitive_systems": 0.1
+      },
+      "appraisal_profile": {
+        "agency": "other",
+        "valence": "negative",
+        "goal_relevance": 0.8,
+        "coping": 0.4,
+        "certainty": 0.3,
+        "novelty": 0.5,
+        "norm_compatibility": 0.7
+      },
+      "primary_networks": ["ToM", "Emotion Regulation", "Cognitive Attention Control"],
+      "key_brain_regions": ["tpj", "mpfc", "杏仁核", "acc", "dlpfc", "前脑岛", "vmPFC"],
+      "levels_involved": ["L1", "L2", "L5"],
+      "auto_activated_links": ["杏仁核→acc", "前脑岛→acc", "tpj→mpfc", "dlpfc→杏仁核"],
+      "typical_game_scenario": "NPC质疑玩家的面具身份。月光下NPC的真实敌意具象化为阴影触手。玩家必须维持叙事一致性，否则暴露。"
+    },
+    {
+      "name": "physical_threat_imminent",
+      "display_name": "即时物理威胁",
+      "summary": "Direct, immediate physical danger requiring instant defensive action.",
+      "rdoc_profile": {
+        "negative_valence": 0.8,
+        "sensorimotor": 0.15,
+        "arousal_regulatory": 0.05
+      },
+      "appraisal_profile": {
+        "agency": "other",
+        "valence": "negative",
+        "goal_relevance": 1.0,
+        "coping": 0.2,
+        "certainty": 0.1,
+        "novelty": 0.3,
+        "norm_compatibility": 0.0
+      },
+      "primary_networks": ["Vigilant Attention", "Motor", "Emotional Scene & Face Processing"],
+      "key_brain_regions": ["pag", "上丘", "杏仁核", "蓝斑", "acc背侧", "m1", "反射环路·快速闪避"],
+      "levels_involved": ["L0", "L1", "L3"],
+      "auto_activated_links": ["上丘→pag", "pag→反射环路·快速闪避", "杏仁核→pag", "蓝斑→上丘"],
+      "typical_game_scenario": "被扭曲患者突然袭击。月光下攻击具象化为可见的精神能量。强制恐慌检查——低SAN角色自动触发逃离/冻结。"
+    },
+    {
+      "name": "unexplained_phenomenon",
+      "display_name": "超自然现象",
+      "summary": "Something impossible or reality-breaking occurs due to the observer effect.",
+      "rdoc_profile": {
+        "cognitive_systems": 0.4,
+        "negative_valence": 0.3,
+        "arousal_regulatory": 0.2,
+        "social_processes": 0.1
+      },
+      "appraisal_profile": {
+        "agency": "circumstance",
+        "valence": "ambiguous",
+        "goal_relevance": 0.6,
+        "coping": 0.1,
+        "certainty": 0.0,
+        "novelty": 1.0,
+        "norm_compatibility": 0.0
+      },
+      "primary_networks": ["Vigilant Attention", "Autobiographical Memory", "Cognitive Attention Control"],
+      "key_brain_regions": ["海马体 CA1", "上丘", "蓝斑", "前脑岛", "acc吻侧", "dlpfc", "楔前叶"],
+      "levels_involved": ["L0", "L1", "L2", "L5"],
+      "auto_activated_links": ["上丘→蓝斑", "蓝斑→前脑岛→acc", "海马体 ca1→楔前叶", "前脑岛→dlpfc"],
+      "typical_game_scenario": "走廊尽头的墙变成跳动着的心脏。天花板倒挂着一个穿着玩家已故亲人衣服的实体。海马体疯狂搜索记忆匹配，但没有任何模式匹配——认知系统过载。"
+    },
+    {
+      "name": "moral_dilemma",
+      "display_name": "道德困境",
+      "summary": "A choice between conflicting ethical values with no clear right answer.",
+      "rdoc_profile": {
+        "social_processes": 0.5,
+        "cognitive_systems": 0.3,
+        "positive_valence": 0.1,
+        "negative_valence": 0.1
+      },
+      "appraisal_profile": {
+        "agency": "self",
+        "valence": "ambiguous",
+        "goal_relevance": 0.9,
+        "coping": 0.6,
+        "certainty": 0.2,
+        "novelty": 0.4,
+        "norm_compatibility": 0.9
+      },
+      "primary_networks": ["Extended Socio-Affective Default", "Theory of Mind", "Emotion Regulation"],
+      "key_brain_regions": ["vmPFC", "mpfc", "tpj", "acc吻侧", "前脑岛", "ofc", "dlpfc"],
+      "levels_involved": ["L2", "L5"],
+      "auto_activated_links": ["vmPFC→acc吻侧", "前脑岛→tpj", "mpfc→ofc", "dlpfc→vmPFC"],
+      "typical_game_scenario": "一个扭曲患者请求玩家解除其痛苦(治疗)但同时它看守着出口钥匙。杀→钥匙但SAN受损；不杀→找替代但浪费时间(月光污染累积)。"
+    },
+    {
+      "name": "patient_breakdown",
+      "display_name": "患者崩溃",
+      "summary": "An NPC patient experiences a psychotic episode, becoming volatile or dangerous.",
+      "rdoc_profile": {
+        "negative_valence": 0.4,
+        "social_processes": 0.3,
+        "cognitive_systems": 0.2,
+        "sensorimotor": 0.1
+      },
+      "appraisal_profile": {
+        "agency": "other",
+        "valence": "negative",
+        "goal_relevance": 0.7,
+        "coping": 0.3,
+        "certainty": 0.1,
+        "novelty": 0.6,
+        "norm_compatibility": 0.3
+      },
+      "primary_networks": ["Emotional Scene & Face Processing", "Empathy", "Theory of Mind"],
+      "key_brain_regions": ["杏仁核", "前脑岛", "acc", "tpj", "mpfc", "颞极", "颞上沟岸"],
+      "levels_involved": ["L1", "L2", "L5"],
+      "auto_activated_links": ["杏仁核→前脑岛", "前脑岛→acc", "颞上沟岸→tpj→mpfc", "颞极→杏仁核"],
+      "typical_game_scenario": "原本安静的患者开始对着墙角低语，声音逐渐变成嘶吼。月光下，他脑中的恐惧实体化为可见的寄生虫状生物爬出他的眼眶。周围NPC开始恐慌传染。"
+    },
+    {
+      "name": "memory_flashback",
+      "display_name": "记忆闪回",
+      "summary": "A triggered memory overwhelms the player, blending past trauma with present perception.",
+      "rdoc_profile": {
+        "cognitive_systems": 0.5,
+        "negative_valence": 0.3,
+        "social_processes": 0.1,
+        "arousal_regulatory": 0.1
+      },
+      "appraisal_profile": {
+        "agency": "circumstance",
+        "valence": "negative",
+        "goal_relevance": 0.7,
+        "coping": 0.2,
+        "certainty": 0.1,
+        "novelty": 0.8,
+        "norm_compatibility": 0.2
+      },
+      "primary_networks": ["Autobiographical Memory", "Extended Socio-Affective Default", "Emotion Regulation"],
+      "key_brain_regions": ["海马体 CA1", "海马体 CA3", "杏仁核", "后扣带", "楔前叶", "前脑岛", "vmPFC"],
+      "levels_involved": ["L1", "L2", "L4", "L5"],
+      "auto_activated_links": ["海马体 ca1→后扣带", "海马体 ca3→杏仁核", "后扣带→楔前叶", "前脑岛→vmPFC"],
+      "typical_game_scenario": "推开一扇门，眼前的场景与患者创伤记忆完全匹配。月光触发模式完成——海马体CA3将部分线索补全为完整场景。玩家必须区分当前现实和记忆，否则被闪回吞噬。"
+    },
+    {
+      "name": "stealth_avoidance",
+      "display_name": "潜行躲避",
+      "summary": "Avoiding a superior threat through concealment, silence, and careful movement.",
+      "rdoc_profile": {
+        "cognitive_systems": 0.4,
+        "sensorimotor": 0.3,
+        "arousal_regulatory": 0.2,
+        "negative_valence": 0.1
+      },
+      "appraisal_profile": {
+        "agency": "self",
+        "valence": "negative",
+        "goal_relevance": 0.9,
+        "coping": 0.5,
+        "certainty": 0.2,
+        "novelty": 0.2,
+        "norm_compatibility": 0.1
+      },
+      "primary_networks": ["Vigilant Attention", "Cognitive Attention Control", "Motor"],
+      "key_brain_regions": ["蓝斑", "上丘", "前脑岛", "acc背侧", "m1", "s1", "dlpfc", "小脑皮层"],
+      "levels_involved": ["L0", "L2", "L3", "L5"],
+      "auto_activated_links": ["蓝斑→上丘", "上丘→丘脑", "前脑岛→acc背侧", "dlpfc→m1"],
+      "typical_game_scenario": "一个不可击败的怪物在走廊巡逻。玩家必须在阴影中移动，控制呼吸(压制L0恐慌反射)，避免发出声音。高唤醒→听觉敏感但更容易触发冻结。"
+    },
+    {
+      "name": "negotiation_bargain",
+      "display_name": "谈判交易",
+      "summary": "Persuading an NPC through dialogue, trading information, or making promises.",
+      "rdoc_profile": {
+        "social_processes": 0.6,
+        "cognitive_systems": 0.3,
+        "positive_valence": 0.1
+      },
+      "appraisal_profile": {
+        "agency": "self",
+        "valence": "positive",
+        "goal_relevance": 0.8,
+        "coping": 0.7,
+        "certainty": 0.4,
+        "novelty": 0.3,
+        "norm_compatibility": 0.6
+      },
+      "primary_networks": ["Theory of Mind", "Semantic Memory", "Reward"],
+      "key_brain_regions": ["tpj", "mpfc", "vmPFC", "Broca区", "wernicke区", "ofc", "NAcc"],
+      "levels_involved": ["L1", "L4", "L5"],
+      "auto_activated_links": ["tpj→mpfc", "Broca区→wernicke区(弓状束)", "vmPFC→ofc→NAcc", "颞极→tpj"],
+      "typical_game_scenario": "与一个囤积物资的偏执患者谈判。玩家必须推断对方的真正需求(ToM)，选择合适的语言标签(语义记忆+命名)，在月光下谎言具象化使欺骗几乎不可能。"
+    },
+    {
+      "name": "combat_engagement",
+      "display_name": "战斗接敌",
+      "summary": "Direct combat with a hostile entity using skills from the brain-region skill tree.",
+      "rdoc_profile": {
+        "sensorimotor": 0.4,
+        "negative_valence": 0.3,
+        "cognitive_systems": 0.2,
+        "arousal_regulatory": 0.1
+      },
+      "appraisal_profile": {
+        "agency": "other",
+        "valence": "negative",
+        "goal_relevance": 1.0,
+        "coping": 0.6,
+        "certainty": 0.3,
+        "novelty": 0.3,
+        "norm_compatibility": 0.0
+      },
+      "primary_networks": ["Motor", "Working Memory", "Cognitive Attention Control", "Extended Multiple Demand"],
+      "key_brain_regions": ["m1", "s1", "dlpfc", "壳核", "小脑皮层", "顶内沟", "acc背侧", "前脑岛", "PAG"],
+      "levels_involved": ["L0", "L1", "L2", "L3", "L4", "L5"],
+      "auto_activated_links": ["PAG→m1", "dlpfc→壳核→苍白球→丘脑→m1", "前脑岛→acc背侧→dlpfc", "上丘→顶内沟"],
+      "typical_game_scenario": "战斗回合制。玩家从技能树中选择技能：L4识别敌人模式→L5制定策略→L3瞄准→L0执行攻击。月光增加所有技能效果但增加恐慌概率。"
+    },
+    {
+      "name": "healing_ritual",
+      "display_name": "治愈仪式",
+      "summary": "Restoring HP or SAN through a calm, focused activity or treatment procedure.",
+      "rdoc_profile": {
+        "positive_valence": 0.4,
+        "cognitive_systems": 0.3,
+        "social_processes": 0.2,
+        "arousal_regulatory": 0.1
+      },
+      "appraisal_profile": {
+        "agency": "self",
+        "valence": "positive",
+        "goal_relevance": 0.9,
+        "coping": 0.8,
+        "certainty": 0.7,
+        "novelty": 0.1,
+        "norm_compatibility": 0.8
+      },
+      "primary_networks": ["Extended Socio-Affective Default", "Emotion Regulation", "Reward"],
+      "key_brain_regions": ["vmPFC", "后扣带", "楔前叶", "隔区", "前脑岛", "acc吻侧", "蓝斑"],
+      "levels_involved": ["L0", "L1", "L2", "L5"],
+      "auto_activated_links": ["vmPFC→后扣带", "隔区→前脑岛", "acc吻侧→蓝斑(抑制)", "楔前叶→后扣带"],
+      "typical_game_scenario": "找到一个相对安全的房间，玩家进行冥想/记录/简易治疗。L5框架重置→释放认知槽。抑制蓝斑→降低唤醒→减少恐慌触发概率。但在月光下，内心平静也可能反向具象化。"
+    },
+    {
+      "name": "investigation_search",
+      "display_name": "调查搜索",
+      "summary": "Searching the environment for clues, hidden objects, or information.",
+      "rdoc_profile": {
+        "cognitive_systems": 0.6,
+        "social_processes": 0.2,
+        "positive_valence": 0.1,
+        "sensorimotor": 0.1
+      },
+      "appraisal_profile": {
+        "agency": "self",
+        "valence": "ambiguous",
+        "goal_relevance": 0.8,
+        "coping": 0.7,
+        "certainty": 0.3,
+        "novelty": 0.5,
+        "norm_compatibility": 0.4
+      },
+      "primary_networks": ["Cognitive Attention Control", "Semantic Memory", "Vigilant Attention"],
+      "key_brain_regions": ["枕叶 V1", "外侧枕叶", "顶内沟", "前脑岛", "dlpfc", "ACC背侧", "角回", "颞下回"],
+      "levels_involved": ["L2", "L3", "L4", "L5"],
+      "auto_activated_links": ["枕叶 v1→外侧枕叶→颞下回", "顶内沟→ACC背侧", "前脑岛→dlpfc", "角回→语义分类"],
+      "typical_game_scenario": "搜索病房寻找日记页面。L3视觉扫描→L4模式识别(这是医疗记录还是患者日志?)→L5语义理解(内容含义)。月光下线索可能物理变形——玩家看到的文字取决于当时情绪状态。"
+    },
+    {
+      "name": "betrayal_reversal",
+      "display_name": "背叛反转",
+      "summary": "An NPC the player trusted reveals hostile intentions, often mid-situation.",
+      "rdoc_profile": {
+        "social_processes": 0.5,
+        "negative_valence": 0.4,
+        "cognitive_systems": 0.1
+      },
+      "appraisal_profile": {
+        "agency": "other",
+        "valence": "negative",
+        "goal_relevance": 1.0,
+        "coping": 0.2,
+        "certainty": 0.0,
+        "novelty": 1.0,
+        "norm_compatibility": 0.8
+      },
+      "primary_networks": ["Theory of Mind", "Empathy", "Extended Socio-Affective Default"],
+      "key_brain_regions": ["tpj", "mpfc", "前脑岛", "acc", "杏仁核", "vmPFC", "海马体 CA1"],
+      "levels_involved": ["L1", "L2", "L5"],
+      "auto_activated_links": ["tpj→mpfc(更新信念)", "前脑岛→acc(冲突信号)", "杏仁核→vmPFC(价值重估)", "海马体 ca1→前脑岛(记忆检索)"],
+      "typical_game_scenario": "一路帮助玩家的友善NPC，在关键战斗前突然暴露真实身份(他是医院秩序长的化身)。玩家必须快速重估所有过去的交互——哪些信号被误读了?预期奖励(OFC)与现实(缰核)的冲突最大化。"
+    },
+    {
+      "name": "emotional_support",
+      "display_name": "情感支持",
+      "summary": "Comforting, reassuring, or stabilizing an NPC or ally under duress.",
+      "rdoc_profile": {
+        "social_processes": 0.6,
+        "positive_valence": 0.3,
+        "cognitive_systems": 0.1
+      },
+      "appraisal_profile": {
+        "agency": "self",
+        "valence": "positive",
+        "goal_relevance": 0.7,
+        "coping": 0.8,
+        "certainty": 0.6,
+        "novelty": 0.2,
+        "norm_compatibility": 0.9
+      },
+      "primary_networks": ["Empathy", "Theory of Mind", "Emotion Regulation", "Mirror Neuron System"],
+      "key_brain_regions": ["前脑岛", "acc", "tpj", "mpfc", "vmPFC", "纺锤体回", "眼眶前额叶"],
+      "levels_involved": ["L1", "L2", "L4", "L5"],
+      "auto_activated_links": ["前脑岛→acc(共情共享)", "纺锤体回→tpj(读表情)", "tpj→mpfc(理解感受)", "vmPFC→杏仁核(降低恐惧)"],
+      "typical_game_scenario": "一个患者因为看到扭曲影像而惊恐发作。玩家通过抚触(S1→前脑岛)、温和语调(A1→颞上回→情绪识别)、命名(把未知恐惧变为已知标签)来稳定对方。成功→NPC信任+1，SAN小幅恢复。"
+    },
+    {
+      "name": "territorial_encroachment",
+      "display_name": "领地侵犯",
+      "summary": "Entering an area claimed by a hostile entity that responds aggressively to intrusion.",
+      "rdoc_profile": {
+        "negative_valence": 0.5,
+        "sensorimotor": 0.2,
+        "cognitive_systems": 0.2,
+        "arousal_regulatory": 0.1
+      },
+      "appraisal_profile": {
+        "agency": "other",
+        "valence": "negative",
+        "goal_relevance": 0.8,
+        "coping": 0.4,
+        "certainty": 0.3,
+        "novelty": 0.6,
+        "norm_compatibility": 0.2
+      },
+      "primary_networks": ["Vigilant Attention", "Emotional Scene & Face Processing", "Motor"],
+      "key_brain_regions": ["上丘", "PAG", "杏仁核", "蓝斑", "前脑岛", "acc背侧", "海马旁回"],
+      "levels_involved": ["L0", "L1", "L2", "L3"],
+      "auto_activated_links": ["上丘→PAG(领地警报)", "海马旁回→场景识别(不安全)", "蓝斑→前脑岛→acc背侧", "PAG→m1(准备战斗)"],
+      "typical_game_scenario": "进入一个被实体占据的病房。空气中充满敌意——场景本身就在排斥玩家。海马旁回(场景识别)标记为'危险场所'，蓝斑提高唤醒。如果继续深入→领地持有者发动攻击。"
+    },
+    {
+      "name": "identity_crisis",
+      "display_name": "身份危机",
+      "summary": "The player's sense of self is challenged or fragmented by supernatural or psychological forces.",
+      "rdoc_profile": {
+        "social_processes": 0.4,
+        "cognitive_systems": 0.3,
+        "negative_valence": 0.2,
+        "arousal_regulatory": 0.1
+      },
+      "appraisal_profile": {
+        "agency": "circumstance",
+        "valence": "negative",
+        "goal_relevance": 1.0,
+        "coping": 0.1,
+        "certainty": 0.0,
+        "novelty": 0.9,
+        "norm_compatibility": 0.1
+      },
+      "primary_networks": ["Autobiographical Memory", "Extended Socio-Affective Default", "Theory of Mind"],
+      "key_brain_regions": ["楔前叶", "mpfc", "后扣带", "tpj", "前脑岛", "海马体 CA1", "vmPFC", "ACC"],
+      "levels_involved": ["L1", "L2", "L4", "L5", "L6"],
+      "auto_activated_links": ["楔前叶→后扣带(自我参照)", "mpfc→tpj(自我vs他人)", "海马体 ca1→ACC(记忆冲突)", "前脑岛→vmPFC(谁在感受?)"],
+      "typical_game_scenario": "月光强烈时，玩家经过一面镜子看到自己变成了另一个人的脸。海马体+楔前叶的自我叙事网络(L6 DMN)与现实视觉输入冲突——'我是谁'的答案不再确定。可能需要L6技能重建自我叙事。"
+    },
+    {
+      "name": "time_pressure_race",
+      "display_name": "时间压力",
+      "summary": "A countdown or escalating threat forces rapid decision-making with limited information.",
+      "rdoc_profile": {
+        "cognitive_systems": 0.4,
+        "negative_valence": 0.3,
+        "arousal_regulatory": 0.2,
+        "sensorimotor": 0.1
+      },
+      "appraisal_profile": {
+        "agency": "circumstance",
+        "valence": "negative",
+        "goal_relevance": 1.0,
+        "coping": 0.4,
+        "certainty": 0.1,
+        "novelty": 0.3,
+        "norm_compatibility": 0.1
+      },
+      "primary_networks": ["Cognitive Attention Control", "Working Memory", "Vigilant Attention", "Extended Multiple Demand"],
+      "key_brain_regions": ["dlpfc", "acc背侧", "蓝斑", "前脑岛", "额中回尾部", "顶内沟", "壳核", "丘脑"],
+      "levels_involved": ["L0", "L2", "L5"],
+      "auto_activated_links": ["蓝斑→dlpfc(压力下认知增强)", "acc背侧→前脑岛(冲突加速)", "dlpfc→壳核(习惯化动作)", "额中回尾部→顶内沟(快速工作记忆轮换)"],
+      "typical_game_scenario": "月光污染的涟漪正在蔓延——玩家有5回合内到达安全房间。每回合污染增加，SAN逐渐减少。需要快速决策+高效路径规划。认知槽压力最大——必须优先考虑哪些冲突需要压制，哪些可以放任。"
+    },
+    {
+      "name": "social_isolation",
+      "display_name": "社会孤立",
+      "summary": "Alone in a threatening environment with no allies or witnesses.",
+      "rdoc_profile": {
+        "negative_valence": 0.4,
+        "cognitive_systems": 0.3,
+        "arousal_regulatory": 0.2,
+        "social_processes": 0.1
+      },
+      "appraisal_profile": {
+        "agency": "circumstance",
+        "valence": "negative",
+        "goal_relevance": 0.7,
+        "coping": 0.3,
+        "certainty": 0.2,
+        "novelty": 0.4,
+        "norm_compatibility": 0.3
+      },
+      "primary_networks": ["Vigilant Attention", "Autobiographical Memory", "Extended Socio-Affective Default"],
+      "key_brain_regions": ["蓝斑", "前脑岛", "后扣带", "ACC", "海马体 CA1", "楔前叶", "PAG"],
+      "levels_involved": ["L0", "L1", "L2", "L5"],
+      "auto_activated_links": ["蓝斑→前脑岛(孤立警觉)", "后扣带→楔前叶(内省增多)", "海马体 ca1→ACC(记忆回放)", "PAG→蓝斑(正反馈:孤立→警惕→更多孤立)"],
+      "typical_game_scenario": "与NPC同伴走散，独自在扭曲的医院翼楼中。没有社会缓冲→恐惧阈值降低。缺乏社交验证→现实感减弱。玩家开始怀疑自己的感知——这些阴影是真的吗?孤立时间延长→幻觉概率上升。"
+    },
+    {
+      "name": "cognitive_overload",
+      "display_name": "认知过载",
+      "summary": "Too many competing stimuli or tasks exceed the player's cognitive load capacity.",
+      "rdoc_profile": {
+        "cognitive_systems": 0.6,
+        "negative_valence": 0.2,
+        "sensorimotor": 0.1,
+        "arousal_regulatory": 0.1
+      },
+      "appraisal_profile": {
+        "agency": "circumstance",
+        "valence": "negative",
+        "goal_relevance": 0.8,
+        "coping": 0.1,
+        "certainty": 0.1,
+        "novelty": 0.7,
+        "norm_compatibility": 0.2
+      },
+      "primary_networks": ["Working Memory", "Cognitive Attention Control", "Extended Multiple Demand", "Vigilant Attention"],
+      "key_brain_regions": ["dlpfc", "ACC背侧", "前脑岛", "额中回尾部", "顶内沟", "蓝斑", "丘脑", "尾状核"],
+      "levels_involved": ["L0", "L2", "L5"],
+      "auto_activated_links": ["dlpfc→ACC背侧(冲突增多)", "前脑岛→dlpfc(过载信号)", "蓝斑→dlpfc(唤醒增强但效率下降)", "ACC背侧→顶内沟(注意力碎片化)"],
+      "typical_game_scenario": "同时面对:1)扭曲怪物攻击 2)NPC呼救 3)月光污染上升 4)关键道具即将消失。认知槽满额→所有L5技能AP+1→压制L0反射困难。玩家必须战略性放弃一些处理任务。"
+    },
+    {
+      "name": "authority_conflict",
+      "display_name": "权威冲突",
+      "summary": "Power struggle with an authority figure (hospital staff, orderlies, or entity)",
+      "rdoc_profile": {
+        "social_processes": 0.5,
+        "negative_valence": 0.3,
+        "cognitive_systems": 0.2
+      },
+      "appraisal_profile": {
+        "agency": "other",
+        "valence": "negative",
+        "goal_relevance": 0.9,
+        "coping": 0.3,
+        "certainty": 0.4,
+        "novelty": 0.3,
+        "norm_compatibility": 0.8
+      },
+      "primary_networks": ["Theory of Mind", "Emotion Regulation", "Extended Socio-Affective Default"],
+      "key_brain_regions": ["mpfc", "vmPFC", "tpj", "acc", "前脑岛", "dlpfc", "杏仁核", "PAG"],
+      "levels_involved": ["L1", "L2", "L5"],
+      "auto_activated_links": ["mpfc→tpj(权力谈判)", "acc→前脑岛(不公平感)", "vmPFC→dlpfc(策略vs冲动)", "杏仁核→PAG(顺从vs反抗)"],
+      "typical_game_scenario": "被医院秩序长(一个扭曲的权威NPC)堵住。他要求玩家遵守「规则」——交出违禁品、透露信息、服从检查。服从→安全但自尊受损；反抗→战斗但可能引发全面警报。社会等级评定(TPJ+mPFC)和公平感知(ACC+前脑岛)冲突。"
+    },
+    {
+      "name": "loss_and_grief",
+      "display_name": "丧失与哀伤",
+      "summary": "Dealing with the death or permanent departure of a valued NPC or ally.",
+      "rdoc_profile": {
+        "negative_valence": 0.5,
+        "social_processes": 0.3,
+        "cognitive_systems": 0.1,
+        "arousal_regulatory": 0.1
+      },
+      "appraisal_profile": {
+        "agency": "circumstance",
+        "valence": "negative",
+        "goal_relevance": 0.9,
+        "coping": 0.2,
+        "certainty": 0.3,
+        "novelty": 0.2,
+        "norm_compatibility": 0.5
+      },
+      "primary_networks": ["Autobiographical Memory", "Extended Socio-Affective Default", "Empathy"],
+      "key_brain_regions": ["隔区", "海马体 CA1", "前脑岛", "ACC吻侧", "vmPFC", "后扣带", "楔前叶", "NAcc"],
+      "levels_involved": ["L1", "L2", "L5"],
+      "auto_activated_links": ["隔区→海马体 ca1(依恋记忆)", "前脑岛→ACC吻侧(社会痛苦)", "vmPFC→后扣带(意义重构)", "NAcc→隔区(奖赏缺失信号)"],
+      "typical_game_scenario": "一路陪伴的NPC在战斗中牺牲。隔区(社会依恋)和ACC吻侧(社会排斥/痛苦)激活。海马体回放共同经历的记忆。月光中，失去之人的幻影可能出现——是真的灵魂还是观察者效应?玩家可通过L6叙事技能将丧失整合入自我叙事。"
+    },
+    {
+      "name": "sensory_deprivation",
+      "display_name": "感觉剥夺",
+      "summary": "Complete darkness, silence, or featureless environment that removes sensory input.",
+      "rdoc_profile": {
+        "cognitive_systems": 0.4,
+        "arousal_regulatory": 0.3,
+        "negative_valence": 0.2,
+        "social_processes": 0.1
+      },
+      "appraisal_profile": {
+        "agency": "circumstance",
+        "valence": "negative",
+        "goal_relevance": 0.5,
+        "coping": 0.2,
+        "certainty": 0.0,
+        "novelty": 0.7,
+        "norm_compatibility": 0.1
+      },
+      "primary_networks": ["Vigilant Attention", "Autobiographical Memory", "Extended Socio-Affective Default"],
+      "key_brain_regions": ["蓝斑", "上丘", "丘脑", "前脑岛", "海马体 CA3", "后扣带", "楔前叶"],
+      "levels_involved": ["L0", "L1", "L2", "L4"],
+      "auto_activated_links": ["上丘→蓝斑(感觉饥饿)", "蓝斑→丘脑(放大内部信号)", "海马体 ca3→后扣带(记忆补全)", "前脑岛→ACC(内部感受放大)"],
+      "typical_game_scenario": "电源被切断的医院地下室。视觉输入为零→上丘和蓝斑进入高警觉状态。缺乏外部感觉输入→内部感受(心跳、呼吸)被放大。海马体CA3开始用记忆填补空白→在完全黑暗中看到不存在的形状。恐慌检查频率增加。"
+    },
+    {
+      "name": "deception_unraveling",
+      "display_name": "谎言揭穿",
+      "summary": "Detecting that an NPC is lying, hiding something, or has contradictory intentions.",
+      "rdoc_profile": {
+        "social_processes": 0.6,
+        "cognitive_systems": 0.3,
+        "negative_valence": 0.1
+      },
+      "appraisal_profile": {
+        "agency": "other",
+        "valence": "negative",
+        "goal_relevance": 0.8,
+        "coping": 0.5,
+        "certainty": 0.4,
+        "novelty": 0.5,
+        "norm_compatibility": 0.7
+      },
+      "primary_networks": ["Theory of Mind", "Emotional Scene & Face Processing", "Cognitive Attention Control"],
+      "key_brain_regions": ["tpj", "mpfc", "杏仁核", "前脑岛", "ACC", "纺锤体回", "颞上沟岸", "dlpfc"],
+      "levels_involved": ["L1", "L2", "L4", "L5"],
+      "auto_activated_links": ["纺锤体回→颞上沟岸(微表情检测)", "颞上沟岸→tpj(意图推断)", "杏仁核→前脑岛(直觉不对劲)", "ACC→dlpfc(矛盾需要解决)"],
+      "typical_game_scenario": "NPC声称「这里很安全」但嘴角一闪而过的微表情(纺锤体回+颞上沟岸→MNS)与言语矛盾。ACC冲突监测发出信号。在月光下，NPC的谎话可能具象化为可见的「不协调光环」——但判断失误也会产生假阳性。"
+    },
+    {
+      "name": "ritual_sequence",
+      "display_name": "仪式序列",
+      "summary": "Performing a specific sequence of actions correctly to achieve a supernatural effect.",
+      "rdoc_profile": {
+        "cognitive_systems": 0.4,
+        "sensorimotor": 0.3,
+        "social_processes": 0.2,
+        "positive_valence": 0.1
+      },
+      "appraisal_profile": {
+        "agency": "self",
+        "valence": "ambiguous",
+        "goal_relevance": 1.0,
+        "coping": 0.6,
+        "certainty": 0.5,
+        "novelty": 0.3,
+        "norm_compatibility": 0.4
+      },
+      "primary_networks": ["Working Memory", "Motor", "Semantic Memory", "Mirror Neuron System"],
+      "key_brain_regions": ["dlpfc", "额中回尾部", "小脑皮层", "壳核", "M1", "角回", "Broca区", "海马体 CA1"],
+      "levels_involved": ["L1", "L3", "L4", "L5"],
+      "auto_activated_links": ["dlpfc→额中回尾部(保持序列在线)", "小脑皮层→M1(时序执行)", "角回→Broca区(命名每一步)", "海马体 ca1→角回(语义检索)"],
+      "typical_game_scenario": "要封印一个月光裂缝，玩家必须按正确顺序激活三个墙壁符号。L5工作记忆维持序列→L4模式识别确认符号→L3运动执行操作。小脑皮层负责时序精确性。顺序错误→反噬伤害。"
+    },
+    {
+      "name": "escape_pursuit",
+      "display_name": "逃亡追逐",
+      "summary": "Being actively chased by an unstoppable entity through the hospital.",
+      "rdoc_profile": {
+        "sensorimotor": 0.4,
+        "negative_valence": 0.3,
+        "arousal_regulatory": 0.2,
+        "cognitive_systems": 0.1
+      },
+      "appraisal_profile": {
+        "agency": "other",
+        "valence": "negative",
+        "goal_relevance": 1.0,
+        "coping": 0.2,
+        "certainty": 0.0,
+        "novelty": 0.4,
+        "norm_compatibility": 0.0
+      },
+      "primary_networks": ["Motor", "Vigilant Attention", "Cognitive Attention Control"],
+      "key_brain_regions": ["PAG", "上丘", "蓝斑", "杏仁核", "M1", "小脑皮层", "反射环路·快速闪避", "壳核", "顶内沟"],
+      "levels_involved": ["L0", "L1", "L3"],
+      "auto_activated_links": ["上丘→PAG→反射环路·快速闪避", "蓝斑→全身(最大唤醒)", "杏仁核→PAG(恐惧增强逃跑)", "PAG→M1(强制运动输出)"],
+      "typical_game_scenario": "不可击败的'沉默护士'实体发现玩家——PAG强制触发逃跑反射。L0原子操作不可压制(需要2认知槽才能尝试压制)。玩家必须快速空间导航(海马旁回+顶内沟)找逃跑路线。小脑皮层负责复杂地形的运动协调。"
+    },
+    {
+      "name": "witnessing_trauma",
+      "display_name": "目睹创伤",
+      "summary": "Witnessing a horrific event that causes SAN damage through secondary trauma.",
+      "rdoc_profile": {
+        "negative_valence": 0.5,
+        "social_processes": 0.3,
+        "cognitive_systems": 0.1,
+        "arousal_regulatory": 0.1
+      },
+      "appraisal_profile": {
+        "agency": "circumstance",
+        "valence": "negative",
+        "goal_relevance": 0.8,
+        "coping": 0.1,
+        "certainty": 0.2,
+        "novelty": 0.8,
+        "norm_compatibility": 0.0
+      },
+      "primary_networks": ["Emotional Scene & Face Processing", "Empathy", "Extended Socio-Affective Default"],
+      "key_brain_regions": ["杏仁核", "前脑岛", "ACC", "纺锤体回", "海马体 CA1", "楔前叶", "vmPFC", "TPJ"],
+      "levels_involved": ["L1", "L2", "L4", "L5"],
+      "auto_activated_links": ["纺锤体回→杏仁核(看到恐怖画面)", "杏仁核→前脑岛→ACC(共情痛苦)", "海马体 ca1→楔前叶(记忆烙印)", "TPJ→vmPFC(试图理解)"],
+      "typical_game_scenario": "目睹另一个患者被实体'溶解'吸入墙壁。杏仁核立即编码恐怖记忆。前脑岛+ACC共情反应导致间接SAN伤害。纺锤体回记住了面孔——这可能成为后续闪回的触发点。在月光下，受害者的最后一刻会持续在空间中回放。"
+    },
+    {
+      "name": "cooperative_task",
+      "display_name": "合作任务",
+      "summary": "Working with an NPC or ally toward a shared goal requiring coordination.",
+      "rdoc_profile": {
+        "social_processes": 0.5,
+        "cognitive_systems": 0.3,
+        "positive_valence": 0.1,
+        "sensorimotor": 0.1
+      },
+      "appraisal_profile": {
+        "agency": "self",
+        "valence": "positive",
+        "goal_relevance": 0.9,
+        "coping": 0.7,
+        "certainty": 0.5,
+        "novelty": 0.3,
+        "norm_compatibility": 0.8
+      },
+      "primary_networks": ["Theory of Mind", "Mirror Neuron System", "Working Memory", "Extended Multiple Demand"],
+      "key_brain_regions": ["tpj", "mpfc", "dlpfc", "MNS区域", "Broca区", "颞上沟岸", "小脑皮层", "ACC"],
+      "levels_involved": ["L3", "L4", "L5"],
+      "auto_activated_links": ["tpj→mpfc(共享意图建立)", "Broca区→wernicke区(沟通协调)", "MNS区域→小脑皮层(动作同步)", "dlpfc→ACC(联合规划)"],
+      "typical_game_scenario": "与一个NPC患者合作推动重物堵住月光裂缝。需要分工协调——一个推，一个卡位。MNS确保双方理解彼此的物理动作，ToM确保意图同步。成功→信任度上升，后续可能解锁合作技能连携。"
+    },
+    {
+      "name": "sacrifice_choice",
+      "display_name": "牺牲抉择",
+      "summary": "Choosing to sacrifice something valuable (HP, SAN, item, or ally) to achieve a greater goal.",
+      "rdoc_profile": {
+        "negative_valence": 0.4,
+        "social_processes": 0.3,
+        "cognitive_systems": 0.2,
+        "positive_valence": 0.1
+      },
+      "appraisal_profile": {
+        "agency": "self",
+        "valence": "negative",
+        "goal_relevance": 1.0,
+        "coping": 0.5,
+        "certainty": 0.3,
+        "novelty": 0.4,
+        "norm_compatibility": 0.7
+      },
+      "primary_networks": ["Reward", "Emotion Regulation", "Extended Socio-Affective Default", "Cognitive Attention Control"],
+      "key_brain_regions": ["OFC", "vmPFC", "ACC", "前脑岛", "dlpfc", "缰核", "NAcc", "TPJ"],
+      "levels_involved": ["L1", "L2", "L5", "L6"],
+      "auto_activated_links": ["OFC→vmPFC(得失计算)", "前脑岛→ACC(损失厌恶)", "dlpfc→vmPFC(克制冲动)", "缰核→NAcc(放弃奖赏)", "TPJ→前脑岛(社会成本)"],
+      "typical_game_scenario": "实体提出交易:交出你最重要的记忆(永久降低某技能等级)换取通过这扇门。OFC计算价值损失，前脑岛感觉痛苦，dlPFC执行最终决定。在L6层面，这可能改变玩家的叙事——'我愿意为前行付出什么代价?'"
+    }
+  ],
+
+  "composition_rules": {
+    "_description": "How situation archetypes combine in practice. Archetypes are rarely alone — they layer, chain, and merge.",
+    "combinations": [
+      {
+        "name": "threat_during_confrontation",
+        "components": ["social_confrontation", "physical_threat_imminent"],
+        "result": "Social confrontation escalates to violence. The NPC's emotional state spells over into physical attack. RDoC: social + negative_valence both high. Brain: amygdala drives both social evaluation AND fear response — TPJ-mPFC loop competes with PAG reflex.",
+        "game_example": "被揭穿面具的NPC不是逃跑而是直接攻击→社交冲突升级为战斗。叠加了社交背叛的SAN伤害+物理HP伤害。"
+      },
+      {
+        "name": "traumatic_discovery",
+        "components": ["investigation_search", "witnessing_trauma"],
+        "result": "Searching for clues leads to finding something horrific. Investigation reward is negated by trauma cost. RDoC: cognitive drops as negative_valence spikes. Brain: ACC-hippocampus conflict — 'I found what I was looking for but I wish I hadn't.'",
+        "game_example": "搜索医生办公室→发现日记记载了患者被虐待的真实记录→目睹记忆闪回中的创伤场景。找到了关键线索但付出了SAN代价。"
+      },
+      {
+        "name": "desperate_escape",
+        "components": ["escape_pursuit", "cognitive_overload", "time_pressure_race"],
+        "result": "Being chased while managing limited cognitive resources against a deadline. Maximum L0 panic pressure combined with L5 strategy failure risk. RDoC: sensorimotor + cognitive competing for priority. Brain: PAG (flee) vs dlPFC (plan) — cognitive load determines which wins.",
+        "game_example": "被实体追逐时必须同时导航迷宫出口+管理认知槽。如果认知槽满额→无法压制恐慌→强制冻结=死亡。月光下逃跑路径也在变化。"
+      },
+      {
+        "name": "betrayal_in_combat",
+        "components": ["combat_engagement", "betrayal_reversal"],
+        "result": "An ally turns hostile mid-fight. Sudden re-evaluation of all combat assumptions. RDoC: social_processes spike during combat, splitting attention. Brain: TPJ-mPFC belief updating competes with M1 motor execution.",
+        "game_example": "正在对抗怪物时，信任的NPC从背后攻击玩家。需要同时维持战斗节奏+重新评估盟友状态→认知槽双倍占用。"
+      },
+      {
+        "name": "healing_under_threat",
+        "components": ["healing_ritual", "physical_threat_imminent"],
+        "result": "Attempting restorative activity while danger is present. Ritual interrupted = partial effect + cognitive load waste. RDoC: positive_valence (healing) vs negative_valence (threat) compete. Brain: vmPFC-DMN (calm) vs PAG-amygdala (alarm) — SN chooses which network dominates.",
+        "game_example": "躲在看似安全的房间恢复SAN→突然怪物破窗而入。治疗被中断只恢复50%效果+损失AP。突显网络必须在内部恢复和外部威胁间切换。"
+      },
+      {
+        "name": "grief_during_flashback",
+        "components": ["loss_and_grief", "memory_flashback"],
+        "result": "Memory of loss triggered by environmental cue. Past and present trauma compound. RDoC: autobiographical memory + negative_valence reinforcing loop. Brain: hippocampus-DMN replay + amygdala reconsolidation — each flashback strengthens the traumatic association.",
+        "game_example": "走过走廊闻到特定消毒水味→触发在该房间失去盟友的记忆→闪回中重新经历那一幕。反复闪回→创伤记忆强化→后续触发阈值降低。"
+      },
+      {
+        "name": "negotiation_under_deception",
+        "components": ["negotiation_bargain", "deception_unraveling"],
+        "result": "A negotiation where one party is lying. Requires real-time deception detection while maintaining bargaining position. RDoC: social + cognitive both high. Brain: TPJ-ToM for lie detection, OFC-vmPFC for value calculation, ACC for contradiction monitoring.",
+        "game_example": "与看起来友善的NPC交易物资→同时正在说谎(他要害你)。玩家必须同时谈判+察觉欺骗+决定是否揭穿。揭穿→可能战斗；不揭穿→可能被坑。"
+      },
+      {
+        "name": "moral_crisis_isolation",
+        "components": ["moral_dilemma", "social_isolation"],
+        "result": "A moral choice with no social support or external validation. Pure internal conflict. RDoC: social (internalized norms) vs negative_valence (fear of wrong choice). Brain: vmPFC-mPFC moral reasoning without TPJ social feedback — self vs superego.",
+        "game_example": "独自一人发现一个可以逃出医院的机会——但代价是释放所有患者。没有NPC提供建议，没有社会镜子。纯粹的内心道德冲突在月光下放大。"
+      },
+      {
+        "name": "territorial_escape",
+        "components": ["territorial_encroachment", "escape_pursuit"],
+        "result": "Entering a claimed territory triggers immediate chase. No warning phase. RDoC: negative_valence max, cognitive min — pure reflexive response. Brain: SC→PAG→escape reflex bypasses cortex entirely. No time for appraisal.",
+        "game_example": "误入某个实体的核心领地→对方立即感知并发起追击。没有任何谈判或观察窗口——L0反射直接接管。玩家必须纯靠本能反应求生。"
+      },
+      {
+        "name": "identity_investigation",
+        "components": ["identity_crisis", "investigation_search"],
+        "result": "Investigating the mystery of the hospital leads to discoveries that challenge the player's own identity. The investigation subject IS the player. RDoC: social (self) + cognitive (search). Brain: DMN (self-narrative) + FPN (investigation) compete for SN routing.",
+        "game_example": "搜索医院记录时发现一份患者档案——档案描述的经历与玩家自己的记忆完全吻合。我是调查者还是被调查者?L6 DMN自我叙事必须整合这一矛盾。"
+      }
+    ],
+    "merge_rules": [
+      {
+        "rule": "dominant_rdoc",
+        "description": "When archetypes combine, the RDoC profile is a weighted average weighted by intensity (0-1). The domain with highest score drives NPC behavior selection priority."
+      },
+      {
+        "rule": "appraisal_override",
+        "description": "Physical threat overrides all appraisal dimensions except 'coping' and 'certainty' — those remain independently computed. Social situations preserve full appraisal set."
+      },
+      {
+        "rule": "network_sum",
+        "description": "Combined situations activate the union of both archetypes' primary networks, but cognitive load (total active networks) cannot exceed 3 without penalty (overload)."
+      },
+      {
+        "rule": "level_span",
+        "description": "Combined situations span from the lowest L to the highest L of component archetypes. Wider span = more brain regions involved = higher cognitive load."
+      },
+      {
+        "rule": "reflex_priority",
+        "description": "If either component activates an L0 reflex (PAG, SC, LC), the reflex auto-triggers before any L5 cognitive processing — unless the player spends cognitive load to suppress it."
+      },
+      {
+        "rule": "moonlight_modifier",
+        "description": "Moonlight intensity multiplies all archetype intensities by 1.0-2.0x (depending on phase). In full moon: appraisal certainty→0 for all ambiguous situations, novelty→1.0, and auto_activated_links have a chance to 'cross-wire' to wrong targets."
+      }
+    ]
+  }
+}

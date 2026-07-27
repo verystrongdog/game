@@ -1,0 +1,1500 @@
+{
+  "_metadata": {
+    "description": "三因子链路调制模型 — Momi2025 excitability × Hansen2024 neuromodulator × Pajevic2023 myelination sync",
+    "version": "2.0",
+    "generated": "2026-07-27",
+    "formula": "ceiling = excitability × gain_coeff; actual = ceiling × sigmoid(myelination, shift=0.4, steep=8)",
+    "factors": {
+      "excitability": "Momi et al. (2025) Nat Commun — cortical hierarchy of evoked response strength",
+      "conduction_priority": "TMS-fMRI effective connectivity + Hansen 2024 temporal hierarchy — link resolution order",
+      "neuromodulator_gain": "Hansen et al. (2024) Nat Neurosci — neurotransmitter community → effect type specialization",
+      "myelination_sync": "Pajevic et al. (2023) eLife — oligodendrocyte-mediated conduction delay synchronization"
+    },
+    "gain_type_mechanics": {
+      "force": {
+        "description": "运动输出放大 — 力量/爆发力",
+        "formula": "base_physical × (1 + min(Σ ceiling_i × sync(myelination_i), cap_force))",
+        "affects": [
+          "物理攻击.HP伤害",
+          "打击力度"
+        ],
+        "narrative": "M1/皮质脊髓束/小脑/脑桥网状核 → \"你的身体能做到什么程度\"",
+        "cap": 0.5,
+        "stability": "高 (肌肉记忆不会今天会明天忘)"
+      },
+      "motivation": {
+        "description": "动机驱动放大 — DA/NAcc/VTA 系统的\"想要\"转化为行动强度",
+        "formula": "base_physical × (1 + min(Σ ceiling_i × sync(myelination_i), cap_motivation))",
+        "affects": [
+          "物理攻击.HP伤害",
+          "精神攻击.SAN伤害"
+        ],
+        "narrative": "VTA/NAcc/vmPFC → \"你想做到什么程度\"",
+        "cap": 1.0,
+        "stability": "低 (情境敏感: 打恨的人 vs 打路人, 力度不同)"
+      },
+      "precision": {
+        "description": "精度/命中提升",
+        "formula": "base_hit_rate + Σ ceiling_i × sync(myelination_i) × 15%, capped at +50%",
+        "affects": [
+          "物理攻击.命中率",
+          "精神攻击.命中率",
+          "信息揭示精度"
+        ],
+        "narrative": "NE/蓝斑系统 — \"你看得更清楚，做得更准\"",
+        "cap": 0.5,
+        "stability": "中 (NE tonic/phasic 波动)"
+      },
+      "defense": {
+        "description": "防御/SAN减免",
+        "formula": "incoming_damage × (1 - min(Σ ceiling_i × sync(myelination_i), 0.5))",
+        "affects": [
+          "受到物理伤害",
+          "受到精神伤害",
+          "SAN消耗减免"
+        ],
+        "narrative": "5-HT/中缝核系统 — \"不重要的事被过滤掉了\"",
+        "cap": 0.5,
+        "stability": "高 (被动护盾, 不消耗激活点)"
+      },
+      "info": {
+        "description": "信息揭示数量/质量",
+        "formula": "基础揭示1个属性 + floor(Σ ceiling_i × sync(myelination_i) × 3) 额外属性",
+        "affects": [
+          "敌方属性揭示数",
+          "意图预测精度"
+        ],
+        "narrative": "ACh/皮层系统 — \"你注意到更多细节\"",
+        "cap": 3,
+        "stability": "高"
+      },
+      "automation": {
+        "description": "AP消耗减免",
+        "formula": "技能AP = max(1, base_AP - floor(Σ ceiling_i × sync(myelination_i) × 3))",
+        "affects": [
+          "连续使用AP消耗",
+          "冷却时间"
+        ],
+        "narrative": "小脑/壳核CSTC环路 — \"身体替你做了\"",
+        "cap": "AP最低减至1",
+        "stability": "高"
+      },
+      "neutral": {
+        "description": "通用调制",
+        "formula": "base × (1 + Σ ceiling_i × sync(myelination_i) × 0.5), capped at +50%",
+        "affects": [
+          "所有效果"
+        ],
+        "narrative": "通用增益",
+        "cap": 0.5,
+        "stability": "中"
+      },
+      "detection": {
+        "description": "威胁检测",
+        "formula": "威胁检测距离 + floor(Σ ceiling_i × sync(myelination_i) × 3)",
+        "affects": [
+          "检测范围",
+          "警觉标记获取"
+        ],
+        "narrative": "上丘 → \"你感觉到有东西不对劲\"",
+        "cap": 3,
+        "stability": "高"
+      }
+    },
+    "priority_rules": {
+      "1": "脑干反射 — 最先结算, 闪避/恐慌/基础防御",
+      "2": "边缘系统/初级感觉 — 情绪触发/感官输入",
+      "3": "旁边缘 — 突显检测/注意力分配",
+      "4": "高级单模态/白质通路 — 模式识别/分类",
+      "5": "跨模态皮层 — 认知框架/计划/语言",
+      "6": "全脑整合 — 最后结算, 叙事重构/裁决(改变全局规则)"
+    }
+  },
+  "links": [
+    {
+      "link_name": "应激反应·被动逃逸",
+      "source_regions": [
+        "PAG"
+      ],
+      "source_layer": 0,
+      "gain_type": "defense",
+      "excitability": 0.25,
+      "gain_coeff": 1.3,
+      "modulation_ceiling": 0.325,
+      "link_priority": 1,
+      "myelination_curve": {
+        "m0.1": 0.027,
+        "m0.3": 0.1008,
+        "m0.5": 0.2242,
+        "m0.7": 0.298,
+        "m0.9": 0.3192,
+        "m1.0": 0.3223
+      },
+      "gain_mechanic": {
+        "description": "防御/SAN减免",
+        "formula": "incoming_damage × (1 - min(Σ ceiling_i × sync(myelination_i), 0.5))",
+        "affects": [
+          "受到物理伤害",
+          "受到精神伤害",
+          "SAN消耗减免"
+        ],
+        "narrative": "5-HT/中缝核系统 — \"不重要的事被过滤掉了\"",
+        "cap": 0.5,
+        "stability": "高 (被动护盾, 不消耗激活点)"
+      }
+    },
+    {
+      "link_name": "应激反应·冻结",
+      "source_regions": [
+        "反射环路·冻结反应"
+      ],
+      "source_layer": 0,
+      "gain_type": "defense",
+      "excitability": 0.25,
+      "gain_coeff": 1.2,
+      "modulation_ceiling": 0.3,
+      "link_priority": 1,
+      "myelination_curve": {
+        "m0.1": 0.025,
+        "m0.3": 0.093,
+        "m0.5": 0.207,
+        "m0.7": 0.275,
+        "m0.9": 0.2946,
+        "m1.0": 0.2976
+      },
+      "gain_mechanic": {
+        "description": "防御/SAN减免",
+        "formula": "incoming_damage × (1 - min(Σ ceiling_i × sync(myelination_i), 0.5))",
+        "affects": [
+          "受到物理伤害",
+          "受到精神伤害",
+          "SAN消耗减免"
+        ],
+        "narrative": "5-HT/中缝核系统 — \"不重要的事被过滤掉了\"",
+        "cap": 0.5,
+        "stability": "高 (被动护盾, 不消耗激活点)"
+      }
+    },
+    {
+      "link_name": "应激反应·闪避",
+      "source_regions": [
+        "反射环路·快速闪避"
+      ],
+      "source_layer": 0,
+      "gain_type": "defense",
+      "excitability": 0.25,
+      "gain_coeff": 1.3,
+      "modulation_ceiling": 0.325,
+      "link_priority": 1,
+      "myelination_curve": {
+        "m0.1": 0.027,
+        "m0.3": 0.1008,
+        "m0.5": 0.2242,
+        "m0.7": 0.298,
+        "m0.9": 0.3192,
+        "m1.0": 0.3223
+      },
+      "gain_mechanic": {
+        "description": "防御/SAN减免",
+        "formula": "incoming_damage × (1 - min(Σ ceiling_i × sync(myelination_i), 0.5))",
+        "affects": [
+          "受到物理伤害",
+          "受到精神伤害",
+          "SAN消耗减免"
+        ],
+        "narrative": "5-HT/中缝核系统 — \"不重要的事被过滤掉了\"",
+        "cap": 0.5,
+        "stability": "高 (被动护盾, 不消耗激活点)"
+      }
+    },
+    {
+      "link_name": "警觉",
+      "source_regions": [
+        "上丘"
+      ],
+      "source_layer": 0,
+      "gain_type": "detection",
+      "excitability": 0.25,
+      "gain_coeff": 1.2,
+      "modulation_ceiling": 0.3,
+      "link_priority": 1,
+      "myelination_curve": {
+        "m0.1": 0.025,
+        "m0.3": 0.093,
+        "m0.5": 0.207,
+        "m0.7": 0.275,
+        "m0.9": 0.2946,
+        "m1.0": 0.2976
+      },
+      "gain_mechanic": {
+        "description": "威胁检测",
+        "formula": "威胁检测距离 + floor(Σ ceiling_i × sync(myelination_i) × 3)",
+        "affects": [
+          "检测范围",
+          "警觉标记获取"
+        ],
+        "narrative": "上丘 → \"你感觉到有东西不对劲\"",
+        "cap": 3,
+        "stability": "高"
+      }
+    },
+    {
+      "link_name": "忍耐·被动SAN盾",
+      "source_regions": [
+        "中缝背核"
+      ],
+      "source_layer": 0,
+      "gain_type": "defense",
+      "excitability": 0.25,
+      "gain_coeff": 1.4,
+      "modulation_ceiling": 0.35,
+      "link_priority": 1,
+      "myelination_curve": {
+        "m0.1": 0.0291,
+        "m0.3": 0.1085,
+        "m0.5": 0.2415,
+        "m0.7": 0.3209,
+        "m0.9": 0.3437,
+        "m1.0": 0.3471
+      },
+      "gain_mechanic": {
+        "description": "防御/SAN减免",
+        "formula": "incoming_damage × (1 - min(Σ ceiling_i × sync(myelination_i), 0.5))",
+        "affects": [
+          "受到物理伤害",
+          "受到精神伤害",
+          "SAN消耗减免"
+        ],
+        "narrative": "5-HT/中缝核系统 — \"不重要的事被过滤掉了\"",
+        "cap": 0.5,
+        "stability": "高 (被动护盾, 不消耗激活点)"
+      }
+    },
+    {
+      "link_name": "忍耐·主动压制恐慌",
+      "source_regions": [
+        "中缝背核"
+      ],
+      "source_layer": 0,
+      "gain_type": "defense",
+      "excitability": 0.25,
+      "gain_coeff": 1.4,
+      "modulation_ceiling": 0.35,
+      "link_priority": 1,
+      "myelination_curve": {
+        "m0.1": 0.0291,
+        "m0.3": 0.1085,
+        "m0.5": 0.2415,
+        "m0.7": 0.3209,
+        "m0.9": 0.3437,
+        "m1.0": 0.3471
+      },
+      "gain_mechanic": {
+        "description": "防御/SAN减免",
+        "formula": "incoming_damage × (1 - min(Σ ceiling_i × sync(myelination_i), 0.5))",
+        "affects": [
+          "受到物理伤害",
+          "受到精神伤害",
+          "SAN消耗减免"
+        ],
+        "narrative": "5-HT/中缝核系统 — \"不重要的事被过滤掉了\"",
+        "cap": 0.5,
+        "stability": "高 (被动护盾, 不消耗激活点)"
+      }
+    },
+    {
+      "link_name": "激活·蓝斑唤醒",
+      "source_regions": [
+        "蓝斑"
+      ],
+      "source_layer": 0,
+      "gain_type": "force",
+      "excitability": 0.25,
+      "gain_coeff": 1.5,
+      "modulation_ceiling": 0.375,
+      "link_priority": 1,
+      "myelination_curve": {
+        "m0.1": 0.0312,
+        "m0.3": 0.1163,
+        "m0.5": 0.2587,
+        "m0.7": 0.3438,
+        "m0.9": 0.3683,
+        "m1.0": 0.3719
+      },
+      "gain_mechanic": {
+        "description": "运动输出放大 — 力量/爆发力",
+        "formula": "base_physical × (1 + min(Σ ceiling_i × sync(myelination_i), cap_force))",
+        "affects": [
+          "物理攻击.HP伤害",
+          "打击力度"
+        ],
+        "narrative": "M1/皮质脊髓束/小脑/脑桥网状核 → \"你的身体能做到什么程度\"",
+        "cap": 0.5,
+        "stability": "高 (肌肉记忆不会今天会明天忘)"
+      }
+    },
+    {
+      "link_name": "趋向·动机方向",
+      "source_regions": [
+        "VTA"
+      ],
+      "source_layer": 0,
+      "gain_type": "motivation",
+      "excitability": 0.25,
+      "gain_coeff": 1.5,
+      "modulation_ceiling": 0.375,
+      "link_priority": 1,
+      "myelination_curve": {
+        "m0.1": 0.0312,
+        "m0.3": 0.1163,
+        "m0.5": 0.2587,
+        "m0.7": 0.3438,
+        "m0.9": 0.3683,
+        "m1.0": 0.3719
+      },
+      "gain_mechanic": {
+        "description": "动机驱动放大 — DA/NAcc/VTA 系统的\"想要\"转化为行动强度",
+        "formula": "base_physical × (1 + min(Σ ceiling_i × sync(myelination_i), cap_motivation))",
+        "affects": [
+          "物理攻击.HP伤害",
+          "精神攻击.SAN伤害"
+        ],
+        "narrative": "VTA/NAcc/vmPFC → \"你想做到什么程度\"",
+        "cap": 1.0,
+        "stability": "低 (情境敏感: 打恨的人 vs 打路人, 力度不同)"
+      }
+    },
+    {
+      "link_name": "熟练·自动化",
+      "source_regions": [
+        "小脑皮层"
+      ],
+      "source_layer": 0,
+      "gain_type": "force",
+      "excitability": 0.3,
+      "gain_coeff": 1.3,
+      "modulation_ceiling": 0.39,
+      "link_priority": 3,
+      "myelination_curve": {
+        "m0.1": 0.0324,
+        "m0.3": 0.1209,
+        "m0.5": 0.2691,
+        "m0.7": 0.3576,
+        "m0.9": 0.383,
+        "m1.0": 0.3868
+      },
+      "gain_mechanic": {
+        "description": "运动输出放大 — 力量/爆发力",
+        "formula": "base_physical × (1 + min(Σ ceiling_i × sync(myelination_i), cap_force))",
+        "affects": [
+          "物理攻击.HP伤害",
+          "打击力度"
+        ],
+        "narrative": "M1/皮质脊髓束/小脑/脑桥网状核 → \"你的身体能做到什么程度\"",
+        "cap": 0.5,
+        "stability": "高 (肌肉记忆不会今天会明天忘)"
+      }
+    },
+    {
+      "link_name": "恐惧条件化",
+      "source_regions": [
+        "杏仁核"
+      ],
+      "source_layer": 1,
+      "gain_type": "defense",
+      "excitability": 0.4,
+      "gain_coeff": 1.5,
+      "modulation_ceiling": 0.6,
+      "link_priority": 2,
+      "myelination_curve": {
+        "m0.1": 0.0499,
+        "m0.3": 0.186,
+        "m0.5": 0.414,
+        "m0.7": 0.5501,
+        "m0.9": 0.5892,
+        "m1.0": 0.5951
+      },
+      "gain_mechanic": {
+        "description": "防御/SAN减免",
+        "formula": "incoming_damage × (1 - min(Σ ceiling_i × sync(myelination_i), 0.5))",
+        "affects": [
+          "受到物理伤害",
+          "受到精神伤害",
+          "SAN消耗减免"
+        ],
+        "narrative": "5-HT/中缝核系统 — \"不重要的事被过滤掉了\"",
+        "cap": 0.5,
+        "stability": "高 (被动护盾, 不消耗激活点)"
+      }
+    },
+    {
+      "link_name": "恐惧·BNST焦虑",
+      "source_regions": [
+        "BNST"
+      ],
+      "source_layer": 1,
+      "gain_type": "defense",
+      "excitability": 0.4,
+      "gain_coeff": 1.3,
+      "modulation_ceiling": 0.52,
+      "link_priority": 2,
+      "myelination_curve": {
+        "m0.1": 0.0432,
+        "m0.3": 0.1612,
+        "m0.5": 0.3588,
+        "m0.7": 0.4768,
+        "m0.9": 0.5106,
+        "m1.0": 0.5158
+      },
+      "gain_mechanic": {
+        "description": "防御/SAN减免",
+        "formula": "incoming_damage × (1 - min(Σ ceiling_i × sync(myelination_i), 0.5))",
+        "affects": [
+          "受到物理伤害",
+          "受到精神伤害",
+          "SAN消耗减免"
+        ],
+        "narrative": "5-HT/中缝核系统 — \"不重要的事被过滤掉了\"",
+        "cap": 0.5,
+        "stability": "高 (被动护盾, 不消耗激活点)"
+      }
+    },
+    {
+      "link_name": "回忆·模式完成",
+      "source_regions": [
+        "海马体 CA1"
+      ],
+      "source_layer": 1,
+      "gain_type": "info",
+      "excitability": 0.4,
+      "gain_coeff": 1.3,
+      "modulation_ceiling": 0.52,
+      "link_priority": 2,
+      "myelination_curve": {
+        "m0.1": 0.0432,
+        "m0.3": 0.1612,
+        "m0.5": 0.3588,
+        "m0.7": 0.4768,
+        "m0.9": 0.5106,
+        "m1.0": 0.5158
+      },
+      "gain_mechanic": {
+        "description": "信息揭示数量/质量",
+        "formula": "基础揭示1个属性 + floor(Σ ceiling_i × sync(myelination_i) × 3) 额外属性",
+        "affects": [
+          "敌方属性揭示数",
+          "意图预测精度"
+        ],
+        "narrative": "ACh/皮层系统 — \"你注意到更多细节\"",
+        "cap": 3,
+        "stability": "高"
+      }
+    },
+    {
+      "link_name": "辨别·模式分离",
+      "source_regions": [
+        "海马体 CA3"
+      ],
+      "source_layer": 1,
+      "gain_type": "precision",
+      "excitability": 0.4,
+      "gain_coeff": 1.3,
+      "modulation_ceiling": 0.52,
+      "link_priority": 2,
+      "myelination_curve": {
+        "m0.1": 0.0432,
+        "m0.3": 0.1612,
+        "m0.5": 0.3588,
+        "m0.7": 0.4768,
+        "m0.9": 0.5106,
+        "m1.0": 0.5158
+      },
+      "gain_mechanic": {
+        "description": "精度/命中提升",
+        "formula": "base_hit_rate + Σ ceiling_i × sync(myelination_i) × 15%, capped at +50%",
+        "affects": [
+          "物理攻击.命中率",
+          "精神攻击.命中率",
+          "信息揭示精度"
+        ],
+        "narrative": "NE/蓝斑系统 — \"你看得更清楚，做得更准\"",
+        "cap": 0.5,
+        "stability": "中 (NE tonic/phasic 波动)"
+      }
+    },
+    {
+      "link_name": "识景·场景识别",
+      "source_regions": [
+        "海马旁回"
+      ],
+      "source_layer": 1,
+      "gain_type": "info",
+      "excitability": 0.4,
+      "gain_coeff": 1.1,
+      "modulation_ceiling": 0.44,
+      "link_priority": 4,
+      "myelination_curve": {
+        "m0.1": 0.0366,
+        "m0.3": 0.1364,
+        "m0.5": 0.3036,
+        "m0.7": 0.4034,
+        "m0.9": 0.4321,
+        "m1.0": 0.4364
+      },
+      "gain_mechanic": {
+        "description": "信息揭示数量/质量",
+        "formula": "基础揭示1个属性 + floor(Σ ceiling_i × sync(myelination_i) × 3) 额外属性",
+        "affects": [
+          "敌方属性揭示数",
+          "意图预测精度"
+        ],
+        "narrative": "ACh/皮层系统 — \"你注意到更多细节\"",
+        "cap": 3,
+        "stability": "高"
+      }
+    },
+    {
+      "link_name": "期待·奖赏预期",
+      "source_regions": [
+        "伏隔核/NAcc",
+        "腹侧纹状体"
+      ],
+      "source_layer": 1,
+      "gain_type": "motivation",
+      "excitability": 0.4,
+      "gain_coeff": 1.35,
+      "modulation_ceiling": 0.54,
+      "link_priority": 2,
+      "myelination_curve": {
+        "m0.1": 0.0449,
+        "m0.3": 0.1674,
+        "m0.5": 0.3726,
+        "m0.7": 0.4951,
+        "m0.9": 0.5303,
+        "m1.0": 0.5356
+      },
+      "gain_mechanic": {
+        "description": "动机驱动放大 — DA/NAcc/VTA 系统的\"想要\"转化为行动强度",
+        "formula": "base_physical × (1 + min(Σ ceiling_i × sync(myelination_i), cap_motivation))",
+        "affects": [
+          "物理攻击.HP伤害",
+          "精神攻击.SAN伤害"
+        ],
+        "narrative": "VTA/NAcc/vmPFC → \"你想做到什么程度\"",
+        "cap": 1.0,
+        "stability": "低 (情境敏感: 打恨的人 vs 打路人, 力度不同)"
+      }
+    },
+    {
+      "link_name": "失望·惩罚预期",
+      "source_regions": [
+        "缰核"
+      ],
+      "source_layer": 1,
+      "gain_type": "defense",
+      "excitability": 0.4,
+      "gain_coeff": 1.1,
+      "modulation_ceiling": 0.44,
+      "link_priority": 2,
+      "myelination_curve": {
+        "m0.1": 0.0366,
+        "m0.3": 0.1364,
+        "m0.5": 0.3036,
+        "m0.7": 0.4034,
+        "m0.9": 0.4321,
+        "m1.0": 0.4364
+      },
+      "gain_mechanic": {
+        "description": "防御/SAN减免",
+        "formula": "incoming_damage × (1 - min(Σ ceiling_i × sync(myelination_i), 0.5))",
+        "affects": [
+          "受到物理伤害",
+          "受到精神伤害",
+          "SAN消耗减免"
+        ],
+        "narrative": "5-HT/中缝核系统 — \"不重要的事被过滤掉了\"",
+        "cap": 0.5,
+        "stability": "高 (被动护盾, 不消耗激活点)"
+      }
+    },
+    {
+      "link_name": "满足·奖励终止",
+      "source_regions": [
+        "隔区"
+      ],
+      "source_layer": 1,
+      "gain_type": "defense",
+      "excitability": 0.4,
+      "gain_coeff": 1.2,
+      "modulation_ceiling": 0.48,
+      "link_priority": 2,
+      "myelination_curve": {
+        "m0.1": 0.0399,
+        "m0.3": 0.1488,
+        "m0.5": 0.3312,
+        "m0.7": 0.4401,
+        "m0.9": 0.4714,
+        "m1.0": 0.4761
+      },
+      "gain_mechanic": {
+        "description": "防御/SAN减免",
+        "formula": "incoming_damage × (1 - min(Σ ceiling_i × sync(myelination_i), 0.5))",
+        "affects": [
+          "受到物理伤害",
+          "受到精神伤害",
+          "SAN消耗减免"
+        ],
+        "narrative": "5-HT/中缝核系统 — \"不重要的事被过滤掉了\"",
+        "cap": 0.5,
+        "stability": "高 (被动护盾, 不消耗激活点)"
+      }
+    },
+    {
+      "link_name": "习惯化·CSTC捷径",
+      "source_regions": [
+        "壳核",
+        "苍白球"
+      ],
+      "source_layer": 1,
+      "gain_type": "force",
+      "excitability": 0.4,
+      "gain_coeff": 1.3,
+      "modulation_ceiling": 0.52,
+      "link_priority": 2,
+      "myelination_curve": {
+        "m0.1": 0.0432,
+        "m0.3": 0.1612,
+        "m0.5": 0.3588,
+        "m0.7": 0.4768,
+        "m0.9": 0.5106,
+        "m1.0": 0.5158
+      },
+      "gain_mechanic": {
+        "description": "运动输出放大 — 力量/爆发力",
+        "formula": "base_physical × (1 + min(Σ ceiling_i × sync(myelination_i), cap_force))",
+        "affects": [
+          "物理攻击.HP伤害",
+          "打击力度"
+        ],
+        "narrative": "M1/皮质脊髓束/小脑/脑桥网状核 → \"你的身体能做到什么程度\"",
+        "cap": 0.5,
+        "stability": "高 (肌肉记忆不会今天会明天忘)"
+      }
+    },
+    {
+      "link_name": "内感受·身体读取",
+      "source_regions": [
+        "前脑岛"
+      ],
+      "source_layer": 2,
+      "gain_type": "info",
+      "excitability": 0.55,
+      "gain_coeff": 1.0,
+      "modulation_ceiling": 0.55,
+      "link_priority": 3,
+      "myelination_curve": {
+        "m0.1": 0.0457,
+        "m0.3": 0.1705,
+        "m0.5": 0.3795,
+        "m0.7": 0.5043,
+        "m0.9": 0.5401,
+        "m1.0": 0.5455
+      },
+      "gain_mechanic": {
+        "description": "信息揭示数量/质量",
+        "formula": "基础揭示1个属性 + floor(Σ ceiling_i × sync(myelination_i) × 3) 额外属性",
+        "affects": [
+          "敌方属性揭示数",
+          "意图预测精度"
+        ],
+        "narrative": "ACh/皮层系统 — \"你注意到更多细节\"",
+        "cap": 3,
+        "stability": "高"
+      }
+    },
+    {
+      "link_name": "共感·他人身体映射",
+      "source_regions": [
+        "前脑岛"
+      ],
+      "source_layer": 2,
+      "gain_type": "info",
+      "excitability": 0.55,
+      "gain_coeff": 1.0,
+      "modulation_ceiling": 0.55,
+      "link_priority": 3,
+      "myelination_curve": {
+        "m0.1": 0.0457,
+        "m0.3": 0.1705,
+        "m0.5": 0.3795,
+        "m0.7": 0.5043,
+        "m0.9": 0.5401,
+        "m1.0": 0.5455
+      },
+      "gain_mechanic": {
+        "description": "信息揭示数量/质量",
+        "formula": "基础揭示1个属性 + floor(Σ ceiling_i × sync(myelination_i) × 3) 额外属性",
+        "affects": [
+          "敌方属性揭示数",
+          "意图预测精度"
+        ],
+        "narrative": "ACh/皮层系统 — \"你注意到更多细节\"",
+        "cap": 3,
+        "stability": "高"
+      }
+    },
+    {
+      "link_name": "冲突感知·异常检测",
+      "source_regions": [
+        "ACC",
+        "ACC背侧"
+      ],
+      "source_layer": 2,
+      "gain_type": "precision",
+      "excitability": 0.55,
+      "gain_coeff": 1.3,
+      "modulation_ceiling": 0.715,
+      "link_priority": 3,
+      "myelination_curve": {
+        "m0.1": 0.0595,
+        "m0.3": 0.2217,
+        "m0.5": 0.4933,
+        "m0.7": 0.6555,
+        "m0.9": 0.7021,
+        "m1.0": 0.7092
+      },
+      "gain_mechanic": {
+        "description": "精度/命中提升",
+        "formula": "base_hit_rate + Σ ceiling_i × sync(myelination_i) × 15%, capped at +50%",
+        "affects": [
+          "物理攻击.命中率",
+          "精神攻击.命中率",
+          "信息揭示精度"
+        ],
+        "narrative": "NE/蓝斑系统 — \"你看得更清楚，做得更准\"",
+        "cap": 0.5,
+        "stability": "中 (NE tonic/phasic 波动)"
+      }
+    },
+    {
+      "link_name": "价值直觉·快速比较",
+      "source_regions": [
+        "OFC"
+      ],
+      "source_layer": 2,
+      "gain_type": "motivation",
+      "excitability": 0.55,
+      "gain_coeff": 1.2,
+      "modulation_ceiling": 0.66,
+      "link_priority": 3,
+      "myelination_curve": {
+        "m0.1": 0.0549,
+        "m0.3": 0.2046,
+        "m0.5": 0.4554,
+        "m0.7": 0.6051,
+        "m0.9": 0.6481,
+        "m1.0": 0.6546
+      },
+      "gain_mechanic": {
+        "description": "动机驱动放大 — DA/NAcc/VTA 系统的\"想要\"转化为行动强度",
+        "formula": "base_physical × (1 + min(Σ ceiling_i × sync(myelination_i), cap_motivation))",
+        "affects": [
+          "物理攻击.HP伤害",
+          "精神攻击.SAN伤害"
+        ],
+        "narrative": "VTA/NAcc/vmPFC → \"你想做到什么程度\"",
+        "cap": 1.0,
+        "stability": "低 (情境敏感: 打恨的人 vs 打路人, 力度不同)"
+      }
+    },
+    {
+      "link_name": "内省·SAN恢复",
+      "source_regions": [
+        "后扣带",
+        "峡部扣带"
+      ],
+      "source_layer": 2,
+      "gain_type": "defense",
+      "excitability": 0.55,
+      "gain_coeff": 1.0,
+      "modulation_ceiling": 0.55,
+      "link_priority": 3,
+      "myelination_curve": {
+        "m0.1": 0.0457,
+        "m0.3": 0.1705,
+        "m0.5": 0.3795,
+        "m0.7": 0.5043,
+        "m0.9": 0.5401,
+        "m1.0": 0.5455
+      },
+      "gain_mechanic": {
+        "description": "防御/SAN减免",
+        "formula": "incoming_damage × (1 - min(Σ ceiling_i × sync(myelination_i), 0.5))",
+        "affects": [
+          "受到物理伤害",
+          "受到精神伤害",
+          "SAN消耗减免"
+        ],
+        "narrative": "5-HT/中缝核系统 — \"不重要的事被过滤掉了\"",
+        "cap": 0.5,
+        "stability": "高 (被动护盾, 不消耗激活点)"
+      }
+    },
+    {
+      "link_name": "识人·社会读取",
+      "source_regions": [
+        "颞极",
+        "ACC吻侧"
+      ],
+      "source_layer": 2,
+      "gain_type": "info",
+      "excitability": 0.55,
+      "gain_coeff": 1.0,
+      "modulation_ceiling": 0.55,
+      "link_priority": 3,
+      "myelination_curve": {
+        "m0.1": 0.0457,
+        "m0.3": 0.1705,
+        "m0.5": 0.3795,
+        "m0.7": 0.5043,
+        "m0.9": 0.5401,
+        "m1.0": 0.5455
+      },
+      "gain_mechanic": {
+        "description": "信息揭示数量/质量",
+        "formula": "基础揭示1个属性 + floor(Σ ceiling_i × sync(myelination_i) × 3) 额外属性",
+        "affects": [
+          "敌方属性揭示数",
+          "意图预测精度"
+        ],
+        "narrative": "ACh/皮层系统 — \"你注意到更多细节\"",
+        "cap": 3,
+        "stability": "高"
+      }
+    },
+    {
+      "link_name": "注视·视觉聚焦",
+      "source_regions": [
+        "枕叶 V1",
+        "枕顶联合",
+        "楔叶"
+      ],
+      "source_layer": 3,
+      "gain_type": "info",
+      "excitability": 0.45,
+      "gain_coeff": 1.0,
+      "modulation_ceiling": 0.45,
+      "link_priority": 2,
+      "myelination_curve": {
+        "m0.1": 0.0374,
+        "m0.3": 0.1395,
+        "m0.5": 0.3105,
+        "m0.7": 0.4126,
+        "m0.9": 0.4419,
+        "m1.0": 0.4463
+      },
+      "gain_mechanic": {
+        "description": "信息揭示数量/质量",
+        "formula": "基础揭示1个属性 + floor(Σ ceiling_i × sync(myelination_i) × 3) 额外属性",
+        "affects": [
+          "敌方属性揭示数",
+          "意图预测精度"
+        ],
+        "narrative": "ACh/皮层系统 — \"你注意到更多细节\"",
+        "cap": 3,
+        "stability": "高"
+      }
+    },
+    {
+      "link_name": "聆听·听觉聚焦",
+      "source_regions": [
+        "A1"
+      ],
+      "source_layer": 3,
+      "gain_type": "info",
+      "excitability": 0.3,
+      "gain_coeff": 1.0,
+      "modulation_ceiling": 0.3,
+      "link_priority": 2,
+      "myelination_curve": {
+        "m0.1": 0.025,
+        "m0.3": 0.093,
+        "m0.5": 0.207,
+        "m0.7": 0.275,
+        "m0.9": 0.2946,
+        "m1.0": 0.2976
+      },
+      "gain_mechanic": {
+        "description": "信息揭示数量/质量",
+        "formula": "基础揭示1个属性 + floor(Σ ceiling_i × sync(myelination_i) × 3) 额外属性",
+        "affects": [
+          "敌方属性揭示数",
+          "意图预测精度"
+        ],
+        "narrative": "ACh/皮层系统 — \"你注意到更多细节\"",
+        "cap": 3,
+        "stability": "高"
+      }
+    },
+    {
+      "link_name": "身体感知·体感精度",
+      "source_regions": [
+        "S1",
+        "旁中央小叶"
+      ],
+      "source_layer": 3,
+      "gain_type": "info",
+      "excitability": 0.375,
+      "gain_coeff": 1.0,
+      "modulation_ceiling": 0.375,
+      "link_priority": 2,
+      "myelination_curve": {
+        "m0.1": 0.0312,
+        "m0.3": 0.1163,
+        "m0.5": 0.2587,
+        "m0.7": 0.3438,
+        "m0.9": 0.3683,
+        "m1.0": 0.3719
+      },
+      "gain_mechanic": {
+        "description": "信息揭示数量/质量",
+        "formula": "基础揭示1个属性 + floor(Σ ceiling_i × sync(myelination_i) × 3) 额外属性",
+        "affects": [
+          "敌方属性揭示数",
+          "意图预测精度"
+        ],
+        "narrative": "ACh/皮层系统 — \"你注意到更多细节\"",
+        "cap": 3,
+        "stability": "高"
+      }
+    },
+    {
+      "link_name": "执行动作·运动精度",
+      "source_regions": [
+        "M1"
+      ],
+      "source_layer": 3,
+      "gain_type": "precision",
+      "excitability": 0.3,
+      "gain_coeff": 1.5,
+      "modulation_ceiling": 0.45,
+      "link_priority": 2,
+      "myelination_curve": {
+        "m0.1": 0.0374,
+        "m0.3": 0.1395,
+        "m0.5": 0.3105,
+        "m0.7": 0.4126,
+        "m0.9": 0.4419,
+        "m1.0": 0.4463
+      },
+      "gain_mechanic": {
+        "description": "精度/命中提升",
+        "formula": "base_hit_rate + Σ ceiling_i × sync(myelination_i) × 15%, capped at +50%",
+        "affects": [
+          "物理攻击.命中率",
+          "精神攻击.命中率",
+          "信息揭示精度"
+        ],
+        "narrative": "NE/蓝斑系统 — \"你看得更清楚，做得更准\"",
+        "cap": 0.5,
+        "stability": "中 (NE tonic/phasic 波动)"
+      }
+    },
+    {
+      "link_name": "识别·物体分类",
+      "source_regions": [
+        "颞下回",
+        "纺锤体回",
+        "外侧枕叶",
+        "舌回"
+      ],
+      "source_layer": 4,
+      "gain_type": "info",
+      "excitability": 0.6,
+      "gain_coeff": 1.2,
+      "modulation_ceiling": 0.72,
+      "link_priority": 4,
+      "myelination_curve": {
+        "m0.1": 0.0599,
+        "m0.3": 0.2232,
+        "m0.5": 0.4968,
+        "m0.7": 0.6601,
+        "m0.9": 0.707,
+        "m1.0": 0.7141
+      },
+      "gain_mechanic": {
+        "description": "信息揭示数量/质量",
+        "formula": "基础揭示1个属性 + floor(Σ ceiling_i × sync(myelination_i) × 3) 额外属性",
+        "affects": [
+          "敌方属性揭示数",
+          "意图预测精度"
+        ],
+        "narrative": "ACh/皮层系统 — \"你注意到更多细节\"",
+        "cap": 3,
+        "stability": "高"
+      }
+    },
+    {
+      "link_name": "读意图·生物运动",
+      "source_regions": [
+        "颞上沟岸",
+        "颞中回"
+      ],
+      "source_layer": 4,
+      "gain_type": "precision",
+      "excitability": 0.6,
+      "gain_coeff": 1.2,
+      "modulation_ceiling": 0.72,
+      "link_priority": 4,
+      "myelination_curve": {
+        "m0.1": 0.0599,
+        "m0.3": 0.2232,
+        "m0.5": 0.4968,
+        "m0.7": 0.6601,
+        "m0.9": 0.707,
+        "m1.0": 0.7141
+      },
+      "gain_mechanic": {
+        "description": "精度/命中提升",
+        "formula": "base_hit_rate + Σ ceiling_i × sync(myelination_i) × 15%, capped at +50%",
+        "affects": [
+          "物理攻击.命中率",
+          "精神攻击.命中率",
+          "信息揭示精度"
+        ],
+        "narrative": "NE/蓝斑系统 — \"你看得更清楚，做得更准\"",
+        "cap": 0.5,
+        "stability": "中 (NE tonic/phasic 波动)"
+      }
+    },
+    {
+      "link_name": "比喻·跨域映射",
+      "source_regions": [
+        "角回"
+      ],
+      "source_layer": 4,
+      "gain_type": "info",
+      "excitability": 0.6,
+      "gain_coeff": 1.2,
+      "modulation_ceiling": 0.72,
+      "link_priority": 4,
+      "myelination_curve": {
+        "m0.1": 0.0599,
+        "m0.3": 0.2232,
+        "m0.5": 0.4968,
+        "m0.7": 0.6601,
+        "m0.9": 0.707,
+        "m1.0": 0.7141
+      },
+      "gain_mechanic": {
+        "description": "信息揭示数量/质量",
+        "formula": "基础揭示1个属性 + floor(Σ ceiling_i × sync(myelination_i) × 3) 额外属性",
+        "affects": [
+          "敌方属性揭示数",
+          "意图预测精度"
+        ],
+        "narrative": "ACh/皮层系统 — \"你注意到更多细节\"",
+        "cap": 3,
+        "stability": "高"
+      }
+    },
+    {
+      "link_name": "想象·心理模拟",
+      "source_regions": [
+        "楔前叶",
+        "顶内沟",
+        "顶叶"
+      ],
+      "source_layer": 4,
+      "gain_type": "precision",
+      "excitability": 0.6,
+      "gain_coeff": 1.2,
+      "modulation_ceiling": 0.72,
+      "link_priority": 4,
+      "myelination_curve": {
+        "m0.1": 0.0599,
+        "m0.3": 0.2232,
+        "m0.5": 0.4968,
+        "m0.7": 0.6601,
+        "m0.9": 0.707,
+        "m1.0": 0.7141
+      },
+      "gain_mechanic": {
+        "description": "精度/命中提升",
+        "formula": "base_hit_rate + Σ ceiling_i × sync(myelination_i) × 15%, capped at +50%",
+        "affects": [
+          "物理攻击.命中率",
+          "精神攻击.命中率",
+          "信息揭示精度"
+        ],
+        "narrative": "NE/蓝斑系统 — \"你看得更清楚，做得更准\"",
+        "cap": 0.5,
+        "stability": "中 (NE tonic/phasic 波动)"
+      }
+    },
+    {
+      "link_name": "计划·多步序列",
+      "source_regions": [
+        "dlPFC",
+        "额极",
+        "额上回",
+        "额中回尾部"
+      ],
+      "source_layer": 5,
+      "gain_type": "precision",
+      "excitability": 0.85,
+      "gain_coeff": 1.25,
+      "modulation_ceiling": 1.0,
+      "link_priority": 5,
+      "myelination_curve": {
+        "m0.1": 0.0832,
+        "m0.3": 0.31,
+        "m0.5": 0.69,
+        "m0.7": 0.9168,
+        "m0.9": 0.982,
+        "m1.0": 0.9918
+      },
+      "gain_mechanic": {
+        "description": "精度/命中提升",
+        "formula": "base_hit_rate + Σ ceiling_i × sync(myelination_i) × 15%, capped at +50%",
+        "affects": [
+          "物理攻击.命中率",
+          "精神攻击.命中率",
+          "信息揭示精度"
+        ],
+        "narrative": "NE/蓝斑系统 — \"你看得更清楚，做得更准\"",
+        "cap": 0.5,
+        "stability": "中 (NE tonic/phasic 波动)"
+      }
+    },
+    {
+      "link_name": "命名·语言固化",
+      "source_regions": [
+        "Broca区",
+        "Wernicke区",
+        "弓状束",
+        "颞上回"
+      ],
+      "source_layer": 5,
+      "gain_type": "motivation",
+      "excitability": 0.725,
+      "gain_coeff": 1.2,
+      "modulation_ceiling": 0.87,
+      "link_priority": 4,
+      "myelination_curve": {
+        "m0.1": 0.0724,
+        "m0.3": 0.2697,
+        "m0.5": 0.6003,
+        "m0.7": 0.7976,
+        "m0.9": 0.8544,
+        "m1.0": 0.8629
+      },
+      "gain_mechanic": {
+        "description": "动机驱动放大 — DA/NAcc/VTA 系统的\"想要\"转化为行动强度",
+        "formula": "base_physical × (1 + min(Σ ceiling_i × sync(myelination_i), cap_motivation))",
+        "affects": [
+          "物理攻击.HP伤害",
+          "精神攻击.SAN伤害"
+        ],
+        "narrative": "VTA/NAcc/vmPFC → \"你想做到什么程度\"",
+        "cap": 1.0,
+        "stability": "低 (情境敏感: 打恨的人 vs 打路人, 力度不同)"
+      }
+    },
+    {
+      "link_name": "换位·视角转换",
+      "source_regions": [
+        "TPJ",
+        "缘上回",
+        "mPFC"
+      ],
+      "source_layer": 5,
+      "gain_type": "info",
+      "excitability": 0.85,
+      "gain_coeff": 1.2,
+      "modulation_ceiling": 1.0,
+      "link_priority": 5,
+      "myelination_curve": {
+        "m0.1": 0.0832,
+        "m0.3": 0.31,
+        "m0.5": 0.69,
+        "m0.7": 0.9168,
+        "m0.9": 0.982,
+        "m1.0": 0.9918
+      },
+      "gain_mechanic": {
+        "description": "信息揭示数量/质量",
+        "formula": "基础揭示1个属性 + floor(Σ ceiling_i × sync(myelination_i) × 3) 额外属性",
+        "affects": [
+          "敌方属性揭示数",
+          "意图预测精度"
+        ],
+        "narrative": "ACh/皮层系统 — \"你注意到更多细节\"",
+        "cap": 3,
+        "stability": "高"
+      }
+    },
+    {
+      "link_name": "决策·价值确认",
+      "source_regions": [
+        "vmPFC",
+        "OFC"
+      ],
+      "source_layer": 5,
+      "gain_type": "motivation",
+      "excitability": 0.7,
+      "gain_coeff": 1.25,
+      "modulation_ceiling": 0.875,
+      "link_priority": 4,
+      "myelination_curve": {
+        "m0.1": 0.0728,
+        "m0.3": 0.2713,
+        "m0.5": 0.6037,
+        "m0.7": 0.8022,
+        "m0.9": 0.8593,
+        "m1.0": 0.8679
+      },
+      "gain_mechanic": {
+        "description": "动机驱动放大 — DA/NAcc/VTA 系统的\"想要\"转化为行动强度",
+        "formula": "base_physical × (1 + min(Σ ceiling_i × sync(myelination_i), cap_motivation))",
+        "affects": [
+          "物理攻击.HP伤害",
+          "精神攻击.SAN伤害"
+        ],
+        "narrative": "VTA/NAcc/vmPFC → \"你想做到什么程度\"",
+        "cap": 1.0,
+        "stability": "低 (情境敏感: 打恨的人 vs 打路人, 力度不同)"
+      }
+    },
+    {
+      "link_name": "控制·主动压制",
+      "source_regions": [
+        "dlPFC",
+        "额顶网络",
+        "ACC背侧"
+      ],
+      "source_layer": 5,
+      "gain_type": "precision",
+      "excitability": 0.6,
+      "gain_coeff": 1.4,
+      "modulation_ceiling": 0.84,
+      "link_priority": 4,
+      "myelination_curve": {
+        "m0.1": 0.0699,
+        "m0.3": 0.2604,
+        "m0.5": 0.5796,
+        "m0.7": 0.7701,
+        "m0.9": 0.8249,
+        "m1.0": 0.8331
+      },
+      "gain_mechanic": {
+        "description": "精度/命中提升",
+        "formula": "base_hit_rate + Σ ceiling_i × sync(myelination_i) × 15%, capped at +50%",
+        "affects": [
+          "物理攻击.命中率",
+          "精神攻击.命中率",
+          "信息揭示精度"
+        ],
+        "narrative": "NE/蓝斑系统 — \"你看得更清楚，做得更准\"",
+        "cap": 0.5,
+        "stability": "中 (NE tonic/phasic 波动)"
+      }
+    },
+    {
+      "link_name": "自省·元认知",
+      "source_regions": [
+        "mPFC",
+        "额上回"
+      ],
+      "source_layer": 5,
+      "gain_type": "defense",
+      "excitability": 0.85,
+      "gain_coeff": 1.2,
+      "modulation_ceiling": 1.0,
+      "link_priority": 5,
+      "myelination_curve": {
+        "m0.1": 0.0832,
+        "m0.3": 0.31,
+        "m0.5": 0.69,
+        "m0.7": 0.9168,
+        "m0.9": 0.982,
+        "m1.0": 0.9918
+      },
+      "gain_mechanic": {
+        "description": "防御/SAN减免",
+        "formula": "incoming_damage × (1 - min(Σ ceiling_i × sync(myelination_i), 0.5))",
+        "affects": [
+          "受到物理伤害",
+          "受到精神伤害",
+          "SAN消耗减免"
+        ],
+        "narrative": "5-HT/中缝核系统 — \"不重要的事被过滤掉了\"",
+        "cap": 0.5,
+        "stability": "高 (被动护盾, 不消耗激活点)"
+      }
+    },
+    {
+      "link_name": "叙事重构A·我不是受害者",
+      "source_regions": [
+        "前额叶极·DMN",
+        "DMN+OFC"
+      ],
+      "source_layer": 5,
+      "gain_type": "defense",
+      "excitability": 0.85,
+      "gain_coeff": 1.25,
+      "modulation_ceiling": 1.0,
+      "link_priority": 5,
+      "myelination_curve": {
+        "m0.1": 0.0832,
+        "m0.3": 0.31,
+        "m0.5": 0.69,
+        "m0.7": 0.9168,
+        "m0.9": 0.982,
+        "m1.0": 0.9918
+      },
+      "gain_mechanic": {
+        "description": "防御/SAN减免",
+        "formula": "incoming_damage × (1 - min(Σ ceiling_i × sync(myelination_i), 0.5))",
+        "affects": [
+          "受到物理伤害",
+          "受到精神伤害",
+          "SAN消耗减免"
+        ],
+        "narrative": "5-HT/中缝核系统 — \"不重要的事被过滤掉了\"",
+        "cap": 0.5,
+        "stability": "高 (被动护盾, 不消耗激活点)"
+      }
+    },
+    {
+      "link_name": "叙事重构B·我为他人而战",
+      "source_regions": [
+        "前额叶极·DMN",
+        "DMN+OFC"
+      ],
+      "source_layer": 5,
+      "gain_type": "motivation",
+      "excitability": 0.85,
+      "gain_coeff": 1.25,
+      "modulation_ceiling": 1.0,
+      "link_priority": 5,
+      "myelination_curve": {
+        "m0.1": 0.0832,
+        "m0.3": 0.31,
+        "m0.5": 0.69,
+        "m0.7": 0.9168,
+        "m0.9": 0.982,
+        "m1.0": 0.9918
+      },
+      "gain_mechanic": {
+        "description": "动机驱动放大 — DA/NAcc/VTA 系统的\"想要\"转化为行动强度",
+        "formula": "base_physical × (1 + min(Σ ceiling_i × sync(myelination_i), cap_motivation))",
+        "affects": [
+          "物理攻击.HP伤害",
+          "精神攻击.SAN伤害"
+        ],
+        "narrative": "VTA/NAcc/vmPFC → \"你想做到什么程度\"",
+        "cap": 1.0,
+        "stability": "低 (情境敏感: 打恨的人 vs 打路人, 力度不同)"
+      }
+    },
+    {
+      "link_name": "叙事重构C·我可以改变",
+      "source_regions": [
+        "前额叶极·DMN",
+        "DMN+OFC"
+      ],
+      "source_layer": 5,
+      "gain_type": "precision",
+      "excitability": 0.85,
+      "gain_coeff": 1.25,
+      "modulation_ceiling": 1.0,
+      "link_priority": 5,
+      "myelination_curve": {
+        "m0.1": 0.0832,
+        "m0.3": 0.31,
+        "m0.5": 0.69,
+        "m0.7": 0.9168,
+        "m0.9": 0.982,
+        "m1.0": 0.9918
+      },
+      "gain_mechanic": {
+        "description": "精度/命中提升",
+        "formula": "base_hit_rate + Σ ceiling_i × sync(myelination_i) × 15%, capped at +50%",
+        "affects": [
+          "物理攻击.命中率",
+          "精神攻击.命中率",
+          "信息揭示精度"
+        ],
+        "narrative": "NE/蓝斑系统 — \"你看得更清楚，做得更准\"",
+        "cap": 0.5,
+        "stability": "中 (NE tonic/phasic 波动)"
+      }
+    },
+    {
+      "link_name": "全脑协调·突破容量",
+      "source_regions": [
+        "前额叶极·FPN",
+        "全脑整合"
+      ],
+      "source_layer": 5,
+      "gain_type": "precision",
+      "excitability": 0.625,
+      "gain_coeff": 1.15,
+      "modulation_ceiling": 0.719,
+      "link_priority": 3,
+      "myelination_curve": {
+        "m0.1": 0.0598,
+        "m0.3": 0.2229,
+        "m0.5": 0.4961,
+        "m0.7": 0.6592,
+        "m0.9": 0.7061,
+        "m1.0": 0.7131
+      },
+      "gain_mechanic": {
+        "description": "精度/命中提升",
+        "formula": "base_hit_rate + Σ ceiling_i × sync(myelination_i) × 15%, capped at +50%",
+        "affects": [
+          "物理攻击.命中率",
+          "精神攻击.命中率",
+          "信息揭示精度"
+        ],
+        "narrative": "NE/蓝斑系统 — \"你看得更清楚，做得更准\"",
+        "cap": 0.5,
+        "stability": "中 (NE tonic/phasic 波动)"
+      }
+    },
+    {
+      "link_name": "裁决·网络切换",
+      "source_regions": [
+        "前额叶极·SN"
+      ],
+      "source_layer": 5,
+      "gain_type": "precision",
+      "excitability": 0.85,
+      "gain_coeff": 1.2,
+      "modulation_ceiling": 1.0,
+      "link_priority": 5,
+      "myelination_curve": {
+        "m0.1": 0.0832,
+        "m0.3": 0.31,
+        "m0.5": 0.69,
+        "m0.7": 0.9168,
+        "m0.9": 0.982,
+        "m1.0": 0.9918
+      },
+      "gain_mechanic": {
+        "description": "精度/命中提升",
+        "formula": "base_hit_rate + Σ ceiling_i × sync(myelination_i) × 15%, capped at +50%",
+        "affects": [
+          "物理攻击.命中率",
+          "精神攻击.命中率",
+          "信息揭示精度"
+        ],
+        "narrative": "NE/蓝斑系统 — \"你看得更清楚，做得更准\"",
+        "cap": 0.5,
+        "stability": "中 (NE tonic/phasic 波动)"
+      }
+    }
+  ]
+}

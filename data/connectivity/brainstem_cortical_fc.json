@@ -1,0 +1,119 @@
+{
+  "_description": "Hansen 2024 脑干核团→皮层/皮下功能连接补充数据。ENIGMA DK图谱不覆盖脑干，此文件补充L0-L1-L2的结构基础。",
+  "_source": "Hansen et al. (2024) Nature Neuroscience, Paxinos & Mai (2004), L0-L1 设计文档",
+  "_method": "保守估计——仅收录文献中明确记载的解剖投射。连接强度为相对值(0-1)，基于Hansen2024社区-皮层FC梯度和L0设计文档。",
+
+  "_hansen_communities": {
+    "GREEN": {"location": "中脑", "target_cortex": "内侧跨模态皮层", "functions": "自传记忆、社会认知"},
+    "PINK":  {"location": "中脑", "target_cortex": "扣带皮层", "functions": "情绪调节、唤醒"},
+    "BLUE":  {"location": "中脑&脑桥", "target_cortex": "外侧跨模态皮层", "functions": "工作记忆、认知控制"},
+    "YELLOW":{"location": "全脑干", "target_cortex": "单模态皮层", "functions": "感觉/运动"}
+  },
+
+  "connections": [
+    {
+      "brainstem_nucleus": "PAG",
+      "hansen_community": "GREEN",
+      "targets": [
+        {"target": "amygdala",    "fc_strength": 0.85, "pathway": "PAG→杏仁核中央核", "ref": "Paxinos2004, LeDoux2000"},
+        {"target": "hypothalamus","fc_strength": 0.70, "pathway": "PAG→下丘脑室旁核", "ref": "Paxinos2004"},
+        {"target": "thalamus",    "fc_strength": 0.60, "pathway": "PAG→丘脑中线核/板内核", "ref": "Pessoa2024"},
+        {"target": "insula",      "fc_strength": 0.50, "pathway": "PAG→前脑岛(经丘脑中继)", "ref": "Craig2009"},
+        {"target": "caudalanteriorcingulate", "fc_strength": 0.55, "pathway": "PAG→ACC", "ref": "Hansen2024 Fig5"}
+      ]
+    },
+    {
+      "brainstem_nucleus": "上丘",
+      "hansen_community": "GREEN",
+      "targets": [
+        {"target": "amygdala",    "fc_strength": 0.75, "pathway": "上丘→杏仁核(经丘脑枕)", "ref": "Paxinos2004"},
+        {"target": "thalamus",    "fc_strength": 0.80, "pathway": "上丘→丘脑枕→皮层", "ref": "Paxinos2004"},
+        {"target": "pericalcarine","fc_strength": 0.40, "pathway": "上丘→V1(经丘脑枕)", "ref": "视觉通路"}
+      ]
+    },
+    {
+      "brainstem_nucleus": "中缝背核",
+      "hansen_community": "PINK",
+      "targets": [
+        {"target": "hippocampus",  "fc_strength": 0.75, "pathway": "中缝背核→海马(5-HT)", "ref": "Hansen2024 Table1"},
+        {"target": "amygdala",     "fc_strength": 0.70, "pathway": "中缝背核→杏仁核(5-HT)", "ref": "Hansen2024 Table1"},
+        {"target": "septum",       "fc_strength": 0.65, "pathway": "中缝背核→隔区", "ref": "Paxinos2004"},
+        {"target": "insula",       "fc_strength": 0.60, "pathway": "中缝背核→前脑岛", "ref": "Hansen2024 — PINK→cingulate"},
+        {"target": "caudalanteriorcingulate", "fc_strength": 0.70, "pathway": "中缝背核→ACC(PINK社区关键hub)", "ref": "Hansen2024 Fig5"},
+        {"target": "rostralmiddlefrontal", "fc_strength": 0.40, "pathway": "中缝背核→dlPFC(间接)", "ref": "Hansen2024"}
+      ]
+    },
+    {
+      "brainstem_nucleus": "中缝正中核",
+      "hansen_community": "GREEN",
+      "targets": [
+        {"target": "hippocampus",  "fc_strength": 0.70, "pathway": "中缝正中核→海马", "ref": "Hansen2024 Table1"},
+        {"target": "septum",       "fc_strength": 0.65, "pathway": "中缝正中核→隔区", "ref": "Paxinos2004"},
+        {"target": "medialorbitofrontal", "fc_strength": 0.45, "pathway": "中缝正中核→mPFC(GREEN→内侧跨模态)", "ref": "Hansen2024"}
+      ]
+    },
+    {
+      "brainstem_nucleus": "蓝斑",
+      "hansen_community": "PINK",
+      "targets": [
+        {"target": "insula",       "fc_strength": 0.85, "pathway": "蓝斑→前脑岛(NE)", "ref": "Hansen2024 — PINK最强hub"},
+        {"target": "caudalanteriorcingulate", "fc_strength": 0.85, "pathway": "蓝斑→ACC(NE)", "ref": "Hansen2024 Fig5"},
+        {"target": "rostralmiddlefrontal", "fc_strength": 0.75, "pathway": "蓝斑→dlPFC(NE)", "ref": "Hansen2024"},
+        {"target": "superiorfrontal", "fc_strength": 0.65, "pathway": "蓝斑→mPFC(NE)", "ref": "Hansen2024"},
+        {"target": "precentral",   "fc_strength": 0.50, "pathway": "蓝斑→M1(NE)", "ref": "Hansen2024"},
+        {"target": "pericalcarine","fc_strength": 0.60, "pathway": "蓝斑→V1(NE→感觉皮层信噪比)", "ref": "Hansen2024"},
+        {"target": "amygdala",     "fc_strength": 0.70, "pathway": "蓝斑→杏仁核(NE)", "ref": "Hansen2024 Table1"},
+        {"target": "thalamus",     "fc_strength": 0.65, "pathway": "蓝斑→丘脑(NE广播)", "ref": "Paxinos2004"},
+        {"target": "hippocampus",  "fc_strength": 0.60, "pathway": "蓝斑→海马(NE)", "ref": "Hansen2024"},
+        {"target": "entorhinal",   "fc_strength": 0.50, "pathway": "蓝斑→内嗅皮层(NE)", "ref": "Hansen2024"}
+      ]
+    },
+    {
+      "brainstem_nucleus": "VTA",
+      "hansen_community": "GREEN",
+      "targets": [
+        {"target": "accumbens",    "fc_strength": 0.90, "pathway": "VTA→NAcc(中脑边缘DA通路)", "ref": "Schultz1997"},
+        {"target": "medialorbitofrontal", "fc_strength": 0.70, "pathway": "VTA→vmPFC(中脑皮层DA通路)", "ref": "Hansen2024"},
+        {"target": "superiorfrontal", "fc_strength": 0.60, "pathway": "VTA→mPFC(DA)", "ref": "Hansen2024"},
+        {"target": "amygdala",     "fc_strength": 0.65, "pathway": "VTA→杏仁核(DA)", "ref": "Hansen2024 Table1"},
+        {"target": "hippocampus",  "fc_strength": 0.55, "pathway": "VTA→海马(DA)", "ref": "Hansen2024"},
+        {"target": "caudalanteriorcingulate", "fc_strength": 0.55, "pathway": "VTA→ACC(DA)", "ref": "Hansen2024"},
+        {"target": "insula",       "fc_strength": 0.50, "pathway": "VTA→前脑岛(DA)", "ref": "Hansen2024"}
+      ]
+    },
+    {
+      "brainstem_nucleus": "黑质致密部",
+      "hansen_community": "GREEN",
+      "targets": [
+        {"target": "caudate",      "fc_strength": 0.90, "pathway": "黑质致密部→尾状核(黑质纹状体DA通路)", "ref": "Paxinos2004"},
+        {"target": "putamen",      "fc_strength": 0.85, "pathway": "黑质致密部→壳核(黑质纹状体DA通路)", "ref": "Paxinos2004"},
+        {"target": "accumbens",    "fc_strength": 0.70, "pathway": "黑质致密部→NAcc(DA)", "ref": "Hansen2024"}
+      ]
+    },
+    {
+      "brainstem_nucleus": "脑桥网状核",
+      "hansen_community": "YELLOW",
+      "targets": [
+        {"target": "thalamus",     "fc_strength": 0.75, "pathway": "脑桥网状核→丘脑(网状激活系统)", "ref": "Paxinos2004"},
+        {"target": "precentral",   "fc_strength": 0.55, "pathway": "脑桥网状核→运动皮层(间接)", "ref": "Hansen2024 — YELLOW→单模态"},
+        {"target": "postcentral",  "fc_strength": 0.50, "pathway": "脑桥网状核→体感皮层(间接)", "ref": "Hansen2024"}
+      ]
+    },
+    {
+      "brainstem_nucleus": "小脑皮层",
+      "hansen_community": null,
+      "targets": [
+        {"target": "thalamus",     "fc_strength": 0.85, "pathway": "小脑→丘脑(齿状核-丘脑束)", "ref": "Paxinos2004"},
+        {"target": "precentral",   "fc_strength": 0.75, "pathway": "小脑→M1(经丘脑)", "ref": "Paxinos2004"},
+        {"target": "putamen",      "fc_strength": 0.60, "pathway": "小脑→壳核", "ref": "Bostan2013"},
+        {"target": "rostralmiddlefrontal", "fc_strength": 0.50, "pathway": "小脑→dlPFC(经丘脑)", "ref": "Schmahmann2019"}
+      ]
+    }
+  ],
+
+  "_notes": {
+    "fc_strength": "0-1相对值。0.5+ = 强投射, 0.7+ = 主要投射, 0.85+ = 核心通路",
+    "missing_nuclei": "VTA-NAcc(合并入VTA), 反射环路×3(合并入PAG), 杏仁核-PAG(是L1→L0链路, 已单独处理)",
+    "L1_subcortical_to_consider": "缰核→VTA/中缝核, BNST→下丘脑/蓝斑, 下丘脑→PAG/VTA, 隔区→缰核/下丘脑"
+  }
+}

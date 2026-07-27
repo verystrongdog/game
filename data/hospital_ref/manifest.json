@@ -1,0 +1,216 @@
+{
+  "source_pdf": "/mnt/c/Users/9527/Downloads/doc7497.pdf",
+  "total_pages": 34,
+  "extracted_pages": 29,
+  "dpi": 300,
+  "output_time": "2026-07-12T06:30:18.210645",
+  "directories": {
+    "full_res": "data/hospital_ref/full",
+    "thumbnails": "data/hospital_ref/thumb"
+  },
+  "pages": [
+    {
+      "page": 6,
+      "section": "150床_方案一",
+      "floor_label": "一层平面图",
+      "full_res": "data/hospital_ref/full/page-06.png",
+      "thumbnail": "data/hospital_ref/thumb/page-06.png"
+    },
+    {
+      "page": 7,
+      "section": "150床_方案一",
+      "floor_label": "二层平面图",
+      "full_res": "data/hospital_ref/full/page-07.png",
+      "thumbnail": "data/hospital_ref/thumb/page-07.png"
+    },
+    {
+      "page": 8,
+      "section": "150床_方案一",
+      "floor_label": "三层平面图",
+      "full_res": "data/hospital_ref/full/page-08.png",
+      "thumbnail": "data/hospital_ref/thumb/page-08.png"
+    },
+    {
+      "page": 9,
+      "section": "150床_方案一",
+      "floor_label": "四层平面图",
+      "full_res": "data/hospital_ref/full/page-09.png",
+      "thumbnail": "data/hospital_ref/thumb/page-09.png"
+    },
+    {
+      "page": 10,
+      "section": "150床_方案一",
+      "floor_label": "五层平面图",
+      "full_res": "data/hospital_ref/full/page-10.png",
+      "thumbnail": "data/hospital_ref/thumb/page-10.png"
+    },
+    {
+      "page": 11,
+      "section": "150床_方案二",
+      "floor_label": "一层平面图",
+      "full_res": "data/hospital_ref/full/page-11.png",
+      "thumbnail": "data/hospital_ref/thumb/page-11.png"
+    },
+    {
+      "page": 12,
+      "section": "150床_方案二",
+      "floor_label": "二层平面图",
+      "full_res": "data/hospital_ref/full/page-12.png",
+      "thumbnail": "data/hospital_ref/thumb/page-12.png"
+    },
+    {
+      "page": 13,
+      "section": "150床_方案二",
+      "floor_label": "三层平面图",
+      "full_res": "data/hospital_ref/full/page-13.png",
+      "thumbnail": "data/hospital_ref/thumb/page-13.png"
+    },
+    {
+      "page": 14,
+      "section": "150床_方案二",
+      "floor_label": "四层平面图",
+      "full_res": "data/hospital_ref/full/page-14.png",
+      "thumbnail": "data/hospital_ref/thumb/page-14.png"
+    },
+    {
+      "page": 15,
+      "section": "300床_方案一",
+      "floor_label": "一层平面图",
+      "full_res": "data/hospital_ref/full/page-15.png",
+      "thumbnail": "data/hospital_ref/thumb/page-15.png"
+    },
+    {
+      "page": 16,
+      "section": "300床_方案一",
+      "floor_label": "二层平面图",
+      "full_res": "data/hospital_ref/full/page-16.png",
+      "thumbnail": "data/hospital_ref/thumb/page-16.png"
+    },
+    {
+      "page": 17,
+      "section": "300床_方案一",
+      "floor_label": "三层平面图",
+      "full_res": "data/hospital_ref/full/page-17.png",
+      "thumbnail": "data/hospital_ref/thumb/page-17.png"
+    },
+    {
+      "page": 18,
+      "section": "300床_方案一",
+      "floor_label": "四层平面图",
+      "full_res": "data/hospital_ref/full/page-18.png",
+      "thumbnail": "data/hospital_ref/thumb/page-18.png"
+    },
+    {
+      "page": 19,
+      "section": "300床_方案二",
+      "floor_label": "总平面图",
+      "full_res": "data/hospital_ref/full/page-19.png",
+      "thumbnail": "data/hospital_ref/thumb/page-19.png"
+    },
+    {
+      "page": 20,
+      "section": "300床_方案二",
+      "floor_label": "一层平面图",
+      "full_res": "data/hospital_ref/full/page-20.png",
+      "thumbnail": "data/hospital_ref/thumb/page-20.png"
+    },
+    {
+      "page": 21,
+      "section": "300床_方案二",
+      "floor_label": "二层平面图",
+      "full_res": "data/hospital_ref/full/page-21.png",
+      "thumbnail": "data/hospital_ref/thumb/page-21.png"
+    },
+    {
+      "page": 22,
+      "section": "300床_方案二",
+      "floor_label": "三层平面图",
+      "full_res": "data/hospital_ref/full/page-22.png",
+      "thumbnail": "data/hospital_ref/thumb/page-22.png"
+    },
+    {
+      "page": 23,
+      "section": "300床_方案二",
+      "floor_label": "四层平面图",
+      "full_res": "data/hospital_ref/full/page-23.png",
+      "thumbnail": "data/hospital_ref/thumb/page-23.png"
+    },
+    {
+      "page": 24,
+      "section": "500床_方案一",
+      "floor_label": "总平面图",
+      "full_res": "data/hospital_ref/full/page-24.png",
+      "thumbnail": "data/hospital_ref/thumb/page-24.png"
+    },
+    {
+      "page": 25,
+      "section": "500床_方案一",
+      "floor_label": "一层平面图",
+      "full_res": "data/hospital_ref/full/page-25.png",
+      "thumbnail": "data/hospital_ref/thumb/page-25.png"
+    },
+    {
+      "page": 26,
+      "section": "500床_方案一",
+      "floor_label": "二层平面图",
+      "full_res": "data/hospital_ref/full/page-26.png",
+      "thumbnail": "data/hospital_ref/thumb/page-26.png"
+    },
+    {
+      "page": 27,
+      "section": "500床_方案一",
+      "floor_label": "三层平面图",
+      "full_res": "data/hospital_ref/full/page-27.png",
+      "thumbnail": "data/hospital_ref/thumb/page-27.png"
+    },
+    {
+      "page": 28,
+      "section": "500床_方案一",
+      "floor_label": "四层平面图",
+      "full_res": "data/hospital_ref/full/page-28.png",
+      "thumbnail": "data/hospital_ref/thumb/page-28.png"
+    },
+    {
+      "page": 29,
+      "section": "500床_方案二",
+      "floor_label": "总平面图",
+      "full_res": "data/hospital_ref/full/page-29.png",
+      "thumbnail": "data/hospital_ref/thumb/page-29.png"
+    },
+    {
+      "page": 30,
+      "section": "500床_方案二",
+      "floor_label": "一层平面图",
+      "full_res": "data/hospital_ref/full/page-30.png",
+      "thumbnail": "data/hospital_ref/thumb/page-30.png"
+    },
+    {
+      "page": 31,
+      "section": "500床_方案二",
+      "floor_label": "二层平面图",
+      "full_res": "data/hospital_ref/full/page-31.png",
+      "thumbnail": "data/hospital_ref/thumb/page-31.png"
+    },
+    {
+      "page": 32,
+      "section": "500床_方案二",
+      "floor_label": "三层平面图",
+      "full_res": "data/hospital_ref/full/page-32.png",
+      "thumbnail": "data/hospital_ref/thumb/page-32.png"
+    },
+    {
+      "page": 33,
+      "section": "大样示意图",
+      "floor_label": "门窗大样",
+      "full_res": "data/hospital_ref/full/page-33.png",
+      "thumbnail": "data/hospital_ref/thumb/page-33.png"
+    },
+    {
+      "page": 34,
+      "section": "大样示意图",
+      "floor_label": "细部大样",
+      "full_res": "data/hospital_ref/full/page-34.png",
+      "thumbnail": "data/hospital_ref/thumb/page-34.png"
+    }
+  ]
+}

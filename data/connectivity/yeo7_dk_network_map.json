@@ -1,0 +1,146 @@
+{
+  "_metadata": {
+    "source": "Multi-study synthesis",
+    "atlas": "Desikan-Killiany (DK) 68 cortical regions to Yeo 7 resting-state networks",
+    "yeo_reference": "Yeo BT, Krienen FM, Sepulcre J, et al. (2011). The organization of the human cerebral cortex estimated by intrinsic functional connectivity. J Neurophysiol, 106(3):1125-1165.",
+    "method": "Winner-takes-all spatial overlap mapping from published studies. For the full overlap-percentage mapping, one must compute from FreeSurfer annotation files (Yeo2011_7Networks_N1000.annot overlaid on aparc.annot).",
+    "data_quality": "PARTIAL — Only a subset of regions have confirmed Yeo 7 assignments from published literature. Full mapping requires computing overlap from FreeSurfer surface annotations.",
+    "yeo_7_networks": {
+      "1": "Visual (VIS)",
+      "2": "Somatomotor (SM)",
+      "3": "Dorsal Attention (DAN)",
+      "4": "Ventral Attention / Salience (VAN)",
+      "5": "Limbic (LIM)",
+      "6": "Frontoparietal / Control (FPN)",
+      "7": "Default Mode Network (DMN)"
+    }
+  },
+  "confirmed_assignments_from_literature": [
+    {
+      "dk_region": "L_pericalcarine",
+      "yeo7_network": "Visual",
+      "overlap_pct": 86.6,
+      "source": "Park et al. (2022) PNAS"
+    },
+    {
+      "dk_region": "L_paracentral",
+      "yeo7_network": "Somatomotor",
+      "overlap_pct": 100.0,
+      "source": "Park et al. (2022) PNAS"
+    },
+    {
+      "dk_region": "L_superior_temporal",
+      "yeo7_network": "Limbic",
+      "overlap_pct": 80.7,
+      "source": "Park et al. (2022) PNAS"
+    },
+    {
+      "dk_region": "L_medial_orbitofrontal",
+      "yeo7_network": "Default Mode Network",
+      "overlap_pct": 87.7,
+      "source": "Park et al. (2022) PNAS"
+    },
+    {
+      "dk_region": "R_insula",
+      "yeo7_network": "Ventral Attention",
+      "overlap_pct": 92.4,
+      "source": "Park et al. (2022) PNAS"
+    },
+    {
+      "dk_region": "L_caudal_middle_frontal",
+      "yeo7_network": "Frontoparietal",
+      "overlap_pct": 50.2,
+      "source": "Park et al. (2022) PNAS"
+    },
+    {
+      "dk_region": "L_superior_parietal",
+      "yeo7_network": "Dorsal Attention",
+      "overlap_pct": 51.7,
+      "source": "Park et al. (2022) PNAS"
+    },
+    {
+      "dk_region": "medialorbitofrontal",
+      "yeo7_network": "Default Mode Network",
+      "source": "Table 2, PMC11480971"
+    },
+    {
+      "dk_region": "precuneus",
+      "yeo7_network": "Default Mode Network",
+      "source": "Table 2, PMC11480971"
+    },
+    {
+      "dk_region": "superiorfrontal",
+      "yeo7_network": "Default Mode Network",
+      "source": "Table 2, PMC11480971"
+    },
+    {
+      "dk_region": "superiorparietal",
+      "yeo7_network": "Frontoparietal",
+      "source": "Table 2, PMC11480971"
+    },
+    {
+      "dk_region": "caudalmiddlefrontal",
+      "yeo7_network": "Frontoparietal",
+      "source": "Table 2, PMC11480971"
+    },
+    {
+      "dk_region": "precentral",
+      "yeo7_network": "Frontoparietal",
+      "source": "Table 2, PMC11480971"
+    }
+  ],
+  "network_assignment_by_yeo17_subnetworks": {
+    "_note": "The 17-network parcellation subdivides each Yeo 7 network. Some DK regions are better characterized by Yeo 17-subnetwork labels.",
+    "known_overlaps": {
+      "Face Detection (CN2)": {
+        "top_yeo17_networks": [
+          "DorsAttn-A (24.7%)",
+          "Visual-A (21.7%)",
+          "VentAttn-A (14.5%)"
+        ]
+      },
+      "Language (CN3)": {
+        "top_yeo17_networks": [
+          "DMN-B (29.5%)",
+          "FP-A (16.4%)",
+          "TempPar (13.1%)"
+        ]
+      },
+      "Spatial Memory (CN4)": {
+        "top_yeo17_networks": [
+          "Visual-B (27.7%)",
+          "DMN-C (27.7%)",
+          "DorsAttn-A (14.5%)"
+        ]
+      },
+      "Cognitive Control (CN5)": {
+        "top_yeo17_networks": [
+          "FP-A (28.9%)",
+          "DorsAttn-A (22.4%)",
+          "VentAttn-B (11.2%)"
+        ]
+      },
+      "Physiological Arousal (CN6)": {
+        "top_yeo17_networks": [
+          "VentAttn-A (45.3%)",
+          "VentAttn-B (22.9%)",
+          "SomMot-B (20.1%)"
+        ]
+      }
+    }
+  },
+  "how_to_compute_full_mapping": {
+    "method": "Overlay the Yeo 2011 7-network annotation file on the FreeSurfer DK (aparc) annotation and compute per-region majority vote or overlap percentage.",
+    "tools": [
+      "FreeSurfer: mri_segstats with annotations on fsaverage surface",
+      "AFNI: 3dCM + whereami",
+      "PANDA toolbox: between-atlas mapping function",
+      "R brainGraph package: contains DK atlas coordinates but NOT Yeo labels (Yeo labels only available for Brainnetome atlas)",
+      "Python: nibabel + numpy can read .annot files and compute overlaps"
+    ],
+    "data_files": {
+      "yeo7_annotation": "ftp://surfer.nmr.mgh.harvard.edu/pub/data/Yeo_JNeurophysiol11_FreeSurfer.zip",
+      "dk_annotation": "FreeSurfer aparc.annot (built-in)"
+    }
+  }
+}

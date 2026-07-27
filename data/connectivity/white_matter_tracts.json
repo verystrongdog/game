@@ -1,0 +1,473 @@
+{
+  "_metadata": {
+    "source": "Literature synthesis from multiple DTI tractography studies and classic neuroanatomy",
+    "description": "Major white matter tracts of the human brain, organized by fiber type classification, with connected brain regions",
+    "note": "Connections listed are well-established in the literature. Exact gray matter termination zones may vary by tractography protocol."
+  },
+  "association_tracts": {
+    "description": "Connect cortical regions within the same hemisphere",
+    "tracts": [
+      {
+        "name": "Cingulum (Cingulum Bundle, CB)",
+        "abbreviation": "CB",
+        "type": "Long association (limbic)",
+        "subdivisions": {
+          "cingulum-cingulate (CC)": "Cingulate gyrus connections",
+          "cingulum-hippocampus (CH)": "Hippocampal connections"
+        },
+        "connected_regions": [
+          "Cingulate gyrus (anterior, mid, posterior)",
+          "Parahippocampal gyrus",
+          "Entorhinal cortex",
+          "Amygdala",
+          "Hippocampus (via CH segment)",
+          "Septal region / subcallosal gyrus",
+          "Anterior thalamic nuclei",
+          "Medial frontal gyrus (subgenual cortex)",
+          "Precuneus (medial parietal)",
+          "Cuneus",
+          "Lingual gyrus",
+          "Fusiform gyrus",
+          "Temporal pole (medial)"
+        ],
+        "function": "Emotion processing, memory, visuospatial processing, DMN connectivity",
+        "notes": "Main white matter bundle of the limbic system. Projects bidirectionally through the limbic lobe."
+      },
+      {
+        "name": "Arcuate Fasciculus (AF)",
+        "abbreviation": "AF",
+        "type": "Long association (dorsal stream)",
+        "subdivisions": {
+          "long_segment": "Direct connection between frontal and temporal language areas",
+          "anterior_segment": "Between Broca's area and inferior parietal lobule",
+          "posterior_segment": "Between inferior parietal lobule and Wernicke's area"
+        },
+        "connected_regions": [
+          "Broca's area (pars opercularis, pars triangularis, BA44/45)",
+          "Wernicke's area (posterior superior temporal gyrus, BA22)",
+          "Middle temporal gyrus (posterior)",
+          "Inferior frontal gyrus (pars opercularis)",
+          "Precentral gyrus (inferior)",
+          "Posterior middle frontal gyrus",
+          "Inferior parietal lobule (supramarginal gyrus)"
+        ],
+        "function": "Language repetition, phonological processing, syntactic processing, auditory-motor integration",
+        "lateralization": "Strongly left-hemisphere dominant (language)",
+        "notes": "Often considered the direct segment of the broader SLF/AF complex"
+      },
+      {
+        "name": "Superior Longitudinal Fasciculus (SLF)",
+        "abbreviation": "SLF",
+        "type": "Long association (dorsal stream)",
+        "subdivisions": {
+          "SLF_I": {
+            "connected_regions": [
+              "Superior parietal lobule",
+              "Superior frontal gyrus (dorsal premotor / supplementary motor area)"
+            ],
+            "function": "Processing spatial coordinates of trunk/limbs, movement planning"
+          },
+          "SLF_II": {
+            "connected_regions": [
+              "Posterior inferior parietal lobule (intraparietal sulcus)",
+              "Lateral superior frontal gyrus",
+              "Middle frontal gyrus (including frontal eye fields, BA8)",
+              "Lateral occipital cortex"
+            ],
+            "function": "Visuospatial attention, working memory, reaching/grasping"
+          },
+          "SLF_III": {
+            "connected_regions": [
+              "Inferior parietal lobule (supramarginal gyrus, anterior angular gyrus)",
+              "Posterior inferior frontal gyrus (pars opercularis, ventral premotor)"
+            ],
+            "function": "Language, sensorimotor functions, articulatory processing"
+          }
+        },
+        "connected_regions_summary": [
+          "Frontal lobe (superior, middle, inferior frontal gyri)",
+          "Parietal lobe (superior and inferior parietal lobules)",
+          "Temporal lobe (via AF connections)",
+          "Lateral occipital cortex"
+        ],
+        "lateralization": "Rightward asymmetries in volume and microstructure",
+        "notes": "Largest association tract complex. SLF III overlaps with the anterior segment of AF."
+      },
+      {
+        "name": "Uncinate Fasciculus (UF)",
+        "abbreviation": "UF",
+        "type": "Long association (ventral stream, limbic)",
+        "connected_regions": [
+          "Orbitofrontal cortex (lateral OFC, BA11/47)",
+          "Inferior frontal gyrus (pars orbitalis)",
+          "Frontal pole (BA10)",
+          "Anterior temporal lobe (temporal pole, BA38)",
+          "Amygdala",
+          "Uncus",
+          "Hippocampal gyrus (anterior)",
+          "Anterior cingulate gyrus"
+        ],
+        "function": "Episodic memory, language (rapid naming), semantic associations, social-emotional processing, decision-making",
+        "lateralization": "Left-hemisphere dominant in FA",
+        "notes": "Hook-shaped bundle. Combines somatosensory information with emotional response regulation."
+      },
+      {
+        "name": "Inferior Longitudinal Fasciculus (ILF)",
+        "abbreviation": "ILF",
+        "type": "Long association (ventral stream)",
+        "connected_regions": [
+          "Occipital lobe (lateral occipital cortex, occipital pole)",
+          "Anterior temporal lobe (fusiform gyrus, temporal pole)",
+          "Middle temporal gyrus",
+          "Inferior temporal gyrus",
+          "Lingual gyrus",
+          "Parahippocampal gyrus (posterior)"
+        ],
+        "function": "Face and emotion recognition, visual association, object recognition (ventral visual stream), reading",
+        "lateralization": "Right-hemisphere dominant",
+        "notes": "Major white matter bundle of the ventral visual stream ('what' pathway)"
+      },
+      {
+        "name": "Inferior Fronto-Occipital Fasciculus (IFOF)",
+        "abbreviation": "IFOF",
+        "type": "Long association (ventral stream)",
+        "connected_regions": [
+          "Frontal lobe (orbital cortex, lateral prefrontal cortex, inferior frontal gyrus)",
+          "Occipital lobe (lateral occipital cortex, occipital pole)",
+          "Temporal lobe (passes through; connects to temporo-basal areas)",
+          "Superior parietal lobe",
+          "Fusiform gyrus (mid-fusiform)"
+        ],
+        "function": "Semantic processing, visual processing, reading, attentional functions",
+        "lateralization": "Right-hemisphere dominant in FA",
+        "notes": "The longest association pathway. Runs along the external capsule. May be unique to humans."
+      },
+      {
+        "name": "Middle Longitudinal Fasciculus (MdLF)",
+        "abbreviation": "MdLF",
+        "type": "Long association",
+        "connected_regions": [
+          "Posterior superior temporal gyrus (STG)",
+          "Temporal pole",
+          "Superior temporal sulcus"
+        ],
+        "function": "Auditory/linguistic processing (less well-characterized)",
+        "notes": "Less consistently described across tractography protocols"
+      },
+      {
+        "name": "Vertical Occipital Fasciculus (VOF)",
+        "abbreviation": "VOF",
+        "type": "Long association",
+        "connected_regions": [
+          "Occipital lobe",
+          "Rest of brain (forms part of sagittal stratum)"
+        ],
+        "function": "Visual processing integration",
+        "notes": "Part of the sagittal stratum"
+      },
+      {
+        "name": "Extreme Capsule (EmC)",
+        "abbreviation": "EmC",
+        "type": "Long association",
+        "connected_regions": [
+          "Middle temporal area (MT+)",
+          "Ventral prefrontal cortex",
+          "Frontal opercular regions"
+        ],
+        "function": "Language, syntax, grammar",
+        "notes": "Runs between claustrum and insula"
+      },
+      {
+        "name": "External Capsule",
+        "abbreviation": "EC",
+        "type": "Mixed (association + projection)",
+        "connected_regions": [
+          "Frontal cortex",
+          "Striatum (frontostriatal projections)"
+        ],
+        "function": "Frontostriatal connectivity"
+      }
+    ]
+  },
+  "commissural_tracts": {
+    "description": "Connect corresponding regions across the two cerebral hemispheres",
+    "tracts": [
+      {
+        "name": "Corpus Callosum",
+        "abbreviation": "CC",
+        "subdivisions": {
+          "genu": "Connects bilateral frontal lobes (forceps minor)",
+          "body": "Connects bilateral frontal and parietal lobes",
+          "isthmus": "Connects bilateral temporal and parietal lobes",
+          "splenium": "Connects bilateral occipital lobes (forceps major)",
+          "tapetum": "Connects bilateral temporal regions (lateral ventricles roof)"
+        },
+        "connected_regions": [
+          "All homologous cortical areas across hemispheres",
+          "Frontal lobes (via genu / forceps minor)",
+          "Occipital lobes (via splenium / forceps major)",
+          "Temporal lobes (via tapetum)",
+          "Parietal lobes (via body)"
+        ],
+        "function": "Interhemispheric communication, higher-order cognition",
+        "axon_count": "~300 million axons",
+        "notes": "Largest white matter bundle in the brain"
+      },
+      {
+        "name": "Anterior Commissure",
+        "abbreviation": "AC",
+        "connected_regions": [
+          "Temporal cortex (middle and inferior temporal gyri)",
+          "Olfactory regions (olfactory bulbs and tracts)",
+          "Amygdala (bilaterally)",
+          "Ventromedial temporo-occipital cortex"
+        ],
+        "function": "Interhemispheric temporal and olfactory communication"
+      },
+      {
+        "name": "Posterior Commissure",
+        "abbreviation": "PC",
+        "connected_regions": [
+          "Midbrain (superior colliculi level)"
+        ],
+        "function": "Pupillary light reflex, vertical gaze"
+      },
+      {
+        "name": "Hippocampal Commissure",
+        "abbreviation": "HC",
+        "connected_regions": [
+          "Bilateral hippocampal formations"
+        ],
+        "notes": "Part of the forniceal commissural system (psalterium)"
+      },
+      {
+        "name": "Habenular Commissure",
+        "abbreviation": "HbC",
+        "connected_regions": [
+          "Bilateral habenular nuclei"
+        ],
+        "function": "Limbic circuitry"
+      }
+    ]
+  },
+  "projection_tracts": {
+    "description": "Connect cerebral cortex with subcortical structures (thalamus, basal ganglia, brainstem, spinal cord)",
+    "tracts": [
+      {
+        "name": "Corticospinal Tract (Pyramidal Tract)",
+        "abbreviation": "CST",
+        "connected_regions": {
+          "cortical_origin": [
+            "Primary motor cortex (M1, BA4)",
+            "Supplementary motor area (SMA, BA6)",
+            "Premotor cortex (BA6)",
+            "Primary somatosensory cortex (S1, BA3/1/2)",
+            "Cingulate gyrus (cingulate motor areas)"
+          ],
+          "subcortical_path": [
+            "Corona radiata",
+            "Internal capsule (posterior limb)",
+            "Cerebral peduncle (crus cerebri, midbrain)",
+            "Pons (longitudinal pontine fibers)",
+            "Medullary pyramid",
+            "Pyramidal decussation (~85-90% fibers cross)",
+            "Spinal cord (lateral corticospinal tract)"
+          ],
+          "targets": [
+            "Spinal cord anterior horn (lower motor neurons)",
+            "Brainstem motor nuclei (corticobulbar component)"
+          ]
+        },
+        "function": "Voluntary movement control",
+        "notes": "Major efferent pathway for voluntary movement. ~1 million axons."
+      },
+      {
+        "name": "Corticobulbar Tract",
+        "abbreviation": "CBT",
+        "connected_regions": {
+          "cortical_origin": [
+            "Motor cortex (face area of M1)",
+            "Premotor cortex"
+          ],
+          "targets": [
+            "Cranial nerve motor nuclei (CN V, VII, IX, X, XI, XII)",
+            "Reticular formation"
+          ]
+        },
+        "function": "Control of facial muscles, jaw, pharynx, larynx, tongue",
+        "notes": "Lies medial/dorsal to corticospinal fibers. Mostly bilateral innervation (except lower face, which is contralateral)."
+      },
+      {
+        "name": "Corona Radiata",
+        "abbreviation": "CR",
+        "subdivisions": {
+          "anterior_corona_radiata_ACR": "Frontal projections",
+          "superior_corona_radiata_SCR": "Superior/parietal projections",
+          "posterior_corona_radiata_PCR": "Occipital/posterior projections"
+        },
+        "connected_regions": {
+          "ascending_afferent": [
+            "Thalamic radiations (thalamo-cortical fibers to all cortical lobes)"
+          ],
+          "descending_efferent": [
+            "Corticospinal tract fibers",
+            "Corticobulbar tract fibers",
+            "Corticopontine fibers",
+            "Cortico-striatal fibers"
+          ]
+        },
+        "function": "Fan-shaped convergence of projection fibers between cortex and internal capsule"
+      },
+      {
+        "name": "Internal Capsule",
+        "abbreviation": "IC",
+        "subdivisions": {
+          "anterior_limb": [
+            "Fronto-thalamic connections (anterior thalamic radiations)",
+            "Frontopontine tracts"
+          ],
+          "genu": [
+            "Corticobulbar tract"
+          ],
+          "posterior_limb": [
+            "Corticospinal tract",
+            "Corticopontine tracts",
+            "Thalamo-cortical sensory fibers (somatosensory radiations)"
+          ],
+          "retrolenticular": [
+            "Optic radiations (geniculocalcarine tract)",
+            "Posterior thalamic peduncle"
+          ],
+          "sublenticular": [
+            "Auditory radiations",
+            "Inferior thalamic peduncle"
+          ]
+        },
+        "function": "Compact band of projection fibers flanked by caudate, lenticular nucleus, and thalamus"
+      },
+      {
+        "name": "Thalamic Radiations (Peduncles)",
+        "abbreviation": "TR",
+        "subdivisions": {
+          "anterior_thalamic_peduncle": "Frontal lobe connections (MD nucleus, anterior nuclei)",
+          "superior_thalamic_peduncle": "Parietal lobe connections (VPL, VPM)",
+          "posterior_thalamic_peduncle": "Occipital lobe connections (pulvinar, LGN)",
+          "inferior_thalamic_peduncle": "Temporal lobe connections (MGN, pulvinar)"
+        },
+        "connected_regions_summary": [
+          "Mediodorsal (MD) thalamic nucleus ↔ orbitofrontal/polar prefrontal cortex",
+          "Anterior thalamic nuclei ↔ ventromedial prefrontal / cingulate cortex",
+          "Ventrolateral posterior (VLp) thalamus ↔ motor cortex",
+          "Ventral posterolateral (VPL) → somatosensory cortex",
+          "Lateral geniculate (LGN) → primary visual cortex (via optic radiations)",
+          "Medial geniculate (MGN) → primary auditory cortex (via auditory radiations)"
+        ]
+      },
+      {
+        "name": "Fornix",
+        "abbreviation": "FOR",
+        "type": "Projection (limbic) — sometimes classified as association",
+        "subdivisions": {
+          "precommissural_fornix": "Projects to septal region and nucleus accumbens",
+          "postcommissural_fornix": "Projects to mammillary bodies, anterior thalamus, hypothalamus"
+        },
+        "connected_regions": {
+          "origin": [
+            "Hippocampus (CA fields, subiculum)",
+            "Entorhinal cortex"
+          ],
+          "targets": [
+            "Mammillary bodies (major target)",
+            "Anterior thalamic nuclei",
+            "Hypothalamus",
+            "Septal region",
+            "Nucleus accumbens",
+            "Lateral habenula"
+          ]
+        },
+        "function": "Memory formation (Papez circuit), emotional processing",
+        "notes": "C-shaped bundle. Also contains some afferent fibers to hippocampus from septal/hypothalamic nuclei."
+      },
+      {
+        "name": "Optic Radiations (Geniculocalcarine Tract)",
+        "abbreviation": "OR",
+        "subdivisions": {
+          "upper_division": "Carries information from inferior visual field → cuneus (above calcarine fissure)",
+          "lower_division_Meyers_loop": "Carries information from superior visual field → lingual gyrus (below calcarine fissure)"
+        },
+        "connected_regions": [
+          "Lateral geniculate nucleus (LGN) of thalamus",
+          "Primary visual cortex (V1, pericalcarine cortex, BA17)"
+        ],
+        "function": "Vision (relays retinal input from LGN to V1)",
+        "notes": "Forms part of the sagittal stratum in the temporal lobe"
+      },
+      {
+        "name": "Cerebellar Peduncles",
+        "abbreviation": "CP",
+        "subdivisions": {
+          "superior_cerebellar_peduncle_SCP": {
+            "connected_regions": [
+              "Cerebellum (output) → red nucleus",
+              "Cerebellum → thalamus (VL) → motor cortex"
+            ],
+            "function": "Main cerebellar output pathway"
+          },
+          "middle_cerebellar_peduncle_MCP": {
+            "connected_regions": [
+              "Contralateral pons (pontine nuclei) → cerebellum"
+            ],
+            "function": "Main cerebellar input pathway (cortico-ponto-cerebellar)"
+          },
+          "inferior_cerebellar_peduncle_ICP": {
+            "connected_regions": [
+              "Spinal cord (spinocerebellar tracts) → cerebellum",
+              "Brainstem (olivary nucleus) → cerebellum",
+              "Vestibular nuclei → cerebellum"
+            ],
+            "function": "Sensory input from spinal cord and brainstem"
+          }
+        }
+      },
+      {
+        "name": "Corticopontine Fibers",
+        "abbreviation": "CPF",
+        "connected_regions": [
+          "Frontal cortex (frontopontine tract)",
+          "Parietal cortex (parietopontine tract)",
+          "Temporal cortex (temporopontine tract)",
+          "Occipital cortex (occipitopontine tract)",
+          "Pontine nuclei (basis pontis)"
+        ],
+        "function": "Part of cortico-ponto-cerebellar circuit for motor coordination and learning"
+      }
+    ]
+  },
+  "cerebellar_tracts": {
+    "description": "White matter pathways connecting cerebellum with the rest of the brain",
+    "tracts": [
+      {
+        "name": "Cerebellar Peduncles (Superior, Middle, Inferior)",
+        "abbreviation": "SCP/MCP/ICP",
+        "details": "See projection_tracts section above"
+      }
+    ]
+  },
+  "abbreviations": {
+    "AC": "Anterior Commissure",
+    "AF": "Arcuate Fasciculus",
+    "CB": "Cingulum Bundle",
+    "CC": "Corpus Callosum",
+    "CST": "Corticospinal Tract",
+    "EmC": "Extreme Capsule",
+    "FOR": "Fornix",
+    "IC": "Internal Capsule",
+    "IFOF": "Inferior Fronto-Occipital Fasciculus",
+    "ILF": "Inferior Longitudinal Fasciculus",
+    "MdLF": "Middle Longitudinal Fasciculus",
+    "OR": "Optic Radiations",
+    "SLF": "Superior Longitudinal Fasciculus",
+    "UF": "Uncinate Fasciculus",
+    "VOF": "Vertical Occipital Fasciculus"
+  }
+}
