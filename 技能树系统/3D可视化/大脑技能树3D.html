@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<!--
+  ⚠️ 参考原型 — 不再做功能开发。
+  设计意图保留（玻璃大脑技能树交互），但坐标系统和渲染管线已迁移：
+  - 坐标: PAD推导 → MNI解剖脑图谱 (见 data/brain_regions.json, data/skill_coords.json)
+  - 渲染: Three.js → Blender建模 → Unity实装 (见 Blender建模指南.md)
+  - 数据: 硬编码 → JSON数据管线 (见 脑图谱数据管线.md)
+  此文件作为交互设计参考保留。
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大脑技能树 — 面具 (The Mask)</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#050510;font-family:'Segoe UI','Microsoft YaHei',sans-serif;overflow:hidden;height:100vh;user-select:none}
+#c{display:block;position:fixed;top:0;left:0;width:100%;height:100%}
+
+#top{position:fixed;top:12px;left:20px;z-index:10;pointer-events:none;color:#d0d0e8}
+#top h1{font-size:1.0rem;font-weight:500;letter-spacing:0.04em}
+#top p{font-size:0.58rem;color:#7778a0;margin-top:2px}
+
+#leg{position:fixed;top:12px;right:20px;z-index:10;display:flex;gap:8px;color:#8888a0;font-size:0.55rem;flex-wrap:wrap;max-width:340px;justify-content:flex-end}
+#leg span{display:flex;align-items:center;gap:3px;white-space:nowrap}
+#leg i{display:inline-block;width:7px;height:7px;border-radius:50%}
+
+#sp{position:fixed;top:42px;left:20px;z-index:10;color:#e8d070;font-size:0.75rem;font-weight:600}
+
+#pnl{position:fixed;right:12px;top:50%;transform:translateY(-50%);width:240px;max-height:56vh;overflow-y:auto;background:rgba(8,8,22,0.94);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:14px;z-index:10;display:none;font-size:0.65rem;color:#ccc}
+#pnl.on{display:block}
+#pnl h3{margin:0 0 2px;font-size:0.85rem}
+#pnl .meta{font-size:0.55rem;color:#888;margin-bottom:4px}
+#pnl .tags{display:flex;gap:3px;flex-wrap:wrap;margin-bottom:5px}
+#pnl .tags em{font-size:0.53rem;padding:1px 4px;border-radius:3px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.05);font-style:normal}
+#pnl .desc{line-height:1.4;margin-bottom:5px;color:#bbb}
+#pnl .stat{display:grid;grid-template-columns:1fr 1fr;gap:1px 8px;font-size:0.6rem}
+#pnl .stat b{color:#999;font-weight:400}
+#pnl .stat i{color:#ddd;font-style:normal}
+#pnl .pre{font-size:0.56rem;color:#777;margin-top:4px}
+#pnl .x{position:absolute;top:4px;right:6px;background:none;border:none;color:#666;cursor:pointer;font-size:0.85rem}
+#pnl .btn{display:block;width:100%;margin-top:6px;padding:4px 0;border-radius:5px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:#ccc;cursor:pointer;font-size:0.62rem;text-align:center}
+#pnl .btn:hover{background:rgba(255,255,255,0.06)}
+#pnl .btn.lock{color:#555;cursor:not-allowed;border-color:rgba(255,255,255,0.03)}
+#pnl .btn.lock:hover{background:rgba(255,255,255,0.01)}
+#pnl .region{font-size:0.54rem;color:#667;margin-top:3px}
+
+#slots{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);z-index:10;display:flex;gap:5px;background:rgba(8,8,20,0.9);border:1px solid rgba(255,255,255,0.05);border-radius:10px;padding:7px 12px}
+.slot{width:40px;height:40px;border-radius:7px;border:1px dashed rgba(255,255,255,0.08);background:rgba(255,255,255,0.01);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.15s;position:relative}
+.slot:hover{border-color:rgba(255,255,255,0.2);background:rgba(255,255,255,0.03)}
+.slot.filled{border-style:solid;border-color:rgba(255,255,255,0.15)}
+.slot .name{font-size:0.5rem;color:#aaa;text-align:center;line-height:1.1}
+.slot .ap{position:absolute;bottom:1px;right:3px;font-size:0.4rem;color:#777}
+.slot.cog-slot{border-color:rgba(123,143,255,0.2)}.slot.emo-slot{border-color:rgba(240,160,96,0.2)}.slot.beh-slot{border-color:rgba(79,195,247,0.2)}
+
+#tip{position:fixed;pointer-events:none;z-index:20;padding:3px 8px;border-radius:4px;background:rgba(8,8,18,0.9);border:1px solid rgba(255,255,255,0.07);color:#ddd;font-size:0.6rem;display:none}
+#bot{position:fixed;bottom:3px;left:50%;transform:translateX(-50%);z-index:9;color:#333;font-size:0.48rem}
+</style>
+</head>
+<body>
+<div id="top"><h1>🧠 大脑技能树</h1><p>态度空间坐标系 · 玻璃大脑 · fMRI光晕</p></div>
+<div id="sp">✦ 技能点: <b id="sp-val">0</b></div>
+<div id="leg">
+  <span><i style="background:#7b8fff;box-shadow:0 0 4px #7b8fff"></i>认知(皮层)</span>
+  <span><i style="background:#f0a060;box-shadow:0 0 4px #f0a060"></i>情绪(边缘)</span>
+  <span><i style="background:#4fc3f7;box-shadow:0 0 4px #4fc3f7"></i>行为(动作)</span>
+  <span><i style="background:#e8d070;box-shadow:0 0 4px #e8d070"></i>终极(DMN)</span>
+  <span><i style="background:#3a3a4a"></i>未解锁</span>
+</div>
+<div id="tip"></div>
+<div id="pnl"><button class="x" id="pnl-x">✕</button><h3 id="pn"></h3><div class="meta" id="pm"></div><div class="tags" id="pt"></div><div class="desc" id="pd"></div><div class="stat" id="ps"></div><div class="region" id="pr"></div><div class="pre" id="pp"></div><button class="btn" id="pnl-btn">解锁</button></div>
+<div id="slots"></div>
+<div id="bot">🖱 拖拽旋转 | 滚轮缩放 | 右键平移 | 点击节点 | R/T/F 视角 | U 解锁</div>
+<canvas id="c"></canvas>
+
+<script src="brain_mesh_data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+(function(){
+// ═══════════════════════════════════════════════════════════
+//  CONSTANTS
+// ═══════════════════════════════════════════════════════════
+var TIER_COST={1:1,2:2,3:3,4:5,5:8,U:10};
+function costOf(t){return TIER_COST[t]||1;}
+
+// ═══════════════════════════════════════════════════════════
+	//  SKILL DATA — coordinates in ATTITUDE SPACE (not anatomical space)
+	//  X=V(valence): 左回避/右趋近, Y=|A|(intensity): 行为强度, Z=D(autonomy): 后被动/前主动
+	//  情绪节点: B_raw=(V,|A|,D) 直接映射 | 行为节点: 驱动质心 B(t) | 认知节点: CPM步骤+深度+偏向
+// ═══════════════════════════════════════════════════════════
+var treeData={
+  cognition:[
+    // L1 知觉与注意 — 枕叶/顶叶 (后部 Z~-0.6)
+    {id:'cog_0',name:'洞见',tier:1,mod:'知觉与注意',type:'被动',ap:'0',cd:'/',x:0.00,y:0.47,z:-0.60,desc:'永久提升知觉精度 d\'+0.2',region:'枕叶 V1'},
+    {id:'cog_1',name:'凝神',tier:1,mod:'知觉与注意',type:'主动',ap:'0',cd:'3',x:0.36,y:0.56,z:-0.60,desc:'锁定目标 对目标认知效果+30%',region:'顶内沟'},
+    {id:'cog_2',name:'察微',tier:1,mod:'知觉与注意',type:'被动',ap:'0',cd:'/',x:-0.12,y:0.65,z:-0.60,desc:'criterion放宽 更易报告变化',region:'顶叶'},
+    {id:'cog_3',name:'纵观',tier:1,mod:'知觉与注意',type:'主动',ap:'0',cd:'2',x:-0.24,y:0.38,z:-0.60,desc:'揭示敌方1个隐藏属性',region:'枕顶联合'},
+    {id:'cog_4',name:'警觉',tier:1,mod:'知觉与注意',type:'被动',ap:'0',cd:'/',x:-0.30,y:0.43,z:-0.60,desc:'入场获警觉标记',region:'丘脑枕'},
+    // L2 记忆 — 颞叶/海马体 (Z~-0.35)
+    {id:'cog_5',name:'拾遗',tier:2,mod:'记忆',type:'主动',ap:'0',cd:'2',x:0.12,y:0.56,z:-0.35,desc:'减随机技能冷却1回合',region:'海马体 CA1'},
+    {id:'cog_6',name:'追忆',tier:2,mod:'记忆',type:'主动',ap:'1',cd:'3',x:0.06,y:0.70,z:-0.35,desc:'复制上回合效果×0.7',region:'内嗅皮层'},
+    {id:'cog_7',name:'闪回',tier:2,mod:'记忆',type:'被动',ap:'0',cd:'/',x:-0.12,y:0.60,z:-0.35,desc:'SAN&lt;40%触发恐惧偏移',region:'杏仁核-海马'},
+    {id:'cog_8',name:'铭刻',tier:2,mod:'记忆',type:'被动',ap:'0',cd:'/',x:-0.24,y:0.83,z:-0.35,desc:'首用技能本场效果+10%',region:'海马体 CA3'},
+    {id:'cog_9',name:'释怀',tier:2,mod:'记忆',type:'主动',ap:'0',cd:'4',x:-0.42,y:0.74,z:-0.35,desc:'移除自身负面认知标签',region:'前额叶-海马'},
+    // L3 知识表征 — TPJ/颞下回 (Z~-0.1)
+    {id:'cog_10',name:'甄别',tier:3,mod:'知识表征',type:'主动',ap:'0',cd:'3',x:0.12,y:0.65,z:-0.10,desc:'改变目标标签',region:'TPJ'},
+    {id:'cog_11',name:'定性',tier:3,mod:'知识表征',type:'主动',ap:'0',cd:'4',x:-0.42,y:0.60,z:-0.10,desc:'施加定性标记影响敌方AI',region:'颞下回'},
+    {id:'cog_12',name:'归因',tier:3,mod:'知识表征',type:'主动',ap:'0',cd:'3',x:0.18,y:0.70,z:-0.10,desc:'揭示敌方技能驱动归属',region:'楔前叶'},
+    {id:'cog_13',name:'正名',tier:3,mod:'知识表征',type:'主动',ap:'0',cd:'5',x:0.36,y:0.74,z:-0.10,desc:'移除负面标签+替换正面',region:'角回'},
+    {id:'cog_14',name:'类比',tier:3,mod:'知识表征',type:'被动',ap:'0',cd:'/',x:-0.36,y:0.65,z:-0.10,desc:'同类敌人认知效果+15%',region:'颞上沟'},
+    // L4 表象与语言 — Wernicke/Broca/角回 (Z~+0.15)
+    {id:'cog_15',name:'隐喻',tier:4,mod:'表象与语言',type:'被动',ap:'0',cd:'/',x:-0.36,y:0.65,z:0.15,desc:'技能PAD偏移+15%',region:'Broca区'},
+    {id:'cog_16',name:'白描',tier:4,mod:'表象与语言',type:'主动',ap:'0',cd:'5',x:0.30,y:0.79,z:0.15,desc:'清除幻象/伪装效果',region:'Wernicke区'},
+    {id:'cog_17',name:'构想',tier:4,mod:'表象与语言',type:'被动',ap:'0',cd:'/',x:-0.30,y:0.74,z:0.15,desc:'行为外观伪装为其他驱动',region:'角回'},
+    {id:'cog_18',name:'转述',tier:4,mod:'表象与语言',type:'主动',ap:'0',cd:'6',x:0.06,y:0.70,z:0.15,desc:'翻转敌方PAD偏移方向',region:'弓状束'},
+    {id:'cog_19',name:'命名',tier:4,mod:'表象与语言',type:'主动',ap:'2',cd:'每场1次',x:-0.48,y:0.88,z:0.15,desc:'命名未名实体 效果+30%',region:'前额叶极'},
+    // L5 推理与决策 — 前额叶 (Z~+0.5)
+    {id:'cog_20',name:'预判',tier:5,mod:'推理与决策',type:'主动',ap:'0',cd:'4',x:0.12,y:0.70,z:0.50,desc:'预览敌方下回合技能',region:'dlPFC'},
+    {id:'cog_21',name:'决意',tier:5,mod:'推理与决策',type:'被动',ap:'0',cd:'/',x:-0.42,y:0.83,z:0.50,desc:'HP&lt;30%时主动技冷却-1',region:'vmPFC'},
+    {id:'cog_22',name:'筹算',tier:5,mod:'推理与决策',type:'被动',ap:'0',cd:'/',x:0.18,y:0.70,z:0.50,desc:'AP≥2的技能AP-1',region:'额极'},
+    {id:'cog_23',name:'推演',tier:5,mod:'推理与决策',type:'主动',ap:'1',cd:'6',x:0.06,y:0.74,z:0.50,desc:'可多用1个非行为技能',region:'dlPFC'},
+    {id:'cog_24',name:'权衡',tier:5,mod:'推理与决策',type:'主动',ap:'0',cd:'5',x:0.24,y:0.79,z:0.50,desc:'牺牲本回合→下回合×1.5',region:'OFC'}
+  ],
+  emotion:[
+    // B_raw = (V, |A|, D) — exact attitude space coordinates
+    {id:'emo_0',name:'快乐',tier:1,x:0.960,y:0.648,z:0.588,light:0.65,desc:'被动: 扩展PAD至P+区 惩罚门槛↑',region:'伏隔核/NAcc'},
+    {id:'emo_1',name:'恐惧',tier:1,x:-0.854,y:0.680,z:-0.414,light:0.9,desc:'被动: 扩展PAD至P-D-区 反射门槛↓',region:'杏仁核'},
+    {id:'emo_2',name:'平静',tier:1,x:0.600,y:0.756,z:0.114,light:0.2,desc:'被动: PAD衰减率×0.8',region:'下丘脑'},
+    {id:'emo_3',name:'希望',tier:2,x:0.854,y:0.366,z:0.478,light:0.4,desc:'被动: P+区情绪效果×1.1',region:'腹侧纹状体'},
+    {id:'emo_4',name:'愤怒',tier:2,x:-0.666,y:0.730,z:0.314,light:0.9,desc:'被动: 主动靠近威胁源 C_control=0',region:'BNST'},
+    {id:'emo_5',name:'悲痛',tier:2,x:-0.896,y:0.424,z:-0.672,light:0.4,desc:'被动: 奖励门槛↑ 照护仍可激活',region:'隔区'},
+    {id:'emo_6',name:'共情',tier:3,x:0.458,y:0.302,z:0.090,light:0.35,desc:'被动: 可读取敌方PAD Attachment+0.1',region:'前脑岛'},
+    {id:'emo_7',name:'爱',tier:3,x:1.000,y:0.038,z:0.346,light:0.45,desc:'被动: 价值门槛↓ 为所爱坚守',region:'ACC吻侧'},
+    {id:'emo_8',name:'焦虑',tier:3,x:-0.708,y:0.730,z:-0.316,light:0.85,desc:'被动: 惩罚门槛↓ 恐惧的未来版',region:'终纹床核'},
+    {id:'emo_9',name:'厌恶',tier:3,x:-0.896,y:0.550,z:-0.366,light:0.8,desc:'被动: 排斥效果×1.2',region:'前脑岛'},
+    {id:'emo_10',name:'绝望',tier:4,x:-0.770,y:0.588,z:-0.510,light:0.75,desc:'被动: 绝望+价值伤害随已损HP增长',region:'OFC'},
+    {id:'emo_11',name:'内疚',tier:4,x:-0.584,y:0.134,z:-0.588,light:0.5,desc:'被动: 短路激活道德 C_control降至1.5',region:'vmPFC'},
+    {id:'emo_12',name:'敬畏',tier:4,x:-0.062,y:0.480,z:-0.400,light:0.6,desc:'被动: 敬畏+文化习俗效果×1.5',region:'mPFC'},
+    {id:'emo_13',name:'孤独',tier:4,x:-0.500,y:0.548,z:-0.524,light:0.3,desc:'被动: 孤独+价值C_control≈3.4',region:'颞极'},
+    {id:'emo_14',name:'恐怖',tier:5,x:-0.770,y:0.700,z:-0.124,light:1.0,desc:'被动: 核心情绪 反射×1.2 恐怖+价值C=3.8',region:'mPFC-杏仁核'}
+  ],
+  behavior:[
+    // Drive centroids (attitude model B(t) = w_raw*B_raw + w_drive*pole) + slight offsets
+    {id:'beh_0',name:'逃跑',tier:1,drive:'反射',x:-0.87,y:0.73,z:-0.50,ap:'1',cd:'0',desc:'主动: 闪避1次攻击 恐惧下AP=0',region:'反射环路·PAG→杏仁核'},
+    {id:'beh_1',name:'僵住',tier:1,drive:'反射',x:-0.85,y:0.69,z:-0.54,ap:'0',cd:'1',desc:'主动: 等待+减伤50% 恐慌自动触发',region:'反射环路·冻结反应'},
+    {id:'beh_2',name:'闪避',tier:1,drive:'反射',x:-0.83,y:0.71,z:-0.53,ap:'1',cd:'1',desc:'主动: 闪避+小位移',region:'反射环路·快速闪避'},
+    {id:'beh_3',name:'回避',tier:2,drive:'惩罚机制',x:-0.56,y:0.54,z:-0.32,ap:'2',cd:'3',desc:'主动: 减伤30%×2回合',region:'基底节间接通路'},
+    {id:'beh_4',name:'妥协',tier:2,drive:'惩罚机制',x:-0.54,y:0.50,z:-0.36,ap:'2',cd:'4',desc:'主动: 降敌下回合伤害30%',region:'缰核'},
+    {id:'beh_5',name:'克制',tier:2,drive:'惩罚机制',x:-0.52,y:0.52,z:-0.35,ap:'1',cd:'2',desc:'主动: 跳过行为→意志力+1',region:'纹状体基质'},
+    {id:'beh_6',name:'试探',tier:2,drive:'奖励机制',x:0.59,y:0.56,z:0.19,ap:'2',cd:'2',desc:'主动: 震慑2+揭示抗性',region:'NAcc壳'},
+    {id:'beh_7',name:'追求',tier:2,drive:'奖励机制',x:0.61,y:0.52,z:0.15,ap:'2',cd:'1',desc:'主动: 震慑4 最直接伤害输出',region:'NAcc核'},
+    {id:'beh_8',name:'坚持',tier:2,drive:'奖励机制',x:0.63,y:0.54,z:0.16,ap:'3',cd:'1',desc:'主动: 震慑3 连用AP递减',region:'VTA-NAcc'},
+    {id:'beh_9',name:'自责',tier:3,drive:'道德驱动',x:0.15,y:0.48,z:0.41,ap:'1',cd:'4',desc:'主动: 意志力+2 SAN-1',region:'vmPFC'},
+    {id:'beh_10',name:'维护',tier:3,drive:'道德驱动',x:0.17,y:0.44,z:0.37,ap:'2',cd:'3',desc:'主动: 移除友方负面标签',region:'TPJ'},
+    {id:'beh_11',name:'坚守',tier:3,drive:'道德驱动',x:0.18,y:0.46,z:0.38,ap:'3',cd:'5',desc:'主动: 抵抗恐慌强制+SAN+2',region:'楔前叶'},
+    {id:'beh_12',name:'遵从',tier:3,drive:'文化习俗',x:-0.11,y:0.38,z:-0.05,ap:'1',cd:'1',desc:'主动: 情境默认行为',region:'mPFC'},
+    {id:'beh_13',name:'从众',tier:3,drive:'文化习俗',x:-0.09,y:0.34,z:-0.09,ap:'1',cd:'2',desc:'主动: 复制友方技能×0.6',region:'颞极'},
+    {id:'beh_14',name:'运用仪式',tier:3,drive:'文化习俗',x:-0.07,y:0.36,z:-0.08,ap:'2',cd:'4',desc:'主动: SAN+2 A-0.3 敬畏翻倍',region:'后扣带'},
+    {id:'beh_15',name:'牺牲',tier:4,drive:'价值驱动',x:0.56,y:0.80,z:0.60,ap:'3',cd:'5',desc:'主动: 震慑6+HP-10% C最高3.8',region:'ACC背侧'},
+    {id:'beh_16',name:'对抗',tier:4,drive:'价值驱动',x:0.58,y:0.76,z:0.56,ap:'3',cd:'4',desc:'主动: 震慑5+驱散敌方buff',region:'dlPFC'},
+    {id:'beh_17',name:'突破',tier:4,drive:'价值驱动',x:0.60,y:0.78,z:0.57,ap:'4',cd:'6',desc:'主动: 震慑7+无视防+SAN-2',region:'额顶网络'},
+    {id:'beh_18',name:'安抚',tier:4,drive:'照护',x:0.39,y:0.73,z:0.30,ap:'2',cd:'3',desc:'主动: 目标A-0.3+SAN+2',region:'前脑岛'},
+    {id:'beh_19',name:'保护',tier:4,drive:'照护',x:0.41,y:0.69,z:0.26,ap:'3',cd:'5',desc:'主动: 替友方吸收1次伤害',region:'ACC'},
+    {id:'beh_20',name:'舍身',tier:4,drive:'照护',x:0.43,y:0.71,z:0.27,ap:'5',cd:'10',desc:'主动: 目标免疫1回合+自身受伤+50%',region:'岛叶-ACC-VTA'}
+  ],
+  ultimate:[
+    // Behavior output coords from attitudes.json (emotion×drive→behavior_output)
+    {id:'ult_0',name:'逆流而上',combo:'恐惧+价值驱动',x:0.444,y:0.904,z:+0.576,ap:'3',cd:'10',cost:10,desc:'心灵震慑8+意志力+1 C=3.8',region:'前额叶极·DMN'},
+    {id:'ult_1',name:'奋起',combo:'愤怒+价值驱动',x:-0.333,y:0.784,z:+0.451,ap:'2',cd:'6',cost:10,desc:'心灵震慑6+驱散防御 C=0',region:'前额叶极·FPN'},
+    {id:'ult_2',name:'献身',combo:'爱+价值驱动',x:1.000,y:0.230,z:+0.477,ap:'3',cd:'10',cost:10,desc:'心灵震慑5+保护队友+HP-10%',region:'前额叶极·DMN'},
+    {id:'ult_3',name:'背水',combo:'绝望+价值驱动',x:0.469,y:0.876,z:+0.547,ap:'4',cd:'12',cost:10,desc:'伤害随已损HP增长+无视防御',region:'前额叶极·SN'},
+    {id:'ult_4',name:'净除',combo:'厌恶+价值驱动',x:0.431,y:0.865,z:+0.590,ap:'3',cd:'5',cost:10,desc:'心灵震慑5+移除幻象',region:'前额叶极·FPN'},
+    {id:'ult_5',name:'独行',combo:'孤独+价值驱动',x:0.550,y:0.864,z:+0.543,ap:'3',cd:'8',cost:10,desc:'重定义标签+意志力+1',region:'前额叶极·DMN'},
+    {id:'ult_6',name:'赎罪',combo:'内疚+道德驱动',x:0.035,y:0.320,z:+0.384,ap:'2',cd:'5',cost:10,desc:'意志力+2+道德激活+0.3',region:'vmPFC-TPJ'},
+    {id:'ult_7',name:'义愤',combo:'愤怒+道德驱动',x:-0.473,y:0.664,z:+0.411,ap:'2',cd:'6',cost:10,desc:'心灵震慑4+敌方道德推迟',region:'岛叶-PFC-杏仁核'},
+    {id:'ult_8',name:'溃逃',combo:'恐惧+反射',x:-0.883,y:0.744,z:-0.531,ap:'1',cd:'3',cost:10,desc:'闪避+D轴-0.2',region:'杏仁核-PAG'},
+    {id:'ult_9',name:'共悲',combo:'悲痛+照护',x:0.052,y:0.662,z:+0.014,ap:'2',cd:'5',cost:10,desc:'双方A-0.3+各回复SAN1',region:'岛叶-ACC'},
+    {id:'ult_10',name:'抚慰',combo:'共情+照护',x:0.729,y:0.601,z:+0.395,ap:'2',cd:'3',cost:10,desc:'目标A-0.3+SAN+2',region:'岛叶-vmPFC'},
+    {id:'ult_11',name:'虔敬',combo:'敬畏+文化习俗',x:-0.031,y:0.340,z:-0.200,ap:'2',cd:'5',cost:10,desc:'仪式效果翻倍+回复SAN2',region:'DMN+OFC'},
+    {id:'ult_12',name:'赴汤蹈火',combo:'恐怖+照护',x:0.115,y:0.800,z:+0.288,ap:'5',cd:'12',cost:10,desc:'绝对保护目标1回合 最强防御',region:'全脑整合'}
+  ]
+};
+
+// ═══════════════════════════════════════════════════════════
+//  GAME STATE
+// ═══════════════════════════════════════════════════════════
+var state={
+  skillPoints:10,
+  unlocked:{},
+  quickSlots:new Array(6).fill(null),
+  selectedNode:null
+};
+// Pre-unlock demo skills
+'cog_0,cog_2,cog_20,emo_0,emo_1,emo_2,beh_0,beh_1,beh_6,beh_7'.split(',').forEach(function(id){state.unlocked[id]=true;});
+
+// ═══════════════════════════════════════════════════════════
+//  THREE.JS SETUP
+// ═══════════════════════════════════════════════════════════
+var C=document.getElementById('c');
+var R=new THREE.WebGLRenderer({canvas:C,antialias:true,alpha:false});
+R.setPixelRatio(Math.min(window.devicePixelRatio,2));
+R.setSize(window.innerWidth,window.innerHeight);
+R.setClearColor(0x050510);
+
+var S=new THREE.Scene();
+var Cam=new THREE.PerspectiveCamera(45,window.innerWidth/window.innerHeight,0.3,80);
+Cam.position.set(3.5,2.8,3.2);
+
+var ctrl=new THREE.OrbitControls(Cam,R.domElement);
+ctrl.target.set(0,0.55,0);
+ctrl.enableDamping=true;ctrl.dampingFactor=0.06;
+ctrl.minDistance=1.5;ctrl.maxDistance=10;
+ctrl.maxPolarAngle=Math.PI*0.8;
+ctrl.update();
+
+// Lighting — atmospheric
+S.add(new THREE.AmbientLight(0x1a1a2e,0.7));
+var key=new THREE.DirectionalLight(0xffeedd,1.8); key.position.set(3,5,4); S.add(key);
+var fill=new THREE.DirectionalLight(0x5577aa,1.0); fill.position.set(-3,1,-2); S.add(fill);
+var rimL=new THREE.DirectionalLight(0x334466,0.5); rimL.position.set(0,-1,0); S.add(rimL);
+
+var G=new THREE.Group(); S.add(G);
+var nodes=[]; // {mesh, data} for raycaster
+var glowSpheres=[]; // fMRI glow spheres
+
+// Materials
+function mat(hex,emitHex,opacity){
+  return new THREE.MeshPhongMaterial({
+    color:hex, emissive:emitHex||hex, emissiveIntensity:0.5,
+    specular:0x333355, shininess:50,
+    transparent:true, opacity:opacity||0.9
+  });
+}
+function lmat(){
+  return new THREE.MeshPhongMaterial({
+    color:0x1a1a28, emissive:0x080810, emissiveIntensity:0.1,
+    specular:0x111122, shininess:8,
+    transparent:true, opacity:0.35
+  });
+}
+function ulmat(){
+  return new THREE.MeshPhongMaterial({
+    color:0x3a3a50, emissive:0x1a1a33, emissiveIntensity:0.4,
+    specular:0x333355, shininess:35,
+    transparent:true, opacity:0.6
+  });
+}
+
+var mCog=mat(0x7b8fff,0x2a2266);
+var mCogA=mat(0xa0c0ff,0x4a3377);
+var mEmo=mat(0xf0a060,0x441800);
+var mBeh=mat(0x4fc3f7,0x0a3344);
+var mUlt=mat(0xe8d070,0x443300);
+var mLock=lmat();
+var mUnlockable=ulmat();
+
+// Node geometries
+var gCog=new THREE.IcosahedronGeometry(0.04,1);
+var gEmo=new THREE.SphereGeometry(0.045,20,20);
+var gBeh=new THREE.BoxGeometry(0.07,0.05,0.07);
+var gUlt=new THREE.DodecahedronGeometry(0.06,1);
+
+// ═══════════════════════════════════════════════════════════
+//  BUILD BRAIN — from pre-generated mesh data
+//  See brain_mesh_data.js (generated by Python mathematical surface model)
+// ═══════════════════════════════════════════════════════════
+
+	// Brain geometry group — centered in attitude space
+	// BigBrain mesh raw center ~(0.10,0.52,-0.03) → shift to attitude-space center (0,0.55,0.05)
+	// Brain container — transforms BigBrain mesh (neuroimaging coords) → attitude space
+	// Rotation swaps Y↔Z: neuroimaging (X=LR,Y=PA,Z=IS) → attitude (X=V,Y=|A|,Z=D)
+	// Scale 1.72x ensures all 74 attitude nodes are inside the brain volume
+	var brainGroup=new THREE.Group();
+	brainGroup.rotation.x=-Math.PI/2;
+	brainGroup.position.set(-0.057,0.584,0.569);
+	brainGroup.scale.set(1.72,1.72,1.72);
+	G.add(brainGroup);
+
+	// Brain materials — use vertex colors for region distinction
+var brainMat=new THREE.MeshPhongMaterial({
+  color:0xffffff, emissive:0x000000, emissiveIntensity:0.0,
+  specular:0x667788, shininess:35,
+  vertexColors:true,
+  transparent:true, opacity:0.12, side:THREE.DoubleSide, depthWrite:false
+});
+var brainWireMat2=new THREE.MeshBasicMaterial({
+  color:0x334466, transparent:true, opacity:0.02,
+  wireframe:true, depthWrite:false
+});
+
+// Helper: build geometry from flat vertex+face arrays, with optional vertex colors
+var hasColors=(typeof BRAIN_COLORS!=='undefined');
+function meshFromData(vertsArr, facesArr, mat, colorsArr, cOff){
+  var geo=new THREE.BufferGeometry();
+  geo.setAttribute('position',new THREE.BufferAttribute(new Float32Array(vertsArr),3));
+  geo.setIndex(facesArr);
+  if(colorsArr){
+    var cSlice=colorsArr.slice(cOff||0, (cOff||0)+vertsArr.length);
+    geo.setAttribute('color',new THREE.BufferAttribute(new Float32Array(cSlice),3));
+  }
+  geo.computeVertexNormals();
+  return new THREE.Mesh(geo, mat);
+}
+
+// Left hemisphere
+var lvStart=0, lvEnd=BRAIN_LEFT_COUNT*3;
+var leftHemi=meshFromData(BRAIN_VERTS.slice(lvStart,lvEnd),
+  BRAIN_FACES.filter(function(f){return f<BRAIN_LEFT_COUNT;}), brainMat,
+  hasColors?BRAIN_COLORS:null, lvStart); brainGroup.add(leftHemi);
+// Wireframe overlay (no colors needed)
+brainGroup.add(meshFromData(BRAIN_VERTS.slice(lvStart,lvEnd),
+  BRAIN_FACES.filter(function(f){return f<BRAIN_LEFT_COUNT;}), brainWireMat2));
+
+// Right hemisphere
+var rvStart=BRAIN_LEFT_COUNT*3, rvEnd=(BRAIN_LEFT_COUNT+BRAIN_RIGHT_COUNT)*3;
+var rightHemi=meshFromData(BRAIN_VERTS.slice(rvStart,rvEnd),
+  BRAIN_FACES.filter(function(f){return f>=BRAIN_LEFT_COUNT&&f<BRAIN_LEFT_COUNT+BRAIN_RIGHT_COUNT;}).map(function(f){return f-BRAIN_LEFT_COUNT;}), brainMat,
+  hasColors?BRAIN_COLORS:null, rvStart); brainGroup.add(rightHemi);
+brainGroup.add(meshFromData(BRAIN_VERTS.slice(rvStart,rvEnd),
+  BRAIN_FACES.filter(function(f){return f>=BRAIN_LEFT_COUNT&&f<BRAIN_LEFT_COUNT+BRAIN_RIGHT_COUNT;}).map(function(f){return f-BRAIN_LEFT_COUNT;}), brainWireMat2));
+
+// Cerebellum
+var cvStart=(BRAIN_LEFT_COUNT+BRAIN_RIGHT_COUNT)*3;
+if(BRAIN_CEREB_COUNT>0){
+  brainGroup.add(meshFromData(BRAIN_VERTS.slice(cvStart),
+    BRAIN_FACES.filter(function(f){return f>=BRAIN_LEFT_COUNT+BRAIN_RIGHT_COUNT;}).map(function(f){return f-BRAIN_LEFT_COUNT-BRAIN_RIGHT_COUNT;}), brainMat));
+}  // Cerebellum: included via BigBrain mesh data
+
+// Brainstem: included in BigBrain mesh data — no procedural needed
+
+// ═══════════════════════════════════════════════════════════
+//  HELPERS
+// ═══════════════════════════════════════════════════════════
+function bezier3(a,b,c,t){
+  var u=1-t;
+  return new THREE.Vector3(u*u*a.x+2*u*t*b.x+t*t*c.x, u*u*a.y+2*u*t*b.y+t*t*c.y, u*u*a.z+2*u*t*b.z+t*t*c.z);
+}
+function addTract(from,to,colorHex,unlocked){
+  var mid=new THREE.Vector3().addVectors(from,to).multiplyScalar(0.5);
+  var dir=new THREE.Vector3().subVectors(to,from).normalize();
+  var perp=new THREE.Vector3(-dir.z,0,dir.x).normalize();
+  mid.add(perp.multiplyScalar(0.12)); // curvature for tract-like look
+
+  var pts=[];
+  for(var i=0;i<=20;i++){pts.push(bezier3(from,mid,to,i/20));}
+
+  if(unlocked){
+    var curve=new THREE.CatmullRomCurve3(pts);
+    var tubeGeo=new THREE.TubeGeometry(curve,16,0.004,6,false);
+    var tubeMat=new THREE.MeshPhongMaterial({color:colorHex,emissive:colorHex,emissiveIntensity:0.4,transparent:true,opacity:0.5,depthWrite:false});
+    G.add(new THREE.Mesh(tubeGeo,tubeMat));
+  }else{
+    var lineGeo=new THREE.BufferGeometry().setFromPoints(pts);
+    var lineMat=new THREE.LineDashedMaterial({color:0x334455,transparent:true,opacity:0.18,dashSize:0.12,gapSize:0.10,depthWrite:false});
+    var line=new THREE.Line(lineGeo,lineMat);
+    line.computeLineDistances();
+    G.add(line);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+//  ADD NODES
+// ═══════════════════════════════════════════════════════════
+function addNode(nd){
+  var geo;
+  if(nd.branch==='cog') geo=gCog;
+  else if(nd.branch==='emo') geo=gEmo;
+  else if(nd.branch==='beh') geo=gBeh;
+  else geo=gUlt;
+
+  var m;
+  if(state.unlocked[nd.id]){
+    if(nd.branch==='cog') m=new THREE.Mesh(geo, (nd.type==='主动')?mCogA:mCog);
+    else if(nd.branch==='emo') m=new THREE.Mesh(geo, mEmo);
+    else if(nd.branch==='beh') m=new THREE.Mesh(geo, mBeh);
+    else m=new THREE.Mesh(geo, mUlt);
+    m.material=m.material.clone();
+    // fMRI glow sphere
+    var glowGeo=new THREE.SphereGeometry(0.12,16,16);
+    var glowColor=nd.branch==='cog'?0x664488:(nd.branch==='emo'?0x884422:(nd.branch==='beh'?0x225566:0x886622));
+    var glowMat=new THREE.MeshBasicMaterial({color:glowColor,transparent:true,opacity:0.10,depthWrite:false});
+    var glow=new THREE.Mesh(glowGeo,glowMat);
+    glow.position.set(nd.x,nd.y,nd.z);
+    G.add(glow);
+    glowSpheres.push({mesh:glow, nodeId:nd.id});
+  }else if(state.skillPoints>=costOf(nd.tier)){
+    m=new THREE.Mesh(geo, mUnlockable.clone());
+  }else{
+    m=new THREE.Mesh(geo, mLock.clone());
+  }
+  m.position.set(nd.x,nd.y,nd.z);
+  m.userData={nd:nd};
+  G.add(m);
+  nodes.push({mesh:m, data:nd});
+  return m;
+}
+
+// Build all nodes
+var allBranches=[
+  {list:treeData.cognition, branch:'cog'},
+  {list:treeData.emotion, branch:'emo'},
+  {list:treeData.behavior, branch:'beh'},
+  {list:treeData.ultimate, branch:'ultimate'}
+];
+for(var b=0;b<allBranches.length;b++){
+  var bl=allBranches[b];
+  for(var i=0;i<bl.list.length;i++){
+    var nd=bl.list[i];
+    nd.branch=bl.branch;
+    addNode(nd);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+//  PREREQUISITE TRACTS
+// ═══════════════════════════════════════════════════════════
+var nodeMap={};
+for(var n=0;n<nodes.length;n++){nodeMap[nodes[n].data.id]=nodes[n].data;}
+
+var prereqPairs=[
+  // Cognition within-branch
+  ['cog_5','cog_0'],['cog_6','cog_1'],['cog_7','cog_2'],['cog_8','cog_3'],['cog_9','cog_4'],
+  ['cog_10','cog_5'],['cog_11','cog_6'],['cog_12','cog_7'],['cog_13','cog_8'],['cog_14','cog_9'],
+  ['cog_15','cog_10'],['cog_16','cog_11'],['cog_17','cog_12'],['cog_18','cog_13'],['cog_19','cog_14'],
+  ['cog_20','cog_15'],['cog_21','cog_16'],['cog_22','cog_17'],['cog_23','cog_18'],['cog_24','cog_19'],
+  // Behavior L2 needs Cognition L2
+  ['beh_3','cog_5'],['beh_4','cog_5'],['beh_5','cog_5'],
+  ['beh_6','cog_6'],['beh_7','cog_6'],['beh_8','cog_6'],
+  // Behavior L3 needs Cognition L3
+  ['beh_9','cog_10'],['beh_10','cog_10'],['beh_11','cog_10'],
+  ['beh_12','cog_11'],['beh_13','cog_11'],['beh_14','cog_11'],
+  // Behavior L4 needs Cognition L5
+  ['beh_15','cog_20'],['beh_16','cog_20'],['beh_17','cog_20'],
+  ['beh_18','cog_21'],['beh_19','cog_21'],['beh_20','cog_21'],
+  // Emotion within-branch
+  ['emo_3','emo_0'],['emo_4','emo_1'],['emo_5','emo_1'],
+  ['emo_6','emo_3'],['emo_7','emo_0'],['emo_8','emo_1'],['emo_9','emo_4'],
+  ['emo_10','emo_5'],['emo_11','emo_5'],['emo_12','emo_1'],['emo_13','emo_5'],
+  ['emo_14','emo_8'],
+  // Ultimate needs 3 branches
+  ['ult_0','cog_21'],['ult_0','emo_1'],['ult_0','beh_15'],
+  ['ult_1','cog_12'],['ult_1','emo_4'],['ult_1','beh_16'],
+  ['ult_3','cog_21'],['ult_3','emo_10'],['ult_3','beh_17'],
+  ['ult_6','cog_12'],['ult_6','emo_11'],['ult_6','beh_9'],
+  ['ult_9','cog_18'],['ult_9','emo_5'],['ult_9','beh_18'],
+  ['ult_12','cog_19'],['ult_12','emo_14'],['ult_12','beh_20'],
+  ['ult_11','cog_15'],['ult_11','emo_12'],['ult_11','beh_14'],
+  ['ult_4','cog_16'],['ult_4','emo_9'],['ult_4','beh_16'],
+  ['ult_5','cog_17'],['ult_5','emo_13'],['ult_5','beh_17'],
+  ['ult_7','cog_11'],['ult_7','emo_4'],['ult_7','beh_10'],
+  ['ult_2','cog_15'],['ult_2','emo_7'],['ult_2','beh_15'],
+  ['ult_8','cog_4'],['ult_8','emo_1'],['ult_8','beh_0'],
+  ['ult_10','cog_14'],['ult_10','emo_6'],['ult_10','beh_18']
+];
+
+for(var p=0;p<prereqPairs.length;p++){
+  var a=prereqPairs[p][0], bId=prereqPairs[p][1];
+  if(nodeMap[a]&&nodeMap[bId]){
+    var from=new THREE.Vector3(nodeMap[a].x,nodeMap[a].y,nodeMap[a].z);
+    var to=new THREE.Vector3(nodeMap[bId].x,nodeMap[bId].y,nodeMap[bId].z);
+    var bothUnlocked=state.unlocked[a]&&state.unlocked[bId];
+    var col=bothUnlocked?'#556688':'#334455';
+    addTract(from,to,col,bothUnlocked);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+//  STARFIELD
+// ═══════════════════════════════════════════════════════════
+var sGeo=new THREE.BufferGeometry();
+var sPos=new Float32Array(600*3);
+for(var i=0;i<600;i++){sPos[i*3]=(Math.random()-0.5)*6;sPos[i*3+1]=(Math.random()-0.5)*6;sPos[i*3+2]=(Math.random()-0.5)*6;}
+sGeo.setAttribute('position',new THREE.BufferAttribute(sPos,3));
+var stars=new THREE.Points(sGeo,new THREE.PointsMaterial({color:0x334466,size:0.008,transparent:true,opacity:0.4,depthWrite:false}));
+S.add(stars);
+
+// ═══════════════════════════════════════════════════════════
+//  UI: QUICK SLOTS
+// ═══════════════════════════════════════════════════════════
+var slotsEl=document.getElementById('slots');
+var slotDivs=[];
+for(var s=0;s<6;s++){
+  var div=document.createElement('div'); div.className='slot';
+  div.addEventListener('click',(function(i){return function(){onSlotClick(i);};})(s));
+  slotsEl.appendChild(div); slotDivs.push(div);
+}
+function renderSlots(){
+  for(var i=0;i<6;i++){
+    var ndId=state.quickSlots[i], div=slotDivs[i];
+    div.className='slot';
+    if(ndId){
+      div.classList.add('filled'); var nd=nodeMap[ndId];
+      if(nd){
+        if(nd.branch==='cog')div.classList.add('cog-slot');
+        else if(nd.branch==='emo')div.classList.add('emo-slot');
+        else if(nd.branch==='beh')div.classList.add('beh-slot');
+        div.innerHTML='<span class="name">'+nd.name+'</span><span class="ap">'+(nd.ap||'')+'</span>';
+      }
+    }else{div.innerHTML='<span style="color:#333;font-size:0.7rem">+</span>';}
+  }
+}
+function onSlotClick(i){
+  if(state.quickSlots[i]){state.quickSlots[i]=null;}
+  else if(state.selectedNode){var ndId=state.selectedNode.data.id;if(state.quickSlots.indexOf(ndId)<0)state.quickSlots[i]=ndId;}
+  renderSlots();
+}
+
+// ═══════════════════════════════════════════════════════════
+//  UI: INFO PANEL
+// ═══════════════════════════════════════════════════════════
+var pnl=document.getElementById('pnl');
+var selectedMesh=null;
+
+function refreshNodeMaterials(){
+  for(var n=0;n<nodes.length;n++){
+    var nd=nodes[n].data, m=nodes[n].mesh;
+    if(state.unlocked[nd.id]){
+      if(nd.branch==='cog')m.material=(nd.type==='主动')?mCogA:mCog;
+      else if(nd.branch==='emo')m.material=mEmo;
+      else if(nd.branch==='beh')m.material=mBeh;
+      else m.material=mUlt;
+      m.material=m.material.clone();
+    }else if(state.skillPoints>=costOf(nd.tier)){
+      m.material=mUnlockable.clone();
+    }else{
+      m.material=mLock.clone();
+    }
+    m.material.needsUpdate=true;
+  }
+  // Refresh glow spheres
+  for(var g=0;g<glowSpheres.length;g++){
+    glowSpheres[g].mesh.visible=!!state.unlocked[glowSpheres[g].nodeId];
+  }
+}
+
+function showPanel(nd){
+  var b=nd.branch;
+  var bName=b==='cog'?'认知':(b==='emo'?'情绪':(b==='beh'?'行为':'终极技能'));
+  var bColor=b==='cog'?'#a0b0ff':(b==='emo'?'#ffb878':(b==='beh'?'#80d8ff':'#ffe888'));
+  document.getElementById('pn').textContent=nd.name;
+  document.getElementById('pn').style.color=bColor;
+  document.getElementById('pm').textContent=bName+' · '+(nd.type||'')+' · '+(nd.tier==='U'?'终极':'L'+nd.tier);
+  var t='';
+  if(nd.mod)t+='<em>'+nd.mod+'</em>';
+  if(nd.drive)t+='<em>'+nd.drive+'</em>';
+  if(nd.combo)t+='<em>'+nd.combo+'</em>';
+  var ct=nd.tier==='U'?10:costOf(nd.tier);
+  t+='<em>'+ct+'点</em>';
+  document.getElementById('pt').innerHTML=t;
+  document.getElementById('pd').textContent=nd.desc||'';
+  document.getElementById('ps').innerHTML=
+    '<div><b>AP</b> <i>'+(nd.ap||'—')+'</i></div>'+
+    '<div><b>冷却</b> <i>'+(nd.cd||'—')+'</i></div>'+
+    '<div><b>成本</b> <i>'+ct+'点</i></div>'+
+    '<div><b>层级</b> <i>'+(nd.tier||'—')+'</i></div>';
+  document.getElementById('pr').textContent='脑区: '+(nd.region||'—');
+  document.getElementById('pp').textContent='坐标: ('+nd.x.toFixed(2)+', '+nd.y.toFixed(2)+', '+nd.z.toFixed(2)+')';
+  var btn=document.getElementById('pnl-btn');
+  if(state.unlocked[nd.id]){
+    btn.textContent='✓ 已解锁'; btn.className='btn lock'; btn.onclick=null;
+  }else if(state.skillPoints>=ct){
+    btn.textContent='解锁 ('+ct+' 点)'; btn.className='btn';
+    btn.onclick=function(){unlockNode(nd.id);};
+  }else{
+    btn.textContent='技能点不足 (需'+ct+')'; btn.className='btn lock'; btn.onclick=null;
+  }
+  pnl.classList.add('on');
+}
+
+function unlockNode(id){
+  var nd=nodeMap[id]; if(!nd)return;
+  var ct=nd.tier==='U'?10:costOf(nd.tier);
+  if(state.unlocked[id]||state.skillPoints<ct)return;
+  state.skillPoints-=ct; state.unlocked[id]=true;
+  document.getElementById('sp-val').textContent=state.skillPoints;
+  // Add glow
+  var glowGeo=new THREE.SphereGeometry(0.12,16,16);
+  var glowColor=nd.branch==='cog'?0x664488:(nd.branch==='emo'?0x884422:(nd.branch==='beh'?0x225566:0x886622));
+  var glowMat=new THREE.MeshBasicMaterial({color:glowColor,transparent:true,opacity:0.10,depthWrite:false});
+  var glow=new THREE.Mesh(glowGeo,glowMat);
+  glow.position.set(nd.x,nd.y,nd.z); G.add(glow);
+  glowSpheres.push({mesh:glow, nodeId:nd.id});
+  refreshNodeMaterials();
+  showPanel(nd);
+}
+
+// ═══════════════════════════════════════════════════════════
+//  INTERACTION
+// ═══════════════════════════════════════════════════════════
+var raycaster=new THREE.Raycaster(); raycaster.params.Points.threshold=0.15;
+var mouse=new THREE.Vector2();
+var tip=document.getElementById('tip');
+var hovered=null;
+
+document.getElementById('pnl-x').addEventListener('click',function(){
+  pnl.classList.remove('on');
+  if(selectedMesh){selectedMesh.material.emissiveIntensity=0.5;selectedMesh=null;}
+  state.selectedNode=null;
+});
+
+function onMove(ev){
+  mouse.x=(ev.clientX/window.innerWidth)*2-1;
+  mouse.y=-(ev.clientY/window.innerHeight)*2+1;
+  raycaster.setFromCamera(mouse,Cam);
+  var meshObjs=nodes.map(function(n){return n.mesh;});
+  var hits=raycaster.intersectObjects(meshObjs);
+  if(hits.length>0){
+    var obj=hits[0].object;
+    if(hovered!==obj){
+      if(hovered&&hovered!==selectedMesh)hovered.material.emissiveIntensity=0.5;
+      hovered=obj;
+      if(hovered!==selectedMesh)hovered.material.emissiveIntensity=1.3;
+    }
+    tip.style.display='block'; tip.style.left=(ev.clientX+14)+'px'; tip.style.top=(ev.clientY-24)+'px';
+    var hd=obj.userData.nd; tip.textContent=hd.name+(hd.region?' · '+hd.region:'');
+    document.body.style.cursor='pointer';
+  }else{
+    if(hovered&&hovered!==selectedMesh)hovered.material.emissiveIntensity=0.5;
+    hovered=null; tip.style.display='none'; document.body.style.cursor='default';
+  }
+}
+function onClick(ev){
+  raycaster.setFromCamera(mouse,Cam);
+  var meshObjs=nodes.map(function(n){return n.mesh;});
+  var hits=raycaster.intersectObjects(meshObjs);
+  if(hits.length>0){
+    var obj=hits[0].object;
+    if(selectedMesh&&selectedMesh!==obj)selectedMesh.material.emissiveIntensity=0.5;
+    selectedMesh=obj; selectedMesh.material.emissiveIntensity=1.6;
+    state.selectedNode={mesh:obj, data:obj.userData.nd};
+    showPanel(obj.userData.nd);
+  }
+}
+
+window.addEventListener('mousemove',onMove);
+window.addEventListener('click',onClick);
+window.addEventListener('keydown',function(e){
+  switch(e.key.toLowerCase()){
+    case'r':Cam.position.set(3.5,2.8,3.2);ctrl.target.set(0,0.55,0);break;
+    case'f':Cam.position.set(0,2,4.5);ctrl.target.set(0,0.55,0);break;
+    case't':Cam.position.set(0,3.5,0.5);ctrl.target.set(0,0.55,0);break;
+    case'u':if(state.selectedNode&&state.selectedNode.data){var nd=state.selectedNode.data;if(!state.unlocked[nd.id])unlockNode(nd.id);}break;
+  }
+  ctrl.update();
+});
+window.addEventListener('resize',function(){
+  Cam.aspect=window.innerWidth/window.innerHeight;Cam.updateProjectionMatrix();
+  R.setSize(window.innerWidth,window.innerHeight);
+});
+
+// ═══════════════════════════════════════════════════════════
+//  ANIMATION
+// ═══════════════════════════════════════════════════════════
+renderSlots();
+document.getElementById('sp-val').textContent=state.skillPoints;
+
+var totalNodes=treeData.cognition.length+treeData.emotion.length+treeData.behavior.length+treeData.ultimate.length;
+console.log('🧠 大脑技能树: '+totalNodes+'节点 (认知:'+treeData.cognition.length+' 情绪:'+treeData.emotion.length+' 行为:'+treeData.behavior.length+' 终极:'+treeData.ultimate.length+')');
+console.log('   前置连线: '+prereqPairs.length+'条 | 快捷槽: 6个 | 技能点: '+state.skillPoints);
+
+var clock=new THREE.Clock();
+function animate(){
+  requestAnimationFrame(animate);
+  var t=clock.getElapsedTime();
+  // Subtle pulse for unlocked nodes
+  for(var i=0;i<nodes.length;i++){
+    if(state.unlocked[nodes[i].data.id]){
+      var s=1+Math.sin(t*2.0+nodes[i].data.x*3+nodes[i].data.y*4)*0.05;
+      nodes[i].mesh.scale.setScalar(s);
+    }
+  }
+  // Pulsing glow for unlockable nodes
+  for(var n=0;n<nodes.length;n++){
+    if(!state.unlocked[nodes[n].data.id]&&state.skillPoints>=costOf(nodes[n].data.tier)){
+      var pulse=0.5+Math.sin(t*3.0+n)*0.15;
+      nodes[n].mesh.material.opacity=pulse;
+    }
+  }
+  // Subtle ambient motion
+  // Subtle hemisphere rotation (meshes are inside brainGroup, transforms compose correctly)
+	  leftHemi.rotation.y+=0.00005; rightHemi.rotation.y-=0.00005;
+  stars.rotation.y+=0.0002;
+  ctrl.update();
+  R.render(S,Cam);
+}
+animate();
+
+})();
+</script>
+</body>
+</html>
