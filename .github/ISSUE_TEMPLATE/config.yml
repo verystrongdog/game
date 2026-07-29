@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 六维设计框架
+    url: https://github.com/verystrongdog/game/blob/main/docs/设计框架-六维状态.md
+    about: 提起 Issue 前先确认话题在全局优先级中的位置
