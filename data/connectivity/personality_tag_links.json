@@ -1,0 +1,151 @@
+{
+  "_description": "性格标签 → 链路 ID 映射 — 自动生成初稿，人工可覆盖",
+  "_source": "tools/generate_tag_links.py",
+  "_note": "collateral_links 留空待人工审核后补充",
+  "tags": {
+    "threat_sensitization": {
+      "display_name": "敏化-威胁",
+      "description": "过度警觉，容易恐惧逃离。杏仁核+前脑岛→PAG/脑干防御回路增强。",
+      "main_offset": 0.4,
+      "core_links": [
+        201,
+        198,
+        199,
+        200,
+        203,
+        204,
+        93,
+        187,
+        208,
+        212,
+        221,
+        202,
+        51,
+        54,
+        90
+      ],
+      "collateral_links": {},
+      "auto_generated": true
+    },
+    "reward_sensitization": {
+      "display_name": "敏化-奖励",
+      "description": "冲动趋近，成瘾倾向。VTA→NAcc/壳核奖赏回路增强。",
+      "main_offset": 0.4,
+      "core_links": [
+        53,
+        51,
+        54,
+        135,
+        174,
+        222,
+        223,
+        224,
+        172,
+        173,
+        217,
+        218,
+        219,
+        221,
+        0
+      ],
+      "collateral_links": {},
+      "auto_generated": true
+    },
+    "under_inhibition": {
+      "display_name": "抑制不足",
+      "description": "自控差，无法压制冲动。dlPFC→杏仁核/纹状体抑制链路弱（负向偏移，即这些抑制链路不被选中）。此处选择的是少了抑制后会多出来的行动链路。",
+      "main_offset": 0.4,
+      "core_links": [
+        16,
+        132,
+        14,
+        19,
+        115,
+        116,
+        121,
+        131,
+        146,
+        195,
+        13,
+        18,
+        110,
+        112,
+        145
+      ],
+      "collateral_links": {},
+      "auto_generated": true
+    },
+    "over_inhibition": {
+      "display_name": "过度抑制",
+      "description": "抑制一切——不说话、不动、情感淡漠。dlPFC控制链路全面增强。",
+      "main_offset": 0.4,
+      "core_links": [
+        13,
+        18,
+        110,
+        145,
+        112,
+        108,
+        113,
+        119,
+        192,
+        16,
+        132,
+        11,
+        15,
+        97,
+        109
+      ],
+      "collateral_links": {},
+      "auto_generated": true
+    },
+    "rumination": {
+      "display_name": "反刍",
+      "description": "关不掉的内在世界。默认网络（后扣带+vmPFC）髓鞘化过高。",
+      "main_offset": 0.4,
+      "core_links": [
+        101,
+        56,
+        62,
+        92,
+        175,
+        98,
+        102,
+        189,
+        58,
+        65,
+        117,
+        176,
+        41,
+        55,
+        60
+      ],
+      "collateral_links": {},
+      "auto_generated": true
+    },
+    "social_blunting": {
+      "display_name": "社交钝化",
+      "description": "不理解社交线索，不回应。颞极/mPFC/STS社会认知链路髓鞘化过低（负向偏移）。",
+      "main_offset": -0.4,
+      "core_links": [
+        133,
+        106,
+        77,
+        80,
+        82,
+        118,
+        182,
+        184,
+        12,
+        17,
+        24,
+        43,
+        67,
+        78,
+        79
+      ],
+      "collateral_links": {},
+      "auto_generated": true
+    }
+  }
+}
