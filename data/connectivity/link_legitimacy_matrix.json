@@ -1,10 +1,10 @@
 {
-  "_description": "合法神经链路矩阵 — 满足四规则的脑区间连接",
+  "_description": "合法神经链路矩阵 — 满足三规则(结构存在+协同激活+方向分类)的脑区间连接。层级相邻已降级为信息性标记。",
   "_rules": [
-    "1. 层级相邻: |level_a - level_b| <= 1 (L0例外: 可投射到L2 — 脑干广播式投射)",
-    "2. 结构存在: ENIGMA HCP DTI (皮层) + Hansen 2024 FC (脑干)",
-    "3. 协同激活: Kroell 功能网络 (皮层) / Hansen社区 (脑干)",
-    "4. 双向不对称: feedforward=快/被动, feedback=慢/主动"
+    "1. 结构存在: ENIGMA HCP DTI (皮层) + Hansen 2024 FC (脑干)",
+    "2. 协同激活: Kroell 功能网络 (皮层) / Hansen社区 (脑干)",
+    "3. 双向不对称: feedforward=快/被动, feedback=慢/主动",
+    "(层级相邻已降级为信息性标记 — 有DTI/FC证据的跨层连接合法)"
   ],
   "_data_sources": {
     "brain_regions": "data/brain_regions.json (89脑区 L0-L5)",
@@ -16,12 +16,48 @@
   "_stats": {
     "total_enigma_connections": 1114,
     "total_brainstem_targets": 44,
-    "legal_links": 228,
-    "feedforward": 63,
-    "feedback": 29,
+    "legal_links": 353,
+    "layer_adjacent": 228,
+    "layer_nonadjacent": 125,
+    "feedforward": 124,
+    "feedback": 93,
     "lateral": 136
   },
   "links": [
+    {
+      "dk_pair": [
+        "caudalanteriorcingulate",
+        "caudalmiddlefrontal"
+      ],
+      "enigma_labels": [
+        "L_caudalanteriorcingulate",
+        "L_caudalmiddlefrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 2.75,
+      "regions_a": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "regions_b": [
+        "额中回尾部"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Reward"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
     {
       "dk_pair": [
         "caudalanteriorcingulate",
@@ -49,14 +85,52 @@
         "Uncinate Fasciculus (UF)"
       ],
       "coactivated_networks": [
-        "Emotional Scene and Face Processing",
-        "Reward"
+        "Reward",
+        "Emotional Scene and Face Processing"
       ],
       "rule_check": {
         "layer_adjacent": true,
         "structure_exists": true,
         "coactivation": true,
         "direction": "lateral"
+      }
+    },
+    {
+      "dk_pair": [
+        "caudalanteriorcingulate",
+        "medialorbitofrontal"
+      ],
+      "enigma_labels": [
+        "L_caudalanteriorcingulate",
+        "L_medialorbitofrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 7.78,
+      "regions_a": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "regions_b": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Reward",
+        "Emotional Scene and Face Processing",
+        "Extended Socio-Affective Default"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
       }
     },
     {
@@ -164,6 +238,42 @@
     {
       "dk_pair": [
         "caudalanteriorcingulate",
+        "precuneus"
+      ],
+      "enigma_labels": [
+        "L_caudalanteriorcingulate",
+        "L_precuneus"
+      ],
+      "layers": [
+        2,
+        4
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 8.7,
+      "regions_a": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "regions_b": [
+        "楔前叶"
+      ],
+      "white_matter_tracts": [
+        "Cingulum (Cingulum Bundle, CB)"
+      ],
+      "coactivated_networks": [
+        "Extended Socio-Affective Default"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "dk_pair": [
+        "caudalanteriorcingulate",
         "rostralanteriorcingulate"
       ],
       "enigma_labels": [
@@ -199,6 +309,83 @@
     {
       "dk_pair": [
         "caudalanteriorcingulate",
+        "rostralmiddlefrontal"
+      ],
+      "enigma_labels": [
+        "L_caudalanteriorcingulate",
+        "L_rostralmiddlefrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 5.23,
+      "regions_a": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "regions_b": [
+        "dlPFC",
+        "前额叶极",
+        "前额叶极·FPN"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Emotion Regulation",
+        "Cognitive Attention Control"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "dk_pair": [
+        "caudalanteriorcingulate",
+        "superiorfrontal"
+      ],
+      "enigma_labels": [
+        "L_caudalanteriorcingulate",
+        "L_superiorfrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 10.27,
+      "regions_a": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Reward",
+        "Extended Socio-Affective Default",
+        "Empathy",
+        "Vigilant Attention",
+        "Emotional Scene and Face Processing",
+        "Emotion Regulation"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "dk_pair": [
+        "caudalanteriorcingulate",
         "insula"
       ],
       "enigma_labels": [
@@ -221,11 +408,11 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Cognitive Attention Control",
         "Reward",
         "Empathy",
+        "Vigilant Attention",
         "Emotion Regulation",
-        "Vigilant Attention"
+        "Cognitive Attention Control"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -261,13 +448,13 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Cognitive Attention Control",
-        "Emotional Scene and Face Processing",
-        "Extended Socio-Affective Default",
         "Reward",
+        "Extended Socio-Affective Default",
         "Empathy",
+        "Vigilant Attention",
+        "Emotional Scene and Face Processing",
         "Emotion Regulation",
-        "Vigilant Attention"
+        "Cognitive Attention Control"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -303,8 +490,8 @@
         "Uncinate Fasciculus (UF)"
       ],
       "coactivated_networks": [
-        "Emotional Scene and Face Processing",
-        "Reward"
+        "Reward",
+        "Emotional Scene and Face Processing"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -380,6 +567,83 @@
         "structure_exists": true,
         "coactivation": true,
         "direction": "lateral"
+      }
+    },
+    {
+      "dk_pair": [
+        "caudalanteriorcingulate",
+        "rostralmiddlefrontal"
+      ],
+      "enigma_labels": [
+        "L_caudalanteriorcingulate",
+        "R_rostralmiddlefrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 2.91,
+      "regions_a": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "regions_b": [
+        "dlPFC",
+        "前额叶极",
+        "前额叶极·FPN"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Emotion Regulation",
+        "Cognitive Attention Control"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "dk_pair": [
+        "caudalanteriorcingulate",
+        "superiorfrontal"
+      ],
+      "enigma_labels": [
+        "L_caudalanteriorcingulate",
+        "R_superiorfrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 8.46,
+      "regions_a": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Reward",
+        "Extended Socio-Affective Default",
+        "Empathy",
+        "Vigilant Attention",
+        "Emotional Scene and Face Processing",
+        "Emotion Regulation"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
       }
     },
     {
@@ -479,6 +743,38 @@
         "structure_exists": true,
         "coactivation": true,
         "direction": "lateral"
+      }
+    },
+    {
+      "dk_pair": [
+        "caudalmiddlefrontal",
+        "posteriorcingulate"
+      ],
+      "enigma_labels": [
+        "L_caudalmiddlefrontal",
+        "L_posteriorcingulate"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 1.99,
+      "regions_a": [
+        "额中回尾部"
+      ],
+      "regions_b": [
+        "后扣带"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Reward"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
       }
     },
     {
@@ -605,8 +901,8 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Extended Multiple Demand",
         "Reward",
+        "Extended Multiple Demand",
         "Working Memory"
       ],
       "rule_check": {
@@ -719,6 +1015,40 @@
     },
     {
       "dk_pair": [
+        "caudalmiddlefrontal",
+        "insula"
+      ],
+      "enigma_labels": [
+        "L_caudalmiddlefrontal",
+        "R_insula"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 2.61,
+      "regions_a": [
+        "额中回尾部"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Reward",
+        "Extended Multiple Demand",
+        "Working Memory"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
+      }
+    },
+    {
+      "dk_pair": [
         "fusiform",
         "inferiorparietal"
       ],
@@ -807,8 +1137,8 @@
         "枕顶联合"
       ],
       "white_matter_tracts": [
-        "Inferior Longitudinal Fasciculus (ILF)",
-        "Inferior Fronto-Occipital Fasciculus (IFOF)"
+        "Inferior Fronto-Occipital Fasciculus (IFOF)",
+        "Inferior Longitudinal Fasciculus (ILF)"
       ],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
@@ -853,6 +1183,39 @@
         "structure_exists": true,
         "coactivation": true,
         "direction": "lateral"
+      }
+    },
+    {
+      "dk_pair": [
+        "fusiform",
+        "parahippocampal"
+      ],
+      "enigma_labels": [
+        "L_fusiform",
+        "L_parahippocampal"
+      ],
+      "layers": [
+        4,
+        1
+      ],
+      "direction": "feedback",
+      "enigma_strength": 9.49,
+      "regions_a": [
+        "纺锤体回"
+      ],
+      "regions_b": [
+        "海马旁回"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Semantic Memory",
+        "Emotional Scene and Face Processing"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
       }
     },
     {
@@ -978,8 +1341,8 @@
         "枕顶联合"
       ],
       "white_matter_tracts": [
-        "Inferior Longitudinal Fasciculus (ILF)",
-        "Inferior Fronto-Occipital Fasciculus (IFOF)"
+        "Inferior Fronto-Occipital Fasciculus (IFOF)",
+        "Inferior Longitudinal Fasciculus (ILF)"
       ],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
@@ -1084,8 +1447,8 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Cognitive Attention Control",
-        "Vigilant Attention"
+        "Vigilant Attention",
+        "Cognitive Attention Control"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -1127,6 +1490,39 @@
         "structure_exists": true,
         "coactivation": true,
         "direction": "lateral"
+      }
+    },
+    {
+      "dk_pair": [
+        "inferiorparietal",
+        "parahippocampal"
+      ],
+      "enigma_labels": [
+        "L_inferiorparietal",
+        "L_parahippocampal"
+      ],
+      "layers": [
+        4,
+        1
+      ],
+      "direction": "feedback",
+      "enigma_strength": 5.63,
+      "regions_a": [
+        "角回",
+        "顶叶"
+      ],
+      "regions_b": [
+        "海马旁回"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Semantic Memory"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
       }
     },
     {
@@ -1296,10 +1692,10 @@
       "white_matter_tracts": [],
       "coactivated_networks": [
         "Reward",
-        "Motor",
-        "Semantic Memory",
         "Vigilant Attention",
-        "Working Memory"
+        "Working Memory",
+        "Semantic Memory",
+        "Motor"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -1375,6 +1771,42 @@
         "structure_exists": true,
         "coactivation": true,
         "direction": "feedforward"
+      }
+    },
+    {
+      "dk_pair": [
+        "inferiorparietal",
+        "insula"
+      ],
+      "enigma_labels": [
+        "L_inferiorparietal",
+        "L_insula"
+      ],
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 7.32,
+      "regions_a": [
+        "角回",
+        "顶叶"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Reward",
+        "Vigilant Attention",
+        "Cognitive Attention Control",
+        "Working Memory"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
       }
     },
     {
@@ -1515,6 +1947,38 @@
     {
       "dk_pair": [
         "inferiortemporal",
+        "parahippocampal"
+      ],
+      "enigma_labels": [
+        "L_inferiortemporal",
+        "L_parahippocampal"
+      ],
+      "layers": [
+        4,
+        1
+      ],
+      "direction": "feedback",
+      "enigma_strength": 6.02,
+      "regions_a": [
+        "颞下回"
+      ],
+      "regions_b": [
+        "海马旁回"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Semantic Memory"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
+      }
+    },
+    {
+      "dk_pair": [
+        "inferiortemporal",
         "parsopercularis"
       ],
       "enigma_labels": [
@@ -1580,6 +2044,38 @@
     {
       "dk_pair": [
         "inferiortemporal",
+        "insula"
+      ],
+      "enigma_labels": [
+        "L_inferiortemporal",
+        "L_insula"
+      ],
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 7.01,
+      "regions_a": [
+        "颞下回"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Extended Multiple Demand"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
+      }
+    },
+    {
+      "dk_pair": [
+        "inferiortemporal",
         "inferiortemporal"
       ],
       "enigma_labels": [
@@ -1600,8 +2096,8 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Semantic Memory",
-        "Extended Multiple Demand"
+        "Extended Multiple Demand",
+        "Semantic Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -1672,6 +2168,73 @@
         "structure_exists": true,
         "coactivation": true,
         "direction": "lateral"
+      }
+    },
+    {
+      "dk_pair": [
+        "lateraloccipital",
+        "lateralorbitofrontal"
+      ],
+      "enigma_labels": [
+        "L_lateraloccipital",
+        "L_lateralorbitofrontal"
+      ],
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 6.02,
+      "regions_a": [
+        "外侧枕叶",
+        "枕顶联合"
+      ],
+      "regions_b": [
+        "OFC"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Emotional Scene and Face Processing"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
+      }
+    },
+    {
+      "dk_pair": [
+        "lateraloccipital",
+        "parahippocampal"
+      ],
+      "enigma_labels": [
+        "L_lateraloccipital",
+        "L_parahippocampal"
+      ],
+      "layers": [
+        4,
+        1
+      ],
+      "direction": "feedback",
+      "enigma_strength": 5.76,
+      "regions_a": [
+        "外侧枕叶",
+        "枕顶联合"
+      ],
+      "regions_b": [
+        "海马旁回"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Autobiographical Memory",
+        "Emotional Scene and Face Processing"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
       }
     },
     {
@@ -1748,6 +2311,40 @@
     {
       "dk_pair": [
         "lateraloccipital",
+        "insula"
+      ],
+      "enigma_labels": [
+        "L_lateraloccipital",
+        "L_insula"
+      ],
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 8.87,
+      "regions_a": [
+        "外侧枕叶",
+        "枕顶联合"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Vigilant Attention",
+        "Cognitive Attention Control"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
+      }
+    },
+    {
+      "dk_pair": [
+        "lateraloccipital",
         "superiorparietal"
       ],
       "enigma_labels": [
@@ -1779,6 +2376,142 @@
         "structure_exists": true,
         "coactivation": true,
         "direction": "lateral"
+      }
+    },
+    {
+      "dk_pair": [
+        "lateralorbitofrontal",
+        "medialorbitofrontal"
+      ],
+      "enigma_labels": [
+        "L_lateralorbitofrontal",
+        "L_medialorbitofrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 10.23,
+      "regions_a": [
+        "OFC"
+      ],
+      "regions_b": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Reward",
+        "Semantic Memory",
+        "Emotional Scene and Face Processing"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "dk_pair": [
+        "lateralorbitofrontal",
+        "middletemporal"
+      ],
+      "enigma_labels": [
+        "L_lateralorbitofrontal",
+        "L_middletemporal"
+      ],
+      "layers": [
+        2,
+        4
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 6.71,
+      "regions_a": [
+        "OFC"
+      ],
+      "regions_b": [
+        "颞中回"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Semantic Memory"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "dk_pair": [
+        "lateralorbitofrontal",
+        "superiorfrontal"
+      ],
+      "enigma_labels": [
+        "L_lateralorbitofrontal",
+        "L_superiorfrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 6.79,
+      "regions_a": [
+        "OFC"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Reward",
+        "Semantic Memory",
+        "Emotional Scene and Face Processing"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "dk_pair": [
+        "lateralorbitofrontal",
+        "supramarginal"
+      ],
+      "enigma_labels": [
+        "L_lateralorbitofrontal",
+        "L_supramarginal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 4.39,
+      "regions_a": [
+        "OFC"
+      ],
+      "regions_b": [
+        "TPJ",
+        "缘上回"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Semantic Memory"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
       }
     },
     {
@@ -1840,8 +2573,8 @@
         "Uncinate Fasciculus (UF)"
       ],
       "coactivated_networks": [
-        "Emotional Scene and Face Processing",
-        "Reward"
+        "Reward",
+        "Emotional Scene and Face Processing"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -1873,15 +2606,86 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
+        "Reward",
         "Semantic Memory",
-        "Emotional Scene and Face Processing",
-        "Reward"
+        "Emotional Scene and Face Processing"
       ],
       "rule_check": {
         "layer_adjacent": true,
         "structure_exists": true,
         "coactivation": true,
         "direction": "lateral"
+      }
+    },
+    {
+      "dk_pair": [
+        "lateralorbitofrontal",
+        "medialorbitofrontal"
+      ],
+      "enigma_labels": [
+        "L_lateralorbitofrontal",
+        "R_medialorbitofrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 8.46,
+      "regions_a": [
+        "OFC"
+      ],
+      "regions_b": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Reward",
+        "Semantic Memory",
+        "Emotional Scene and Face Processing"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "dk_pair": [
+        "lateralorbitofrontal",
+        "superiorfrontal"
+      ],
+      "enigma_labels": [
+        "L_lateralorbitofrontal",
+        "R_superiorfrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 6.08,
+      "regions_a": [
+        "OFC"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Reward",
+        "Semantic Memory",
+        "Emotional Scene and Face Processing"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
       }
     },
     {
@@ -1954,6 +2758,42 @@
     {
       "dk_pair": [
         "medialorbitofrontal",
+        "posteriorcingulate"
+      ],
+      "enigma_labels": [
+        "L_medialorbitofrontal",
+        "L_posteriorcingulate"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 6.95,
+      "regions_a": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "regions_b": [
+        "后扣带"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Autobiographical Memory",
+        "Reward",
+        "Semantic Memory"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
+      }
+    },
+    {
+      "dk_pair": [
+        "medialorbitofrontal",
         "precuneus"
       ],
       "enigma_labels": [
@@ -1976,13 +2816,47 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
+        "Autobiographical Memory",
         "Semantic Memory",
         "Extended Socio-Affective Default",
-        "Theory of Mind",
-        "Autobiographical Memory"
+        "Theory of Mind"
       ],
       "rule_check": {
         "layer_adjacent": true,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
+      }
+    },
+    {
+      "dk_pair": [
+        "medialorbitofrontal",
+        "rostralanteriorcingulate"
+      ],
+      "enigma_labels": [
+        "L_medialorbitofrontal",
+        "L_rostralanteriorcingulate"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 10.23,
+      "regions_a": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "regions_b": [
+        "ACC吻侧"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Extended Socio-Affective Default"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
         "structure_exists": true,
         "coactivation": true,
         "direction": "feedback"
@@ -2050,12 +2924,12 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Emotional Scene and Face Processing",
-        "Extended Socio-Affective Default",
         "Reward",
-        "Semantic Memory",
+        "Extended Socio-Affective Default",
+        "Autobiographical Memory",
+        "Emotional Scene and Face Processing",
         "Theory of Mind",
-        "Autobiographical Memory"
+        "Semantic Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -2137,6 +3011,112 @@
     {
       "dk_pair": [
         "medialorbitofrontal",
+        "temporalpole"
+      ],
+      "enigma_labels": [
+        "L_medialorbitofrontal",
+        "L_temporalpole"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 6.57,
+      "regions_a": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "regions_b": [
+        "颞极"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Theory of Mind"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
+      }
+    },
+    {
+      "dk_pair": [
+        "medialorbitofrontal",
+        "insula"
+      ],
+      "enigma_labels": [
+        "L_medialorbitofrontal",
+        "L_insula"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 8.69,
+      "regions_a": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Reward"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
+      }
+    },
+    {
+      "dk_pair": [
+        "medialorbitofrontal",
+        "caudalanteriorcingulate"
+      ],
+      "enigma_labels": [
+        "L_medialorbitofrontal",
+        "R_caudalanteriorcingulate"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 4.96,
+      "regions_a": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "regions_b": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Reward",
+        "Emotional Scene and Face Processing",
+        "Extended Socio-Affective Default"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
+      }
+    },
+    {
+      "dk_pair": [
+        "medialorbitofrontal",
         "inferiortemporal"
       ],
       "enigma_labels": [
@@ -2171,6 +3151,42 @@
     {
       "dk_pair": [
         "medialorbitofrontal",
+        "lateralorbitofrontal"
+      ],
+      "enigma_labels": [
+        "L_medialorbitofrontal",
+        "R_lateralorbitofrontal"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 7.92,
+      "regions_a": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "regions_b": [
+        "OFC"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Reward",
+        "Semantic Memory",
+        "Emotional Scene and Face Processing"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
+      }
+    },
+    {
+      "dk_pair": [
+        "medialorbitofrontal",
         "medialorbitofrontal"
       ],
       "enigma_labels": [
@@ -2195,12 +3211,12 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Emotional Scene and Face Processing",
-        "Extended Socio-Affective Default",
         "Reward",
-        "Semantic Memory",
+        "Extended Socio-Affective Default",
+        "Autobiographical Memory",
+        "Emotional Scene and Face Processing",
         "Theory of Mind",
-        "Autobiographical Memory"
+        "Semantic Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -2239,6 +3255,40 @@
       ],
       "rule_check": {
         "layer_adjacent": true,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
+      }
+    },
+    {
+      "dk_pair": [
+        "medialorbitofrontal",
+        "rostralanteriorcingulate"
+      ],
+      "enigma_labels": [
+        "L_medialorbitofrontal",
+        "R_rostralanteriorcingulate"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 7.24,
+      "regions_a": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "regions_b": [
+        "ACC吻侧"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Extended Socio-Affective Default"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
         "structure_exists": true,
         "coactivation": true,
         "direction": "feedback"
@@ -2306,12 +3356,12 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Emotional Scene and Face Processing",
-        "Extended Socio-Affective Default",
         "Reward",
-        "Semantic Memory",
+        "Extended Socio-Affective Default",
+        "Autobiographical Memory",
+        "Emotional Scene and Face Processing",
         "Theory of Mind",
-        "Autobiographical Memory"
+        "Semantic Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -2352,6 +3402,74 @@
         "structure_exists": true,
         "coactivation": true,
         "direction": "lateral"
+      }
+    },
+    {
+      "dk_pair": [
+        "medialorbitofrontal",
+        "temporalpole"
+      ],
+      "enigma_labels": [
+        "L_medialorbitofrontal",
+        "R_temporalpole"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 3.31,
+      "regions_a": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "regions_b": [
+        "颞极"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Theory of Mind"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
+      }
+    },
+    {
+      "dk_pair": [
+        "medialorbitofrontal",
+        "insula"
+      ],
+      "enigma_labels": [
+        "L_medialorbitofrontal",
+        "R_insula"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 5.7,
+      "regions_a": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Reward"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
       }
     },
     {
@@ -2461,6 +3579,38 @@
     {
       "dk_pair": [
         "middletemporal",
+        "temporalpole"
+      ],
+      "enigma_labels": [
+        "L_middletemporal",
+        "L_temporalpole"
+      ],
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 8.14,
+      "regions_a": [
+        "颞中回"
+      ],
+      "regions_b": [
+        "颞极"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Theory of Mind"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
+      }
+    },
+    {
+      "dk_pair": [
+        "middletemporal",
         "inferiortemporal"
       ],
       "enigma_labels": [
@@ -2495,6 +3645,74 @@
     {
       "dk_pair": [
         "parahippocampal",
+        "precuneus"
+      ],
+      "enigma_labels": [
+        "L_parahippocampal",
+        "L_precuneus"
+      ],
+      "layers": [
+        1,
+        4
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 8.17,
+      "regions_a": [
+        "海马旁回"
+      ],
+      "regions_b": [
+        "楔前叶"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Autobiographical Memory",
+        "Semantic Memory"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "dk_pair": [
+        "parahippocampal",
+        "superiorfrontal"
+      ],
+      "enigma_labels": [
+        "L_parahippocampal",
+        "L_superiorfrontal"
+      ],
+      "layers": [
+        1,
+        5
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 7.2,
+      "regions_a": [
+        "海马旁回"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Autobiographical Memory",
+        "Semantic Memory",
+        "Emotional Scene and Face Processing"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "dk_pair": [
+        "parahippocampal",
         "parahippocampal"
       ],
       "enigma_labels": [
@@ -2515,9 +3733,9 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
+        "Autobiographical Memory",
         "Semantic Memory",
-        "Emotional Scene and Face Processing",
-        "Autobiographical Memory"
+        "Emotional Scene and Face Processing"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -2549,8 +3767,8 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Semantic Memory",
-        "Autobiographical Memory"
+        "Autobiographical Memory",
+        "Semantic Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -2589,6 +3807,39 @@
         "structure_exists": true,
         "coactivation": true,
         "direction": "lateral"
+      }
+    },
+    {
+      "dk_pair": [
+        "paracentral",
+        "superiorfrontal"
+      ],
+      "enigma_labels": [
+        "L_paracentral",
+        "L_superiorfrontal"
+      ],
+      "layers": [
+        3,
+        5
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 9.81,
+      "regions_a": [
+        "旁中央小叶"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Vigilant Attention"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
       }
     },
     {
@@ -2657,6 +3908,39 @@
     },
     {
       "dk_pair": [
+        "paracentral",
+        "superiorfrontal"
+      ],
+      "enigma_labels": [
+        "L_paracentral",
+        "R_superiorfrontal"
+      ],
+      "layers": [
+        3,
+        5
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 8.79,
+      "regions_a": [
+        "旁中央小叶"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Vigilant Attention"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "dk_pair": [
         "parsopercularis",
         "rostralmiddlefrontal"
       ],
@@ -2715,10 +3999,10 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
+        "Working Memory",
         "Empathy",
         "Emotion Regulation",
-        "Theory of Mind",
-        "Working Memory"
+        "Theory of Mind"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -2751,9 +4035,9 @@
       "white_matter_tracts": [],
       "coactivated_networks": [
         "Extended Multiple Demand",
+        "Working Memory",
         "Emotion Regulation",
         "Cognitive Attention Control",
-        "Working Memory",
         "Mirror Neuron System"
       ],
       "rule_check": {
@@ -2839,6 +4123,78 @@
     {
       "dk_pair": [
         "parsopercularis",
+        "insula"
+      ],
+      "enigma_labels": [
+        "L_parsopercularis",
+        "L_insula"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 10.03,
+      "regions_a": [
+        "Broca区"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Empathy",
+        "Extended Multiple Demand",
+        "Working Memory",
+        "Emotion Regulation",
+        "Cognitive Attention Control"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
+      }
+    },
+    {
+      "dk_pair": [
+        "parsopercularis",
+        "caudalanteriorcingulate"
+      ],
+      "enigma_labels": [
+        "L_parsopercularis",
+        "R_caudalanteriorcingulate"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 3.23,
+      "regions_a": [
+        "Broca区"
+      ],
+      "regions_b": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Empathy",
+        "Emotion Regulation",
+        "Cognitive Attention Control"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
+      }
+    },
+    {
+      "dk_pair": [
+        "parsopercularis",
         "caudalmiddlefrontal"
       ],
       "enigma_labels": [
@@ -2893,16 +4249,52 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
+        "Working Memory",
         "Empathy",
         "Emotion Regulation",
-        "Theory of Mind",
-        "Working Memory"
+        "Theory of Mind"
       ],
       "rule_check": {
         "layer_adjacent": true,
         "structure_exists": true,
         "coactivation": true,
         "direction": "lateral"
+      }
+    },
+    {
+      "dk_pair": [
+        "parsopercularis",
+        "insula"
+      ],
+      "enigma_labels": [
+        "L_parsopercularis",
+        "R_insula"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 1.79,
+      "regions_a": [
+        "Broca区"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Empathy",
+        "Extended Multiple Demand",
+        "Working Memory",
+        "Emotion Regulation",
+        "Cognitive Attention Control"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
       }
     },
     {
@@ -3137,6 +4529,74 @@
     {
       "dk_pair": [
         "posteriorcingulate",
+        "precuneus"
+      ],
+      "enigma_labels": [
+        "L_posteriorcingulate",
+        "L_precuneus"
+      ],
+      "layers": [
+        2,
+        4
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 9.85,
+      "regions_a": [
+        "后扣带"
+      ],
+      "regions_b": [
+        "楔前叶"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Autobiographical Memory",
+        "Semantic Memory"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "dk_pair": [
+        "posteriorcingulate",
+        "superiorfrontal"
+      ],
+      "enigma_labels": [
+        "L_posteriorcingulate",
+        "L_superiorfrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 9.76,
+      "regions_a": [
+        "后扣带"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Autobiographical Memory",
+        "Reward",
+        "Semantic Memory"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "dk_pair": [
+        "posteriorcingulate",
         "insula"
       ],
       "enigma_labels": [
@@ -3203,6 +4663,42 @@
     {
       "dk_pair": [
         "posteriorcingulate",
+        "medialorbitofrontal"
+      ],
+      "enigma_labels": [
+        "L_posteriorcingulate",
+        "R_medialorbitofrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 3.62,
+      "regions_a": [
+        "后扣带"
+      ],
+      "regions_b": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Autobiographical Memory",
+        "Reward",
+        "Semantic Memory"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "dk_pair": [
+        "posteriorcingulate",
         "posteriorcingulate"
       ],
       "enigma_labels": [
@@ -3223,15 +4719,150 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Semantic Memory",
+        "Autobiographical Memory",
         "Reward",
-        "Autobiographical Memory"
+        "Semantic Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
         "structure_exists": true,
         "coactivation": true,
         "direction": "lateral"
+      }
+    },
+    {
+      "dk_pair": [
+        "posteriorcingulate",
+        "precuneus"
+      ],
+      "enigma_labels": [
+        "L_posteriorcingulate",
+        "R_precuneus"
+      ],
+      "layers": [
+        2,
+        4
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 6.45,
+      "regions_a": [
+        "后扣带"
+      ],
+      "regions_b": [
+        "楔前叶"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Autobiographical Memory",
+        "Semantic Memory"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "dk_pair": [
+        "posteriorcingulate",
+        "superiorfrontal"
+      ],
+      "enigma_labels": [
+        "L_posteriorcingulate",
+        "R_superiorfrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 7.75,
+      "regions_a": [
+        "后扣带"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Autobiographical Memory",
+        "Reward",
+        "Semantic Memory"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "dk_pair": [
+        "precentral",
+        "superiorfrontal"
+      ],
+      "enigma_labels": [
+        "L_precentral",
+        "L_superiorfrontal"
+      ],
+      "layers": [
+        3,
+        5
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 10.75,
+      "regions_a": [
+        "M1"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Vigilant Attention",
+        "Motor"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "dk_pair": [
+        "precentral",
+        "supramarginal"
+      ],
+      "enigma_labels": [
+        "L_precentral",
+        "L_supramarginal"
+      ],
+      "layers": [
+        3,
+        5
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 9.06,
+      "regions_a": [
+        "M1"
+      ],
+      "regions_b": [
+        "TPJ",
+        "缘上回"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Vigilant Attention"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
       }
     },
     {
@@ -3365,6 +4996,72 @@
     },
     {
       "dk_pair": [
+        "precentral",
+        "superiorfrontal"
+      ],
+      "enigma_labels": [
+        "L_precentral",
+        "R_superiorfrontal"
+      ],
+      "layers": [
+        3,
+        5
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 9.1,
+      "regions_a": [
+        "M1"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Vigilant Attention",
+        "Motor"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "dk_pair": [
+        "precuneus",
+        "rostralanteriorcingulate"
+      ],
+      "enigma_labels": [
+        "L_precuneus",
+        "L_rostralanteriorcingulate"
+      ],
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 7.81,
+      "regions_a": [
+        "楔前叶"
+      ],
+      "regions_b": [
+        "ACC吻侧"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Extended Socio-Affective Default"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
+      }
+    },
+    {
+      "dk_pair": [
         "precuneus",
         "rostralmiddlefrontal"
       ],
@@ -3421,10 +5118,10 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
+        "Autobiographical Memory",
         "Semantic Memory",
         "Extended Socio-Affective Default",
-        "Theory of Mind",
-        "Autobiographical Memory"
+        "Theory of Mind"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -3503,6 +5200,39 @@
     {
       "dk_pair": [
         "precuneus",
+        "posteriorcingulate"
+      ],
+      "enigma_labels": [
+        "L_precuneus",
+        "R_posteriorcingulate"
+      ],
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 6.88,
+      "regions_a": [
+        "楔前叶"
+      ],
+      "regions_b": [
+        "后扣带"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Autobiographical Memory",
+        "Semantic Memory"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
+      }
+    },
+    {
+      "dk_pair": [
+        "precuneus",
         "precuneus"
       ],
       "enigma_labels": [
@@ -3523,10 +5253,10 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
+        "Autobiographical Memory",
         "Semantic Memory",
         "Extended Socio-Affective Default",
-        "Theory of Mind",
-        "Autobiographical Memory"
+        "Theory of Mind"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -3559,10 +5289,10 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
+        "Autobiographical Memory",
         "Semantic Memory",
         "Extended Socio-Affective Default",
-        "Theory of Mind",
-        "Autobiographical Memory"
+        "Theory of Mind"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -3595,13 +5325,47 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
+        "Autobiographical Memory",
         "Semantic Memory",
         "Extended Socio-Affective Default",
-        "Theory of Mind",
-        "Autobiographical Memory"
+        "Theory of Mind"
       ],
       "rule_check": {
         "layer_adjacent": true,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "dk_pair": [
+        "rostralanteriorcingulate",
+        "superiorfrontal"
+      ],
+      "enigma_labels": [
+        "L_rostralanteriorcingulate",
+        "L_superiorfrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 9.87,
+      "regions_a": [
+        "ACC吻侧"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Empathy",
+        "Extended Socio-Affective Default"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
         "structure_exists": true,
         "coactivation": true,
         "direction": "feedforward"
@@ -3677,6 +5441,40 @@
     {
       "dk_pair": [
         "rostralanteriorcingulate",
+        "medialorbitofrontal"
+      ],
+      "enigma_labels": [
+        "L_rostralanteriorcingulate",
+        "R_medialorbitofrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 6.84,
+      "regions_a": [
+        "ACC吻侧"
+      ],
+      "regions_b": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Extended Socio-Affective Default"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "dk_pair": [
+        "rostralanteriorcingulate",
         "rostralanteriorcingulate"
       ],
       "enigma_labels": [
@@ -3705,6 +5503,40 @@
         "structure_exists": true,
         "coactivation": true,
         "direction": "lateral"
+      }
+    },
+    {
+      "dk_pair": [
+        "rostralanteriorcingulate",
+        "superiorfrontal"
+      ],
+      "enigma_labels": [
+        "L_rostralanteriorcingulate",
+        "R_superiorfrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 7.33,
+      "regions_a": [
+        "ACC吻侧"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Empathy",
+        "Extended Socio-Affective Default"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
       }
     },
     {
@@ -3765,9 +5597,9 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
+        "Autobiographical Memory",
         "Emotion Regulation",
-        "Working Memory",
-        "Autobiographical Memory"
+        "Working Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -3807,6 +5639,79 @@
       ],
       "rule_check": {
         "layer_adjacent": true,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
+      }
+    },
+    {
+      "dk_pair": [
+        "rostralmiddlefrontal",
+        "insula"
+      ],
+      "enigma_labels": [
+        "L_rostralmiddlefrontal",
+        "L_insula"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 8.68,
+      "regions_a": [
+        "dlPFC",
+        "前额叶极",
+        "前额叶极·FPN"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Emotion Regulation",
+        "Cognitive Attention Control",
+        "Working Memory"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
+      }
+    },
+    {
+      "dk_pair": [
+        "rostralmiddlefrontal",
+        "caudalanteriorcingulate"
+      ],
+      "enigma_labels": [
+        "L_rostralmiddlefrontal",
+        "R_caudalanteriorcingulate"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 3.91,
+      "regions_a": [
+        "dlPFC",
+        "前额叶极",
+        "前额叶极·FPN"
+      ],
+      "regions_b": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Emotion Regulation",
+        "Cognitive Attention Control"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
         "structure_exists": true,
         "coactivation": true,
         "direction": "feedback"
@@ -3909,10 +5814,10 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
+        "Autobiographical Memory",
         "Emotion Regulation",
         "Cognitive Attention Control",
-        "Working Memory",
-        "Autobiographical Memory"
+        "Working Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -3947,9 +5852,9 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
+        "Autobiographical Memory",
         "Emotion Regulation",
-        "Working Memory",
-        "Autobiographical Memory"
+        "Working Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -4028,6 +5933,83 @@
     {
       "dk_pair": [
         "superiorfrontal",
+        "insula"
+      ],
+      "enigma_labels": [
+        "L_superiorfrontal",
+        "L_insula"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 9.17,
+      "regions_a": [
+        "mPFC",
+        "额上回"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Reward",
+        "Empathy",
+        "Vigilant Attention",
+        "Working Memory",
+        "Emotion Regulation"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
+      }
+    },
+    {
+      "dk_pair": [
+        "superiorfrontal",
+        "caudalanteriorcingulate"
+      ],
+      "enigma_labels": [
+        "L_superiorfrontal",
+        "R_caudalanteriorcingulate"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 8.91,
+      "regions_a": [
+        "mPFC",
+        "额上回"
+      ],
+      "regions_b": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Reward",
+        "Extended Socio-Affective Default",
+        "Empathy",
+        "Vigilant Attention",
+        "Emotional Scene and Face Processing",
+        "Emotion Regulation"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
+      }
+    },
+    {
+      "dk_pair": [
+        "superiorfrontal",
         "caudalmiddlefrontal"
       ],
       "enigma_labels": [
@@ -4062,6 +6044,41 @@
     {
       "dk_pair": [
         "superiorfrontal",
+        "lateralorbitofrontal"
+      ],
+      "enigma_labels": [
+        "L_superiorfrontal",
+        "R_lateralorbitofrontal"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 4.85,
+      "regions_a": [
+        "mPFC",
+        "额上回"
+      ],
+      "regions_b": [
+        "OFC"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Reward",
+        "Semantic Memory",
+        "Emotional Scene and Face Processing"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
+      }
+    },
+    {
+      "dk_pair": [
+        "superiorfrontal",
         "medialorbitofrontal"
       ],
       "enigma_labels": [
@@ -4085,18 +6102,51 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Emotional Scene and Face Processing",
-        "Extended Socio-Affective Default",
         "Reward",
-        "Semantic Memory",
+        "Extended Socio-Affective Default",
+        "Autobiographical Memory",
+        "Emotional Scene and Face Processing",
         "Theory of Mind",
-        "Autobiographical Memory"
+        "Semantic Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
         "structure_exists": true,
         "coactivation": true,
         "direction": "lateral"
+      }
+    },
+    {
+      "dk_pair": [
+        "superiorfrontal",
+        "paracentral"
+      ],
+      "enigma_labels": [
+        "L_superiorfrontal",
+        "R_paracentral"
+      ],
+      "layers": [
+        5,
+        3
+      ],
+      "direction": "feedback",
+      "enigma_strength": 8.96,
+      "regions_a": [
+        "mPFC",
+        "额上回"
+      ],
+      "regions_b": [
+        "旁中央小叶"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Vigilant Attention"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
       }
     },
     {
@@ -4123,16 +6173,119 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
+        "Working Memory",
         "Empathy",
         "Emotion Regulation",
-        "Theory of Mind",
-        "Working Memory"
+        "Theory of Mind"
       ],
       "rule_check": {
         "layer_adjacent": true,
         "structure_exists": true,
         "coactivation": true,
         "direction": "lateral"
+      }
+    },
+    {
+      "dk_pair": [
+        "superiorfrontal",
+        "posteriorcingulate"
+      ],
+      "enigma_labels": [
+        "L_superiorfrontal",
+        "R_posteriorcingulate"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 7.91,
+      "regions_a": [
+        "mPFC",
+        "额上回"
+      ],
+      "regions_b": [
+        "后扣带"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Autobiographical Memory",
+        "Reward",
+        "Semantic Memory"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
+      }
+    },
+    {
+      "dk_pair": [
+        "superiorfrontal",
+        "precentral"
+      ],
+      "enigma_labels": [
+        "L_superiorfrontal",
+        "R_precentral"
+      ],
+      "layers": [
+        5,
+        3
+      ],
+      "direction": "feedback",
+      "enigma_strength": 9.24,
+      "regions_a": [
+        "mPFC",
+        "额上回"
+      ],
+      "regions_b": [
+        "M1"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Vigilant Attention",
+        "Motor"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
+      }
+    },
+    {
+      "dk_pair": [
+        "superiorfrontal",
+        "rostralanteriorcingulate"
+      ],
+      "enigma_labels": [
+        "L_superiorfrontal",
+        "R_rostralanteriorcingulate"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 7.36,
+      "regions_a": [
+        "mPFC",
+        "额上回"
+      ],
+      "regions_b": [
+        "ACC吻侧"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Empathy",
+        "Extended Socio-Affective Default"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
       }
     },
     {
@@ -4161,9 +6314,9 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
+        "Autobiographical Memory",
         "Emotion Regulation",
-        "Working Memory",
-        "Autobiographical Memory"
+        "Working Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -4197,17 +6350,17 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Emotional Scene and Face Processing",
-        "Extended Socio-Affective Default",
         "Reward",
-        "Motor",
+        "Extended Socio-Affective Default",
+        "Autobiographical Memory",
         "Empathy",
-        "Semantic Memory",
-        "Theory of Mind",
-        "Emotion Regulation",
+        "Emotional Scene and Face Processing",
         "Vigilant Attention",
+        "Theory of Mind",
+        "Semantic Memory",
+        "Motor",
         "Working Memory",
-        "Autobiographical Memory"
+        "Emotion Regulation"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -4251,6 +6404,43 @@
     },
     {
       "dk_pair": [
+        "superiorfrontal",
+        "insula"
+      ],
+      "enigma_labels": [
+        "L_superiorfrontal",
+        "R_insula"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 5.85,
+      "regions_a": [
+        "mPFC",
+        "额上回"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Reward",
+        "Empathy",
+        "Vigilant Attention",
+        "Working Memory",
+        "Emotion Regulation"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
+      }
+    },
+    {
+      "dk_pair": [
         "superiorparietal",
         "superiortemporal"
       ],
@@ -4282,6 +6472,41 @@
         "structure_exists": true,
         "coactivation": true,
         "direction": "lateral"
+      }
+    },
+    {
+      "dk_pair": [
+        "superiorparietal",
+        "insula"
+      ],
+      "enigma_labels": [
+        "L_superiorparietal",
+        "L_insula"
+      ],
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 9.15,
+      "regions_a": [
+        "顶内沟"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Extended Multiple Demand",
+        "Emotion Regulation",
+        "Cognitive Attention Control",
+        "Working Memory"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
       }
     },
     {
@@ -4442,9 +6667,9 @@
       "white_matter_tracts": [],
       "coactivated_networks": [
         "Extended Multiple Demand",
+        "Working Memory",
         "Emotion Regulation",
         "Cognitive Attention Control",
-        "Working Memory",
         "Mirror Neuron System"
       ],
       "rule_check": {
@@ -4493,6 +6718,77 @@
     {
       "dk_pair": [
         "superiortemporal",
+        "temporalpole"
+      ],
+      "enigma_labels": [
+        "L_superiortemporal",
+        "L_temporalpole"
+      ],
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 8.5,
+      "regions_a": [
+        "Wernicke区",
+        "颞上回",
+        "颞上沟"
+      ],
+      "regions_b": [
+        "颞极"
+      ],
+      "white_matter_tracts": [
+        "Middle Longitudinal Fasciculus (MdLF)"
+      ],
+      "coactivated_networks": [
+        "Theory of Mind"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
+      }
+    },
+    {
+      "dk_pair": [
+        "superiortemporal",
+        "insula"
+      ],
+      "enigma_labels": [
+        "L_superiortemporal",
+        "L_insula"
+      ],
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 10.26,
+      "regions_a": [
+        "Wernicke区",
+        "颞上回",
+        "颞上沟"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Empathy",
+        "Emotion Regulation"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
+      }
+    },
+    {
+      "dk_pair": [
+        "superiortemporal",
         "precuneus"
       ],
       "enigma_labels": [
@@ -4522,6 +6818,40 @@
         "structure_exists": true,
         "coactivation": true,
         "direction": "lateral"
+      }
+    },
+    {
+      "dk_pair": [
+        "supramarginal",
+        "insula"
+      ],
+      "enigma_labels": [
+        "L_supramarginal",
+        "L_insula"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 9.72,
+      "regions_a": [
+        "TPJ",
+        "缘上回"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Empathy",
+        "Vigilant Attention"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
       }
     },
     {
@@ -4680,17 +7010,51 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Cognitive Attention Control",
         "Reward",
         "Empathy",
+        "Vigilant Attention",
         "Emotion Regulation",
-        "Vigilant Attention"
+        "Cognitive Attention Control"
       ],
       "rule_check": {
         "layer_adjacent": true,
         "structure_exists": true,
         "coactivation": true,
         "direction": "lateral"
+      }
+    },
+    {
+      "dk_pair": [
+        "insula",
+        "caudalmiddlefrontal"
+      ],
+      "enigma_labels": [
+        "L_insula",
+        "R_caudalmiddlefrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 3.41,
+      "regions_a": [
+        "前脑岛"
+      ],
+      "regions_b": [
+        "额中回尾部"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Reward",
+        "Extended Multiple Demand",
+        "Working Memory"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
       }
     },
     {
@@ -4728,6 +7092,40 @@
     {
       "dk_pair": [
         "insula",
+        "medialorbitofrontal"
+      ],
+      "enigma_labels": [
+        "L_insula",
+        "R_medialorbitofrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 5.29,
+      "regions_a": [
+        "前脑岛"
+      ],
+      "regions_b": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Reward"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "dk_pair": [
+        "insula",
         "rostralanteriorcingulate"
       ],
       "enigma_labels": [
@@ -4759,6 +7157,112 @@
     },
     {
       "dk_pair": [
+        "insula",
+        "superiorfrontal"
+      ],
+      "enigma_labels": [
+        "L_insula",
+        "R_superiorfrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 6.33,
+      "regions_a": [
+        "前脑岛"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Reward",
+        "Empathy",
+        "Vigilant Attention",
+        "Working Memory",
+        "Emotion Regulation"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "dk_pair": [
+        "insula",
+        "superiorparietal"
+      ],
+      "enigma_labels": [
+        "L_insula",
+        "R_superiorparietal"
+      ],
+      "layers": [
+        2,
+        4
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 5.58,
+      "regions_a": [
+        "前脑岛"
+      ],
+      "regions_b": [
+        "顶内沟"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Extended Multiple Demand",
+        "Emotion Regulation",
+        "Cognitive Attention Control",
+        "Working Memory"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "dk_pair": [
+        "caudalanteriorcingulate",
+        "caudalmiddlefrontal"
+      ],
+      "enigma_labels": [
+        "R_caudalanteriorcingulate",
+        "R_caudalmiddlefrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 4.14,
+      "regions_a": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "regions_b": [
+        "额中回尾部"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Reward"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "dk_pair": [
         "caudalanteriorcingulate",
         "lateralorbitofrontal"
       ],
@@ -4784,14 +7288,52 @@
         "Uncinate Fasciculus (UF)"
       ],
       "coactivated_networks": [
-        "Emotional Scene and Face Processing",
-        "Reward"
+        "Reward",
+        "Emotional Scene and Face Processing"
       ],
       "rule_check": {
         "layer_adjacent": true,
         "structure_exists": true,
         "coactivation": true,
         "direction": "lateral"
+      }
+    },
+    {
+      "dk_pair": [
+        "caudalanteriorcingulate",
+        "medialorbitofrontal"
+      ],
+      "enigma_labels": [
+        "R_caudalanteriorcingulate",
+        "R_medialorbitofrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 6.9,
+      "regions_a": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "regions_b": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Reward",
+        "Emotional Scene and Face Processing",
+        "Extended Socio-Affective Default"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
       }
     },
     {
@@ -4831,6 +7373,42 @@
     {
       "dk_pair": [
         "caudalanteriorcingulate",
+        "parsopercularis"
+      ],
+      "enigma_labels": [
+        "R_caudalanteriorcingulate",
+        "R_parsopercularis"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 6.38,
+      "regions_a": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "regions_b": [
+        "Broca区"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Empathy",
+        "Emotion Regulation",
+        "Cognitive Attention Control"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "dk_pair": [
+        "caudalanteriorcingulate",
         "posteriorcingulate"
       ],
       "enigma_labels": [
@@ -4860,6 +7438,42 @@
         "structure_exists": true,
         "coactivation": true,
         "direction": "lateral"
+      }
+    },
+    {
+      "dk_pair": [
+        "caudalanteriorcingulate",
+        "precuneus"
+      ],
+      "enigma_labels": [
+        "R_caudalanteriorcingulate",
+        "R_precuneus"
+      ],
+      "layers": [
+        2,
+        4
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 8.99,
+      "regions_a": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "regions_b": [
+        "楔前叶"
+      ],
+      "white_matter_tracts": [
+        "Cingulum (Cingulum Bundle, CB)"
+      ],
+      "coactivated_networks": [
+        "Extended Socio-Affective Default"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
       }
     },
     {
@@ -4900,6 +7514,83 @@
     {
       "dk_pair": [
         "caudalanteriorcingulate",
+        "rostralmiddlefrontal"
+      ],
+      "enigma_labels": [
+        "R_caudalanteriorcingulate",
+        "R_rostralmiddlefrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 5.19,
+      "regions_a": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "regions_b": [
+        "dlPFC",
+        "前额叶极",
+        "前额叶极·FPN"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Emotion Regulation",
+        "Cognitive Attention Control"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "dk_pair": [
+        "caudalanteriorcingulate",
+        "superiorfrontal"
+      ],
+      "enigma_labels": [
+        "R_caudalanteriorcingulate",
+        "R_superiorfrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 10.65,
+      "regions_a": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Reward",
+        "Extended Socio-Affective Default",
+        "Empathy",
+        "Vigilant Attention",
+        "Emotional Scene and Face Processing",
+        "Emotion Regulation"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "dk_pair": [
+        "caudalanteriorcingulate",
         "insula"
       ],
       "enigma_labels": [
@@ -4922,11 +7613,11 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Cognitive Attention Control",
         "Reward",
         "Empathy",
+        "Vigilant Attention",
         "Emotion Regulation",
-        "Vigilant Attention"
+        "Cognitive Attention Control"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -5137,6 +7828,40 @@
     },
     {
       "dk_pair": [
+        "caudalmiddlefrontal",
+        "insula"
+      ],
+      "enigma_labels": [
+        "R_caudalmiddlefrontal",
+        "R_insula"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 6.18,
+      "regions_a": [
+        "额中回尾部"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Reward",
+        "Extended Multiple Demand",
+        "Working Memory"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
+      }
+    },
+    {
+      "dk_pair": [
         "fusiform",
         "inferiorparietal"
       ],
@@ -5225,8 +7950,8 @@
         "枕顶联合"
       ],
       "white_matter_tracts": [
-        "Inferior Longitudinal Fasciculus (ILF)",
-        "Inferior Fronto-Occipital Fasciculus (IFOF)"
+        "Inferior Fronto-Occipital Fasciculus (IFOF)",
+        "Inferior Longitudinal Fasciculus (ILF)"
       ],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
@@ -5271,6 +7996,39 @@
         "structure_exists": true,
         "coactivation": true,
         "direction": "lateral"
+      }
+    },
+    {
+      "dk_pair": [
+        "fusiform",
+        "parahippocampal"
+      ],
+      "enigma_labels": [
+        "R_fusiform",
+        "R_parahippocampal"
+      ],
+      "layers": [
+        4,
+        1
+      ],
+      "direction": "feedback",
+      "enigma_strength": 9.45,
+      "regions_a": [
+        "纺锤体回"
+      ],
+      "regions_b": [
+        "海马旁回"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Semantic Memory",
+        "Emotional Scene and Face Processing"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
       }
     },
     {
@@ -5433,8 +8191,8 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Cognitive Attention Control",
-        "Vigilant Attention"
+        "Vigilant Attention",
+        "Cognitive Attention Control"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -5469,8 +8227,8 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Semantic Memory",
-        "Reward"
+        "Reward",
+        "Semantic Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -5512,6 +8270,39 @@
         "structure_exists": true,
         "coactivation": true,
         "direction": "lateral"
+      }
+    },
+    {
+      "dk_pair": [
+        "inferiorparietal",
+        "parahippocampal"
+      ],
+      "enigma_labels": [
+        "R_inferiorparietal",
+        "R_parahippocampal"
+      ],
+      "layers": [
+        4,
+        1
+      ],
+      "direction": "feedback",
+      "enigma_strength": 5.58,
+      "regions_a": [
+        "角回",
+        "顶叶"
+      ],
+      "regions_b": [
+        "海马旁回"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Semantic Memory"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
       }
     },
     {
@@ -5681,10 +8472,10 @@
       "white_matter_tracts": [],
       "coactivated_networks": [
         "Reward",
-        "Motor",
-        "Semantic Memory",
         "Vigilant Attention",
-        "Working Memory"
+        "Working Memory",
+        "Semantic Memory",
+        "Motor"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -5764,6 +8555,42 @@
     },
     {
       "dk_pair": [
+        "inferiorparietal",
+        "insula"
+      ],
+      "enigma_labels": [
+        "R_inferiorparietal",
+        "R_insula"
+      ],
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 8.06,
+      "regions_a": [
+        "角回",
+        "顶叶"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Reward",
+        "Vigilant Attention",
+        "Cognitive Attention Control",
+        "Working Memory"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
+      }
+    },
+    {
+      "dk_pair": [
         "inferiortemporal",
         "middletemporal"
       ],
@@ -5794,6 +8621,38 @@
         "structure_exists": true,
         "coactivation": true,
         "direction": "lateral"
+      }
+    },
+    {
+      "dk_pair": [
+        "inferiortemporal",
+        "parahippocampal"
+      ],
+      "enigma_labels": [
+        "R_inferiortemporal",
+        "R_parahippocampal"
+      ],
+      "layers": [
+        4,
+        1
+      ],
+      "direction": "feedback",
+      "enigma_strength": 7.04,
+      "regions_a": [
+        "颞下回"
+      ],
+      "regions_b": [
+        "海马旁回"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Semantic Memory"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
       }
     },
     {
@@ -5863,6 +8722,105 @@
     },
     {
       "dk_pair": [
+        "inferiortemporal",
+        "insula"
+      ],
+      "enigma_labels": [
+        "R_inferiortemporal",
+        "R_insula"
+      ],
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 7.6,
+      "regions_a": [
+        "颞下回"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Extended Multiple Demand"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
+      }
+    },
+    {
+      "dk_pair": [
+        "lateraloccipital",
+        "lateralorbitofrontal"
+      ],
+      "enigma_labels": [
+        "R_lateraloccipital",
+        "R_lateralorbitofrontal"
+      ],
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 6.42,
+      "regions_a": [
+        "外侧枕叶",
+        "枕顶联合"
+      ],
+      "regions_b": [
+        "OFC"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Emotional Scene and Face Processing"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
+      }
+    },
+    {
+      "dk_pair": [
+        "lateraloccipital",
+        "parahippocampal"
+      ],
+      "enigma_labels": [
+        "R_lateraloccipital",
+        "R_parahippocampal"
+      ],
+      "layers": [
+        4,
+        1
+      ],
+      "direction": "feedback",
+      "enigma_strength": 6.0,
+      "regions_a": [
+        "外侧枕叶",
+        "枕顶联合"
+      ],
+      "regions_b": [
+        "海马旁回"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Autobiographical Memory",
+        "Emotional Scene and Face Processing"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
+      }
+    },
+    {
+      "dk_pair": [
         "lateraloccipital",
         "rostralmiddlefrontal"
       ],
@@ -5887,8 +8845,8 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Cognitive Attention Control",
-        "Autobiographical Memory"
+        "Autobiographical Memory",
+        "Cognitive Attention Control"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -5970,6 +8928,108 @@
     },
     {
       "dk_pair": [
+        "lateraloccipital",
+        "insula"
+      ],
+      "enigma_labels": [
+        "R_lateraloccipital",
+        "R_insula"
+      ],
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 9.16,
+      "regions_a": [
+        "外侧枕叶",
+        "枕顶联合"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Vigilant Attention",
+        "Cognitive Attention Control"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
+      }
+    },
+    {
+      "dk_pair": [
+        "lateralorbitofrontal",
+        "medialorbitofrontal"
+      ],
+      "enigma_labels": [
+        "R_lateralorbitofrontal",
+        "R_medialorbitofrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 10.15,
+      "regions_a": [
+        "OFC"
+      ],
+      "regions_b": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Reward",
+        "Semantic Memory",
+        "Emotional Scene and Face Processing"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "dk_pair": [
+        "lateralorbitofrontal",
+        "middletemporal"
+      ],
+      "enigma_labels": [
+        "R_lateralorbitofrontal",
+        "R_middletemporal"
+      ],
+      "layers": [
+        2,
+        4
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 7.99,
+      "regions_a": [
+        "OFC"
+      ],
+      "regions_b": [
+        "颞中回"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Semantic Memory"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "dk_pair": [
         "lateralorbitofrontal",
         "parahippocampal"
       ],
@@ -6024,14 +9084,81 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Semantic Memory",
-        "Reward"
+        "Reward",
+        "Semantic Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
         "structure_exists": true,
         "coactivation": true,
         "direction": "lateral"
+      }
+    },
+    {
+      "dk_pair": [
+        "lateralorbitofrontal",
+        "precuneus"
+      ],
+      "enigma_labels": [
+        "R_lateralorbitofrontal",
+        "R_precuneus"
+      ],
+      "layers": [
+        2,
+        4
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 6.05,
+      "regions_a": [
+        "OFC"
+      ],
+      "regions_b": [
+        "楔前叶"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Semantic Memory"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "dk_pair": [
+        "lateralorbitofrontal",
+        "superiorfrontal"
+      ],
+      "enigma_labels": [
+        "R_lateralorbitofrontal",
+        "R_superiorfrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 6.18,
+      "regions_a": [
+        "OFC"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Reward",
+        "Semantic Memory",
+        "Emotional Scene and Face Processing"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
       }
     },
     {
@@ -6069,6 +9196,42 @@
     {
       "dk_pair": [
         "medialorbitofrontal",
+        "posteriorcingulate"
+      ],
+      "enigma_labels": [
+        "R_medialorbitofrontal",
+        "R_posteriorcingulate"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 5.67,
+      "regions_a": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "regions_b": [
+        "后扣带"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Autobiographical Memory",
+        "Reward",
+        "Semantic Memory"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
+      }
+    },
+    {
+      "dk_pair": [
+        "medialorbitofrontal",
         "precuneus"
       ],
       "enigma_labels": [
@@ -6091,13 +9254,47 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
+        "Autobiographical Memory",
         "Semantic Memory",
         "Extended Socio-Affective Default",
-        "Theory of Mind",
-        "Autobiographical Memory"
+        "Theory of Mind"
       ],
       "rule_check": {
         "layer_adjacent": true,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
+      }
+    },
+    {
+      "dk_pair": [
+        "medialorbitofrontal",
+        "rostralanteriorcingulate"
+      ],
+      "enigma_labels": [
+        "R_medialorbitofrontal",
+        "R_rostralanteriorcingulate"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 10.12,
+      "regions_a": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "regions_b": [
+        "ACC吻侧"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Extended Socio-Affective Default"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
         "structure_exists": true,
         "coactivation": true,
         "direction": "feedback"
@@ -6129,12 +9326,12 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Emotional Scene and Face Processing",
-        "Extended Socio-Affective Default",
         "Reward",
-        "Semantic Memory",
+        "Extended Socio-Affective Default",
+        "Autobiographical Memory",
+        "Emotional Scene and Face Processing",
         "Theory of Mind",
-        "Autobiographical Memory"
+        "Semantic Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -6175,6 +9372,106 @@
         "structure_exists": true,
         "coactivation": true,
         "direction": "lateral"
+      }
+    },
+    {
+      "dk_pair": [
+        "medialorbitofrontal",
+        "temporalpole"
+      ],
+      "enigma_labels": [
+        "R_medialorbitofrontal",
+        "R_temporalpole"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 4.37,
+      "regions_a": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "regions_b": [
+        "颞极"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Theory of Mind"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
+      }
+    },
+    {
+      "dk_pair": [
+        "medialorbitofrontal",
+        "insula"
+      ],
+      "enigma_labels": [
+        "R_medialorbitofrontal",
+        "R_insula"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 7.79,
+      "regions_a": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Reward"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
+      }
+    },
+    {
+      "dk_pair": [
+        "middletemporal",
+        "parahippocampal"
+      ],
+      "enigma_labels": [
+        "R_middletemporal",
+        "R_parahippocampal"
+      ],
+      "layers": [
+        4,
+        1
+      ],
+      "direction": "feedback",
+      "enigma_strength": 5.64,
+      "regions_a": [
+        "颞中回"
+      ],
+      "regions_b": [
+        "海马旁回"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Semantic Memory"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
       }
     },
     {
@@ -6249,6 +9546,106 @@
     },
     {
       "dk_pair": [
+        "middletemporal",
+        "temporalpole"
+      ],
+      "enigma_labels": [
+        "R_middletemporal",
+        "R_temporalpole"
+      ],
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 8.5,
+      "regions_a": [
+        "颞中回"
+      ],
+      "regions_b": [
+        "颞极"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Theory of Mind"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
+      }
+    },
+    {
+      "dk_pair": [
+        "parahippocampal",
+        "precuneus"
+      ],
+      "enigma_labels": [
+        "R_parahippocampal",
+        "R_precuneus"
+      ],
+      "layers": [
+        1,
+        4
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 8.35,
+      "regions_a": [
+        "海马旁回"
+      ],
+      "regions_b": [
+        "楔前叶"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Autobiographical Memory",
+        "Semantic Memory"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "dk_pair": [
+        "parahippocampal",
+        "superiorfrontal"
+      ],
+      "enigma_labels": [
+        "R_parahippocampal",
+        "R_superiorfrontal"
+      ],
+      "layers": [
+        1,
+        5
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 7.27,
+      "regions_a": [
+        "海马旁回"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Autobiographical Memory",
+        "Semantic Memory",
+        "Emotional Scene and Face Processing"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "dk_pair": [
         "paracentral",
         "precentral"
       ],
@@ -6277,6 +9674,71 @@
         "structure_exists": true,
         "coactivation": true,
         "direction": "lateral"
+      }
+    },
+    {
+      "dk_pair": [
+        "paracentral",
+        "superiorfrontal"
+      ],
+      "enigma_labels": [
+        "R_paracentral",
+        "R_superiorfrontal"
+      ],
+      "layers": [
+        3,
+        5
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 9.81,
+      "regions_a": [
+        "旁中央小叶"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Vigilant Attention"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "dk_pair": [
+        "parsopercularis",
+        "postcentral"
+      ],
+      "enigma_labels": [
+        "R_parsopercularis",
+        "R_postcentral"
+      ],
+      "layers": [
+        5,
+        3
+      ],
+      "direction": "feedback",
+      "enigma_strength": 6.52,
+      "regions_a": [
+        "Broca区"
+      ],
+      "regions_b": [
+        "S1"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Mirror Neuron System"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
       }
     },
     {
@@ -6339,10 +9801,10 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
+        "Working Memory",
         "Empathy",
         "Emotion Regulation",
-        "Theory of Mind",
-        "Working Memory"
+        "Theory of Mind"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -6375,9 +9837,9 @@
       "white_matter_tracts": [],
       "coactivated_networks": [
         "Extended Multiple Demand",
+        "Working Memory",
         "Emotion Regulation",
         "Cognitive Attention Control",
-        "Working Memory",
         "Mirror Neuron System"
       ],
       "rule_check": {
@@ -6419,6 +9881,42 @@
         "structure_exists": true,
         "coactivation": true,
         "direction": "lateral"
+      }
+    },
+    {
+      "dk_pair": [
+        "parsopercularis",
+        "insula"
+      ],
+      "enigma_labels": [
+        "R_parsopercularis",
+        "R_insula"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 9.98,
+      "regions_a": [
+        "Broca区"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Empathy",
+        "Extended Multiple Demand",
+        "Working Memory",
+        "Emotion Regulation",
+        "Cognitive Attention Control"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
       }
     },
     {
@@ -6487,6 +9985,141 @@
     },
     {
       "dk_pair": [
+        "posteriorcingulate",
+        "precuneus"
+      ],
+      "enigma_labels": [
+        "R_posteriorcingulate",
+        "R_precuneus"
+      ],
+      "layers": [
+        2,
+        4
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 9.93,
+      "regions_a": [
+        "后扣带"
+      ],
+      "regions_b": [
+        "楔前叶"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Autobiographical Memory",
+        "Semantic Memory"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "dk_pair": [
+        "posteriorcingulate",
+        "superiorfrontal"
+      ],
+      "enigma_labels": [
+        "R_posteriorcingulate",
+        "R_superiorfrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 9.8,
+      "regions_a": [
+        "后扣带"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Autobiographical Memory",
+        "Reward",
+        "Semantic Memory"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "dk_pair": [
+        "precentral",
+        "superiorfrontal"
+      ],
+      "enigma_labels": [
+        "R_precentral",
+        "R_superiorfrontal"
+      ],
+      "layers": [
+        3,
+        5
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 10.75,
+      "regions_a": [
+        "M1"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Vigilant Attention",
+        "Motor"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "dk_pair": [
+        "precentral",
+        "supramarginal"
+      ],
+      "enigma_labels": [
+        "R_precentral",
+        "R_supramarginal"
+      ],
+      "layers": [
+        3,
+        5
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 8.6,
+      "regions_a": [
+        "M1"
+      ],
+      "regions_b": [
+        "TPJ",
+        "缘上回"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Vigilant Attention"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "dk_pair": [
         "precentral",
         "insula"
       ],
@@ -6512,6 +10145,38 @@
       ],
       "rule_check": {
         "layer_adjacent": true,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
+      }
+    },
+    {
+      "dk_pair": [
+        "precuneus",
+        "rostralanteriorcingulate"
+      ],
+      "enigma_labels": [
+        "R_precuneus",
+        "R_rostralanteriorcingulate"
+      ],
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 7.79,
+      "regions_a": [
+        "楔前叶"
+      ],
+      "regions_b": [
+        "ACC吻侧"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Extended Socio-Affective Default"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
         "structure_exists": true,
         "coactivation": true,
         "direction": "feedback"
@@ -6575,10 +10240,10 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
+        "Autobiographical Memory",
         "Semantic Memory",
         "Extended Socio-Affective Default",
-        "Theory of Mind",
-        "Autobiographical Memory"
+        "Theory of Mind"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -6619,6 +10284,74 @@
         "structure_exists": true,
         "coactivation": true,
         "direction": "lateral"
+      }
+    },
+    {
+      "dk_pair": [
+        "precuneus",
+        "temporalpole"
+      ],
+      "enigma_labels": [
+        "R_precuneus",
+        "R_temporalpole"
+      ],
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 4.62,
+      "regions_a": [
+        "楔前叶"
+      ],
+      "regions_b": [
+        "颞极"
+      ],
+      "white_matter_tracts": [
+        "Cingulum (Cingulum Bundle, CB)"
+      ],
+      "coactivated_networks": [
+        "Theory of Mind"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
+      }
+    },
+    {
+      "dk_pair": [
+        "rostralanteriorcingulate",
+        "superiorfrontal"
+      ],
+      "enigma_labels": [
+        "R_rostralanteriorcingulate",
+        "R_superiorfrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "enigma_strength": 9.97,
+      "regions_a": [
+        "ACC吻侧"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Empathy",
+        "Extended Socio-Affective Default"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
       }
     },
     {
@@ -6679,9 +10412,9 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
+        "Autobiographical Memory",
         "Emotion Regulation",
-        "Working Memory",
-        "Autobiographical Memory"
+        "Working Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -6721,6 +10454,42 @@
       ],
       "rule_check": {
         "layer_adjacent": true,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
+      }
+    },
+    {
+      "dk_pair": [
+        "rostralmiddlefrontal",
+        "insula"
+      ],
+      "enigma_labels": [
+        "R_rostralmiddlefrontal",
+        "R_insula"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 8.29,
+      "regions_a": [
+        "dlPFC",
+        "前额叶极",
+        "前额叶极·FPN"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Emotion Regulation",
+        "Cognitive Attention Control",
+        "Working Memory"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
         "structure_exists": true,
         "coactivation": true,
         "direction": "feedback"
@@ -6795,6 +10564,43 @@
     },
     {
       "dk_pair": [
+        "superiorfrontal",
+        "insula"
+      ],
+      "enigma_labels": [
+        "R_superiorfrontal",
+        "R_insula"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 8.97,
+      "regions_a": [
+        "mPFC",
+        "额上回"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Reward",
+        "Empathy",
+        "Vigilant Attention",
+        "Working Memory",
+        "Emotion Regulation"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
+      }
+    },
+    {
+      "dk_pair": [
         "superiorparietal",
         "superiortemporal"
       ],
@@ -6826,6 +10632,41 @@
         "structure_exists": true,
         "coactivation": true,
         "direction": "lateral"
+      }
+    },
+    {
+      "dk_pair": [
+        "superiorparietal",
+        "insula"
+      ],
+      "enigma_labels": [
+        "R_superiorparietal",
+        "R_insula"
+      ],
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 9.44,
+      "regions_a": [
+        "顶内沟"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Extended Multiple Demand",
+        "Emotion Regulation",
+        "Cognitive Attention Control",
+        "Working Memory"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
       }
     },
     {
@@ -6862,6 +10703,111 @@
         "structure_exists": true,
         "coactivation": true,
         "direction": "feedforward"
+      }
+    },
+    {
+      "dk_pair": [
+        "superiortemporal",
+        "temporalpole"
+      ],
+      "enigma_labels": [
+        "R_superiortemporal",
+        "R_temporalpole"
+      ],
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 8.56,
+      "regions_a": [
+        "Wernicke区",
+        "颞上回",
+        "颞上沟"
+      ],
+      "regions_b": [
+        "颞极"
+      ],
+      "white_matter_tracts": [
+        "Middle Longitudinal Fasciculus (MdLF)"
+      ],
+      "coactivated_networks": [
+        "Theory of Mind"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
+      }
+    },
+    {
+      "dk_pair": [
+        "superiortemporal",
+        "insula"
+      ],
+      "enigma_labels": [
+        "R_superiortemporal",
+        "R_insula"
+      ],
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 10.3,
+      "regions_a": [
+        "Wernicke区",
+        "颞上回",
+        "颞上沟"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Empathy",
+        "Emotion Regulation"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
+      }
+    },
+    {
+      "dk_pair": [
+        "supramarginal",
+        "insula"
+      ],
+      "enigma_labels": [
+        "R_supramarginal",
+        "R_insula"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "enigma_strength": 10.0,
+      "regions_a": [
+        "TPJ",
+        "缘上回"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Empathy",
+        "Vigilant Attention"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedback"
       }
     },
     {
@@ -7334,6 +11280,129 @@
       "source": "hansen2024_brainstem",
       "brainstem_nucleus": "蓝斑",
       "hansen_community": "PINK",
+      "dk_target": "rostralmiddlefrontal",
+      "layers": [
+        0,
+        5
+      ],
+      "direction": "feedforward",
+      "fc_strength": 0.75,
+      "pathway": "蓝斑→dlPFC(NE)",
+      "ref": "Hansen2024",
+      "regions_a": [
+        "蓝斑"
+      ],
+      "regions_b": [
+        "dlPFC",
+        "前额叶极",
+        "前额叶极·FPN"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Hansen:PINK"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "source": "hansen2024_brainstem",
+      "brainstem_nucleus": "蓝斑",
+      "hansen_community": "PINK",
+      "dk_target": "superiorfrontal",
+      "layers": [
+        0,
+        5
+      ],
+      "direction": "feedforward",
+      "fc_strength": 0.65,
+      "pathway": "蓝斑→mPFC(NE)",
+      "ref": "Hansen2024",
+      "regions_a": [
+        "蓝斑"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Hansen:PINK"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "source": "hansen2024_brainstem",
+      "brainstem_nucleus": "蓝斑",
+      "hansen_community": "PINK",
+      "dk_target": "precentral",
+      "layers": [
+        0,
+        3
+      ],
+      "direction": "feedforward",
+      "fc_strength": 0.5,
+      "pathway": "蓝斑→M1(NE)",
+      "ref": "Hansen2024",
+      "regions_a": [
+        "蓝斑"
+      ],
+      "regions_b": [
+        "M1"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Hansen:PINK"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "source": "hansen2024_brainstem",
+      "brainstem_nucleus": "蓝斑",
+      "hansen_community": "PINK",
+      "dk_target": "pericalcarine",
+      "layers": [
+        0,
+        3
+      ],
+      "direction": "feedforward",
+      "fc_strength": 0.6,
+      "pathway": "蓝斑→V1(NE→感觉皮层信噪比)",
+      "ref": "Hansen2024",
+      "regions_a": [
+        "蓝斑"
+      ],
+      "regions_b": [
+        "枕叶 V1"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Hansen:PINK"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "source": "hansen2024_brainstem",
+      "brainstem_nucleus": "蓝斑",
+      "hansen_community": "PINK",
       "dk_target": "amygdala",
       "layers": [
         0,
@@ -7416,6 +11485,36 @@
     },
     {
       "source": "hansen2024_brainstem",
+      "brainstem_nucleus": "蓝斑",
+      "hansen_community": "PINK",
+      "dk_target": "entorhinal",
+      "layers": [
+        0,
+        4
+      ],
+      "direction": "feedforward",
+      "fc_strength": 0.5,
+      "pathway": "蓝斑→内嗅皮层(NE)",
+      "ref": "Hansen2024",
+      "regions_a": [
+        "蓝斑"
+      ],
+      "regions_b": [
+        "内嗅皮层"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Hansen:PINK"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "source": "hansen2024_brainstem",
       "brainstem_nucleus": "VTA",
       "hansen_community": "GREEN",
       "dk_target": "accumbens",
@@ -7437,6 +11536,69 @@
       ],
       "rule_check": {
         "layer_adjacent": true,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "source": "hansen2024_brainstem",
+      "brainstem_nucleus": "VTA",
+      "hansen_community": "GREEN",
+      "dk_target": "medialorbitofrontal",
+      "layers": [
+        0,
+        5
+      ],
+      "direction": "feedforward",
+      "fc_strength": 0.7,
+      "pathway": "VTA→vmPFC(中脑皮层DA通路)",
+      "ref": "Hansen2024",
+      "regions_a": [
+        "VTA"
+      ],
+      "regions_b": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Hansen:GREEN"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "source": "hansen2024_brainstem",
+      "brainstem_nucleus": "VTA",
+      "hansen_community": "GREEN",
+      "dk_target": "superiorfrontal",
+      "layers": [
+        0,
+        5
+      ],
+      "direction": "feedforward",
+      "fc_strength": 0.6,
+      "pathway": "VTA→mPFC(DA)",
+      "ref": "Hansen2024",
+      "regions_a": [
+        "VTA"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Hansen:GREEN"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
         "structure_exists": true,
         "coactivation": true,
         "direction": "feedforward"
@@ -7674,6 +11836,66 @@
     },
     {
       "source": "hansen2024_brainstem",
+      "brainstem_nucleus": "脑桥网状核",
+      "hansen_community": "YELLOW",
+      "dk_target": "precentral",
+      "layers": [
+        0,
+        3
+      ],
+      "direction": "feedforward",
+      "fc_strength": 0.55,
+      "pathway": "脑桥网状核→运动皮层(间接)",
+      "ref": "Hansen2024 — YELLOW→单模态",
+      "regions_a": [
+        "脑桥网状核"
+      ],
+      "regions_b": [
+        "M1"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Hansen:YELLOW"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "source": "hansen2024_brainstem",
+      "brainstem_nucleus": "脑桥网状核",
+      "hansen_community": "YELLOW",
+      "dk_target": "postcentral",
+      "layers": [
+        0,
+        3
+      ],
+      "direction": "feedforward",
+      "fc_strength": 0.5,
+      "pathway": "脑桥网状核→体感皮层(间接)",
+      "ref": "Hansen2024",
+      "regions_a": [
+        "脑桥网状核"
+      ],
+      "regions_b": [
+        "S1"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Hansen:YELLOW"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "source": "hansen2024_brainstem",
       "brainstem_nucleus": "小脑皮层",
       "hansen_community": null,
       "dk_target": "thalamus",
@@ -7704,6 +11926,36 @@
       "source": "hansen2024_brainstem",
       "brainstem_nucleus": "小脑皮层",
       "hansen_community": null,
+      "dk_target": "precentral",
+      "layers": [
+        0,
+        3
+      ],
+      "direction": "feedforward",
+      "fc_strength": 0.75,
+      "pathway": "小脑→M1(经丘脑)",
+      "ref": "Paxinos2004",
+      "regions_a": [
+        "小脑皮层"
+      ],
+      "regions_b": [
+        "M1"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Hansen:None"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "source": "hansen2024_brainstem",
+      "brainstem_nucleus": "小脑皮层",
+      "hansen_community": null,
       "dk_target": "putamen",
       "layers": [
         0,
@@ -7723,6 +11975,38 @@
       ],
       "rule_check": {
         "layer_adjacent": true,
+        "structure_exists": true,
+        "coactivation": true,
+        "direction": "feedforward"
+      }
+    },
+    {
+      "source": "hansen2024_brainstem",
+      "brainstem_nucleus": "小脑皮层",
+      "hansen_community": null,
+      "dk_target": "rostralmiddlefrontal",
+      "layers": [
+        0,
+        5
+      ],
+      "direction": "feedforward",
+      "fc_strength": 0.5,
+      "pathway": "小脑→dlPFC(经丘脑)",
+      "ref": "Schmahmann2019",
+      "regions_a": [
+        "小脑皮层"
+      ],
+      "regions_b": [
+        "dlPFC",
+        "前额叶极",
+        "前额叶极·FPN"
+      ],
+      "white_matter_tracts": [],
+      "coactivated_networks": [
+        "Hansen:None"
+      ],
+      "rule_check": {
+        "layer_adjacent": false,
         "structure_exists": true,
         "coactivation": true,
         "direction": "feedforward"

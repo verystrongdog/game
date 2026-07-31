@@ -1,12 +1,45 @@
 {
   "_description": "统一链路注册表 — 228 条合法链路的唯一 ID 和显示名",
   "_generated_from": "data/connectivity/link_legitimacy_matrix.json",
-  "_total": 228,
-  "_enigma_count": 198,
-  "_brainstem_count": 30,
+  "_total": 353,
+  "_enigma_count": 312,
+  "_brainstem_count": 41,
   "links": [
     {
       "id": "link_000",
+      "display_name": "ACC → 额中回尾部 (L)",
+      "source_region": "ACC",
+      "target_region": "额中回尾部",
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "regions_b": [
+        "额中回尾部"
+      ],
+      "coactivated_networks": [
+        "Reward"
+      ],
+      "dk_pair": [
+        "caudalanteriorcingulate",
+        "caudalmiddlefrontal"
+      ],
+      "enigma_strength": 2.75
+    },
+    {
+      "id": "link_001",
       "display_name": "ACC ↔ OFC (L)",
       "source_region": "ACC",
       "target_region": "OFC",
@@ -30,8 +63,8 @@
         "OFC"
       ],
       "coactivated_networks": [
-        "Emotional Scene and Face Processing",
-        "Reward"
+        "Reward",
+        "Emotional Scene and Face Processing"
       ],
       "dk_pair": [
         "caudalanteriorcingulate",
@@ -40,7 +73,44 @@
       "enigma_strength": 6.7
     },
     {
-      "id": "link_001",
+      "id": "link_002",
+      "display_name": "ACC → DMN+OFC (L)",
+      "source_region": "ACC",
+      "target_region": "DMN+OFC",
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "regions_b": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "coactivated_networks": [
+        "Reward",
+        "Emotional Scene and Face Processing",
+        "Extended Socio-Affective Default"
+      ],
+      "dk_pair": [
+        "caudalanteriorcingulate",
+        "medialorbitofrontal"
+      ],
+      "enigma_strength": 7.78
+    },
+    {
+      "id": "link_003",
       "display_name": "ACC ← 海马旁回 (L)",
       "source_region": "ACC",
       "target_region": "海马旁回",
@@ -73,7 +143,7 @@
       "enigma_strength": 4.89
     },
     {
-      "id": "link_002",
+      "id": "link_004",
       "display_name": "ACC → 旁中央小叶 (L)",
       "source_region": "ACC",
       "target_region": "旁中央小叶",
@@ -106,7 +176,7 @@
       "enigma_strength": 5.35
     },
     {
-      "id": "link_003",
+      "id": "link_005",
       "display_name": "ACC ↔ 后扣带 (L)",
       "source_region": "ACC",
       "target_region": "后扣带",
@@ -139,7 +209,40 @@
       "enigma_strength": 8.93
     },
     {
-      "id": "link_004",
+      "id": "link_006",
+      "display_name": "ACC → 楔前叶 (L)",
+      "source_region": "ACC",
+      "target_region": "楔前叶",
+      "layers": [
+        2,
+        4
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "regions_b": [
+        "楔前叶"
+      ],
+      "coactivated_networks": [
+        "Extended Socio-Affective Default"
+      ],
+      "dk_pair": [
+        "caudalanteriorcingulate",
+        "precuneus"
+      ],
+      "enigma_strength": 8.7
+    },
+    {
+      "id": "link_007",
       "display_name": "ACC ↔ ACC吻侧 (L)",
       "source_region": "ACC",
       "target_region": "ACC吻侧",
@@ -173,7 +276,82 @@
       "enigma_strength": 8.84
     },
     {
-      "id": "link_005",
+      "id": "link_008",
+      "display_name": "ACC → dlPFC (L)",
+      "source_region": "ACC",
+      "target_region": "dlPFC",
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "regions_b": [
+        "dlPFC",
+        "前额叶极",
+        "前额叶极·FPN"
+      ],
+      "coactivated_networks": [
+        "Emotion Regulation",
+        "Cognitive Attention Control"
+      ],
+      "dk_pair": [
+        "caudalanteriorcingulate",
+        "rostralmiddlefrontal"
+      ],
+      "enigma_strength": 5.23
+    },
+    {
+      "id": "link_009",
+      "display_name": "ACC → mPFC (L)",
+      "source_region": "ACC",
+      "target_region": "mPFC",
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "coactivated_networks": [
+        "Reward",
+        "Extended Socio-Affective Default",
+        "Empathy",
+        "Vigilant Attention",
+        "Emotional Scene and Face Processing",
+        "Emotion Regulation"
+      ],
+      "dk_pair": [
+        "caudalanteriorcingulate",
+        "superiorfrontal"
+      ],
+      "enigma_strength": 10.27
+    },
+    {
+      "id": "link_010",
       "display_name": "ACC ↔ 前脑岛 (L)",
       "source_region": "ACC",
       "target_region": "前脑岛",
@@ -197,11 +375,11 @@
         "前脑岛"
       ],
       "coactivated_networks": [
-        "Cognitive Attention Control",
         "Reward",
         "Empathy",
+        "Vigilant Attention",
         "Emotion Regulation",
-        "Vigilant Attention"
+        "Cognitive Attention Control"
       ],
       "dk_pair": [
         "caudalanteriorcingulate",
@@ -210,7 +388,7 @@
       "enigma_strength": 5.58
     },
     {
-      "id": "link_006",
+      "id": "link_011",
       "display_name": "ACC ↔ ACC (L→R)",
       "source_region": "ACC",
       "target_region": "ACC",
@@ -236,13 +414,13 @@
         "前额叶极·SN"
       ],
       "coactivated_networks": [
-        "Cognitive Attention Control",
-        "Emotional Scene and Face Processing",
-        "Extended Socio-Affective Default",
         "Reward",
+        "Extended Socio-Affective Default",
         "Empathy",
+        "Vigilant Attention",
+        "Emotional Scene and Face Processing",
         "Emotion Regulation",
-        "Vigilant Attention"
+        "Cognitive Attention Control"
       ],
       "dk_pair": [
         "caudalanteriorcingulate",
@@ -251,7 +429,7 @@
       "enigma_strength": 8.44
     },
     {
-      "id": "link_007",
+      "id": "link_012",
       "display_name": "ACC ↔ OFC (L→R)",
       "source_region": "ACC",
       "target_region": "OFC",
@@ -275,8 +453,8 @@
         "OFC"
       ],
       "coactivated_networks": [
-        "Emotional Scene and Face Processing",
-        "Reward"
+        "Reward",
+        "Emotional Scene and Face Processing"
       ],
       "dk_pair": [
         "caudalanteriorcingulate",
@@ -285,7 +463,7 @@
       "enigma_strength": 1.82
     },
     {
-      "id": "link_008",
+      "id": "link_013",
       "display_name": "ACC ↔ 后扣带 (L→R)",
       "source_region": "ACC",
       "target_region": "后扣带",
@@ -318,7 +496,7 @@
       "enigma_strength": 5.16
     },
     {
-      "id": "link_009",
+      "id": "link_014",
       "display_name": "ACC ↔ ACC吻侧 (L→R)",
       "source_region": "ACC",
       "target_region": "ACC吻侧",
@@ -352,7 +530,82 @@
       "enigma_strength": 3.91
     },
     {
-      "id": "link_010",
+      "id": "link_015",
+      "display_name": "ACC → dlPFC (L→R)",
+      "source_region": "ACC",
+      "target_region": "dlPFC",
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "regions_b": [
+        "dlPFC",
+        "前额叶极",
+        "前额叶极·FPN"
+      ],
+      "coactivated_networks": [
+        "Emotion Regulation",
+        "Cognitive Attention Control"
+      ],
+      "dk_pair": [
+        "caudalanteriorcingulate",
+        "rostralmiddlefrontal"
+      ],
+      "enigma_strength": 2.91
+    },
+    {
+      "id": "link_016",
+      "display_name": "ACC → mPFC (L→R)",
+      "source_region": "ACC",
+      "target_region": "mPFC",
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "coactivated_networks": [
+        "Reward",
+        "Extended Socio-Affective Default",
+        "Empathy",
+        "Vigilant Attention",
+        "Emotional Scene and Face Processing",
+        "Emotion Regulation"
+      ],
+      "dk_pair": [
+        "caudalanteriorcingulate",
+        "superiorfrontal"
+      ],
+      "enigma_strength": 8.46
+    },
+    {
+      "id": "link_017",
       "display_name": "额中回尾部 ← 角回 (L)",
       "source_region": "额中回尾部",
       "target_region": "角回",
@@ -385,7 +638,7 @@
       "enigma_strength": 9.35
     },
     {
-      "id": "link_011",
+      "id": "link_018",
       "display_name": "额中回尾部 ← 颞下回 (L)",
       "source_region": "额中回尾部",
       "target_region": "颞下回",
@@ -416,7 +669,7 @@
       "enigma_strength": 8.98
     },
     {
-      "id": "link_012",
+      "id": "link_019",
       "display_name": "额中回尾部 ↔ Broca区 (L)",
       "source_region": "额中回尾部",
       "target_region": "Broca区",
@@ -448,7 +701,38 @@
       "enigma_strength": 10.38
     },
     {
-      "id": "link_013",
+      "id": "link_020",
+      "display_name": "额中回尾部 ← 后扣带 (L)",
+      "source_region": "额中回尾部",
+      "target_region": "后扣带",
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "额中回尾部"
+      ],
+      "regions_b": [
+        "后扣带"
+      ],
+      "coactivated_networks": [
+        "Reward"
+      ],
+      "dk_pair": [
+        "caudalmiddlefrontal",
+        "posteriorcingulate"
+      ],
+      "enigma_strength": 1.99
+    },
+    {
+      "id": "link_021",
       "display_name": "额中回尾部 ↔ dlPFC (L)",
       "source_region": "额中回尾部",
       "target_region": "dlPFC",
@@ -481,7 +765,7 @@
       "enigma_strength": 10.45
     },
     {
-      "id": "link_014",
+      "id": "link_022",
       "display_name": "额中回尾部 ↔ mPFC (L)",
       "source_region": "额中回尾部",
       "target_region": "mPFC",
@@ -514,7 +798,7 @@
       "enigma_strength": 11.12
     },
     {
-      "id": "link_015",
+      "id": "link_023",
       "display_name": "额中回尾部 ← 顶内沟 (L)",
       "source_region": "额中回尾部",
       "target_region": "顶内沟",
@@ -546,7 +830,7 @@
       "enigma_strength": 7.94
     },
     {
-      "id": "link_016",
+      "id": "link_024",
       "display_name": "额中回尾部 ↔ 额中回尾部 (L→R)",
       "source_region": "额中回尾部",
       "target_region": "额中回尾部",
@@ -568,8 +852,8 @@
         "额中回尾部"
       ],
       "coactivated_networks": [
-        "Extended Multiple Demand",
         "Reward",
+        "Extended Multiple Demand",
         "Working Memory"
       ],
       "dk_pair": [
@@ -579,7 +863,7 @@
       "enigma_strength": 9.64
     },
     {
-      "id": "link_017",
+      "id": "link_025",
       "display_name": "额中回尾部 ↔ Broca区 (L→R)",
       "source_region": "额中回尾部",
       "target_region": "Broca区",
@@ -611,7 +895,7 @@
       "enigma_strength": 6.39
     },
     {
-      "id": "link_018",
+      "id": "link_026",
       "display_name": "额中回尾部 ↔ dlPFC (L→R)",
       "source_region": "额中回尾部",
       "target_region": "dlPFC",
@@ -644,7 +928,7 @@
       "enigma_strength": 7.79
     },
     {
-      "id": "link_019",
+      "id": "link_027",
       "display_name": "额中回尾部 ↔ mPFC (L→R)",
       "source_region": "额中回尾部",
       "target_region": "mPFC",
@@ -677,7 +961,40 @@
       "enigma_strength": 9.52
     },
     {
-      "id": "link_020",
+      "id": "link_028",
+      "display_name": "额中回尾部 ← 前脑岛 (L→R)",
+      "source_region": "额中回尾部",
+      "target_region": "前脑岛",
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "额中回尾部"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "coactivated_networks": [
+        "Reward",
+        "Extended Multiple Demand",
+        "Working Memory"
+      ],
+      "dk_pair": [
+        "caudalmiddlefrontal",
+        "insula"
+      ],
+      "enigma_strength": 2.61
+    },
+    {
+      "id": "link_029",
       "display_name": "纺锤体回 ↔ 角回 (L)",
       "source_region": "纺锤体回",
       "target_region": "角回",
@@ -709,7 +1026,7 @@
       "enigma_strength": 9.35
     },
     {
-      "id": "link_021",
+      "id": "link_030",
       "display_name": "纺锤体回 ↔ 颞下回 (L)",
       "source_region": "纺锤体回",
       "target_region": "颞下回",
@@ -740,7 +1057,7 @@
       "enigma_strength": 10.61
     },
     {
-      "id": "link_022",
+      "id": "link_031",
       "display_name": "纺锤体回 ↔ 外侧枕叶 (L)",
       "source_region": "纺锤体回",
       "target_region": "外侧枕叶",
@@ -773,7 +1090,7 @@
       "enigma_strength": 10.82
     },
     {
-      "id": "link_023",
+      "id": "link_032",
       "display_name": "纺锤体回 ↔ 颞中回 (L)",
       "source_region": "纺锤体回",
       "target_region": "颞中回",
@@ -804,7 +1121,39 @@
       "enigma_strength": 7.28
     },
     {
-      "id": "link_024",
+      "id": "link_033",
+      "display_name": "纺锤体回 ← 海马旁回 (L)",
+      "source_region": "纺锤体回",
+      "target_region": "海马旁回",
+      "layers": [
+        4,
+        1
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "纺锤体回"
+      ],
+      "regions_b": [
+        "海马旁回"
+      ],
+      "coactivated_networks": [
+        "Semantic Memory",
+        "Emotional Scene and Face Processing"
+      ],
+      "dk_pair": [
+        "fusiform",
+        "parahippocampal"
+      ],
+      "enigma_strength": 9.49
+    },
+    {
+      "id": "link_034",
       "display_name": "纺锤体回 → Broca区 (L)",
       "source_region": "纺锤体回",
       "target_region": "Broca区",
@@ -835,7 +1184,7 @@
       "enigma_strength": 5.9
     },
     {
-      "id": "link_025",
+      "id": "link_035",
       "display_name": "纺锤体回 ↔ 顶内沟 (L)",
       "source_region": "纺锤体回",
       "target_region": "顶内沟",
@@ -866,7 +1215,7 @@
       "enigma_strength": 8.75
     },
     {
-      "id": "link_026",
+      "id": "link_036",
       "display_name": "纺锤体回 ↔ Wernicke区 (L)",
       "source_region": "纺锤体回",
       "target_region": "Wernicke区",
@@ -899,7 +1248,7 @@
       "enigma_strength": 6.93
     },
     {
-      "id": "link_027",
+      "id": "link_037",
       "display_name": "纺锤体回 ↔ 外侧枕叶 (L→R)",
       "source_region": "纺锤体回",
       "target_region": "外侧枕叶",
@@ -932,7 +1281,7 @@
       "enigma_strength": 5.84
     },
     {
-      "id": "link_028",
+      "id": "link_038",
       "display_name": "纺锤体回 ↔ 顶内沟 (L→R)",
       "source_region": "纺锤体回",
       "target_region": "顶内沟",
@@ -963,7 +1312,7 @@
       "enigma_strength": 7.04
     },
     {
-      "id": "link_029",
+      "id": "link_039",
       "display_name": "角回 ↔ 颞下回 (L)",
       "source_region": "角回",
       "target_region": "颞下回",
@@ -995,7 +1344,7 @@
       "enigma_strength": 9.74
     },
     {
-      "id": "link_030",
+      "id": "link_040",
       "display_name": "角回 ↔ 外侧枕叶 (L)",
       "source_region": "角回",
       "target_region": "外侧枕叶",
@@ -1019,8 +1368,8 @@
         "枕顶联合"
       ],
       "coactivated_networks": [
-        "Cognitive Attention Control",
-        "Vigilant Attention"
+        "Vigilant Attention",
+        "Cognitive Attention Control"
       ],
       "dk_pair": [
         "inferiorparietal",
@@ -1029,7 +1378,7 @@
       "enigma_strength": 10.66
     },
     {
-      "id": "link_031",
+      "id": "link_041",
       "display_name": "角回 ↔ 颞中回 (L)",
       "source_region": "角回",
       "target_region": "颞中回",
@@ -1061,7 +1410,39 @@
       "enigma_strength": 10.84
     },
     {
-      "id": "link_032",
+      "id": "link_042",
+      "display_name": "角回 ← 海马旁回 (L)",
+      "source_region": "角回",
+      "target_region": "海马旁回",
+      "layers": [
+        4,
+        1
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "角回",
+        "顶叶"
+      ],
+      "regions_b": [
+        "海马旁回"
+      ],
+      "coactivated_networks": [
+        "Semantic Memory"
+      ],
+      "dk_pair": [
+        "inferiorparietal",
+        "parahippocampal"
+      ],
+      "enigma_strength": 5.63
+    },
+    {
+      "id": "link_043",
       "display_name": "角回 → Broca区 (L)",
       "source_region": "角回",
       "target_region": "Broca区",
@@ -1094,7 +1475,7 @@
       "enigma_strength": 6.92
     },
     {
-      "id": "link_033",
+      "id": "link_044",
       "display_name": "角回 ← S1 (L)",
       "source_region": "角回",
       "target_region": "S1",
@@ -1126,7 +1507,7 @@
       "enigma_strength": 8.03
     },
     {
-      "id": "link_034",
+      "id": "link_045",
       "display_name": "角回 ← M1 (L)",
       "source_region": "角回",
       "target_region": "M1",
@@ -1159,7 +1540,7 @@
       "enigma_strength": 8.35
     },
     {
-      "id": "link_035",
+      "id": "link_046",
       "display_name": "角回 → dlPFC (L)",
       "source_region": "角回",
       "target_region": "dlPFC",
@@ -1194,7 +1575,7 @@
       "enigma_strength": 8.89
     },
     {
-      "id": "link_036",
+      "id": "link_047",
       "display_name": "角回 → mPFC (L)",
       "source_region": "角回",
       "target_region": "mPFC",
@@ -1219,10 +1600,10 @@
       ],
       "coactivated_networks": [
         "Reward",
-        "Motor",
-        "Semantic Memory",
         "Vigilant Attention",
-        "Working Memory"
+        "Working Memory",
+        "Semantic Memory",
+        "Motor"
       ],
       "dk_pair": [
         "inferiorparietal",
@@ -1231,7 +1612,7 @@
       "enigma_strength": 6.89
     },
     {
-      "id": "link_037",
+      "id": "link_048",
       "display_name": "角回 ↔ 顶内沟 (L)",
       "source_region": "角回",
       "target_region": "顶内沟",
@@ -1264,7 +1645,7 @@
       "enigma_strength": 11.84
     },
     {
-      "id": "link_038",
+      "id": "link_049",
       "display_name": "角回 → TPJ (L)",
       "source_region": "角回",
       "target_region": "TPJ",
@@ -1298,7 +1679,42 @@
       "enigma_strength": 10.34
     },
     {
-      "id": "link_039",
+      "id": "link_050",
+      "display_name": "角回 ← 前脑岛 (L)",
+      "source_region": "角回",
+      "target_region": "前脑岛",
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "角回",
+        "顶叶"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "coactivated_networks": [
+        "Reward",
+        "Vigilant Attention",
+        "Cognitive Attention Control",
+        "Working Memory"
+      ],
+      "dk_pair": [
+        "inferiorparietal",
+        "insula"
+      ],
+      "enigma_strength": 7.32
+    },
+    {
+      "id": "link_051",
       "display_name": "角回 ↔ 楔前叶 (L→R)",
       "source_region": "角回",
       "target_region": "楔前叶",
@@ -1330,7 +1746,7 @@
       "enigma_strength": 5.67
     },
     {
-      "id": "link_040",
+      "id": "link_052",
       "display_name": "角回 ↔ 顶内沟 (L→R)",
       "source_region": "角回",
       "target_region": "顶内沟",
@@ -1363,7 +1779,7 @@
       "enigma_strength": 7.07
     },
     {
-      "id": "link_041",
+      "id": "link_053",
       "display_name": "颞下回 → DMN+OFC (L)",
       "source_region": "颞下回",
       "target_region": "DMN+OFC",
@@ -1396,7 +1812,7 @@
       "enigma_strength": 4.96
     },
     {
-      "id": "link_042",
+      "id": "link_054",
       "display_name": "颞下回 ↔ 颞中回 (L)",
       "source_region": "颞下回",
       "target_region": "颞中回",
@@ -1427,7 +1843,38 @@
       "enigma_strength": 10.74
     },
     {
-      "id": "link_043",
+      "id": "link_055",
+      "display_name": "颞下回 ← 海马旁回 (L)",
+      "source_region": "颞下回",
+      "target_region": "海马旁回",
+      "layers": [
+        4,
+        1
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "颞下回"
+      ],
+      "regions_b": [
+        "海马旁回"
+      ],
+      "coactivated_networks": [
+        "Semantic Memory"
+      ],
+      "dk_pair": [
+        "inferiortemporal",
+        "parahippocampal"
+      ],
+      "enigma_strength": 6.02
+    },
+    {
+      "id": "link_056",
       "display_name": "颞下回 → Broca区 (L)",
       "source_region": "颞下回",
       "target_region": "Broca区",
@@ -1458,7 +1905,7 @@
       "enigma_strength": 8.52
     },
     {
-      "id": "link_044",
+      "id": "link_057",
       "display_name": "颞下回 → TPJ (L)",
       "source_region": "颞下回",
       "target_region": "TPJ",
@@ -1490,7 +1937,38 @@
       "enigma_strength": 7.51
     },
     {
-      "id": "link_045",
+      "id": "link_058",
+      "display_name": "颞下回 ← 前脑岛 (L)",
+      "source_region": "颞下回",
+      "target_region": "前脑岛",
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "颞下回"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "coactivated_networks": [
+        "Extended Multiple Demand"
+      ],
+      "dk_pair": [
+        "inferiortemporal",
+        "insula"
+      ],
+      "enigma_strength": 7.01
+    },
+    {
+      "id": "link_059",
       "display_name": "颞下回 ↔ 颞下回 (L→R)",
       "source_region": "颞下回",
       "target_region": "颞下回",
@@ -1512,8 +1990,8 @@
         "颞下回"
       ],
       "coactivated_networks": [
-        "Semantic Memory",
-        "Extended Multiple Demand"
+        "Extended Multiple Demand",
+        "Semantic Memory"
       ],
       "dk_pair": [
         "inferiortemporal",
@@ -1522,7 +2000,7 @@
       "enigma_strength": 7.18
     },
     {
-      "id": "link_046",
+      "id": "link_060",
       "display_name": "颞下回 ↔ 楔前叶 (L→R)",
       "source_region": "颞下回",
       "target_region": "楔前叶",
@@ -1553,7 +2031,7 @@
       "enigma_strength": 6.11
     },
     {
-      "id": "link_047",
+      "id": "link_061",
       "display_name": "颞下回 ↔ 顶内沟 (L→R)",
       "source_region": "颞下回",
       "target_region": "顶内沟",
@@ -1584,7 +2062,72 @@
       "enigma_strength": 7.5
     },
     {
-      "id": "link_048",
+      "id": "link_062",
+      "display_name": "外侧枕叶 ← OFC (L)",
+      "source_region": "外侧枕叶",
+      "target_region": "OFC",
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "外侧枕叶",
+        "枕顶联合"
+      ],
+      "regions_b": [
+        "OFC"
+      ],
+      "coactivated_networks": [
+        "Emotional Scene and Face Processing"
+      ],
+      "dk_pair": [
+        "lateraloccipital",
+        "lateralorbitofrontal"
+      ],
+      "enigma_strength": 6.02
+    },
+    {
+      "id": "link_063",
+      "display_name": "外侧枕叶 ← 海马旁回 (L)",
+      "source_region": "外侧枕叶",
+      "target_region": "海马旁回",
+      "layers": [
+        4,
+        1
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "外侧枕叶",
+        "枕顶联合"
+      ],
+      "regions_b": [
+        "海马旁回"
+      ],
+      "coactivated_networks": [
+        "Autobiographical Memory",
+        "Emotional Scene and Face Processing"
+      ],
+      "dk_pair": [
+        "lateraloccipital",
+        "parahippocampal"
+      ],
+      "enigma_strength": 5.76
+    },
+    {
+      "id": "link_064",
       "display_name": "外侧枕叶 ↔ 顶内沟 (L)",
       "source_region": "外侧枕叶",
       "target_region": "顶内沟",
@@ -1617,7 +2160,7 @@
       "enigma_strength": 10.31
     },
     {
-      "id": "link_049",
+      "id": "link_065",
       "display_name": "外侧枕叶 ↔ Wernicke区 (L)",
       "source_region": "外侧枕叶",
       "target_region": "Wernicke区",
@@ -1651,7 +2194,40 @@
       "enigma_strength": 8.93
     },
     {
-      "id": "link_050",
+      "id": "link_066",
+      "display_name": "外侧枕叶 ← 前脑岛 (L)",
+      "source_region": "外侧枕叶",
+      "target_region": "前脑岛",
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "外侧枕叶",
+        "枕顶联合"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "coactivated_networks": [
+        "Vigilant Attention",
+        "Cognitive Attention Control"
+      ],
+      "dk_pair": [
+        "lateraloccipital",
+        "insula"
+      ],
+      "enigma_strength": 8.87
+    },
+    {
+      "id": "link_067",
       "display_name": "外侧枕叶 ↔ 顶内沟 (L→R)",
       "source_region": "外侧枕叶",
       "target_region": "顶内沟",
@@ -1684,7 +2260,139 @@
       "enigma_strength": 8.5
     },
     {
-      "id": "link_051",
+      "id": "link_068",
+      "display_name": "OFC → DMN+OFC (L)",
+      "source_region": "OFC",
+      "target_region": "DMN+OFC",
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "OFC"
+      ],
+      "regions_b": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "coactivated_networks": [
+        "Reward",
+        "Semantic Memory",
+        "Emotional Scene and Face Processing"
+      ],
+      "dk_pair": [
+        "lateralorbitofrontal",
+        "medialorbitofrontal"
+      ],
+      "enigma_strength": 10.23
+    },
+    {
+      "id": "link_069",
+      "display_name": "OFC → 颞中回 (L)",
+      "source_region": "OFC",
+      "target_region": "颞中回",
+      "layers": [
+        2,
+        4
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "OFC"
+      ],
+      "regions_b": [
+        "颞中回"
+      ],
+      "coactivated_networks": [
+        "Semantic Memory"
+      ],
+      "dk_pair": [
+        "lateralorbitofrontal",
+        "middletemporal"
+      ],
+      "enigma_strength": 6.71
+    },
+    {
+      "id": "link_070",
+      "display_name": "OFC → mPFC (L)",
+      "source_region": "OFC",
+      "target_region": "mPFC",
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "OFC"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "coactivated_networks": [
+        "Reward",
+        "Semantic Memory",
+        "Emotional Scene and Face Processing"
+      ],
+      "dk_pair": [
+        "lateralorbitofrontal",
+        "superiorfrontal"
+      ],
+      "enigma_strength": 6.79
+    },
+    {
+      "id": "link_071",
+      "display_name": "OFC → TPJ (L)",
+      "source_region": "OFC",
+      "target_region": "TPJ",
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "OFC"
+      ],
+      "regions_b": [
+        "TPJ",
+        "缘上回"
+      ],
+      "coactivated_networks": [
+        "Semantic Memory"
+      ],
+      "dk_pair": [
+        "lateralorbitofrontal",
+        "supramarginal"
+      ],
+      "enigma_strength": 4.39
+    },
+    {
+      "id": "link_072",
       "display_name": "OFC ↔ 前脑岛 (L)",
       "source_region": "OFC",
       "target_region": "前脑岛",
@@ -1715,7 +2423,7 @@
       "enigma_strength": 10.33
     },
     {
-      "id": "link_052",
+      "id": "link_073",
       "display_name": "OFC ↔ ACC (L→R)",
       "source_region": "OFC",
       "target_region": "ACC",
@@ -1739,8 +2447,8 @@
         "前额叶极·SN"
       ],
       "coactivated_networks": [
-        "Emotional Scene and Face Processing",
-        "Reward"
+        "Reward",
+        "Emotional Scene and Face Processing"
       ],
       "dk_pair": [
         "lateralorbitofrontal",
@@ -1749,7 +2457,7 @@
       "enigma_strength": 3.41
     },
     {
-      "id": "link_053",
+      "id": "link_074",
       "display_name": "OFC ↔ OFC (L→R)",
       "source_region": "OFC",
       "target_region": "OFC",
@@ -1771,9 +2479,9 @@
         "OFC"
       ],
       "coactivated_networks": [
+        "Reward",
         "Semantic Memory",
-        "Emotional Scene and Face Processing",
-        "Reward"
+        "Emotional Scene and Face Processing"
       ],
       "dk_pair": [
         "lateralorbitofrontal",
@@ -1782,7 +2490,76 @@
       "enigma_strength": 7.23
     },
     {
-      "id": "link_054",
+      "id": "link_075",
+      "display_name": "OFC → DMN+OFC (L→R)",
+      "source_region": "OFC",
+      "target_region": "DMN+OFC",
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "OFC"
+      ],
+      "regions_b": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "coactivated_networks": [
+        "Reward",
+        "Semantic Memory",
+        "Emotional Scene and Face Processing"
+      ],
+      "dk_pair": [
+        "lateralorbitofrontal",
+        "medialorbitofrontal"
+      ],
+      "enigma_strength": 8.46
+    },
+    {
+      "id": "link_076",
+      "display_name": "OFC → mPFC (L→R)",
+      "source_region": "OFC",
+      "target_region": "mPFC",
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "OFC"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "coactivated_networks": [
+        "Reward",
+        "Semantic Memory",
+        "Emotional Scene and Face Processing"
+      ],
+      "dk_pair": [
+        "lateralorbitofrontal",
+        "superiorfrontal"
+      ],
+      "enigma_strength": 6.08
+    },
+    {
+      "id": "link_077",
       "display_name": "OFC ↔ 前脑岛 (L→R)",
       "source_region": "OFC",
       "target_region": "前脑岛",
@@ -1813,7 +2590,7 @@
       "enigma_strength": 4.75
     },
     {
-      "id": "link_055",
+      "id": "link_078",
       "display_name": "DMN+OFC ← 颞中回 (L)",
       "source_region": "DMN+OFC",
       "target_region": "颞中回",
@@ -1847,7 +2624,42 @@
       "enigma_strength": 4.93
     },
     {
-      "id": "link_056",
+      "id": "link_079",
+      "display_name": "DMN+OFC ← 后扣带 (L)",
+      "source_region": "DMN+OFC",
+      "target_region": "后扣带",
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "regions_b": [
+        "后扣带"
+      ],
+      "coactivated_networks": [
+        "Autobiographical Memory",
+        "Reward",
+        "Semantic Memory"
+      ],
+      "dk_pair": [
+        "medialorbitofrontal",
+        "posteriorcingulate"
+      ],
+      "enigma_strength": 6.95
+    },
+    {
+      "id": "link_080",
       "display_name": "DMN+OFC ← 楔前叶 (L)",
       "source_region": "DMN+OFC",
       "target_region": "楔前叶",
@@ -1871,10 +2683,10 @@
         "楔前叶"
       ],
       "coactivated_networks": [
+        "Autobiographical Memory",
         "Semantic Memory",
         "Extended Socio-Affective Default",
-        "Theory of Mind",
-        "Autobiographical Memory"
+        "Theory of Mind"
       ],
       "dk_pair": [
         "medialorbitofrontal",
@@ -1883,7 +2695,40 @@
       "enigma_strength": 7.3
     },
     {
-      "id": "link_057",
+      "id": "link_081",
+      "display_name": "DMN+OFC ← ACC吻侧 (L)",
+      "source_region": "DMN+OFC",
+      "target_region": "ACC吻侧",
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "regions_b": [
+        "ACC吻侧"
+      ],
+      "coactivated_networks": [
+        "Extended Socio-Affective Default"
+      ],
+      "dk_pair": [
+        "medialorbitofrontal",
+        "rostralanteriorcingulate"
+      ],
+      "enigma_strength": 10.23
+    },
+    {
+      "id": "link_082",
       "display_name": "DMN+OFC ↔ dlPFC (L)",
       "source_region": "DMN+OFC",
       "target_region": "dlPFC",
@@ -1918,7 +2763,7 @@
       "enigma_strength": 7.79
     },
     {
-      "id": "link_058",
+      "id": "link_083",
       "display_name": "DMN+OFC ↔ mPFC (L)",
       "source_region": "DMN+OFC",
       "target_region": "mPFC",
@@ -1943,12 +2788,12 @@
         "额上回"
       ],
       "coactivated_networks": [
-        "Emotional Scene and Face Processing",
-        "Extended Socio-Affective Default",
         "Reward",
-        "Semantic Memory",
+        "Extended Socio-Affective Default",
+        "Autobiographical Memory",
+        "Emotional Scene and Face Processing",
         "Theory of Mind",
-        "Autobiographical Memory"
+        "Semantic Memory"
       ],
       "dk_pair": [
         "medialorbitofrontal",
@@ -1957,7 +2802,7 @@
       "enigma_strength": 9.46
     },
     {
-      "id": "link_059",
+      "id": "link_084",
       "display_name": "DMN+OFC ← Wernicke区 (L)",
       "source_region": "DMN+OFC",
       "target_region": "Wernicke区",
@@ -1992,7 +2837,7 @@
       "enigma_strength": 5.09
     },
     {
-      "id": "link_060",
+      "id": "link_085",
       "display_name": "DMN+OFC ↔ 额极 (L)",
       "source_region": "DMN+OFC",
       "target_region": "额极",
@@ -2025,7 +2870,110 @@
       "enigma_strength": 9.02
     },
     {
-      "id": "link_061",
+      "id": "link_086",
+      "display_name": "DMN+OFC ← 颞极 (L)",
+      "source_region": "DMN+OFC",
+      "target_region": "颞极",
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "regions_b": [
+        "颞极"
+      ],
+      "coactivated_networks": [
+        "Theory of Mind"
+      ],
+      "dk_pair": [
+        "medialorbitofrontal",
+        "temporalpole"
+      ],
+      "enigma_strength": 6.57
+    },
+    {
+      "id": "link_087",
+      "display_name": "DMN+OFC ← 前脑岛 (L)",
+      "source_region": "DMN+OFC",
+      "target_region": "前脑岛",
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "coactivated_networks": [
+        "Reward"
+      ],
+      "dk_pair": [
+        "medialorbitofrontal",
+        "insula"
+      ],
+      "enigma_strength": 8.69
+    },
+    {
+      "id": "link_088",
+      "display_name": "DMN+OFC ← ACC (L→R)",
+      "source_region": "DMN+OFC",
+      "target_region": "ACC",
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "regions_b": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "coactivated_networks": [
+        "Reward",
+        "Emotional Scene and Face Processing",
+        "Extended Socio-Affective Default"
+      ],
+      "dk_pair": [
+        "medialorbitofrontal",
+        "caudalanteriorcingulate"
+      ],
+      "enigma_strength": 4.96
+    },
+    {
+      "id": "link_089",
       "display_name": "DMN+OFC ← 颞下回 (L→R)",
       "source_region": "DMN+OFC",
       "target_region": "颞下回",
@@ -2058,7 +3006,42 @@
       "enigma_strength": 3.86
     },
     {
-      "id": "link_062",
+      "id": "link_090",
+      "display_name": "DMN+OFC ← OFC (L→R)",
+      "source_region": "DMN+OFC",
+      "target_region": "OFC",
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "regions_b": [
+        "OFC"
+      ],
+      "coactivated_networks": [
+        "Reward",
+        "Semantic Memory",
+        "Emotional Scene and Face Processing"
+      ],
+      "dk_pair": [
+        "medialorbitofrontal",
+        "lateralorbitofrontal"
+      ],
+      "enigma_strength": 7.92
+    },
+    {
+      "id": "link_091",
       "display_name": "DMN+OFC ↔ DMN+OFC (L→R)",
       "source_region": "DMN+OFC",
       "target_region": "DMN+OFC",
@@ -2084,12 +3067,12 @@
         "前额叶极·DMN"
       ],
       "coactivated_networks": [
-        "Emotional Scene and Face Processing",
-        "Extended Socio-Affective Default",
         "Reward",
-        "Semantic Memory",
+        "Extended Socio-Affective Default",
+        "Autobiographical Memory",
+        "Emotional Scene and Face Processing",
         "Theory of Mind",
-        "Autobiographical Memory"
+        "Semantic Memory"
       ],
       "dk_pair": [
         "medialorbitofrontal",
@@ -2098,7 +3081,7 @@
       "enigma_strength": 9.93
     },
     {
-      "id": "link_063",
+      "id": "link_092",
       "display_name": "DMN+OFC ← 颞中回 (L→R)",
       "source_region": "DMN+OFC",
       "target_region": "颞中回",
@@ -2132,7 +3115,40 @@
       "enigma_strength": 3.01
     },
     {
-      "id": "link_064",
+      "id": "link_093",
+      "display_name": "DMN+OFC ← ACC吻侧 (L→R)",
+      "source_region": "DMN+OFC",
+      "target_region": "ACC吻侧",
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "regions_b": [
+        "ACC吻侧"
+      ],
+      "coactivated_networks": [
+        "Extended Socio-Affective Default"
+      ],
+      "dk_pair": [
+        "medialorbitofrontal",
+        "rostralanteriorcingulate"
+      ],
+      "enigma_strength": 7.24
+    },
+    {
+      "id": "link_094",
       "display_name": "DMN+OFC ↔ dlPFC (L→R)",
       "source_region": "DMN+OFC",
       "target_region": "dlPFC",
@@ -2167,7 +3183,7 @@
       "enigma_strength": 7.0
     },
     {
-      "id": "link_065",
+      "id": "link_095",
       "display_name": "DMN+OFC ↔ mPFC (L→R)",
       "source_region": "DMN+OFC",
       "target_region": "mPFC",
@@ -2192,12 +3208,12 @@
         "额上回"
       ],
       "coactivated_networks": [
-        "Emotional Scene and Face Processing",
-        "Extended Socio-Affective Default",
         "Reward",
-        "Semantic Memory",
+        "Extended Socio-Affective Default",
+        "Autobiographical Memory",
+        "Emotional Scene and Face Processing",
         "Theory of Mind",
-        "Autobiographical Memory"
+        "Semantic Memory"
       ],
       "dk_pair": [
         "medialorbitofrontal",
@@ -2206,7 +3222,7 @@
       "enigma_strength": 8.33
     },
     {
-      "id": "link_066",
+      "id": "link_096",
       "display_name": "DMN+OFC ↔ 额极 (L→R)",
       "source_region": "DMN+OFC",
       "target_region": "额极",
@@ -2239,7 +3255,73 @@
       "enigma_strength": 8.28
     },
     {
-      "id": "link_067",
+      "id": "link_097",
+      "display_name": "DMN+OFC ← 颞极 (L→R)",
+      "source_region": "DMN+OFC",
+      "target_region": "颞极",
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "regions_b": [
+        "颞极"
+      ],
+      "coactivated_networks": [
+        "Theory of Mind"
+      ],
+      "dk_pair": [
+        "medialorbitofrontal",
+        "temporalpole"
+      ],
+      "enigma_strength": 3.31
+    },
+    {
+      "id": "link_098",
+      "display_name": "DMN+OFC ← 前脑岛 (L→R)",
+      "source_region": "DMN+OFC",
+      "target_region": "前脑岛",
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "coactivated_networks": [
+        "Reward"
+      ],
+      "dk_pair": [
+        "medialorbitofrontal",
+        "insula"
+      ],
+      "enigma_strength": 5.7
+    },
+    {
+      "id": "link_099",
       "display_name": "颞中回 → Broca区 (L)",
       "source_region": "颞中回",
       "target_region": "Broca区",
@@ -2270,7 +3352,7 @@
       "enigma_strength": 8.98
     },
     {
-      "id": "link_068",
+      "id": "link_100",
       "display_name": "颞中回 ↔ Wernicke区 (L)",
       "source_region": "颞中回",
       "target_region": "Wernicke区",
@@ -2303,7 +3385,7 @@
       "enigma_strength": 10.38
     },
     {
-      "id": "link_069",
+      "id": "link_101",
       "display_name": "颞中回 → TPJ (L)",
       "source_region": "颞中回",
       "target_region": "TPJ",
@@ -2336,7 +3418,38 @@
       "enigma_strength": 10.01
     },
     {
-      "id": "link_070",
+      "id": "link_102",
+      "display_name": "颞中回 ← 颞极 (L)",
+      "source_region": "颞中回",
+      "target_region": "颞极",
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "颞中回"
+      ],
+      "regions_b": [
+        "颞极"
+      ],
+      "coactivated_networks": [
+        "Theory of Mind"
+      ],
+      "dk_pair": [
+        "middletemporal",
+        "temporalpole"
+      ],
+      "enigma_strength": 8.14
+    },
+    {
+      "id": "link_103",
       "display_name": "颞中回 ↔ 颞下回 (L→R)",
       "source_region": "颞中回",
       "target_region": "颞下回",
@@ -2367,7 +3480,73 @@
       "enigma_strength": 4.94
     },
     {
-      "id": "link_071",
+      "id": "link_104",
+      "display_name": "海马旁回 → 楔前叶 (L)",
+      "source_region": "海马旁回",
+      "target_region": "楔前叶",
+      "layers": [
+        1,
+        4
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "海马旁回"
+      ],
+      "regions_b": [
+        "楔前叶"
+      ],
+      "coactivated_networks": [
+        "Autobiographical Memory",
+        "Semantic Memory"
+      ],
+      "dk_pair": [
+        "parahippocampal",
+        "precuneus"
+      ],
+      "enigma_strength": 8.17
+    },
+    {
+      "id": "link_105",
+      "display_name": "海马旁回 → mPFC (L)",
+      "source_region": "海马旁回",
+      "target_region": "mPFC",
+      "layers": [
+        1,
+        5
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "海马旁回"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "coactivated_networks": [
+        "Autobiographical Memory",
+        "Semantic Memory",
+        "Emotional Scene and Face Processing"
+      ],
+      "dk_pair": [
+        "parahippocampal",
+        "superiorfrontal"
+      ],
+      "enigma_strength": 7.2
+    },
+    {
+      "id": "link_106",
       "display_name": "海马旁回 ↔ 海马旁回 (L→R)",
       "source_region": "海马旁回",
       "target_region": "海马旁回",
@@ -2389,9 +3568,9 @@
         "海马旁回"
       ],
       "coactivated_networks": [
+        "Autobiographical Memory",
         "Semantic Memory",
-        "Emotional Scene and Face Processing",
-        "Autobiographical Memory"
+        "Emotional Scene and Face Processing"
       ],
       "dk_pair": [
         "parahippocampal",
@@ -2400,7 +3579,7 @@
       "enigma_strength": 3.44
     },
     {
-      "id": "link_072",
+      "id": "link_107",
       "display_name": "海马旁回 → 后扣带 (L→R)",
       "source_region": "海马旁回",
       "target_region": "后扣带",
@@ -2422,8 +3601,8 @@
         "后扣带"
       ],
       "coactivated_networks": [
-        "Semantic Memory",
-        "Autobiographical Memory"
+        "Autobiographical Memory",
+        "Semantic Memory"
       ],
       "dk_pair": [
         "parahippocampal",
@@ -2432,7 +3611,7 @@
       "enigma_strength": 1.5
     },
     {
-      "id": "link_073",
+      "id": "link_108",
       "display_name": "旁中央小叶 ↔ M1 (L)",
       "source_region": "旁中央小叶",
       "target_region": "M1",
@@ -2463,7 +3642,39 @@
       "enigma_strength": 9.91
     },
     {
-      "id": "link_074",
+      "id": "link_109",
+      "display_name": "旁中央小叶 → mPFC (L)",
+      "source_region": "旁中央小叶",
+      "target_region": "mPFC",
+      "layers": [
+        3,
+        5
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "旁中央小叶"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "coactivated_networks": [
+        "Vigilant Attention"
+      ],
+      "dk_pair": [
+        "paracentral",
+        "superiorfrontal"
+      ],
+      "enigma_strength": 9.81
+    },
+    {
+      "id": "link_110",
       "display_name": "旁中央小叶 ↔ 旁中央小叶 (L→R)",
       "source_region": "旁中央小叶",
       "target_region": "旁中央小叶",
@@ -2494,7 +3705,7 @@
       "enigma_strength": 10.73
     },
     {
-      "id": "link_075",
+      "id": "link_111",
       "display_name": "旁中央小叶 ↔ M1 (L→R)",
       "source_region": "旁中央小叶",
       "target_region": "M1",
@@ -2525,7 +3736,39 @@
       "enigma_strength": 9.74
     },
     {
-      "id": "link_076",
+      "id": "link_112",
+      "display_name": "旁中央小叶 → mPFC (L→R)",
+      "source_region": "旁中央小叶",
+      "target_region": "mPFC",
+      "layers": [
+        3,
+        5
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "旁中央小叶"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "coactivated_networks": [
+        "Vigilant Attention"
+      ],
+      "dk_pair": [
+        "paracentral",
+        "superiorfrontal"
+      ],
+      "enigma_strength": 8.79
+    },
+    {
+      "id": "link_113",
       "display_name": "Broca区 ↔ dlPFC (L)",
       "source_region": "Broca区",
       "target_region": "dlPFC",
@@ -2560,7 +3803,7 @@
       "enigma_strength": 9.84
     },
     {
-      "id": "link_077",
+      "id": "link_114",
       "display_name": "Broca区 ↔ mPFC (L)",
       "source_region": "Broca区",
       "target_region": "mPFC",
@@ -2583,10 +3826,10 @@
         "额上回"
       ],
       "coactivated_networks": [
+        "Working Memory",
         "Empathy",
         "Emotion Regulation",
-        "Theory of Mind",
-        "Working Memory"
+        "Theory of Mind"
       ],
       "dk_pair": [
         "parsopercularis",
@@ -2595,7 +3838,7 @@
       "enigma_strength": 10.13
     },
     {
-      "id": "link_078",
+      "id": "link_115",
       "display_name": "Broca区 ← 顶内沟 (L)",
       "source_region": "Broca区",
       "target_region": "顶内沟",
@@ -2618,9 +3861,9 @@
       ],
       "coactivated_networks": [
         "Extended Multiple Demand",
+        "Working Memory",
         "Emotion Regulation",
         "Cognitive Attention Control",
-        "Working Memory",
         "Mirror Neuron System"
       ],
       "dk_pair": [
@@ -2630,7 +3873,7 @@
       "enigma_strength": 5.49
     },
     {
-      "id": "link_079",
+      "id": "link_116",
       "display_name": "Broca区 ← Wernicke区 (L)",
       "source_region": "Broca区",
       "target_region": "Wernicke区",
@@ -2666,7 +3909,7 @@
       "enigma_strength": 7.97
     },
     {
-      "id": "link_080",
+      "id": "link_117",
       "display_name": "Broca区 ↔ TPJ (L)",
       "source_region": "Broca区",
       "target_region": "TPJ",
@@ -2699,7 +3942,77 @@
       "enigma_strength": 7.89
     },
     {
-      "id": "link_081",
+      "id": "link_118",
+      "display_name": "Broca区 ← 前脑岛 (L)",
+      "source_region": "Broca区",
+      "target_region": "前脑岛",
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "Broca区"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "coactivated_networks": [
+        "Empathy",
+        "Extended Multiple Demand",
+        "Working Memory",
+        "Emotion Regulation",
+        "Cognitive Attention Control"
+      ],
+      "dk_pair": [
+        "parsopercularis",
+        "insula"
+      ],
+      "enigma_strength": 10.03
+    },
+    {
+      "id": "link_119",
+      "display_name": "Broca区 ← ACC (L→R)",
+      "source_region": "Broca区",
+      "target_region": "ACC",
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "Broca区"
+      ],
+      "regions_b": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "coactivated_networks": [
+        "Empathy",
+        "Emotion Regulation",
+        "Cognitive Attention Control"
+      ],
+      "dk_pair": [
+        "parsopercularis",
+        "caudalanteriorcingulate"
+      ],
+      "enigma_strength": 3.23
+    },
+    {
+      "id": "link_120",
       "display_name": "Broca区 ↔ 额中回尾部 (L→R)",
       "source_region": "Broca区",
       "target_region": "额中回尾部",
@@ -2731,7 +4044,7 @@
       "enigma_strength": 6.72
     },
     {
-      "id": "link_082",
+      "id": "link_121",
       "display_name": "Broca区 ↔ mPFC (L→R)",
       "source_region": "Broca区",
       "target_region": "mPFC",
@@ -2754,10 +4067,10 @@
         "额上回"
       ],
       "coactivated_networks": [
+        "Working Memory",
         "Empathy",
         "Emotion Regulation",
-        "Theory of Mind",
-        "Working Memory"
+        "Theory of Mind"
       ],
       "dk_pair": [
         "parsopercularis",
@@ -2766,7 +4079,42 @@
       "enigma_strength": 6.99
     },
     {
-      "id": "link_083",
+      "id": "link_122",
+      "display_name": "Broca区 ← 前脑岛 (L→R)",
+      "source_region": "Broca区",
+      "target_region": "前脑岛",
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "Broca区"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "coactivated_networks": [
+        "Empathy",
+        "Extended Multiple Demand",
+        "Working Memory",
+        "Emotion Regulation",
+        "Cognitive Attention Control"
+      ],
+      "dk_pair": [
+        "parsopercularis",
+        "insula"
+      ],
+      "enigma_strength": 1.79
+    },
+    {
+      "id": "link_123",
       "display_name": "S1 ↔ M1 (L)",
       "source_region": "S1",
       "target_region": "M1",
@@ -2797,7 +4145,7 @@
       "enigma_strength": 11.62
     },
     {
-      "id": "link_084",
+      "id": "link_124",
       "display_name": "S1 → 顶内沟 (L)",
       "source_region": "S1",
       "target_region": "顶内沟",
@@ -2828,7 +4176,7 @@
       "enigma_strength": 10.21
     },
     {
-      "id": "link_085",
+      "id": "link_125",
       "display_name": "S1 → Wernicke区 (L)",
       "source_region": "S1",
       "target_region": "Wernicke区",
@@ -2861,7 +4209,7 @@
       "enigma_strength": 6.24
     },
     {
-      "id": "link_086",
+      "id": "link_126",
       "display_name": "S1 ↔ S1 (L→R)",
       "source_region": "S1",
       "target_region": "S1",
@@ -2893,7 +4241,7 @@
       "enigma_strength": 9.57
     },
     {
-      "id": "link_087",
+      "id": "link_127",
       "display_name": "S1 ↔ M1 (L→R)",
       "source_region": "S1",
       "target_region": "M1",
@@ -2924,7 +4272,7 @@
       "enigma_strength": 7.52
     },
     {
-      "id": "link_088",
+      "id": "link_128",
       "display_name": "S1 → 顶内沟 (L→R)",
       "source_region": "S1",
       "target_region": "顶内沟",
@@ -2955,7 +4303,7 @@
       "enigma_strength": 7.83
     },
     {
-      "id": "link_089",
+      "id": "link_129",
       "display_name": "S1 → Wernicke区 (L→R)",
       "source_region": "S1",
       "target_region": "Wernicke区",
@@ -2988,7 +4336,73 @@
       "enigma_strength": 5.86
     },
     {
-      "id": "link_090",
+      "id": "link_130",
+      "display_name": "后扣带 → 楔前叶 (L)",
+      "source_region": "后扣带",
+      "target_region": "楔前叶",
+      "layers": [
+        2,
+        4
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "后扣带"
+      ],
+      "regions_b": [
+        "楔前叶"
+      ],
+      "coactivated_networks": [
+        "Autobiographical Memory",
+        "Semantic Memory"
+      ],
+      "dk_pair": [
+        "posteriorcingulate",
+        "precuneus"
+      ],
+      "enigma_strength": 9.85
+    },
+    {
+      "id": "link_131",
+      "display_name": "后扣带 → mPFC (L)",
+      "source_region": "后扣带",
+      "target_region": "mPFC",
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "后扣带"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "coactivated_networks": [
+        "Autobiographical Memory",
+        "Reward",
+        "Semantic Memory"
+      ],
+      "dk_pair": [
+        "posteriorcingulate",
+        "superiorfrontal"
+      ],
+      "enigma_strength": 9.76
+    },
+    {
+      "id": "link_132",
       "display_name": "后扣带 ↔ 前脑岛 (L)",
       "source_region": "后扣带",
       "target_region": "前脑岛",
@@ -3019,7 +4433,7 @@
       "enigma_strength": 4.97
     },
     {
-      "id": "link_091",
+      "id": "link_133",
       "display_name": "后扣带 ↔ ACC (L→R)",
       "source_region": "后扣带",
       "target_region": "ACC",
@@ -3052,7 +4466,42 @@
       "enigma_strength": 5.99
     },
     {
-      "id": "link_092",
+      "id": "link_134",
+      "display_name": "后扣带 → DMN+OFC (L→R)",
+      "source_region": "后扣带",
+      "target_region": "DMN+OFC",
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "后扣带"
+      ],
+      "regions_b": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "coactivated_networks": [
+        "Autobiographical Memory",
+        "Reward",
+        "Semantic Memory"
+      ],
+      "dk_pair": [
+        "posteriorcingulate",
+        "medialorbitofrontal"
+      ],
+      "enigma_strength": 3.62
+    },
+    {
+      "id": "link_135",
       "display_name": "后扣带 ↔ 后扣带 (L→R)",
       "source_region": "后扣带",
       "target_region": "后扣带",
@@ -3074,9 +4523,9 @@
         "后扣带"
       ],
       "coactivated_networks": [
-        "Semantic Memory",
+        "Autobiographical Memory",
         "Reward",
-        "Autobiographical Memory"
+        "Semantic Memory"
       ],
       "dk_pair": [
         "posteriorcingulate",
@@ -3085,7 +4534,138 @@
       "enigma_strength": 8.28
     },
     {
-      "id": "link_093",
+      "id": "link_136",
+      "display_name": "后扣带 → 楔前叶 (L→R)",
+      "source_region": "后扣带",
+      "target_region": "楔前叶",
+      "layers": [
+        2,
+        4
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "后扣带"
+      ],
+      "regions_b": [
+        "楔前叶"
+      ],
+      "coactivated_networks": [
+        "Autobiographical Memory",
+        "Semantic Memory"
+      ],
+      "dk_pair": [
+        "posteriorcingulate",
+        "precuneus"
+      ],
+      "enigma_strength": 6.45
+    },
+    {
+      "id": "link_137",
+      "display_name": "后扣带 → mPFC (L→R)",
+      "source_region": "后扣带",
+      "target_region": "mPFC",
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "后扣带"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "coactivated_networks": [
+        "Autobiographical Memory",
+        "Reward",
+        "Semantic Memory"
+      ],
+      "dk_pair": [
+        "posteriorcingulate",
+        "superiorfrontal"
+      ],
+      "enigma_strength": 7.75
+    },
+    {
+      "id": "link_138",
+      "display_name": "M1 → mPFC (L)",
+      "source_region": "M1",
+      "target_region": "mPFC",
+      "layers": [
+        3,
+        5
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "M1"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "coactivated_networks": [
+        "Vigilant Attention",
+        "Motor"
+      ],
+      "dk_pair": [
+        "precentral",
+        "superiorfrontal"
+      ],
+      "enigma_strength": 10.75
+    },
+    {
+      "id": "link_139",
+      "display_name": "M1 → TPJ (L)",
+      "source_region": "M1",
+      "target_region": "TPJ",
+      "layers": [
+        3,
+        5
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "M1"
+      ],
+      "regions_b": [
+        "TPJ",
+        "缘上回"
+      ],
+      "coactivated_networks": [
+        "Vigilant Attention"
+      ],
+      "dk_pair": [
+        "precentral",
+        "supramarginal"
+      ],
+      "enigma_strength": 9.06
+    },
+    {
+      "id": "link_140",
       "display_name": "M1 ← 前脑岛 (L)",
       "source_region": "M1",
       "target_region": "前脑岛",
@@ -3116,7 +4696,7 @@
       "enigma_strength": 10.14
     },
     {
-      "id": "link_094",
+      "id": "link_141",
       "display_name": "M1 ↔ 旁中央小叶 (L→R)",
       "source_region": "M1",
       "target_region": "旁中央小叶",
@@ -3147,7 +4727,7 @@
       "enigma_strength": 9.52
     },
     {
-      "id": "link_095",
+      "id": "link_142",
       "display_name": "M1 ↔ S1 (L→R)",
       "source_region": "M1",
       "target_region": "S1",
@@ -3178,7 +4758,7 @@
       "enigma_strength": 7.49
     },
     {
-      "id": "link_096",
+      "id": "link_143",
       "display_name": "M1 ↔ M1 (L→R)",
       "source_region": "M1",
       "target_region": "M1",
@@ -3210,7 +4790,71 @@
       "enigma_strength": 10.28
     },
     {
-      "id": "link_097",
+      "id": "link_144",
+      "display_name": "M1 → mPFC (L→R)",
+      "source_region": "M1",
+      "target_region": "mPFC",
+      "layers": [
+        3,
+        5
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "M1"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "coactivated_networks": [
+        "Vigilant Attention",
+        "Motor"
+      ],
+      "dk_pair": [
+        "precentral",
+        "superiorfrontal"
+      ],
+      "enigma_strength": 9.1
+    },
+    {
+      "id": "link_145",
+      "display_name": "楔前叶 ← ACC吻侧 (L)",
+      "source_region": "楔前叶",
+      "target_region": "ACC吻侧",
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "楔前叶"
+      ],
+      "regions_b": [
+        "ACC吻侧"
+      ],
+      "coactivated_networks": [
+        "Extended Socio-Affective Default"
+      ],
+      "dk_pair": [
+        "precuneus",
+        "rostralanteriorcingulate"
+      ],
+      "enigma_strength": 7.81
+    },
+    {
+      "id": "link_146",
       "display_name": "楔前叶 → dlPFC (L)",
       "source_region": "楔前叶",
       "target_region": "dlPFC",
@@ -3243,7 +4887,7 @@
       "enigma_strength": 8.02
     },
     {
-      "id": "link_098",
+      "id": "link_147",
       "display_name": "楔前叶 → mPFC (L)",
       "source_region": "楔前叶",
       "target_region": "mPFC",
@@ -3266,10 +4910,10 @@
         "额上回"
       ],
       "coactivated_networks": [
+        "Autobiographical Memory",
         "Semantic Memory",
         "Extended Socio-Affective Default",
-        "Theory of Mind",
-        "Autobiographical Memory"
+        "Theory of Mind"
       ],
       "dk_pair": [
         "precuneus",
@@ -3278,7 +4922,7 @@
       "enigma_strength": 9.97
     },
     {
-      "id": "link_099",
+      "id": "link_148",
       "display_name": "楔前叶 ↔ Wernicke区 (L)",
       "source_region": "楔前叶",
       "target_region": "Wernicke区",
@@ -3311,7 +4955,7 @@
       "enigma_strength": 7.06
     },
     {
-      "id": "link_100",
+      "id": "link_149",
       "display_name": "楔前叶 ↔ 外侧枕叶 (L→R)",
       "source_region": "楔前叶",
       "target_region": "外侧枕叶",
@@ -3343,7 +4987,39 @@
       "enigma_strength": 5.88
     },
     {
-      "id": "link_101",
+      "id": "link_150",
+      "display_name": "楔前叶 ← 后扣带 (L→R)",
+      "source_region": "楔前叶",
+      "target_region": "后扣带",
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "楔前叶"
+      ],
+      "regions_b": [
+        "后扣带"
+      ],
+      "coactivated_networks": [
+        "Autobiographical Memory",
+        "Semantic Memory"
+      ],
+      "dk_pair": [
+        "precuneus",
+        "posteriorcingulate"
+      ],
+      "enigma_strength": 6.88
+    },
+    {
+      "id": "link_151",
       "display_name": "楔前叶 ↔ 楔前叶 (L→R)",
       "source_region": "楔前叶",
       "target_region": "楔前叶",
@@ -3365,10 +5041,10 @@
         "楔前叶"
       ],
       "coactivated_networks": [
+        "Autobiographical Memory",
         "Semantic Memory",
         "Extended Socio-Affective Default",
-        "Theory of Mind",
-        "Autobiographical Memory"
+        "Theory of Mind"
       ],
       "dk_pair": [
         "precuneus",
@@ -3377,7 +5053,7 @@
       "enigma_strength": 9.95
     },
     {
-      "id": "link_102",
+      "id": "link_152",
       "display_name": "楔前叶 → mPFC (L→R)",
       "source_region": "楔前叶",
       "target_region": "mPFC",
@@ -3400,10 +5076,10 @@
         "额上回"
       ],
       "coactivated_networks": [
+        "Autobiographical Memory",
         "Semantic Memory",
         "Extended Socio-Affective Default",
-        "Theory of Mind",
-        "Autobiographical Memory"
+        "Theory of Mind"
       ],
       "dk_pair": [
         "precuneus",
@@ -3412,7 +5088,7 @@
       "enigma_strength": 5.43
     },
     {
-      "id": "link_103",
+      "id": "link_153",
       "display_name": "楔前叶 → TPJ (L→R)",
       "source_region": "楔前叶",
       "target_region": "TPJ",
@@ -3435,10 +5111,10 @@
         "缘上回"
       ],
       "coactivated_networks": [
+        "Autobiographical Memory",
         "Semantic Memory",
         "Extended Socio-Affective Default",
-        "Theory of Mind",
-        "Autobiographical Memory"
+        "Theory of Mind"
       ],
       "dk_pair": [
         "precuneus",
@@ -3447,7 +5123,40 @@
       "enigma_strength": 5.82
     },
     {
-      "id": "link_104",
+      "id": "link_154",
+      "display_name": "ACC吻侧 → mPFC (L)",
+      "source_region": "ACC吻侧",
+      "target_region": "mPFC",
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "ACC吻侧"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "coactivated_networks": [
+        "Empathy",
+        "Extended Socio-Affective Default"
+      ],
+      "dk_pair": [
+        "rostralanteriorcingulate",
+        "superiorfrontal"
+      ],
+      "enigma_strength": 9.87
+    },
+    {
+      "id": "link_155",
       "display_name": "ACC吻侧 ↔ 前脑岛 (L)",
       "source_region": "ACC吻侧",
       "target_region": "前脑岛",
@@ -3478,7 +5187,7 @@
       "enigma_strength": 6.29
     },
     {
-      "id": "link_105",
+      "id": "link_156",
       "display_name": "ACC吻侧 ↔ ACC (L→R)",
       "source_region": "ACC吻侧",
       "target_region": "ACC",
@@ -3512,7 +5221,40 @@
       "enigma_strength": 5.76
     },
     {
-      "id": "link_106",
+      "id": "link_157",
+      "display_name": "ACC吻侧 → DMN+OFC (L→R)",
+      "source_region": "ACC吻侧",
+      "target_region": "DMN+OFC",
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "ACC吻侧"
+      ],
+      "regions_b": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "coactivated_networks": [
+        "Extended Socio-Affective Default"
+      ],
+      "dk_pair": [
+        "rostralanteriorcingulate",
+        "medialorbitofrontal"
+      ],
+      "enigma_strength": 6.84
+    },
+    {
+      "id": "link_158",
       "display_name": "ACC吻侧 ↔ ACC吻侧 (L→R)",
       "source_region": "ACC吻侧",
       "target_region": "ACC吻侧",
@@ -3544,7 +5286,40 @@
       "enigma_strength": 6.94
     },
     {
-      "id": "link_107",
+      "id": "link_159",
+      "display_name": "ACC吻侧 → mPFC (L→R)",
+      "source_region": "ACC吻侧",
+      "target_region": "mPFC",
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "ACC吻侧"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "coactivated_networks": [
+        "Empathy",
+        "Extended Socio-Affective Default"
+      ],
+      "dk_pair": [
+        "rostralanteriorcingulate",
+        "superiorfrontal"
+      ],
+      "enigma_strength": 7.33
+    },
+    {
+      "id": "link_160",
       "display_name": "ACC吻侧 ↔ 前脑岛 (L→R)",
       "source_region": "ACC吻侧",
       "target_region": "前脑岛",
@@ -3575,7 +5350,7 @@
       "enigma_strength": 3.66
     },
     {
-      "id": "link_108",
+      "id": "link_161",
       "display_name": "dlPFC ↔ mPFC (L)",
       "source_region": "dlPFC",
       "target_region": "mPFC",
@@ -3600,9 +5375,9 @@
         "额上回"
       ],
       "coactivated_networks": [
+        "Autobiographical Memory",
         "Emotion Regulation",
-        "Working Memory",
-        "Autobiographical Memory"
+        "Working Memory"
       ],
       "dk_pair": [
         "rostralmiddlefrontal",
@@ -3611,7 +5386,7 @@
       "enigma_strength": 10.74
     },
     {
-      "id": "link_109",
+      "id": "link_162",
       "display_name": "dlPFC ← 顶内沟 (L)",
       "source_region": "dlPFC",
       "target_region": "顶内沟",
@@ -3646,7 +5421,78 @@
       "enigma_strength": 6.99
     },
     {
-      "id": "link_110",
+      "id": "link_163",
+      "display_name": "dlPFC ← 前脑岛 (L)",
+      "source_region": "dlPFC",
+      "target_region": "前脑岛",
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "dlPFC",
+        "前额叶极",
+        "前额叶极·FPN"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "coactivated_networks": [
+        "Emotion Regulation",
+        "Cognitive Attention Control",
+        "Working Memory"
+      ],
+      "dk_pair": [
+        "rostralmiddlefrontal",
+        "insula"
+      ],
+      "enigma_strength": 8.68
+    },
+    {
+      "id": "link_164",
+      "display_name": "dlPFC ← ACC (L→R)",
+      "source_region": "dlPFC",
+      "target_region": "ACC",
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "dlPFC",
+        "前额叶极",
+        "前额叶极·FPN"
+      ],
+      "regions_b": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "coactivated_networks": [
+        "Emotion Regulation",
+        "Cognitive Attention Control"
+      ],
+      "dk_pair": [
+        "rostralmiddlefrontal",
+        "caudalanteriorcingulate"
+      ],
+      "enigma_strength": 3.91
+    },
+    {
+      "id": "link_165",
       "display_name": "dlPFC ↔ 额中回尾部 (L→R)",
       "source_region": "dlPFC",
       "target_region": "额中回尾部",
@@ -3679,7 +5525,7 @@
       "enigma_strength": 7.97
     },
     {
-      "id": "link_111",
+      "id": "link_166",
       "display_name": "dlPFC ↔ DMN+OFC (L→R)",
       "source_region": "dlPFC",
       "target_region": "DMN+OFC",
@@ -3714,7 +5560,7 @@
       "enigma_strength": 8.02
     },
     {
-      "id": "link_112",
+      "id": "link_167",
       "display_name": "dlPFC ↔ dlPFC (L→R)",
       "source_region": "dlPFC",
       "target_region": "dlPFC",
@@ -3740,10 +5586,10 @@
         "前额叶极·FPN"
       ],
       "coactivated_networks": [
+        "Autobiographical Memory",
         "Emotion Regulation",
         "Cognitive Attention Control",
-        "Working Memory",
-        "Autobiographical Memory"
+        "Working Memory"
       ],
       "dk_pair": [
         "rostralmiddlefrontal",
@@ -3752,7 +5598,7 @@
       "enigma_strength": 10.29
     },
     {
-      "id": "link_113",
+      "id": "link_168",
       "display_name": "dlPFC ↔ mPFC (L→R)",
       "source_region": "dlPFC",
       "target_region": "mPFC",
@@ -3777,9 +5623,9 @@
         "额上回"
       ],
       "coactivated_networks": [
+        "Autobiographical Memory",
         "Emotion Regulation",
-        "Working Memory",
-        "Autobiographical Memory"
+        "Working Memory"
       ],
       "dk_pair": [
         "rostralmiddlefrontal",
@@ -3788,7 +5634,7 @@
       "enigma_strength": 10.34
     },
     {
-      "id": "link_114",
+      "id": "link_169",
       "display_name": "mPFC ← 顶内沟 (L)",
       "source_region": "mPFC",
       "target_region": "顶内沟",
@@ -3821,7 +5667,7 @@
       "enigma_strength": 8.48
     },
     {
-      "id": "link_115",
+      "id": "link_170",
       "display_name": "mPFC ↔ 额极 (L)",
       "source_region": "mPFC",
       "target_region": "额极",
@@ -3853,7 +5699,82 @@
       "enigma_strength": 8.01
     },
     {
-      "id": "link_116",
+      "id": "link_171",
+      "display_name": "mPFC ← 前脑岛 (L)",
+      "source_region": "mPFC",
+      "target_region": "前脑岛",
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "mPFC",
+        "额上回"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "coactivated_networks": [
+        "Reward",
+        "Empathy",
+        "Vigilant Attention",
+        "Working Memory",
+        "Emotion Regulation"
+      ],
+      "dk_pair": [
+        "superiorfrontal",
+        "insula"
+      ],
+      "enigma_strength": 9.17
+    },
+    {
+      "id": "link_172",
+      "display_name": "mPFC ← ACC (L→R)",
+      "source_region": "mPFC",
+      "target_region": "ACC",
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "mPFC",
+        "额上回"
+      ],
+      "regions_b": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "coactivated_networks": [
+        "Reward",
+        "Extended Socio-Affective Default",
+        "Empathy",
+        "Vigilant Attention",
+        "Emotional Scene and Face Processing",
+        "Emotion Regulation"
+      ],
+      "dk_pair": [
+        "superiorfrontal",
+        "caudalanteriorcingulate"
+      ],
+      "enigma_strength": 8.91
+    },
+    {
+      "id": "link_173",
       "display_name": "mPFC ↔ 额中回尾部 (L→R)",
       "source_region": "mPFC",
       "target_region": "额中回尾部",
@@ -3886,7 +5807,41 @@
       "enigma_strength": 9.78
     },
     {
-      "id": "link_117",
+      "id": "link_174",
+      "display_name": "mPFC ← OFC (L→R)",
+      "source_region": "mPFC",
+      "target_region": "OFC",
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "mPFC",
+        "额上回"
+      ],
+      "regions_b": [
+        "OFC"
+      ],
+      "coactivated_networks": [
+        "Reward",
+        "Semantic Memory",
+        "Emotional Scene and Face Processing"
+      ],
+      "dk_pair": [
+        "superiorfrontal",
+        "lateralorbitofrontal"
+      ],
+      "enigma_strength": 4.85
+    },
+    {
+      "id": "link_175",
       "display_name": "mPFC ↔ DMN+OFC (L→R)",
       "source_region": "mPFC",
       "target_region": "DMN+OFC",
@@ -3911,12 +5866,12 @@
         "前额叶极·DMN"
       ],
       "coactivated_networks": [
-        "Emotional Scene and Face Processing",
-        "Extended Socio-Affective Default",
         "Reward",
-        "Semantic Memory",
+        "Extended Socio-Affective Default",
+        "Autobiographical Memory",
+        "Emotional Scene and Face Processing",
         "Theory of Mind",
-        "Autobiographical Memory"
+        "Semantic Memory"
       ],
       "dk_pair": [
         "superiorfrontal",
@@ -3925,7 +5880,39 @@
       "enigma_strength": 8.27
     },
     {
-      "id": "link_118",
+      "id": "link_176",
+      "display_name": "mPFC ← 旁中央小叶 (L→R)",
+      "source_region": "mPFC",
+      "target_region": "旁中央小叶",
+      "layers": [
+        5,
+        3
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "mPFC",
+        "额上回"
+      ],
+      "regions_b": [
+        "旁中央小叶"
+      ],
+      "coactivated_networks": [
+        "Vigilant Attention"
+      ],
+      "dk_pair": [
+        "superiorfrontal",
+        "paracentral"
+      ],
+      "enigma_strength": 8.96
+    },
+    {
+      "id": "link_177",
       "display_name": "mPFC ↔ Broca区 (L→R)",
       "source_region": "mPFC",
       "target_region": "Broca区",
@@ -3948,10 +5935,10 @@
         "Broca区"
       ],
       "coactivated_networks": [
+        "Working Memory",
         "Empathy",
         "Emotion Regulation",
-        "Theory of Mind",
-        "Working Memory"
+        "Theory of Mind"
       ],
       "dk_pair": [
         "superiorfrontal",
@@ -3960,7 +5947,107 @@
       "enigma_strength": 6.89
     },
     {
-      "id": "link_119",
+      "id": "link_178",
+      "display_name": "mPFC ← 后扣带 (L→R)",
+      "source_region": "mPFC",
+      "target_region": "后扣带",
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "mPFC",
+        "额上回"
+      ],
+      "regions_b": [
+        "后扣带"
+      ],
+      "coactivated_networks": [
+        "Autobiographical Memory",
+        "Reward",
+        "Semantic Memory"
+      ],
+      "dk_pair": [
+        "superiorfrontal",
+        "posteriorcingulate"
+      ],
+      "enigma_strength": 7.91
+    },
+    {
+      "id": "link_179",
+      "display_name": "mPFC ← M1 (L→R)",
+      "source_region": "mPFC",
+      "target_region": "M1",
+      "layers": [
+        5,
+        3
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "mPFC",
+        "额上回"
+      ],
+      "regions_b": [
+        "M1"
+      ],
+      "coactivated_networks": [
+        "Vigilant Attention",
+        "Motor"
+      ],
+      "dk_pair": [
+        "superiorfrontal",
+        "precentral"
+      ],
+      "enigma_strength": 9.24
+    },
+    {
+      "id": "link_180",
+      "display_name": "mPFC ← ACC吻侧 (L→R)",
+      "source_region": "mPFC",
+      "target_region": "ACC吻侧",
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "mPFC",
+        "额上回"
+      ],
+      "regions_b": [
+        "ACC吻侧"
+      ],
+      "coactivated_networks": [
+        "Empathy",
+        "Extended Socio-Affective Default"
+      ],
+      "dk_pair": [
+        "superiorfrontal",
+        "rostralanteriorcingulate"
+      ],
+      "enigma_strength": 7.36
+    },
+    {
+      "id": "link_181",
       "display_name": "mPFC ↔ dlPFC (L→R)",
       "source_region": "mPFC",
       "target_region": "dlPFC",
@@ -3985,9 +6072,9 @@
         "前额叶极·FPN"
       ],
       "coactivated_networks": [
+        "Autobiographical Memory",
         "Emotion Regulation",
-        "Working Memory",
-        "Autobiographical Memory"
+        "Working Memory"
       ],
       "dk_pair": [
         "superiorfrontal",
@@ -3996,7 +6083,7 @@
       "enigma_strength": 10.02
     },
     {
-      "id": "link_120",
+      "id": "link_182",
       "display_name": "mPFC ↔ mPFC (L→R)",
       "source_region": "mPFC",
       "target_region": "mPFC",
@@ -4020,17 +6107,17 @@
         "额上回"
       ],
       "coactivated_networks": [
-        "Emotional Scene and Face Processing",
-        "Extended Socio-Affective Default",
         "Reward",
-        "Motor",
+        "Extended Socio-Affective Default",
+        "Autobiographical Memory",
         "Empathy",
-        "Semantic Memory",
-        "Theory of Mind",
-        "Emotion Regulation",
+        "Emotional Scene and Face Processing",
         "Vigilant Attention",
+        "Theory of Mind",
+        "Semantic Memory",
+        "Motor",
         "Working Memory",
-        "Autobiographical Memory"
+        "Emotion Regulation"
       ],
       "dk_pair": [
         "superiorfrontal",
@@ -4039,7 +6126,7 @@
       "enigma_strength": 12.62
     },
     {
-      "id": "link_121",
+      "id": "link_183",
       "display_name": "mPFC ↔ 额极 (L→R)",
       "source_region": "mPFC",
       "target_region": "额极",
@@ -4071,7 +6158,43 @@
       "enigma_strength": 8.06
     },
     {
-      "id": "link_122",
+      "id": "link_184",
+      "display_name": "mPFC ← 前脑岛 (L→R)",
+      "source_region": "mPFC",
+      "target_region": "前脑岛",
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "mPFC",
+        "额上回"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "coactivated_networks": [
+        "Reward",
+        "Empathy",
+        "Vigilant Attention",
+        "Working Memory",
+        "Emotion Regulation"
+      ],
+      "dk_pair": [
+        "superiorfrontal",
+        "insula"
+      ],
+      "enigma_strength": 5.85
+    },
+    {
+      "id": "link_185",
       "display_name": "顶内沟 ↔ Wernicke区 (L)",
       "source_region": "顶内沟",
       "target_region": "Wernicke区",
@@ -4105,7 +6228,41 @@
       "enigma_strength": 9.44
     },
     {
-      "id": "link_123",
+      "id": "link_186",
+      "display_name": "顶内沟 ← 前脑岛 (L)",
+      "source_region": "顶内沟",
+      "target_region": "前脑岛",
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "顶内沟"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "coactivated_networks": [
+        "Extended Multiple Demand",
+        "Emotion Regulation",
+        "Cognitive Attention Control",
+        "Working Memory"
+      ],
+      "dk_pair": [
+        "superiorparietal",
+        "insula"
+      ],
+      "enigma_strength": 9.15
+    },
+    {
+      "id": "link_187",
       "display_name": "顶内沟 ↔ 角回 (L→R)",
       "source_region": "顶内沟",
       "target_region": "角回",
@@ -4138,7 +6295,7 @@
       "enigma_strength": 6.83
     },
     {
-      "id": "link_124",
+      "id": "link_188",
       "display_name": "顶内沟 ↔ 颞下回 (L→R)",
       "source_region": "顶内沟",
       "target_region": "颞下回",
@@ -4169,7 +6326,7 @@
       "enigma_strength": 6.81
     },
     {
-      "id": "link_125",
+      "id": "link_189",
       "display_name": "顶内沟 ↔ 外侧枕叶 (L→R)",
       "source_region": "顶内沟",
       "target_region": "外侧枕叶",
@@ -4202,7 +6359,7 @@
       "enigma_strength": 8.02
     },
     {
-      "id": "link_126",
+      "id": "link_190",
       "display_name": "顶内沟 ← S1 (L→R)",
       "source_region": "顶内沟",
       "target_region": "S1",
@@ -4233,7 +6390,7 @@
       "enigma_strength": 8.03
     },
     {
-      "id": "link_127",
+      "id": "link_191",
       "display_name": "顶内沟 ↔ 顶内沟 (L→R)",
       "source_region": "顶内沟",
       "target_region": "顶内沟",
@@ -4256,9 +6413,9 @@
       ],
       "coactivated_networks": [
         "Extended Multiple Demand",
+        "Working Memory",
         "Emotion Regulation",
         "Cognitive Attention Control",
-        "Working Memory",
         "Mirror Neuron System"
       ],
       "dk_pair": [
@@ -4268,7 +6425,7 @@
       "enigma_strength": 10.36
     },
     {
-      "id": "link_128",
+      "id": "link_192",
       "display_name": "Wernicke区 → TPJ (L)",
       "source_region": "Wernicke区",
       "target_region": "TPJ",
@@ -4303,7 +6460,74 @@
       "enigma_strength": 10.38
     },
     {
-      "id": "link_129",
+      "id": "link_193",
+      "display_name": "Wernicke区 ← 颞极 (L)",
+      "source_region": "Wernicke区",
+      "target_region": "颞极",
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "Wernicke区",
+        "颞上回",
+        "颞上沟"
+      ],
+      "regions_b": [
+        "颞极"
+      ],
+      "coactivated_networks": [
+        "Theory of Mind"
+      ],
+      "dk_pair": [
+        "superiortemporal",
+        "temporalpole"
+      ],
+      "enigma_strength": 8.5
+    },
+    {
+      "id": "link_194",
+      "display_name": "Wernicke区 ← 前脑岛 (L)",
+      "source_region": "Wernicke区",
+      "target_region": "前脑岛",
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "Wernicke区",
+        "颞上回",
+        "颞上沟"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "coactivated_networks": [
+        "Empathy",
+        "Emotion Regulation"
+      ],
+      "dk_pair": [
+        "superiortemporal",
+        "insula"
+      ],
+      "enigma_strength": 10.26
+    },
+    {
+      "id": "link_195",
       "display_name": "Wernicke区 ↔ 楔前叶 (L→R)",
       "source_region": "Wernicke区",
       "target_region": "楔前叶",
@@ -4336,7 +6560,40 @@
       "enigma_strength": 5.84
     },
     {
-      "id": "link_130",
+      "id": "link_196",
+      "display_name": "TPJ ← 前脑岛 (L)",
+      "source_region": "TPJ",
+      "target_region": "前脑岛",
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "TPJ",
+        "缘上回"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "coactivated_networks": [
+        "Empathy",
+        "Vigilant Attention"
+      ],
+      "dk_pair": [
+        "supramarginal",
+        "insula"
+      ],
+      "enigma_strength": 9.72
+    },
+    {
+      "id": "link_197",
       "display_name": "额极 ↔ DMN+OFC (L→R)",
       "source_region": "额极",
       "target_region": "DMN+OFC",
@@ -4369,7 +6626,7 @@
       "enigma_strength": 8.8
     },
     {
-      "id": "link_131",
+      "id": "link_198",
       "display_name": "额极 ↔ mPFC (L→R)",
       "source_region": "额极",
       "target_region": "mPFC",
@@ -4401,7 +6658,7 @@
       "enigma_strength": 8.49
     },
     {
-      "id": "link_132",
+      "id": "link_199",
       "display_name": "额极 ↔ 额极 (L→R)",
       "source_region": "额极",
       "target_region": "额极",
@@ -4432,7 +6689,7 @@
       "enigma_strength": 8.32
     },
     {
-      "id": "link_133",
+      "id": "link_200",
       "display_name": "颞极 ↔ 颞极 (L→R)",
       "source_region": "颞极",
       "target_region": "颞极",
@@ -4463,7 +6720,7 @@
       "enigma_strength": 3.92
     },
     {
-      "id": "link_134",
+      "id": "link_201",
       "display_name": "前脑岛 ↔ ACC (L→R)",
       "source_region": "前脑岛",
       "target_region": "ACC",
@@ -4487,11 +6744,11 @@
         "前额叶极·SN"
       ],
       "coactivated_networks": [
-        "Cognitive Attention Control",
         "Reward",
         "Empathy",
+        "Vigilant Attention",
         "Emotion Regulation",
-        "Vigilant Attention"
+        "Cognitive Attention Control"
       ],
       "dk_pair": [
         "insula",
@@ -4500,7 +6757,40 @@
       "enigma_strength": 2.93
     },
     {
-      "id": "link_135",
+      "id": "link_202",
+      "display_name": "前脑岛 → 额中回尾部 (L→R)",
+      "source_region": "前脑岛",
+      "target_region": "额中回尾部",
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "前脑岛"
+      ],
+      "regions_b": [
+        "额中回尾部"
+      ],
+      "coactivated_networks": [
+        "Reward",
+        "Extended Multiple Demand",
+        "Working Memory"
+      ],
+      "dk_pair": [
+        "insula",
+        "caudalmiddlefrontal"
+      ],
+      "enigma_strength": 3.41
+    },
+    {
+      "id": "link_203",
       "display_name": "前脑岛 ↔ OFC (L→R)",
       "source_region": "前脑岛",
       "target_region": "OFC",
@@ -4531,7 +6821,40 @@
       "enigma_strength": 4.99
     },
     {
-      "id": "link_136",
+      "id": "link_204",
+      "display_name": "前脑岛 → DMN+OFC (L→R)",
+      "source_region": "前脑岛",
+      "target_region": "DMN+OFC",
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "前脑岛"
+      ],
+      "regions_b": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "coactivated_networks": [
+        "Reward"
+      ],
+      "dk_pair": [
+        "insula",
+        "medialorbitofrontal"
+      ],
+      "enigma_strength": 5.29
+    },
+    {
+      "id": "link_205",
       "display_name": "前脑岛 ↔ ACC吻侧 (L→R)",
       "source_region": "前脑岛",
       "target_region": "ACC吻侧",
@@ -4562,7 +6885,110 @@
       "enigma_strength": 3.29
     },
     {
-      "id": "link_137",
+      "id": "link_206",
+      "display_name": "前脑岛 → mPFC (L→R)",
+      "source_region": "前脑岛",
+      "target_region": "mPFC",
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "前脑岛"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "coactivated_networks": [
+        "Reward",
+        "Empathy",
+        "Vigilant Attention",
+        "Working Memory",
+        "Emotion Regulation"
+      ],
+      "dk_pair": [
+        "insula",
+        "superiorfrontal"
+      ],
+      "enigma_strength": 6.33
+    },
+    {
+      "id": "link_207",
+      "display_name": "前脑岛 → 顶内沟 (L→R)",
+      "source_region": "前脑岛",
+      "target_region": "顶内沟",
+      "layers": [
+        2,
+        4
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "前脑岛"
+      ],
+      "regions_b": [
+        "顶内沟"
+      ],
+      "coactivated_networks": [
+        "Extended Multiple Demand",
+        "Emotion Regulation",
+        "Cognitive Attention Control",
+        "Working Memory"
+      ],
+      "dk_pair": [
+        "insula",
+        "superiorparietal"
+      ],
+      "enigma_strength": 5.58
+    },
+    {
+      "id": "link_208",
+      "display_name": "ACC → 额中回尾部 (R)",
+      "source_region": "ACC",
+      "target_region": "额中回尾部",
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "regions_b": [
+        "额中回尾部"
+      ],
+      "coactivated_networks": [
+        "Reward"
+      ],
+      "dk_pair": [
+        "caudalanteriorcingulate",
+        "caudalmiddlefrontal"
+      ],
+      "enigma_strength": 4.14
+    },
+    {
+      "id": "link_209",
       "display_name": "ACC ↔ OFC (R)",
       "source_region": "ACC",
       "target_region": "OFC",
@@ -4586,8 +7012,8 @@
         "OFC"
       ],
       "coactivated_networks": [
-        "Emotional Scene and Face Processing",
-        "Reward"
+        "Reward",
+        "Emotional Scene and Face Processing"
       ],
       "dk_pair": [
         "caudalanteriorcingulate",
@@ -4596,7 +7022,44 @@
       "enigma_strength": 6.45
     },
     {
-      "id": "link_138",
+      "id": "link_210",
+      "display_name": "ACC → DMN+OFC (R)",
+      "source_region": "ACC",
+      "target_region": "DMN+OFC",
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "regions_b": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "coactivated_networks": [
+        "Reward",
+        "Emotional Scene and Face Processing",
+        "Extended Socio-Affective Default"
+      ],
+      "dk_pair": [
+        "caudalanteriorcingulate",
+        "medialorbitofrontal"
+      ],
+      "enigma_strength": 6.9
+    },
+    {
+      "id": "link_211",
       "display_name": "ACC ← 海马旁回 (R)",
       "source_region": "ACC",
       "target_region": "海马旁回",
@@ -4629,7 +7092,42 @@
       "enigma_strength": 5.46
     },
     {
-      "id": "link_139",
+      "id": "link_212",
+      "display_name": "ACC → Broca区 (R)",
+      "source_region": "ACC",
+      "target_region": "Broca区",
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "regions_b": [
+        "Broca区"
+      ],
+      "coactivated_networks": [
+        "Empathy",
+        "Emotion Regulation",
+        "Cognitive Attention Control"
+      ],
+      "dk_pair": [
+        "caudalanteriorcingulate",
+        "parsopercularis"
+      ],
+      "enigma_strength": 6.38
+    },
+    {
+      "id": "link_213",
       "display_name": "ACC ↔ 后扣带 (R)",
       "source_region": "ACC",
       "target_region": "后扣带",
@@ -4662,7 +7160,40 @@
       "enigma_strength": 8.89
     },
     {
-      "id": "link_140",
+      "id": "link_214",
+      "display_name": "ACC → 楔前叶 (R)",
+      "source_region": "ACC",
+      "target_region": "楔前叶",
+      "layers": [
+        2,
+        4
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "regions_b": [
+        "楔前叶"
+      ],
+      "coactivated_networks": [
+        "Extended Socio-Affective Default"
+      ],
+      "dk_pair": [
+        "caudalanteriorcingulate",
+        "precuneus"
+      ],
+      "enigma_strength": 8.99
+    },
+    {
+      "id": "link_215",
       "display_name": "ACC ↔ ACC吻侧 (R)",
       "source_region": "ACC",
       "target_region": "ACC吻侧",
@@ -4696,7 +7227,82 @@
       "enigma_strength": 8.85
     },
     {
-      "id": "link_141",
+      "id": "link_216",
+      "display_name": "ACC → dlPFC (R)",
+      "source_region": "ACC",
+      "target_region": "dlPFC",
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "regions_b": [
+        "dlPFC",
+        "前额叶极",
+        "前额叶极·FPN"
+      ],
+      "coactivated_networks": [
+        "Emotion Regulation",
+        "Cognitive Attention Control"
+      ],
+      "dk_pair": [
+        "caudalanteriorcingulate",
+        "rostralmiddlefrontal"
+      ],
+      "enigma_strength": 5.19
+    },
+    {
+      "id": "link_217",
+      "display_name": "ACC → mPFC (R)",
+      "source_region": "ACC",
+      "target_region": "mPFC",
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "coactivated_networks": [
+        "Reward",
+        "Extended Socio-Affective Default",
+        "Empathy",
+        "Vigilant Attention",
+        "Emotional Scene and Face Processing",
+        "Emotion Regulation"
+      ],
+      "dk_pair": [
+        "caudalanteriorcingulate",
+        "superiorfrontal"
+      ],
+      "enigma_strength": 10.65
+    },
+    {
+      "id": "link_218",
       "display_name": "ACC ↔ 前脑岛 (R)",
       "source_region": "ACC",
       "target_region": "前脑岛",
@@ -4720,11 +7326,11 @@
         "前脑岛"
       ],
       "coactivated_networks": [
-        "Cognitive Attention Control",
         "Reward",
         "Empathy",
+        "Vigilant Attention",
         "Emotion Regulation",
-        "Vigilant Attention"
+        "Cognitive Attention Control"
       ],
       "dk_pair": [
         "caudalanteriorcingulate",
@@ -4733,7 +7339,7 @@
       "enigma_strength": 5.37
     },
     {
-      "id": "link_142",
+      "id": "link_219",
       "display_name": "额中回尾部 ← 角回 (R)",
       "source_region": "额中回尾部",
       "target_region": "角回",
@@ -4766,7 +7372,7 @@
       "enigma_strength": 9.59
     },
     {
-      "id": "link_143",
+      "id": "link_220",
       "display_name": "额中回尾部 ← 颞下回 (R)",
       "source_region": "额中回尾部",
       "target_region": "颞下回",
@@ -4797,7 +7403,7 @@
       "enigma_strength": 8.57
     },
     {
-      "id": "link_144",
+      "id": "link_221",
       "display_name": "额中回尾部 ↔ Broca区 (R)",
       "source_region": "额中回尾部",
       "target_region": "Broca区",
@@ -4829,7 +7435,7 @@
       "enigma_strength": 10.24
     },
     {
-      "id": "link_145",
+      "id": "link_222",
       "display_name": "额中回尾部 ↔ dlPFC (R)",
       "source_region": "额中回尾部",
       "target_region": "dlPFC",
@@ -4862,7 +7468,7 @@
       "enigma_strength": 10.42
     },
     {
-      "id": "link_146",
+      "id": "link_223",
       "display_name": "额中回尾部 ↔ mPFC (R)",
       "source_region": "额中回尾部",
       "target_region": "mPFC",
@@ -4895,7 +7501,7 @@
       "enigma_strength": 11.16
     },
     {
-      "id": "link_147",
+      "id": "link_224",
       "display_name": "额中回尾部 ← 顶内沟 (R)",
       "source_region": "额中回尾部",
       "target_region": "顶内沟",
@@ -4927,7 +7533,40 @@
       "enigma_strength": 8.42
     },
     {
-      "id": "link_148",
+      "id": "link_225",
+      "display_name": "额中回尾部 ← 前脑岛 (R)",
+      "source_region": "额中回尾部",
+      "target_region": "前脑岛",
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "额中回尾部"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "coactivated_networks": [
+        "Reward",
+        "Extended Multiple Demand",
+        "Working Memory"
+      ],
+      "dk_pair": [
+        "caudalmiddlefrontal",
+        "insula"
+      ],
+      "enigma_strength": 6.18
+    },
+    {
+      "id": "link_226",
       "display_name": "纺锤体回 ↔ 角回 (R)",
       "source_region": "纺锤体回",
       "target_region": "角回",
@@ -4959,7 +7598,7 @@
       "enigma_strength": 9.29
     },
     {
-      "id": "link_149",
+      "id": "link_227",
       "display_name": "纺锤体回 ↔ 颞下回 (R)",
       "source_region": "纺锤体回",
       "target_region": "颞下回",
@@ -4990,7 +7629,7 @@
       "enigma_strength": 10.61
     },
     {
-      "id": "link_150",
+      "id": "link_228",
       "display_name": "纺锤体回 ↔ 外侧枕叶 (R)",
       "source_region": "纺锤体回",
       "target_region": "外侧枕叶",
@@ -5023,7 +7662,7 @@
       "enigma_strength": 10.84
     },
     {
-      "id": "link_151",
+      "id": "link_229",
       "display_name": "纺锤体回 ↔ 颞中回 (R)",
       "source_region": "纺锤体回",
       "target_region": "颞中回",
@@ -5054,7 +7693,39 @@
       "enigma_strength": 7.08
     },
     {
-      "id": "link_152",
+      "id": "link_230",
+      "display_name": "纺锤体回 ← 海马旁回 (R)",
+      "source_region": "纺锤体回",
+      "target_region": "海马旁回",
+      "layers": [
+        4,
+        1
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "纺锤体回"
+      ],
+      "regions_b": [
+        "海马旁回"
+      ],
+      "coactivated_networks": [
+        "Semantic Memory",
+        "Emotional Scene and Face Processing"
+      ],
+      "dk_pair": [
+        "fusiform",
+        "parahippocampal"
+      ],
+      "enigma_strength": 9.45
+    },
+    {
+      "id": "link_231",
       "display_name": "纺锤体回 ↔ 楔前叶 (R)",
       "source_region": "纺锤体回",
       "target_region": "楔前叶",
@@ -5085,7 +7756,7 @@
       "enigma_strength": 6.33
     },
     {
-      "id": "link_153",
+      "id": "link_232",
       "display_name": "纺锤体回 ↔ 顶内沟 (R)",
       "source_region": "纺锤体回",
       "target_region": "顶内沟",
@@ -5116,7 +7787,7 @@
       "enigma_strength": 9.3
     },
     {
-      "id": "link_154",
+      "id": "link_233",
       "display_name": "纺锤体回 ↔ Wernicke区 (R)",
       "source_region": "纺锤体回",
       "target_region": "Wernicke区",
@@ -5149,7 +7820,7 @@
       "enigma_strength": 6.63
     },
     {
-      "id": "link_155",
+      "id": "link_234",
       "display_name": "角回 ↔ 颞下回 (R)",
       "source_region": "角回",
       "target_region": "颞下回",
@@ -5181,7 +7852,7 @@
       "enigma_strength": 10.11
     },
     {
-      "id": "link_156",
+      "id": "link_235",
       "display_name": "角回 ↔ 外侧枕叶 (R)",
       "source_region": "角回",
       "target_region": "外侧枕叶",
@@ -5205,8 +7876,8 @@
         "枕顶联合"
       ],
       "coactivated_networks": [
-        "Cognitive Attention Control",
-        "Vigilant Attention"
+        "Vigilant Attention",
+        "Cognitive Attention Control"
       ],
       "dk_pair": [
         "inferiorparietal",
@@ -5215,7 +7886,7 @@
       "enigma_strength": 10.44
     },
     {
-      "id": "link_157",
+      "id": "link_236",
       "display_name": "角回 → DMN+OFC (R)",
       "source_region": "角回",
       "target_region": "DMN+OFC",
@@ -5240,8 +7911,8 @@
         "前额叶极·DMN"
       ],
       "coactivated_networks": [
-        "Semantic Memory",
-        "Reward"
+        "Reward",
+        "Semantic Memory"
       ],
       "dk_pair": [
         "inferiorparietal",
@@ -5250,7 +7921,7 @@
       "enigma_strength": 2.15
     },
     {
-      "id": "link_158",
+      "id": "link_237",
       "display_name": "角回 ↔ 颞中回 (R)",
       "source_region": "角回",
       "target_region": "颞中回",
@@ -5282,7 +7953,39 @@
       "enigma_strength": 10.98
     },
     {
-      "id": "link_159",
+      "id": "link_238",
+      "display_name": "角回 ← 海马旁回 (R)",
+      "source_region": "角回",
+      "target_region": "海马旁回",
+      "layers": [
+        4,
+        1
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "角回",
+        "顶叶"
+      ],
+      "regions_b": [
+        "海马旁回"
+      ],
+      "coactivated_networks": [
+        "Semantic Memory"
+      ],
+      "dk_pair": [
+        "inferiorparietal",
+        "parahippocampal"
+      ],
+      "enigma_strength": 5.58
+    },
+    {
+      "id": "link_239",
       "display_name": "角回 → Broca区 (R)",
       "source_region": "角回",
       "target_region": "Broca区",
@@ -5315,7 +8018,7 @@
       "enigma_strength": 8.15
     },
     {
-      "id": "link_160",
+      "id": "link_240",
       "display_name": "角回 ← S1 (R)",
       "source_region": "角回",
       "target_region": "S1",
@@ -5347,7 +8050,7 @@
       "enigma_strength": 8.08
     },
     {
-      "id": "link_161",
+      "id": "link_241",
       "display_name": "角回 ← M1 (R)",
       "source_region": "角回",
       "target_region": "M1",
@@ -5380,7 +8083,7 @@
       "enigma_strength": 8.6
     },
     {
-      "id": "link_162",
+      "id": "link_242",
       "display_name": "角回 → dlPFC (R)",
       "source_region": "角回",
       "target_region": "dlPFC",
@@ -5415,7 +8118,7 @@
       "enigma_strength": 9.63
     },
     {
-      "id": "link_163",
+      "id": "link_243",
       "display_name": "角回 → mPFC (R)",
       "source_region": "角回",
       "target_region": "mPFC",
@@ -5440,10 +8143,10 @@
       ],
       "coactivated_networks": [
         "Reward",
-        "Motor",
-        "Semantic Memory",
         "Vigilant Attention",
-        "Working Memory"
+        "Working Memory",
+        "Semantic Memory",
+        "Motor"
       ],
       "dk_pair": [
         "inferiorparietal",
@@ -5452,7 +8155,7 @@
       "enigma_strength": 7.65
     },
     {
-      "id": "link_164",
+      "id": "link_244",
       "display_name": "角回 ↔ 顶内沟 (R)",
       "source_region": "角回",
       "target_region": "顶内沟",
@@ -5485,7 +8188,7 @@
       "enigma_strength": 11.71
     },
     {
-      "id": "link_165",
+      "id": "link_245",
       "display_name": "角回 → TPJ (R)",
       "source_region": "角回",
       "target_region": "TPJ",
@@ -5519,7 +8222,42 @@
       "enigma_strength": 10.68
     },
     {
-      "id": "link_166",
+      "id": "link_246",
+      "display_name": "角回 ← 前脑岛 (R)",
+      "source_region": "角回",
+      "target_region": "前脑岛",
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "角回",
+        "顶叶"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "coactivated_networks": [
+        "Reward",
+        "Vigilant Attention",
+        "Cognitive Attention Control",
+        "Working Memory"
+      ],
+      "dk_pair": [
+        "inferiorparietal",
+        "insula"
+      ],
+      "enigma_strength": 8.06
+    },
+    {
+      "id": "link_247",
       "display_name": "颞下回 ↔ 颞中回 (R)",
       "source_region": "颞下回",
       "target_region": "颞中回",
@@ -5550,7 +8288,38 @@
       "enigma_strength": 10.8
     },
     {
-      "id": "link_167",
+      "id": "link_248",
+      "display_name": "颞下回 ← 海马旁回 (R)",
+      "source_region": "颞下回",
+      "target_region": "海马旁回",
+      "layers": [
+        4,
+        1
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "颞下回"
+      ],
+      "regions_b": [
+        "海马旁回"
+      ],
+      "coactivated_networks": [
+        "Semantic Memory"
+      ],
+      "dk_pair": [
+        "inferiortemporal",
+        "parahippocampal"
+      ],
+      "enigma_strength": 7.04
+    },
+    {
+      "id": "link_249",
       "display_name": "颞下回 ↔ 顶内沟 (R)",
       "source_region": "颞下回",
       "target_region": "顶内沟",
@@ -5581,7 +8350,7 @@
       "enigma_strength": 7.12
     },
     {
-      "id": "link_168",
+      "id": "link_250",
       "display_name": "颞下回 → TPJ (R)",
       "source_region": "颞下回",
       "target_region": "TPJ",
@@ -5613,7 +8382,103 @@
       "enigma_strength": 6.23
     },
     {
-      "id": "link_169",
+      "id": "link_251",
+      "display_name": "颞下回 ← 前脑岛 (R)",
+      "source_region": "颞下回",
+      "target_region": "前脑岛",
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "颞下回"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "coactivated_networks": [
+        "Extended Multiple Demand"
+      ],
+      "dk_pair": [
+        "inferiortemporal",
+        "insula"
+      ],
+      "enigma_strength": 7.6
+    },
+    {
+      "id": "link_252",
+      "display_name": "外侧枕叶 ← OFC (R)",
+      "source_region": "外侧枕叶",
+      "target_region": "OFC",
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "外侧枕叶",
+        "枕顶联合"
+      ],
+      "regions_b": [
+        "OFC"
+      ],
+      "coactivated_networks": [
+        "Emotional Scene and Face Processing"
+      ],
+      "dk_pair": [
+        "lateraloccipital",
+        "lateralorbitofrontal"
+      ],
+      "enigma_strength": 6.42
+    },
+    {
+      "id": "link_253",
+      "display_name": "外侧枕叶 ← 海马旁回 (R)",
+      "source_region": "外侧枕叶",
+      "target_region": "海马旁回",
+      "layers": [
+        4,
+        1
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "外侧枕叶",
+        "枕顶联合"
+      ],
+      "regions_b": [
+        "海马旁回"
+      ],
+      "coactivated_networks": [
+        "Autobiographical Memory",
+        "Emotional Scene and Face Processing"
+      ],
+      "dk_pair": [
+        "lateraloccipital",
+        "parahippocampal"
+      ],
+      "enigma_strength": 6.0
+    },
+    {
+      "id": "link_254",
       "display_name": "外侧枕叶 → dlPFC (R)",
       "source_region": "外侧枕叶",
       "target_region": "dlPFC",
@@ -5638,8 +8503,8 @@
         "前额叶极·FPN"
       ],
       "coactivated_networks": [
-        "Cognitive Attention Control",
-        "Autobiographical Memory"
+        "Autobiographical Memory",
+        "Cognitive Attention Control"
       ],
       "dk_pair": [
         "lateraloccipital",
@@ -5648,7 +8513,7 @@
       "enigma_strength": 6.31
     },
     {
-      "id": "link_170",
+      "id": "link_255",
       "display_name": "外侧枕叶 ↔ 顶内沟 (R)",
       "source_region": "外侧枕叶",
       "target_region": "顶内沟",
@@ -5681,7 +8546,7 @@
       "enigma_strength": 10.51
     },
     {
-      "id": "link_171",
+      "id": "link_256",
       "display_name": "外侧枕叶 ↔ Wernicke区 (R)",
       "source_region": "外侧枕叶",
       "target_region": "Wernicke区",
@@ -5715,7 +8580,106 @@
       "enigma_strength": 9.02
     },
     {
-      "id": "link_172",
+      "id": "link_257",
+      "display_name": "外侧枕叶 ← 前脑岛 (R)",
+      "source_region": "外侧枕叶",
+      "target_region": "前脑岛",
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "外侧枕叶",
+        "枕顶联合"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "coactivated_networks": [
+        "Vigilant Attention",
+        "Cognitive Attention Control"
+      ],
+      "dk_pair": [
+        "lateraloccipital",
+        "insula"
+      ],
+      "enigma_strength": 9.16
+    },
+    {
+      "id": "link_258",
+      "display_name": "OFC → DMN+OFC (R)",
+      "source_region": "OFC",
+      "target_region": "DMN+OFC",
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "OFC"
+      ],
+      "regions_b": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "coactivated_networks": [
+        "Reward",
+        "Semantic Memory",
+        "Emotional Scene and Face Processing"
+      ],
+      "dk_pair": [
+        "lateralorbitofrontal",
+        "medialorbitofrontal"
+      ],
+      "enigma_strength": 10.15
+    },
+    {
+      "id": "link_259",
+      "display_name": "OFC → 颞中回 (R)",
+      "source_region": "OFC",
+      "target_region": "颞中回",
+      "layers": [
+        2,
+        4
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "OFC"
+      ],
+      "regions_b": [
+        "颞中回"
+      ],
+      "coactivated_networks": [
+        "Semantic Memory"
+      ],
+      "dk_pair": [
+        "lateralorbitofrontal",
+        "middletemporal"
+      ],
+      "enigma_strength": 7.99
+    },
+    {
+      "id": "link_260",
       "display_name": "OFC ← 海马旁回 (R)",
       "source_region": "OFC",
       "target_region": "海马旁回",
@@ -5747,7 +8711,7 @@
       "enigma_strength": 4.3
     },
     {
-      "id": "link_173",
+      "id": "link_261",
       "display_name": "OFC ↔ 后扣带 (R)",
       "source_region": "OFC",
       "target_region": "后扣带",
@@ -5769,8 +8733,8 @@
         "后扣带"
       ],
       "coactivated_networks": [
-        "Semantic Memory",
-        "Reward"
+        "Reward",
+        "Semantic Memory"
       ],
       "dk_pair": [
         "lateralorbitofrontal",
@@ -5779,7 +8743,72 @@
       "enigma_strength": 5.23
     },
     {
-      "id": "link_174",
+      "id": "link_262",
+      "display_name": "OFC → 楔前叶 (R)",
+      "source_region": "OFC",
+      "target_region": "楔前叶",
+      "layers": [
+        2,
+        4
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "OFC"
+      ],
+      "regions_b": [
+        "楔前叶"
+      ],
+      "coactivated_networks": [
+        "Semantic Memory"
+      ],
+      "dk_pair": [
+        "lateralorbitofrontal",
+        "precuneus"
+      ],
+      "enigma_strength": 6.05
+    },
+    {
+      "id": "link_263",
+      "display_name": "OFC → mPFC (R)",
+      "source_region": "OFC",
+      "target_region": "mPFC",
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "OFC"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "coactivated_networks": [
+        "Reward",
+        "Semantic Memory",
+        "Emotional Scene and Face Processing"
+      ],
+      "dk_pair": [
+        "lateralorbitofrontal",
+        "superiorfrontal"
+      ],
+      "enigma_strength": 6.18
+    },
+    {
+      "id": "link_264",
       "display_name": "OFC ↔ 前脑岛 (R)",
       "source_region": "OFC",
       "target_region": "前脑岛",
@@ -5810,7 +8839,42 @@
       "enigma_strength": 10.56
     },
     {
-      "id": "link_175",
+      "id": "link_265",
+      "display_name": "DMN+OFC ← 后扣带 (R)",
+      "source_region": "DMN+OFC",
+      "target_region": "后扣带",
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "regions_b": [
+        "后扣带"
+      ],
+      "coactivated_networks": [
+        "Autobiographical Memory",
+        "Reward",
+        "Semantic Memory"
+      ],
+      "dk_pair": [
+        "medialorbitofrontal",
+        "posteriorcingulate"
+      ],
+      "enigma_strength": 5.67
+    },
+    {
+      "id": "link_266",
       "display_name": "DMN+OFC ← 楔前叶 (R)",
       "source_region": "DMN+OFC",
       "target_region": "楔前叶",
@@ -5834,10 +8898,10 @@
         "楔前叶"
       ],
       "coactivated_networks": [
+        "Autobiographical Memory",
         "Semantic Memory",
         "Extended Socio-Affective Default",
-        "Theory of Mind",
-        "Autobiographical Memory"
+        "Theory of Mind"
       ],
       "dk_pair": [
         "medialorbitofrontal",
@@ -5846,7 +8910,40 @@
       "enigma_strength": 6.81
     },
     {
-      "id": "link_176",
+      "id": "link_267",
+      "display_name": "DMN+OFC ← ACC吻侧 (R)",
+      "source_region": "DMN+OFC",
+      "target_region": "ACC吻侧",
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "regions_b": [
+        "ACC吻侧"
+      ],
+      "coactivated_networks": [
+        "Extended Socio-Affective Default"
+      ],
+      "dk_pair": [
+        "medialorbitofrontal",
+        "rostralanteriorcingulate"
+      ],
+      "enigma_strength": 10.12
+    },
+    {
+      "id": "link_268",
       "display_name": "DMN+OFC ↔ mPFC (R)",
       "source_region": "DMN+OFC",
       "target_region": "mPFC",
@@ -5871,12 +8968,12 @@
         "额上回"
       ],
       "coactivated_networks": [
-        "Emotional Scene and Face Processing",
-        "Extended Socio-Affective Default",
         "Reward",
-        "Semantic Memory",
+        "Extended Socio-Affective Default",
+        "Autobiographical Memory",
+        "Emotional Scene and Face Processing",
         "Theory of Mind",
-        "Autobiographical Memory"
+        "Semantic Memory"
       ],
       "dk_pair": [
         "medialorbitofrontal",
@@ -5885,7 +8982,7 @@
       "enigma_strength": 9.58
     },
     {
-      "id": "link_177",
+      "id": "link_269",
       "display_name": "DMN+OFC ↔ 额极 (R)",
       "source_region": "DMN+OFC",
       "target_region": "额极",
@@ -5918,7 +9015,104 @@
       "enigma_strength": 8.85
     },
     {
-      "id": "link_178",
+      "id": "link_270",
+      "display_name": "DMN+OFC ← 颞极 (R)",
+      "source_region": "DMN+OFC",
+      "target_region": "颞极",
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "regions_b": [
+        "颞极"
+      ],
+      "coactivated_networks": [
+        "Theory of Mind"
+      ],
+      "dk_pair": [
+        "medialorbitofrontal",
+        "temporalpole"
+      ],
+      "enigma_strength": 4.37
+    },
+    {
+      "id": "link_271",
+      "display_name": "DMN+OFC ← 前脑岛 (R)",
+      "source_region": "DMN+OFC",
+      "target_region": "前脑岛",
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "coactivated_networks": [
+        "Reward"
+      ],
+      "dk_pair": [
+        "medialorbitofrontal",
+        "insula"
+      ],
+      "enigma_strength": 7.79
+    },
+    {
+      "id": "link_272",
+      "display_name": "颞中回 ← 海马旁回 (R)",
+      "source_region": "颞中回",
+      "target_region": "海马旁回",
+      "layers": [
+        4,
+        1
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "颞中回"
+      ],
+      "regions_b": [
+        "海马旁回"
+      ],
+      "coactivated_networks": [
+        "Semantic Memory"
+      ],
+      "dk_pair": [
+        "middletemporal",
+        "parahippocampal"
+      ],
+      "enigma_strength": 5.64
+    },
+    {
+      "id": "link_273",
       "display_name": "颞中回 ↔ Wernicke区 (R)",
       "source_region": "颞中回",
       "target_region": "Wernicke区",
@@ -5951,7 +9145,7 @@
       "enigma_strength": 10.21
     },
     {
-      "id": "link_179",
+      "id": "link_274",
       "display_name": "颞中回 → TPJ (R)",
       "source_region": "颞中回",
       "target_region": "TPJ",
@@ -5984,7 +9178,104 @@
       "enigma_strength": 9.55
     },
     {
-      "id": "link_180",
+      "id": "link_275",
+      "display_name": "颞中回 ← 颞极 (R)",
+      "source_region": "颞中回",
+      "target_region": "颞极",
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "颞中回"
+      ],
+      "regions_b": [
+        "颞极"
+      ],
+      "coactivated_networks": [
+        "Theory of Mind"
+      ],
+      "dk_pair": [
+        "middletemporal",
+        "temporalpole"
+      ],
+      "enigma_strength": 8.5
+    },
+    {
+      "id": "link_276",
+      "display_name": "海马旁回 → 楔前叶 (R)",
+      "source_region": "海马旁回",
+      "target_region": "楔前叶",
+      "layers": [
+        1,
+        4
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "海马旁回"
+      ],
+      "regions_b": [
+        "楔前叶"
+      ],
+      "coactivated_networks": [
+        "Autobiographical Memory",
+        "Semantic Memory"
+      ],
+      "dk_pair": [
+        "parahippocampal",
+        "precuneus"
+      ],
+      "enigma_strength": 8.35
+    },
+    {
+      "id": "link_277",
+      "display_name": "海马旁回 → mPFC (R)",
+      "source_region": "海马旁回",
+      "target_region": "mPFC",
+      "layers": [
+        1,
+        5
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "海马旁回"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "coactivated_networks": [
+        "Autobiographical Memory",
+        "Semantic Memory",
+        "Emotional Scene and Face Processing"
+      ],
+      "dk_pair": [
+        "parahippocampal",
+        "superiorfrontal"
+      ],
+      "enigma_strength": 7.27
+    },
+    {
+      "id": "link_278",
       "display_name": "旁中央小叶 ↔ M1 (R)",
       "source_region": "旁中央小叶",
       "target_region": "M1",
@@ -6015,7 +9306,70 @@
       "enigma_strength": 9.87
     },
     {
-      "id": "link_181",
+      "id": "link_279",
+      "display_name": "旁中央小叶 → mPFC (R)",
+      "source_region": "旁中央小叶",
+      "target_region": "mPFC",
+      "layers": [
+        3,
+        5
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "旁中央小叶"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "coactivated_networks": [
+        "Vigilant Attention"
+      ],
+      "dk_pair": [
+        "paracentral",
+        "superiorfrontal"
+      ],
+      "enigma_strength": 9.81
+    },
+    {
+      "id": "link_280",
+      "display_name": "Broca区 ← S1 (R)",
+      "source_region": "Broca区",
+      "target_region": "S1",
+      "layers": [
+        5,
+        3
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "Broca区"
+      ],
+      "regions_b": [
+        "S1"
+      ],
+      "coactivated_networks": [
+        "Mirror Neuron System"
+      ],
+      "dk_pair": [
+        "parsopercularis",
+        "postcentral"
+      ],
+      "enigma_strength": 6.52
+    },
+    {
+      "id": "link_281",
       "display_name": "Broca区 ↔ dlPFC (R)",
       "source_region": "Broca区",
       "target_region": "dlPFC",
@@ -6050,7 +9404,7 @@
       "enigma_strength": 9.58
     },
     {
-      "id": "link_182",
+      "id": "link_282",
       "display_name": "Broca区 ↔ mPFC (R)",
       "source_region": "Broca区",
       "target_region": "mPFC",
@@ -6073,10 +9427,10 @@
         "额上回"
       ],
       "coactivated_networks": [
+        "Working Memory",
         "Empathy",
         "Emotion Regulation",
-        "Theory of Mind",
-        "Working Memory"
+        "Theory of Mind"
       ],
       "dk_pair": [
         "parsopercularis",
@@ -6085,7 +9439,7 @@
       "enigma_strength": 10.07
     },
     {
-      "id": "link_183",
+      "id": "link_283",
       "display_name": "Broca区 ← 顶内沟 (R)",
       "source_region": "Broca区",
       "target_region": "顶内沟",
@@ -6108,9 +9462,9 @@
       ],
       "coactivated_networks": [
         "Extended Multiple Demand",
+        "Working Memory",
         "Emotion Regulation",
         "Cognitive Attention Control",
-        "Working Memory",
         "Mirror Neuron System"
       ],
       "dk_pair": [
@@ -6120,7 +9474,7 @@
       "enigma_strength": 7.38
     },
     {
-      "id": "link_184",
+      "id": "link_284",
       "display_name": "Broca区 ↔ TPJ (R)",
       "source_region": "Broca区",
       "target_region": "TPJ",
@@ -6153,7 +9507,42 @@
       "enigma_strength": 7.58
     },
     {
-      "id": "link_185",
+      "id": "link_285",
+      "display_name": "Broca区 ← 前脑岛 (R)",
+      "source_region": "Broca区",
+      "target_region": "前脑岛",
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "Broca区"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "coactivated_networks": [
+        "Empathy",
+        "Extended Multiple Demand",
+        "Working Memory",
+        "Emotion Regulation",
+        "Cognitive Attention Control"
+      ],
+      "dk_pair": [
+        "parsopercularis",
+        "insula"
+      ],
+      "enigma_strength": 9.98
+    },
+    {
+      "id": "link_286",
       "display_name": "S1 ↔ M1 (R)",
       "source_region": "S1",
       "target_region": "M1",
@@ -6184,7 +9573,7 @@
       "enigma_strength": 11.54
     },
     {
-      "id": "link_186",
+      "id": "link_287",
       "display_name": "S1 → 顶内沟 (R)",
       "source_region": "S1",
       "target_region": "顶内沟",
@@ -6215,7 +9604,138 @@
       "enigma_strength": 10.47
     },
     {
-      "id": "link_187",
+      "id": "link_288",
+      "display_name": "后扣带 → 楔前叶 (R)",
+      "source_region": "后扣带",
+      "target_region": "楔前叶",
+      "layers": [
+        2,
+        4
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "后扣带"
+      ],
+      "regions_b": [
+        "楔前叶"
+      ],
+      "coactivated_networks": [
+        "Autobiographical Memory",
+        "Semantic Memory"
+      ],
+      "dk_pair": [
+        "posteriorcingulate",
+        "precuneus"
+      ],
+      "enigma_strength": 9.93
+    },
+    {
+      "id": "link_289",
+      "display_name": "后扣带 → mPFC (R)",
+      "source_region": "后扣带",
+      "target_region": "mPFC",
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "后扣带"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "coactivated_networks": [
+        "Autobiographical Memory",
+        "Reward",
+        "Semantic Memory"
+      ],
+      "dk_pair": [
+        "posteriorcingulate",
+        "superiorfrontal"
+      ],
+      "enigma_strength": 9.8
+    },
+    {
+      "id": "link_290",
+      "display_name": "M1 → mPFC (R)",
+      "source_region": "M1",
+      "target_region": "mPFC",
+      "layers": [
+        3,
+        5
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "M1"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "coactivated_networks": [
+        "Vigilant Attention",
+        "Motor"
+      ],
+      "dk_pair": [
+        "precentral",
+        "superiorfrontal"
+      ],
+      "enigma_strength": 10.75
+    },
+    {
+      "id": "link_291",
+      "display_name": "M1 → TPJ (R)",
+      "source_region": "M1",
+      "target_region": "TPJ",
+      "layers": [
+        3,
+        5
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "M1"
+      ],
+      "regions_b": [
+        "TPJ",
+        "缘上回"
+      ],
+      "coactivated_networks": [
+        "Vigilant Attention"
+      ],
+      "dk_pair": [
+        "precentral",
+        "supramarginal"
+      ],
+      "enigma_strength": 8.6
+    },
+    {
+      "id": "link_292",
       "display_name": "M1 ← 前脑岛 (R)",
       "source_region": "M1",
       "target_region": "前脑岛",
@@ -6246,7 +9766,38 @@
       "enigma_strength": 9.99
     },
     {
-      "id": "link_188",
+      "id": "link_293",
+      "display_name": "楔前叶 ← ACC吻侧 (R)",
+      "source_region": "楔前叶",
+      "target_region": "ACC吻侧",
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "楔前叶"
+      ],
+      "regions_b": [
+        "ACC吻侧"
+      ],
+      "coactivated_networks": [
+        "Extended Socio-Affective Default"
+      ],
+      "dk_pair": [
+        "precuneus",
+        "rostralanteriorcingulate"
+      ],
+      "enigma_strength": 7.79
+    },
+    {
+      "id": "link_294",
       "display_name": "楔前叶 → dlPFC (R)",
       "source_region": "楔前叶",
       "target_region": "dlPFC",
@@ -6279,7 +9830,7 @@
       "enigma_strength": 7.19
     },
     {
-      "id": "link_189",
+      "id": "link_295",
       "display_name": "楔前叶 → mPFC (R)",
       "source_region": "楔前叶",
       "target_region": "mPFC",
@@ -6302,10 +9853,10 @@
         "额上回"
       ],
       "coactivated_networks": [
+        "Autobiographical Memory",
         "Semantic Memory",
         "Extended Socio-Affective Default",
-        "Theory of Mind",
-        "Autobiographical Memory"
+        "Theory of Mind"
       ],
       "dk_pair": [
         "precuneus",
@@ -6314,7 +9865,7 @@
       "enigma_strength": 9.82
     },
     {
-      "id": "link_190",
+      "id": "link_296",
       "display_name": "楔前叶 ↔ Wernicke区 (R)",
       "source_region": "楔前叶",
       "target_region": "Wernicke区",
@@ -6347,7 +9898,71 @@
       "enigma_strength": 5.53
     },
     {
-      "id": "link_191",
+      "id": "link_297",
+      "display_name": "楔前叶 ← 颞极 (R)",
+      "source_region": "楔前叶",
+      "target_region": "颞极",
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "楔前叶"
+      ],
+      "regions_b": [
+        "颞极"
+      ],
+      "coactivated_networks": [
+        "Theory of Mind"
+      ],
+      "dk_pair": [
+        "precuneus",
+        "temporalpole"
+      ],
+      "enigma_strength": 4.62
+    },
+    {
+      "id": "link_298",
+      "display_name": "ACC吻侧 → mPFC (R)",
+      "source_region": "ACC吻侧",
+      "target_region": "mPFC",
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "ACC吻侧"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "coactivated_networks": [
+        "Empathy",
+        "Extended Socio-Affective Default"
+      ],
+      "dk_pair": [
+        "rostralanteriorcingulate",
+        "superiorfrontal"
+      ],
+      "enigma_strength": 9.97
+    },
+    {
+      "id": "link_299",
       "display_name": "ACC吻侧 ↔ 前脑岛 (R)",
       "source_region": "ACC吻侧",
       "target_region": "前脑岛",
@@ -6378,7 +9993,7 @@
       "enigma_strength": 6.29
     },
     {
-      "id": "link_192",
+      "id": "link_300",
       "display_name": "dlPFC ↔ mPFC (R)",
       "source_region": "dlPFC",
       "target_region": "mPFC",
@@ -6403,9 +10018,9 @@
         "额上回"
       ],
       "coactivated_networks": [
+        "Autobiographical Memory",
         "Emotion Regulation",
-        "Working Memory",
-        "Autobiographical Memory"
+        "Working Memory"
       ],
       "dk_pair": [
         "rostralmiddlefrontal",
@@ -6414,7 +10029,7 @@
       "enigma_strength": 10.71
     },
     {
-      "id": "link_193",
+      "id": "link_301",
       "display_name": "dlPFC ← 顶内沟 (R)",
       "source_region": "dlPFC",
       "target_region": "顶内沟",
@@ -6449,7 +10064,42 @@
       "enigma_strength": 7.52
     },
     {
-      "id": "link_194",
+      "id": "link_302",
+      "display_name": "dlPFC ← 前脑岛 (R)",
+      "source_region": "dlPFC",
+      "target_region": "前脑岛",
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "dlPFC",
+        "前额叶极",
+        "前额叶极·FPN"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "coactivated_networks": [
+        "Emotion Regulation",
+        "Cognitive Attention Control",
+        "Working Memory"
+      ],
+      "dk_pair": [
+        "rostralmiddlefrontal",
+        "insula"
+      ],
+      "enigma_strength": 8.29
+    },
+    {
+      "id": "link_303",
       "display_name": "mPFC ← 顶内沟 (R)",
       "source_region": "mPFC",
       "target_region": "顶内沟",
@@ -6482,7 +10132,7 @@
       "enigma_strength": 8.42
     },
     {
-      "id": "link_195",
+      "id": "link_304",
       "display_name": "mPFC ↔ 额极 (R)",
       "source_region": "mPFC",
       "target_region": "额极",
@@ -6514,7 +10164,43 @@
       "enigma_strength": 7.95
     },
     {
-      "id": "link_196",
+      "id": "link_305",
+      "display_name": "mPFC ← 前脑岛 (R)",
+      "source_region": "mPFC",
+      "target_region": "前脑岛",
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "mPFC",
+        "额上回"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "coactivated_networks": [
+        "Reward",
+        "Empathy",
+        "Vigilant Attention",
+        "Working Memory",
+        "Emotion Regulation"
+      ],
+      "dk_pair": [
+        "superiorfrontal",
+        "insula"
+      ],
+      "enigma_strength": 8.97
+    },
+    {
+      "id": "link_306",
       "display_name": "顶内沟 ↔ Wernicke区 (R)",
       "source_region": "顶内沟",
       "target_region": "Wernicke区",
@@ -6548,7 +10234,41 @@
       "enigma_strength": 9.29
     },
     {
-      "id": "link_197",
+      "id": "link_307",
+      "display_name": "顶内沟 ← 前脑岛 (R)",
+      "source_region": "顶内沟",
+      "target_region": "前脑岛",
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "顶内沟"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "coactivated_networks": [
+        "Extended Multiple Demand",
+        "Emotion Regulation",
+        "Cognitive Attention Control",
+        "Working Memory"
+      ],
+      "dk_pair": [
+        "superiorparietal",
+        "insula"
+      ],
+      "enigma_strength": 9.44
+    },
+    {
+      "id": "link_308",
       "display_name": "Wernicke区 → TPJ (R)",
       "source_region": "Wernicke区",
       "target_region": "TPJ",
@@ -6583,7 +10303,107 @@
       "enigma_strength": 9.7
     },
     {
-      "id": "link_198",
+      "id": "link_309",
+      "display_name": "Wernicke区 ← 颞极 (R)",
+      "source_region": "Wernicke区",
+      "target_region": "颞极",
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "Wernicke区",
+        "颞上回",
+        "颞上沟"
+      ],
+      "regions_b": [
+        "颞极"
+      ],
+      "coactivated_networks": [
+        "Theory of Mind"
+      ],
+      "dk_pair": [
+        "superiortemporal",
+        "temporalpole"
+      ],
+      "enigma_strength": 8.56
+    },
+    {
+      "id": "link_310",
+      "display_name": "Wernicke区 ← 前脑岛 (R)",
+      "source_region": "Wernicke区",
+      "target_region": "前脑岛",
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "Wernicke区",
+        "颞上回",
+        "颞上沟"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "coactivated_networks": [
+        "Empathy",
+        "Emotion Regulation"
+      ],
+      "dk_pair": [
+        "superiortemporal",
+        "insula"
+      ],
+      "enigma_strength": 10.3
+    },
+    {
+      "id": "link_311",
+      "display_name": "TPJ ← 前脑岛 (R)",
+      "source_region": "TPJ",
+      "target_region": "前脑岛",
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "data_source": "enigma",
+      "brainstem_nucleus": null,
+      "dk_target": null,
+      "fc_strength": null,
+      "pathway": null,
+      "ref": "",
+      "regions_a": [
+        "TPJ",
+        "缘上回"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "coactivated_networks": [
+        "Empathy",
+        "Vigilant Attention"
+      ],
+      "dk_pair": [
+        "supramarginal",
+        "insula"
+      ],
+      "enigma_strength": 10.0
+    },
+    {
+      "id": "link_312",
       "display_name": "PAG→杏仁核中央核",
       "source_region": "PAG",
       "target_region": "amygdala",
@@ -6607,7 +10427,7 @@
       ]
     },
     {
-      "id": "link_199",
+      "id": "link_313",
       "display_name": "PAG→下丘脑室旁核",
       "source_region": "PAG",
       "target_region": "hypothalamus",
@@ -6631,7 +10451,7 @@
       ]
     },
     {
-      "id": "link_200",
+      "id": "link_314",
       "display_name": "PAG→丘脑中线核/板内核",
       "source_region": "PAG",
       "target_region": "thalamus",
@@ -6655,7 +10475,7 @@
       ]
     },
     {
-      "id": "link_201",
+      "id": "link_315",
       "display_name": "PAG→前脑岛",
       "source_region": "PAG",
       "target_region": "insula",
@@ -6681,7 +10501,7 @@
       ]
     },
     {
-      "id": "link_202",
+      "id": "link_316",
       "display_name": "PAG→ACC",
       "source_region": "PAG",
       "target_region": "caudalanteriorcingulate",
@@ -6709,7 +10529,7 @@
       ]
     },
     {
-      "id": "link_203",
+      "id": "link_317",
       "display_name": "上丘→杏仁核",
       "source_region": "上丘",
       "target_region": "amygdala",
@@ -6733,7 +10553,7 @@
       ]
     },
     {
-      "id": "link_204",
+      "id": "link_318",
       "display_name": "上丘→丘脑枕→皮层",
       "source_region": "上丘",
       "target_region": "thalamus",
@@ -6757,7 +10577,7 @@
       ]
     },
     {
-      "id": "link_205",
+      "id": "link_319",
       "display_name": "中缝背核→海马",
       "source_region": "中缝背核",
       "target_region": "hippocampus",
@@ -6781,7 +10601,7 @@
       ]
     },
     {
-      "id": "link_206",
+      "id": "link_320",
       "display_name": "中缝背核→杏仁核",
       "source_region": "中缝背核",
       "target_region": "amygdala",
@@ -6805,7 +10625,7 @@
       ]
     },
     {
-      "id": "link_207",
+      "id": "link_321",
       "display_name": "中缝背核→隔区",
       "source_region": "中缝背核",
       "target_region": "septum",
@@ -6829,7 +10649,7 @@
       ]
     },
     {
-      "id": "link_208",
+      "id": "link_322",
       "display_name": "中缝背核→前脑岛",
       "source_region": "中缝背核",
       "target_region": "insula",
@@ -6855,7 +10675,7 @@
       ]
     },
     {
-      "id": "link_209",
+      "id": "link_323",
       "display_name": "中缝背核→ACC",
       "source_region": "中缝背核",
       "target_region": "caudalanteriorcingulate",
@@ -6883,7 +10703,7 @@
       ]
     },
     {
-      "id": "link_210",
+      "id": "link_324",
       "display_name": "中缝正中核→海马",
       "source_region": "中缝正中核",
       "target_region": "hippocampus",
@@ -6907,7 +10727,7 @@
       ]
     },
     {
-      "id": "link_211",
+      "id": "link_325",
       "display_name": "中缝正中核→隔区",
       "source_region": "中缝正中核",
       "target_region": "septum",
@@ -6931,7 +10751,7 @@
       ]
     },
     {
-      "id": "link_212",
+      "id": "link_326",
       "display_name": "蓝斑→前脑岛",
       "source_region": "蓝斑",
       "target_region": "insula",
@@ -6957,7 +10777,7 @@
       ]
     },
     {
-      "id": "link_213",
+      "id": "link_327",
       "display_name": "蓝斑→ACC",
       "source_region": "蓝斑",
       "target_region": "caudalanteriorcingulate",
@@ -6985,7 +10805,114 @@
       ]
     },
     {
-      "id": "link_214",
+      "id": "link_328",
+      "display_name": "蓝斑→dlPFC",
+      "source_region": "蓝斑",
+      "target_region": "rostralmiddlefrontal",
+      "layers": [
+        0,
+        5
+      ],
+      "direction": "feedforward",
+      "data_source": "brainstem",
+      "brainstem_nucleus": "蓝斑",
+      "dk_target": "rostralmiddlefrontal",
+      "fc_strength": 0.75,
+      "pathway": "蓝斑→dlPFC(NE)",
+      "ref": "Hansen2024",
+      "regions_a": [
+        "蓝斑"
+      ],
+      "regions_b": [
+        "dlPFC",
+        "前额叶极",
+        "前额叶极·FPN"
+      ],
+      "coactivated_networks": [
+        "Hansen:PINK"
+      ]
+    },
+    {
+      "id": "link_329",
+      "display_name": "蓝斑→mPFC",
+      "source_region": "蓝斑",
+      "target_region": "superiorfrontal",
+      "layers": [
+        0,
+        5
+      ],
+      "direction": "feedforward",
+      "data_source": "brainstem",
+      "brainstem_nucleus": "蓝斑",
+      "dk_target": "superiorfrontal",
+      "fc_strength": 0.65,
+      "pathway": "蓝斑→mPFC(NE)",
+      "ref": "Hansen2024",
+      "regions_a": [
+        "蓝斑"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "coactivated_networks": [
+        "Hansen:PINK"
+      ]
+    },
+    {
+      "id": "link_330",
+      "display_name": "蓝斑→M1",
+      "source_region": "蓝斑",
+      "target_region": "precentral",
+      "layers": [
+        0,
+        3
+      ],
+      "direction": "feedforward",
+      "data_source": "brainstem",
+      "brainstem_nucleus": "蓝斑",
+      "dk_target": "precentral",
+      "fc_strength": 0.5,
+      "pathway": "蓝斑→M1(NE)",
+      "ref": "Hansen2024",
+      "regions_a": [
+        "蓝斑"
+      ],
+      "regions_b": [
+        "M1"
+      ],
+      "coactivated_networks": [
+        "Hansen:PINK"
+      ]
+    },
+    {
+      "id": "link_331",
+      "display_name": "蓝斑→V1",
+      "source_region": "蓝斑",
+      "target_region": "pericalcarine",
+      "layers": [
+        0,
+        3
+      ],
+      "direction": "feedforward",
+      "data_source": "brainstem",
+      "brainstem_nucleus": "蓝斑",
+      "dk_target": "pericalcarine",
+      "fc_strength": 0.6,
+      "pathway": "蓝斑→V1(NE→感觉皮层信噪比)",
+      "ref": "Hansen2024",
+      "regions_a": [
+        "蓝斑"
+      ],
+      "regions_b": [
+        "枕叶 V1"
+      ],
+      "coactivated_networks": [
+        "Hansen:PINK"
+      ]
+    },
+    {
+      "id": "link_332",
       "display_name": "蓝斑→杏仁核",
       "source_region": "蓝斑",
       "target_region": "amygdala",
@@ -7009,7 +10936,7 @@
       ]
     },
     {
-      "id": "link_215",
+      "id": "link_333",
       "display_name": "蓝斑→丘脑",
       "source_region": "蓝斑",
       "target_region": "thalamus",
@@ -7033,7 +10960,7 @@
       ]
     },
     {
-      "id": "link_216",
+      "id": "link_334",
       "display_name": "蓝斑→海马",
       "source_region": "蓝斑",
       "target_region": "hippocampus",
@@ -7057,7 +10984,33 @@
       ]
     },
     {
-      "id": "link_217",
+      "id": "link_335",
+      "display_name": "蓝斑→内嗅皮层",
+      "source_region": "蓝斑",
+      "target_region": "entorhinal",
+      "layers": [
+        0,
+        4
+      ],
+      "direction": "feedforward",
+      "data_source": "brainstem",
+      "brainstem_nucleus": "蓝斑",
+      "dk_target": "entorhinal",
+      "fc_strength": 0.5,
+      "pathway": "蓝斑→内嗅皮层(NE)",
+      "ref": "Hansen2024",
+      "regions_a": [
+        "蓝斑"
+      ],
+      "regions_b": [
+        "内嗅皮层"
+      ],
+      "coactivated_networks": [
+        "Hansen:PINK"
+      ]
+    },
+    {
+      "id": "link_336",
       "display_name": "VTA→NAcc",
       "source_region": "VTA",
       "target_region": "accumbens",
@@ -7081,7 +11034,62 @@
       ]
     },
     {
-      "id": "link_218",
+      "id": "link_337",
+      "display_name": "VTA→vmPFC",
+      "source_region": "VTA",
+      "target_region": "medialorbitofrontal",
+      "layers": [
+        0,
+        5
+      ],
+      "direction": "feedforward",
+      "data_source": "brainstem",
+      "brainstem_nucleus": "VTA",
+      "dk_target": "medialorbitofrontal",
+      "fc_strength": 0.7,
+      "pathway": "VTA→vmPFC(中脑皮层DA通路)",
+      "ref": "Hansen2024",
+      "regions_a": [
+        "VTA"
+      ],
+      "regions_b": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "coactivated_networks": [
+        "Hansen:GREEN"
+      ]
+    },
+    {
+      "id": "link_338",
+      "display_name": "VTA→mPFC",
+      "source_region": "VTA",
+      "target_region": "superiorfrontal",
+      "layers": [
+        0,
+        5
+      ],
+      "direction": "feedforward",
+      "data_source": "brainstem",
+      "brainstem_nucleus": "VTA",
+      "dk_target": "superiorfrontal",
+      "fc_strength": 0.6,
+      "pathway": "VTA→mPFC(DA)",
+      "ref": "Hansen2024",
+      "regions_a": [
+        "VTA"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "coactivated_networks": [
+        "Hansen:GREEN"
+      ]
+    },
+    {
+      "id": "link_339",
       "display_name": "VTA→杏仁核",
       "source_region": "VTA",
       "target_region": "amygdala",
@@ -7105,7 +11113,7 @@
       ]
     },
     {
-      "id": "link_219",
+      "id": "link_340",
       "display_name": "VTA→海马",
       "source_region": "VTA",
       "target_region": "hippocampus",
@@ -7129,7 +11137,7 @@
       ]
     },
     {
-      "id": "link_220",
+      "id": "link_341",
       "display_name": "VTA→ACC",
       "source_region": "VTA",
       "target_region": "caudalanteriorcingulate",
@@ -7157,7 +11165,7 @@
       ]
     },
     {
-      "id": "link_221",
+      "id": "link_342",
       "display_name": "VTA→前脑岛",
       "source_region": "VTA",
       "target_region": "insula",
@@ -7183,7 +11191,7 @@
       ]
     },
     {
-      "id": "link_222",
+      "id": "link_343",
       "display_name": "黑质致密部→尾状核",
       "source_region": "黑质致密部",
       "target_region": "caudate",
@@ -7207,7 +11215,7 @@
       ]
     },
     {
-      "id": "link_223",
+      "id": "link_344",
       "display_name": "黑质致密部→壳核",
       "source_region": "黑质致密部",
       "target_region": "putamen",
@@ -7231,7 +11239,7 @@
       ]
     },
     {
-      "id": "link_224",
+      "id": "link_345",
       "display_name": "黑质致密部→NAcc",
       "source_region": "黑质致密部",
       "target_region": "accumbens",
@@ -7255,7 +11263,7 @@
       ]
     },
     {
-      "id": "link_225",
+      "id": "link_346",
       "display_name": "脑桥网状核→丘脑",
       "source_region": "脑桥网状核",
       "target_region": "thalamus",
@@ -7279,7 +11287,59 @@
       ]
     },
     {
-      "id": "link_226",
+      "id": "link_347",
+      "display_name": "脑桥网状核→运动皮层",
+      "source_region": "脑桥网状核",
+      "target_region": "precentral",
+      "layers": [
+        0,
+        3
+      ],
+      "direction": "feedforward",
+      "data_source": "brainstem",
+      "brainstem_nucleus": "脑桥网状核",
+      "dk_target": "precentral",
+      "fc_strength": 0.55,
+      "pathway": "脑桥网状核→运动皮层(间接)",
+      "ref": "Hansen2024 — YELLOW→单模态",
+      "regions_a": [
+        "脑桥网状核"
+      ],
+      "regions_b": [
+        "M1"
+      ],
+      "coactivated_networks": [
+        "Hansen:YELLOW"
+      ]
+    },
+    {
+      "id": "link_348",
+      "display_name": "脑桥网状核→体感皮层",
+      "source_region": "脑桥网状核",
+      "target_region": "postcentral",
+      "layers": [
+        0,
+        3
+      ],
+      "direction": "feedforward",
+      "data_source": "brainstem",
+      "brainstem_nucleus": "脑桥网状核",
+      "dk_target": "postcentral",
+      "fc_strength": 0.5,
+      "pathway": "脑桥网状核→体感皮层(间接)",
+      "ref": "Hansen2024",
+      "regions_a": [
+        "脑桥网状核"
+      ],
+      "regions_b": [
+        "S1"
+      ],
+      "coactivated_networks": [
+        "Hansen:YELLOW"
+      ]
+    },
+    {
+      "id": "link_349",
       "display_name": "小脑→丘脑",
       "source_region": "小脑皮层",
       "target_region": "thalamus",
@@ -7303,7 +11363,33 @@
       ]
     },
     {
-      "id": "link_227",
+      "id": "link_350",
+      "display_name": "小脑→M1",
+      "source_region": "小脑皮层",
+      "target_region": "precentral",
+      "layers": [
+        0,
+        3
+      ],
+      "direction": "feedforward",
+      "data_source": "brainstem",
+      "brainstem_nucleus": "小脑皮层",
+      "dk_target": "precentral",
+      "fc_strength": 0.75,
+      "pathway": "小脑→M1(经丘脑)",
+      "ref": "Paxinos2004",
+      "regions_a": [
+        "小脑皮层"
+      ],
+      "regions_b": [
+        "M1"
+      ],
+      "coactivated_networks": [
+        "Hansen:None"
+      ]
+    },
+    {
+      "id": "link_351",
       "display_name": "小脑→壳核",
       "source_region": "小脑皮层",
       "target_region": "putamen",
@@ -7322,6 +11408,34 @@
         "小脑皮层"
       ],
       "regions_b": [],
+      "coactivated_networks": [
+        "Hansen:None"
+      ]
+    },
+    {
+      "id": "link_352",
+      "display_name": "小脑→dlPFC",
+      "source_region": "小脑皮层",
+      "target_region": "rostralmiddlefrontal",
+      "layers": [
+        0,
+        5
+      ],
+      "direction": "feedforward",
+      "data_source": "brainstem",
+      "brainstem_nucleus": "小脑皮层",
+      "dk_target": "rostralmiddlefrontal",
+      "fc_strength": 0.5,
+      "pathway": "小脑→dlPFC(经丘脑)",
+      "ref": "Schmahmann2019",
+      "regions_a": [
+        "小脑皮层"
+      ],
+      "regions_b": [
+        "dlPFC",
+        "前额叶极",
+        "前额叶极·FPN"
+      ],
       "coactivated_networks": [
         "Hansen:None"
       ]

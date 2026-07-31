@@ -465,21 +465,21 @@ def main():
             filter_stats["no_level_mapping"] += 1
             continue
 
-        # 规则 1: 层级相邻
-        if not is_layer_adjacent(level_a, level_b):
-            filter_stats["not_adjacent"] += 1
-            continue
-
-        # 规则 2: 结构存在 (ENIGMA 已满足 —— 数据本身就是结构连接)
+        # 规则 1: 结构存在 (ENIGMA 已满足 —— 数据本身就是结构连接)
         filter_stats["has_structure"] += 1
 
-        # 规则 3: 协同激活 —— 同一功能网络
+        # 规则 2: 协同激活 —— 同一功能网络
         coactivated = have_coactivation(dk_a_clean, dk_b_clean, region_to_networks)
         if not coactivated:
             filter_stats["no_coactivation"] += 1
             continue
 
-        # 规则 4: 方向分类
+        # 层级相邻 (信息性，不排除)
+        layer_adj = is_layer_adjacent(level_a, level_b)
+        if not layer_adj:
+            filter_stats["not_adjacent"] += 1
+
+        # 规则 3: 方向分类
         if level_a < level_b:
             direction = "feedforward"    # 上行
         elif level_a > level_b:
@@ -519,7 +519,7 @@ def main():
                 set(region_to_networks.get(dk_b_clean, []))
             ),
             "rule_check": {
-                "layer_adjacent": True,
+                "layer_adjacent": layer_adj,
                 "structure_exists": True,
                 "coactivation": True,
                 "direction": direction,
@@ -547,22 +547,20 @@ def main():
                 filter_stats["brainstem_no_target_level"] += 1
                 continue
 
-            # 规则1: 层级相邻（L0 特殊放宽到 L2）
-            if not is_layer_adjacent(level_a, level_b):
-                filter_stats["brainstem_not_adjacent"] += 1
-                continue
-
-            # 规则2: 结构存在 — Hansen FC 本身就是结构+功能数据
+            # 规则1: 结构存在 — Hansen FC 本身就是结构+功能数据
             filter_stats["brainstem_has_structure"] += 1
 
-            # 规则3: 功能验证 — 使用 Hansen 社区归属作为"功能网络"等效
-            # 脑干核团的社区归属 = 功能网络分配
-            # 强投射 (fc_strength >= 0.5) 视为通过功能验证
+            # 规则2: 功能验证 — Hansen 社区归属 + fc_strength
             if fc_strength < 0.5:
                 filter_stats["brainstem_weak_fc"] += 1
                 continue
 
-            # 规则4: 方向
+            # 层级相邻 (信息性，不排除)
+            layer_adj = is_layer_adjacent(level_a, level_b)
+            if not layer_adj:
+                filter_stats["brainstem_not_adjacent"] += 1
+
+            # 规则3: 方向
             direction = "feedforward"  # 脑干→皮层一律上行
 
             # 查找该 DK 靶区对应哪些脑区
@@ -589,7 +587,7 @@ def main():
                 "white_matter_tracts": [],
                 "coactivated_networks": [f"Hansen:{community}"],
                 "rule_check": {
-                    "layer_adjacent": True,
+                    "layer_adjacent": layer_adj,
                     "structure_exists": True,  # Hansen FC 数据
                     "coactivation": True,        # 社区归属
                     "direction": direction,
@@ -613,6 +611,9 @@ def main():
     print(f"  层级不相邻:          {filter_stats.get('brainstem_not_adjacent', 0):>6}")
     print(f"  FC 过弱(<0.5):       {filter_stats.get('brainstem_weak_fc', 0):>6}")
     print(f"  ✓ 合法链路:          {filter_stats['legal']:>6}")
+    layer_adj_count = sum(1 for l in legal_links if l["rule_check"]["layer_adjacent"])
+    print(f"    其中层级相邻:       {layer_adj_count:>6}")
+    print(f"    其中层级不相邻:     {filter_stats['legal'] - layer_adj_count:>6}")
 
     # 按方向统计
     ff_count = sum(1 for l in legal_links if l["direction"] == "feedforward")
@@ -634,12 +635,12 @@ def main():
 
     # ─── 保存 ──────────────────────────────────────────────
     output = {
-        "_description": "合法神经链路矩阵 — 满足四规则的脑区间连接",
+        "_description": "合法神经链路矩阵 — 满足三规则(结构存在+协同激活+方向分类)的脑区间连接。层级相邻已降级为信息性标记。",
         "_rules": [
-            "1. 层级相邻: |level_a - level_b| <= 1 (L0例外: 可投射到L2 — 脑干广播式投射)",
-            "2. 结构存在: ENIGMA HCP DTI (皮层) + Hansen 2024 FC (脑干)",
-            "3. 协同激活: Kroell 功能网络 (皮层) / Hansen社区 (脑干)",
-            "4. 双向不对称: feedforward=快/被动, feedback=慢/主动",
+            "1. 结构存在: ENIGMA HCP DTI (皮层) + Hansen 2024 FC (脑干)",
+            "2. 协同激活: Kroell 功能网络 (皮层) / Hansen社区 (脑干)",
+            "3. 双向不对称: feedforward=快/被动, feedback=慢/主动",
+            "(层级相邻已降级为信息性标记 — 有DTI/FC证据的跨层连接合法)",
         ],
         "_data_sources": {
             "brain_regions": "data/brain_regions.json (89脑区 L0-L5)",
@@ -652,6 +653,8 @@ def main():
             "total_enigma_connections": filter_stats["total_enigma"],
             "total_brainstem_targets": filter_stats["total_brainstem"],
             "legal_links": filter_stats["legal"],
+            "layer_adjacent": layer_adj_count,
+            "layer_nonadjacent": filter_stats["legal"] - layer_adj_count,
             "feedforward": ff_count,
             "feedback": fb_count,
             "lateral": lat_count,
