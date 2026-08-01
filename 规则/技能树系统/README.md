@@ -58,7 +58,7 @@
 | 文件 | 说明 |
 |------|------|
 | [brain_regions.json](../data/brain_regions.json) | 89 脑区 MNI/游戏坐标、层级 |
-| [link_legitimacy_matrix.json](../data/connectivity/link_legitimacy_matrix.json) | 228 条合法神经链路 |
+| [link_legitimacy_matrix.json](../data/connectivity/link_legitimacy_matrix.json) | 364 条合法神经链路 |
 | [link_modulation_ceiling_v2.json](../data/connectivity/link_modulation_ceiling_v2.json) | 链路调制天花板 |
 | [situation_primitives.json](../data/connectivity/situation_primitives.json) | 27 情境原型 |
 
