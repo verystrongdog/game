@@ -127,6 +127,21 @@ def load_brainstem_fc():
     return connections, brainstem_level
 
 
+# ─── 1C. 加载手动补充 皮下-皮下连接 ──────────────────────────
+
+def load_subcortical_links():
+    """加载手动文献验证的皮层下-皮层下结构连接补充数据"""
+    path = ROOT / "data/connectivity/subcortical_links.json"
+    if not path.exists():
+        print("  ⚠ subcortical_links.json 不存在，跳过手动补充连接")
+        return []
+
+    with open(path) as f:
+        data = json.load(f)
+
+    return data.get("connections", [])
+
+
 # ─── 2. 加载 ENIGMA 结构连接 ─────────────────────────────────
 
 def load_enigma_connections():
@@ -412,7 +427,7 @@ def main():
     print("=" * 70)
 
     # 加载数据
-    print("\n[1/6] 加载脑区层级数据...")
+    print("\n[1/7] 加载脑区层级数据...")
     dk_to_regions, name_to_level, subcortical_to_enigma, regions = load_brain_regions()
 
     # 统计层级分布
@@ -423,30 +438,35 @@ def main():
     for lv in sorted(level_count.keys()):
         print(f"    {lv}: {level_count[lv]}")
 
-    print("\n[2/6] 加载 ENIGMA 结构连接...")
+    print("\n[2/7] 加载 ENIGMA 结构连接...")
     enigma_connections, sctx_labels, ctx_labels = load_enigma_connections()
     print(f"  ENIGMA 连接总数: {len(enigma_connections)}")
     print(f"  皮下标签: {len(sctx_labels)} ({', '.join(sctx_labels[:5])}...)")
     print(f"  皮层标签: {len(ctx_labels)} ({', '.join(ctx_labels[:5])}...)")
 
-    print("\n[3/6] 加载 Hansen 2024 脑干-皮层 FC...")
+    print("\n[3/7] 加载 Hansen 2024 脑干-皮层 FC...")
     brainstem_connections, brainstem_level = load_brainstem_fc()
     print(f"  脑干核团: {len(brainstem_connections)}")
     total_brainstem_targets = sum(len(bc["targets"]) for bc in brainstem_connections)
     print(f"  脑干→靶区 投射: {total_brainstem_targets}")
 
-    print("\n[4/6] 构建 Kroell 功能网络映射...")
+    print("\n[4/7] 构建 Kroell 功能网络映射...")
     region_to_networks = build_kroell_network_map()
     print(f"  功能网络: 14")
     print(f"  覆盖 DK 区域: {len(region_to_networks)}")
 
-    print("\n[5/6] 构建白质纤维束映射...")
+    print("\n[5/7] 构建白质纤维束映射...")
     wm_tract_map = build_wm_tract_map()
     print(f"  纤维束区域对: {len(wm_tract_map)}")
 
-    print("\n[6/6] 交叉过滤...")
+    print("\n[6/7] 加载手动补充 皮下-皮下连接...")
+    subcortical_connections = load_subcortical_links()
+    print(f"  手动补充连接: {len(subcortical_connections)}")
+
+    print("\n[7/7] 交叉过滤...")
     legal_links = []
     filter_stats = defaultdict(int)
+    filter_stats["total_subcortical"] = len(subcortical_connections)
     filter_stats["total_enigma"] = len(enigma_connections)
     filter_stats["total_brainstem"] = total_brainstem_targets
 
@@ -596,6 +616,41 @@ def main():
             legal_links.append(link)
             filter_stats["legal"] += 1
 
+    # ─── 手动补充 皮下-皮下连接 ─────────────────────────────
+    for sc in subcortical_connections:
+        src = sc["source_region"]
+        tgt = sc["target_region"]
+        level_a = sc["layers"][0]
+        level_b = sc["layers"][1]
+        layer_adj = is_layer_adjacent(level_a, level_b)
+        if not layer_adj:
+            filter_stats["subcortical_not_adjacent"] = filter_stats.get("subcortical_not_adjacent", 0) + 1
+
+        link = {
+            "source": "manual_curation",
+            "dk_pair": None,
+            "enigma_labels": None,
+            "layers": sc["layers"],
+            "direction": sc["direction"],
+            "regions_a": sc["regions_a"],
+            "regions_b": sc["regions_b"],
+            "white_matter_tracts": sc.get("white_matter_tracts", []),
+            "coactivated_networks": sc.get("coactivated_networks", []),
+            "pathway": sc.get("pathway", ""),
+            "ref": sc.get("ref", ""),
+            "fc_strength": sc.get("fc_strength"),
+            "enigma_strength": None,
+            "rule_check": {
+                "layer_adjacent": layer_adj,
+                "structure_exists": True,
+                "coactivation": True,
+                "direction": sc["direction"],
+            }
+        }
+        legal_links.append(link)
+        filter_stats["legal"] += 1
+        filter_stats["subcortical_added"] = filter_stats.get("subcortical_added", 0) + 1
+
     # ─── 输出统计 ──────────────────────────────────────────
     print(f"\n{'='*70}")
     print(f"过滤结果:")
@@ -610,6 +665,10 @@ def main():
     print(f"  无法映射靶区层级:    {filter_stats.get('brainstem_no_target_level', 0):>6}")
     print(f"  层级不相邻:          {filter_stats.get('brainstem_not_adjacent', 0):>6}")
     print(f"  FC 过弱(<0.5):       {filter_stats.get('brainstem_weak_fc', 0):>6}")
+    print(f"  ── 手动补充 皮下-皮下 ──")
+    print(f"  手动补充总数:        {filter_stats.get('total_subcortical', 0):>6}")
+    print(f"  层级不相邻:          {filter_stats.get('subcortical_not_adjacent', 0):>6}")
+    print(f"  已追加:              {filter_stats.get('subcortical_added', 0):>6}")
     print(f"  ✓ 合法链路:          {filter_stats['legal']:>6}")
     layer_adj_count = sum(1 for l in legal_links if l["rule_check"]["layer_adjacent"])
     print(f"    其中层级相邻:       {layer_adj_count:>6}")
@@ -648,6 +707,7 @@ def main():
             "hansen_brainstem": "data/connectivity/brainstem_cortical_fc.json (Hansen2024 脑干FC)",
             "kroell_networks": "data/connectivity/kroell14_networks.md (14功能网络)",
             "white_matter": "data/connectivity/white_matter_tracts.json (25+纤维束)",
+            "subcortical_manual": "data/connectivity/subcortical_links.json (手动补充皮层下-皮下连接)",
         },
         "_stats": {
             "total_enigma_connections": filter_stats["total_enigma"],
