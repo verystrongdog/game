@@ -12,6 +12,12 @@ import re
 import sys
 from pathlib import Path
 
+try:
+    import yaml
+except ImportError:
+    print("需要 PyYAML: pip install pyyaml")
+    sys.exit(1)
+
 ROOT = Path(__file__).parent.parent
 DISEASE_DIR = ROOT / "实体/疾病目录"
 
@@ -34,20 +40,15 @@ def load_registry():
 
 
 def parse_frontmatter(text: str) -> dict:
-    """提取 YAML frontmatter (--- ... ---) 的原始内容"""
+    """提取 YAML frontmatter (--- ... ---)，返回解析后的 dict。
+
+    返回值类型: dict[str, Any]。嵌套键（如父类的"功能域定性方向"）
+    将被解析为嵌套 dict；YAML null → Python None。
+    """
     m = re.match(r"^---\s*\n(.*?)\n---", text, re.DOTALL)
     if not m:
         return {}
-    # 简单解析: 键: 值（不做完整YAML）
-    result = {}
-    for line in m.group(1).split("\n"):
-        line = line.strip()
-        if ":" in line:
-            key, _, val = line.partition(":")
-            key = key.strip()
-            val = val.strip()
-            result[key] = val
-    return result
+    return yaml.safe_load(m.group(1)) or {}
 
 
 def parse_md_table(text: str, section_header: str) -> list[dict]:
@@ -98,6 +99,46 @@ def parse_md_table(text: str, section_header: str) -> list[dict]:
 
 
 # ─── Validation functions ───
+
+# P0.1: 病理类型合法值
+VALID_PATHOLOGY_TYPES = {"跨层短路", "过度耦合", "解耦沉默", "结构异常", "边界崩溃"}
+
+
+def validate_pathology_types(pathology_str: str, link_id: str = "?") -> list[str]:
+    """检查病理类型是否为合法值（支持 + 复合语法）。
+
+    Args:
+        pathology_str: 病理类型字符串，如 "解耦沉默 + 过度耦合"
+        link_id: 链路ID，用于错误信息
+    Returns:
+        ERROR 列表（空列表 = 通过）
+    """
+    errors = []
+    raw = pathology_str.strip()
+    if not raw:
+        errors.append(f"[{link_id}] 病理类型为空")
+        return errors
+
+    # 检查非法分隔符
+    for ch in ["→", ",", "|"]:
+        if ch in raw:
+            errors.append(
+                f"[{link_id}] 病理类型含非法分隔符 '{ch}'（仅支持 + 分隔）: {raw}"
+            )
+            return errors
+
+    # 按 + split 逐项检查
+    parts = [p.strip() for p in raw.split("+")]
+    for p in parts:
+        if not p:
+            errors.append(f"[{link_id}] 病理类型含空项（连续 + 或首尾 +）: {raw}")
+            continue
+        if p not in VALID_PATHOLOGY_TYPES:
+            errors.append(
+                f"[{link_id}] 病理类型 '{p}' 不是合法值"
+                f"（合法: {', '.join(sorted(VALID_PATHOLOGY_TYPES))}）: {raw}"
+            )
+    return errors
 
 def validate_link_ids(table: list[dict], registry_by_name: dict, filepath: str, col: str = "链路ID") -> list[str]:
     """检查链路ID是否在注册表中存在"""
@@ -246,12 +287,19 @@ def validate_jump_refs(
 def validate_drop_pool(
     drop_table: list[dict],
     func_table: list[dict],
-    filepath: str,
-) -> list[str]:
-    """检查组件掉落池是否覆盖功能域表中的全部链路"""
-    warnings = []
+    cgi_table: list[dict] | None = None,
+) -> tuple[list[str], list[str]]:
+    """检查组件掉落池：链路覆盖 + 权重格式 + tier 范围。
+
+    Returns:
+        (errors, warnings) — errors 为空格式错误，warnings 为链路覆盖/权重范围
+    """
+    errors: list[str] = []
+    warnings: list[str] = []
+
     func_link_ids = {row.get("链路ID", "").strip() for row in func_table if row.get("链路ID", "").strip()}
 
+    # ── 链路覆盖检查（原有逻辑，WARNING） ──
     drop_ids = set()
     for row in drop_table:
         ids_str = row.get("链路ID", "").strip()
@@ -268,7 +316,50 @@ def validate_drop_pool(
         warnings.append(f"组件掉落池缺少 {len(missing)} 条链路: {', '.join(sorted(missing))}")
     if extra:
         warnings.append(f"组件掉落池多出 {len(extra)} 条链路: {', '.join(sorted(extra))}")
-    return warnings
+
+    # ── P0.2: 权重格式校验（ERROR） ──
+    weight_re = re.compile(r"^(\d+)\s*\((核心|关联|边缘)\)$")
+    max_weight = 0
+    for row in drop_table:
+        weight_str = row.get("权重", "").strip()
+        if not weight_str:
+            continue
+        m = weight_re.match(weight_str)
+        if not m:
+            errors.append(f"组件掉落池 权重格式错误: '{weight_str}' — 应为 'N (核心|关联|边缘)'")
+            continue
+        w = int(m.group(1))
+        if w < 1:
+            errors.append(f"组件掉落池 权重值 {w} < 1: '{weight_str}'")
+        max_weight = max(max_weight, w)
+
+    # ── P0.2: tier 范围校验（WARNING） ──
+    if cgi_table and max_weight > 0:
+        actual_tiers = _count_actual_tiers(cgi_table)
+        if max_weight > actual_tiers:
+            warnings.append(
+                f"组件掉落池 最大权重 {max_weight} 超过实际 tier 数 {actual_tiers}"
+                f"（CGI-S 表中有 {actual_tiers} 个 tier 列非空）"
+            )
+
+    return errors, warnings
+
+
+def _count_actual_tiers(cgi_table: list[dict]) -> int:
+    """计算 CGI-S 域扩展表中'实际出现的 tier 数'。
+
+    一个 tier "存在" = 在任一严重度行中该 tier 列至少有一个非空域名。
+    tier 列: 核心域 / 关联域 / 边缘域。
+    """
+    tier_cols = ["核心域", "关联域", "边缘域"]
+    active_tiers = 0
+    for col in tier_cols:
+        for row in cgi_table:
+            cell = row.get(col, "").strip()
+            if cell and cell not in ("0", "-"):
+                active_tiers += 1
+                break  # 该 tier 存在，跳到下一个
+    return max(active_tiers, 1)  # 至少 1 个 tier
 
 
 def validate_domain_count_constraints(
@@ -281,8 +372,8 @@ def validate_domain_count_constraints(
     从 CGI-S域扩展表 推断每个域的角色（核心/关联/边缘），
     然后检查功能域表中的 m 偏移是否与域角色一致。
 
-    注意：功能域配置中的"角色"列是链路级重要性标记（核心链路 vs 关联链路），
-    与域级角色（核心域 vs 关联域）是不同的概念。本检查使用域级角色。
+    注意：域级角色（核心域 vs 关联域）定义在 CGI-S 域扩展表中，
+    不在功能域配置表中。功能域配置表不设"角色"列。
 
     规则来源: 决策树 [Grilling] 疾病系统独立建模 §域数 (2026-08-01)
     """
@@ -379,8 +470,251 @@ def validate_domain_count_constraints(
     return warnings
 
 
-def validate_file(filepath: Path, registry_by_name: dict) -> dict:
-    """校验单个文件，返回结果字典"""
+# ═══════════════════════════════════════════════════════════════
+# P0.3: 父类继承校验
+# ═══════════════════════════════════════════════════════════════
+
+# P0.3-B: 病理类型矛盾矩阵（仅信号强度轴对立）
+# 解耦沉默（信号减弱）↔ 过度耦合（信号过强）矛盾。
+# 跨层短路/结构异常/边界崩溃 是路径/架构异常，与任何类型共存。
+_CONTRADICT = {("解耦沉默", "过度耦合"), ("过度耦合", "解耦沉默")}
+
+
+def _compute_net_direction(
+    domain_links: list[tuple[str, list[float]]],
+) -> tuple[int, str]:
+    """计算一个域的"净 m 方向"。
+
+    Args:
+        domain_links: [(link_id, [m_mild, m_mod, m_sev]), ...]
+
+    Returns:
+        (net_sign, severity_used)
+        net_sign: 1 (↑), -1 (↓), 0 (无有效偏移)
+        severity_used: "重"/"中"/"轻"/"无"
+    """
+    sev_indices = [2, 1, 0]  # 重, 中, 轻
+    sev_names = ["重", "中", "轻"]
+    for si, sname in zip(sev_indices, sev_names):
+        total_abs = sum(abs(links[si]) for _, links in domain_links)
+        if total_abs > 0:
+            net = sum(links[si] for _, links in domain_links)
+            if net > 0:
+                return (1, sname)
+            elif net < 0:
+                return (-1, sname)
+            else:
+                return (0, sname)
+    return (0, "无")
+
+
+def validate_parent_inheritance(
+    filepath: Path, parent_dir: Path
+) -> tuple[list[str], list[str]]:
+    """P0.3-A+B: per-file 父类继承校验（域方向 + 病理类型矛盾）。"""
+    errors: list[str] = []
+    warnings: list[str] = []
+
+    with open(filepath, encoding="utf-8") as f:
+        text = f.read()
+    text = text.replace("−", "-").replace("–", "-").replace("—", "-")
+
+    child_fm = parse_frontmatter(text)
+    parent_name = child_fm.get("父类", "")
+    if not parent_name:
+        warnings.append("未声明父类（frontmatter 中无 '父类:' 字段）")
+        return errors, warnings
+
+    parent_path = parent_dir / f"{parent_name}.md"
+    if not parent_path.exists():
+        errors.append(f"父类文件不存在: {parent_path}")
+        return errors, warnings
+
+    with open(parent_path, encoding="utf-8") as f:
+        parent_text = f.read()
+    parent_text = parent_text.replace("−", "-").replace("–", "-").replace("—", "-")
+    parent_fm = parse_frontmatter(parent_text)
+
+    parent_domain_dirs: dict = parent_fm.get("功能域定性方向", {})
+    if not parent_domain_dirs:
+        warnings.append(f"父类文件 {parent_path.name} 缺少 '功能域定性方向' 字段")
+        return errors, warnings
+
+    parent_default_path = parent_fm.get("默认病理类型", "")
+
+    func_table = parse_md_table(text, "功能域配置")
+
+    # ── P0.3-A: 域方向校验 ──
+    domain_links: dict[str, list[tuple[str, list[float]]]] = {}
+    for row in func_table:
+        domain = row.get("域", "").strip()
+        link_id = row.get("链路ID", "?").strip()
+        m_str = row.get("m偏移(轻/中/重)", "").strip()
+        if not domain:
+            continue
+        dnorm = _norm_domain(domain)
+        if not m_str:
+            domain_links.setdefault(dnorm, []).append((link_id, [0.0, 0.0, 0.0]))
+            continue
+        parts = m_str.split("/")
+        try:
+            m_vals = [float(p.strip()) if p.strip() else 0.0 for p in parts[:3]]
+        except ValueError:
+            m_vals = [0.0, 0.0, 0.0]
+        while len(m_vals) < 3:
+            m_vals.append(0.0)
+        domain_links.setdefault(dnorm, []).append((link_id, m_vals))
+
+    for dnorm_raw, parent_dir_val in parent_domain_dirs.items():
+        dnorm = _norm_domain(dnorm_raw)  # 归一化父类 key（去掉"域"后缀）
+        if parent_dir_val is None:  # YAML null → Python None
+            continue
+
+        child_links = domain_links.get(dnorm, [])
+        net_sign, sev_used = _compute_net_direction(child_links)
+
+        if parent_dir_val == "↓":
+            if net_sign > 0:
+                errors.append(
+                    f"[父类方向矛盾] 域 '{dnorm}' 父类声明 ↓，"
+                    f"但子类净方向为 ↑（{sev_used}度 sum>0）"
+                )
+            elif net_sign == 0 and child_links:
+                warnings.append(
+                    f"[父类方向] 域 '{dnorm}' 父类声明 ↓，"
+                    f"但子类无任何非零 m 偏移"
+                )
+
+        elif parent_dir_val == "↑":
+            if net_sign < 0:
+                errors.append(
+                    f"[父类方向矛盾] 域 '{dnorm}' 父类声明 ↑，"
+                    f"但子类净方向为 ↓（{sev_used}度 sum<0）"
+                )
+            elif net_sign == 0 and child_links:
+                warnings.append(
+                    f"[父类方向] 域 '{dnorm}' 父类声明 ↑，"
+                    f"但子类无任何非零 m 偏移"
+                )
+
+        elif parent_dir_val == "异常":
+            has_abnormal = any(
+                any(abs(v) >= 0.1 for v in m_vals) for _, m_vals in child_links
+            )
+            if not has_abnormal and child_links:
+                warnings.append(
+                    f"[父类方向] 域 '{dnorm}' 父类声明 异常，"
+                    f"但子类无任何 |m|≥0.1 的链路"
+                )
+            elif not child_links:
+                warnings.append(
+                    f"[父类方向] 域 '{dnorm}' 父类声明 异常，"
+                    f"但子类在该域无任何链路"
+                )
+
+    # ── P0.3-B: 病理类型矛盾检查 ──
+    if parent_default_path:
+        ppt_raw = parent_default_path.strip()
+        has_or = "或" in ppt_raw
+        has_plus = "+" in ppt_raw
+
+        if has_or and has_plus:
+            errors.append(
+                f"[父类病理类型] 父类默认病理类型含 '+' 和 '或': {ppt_raw}"
+                f"（不支持此组合语法）"
+            )
+        else:
+            parent_types = set(
+                t.strip() for t in ppt_raw.replace("或", "+").split("+") if t.strip()
+            )
+
+            if has_or:
+                pass  # 父类含"或"：不限定
+            elif has_plus:
+                all_child_types: set[str] = set()
+                for row in func_table:
+                    pt = row.get("病理类型", "").strip()
+                    if pt:
+                        for t in pt.split("+"):
+                            t = t.strip()
+                            if t:
+                                all_child_types.add(t)
+                if not (parent_types & all_child_types):
+                    errors.append(
+                        f"[父类病理类型] 父类期望至少包含一种病理类型 "
+                        f"{parent_types}，"
+                        f"但子类未包含任何: {sorted(all_child_types) or '（无）'}"
+                    )
+            else:
+                parent_type = list(parent_types)[0]
+                for row in func_table:
+                    link_id = row.get("链路ID", "?").strip()
+                    pt_str = row.get("病理类型", "").strip()
+                    if not pt_str:
+                        continue
+                    for ct in pt_str.split("+"):
+                        ct = ct.strip()
+                        if not ct or ct not in VALID_PATHOLOGY_TYPES:
+                            continue
+                        if (parent_type, ct) in _CONTRADICT:
+                            errors.append(
+                                f"[父类病理类型矛盾] 父类默认 '{parent_type}'，"
+                                f"链路 '{link_id}' 声明 '{ct}'"
+                                f"（信号强度轴对立）"
+                            )
+
+    return errors, warnings
+
+
+def validate_parent_child_consistency(
+    disease_dir: Path, parent_dir: Path
+) -> tuple[list[str], list[str]]:
+    """P0.3-C: global 父类归属交叉验证。"""
+    errors: list[str] = []
+    warnings: list[str] = []
+
+    if not parent_dir.exists():
+        warnings.append(f"父类目录不存在: {parent_dir}")
+        return errors, warnings
+
+    child_files = [
+        p for p in sorted(disease_dir.glob("*.md")) if not p.name.startswith("_")
+    ]
+    parent_files = sorted(parent_dir.glob("*.md"))
+
+    parent_to_children: dict[str, list[str]] = {}
+    children_no_parent: list[str] = []
+
+    for child in child_files:
+        with open(child, encoding="utf-8") as f:
+            child_text = f.read()
+        fm = parse_frontmatter(child_text)
+        parent = fm.get("父类", "")
+        if parent:
+            parent_to_children.setdefault(parent, []).append(child.name)
+        else:
+            children_no_parent.append(child.name)
+
+    parent_names = {p.stem for p in parent_files}
+    declared = set(parent_to_children.keys())
+
+    for p in sorted(parent_names - declared):
+        warnings.append(f"[交叉验证] 父类 '{p}' 无任何子类引用")
+
+    for d in sorted(declared - parent_names):
+        errors.append(f"[交叉验证] 子类引用父类 '{d}' 但父类文件不存在: _父类/{d}.md")
+
+    if children_no_parent:
+        warnings.append(
+            f"[交叉验证] {len(children_no_parent)} 个文件未声明父类: "
+            f"{', '.join(children_no_parent)}"
+        )
+
+    return errors, warnings
+
+
+def validate_file(filepath: Path, registry_by_name: dict, parent_dir: Path | None = None) -> dict:
+    """校验单个文件，返回结果字典。"""
     result = {
         "filepath": filepath,
         "errors": [],
@@ -410,21 +744,43 @@ def validate_file(filepath: Path, registry_by_name: dict) -> dict:
     result["domain_count"] = len(set(r.get("域", "") for r in func_table))
     result["jump_count"] = len(jump_table)
 
-    # ERROR checks
+    # ── ERROR checks ──
     result["errors"].extend(validate_link_ids(func_table, registry_by_name, str(filepath)))
     result["errors"].extend(validate_m_offsets(func_table, str(filepath)))
     result["errors"].extend(validate_jump_refs(jump_table, func_table, str(filepath)))
 
-    # WARNING checks
+    # P0.1: 病理类型校验（遍历每条链路）
+    for row in func_table:
+        link_id = row.get("链路ID", "?").strip()
+        path_str = row.get("病理类型", "")
+        result["errors"].extend(validate_pathology_types(path_str, link_id))
+
+    # ── WARNING checks ──
     result["warnings"].extend(validate_cgi_consistency(func_table, cgi_table, str(filepath)))
-    result["warnings"].extend(validate_drop_pool(drop_table, func_table, str(filepath)))
     result["warnings"].extend(validate_domain_count_constraints(func_table, cgi_table, str(filepath)))
+
+    # P0.2: 掉落池校验（返回 tuple[errors, warnings]）
+    drop_errors, drop_warnings = validate_drop_pool(drop_table, func_table, cgi_table)
+    result["errors"].extend(drop_errors)
+    result["warnings"].extend(drop_warnings)
+
+    # P0.3-A+B: 父类继承校验（仅子类文件，父类文件自身跳过）
+    if parent_dir and parent_dir.exists():
+        is_parent_file = (
+            filepath.parent == parent_dir or filepath.name.startswith("_")
+        )
+        if not is_parent_file:
+            inh_errors, inh_warnings = validate_parent_inheritance(filepath, parent_dir)
+            result["errors"].extend(inh_errors)
+            result["warnings"].extend(inh_warnings)
 
     return result
 
 
 def main():
     registry_by_name, registry_by_id = load_registry()
+
+    parent_dir = ROOT / "实体/疾病目录/_父类"
 
     # Determine target files
     if len(sys.argv) > 1:
@@ -443,7 +799,7 @@ def main():
     total_warnings = 0
 
     for fp in files:
-        result = validate_file(fp, registry_by_name)
+        result = validate_file(fp, registry_by_name, parent_dir)
 
         print(f"\n{'═' * 60}")
         print(f"校验: {fp.name}")
@@ -465,6 +821,24 @@ def main():
 
         total_errors += len(result["errors"])
         total_warnings += len(result["warnings"])
+
+    # P0.3-C: global 父类归属交叉验证
+    if parent_dir.exists():
+        print(f"\n{'═' * 60}")
+        print("交叉验证: 父类归属")
+        cs_errors, cs_warnings = validate_parent_child_consistency(DISEASE_DIR, parent_dir)
+        if cs_errors:
+            print(f"  🔴 ERROR ({len(cs_errors)}):")
+            for e in cs_errors:
+                print(f"    ✗ {e}")
+        if cs_warnings:
+            print(f"  🟡 WARNING ({len(cs_warnings)}):")
+            for w in cs_warnings:
+                print(f"    ⚠ {w}")
+        if not cs_errors and not cs_warnings:
+            print(f"  ✅ 通过")
+        total_errors += len(cs_errors)
+        total_warnings += len(cs_warnings)
 
     print(f"\n{'═' * 60}")
     print(f"汇总: {len(files)} 文件, {total_errors} ERROR, {total_warnings} WARNING")
