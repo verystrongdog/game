@@ -1,5 +1,5 @@
 {
-  "_description": "228 条链路的行为角色分类 — 用于预烘焙管线采样校验和配置多样性保障",
+  "_description": "364 条链路的行为角色分类 — 用于预烘焙管线采样校验和配置多样性保障",
   "_note": "数值量化是后续内容填充工作，不在此文件中",
   "role_definitions": {
     "attack_physical": "M1通道物理攻击调制",
@@ -14,6 +14,35 @@
   "links": [
     {
       "link_id": 0,
+      "dk_pair": [
+        "caudalanteriorcingulate",
+        "caudalmiddlefrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "regions_b": [
+        "额中回尾部"
+      ],
+      "roles": [
+        "approach",
+        "support"
+      ],
+      "role_scores": {
+        "approach": 0.5,
+        "support": 0.325,
+        "attack_mental": 0.2
+      }
+    },
+    {
+      "link_id": 1,
       "dk_pair": [
         "caudalanteriorcingulate",
         "lateralorbitofrontal"
@@ -42,7 +71,38 @@
       }
     },
     {
-      "link_id": 1,
+      "link_id": 2,
+      "dk_pair": [
+        "caudalanteriorcingulate",
+        "medialorbitofrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "regions_b": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "roles": [
+        "support",
+        "approach"
+      ],
+      "role_scores": {
+        "support": 0.55,
+        "approach": 0.3,
+        "attack_mental": 0.2
+      }
+    },
+    {
+      "link_id": 3,
       "dk_pair": [
         "caudalanteriorcingulate",
         "parahippocampal"
@@ -71,7 +131,7 @@
       }
     },
     {
-      "link_id": 2,
+      "link_id": 4,
       "dk_pair": [
         "caudalanteriorcingulate",
         "paracentral"
@@ -100,7 +160,7 @@
       }
     },
     {
-      "link_id": 3,
+      "link_id": 5,
       "dk_pair": [
         "caudalanteriorcingulate",
         "posteriorcingulate"
@@ -129,7 +189,36 @@
       }
     },
     {
-      "link_id": 4,
+      "link_id": 6,
+      "dk_pair": [
+        "caudalanteriorcingulate",
+        "precuneus"
+      ],
+      "layers": [
+        2,
+        4
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "regions_b": [
+        "楔前叶"
+      ],
+      "roles": [
+        "support",
+        "perceive"
+      ],
+      "role_scores": {
+        "support": 0.75,
+        "perceive": 0.325,
+        "attack_mental": 0.2
+      }
+    },
+    {
+      "link_id": 7,
       "dk_pair": [
         "caudalanteriorcingulate",
         "rostralanteriorcingulate"
@@ -158,7 +247,66 @@
       }
     },
     {
-      "link_id": 5,
+      "link_id": 8,
+      "dk_pair": [
+        "caudalanteriorcingulate",
+        "rostralmiddlefrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "regions_b": [
+        "dlPFC",
+        "前额叶极",
+        "前额叶极·FPN"
+      ],
+      "roles": [
+        "support"
+      ],
+      "role_scores": {
+        "support": 0.45,
+        "attack_mental": 0.2,
+        "approach": 0.2
+      }
+    },
+    {
+      "link_id": 9,
+      "dk_pair": [
+        "caudalanteriorcingulate",
+        "superiorfrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "roles": [
+        "support"
+      ],
+      "role_scores": {
+        "support": 0.35,
+        "approach": 0.25,
+        "disrupt": 0.25
+      }
+    },
+    {
+      "link_id": 10,
       "dk_pair": [
         "caudalanteriorcingulate",
         "insula"
@@ -187,7 +335,7 @@
       }
     },
     {
-      "link_id": 6,
+      "link_id": 11,
       "dk_pair": [
         "caudalanteriorcingulate",
         "caudalanteriorcingulate"
@@ -217,7 +365,7 @@
       }
     },
     {
-      "link_id": 7,
+      "link_id": 12,
       "dk_pair": [
         "caudalanteriorcingulate",
         "lateralorbitofrontal"
@@ -246,7 +394,7 @@
       }
     },
     {
-      "link_id": 8,
+      "link_id": 13,
       "dk_pair": [
         "caudalanteriorcingulate",
         "posteriorcingulate"
@@ -275,7 +423,7 @@
       }
     },
     {
-      "link_id": 9,
+      "link_id": 14,
       "dk_pair": [
         "caudalanteriorcingulate",
         "rostralanteriorcingulate"
@@ -304,7 +452,66 @@
       }
     },
     {
-      "link_id": 10,
+      "link_id": 15,
+      "dk_pair": [
+        "caudalanteriorcingulate",
+        "rostralmiddlefrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "regions_b": [
+        "dlPFC",
+        "前额叶极",
+        "前额叶极·FPN"
+      ],
+      "roles": [
+        "support"
+      ],
+      "role_scores": {
+        "support": 0.45,
+        "attack_mental": 0.2,
+        "approach": 0.2
+      }
+    },
+    {
+      "link_id": 16,
+      "dk_pair": [
+        "caudalanteriorcingulate",
+        "superiorfrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "roles": [
+        "support"
+      ],
+      "role_scores": {
+        "support": 0.35,
+        "approach": 0.25,
+        "disrupt": 0.25
+      }
+    },
+    {
+      "link_id": 17,
       "dk_pair": [
         "caudalmiddlefrontal",
         "inferiorparietal"
@@ -332,7 +539,7 @@
       }
     },
     {
-      "link_id": 11,
+      "link_id": 18,
       "dk_pair": [
         "caudalmiddlefrontal",
         "inferiortemporal"
@@ -358,7 +565,7 @@
       }
     },
     {
-      "link_id": 12,
+      "link_id": 19,
       "dk_pair": [
         "caudalmiddlefrontal",
         "parsopercularis"
@@ -384,7 +591,34 @@
       }
     },
     {
-      "link_id": 13,
+      "link_id": 20,
+      "dk_pair": [
+        "caudalmiddlefrontal",
+        "posteriorcingulate"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "额中回尾部"
+      ],
+      "regions_b": [
+        "后扣带"
+      ],
+      "roles": [
+        "approach",
+        "support"
+      ],
+      "role_scores": {
+        "approach": 0.5,
+        "support": 0.45,
+        "attack_mental": 0.2
+      }
+    },
+    {
+      "link_id": 21,
       "dk_pair": [
         "caudalmiddlefrontal",
         "rostralmiddlefrontal"
@@ -412,7 +646,7 @@
       }
     },
     {
-      "link_id": 14,
+      "link_id": 22,
       "dk_pair": [
         "caudalmiddlefrontal",
         "superiorfrontal"
@@ -439,7 +673,7 @@
       }
     },
     {
-      "link_id": 15,
+      "link_id": 23,
       "dk_pair": [
         "caudalmiddlefrontal",
         "superiorparietal"
@@ -465,7 +699,7 @@
       }
     },
     {
-      "link_id": 16,
+      "link_id": 24,
       "dk_pair": [
         "caudalmiddlefrontal",
         "caudalmiddlefrontal"
@@ -491,7 +725,7 @@
       }
     },
     {
-      "link_id": 17,
+      "link_id": 25,
       "dk_pair": [
         "caudalmiddlefrontal",
         "parsopercularis"
@@ -517,7 +751,7 @@
       }
     },
     {
-      "link_id": 18,
+      "link_id": 26,
       "dk_pair": [
         "caudalmiddlefrontal",
         "rostralmiddlefrontal"
@@ -545,7 +779,7 @@
       }
     },
     {
-      "link_id": 19,
+      "link_id": 27,
       "dk_pair": [
         "caudalmiddlefrontal",
         "superiorfrontal"
@@ -572,7 +806,33 @@
       }
     },
     {
-      "link_id": 20,
+      "link_id": 28,
+      "dk_pair": [
+        "caudalmiddlefrontal",
+        "insula"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "额中回尾部"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "roles": [
+        "approach"
+      ],
+      "role_scores": {
+        "approach": 0.3,
+        "perceive": 0.25,
+        "attack_mental": 0.2
+      }
+    },
+    {
+      "link_id": 29,
       "dk_pair": [
         "fusiform",
         "inferiorparietal"
@@ -600,7 +860,7 @@
       }
     },
     {
-      "link_id": 21,
+      "link_id": 30,
       "dk_pair": [
         "fusiform",
         "inferiortemporal"
@@ -627,7 +887,7 @@
       }
     },
     {
-      "link_id": 22,
+      "link_id": 31,
       "dk_pair": [
         "fusiform",
         "lateraloccipital"
@@ -655,7 +915,7 @@
       }
     },
     {
-      "link_id": 23,
+      "link_id": 32,
       "dk_pair": [
         "fusiform",
         "middletemporal"
@@ -682,7 +942,34 @@
       }
     },
     {
-      "link_id": 24,
+      "link_id": 33,
+      "dk_pair": [
+        "fusiform",
+        "parahippocampal"
+      ],
+      "layers": [
+        4,
+        1
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "纺锤体回"
+      ],
+      "regions_b": [
+        "海马旁回"
+      ],
+      "roles": [
+        "perceive",
+        "flee"
+      ],
+      "role_scores": {
+        "perceive": 0.85,
+        "flee": 0.455,
+        "attack_mental": 0.35
+      }
+    },
+    {
+      "link_id": 34,
       "dk_pair": [
         "fusiform",
         "parsopercularis"
@@ -709,7 +996,7 @@
       }
     },
     {
-      "link_id": 25,
+      "link_id": 35,
       "dk_pair": [
         "fusiform",
         "superiorparietal"
@@ -736,7 +1023,7 @@
       }
     },
     {
-      "link_id": 26,
+      "link_id": 36,
       "dk_pair": [
         "fusiform",
         "superiortemporal"
@@ -765,7 +1052,7 @@
       }
     },
     {
-      "link_id": 27,
+      "link_id": 37,
       "dk_pair": [
         "fusiform",
         "lateraloccipital"
@@ -793,7 +1080,7 @@
       }
     },
     {
-      "link_id": 28,
+      "link_id": 38,
       "dk_pair": [
         "fusiform",
         "superiorparietal"
@@ -820,7 +1107,7 @@
       }
     },
     {
-      "link_id": 29,
+      "link_id": 39,
       "dk_pair": [
         "inferiorparietal",
         "inferiortemporal"
@@ -848,7 +1135,7 @@
       }
     },
     {
-      "link_id": 30,
+      "link_id": 40,
       "dk_pair": [
         "inferiorparietal",
         "lateraloccipital"
@@ -877,7 +1164,7 @@
       }
     },
     {
-      "link_id": 31,
+      "link_id": 41,
       "dk_pair": [
         "inferiorparietal",
         "middletemporal"
@@ -905,7 +1192,35 @@
       }
     },
     {
-      "link_id": 32,
+      "link_id": 42,
+      "dk_pair": [
+        "inferiorparietal",
+        "parahippocampal"
+      ],
+      "layers": [
+        4,
+        1
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "角回",
+        "顶叶"
+      ],
+      "regions_b": [
+        "海马旁回"
+      ],
+      "roles": [
+        "perceive",
+        "attack_mental"
+      ],
+      "role_scores": {
+        "perceive": 0.7,
+        "attack_mental": 0.667,
+        "flee": 0.26
+      }
+    },
+    {
+      "link_id": 43,
       "dk_pair": [
         "inferiorparietal",
         "parsopercularis"
@@ -933,7 +1248,7 @@
       }
     },
     {
-      "link_id": 33,
+      "link_id": 44,
       "dk_pair": [
         "inferiorparietal",
         "postcentral"
@@ -961,7 +1276,7 @@
       }
     },
     {
-      "link_id": 34,
+      "link_id": 45,
       "dk_pair": [
         "inferiorparietal",
         "precentral"
@@ -989,7 +1304,7 @@
       }
     },
     {
-      "link_id": 35,
+      "link_id": 46,
       "dk_pair": [
         "inferiorparietal",
         "rostralmiddlefrontal"
@@ -1019,7 +1334,7 @@
       }
     },
     {
-      "link_id": 36,
+      "link_id": 47,
       "dk_pair": [
         "inferiorparietal",
         "superiorfrontal"
@@ -1048,7 +1363,7 @@
       }
     },
     {
-      "link_id": 37,
+      "link_id": 48,
       "dk_pair": [
         "inferiorparietal",
         "superiorparietal"
@@ -1076,7 +1391,7 @@
       }
     },
     {
-      "link_id": 38,
+      "link_id": 49,
       "dk_pair": [
         "inferiorparietal",
         "supramarginal"
@@ -1105,7 +1420,35 @@
       }
     },
     {
-      "link_id": 39,
+      "link_id": 50,
+      "dk_pair": [
+        "inferiorparietal",
+        "insula"
+      ],
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "角回",
+        "顶叶"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "roles": [
+        "perceive",
+        "attack_mental"
+      ],
+      "role_scores": {
+        "perceive": 0.85,
+        "attack_mental": 0.367,
+        "approach": 0.275
+      }
+    },
+    {
+      "link_id": 51,
       "dk_pair": [
         "inferiorparietal",
         "precuneus"
@@ -1133,7 +1476,7 @@
       }
     },
     {
-      "link_id": 40,
+      "link_id": 52,
       "dk_pair": [
         "inferiorparietal",
         "superiorparietal"
@@ -1161,7 +1504,7 @@
       }
     },
     {
-      "link_id": 41,
+      "link_id": 53,
       "dk_pair": [
         "inferiortemporal",
         "medialorbitofrontal"
@@ -1190,7 +1533,7 @@
       }
     },
     {
-      "link_id": 42,
+      "link_id": 54,
       "dk_pair": [
         "inferiortemporal",
         "middletemporal"
@@ -1217,7 +1560,34 @@
       }
     },
     {
-      "link_id": 43,
+      "link_id": 55,
+      "dk_pair": [
+        "inferiortemporal",
+        "parahippocampal"
+      ],
+      "layers": [
+        4,
+        1
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "颞下回"
+      ],
+      "regions_b": [
+        "海马旁回"
+      ],
+      "roles": [
+        "perceive",
+        "attack_mental"
+      ],
+      "role_scores": {
+        "perceive": 0.7,
+        "attack_mental": 0.5,
+        "flee": 0.26
+      }
+    },
+    {
+      "link_id": 56,
       "dk_pair": [
         "inferiortemporal",
         "parsopercularis"
@@ -1244,7 +1614,7 @@
       }
     },
     {
-      "link_id": 44,
+      "link_id": 57,
       "dk_pair": [
         "inferiortemporal",
         "supramarginal"
@@ -1272,7 +1642,33 @@
       }
     },
     {
-      "link_id": 45,
+      "link_id": 58,
+      "dk_pair": [
+        "inferiortemporal",
+        "insula"
+      ],
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "颞下回"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "roles": [
+        "perceive"
+      ],
+      "role_scores": {
+        "perceive": 0.7,
+        "attack_mental": 0.2,
+        "approach": 0.2
+      }
+    },
+    {
+      "link_id": 59,
       "dk_pair": [
         "inferiortemporal",
         "inferiortemporal"
@@ -1299,7 +1695,7 @@
       }
     },
     {
-      "link_id": 46,
+      "link_id": 60,
       "dk_pair": [
         "inferiortemporal",
         "precuneus"
@@ -1326,7 +1722,7 @@
       }
     },
     {
-      "link_id": 47,
+      "link_id": 61,
       "dk_pair": [
         "inferiortemporal",
         "superiorparietal"
@@ -1352,7 +1748,63 @@
       }
     },
     {
-      "link_id": 48,
+      "link_id": 62,
+      "dk_pair": [
+        "lateraloccipital",
+        "lateralorbitofrontal"
+      ],
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "外侧枕叶",
+        "枕顶联合"
+      ],
+      "regions_b": [
+        "OFC"
+      ],
+      "roles": [
+        "perceive",
+        "flee"
+      ],
+      "role_scores": {
+        "perceive": 0.833,
+        "flee": 0.39,
+        "approach": 0.367
+      }
+    },
+    {
+      "link_id": 63,
+      "dk_pair": [
+        "lateraloccipital",
+        "parahippocampal"
+      ],
+      "layers": [
+        4,
+        1
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "外侧枕叶",
+        "枕顶联合"
+      ],
+      "regions_b": [
+        "海马旁回"
+      ],
+      "roles": [
+        "perceive",
+        "flee"
+      ],
+      "role_scores": {
+        "perceive": 0.85,
+        "flee": 0.455,
+        "defend": 0.24
+      }
+    },
+    {
+      "link_id": 64,
       "dk_pair": [
         "lateraloccipital",
         "superiorparietal"
@@ -1380,7 +1832,7 @@
       }
     },
     {
-      "link_id": 49,
+      "link_id": 65,
       "dk_pair": [
         "lateraloccipital",
         "superiortemporal"
@@ -1410,7 +1862,34 @@
       }
     },
     {
-      "link_id": 50,
+      "link_id": 66,
+      "dk_pair": [
+        "lateraloccipital",
+        "insula"
+      ],
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "外侧枕叶",
+        "枕顶联合"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "roles": [
+        "perceive"
+      ],
+      "role_scores": {
+        "perceive": 1.0,
+        "attack_mental": 0.2,
+        "approach": 0.2
+      }
+    },
+    {
+      "link_id": 67,
       "dk_pair": [
         "lateraloccipital",
         "superiorparietal"
@@ -1438,7 +1917,119 @@
       }
     },
     {
-      "link_id": 51,
+      "link_id": 68,
+      "dk_pair": [
+        "lateralorbitofrontal",
+        "medialorbitofrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "OFC"
+      ],
+      "regions_b": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "roles": [
+        "support",
+        "approach"
+      ],
+      "role_scores": {
+        "support": 0.45,
+        "approach": 0.425,
+        "attack_mental": 0.3
+      }
+    },
+    {
+      "link_id": 69,
+      "dk_pair": [
+        "lateralorbitofrontal",
+        "middletemporal"
+      ],
+      "layers": [
+        2,
+        4
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "OFC"
+      ],
+      "regions_b": [
+        "颞中回"
+      ],
+      "roles": [
+        "attack_mental",
+        "approach"
+      ],
+      "role_scores": {
+        "attack_mental": 0.75,
+        "approach": 0.45,
+        "perceive": 0.2
+      }
+    },
+    {
+      "link_id": 70,
+      "dk_pair": [
+        "lateralorbitofrontal",
+        "superiorfrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "OFC"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "roles": [
+        "approach",
+        "attack_mental"
+      ],
+      "role_scores": {
+        "approach": 0.467,
+        "attack_mental": 0.3,
+        "support": 0.2
+      }
+    },
+    {
+      "link_id": 71,
+      "dk_pair": [
+        "lateralorbitofrontal",
+        "supramarginal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "OFC"
+      ],
+      "regions_b": [
+        "TPJ",
+        "缘上回"
+      ],
+      "roles": [
+        "attack_mental",
+        "approach"
+      ],
+      "role_scores": {
+        "attack_mental": 0.667,
+        "approach": 0.367,
+        "disrupt": 0.367
+      }
+    },
+    {
+      "link_id": 72,
       "dk_pair": [
         "lateralorbitofrontal",
         "insula"
@@ -1464,7 +2055,7 @@
       }
     },
     {
-      "link_id": 52,
+      "link_id": 73,
       "dk_pair": [
         "lateralorbitofrontal",
         "caudalanteriorcingulate"
@@ -1493,7 +2084,7 @@
       }
     },
     {
-      "link_id": 53,
+      "link_id": 74,
       "dk_pair": [
         "lateralorbitofrontal",
         "lateralorbitofrontal"
@@ -1519,7 +2110,64 @@
       }
     },
     {
-      "link_id": 54,
+      "link_id": 75,
+      "dk_pair": [
+        "lateralorbitofrontal",
+        "medialorbitofrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "OFC"
+      ],
+      "regions_b": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "roles": [
+        "support",
+        "approach"
+      ],
+      "role_scores": {
+        "support": 0.45,
+        "approach": 0.425,
+        "attack_mental": 0.3
+      }
+    },
+    {
+      "link_id": 76,
+      "dk_pair": [
+        "lateralorbitofrontal",
+        "superiorfrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "OFC"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "roles": [
+        "approach",
+        "attack_mental"
+      ],
+      "role_scores": {
+        "approach": 0.467,
+        "attack_mental": 0.3,
+        "support": 0.2
+      }
+    },
+    {
+      "link_id": 77,
       "dk_pair": [
         "lateralorbitofrontal",
         "insula"
@@ -1545,7 +2193,7 @@
       }
     },
     {
-      "link_id": 55,
+      "link_id": 78,
       "dk_pair": [
         "medialorbitofrontal",
         "middletemporal"
@@ -1574,7 +2222,36 @@
       }
     },
     {
-      "link_id": 56,
+      "link_id": 79,
+      "dk_pair": [
+        "medialorbitofrontal",
+        "posteriorcingulate"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "regions_b": [
+        "后扣带"
+      ],
+      "roles": [
+        "support",
+        "attack_mental"
+      ],
+      "role_scores": {
+        "support": 0.675,
+        "attack_mental": 0.3,
+        "approach": 0.3
+      }
+    },
+    {
+      "link_id": 80,
       "dk_pair": [
         "medialorbitofrontal",
         "precuneus"
@@ -1603,7 +2280,35 @@
       }
     },
     {
-      "link_id": 57,
+      "link_id": 81,
+      "dk_pair": [
+        "medialorbitofrontal",
+        "rostralanteriorcingulate"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "regions_b": [
+        "ACC吻侧"
+      ],
+      "roles": [
+        "support"
+      ],
+      "role_scores": {
+        "support": 0.875,
+        "attack_mental": 0.2,
+        "approach": 0.2
+      }
+    },
+    {
+      "link_id": 82,
       "dk_pair": [
         "medialorbitofrontal",
         "rostralmiddlefrontal"
@@ -1633,7 +2338,7 @@
       }
     },
     {
-      "link_id": 58,
+      "link_id": 83,
       "dk_pair": [
         "medialorbitofrontal",
         "superiorfrontal"
@@ -1663,7 +2368,7 @@
       }
     },
     {
-      "link_id": 59,
+      "link_id": 84,
       "dk_pair": [
         "medialorbitofrontal",
         "superiortemporal"
@@ -1694,7 +2399,7 @@
       }
     },
     {
-      "link_id": 60,
+      "link_id": 85,
       "dk_pair": [
         "medialorbitofrontal",
         "frontalpole"
@@ -1723,7 +2428,96 @@
       }
     },
     {
-      "link_id": 61,
+      "link_id": 86,
+      "dk_pair": [
+        "medialorbitofrontal",
+        "temporalpole"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "regions_b": [
+        "颞极"
+      ],
+      "roles": [
+        "attack_mental",
+        "support"
+      ],
+      "role_scores": {
+        "attack_mental": 0.5,
+        "support": 0.45,
+        "disrupt": 0.325
+      }
+    },
+    {
+      "link_id": 87,
+      "dk_pair": [
+        "medialorbitofrontal",
+        "insula"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "roles": [
+        "approach",
+        "support"
+      ],
+      "role_scores": {
+        "approach": 0.5,
+        "support": 0.45,
+        "attack_mental": 0.2
+      }
+    },
+    {
+      "link_id": 88,
+      "dk_pair": [
+        "medialorbitofrontal",
+        "caudalanteriorcingulate"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "regions_b": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "roles": [
+        "support",
+        "approach"
+      ],
+      "role_scores": {
+        "support": 0.55,
+        "approach": 0.3,
+        "attack_mental": 0.2
+      }
+    },
+    {
+      "link_id": 89,
       "dk_pair": [
         "medialorbitofrontal",
         "inferiortemporal"
@@ -1752,7 +2546,36 @@
       }
     },
     {
-      "link_id": 62,
+      "link_id": 90,
+      "dk_pair": [
+        "medialorbitofrontal",
+        "lateralorbitofrontal"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "regions_b": [
+        "OFC"
+      ],
+      "roles": [
+        "support",
+        "approach"
+      ],
+      "role_scores": {
+        "support": 0.45,
+        "approach": 0.425,
+        "attack_mental": 0.3
+      }
+    },
+    {
+      "link_id": 91,
       "dk_pair": [
         "medialorbitofrontal",
         "medialorbitofrontal"
@@ -1783,7 +2606,7 @@
       }
     },
     {
-      "link_id": 63,
+      "link_id": 92,
       "dk_pair": [
         "medialorbitofrontal",
         "middletemporal"
@@ -1812,7 +2635,35 @@
       }
     },
     {
-      "link_id": 64,
+      "link_id": 93,
+      "dk_pair": [
+        "medialorbitofrontal",
+        "rostralanteriorcingulate"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "regions_b": [
+        "ACC吻侧"
+      ],
+      "roles": [
+        "support"
+      ],
+      "role_scores": {
+        "support": 0.875,
+        "attack_mental": 0.2,
+        "approach": 0.2
+      }
+    },
+    {
+      "link_id": 94,
       "dk_pair": [
         "medialorbitofrontal",
         "rostralmiddlefrontal"
@@ -1842,7 +2693,7 @@
       }
     },
     {
-      "link_id": 65,
+      "link_id": 95,
       "dk_pair": [
         "medialorbitofrontal",
         "superiorfrontal"
@@ -1872,7 +2723,7 @@
       }
     },
     {
-      "link_id": 66,
+      "link_id": 96,
       "dk_pair": [
         "medialorbitofrontal",
         "frontalpole"
@@ -1901,7 +2752,65 @@
       }
     },
     {
-      "link_id": 67,
+      "link_id": 97,
+      "dk_pair": [
+        "medialorbitofrontal",
+        "temporalpole"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "regions_b": [
+        "颞极"
+      ],
+      "roles": [
+        "attack_mental",
+        "support"
+      ],
+      "role_scores": {
+        "attack_mental": 0.5,
+        "support": 0.45,
+        "disrupt": 0.325
+      }
+    },
+    {
+      "link_id": 98,
+      "dk_pair": [
+        "medialorbitofrontal",
+        "insula"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "roles": [
+        "approach",
+        "support"
+      ],
+      "role_scores": {
+        "approach": 0.5,
+        "support": 0.45,
+        "attack_mental": 0.2
+      }
+    },
+    {
+      "link_id": 99,
       "dk_pair": [
         "middletemporal",
         "parsopercularis"
@@ -1927,7 +2836,7 @@
       }
     },
     {
-      "link_id": 68,
+      "link_id": 100,
       "dk_pair": [
         "middletemporal",
         "superiortemporal"
@@ -1956,7 +2865,7 @@
       }
     },
     {
-      "link_id": 69,
+      "link_id": 101,
       "dk_pair": [
         "middletemporal",
         "supramarginal"
@@ -1984,7 +2893,34 @@
       }
     },
     {
-      "link_id": 70,
+      "link_id": 102,
+      "dk_pair": [
+        "middletemporal",
+        "temporalpole"
+      ],
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "颞中回"
+      ],
+      "regions_b": [
+        "颞极"
+      ],
+      "roles": [
+        "attack_mental",
+        "disrupt"
+      ],
+      "role_scores": {
+        "attack_mental": 0.75,
+        "disrupt": 0.45,
+        "approach": 0.2
+      }
+    },
+    {
+      "link_id": 103,
       "dk_pair": [
         "middletemporal",
         "inferiortemporal"
@@ -2011,7 +2947,62 @@
       }
     },
     {
-      "link_id": 71,
+      "link_id": 104,
+      "dk_pair": [
+        "parahippocampal",
+        "precuneus"
+      ],
+      "layers": [
+        1,
+        4
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "海马旁回"
+      ],
+      "regions_b": [
+        "楔前叶"
+      ],
+      "roles": [
+        "perceive",
+        "support"
+      ],
+      "role_scores": {
+        "perceive": 0.7,
+        "support": 0.4,
+        "attack_mental": 0.35
+      }
+    },
+    {
+      "link_id": 105,
+      "dk_pair": [
+        "parahippocampal",
+        "superiorfrontal"
+      ],
+      "layers": [
+        1,
+        5
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "海马旁回"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "roles": [
+        "flee",
+        "attack_mental"
+      ],
+      "role_scores": {
+        "flee": 0.39,
+        "attack_mental": 0.3,
+        "support": 0.3
+      }
+    },
+    {
+      "link_id": 106,
       "dk_pair": [
         "parahippocampal",
         "parahippocampal"
@@ -2038,7 +3029,7 @@
       }
     },
     {
-      "link_id": 72,
+      "link_id": 107,
       "dk_pair": [
         "parahippocampal",
         "posteriorcingulate"
@@ -2065,7 +3056,7 @@
       }
     },
     {
-      "link_id": 73,
+      "link_id": 108,
       "dk_pair": [
         "paracentral",
         "precentral"
@@ -2091,7 +3082,35 @@
       }
     },
     {
-      "link_id": 74,
+      "link_id": 109,
+      "dk_pair": [
+        "paracentral",
+        "superiorfrontal"
+      ],
+      "layers": [
+        3,
+        5
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "旁中央小叶"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "roles": [
+        "perceive",
+        "attack_physical"
+      ],
+      "role_scores": {
+        "perceive": 0.5,
+        "attack_physical": 0.367,
+        "attack_mental": 0.2
+      }
+    },
+    {
+      "link_id": 110,
       "dk_pair": [
         "paracentral",
         "paracentral"
@@ -2117,7 +3136,7 @@
       }
     },
     {
-      "link_id": 75,
+      "link_id": 111,
       "dk_pair": [
         "paracentral",
         "precentral"
@@ -2143,7 +3162,35 @@
       }
     },
     {
-      "link_id": 76,
+      "link_id": 112,
+      "dk_pair": [
+        "paracentral",
+        "superiorfrontal"
+      ],
+      "layers": [
+        3,
+        5
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "旁中央小叶"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "roles": [
+        "perceive",
+        "attack_physical"
+      ],
+      "role_scores": {
+        "perceive": 0.5,
+        "attack_physical": 0.367,
+        "attack_mental": 0.2
+      }
+    },
+    {
+      "link_id": 113,
       "dk_pair": [
         "parsopercularis",
         "rostralmiddlefrontal"
@@ -2172,7 +3219,7 @@
       }
     },
     {
-      "link_id": 77,
+      "link_id": 114,
       "dk_pair": [
         "parsopercularis",
         "superiorfrontal"
@@ -2200,7 +3247,7 @@
       }
     },
     {
-      "link_id": 78,
+      "link_id": 115,
       "dk_pair": [
         "parsopercularis",
         "superiorparietal"
@@ -2227,7 +3274,7 @@
       }
     },
     {
-      "link_id": 79,
+      "link_id": 116,
       "dk_pair": [
         "parsopercularis",
         "superiortemporal"
@@ -2256,7 +3303,7 @@
       }
     },
     {
-      "link_id": 80,
+      "link_id": 117,
       "dk_pair": [
         "parsopercularis",
         "supramarginal"
@@ -2284,7 +3331,63 @@
       }
     },
     {
-      "link_id": 81,
+      "link_id": 118,
+      "dk_pair": [
+        "parsopercularis",
+        "insula"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "Broca区"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "roles": [
+        "attack_mental",
+        "perceive"
+      ],
+      "role_scores": {
+        "attack_mental": 0.45,
+        "perceive": 0.31,
+        "disrupt": 0.26
+      }
+    },
+    {
+      "link_id": 119,
+      "dk_pair": [
+        "parsopercularis",
+        "caudalanteriorcingulate"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "Broca区"
+      ],
+      "regions_b": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "roles": [
+        "attack_mental",
+        "support"
+      ],
+      "role_scores": {
+        "attack_mental": 0.325,
+        "support": 0.325,
+        "disrupt": 0.3
+      }
+    },
+    {
+      "link_id": 120,
       "dk_pair": [
         "parsopercularis",
         "caudalmiddlefrontal"
@@ -2310,7 +3413,7 @@
       }
     },
     {
-      "link_id": 82,
+      "link_id": 121,
       "dk_pair": [
         "parsopercularis",
         "superiorfrontal"
@@ -2338,7 +3441,34 @@
       }
     },
     {
-      "link_id": 83,
+      "link_id": 122,
+      "dk_pair": [
+        "parsopercularis",
+        "insula"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "Broca区"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "roles": [
+        "attack_mental",
+        "perceive"
+      ],
+      "role_scores": {
+        "attack_mental": 0.45,
+        "perceive": 0.31,
+        "disrupt": 0.26
+      }
+    },
+    {
+      "link_id": 123,
       "dk_pair": [
         "postcentral",
         "precentral"
@@ -2364,7 +3494,7 @@
       }
     },
     {
-      "link_id": 84,
+      "link_id": 124,
       "dk_pair": [
         "postcentral",
         "superiorparietal"
@@ -2391,7 +3521,7 @@
       }
     },
     {
-      "link_id": 85,
+      "link_id": 125,
       "dk_pair": [
         "postcentral",
         "superiortemporal"
@@ -2420,7 +3550,7 @@
       }
     },
     {
-      "link_id": 86,
+      "link_id": 126,
       "dk_pair": [
         "postcentral",
         "postcentral"
@@ -2447,7 +3577,7 @@
       }
     },
     {
-      "link_id": 87,
+      "link_id": 127,
       "dk_pair": [
         "postcentral",
         "precentral"
@@ -2473,7 +3603,7 @@
       }
     },
     {
-      "link_id": 88,
+      "link_id": 128,
       "dk_pair": [
         "postcentral",
         "superiorparietal"
@@ -2500,7 +3630,7 @@
       }
     },
     {
-      "link_id": 89,
+      "link_id": 129,
       "dk_pair": [
         "postcentral",
         "superiortemporal"
@@ -2529,7 +3659,62 @@
       }
     },
     {
-      "link_id": 90,
+      "link_id": 130,
+      "dk_pair": [
+        "posteriorcingulate",
+        "precuneus"
+      ],
+      "layers": [
+        2,
+        4
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "后扣带"
+      ],
+      "regions_b": [
+        "楔前叶"
+      ],
+      "roles": [
+        "support",
+        "perceive"
+      ],
+      "role_scores": {
+        "support": 0.85,
+        "perceive": 0.45,
+        "attack_mental": 0.35
+      }
+    },
+    {
+      "link_id": 131,
+      "dk_pair": [
+        "posteriorcingulate",
+        "superiorfrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "后扣带"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "roles": [
+        "support",
+        "attack_mental"
+      ],
+      "role_scores": {
+        "support": 0.467,
+        "attack_mental": 0.3,
+        "approach": 0.3
+      }
+    },
+    {
+      "link_id": 132,
       "dk_pair": [
         "posteriorcingulate",
         "insula"
@@ -2556,7 +3741,7 @@
       }
     },
     {
-      "link_id": 91,
+      "link_id": 133,
       "dk_pair": [
         "posteriorcingulate",
         "caudalanteriorcingulate"
@@ -2585,7 +3770,36 @@
       }
     },
     {
-      "link_id": 92,
+      "link_id": 134,
+      "dk_pair": [
+        "posteriorcingulate",
+        "medialorbitofrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "后扣带"
+      ],
+      "regions_b": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "roles": [
+        "support",
+        "attack_mental"
+      ],
+      "role_scores": {
+        "support": 0.675,
+        "attack_mental": 0.3,
+        "approach": 0.3
+      }
+    },
+    {
+      "link_id": 135,
       "dk_pair": [
         "posteriorcingulate",
         "posteriorcingulate"
@@ -2612,7 +3826,118 @@
       }
     },
     {
-      "link_id": 93,
+      "link_id": 136,
+      "dk_pair": [
+        "posteriorcingulate",
+        "precuneus"
+      ],
+      "layers": [
+        2,
+        4
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "后扣带"
+      ],
+      "regions_b": [
+        "楔前叶"
+      ],
+      "roles": [
+        "support",
+        "perceive"
+      ],
+      "role_scores": {
+        "support": 0.85,
+        "perceive": 0.45,
+        "attack_mental": 0.35
+      }
+    },
+    {
+      "link_id": 137,
+      "dk_pair": [
+        "posteriorcingulate",
+        "superiorfrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "后扣带"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "roles": [
+        "support",
+        "attack_mental"
+      ],
+      "role_scores": {
+        "support": 0.467,
+        "attack_mental": 0.3,
+        "approach": 0.3
+      }
+    },
+    {
+      "link_id": 138,
+      "dk_pair": [
+        "precentral",
+        "superiorfrontal"
+      ],
+      "layers": [
+        3,
+        5
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "M1"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "roles": [
+        "attack_physical",
+        "perceive"
+      ],
+      "role_scores": {
+        "attack_physical": 0.517,
+        "perceive": 0.35,
+        "attack_mental": 0.2
+      }
+    },
+    {
+      "link_id": 139,
+      "dk_pair": [
+        "precentral",
+        "supramarginal"
+      ],
+      "layers": [
+        3,
+        5
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "M1"
+      ],
+      "regions_b": [
+        "TPJ",
+        "缘上回"
+      ],
+      "roles": [
+        "perceive",
+        "attack_physical"
+      ],
+      "role_scores": {
+        "perceive": 0.5,
+        "attack_physical": 0.367,
+        "attack_mental": 0.367
+      }
+    },
+    {
+      "link_id": 140,
       "dk_pair": [
         "precentral",
         "insula"
@@ -2639,7 +3964,7 @@
       }
     },
     {
-      "link_id": 94,
+      "link_id": 141,
       "dk_pair": [
         "precentral",
         "paracentral"
@@ -2665,7 +3990,7 @@
       }
     },
     {
-      "link_id": 95,
+      "link_id": 142,
       "dk_pair": [
         "precentral",
         "postcentral"
@@ -2691,7 +4016,7 @@
       }
     },
     {
-      "link_id": 96,
+      "link_id": 143,
       "dk_pair": [
         "precentral",
         "precentral"
@@ -2717,7 +4042,62 @@
       }
     },
     {
-      "link_id": 97,
+      "link_id": 144,
+      "dk_pair": [
+        "precentral",
+        "superiorfrontal"
+      ],
+      "layers": [
+        3,
+        5
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "M1"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "roles": [
+        "attack_physical",
+        "perceive"
+      ],
+      "role_scores": {
+        "attack_physical": 0.517,
+        "perceive": 0.35,
+        "attack_mental": 0.2
+      }
+    },
+    {
+      "link_id": 145,
+      "dk_pair": [
+        "precuneus",
+        "rostralanteriorcingulate"
+      ],
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "楔前叶"
+      ],
+      "regions_b": [
+        "ACC吻侧"
+      ],
+      "roles": [
+        "support",
+        "perceive"
+      ],
+      "role_scores": {
+        "support": 1.0,
+        "perceive": 0.45,
+        "attack_mental": 0.2
+      }
+    },
+    {
+      "link_id": 146,
       "dk_pair": [
         "precuneus",
         "rostralmiddlefrontal"
@@ -2746,7 +4126,7 @@
       }
     },
     {
-      "link_id": 98,
+      "link_id": 147,
       "dk_pair": [
         "precuneus",
         "superiorfrontal"
@@ -2774,7 +4154,7 @@
       }
     },
     {
-      "link_id": 99,
+      "link_id": 148,
       "dk_pair": [
         "precuneus",
         "superiortemporal"
@@ -2803,7 +4183,7 @@
       }
     },
     {
-      "link_id": 100,
+      "link_id": 149,
       "dk_pair": [
         "precuneus",
         "lateraloccipital"
@@ -2831,7 +4211,34 @@
       }
     },
     {
-      "link_id": 101,
+      "link_id": 150,
+      "dk_pair": [
+        "precuneus",
+        "posteriorcingulate"
+      ],
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "楔前叶"
+      ],
+      "regions_b": [
+        "后扣带"
+      ],
+      "roles": [
+        "support",
+        "perceive"
+      ],
+      "role_scores": {
+        "support": 0.85,
+        "perceive": 0.45,
+        "attack_mental": 0.35
+      }
+    },
+    {
+      "link_id": 151,
       "dk_pair": [
         "precuneus",
         "precuneus"
@@ -2858,7 +4265,7 @@
       }
     },
     {
-      "link_id": 102,
+      "link_id": 152,
       "dk_pair": [
         "precuneus",
         "superiorfrontal"
@@ -2886,7 +4293,7 @@
       }
     },
     {
-      "link_id": 103,
+      "link_id": 153,
       "dk_pair": [
         "precuneus",
         "supramarginal"
@@ -2914,7 +4321,35 @@
       }
     },
     {
-      "link_id": 104,
+      "link_id": 154,
+      "dk_pair": [
+        "rostralanteriorcingulate",
+        "superiorfrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "ACC吻侧"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "roles": [
+        "support",
+        "disrupt"
+      ],
+      "role_scores": {
+        "support": 0.517,
+        "disrupt": 0.35,
+        "attack_mental": 0.2
+      }
+    },
+    {
+      "link_id": 155,
       "dk_pair": [
         "rostralanteriorcingulate",
         "insula"
@@ -2941,7 +4376,7 @@
       }
     },
     {
-      "link_id": 105,
+      "link_id": 156,
       "dk_pair": [
         "rostralanteriorcingulate",
         "caudalanteriorcingulate"
@@ -2970,7 +4405,35 @@
       }
     },
     {
-      "link_id": 106,
+      "link_id": 157,
+      "dk_pair": [
+        "rostralanteriorcingulate",
+        "medialorbitofrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "ACC吻侧"
+      ],
+      "regions_b": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "roles": [
+        "support"
+      ],
+      "role_scores": {
+        "support": 0.875,
+        "attack_mental": 0.2,
+        "approach": 0.2
+      }
+    },
+    {
+      "link_id": 158,
       "dk_pair": [
         "rostralanteriorcingulate",
         "rostralanteriorcingulate"
@@ -2997,7 +4460,35 @@
       }
     },
     {
-      "link_id": 107,
+      "link_id": 159,
+      "dk_pair": [
+        "rostralanteriorcingulate",
+        "superiorfrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "ACC吻侧"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "roles": [
+        "support",
+        "disrupt"
+      ],
+      "role_scores": {
+        "support": 0.517,
+        "disrupt": 0.35,
+        "attack_mental": 0.2
+      }
+    },
+    {
+      "link_id": 160,
       "dk_pair": [
         "rostralanteriorcingulate",
         "insula"
@@ -3024,7 +4515,7 @@
       }
     },
     {
-      "link_id": 108,
+      "link_id": 161,
       "dk_pair": [
         "rostralmiddlefrontal",
         "superiorfrontal"
@@ -3053,7 +4544,7 @@
       }
     },
     {
-      "link_id": 109,
+      "link_id": 162,
       "dk_pair": [
         "rostralmiddlefrontal",
         "superiorparietal"
@@ -3082,7 +4573,65 @@
       }
     },
     {
-      "link_id": 110,
+      "link_id": 163,
+      "dk_pair": [
+        "rostralmiddlefrontal",
+        "insula"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "dlPFC",
+        "前额叶极",
+        "前额叶极·FPN"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "roles": [
+        "support"
+      ],
+      "role_scores": {
+        "support": 0.45,
+        "perceive": 0.225,
+        "attack_mental": 0.2
+      }
+    },
+    {
+      "link_id": 164,
+      "dk_pair": [
+        "rostralmiddlefrontal",
+        "caudalanteriorcingulate"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "dlPFC",
+        "前额叶极",
+        "前额叶极·FPN"
+      ],
+      "regions_b": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "roles": [
+        "support"
+      ],
+      "role_scores": {
+        "support": 0.45,
+        "attack_mental": 0.2,
+        "approach": 0.2
+      }
+    },
+    {
+      "link_id": 165,
       "dk_pair": [
         "rostralmiddlefrontal",
         "caudalmiddlefrontal"
@@ -3110,7 +4659,7 @@
       }
     },
     {
-      "link_id": 111,
+      "link_id": 166,
       "dk_pair": [
         "rostralmiddlefrontal",
         "medialorbitofrontal"
@@ -3140,7 +4689,7 @@
       }
     },
     {
-      "link_id": 112,
+      "link_id": 167,
       "dk_pair": [
         "rostralmiddlefrontal",
         "rostralmiddlefrontal"
@@ -3170,7 +4719,7 @@
       }
     },
     {
-      "link_id": 113,
+      "link_id": 168,
       "dk_pair": [
         "rostralmiddlefrontal",
         "superiorfrontal"
@@ -3199,7 +4748,7 @@
       }
     },
     {
-      "link_id": 114,
+      "link_id": 169,
       "dk_pair": [
         "superiorfrontal",
         "superiorparietal"
@@ -3226,7 +4775,7 @@
       }
     },
     {
-      "link_id": 115,
+      "link_id": 170,
       "dk_pair": [
         "superiorfrontal",
         "frontalpole"
@@ -3253,7 +4802,64 @@
       }
     },
     {
-      "link_id": 116,
+      "link_id": 171,
+      "dk_pair": [
+        "superiorfrontal",
+        "insula"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "mPFC",
+        "额上回"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "roles": [
+        "approach",
+        "disrupt"
+      ],
+      "role_scores": {
+        "approach": 0.26,
+        "disrupt": 0.26,
+        "perceive": 0.227
+      }
+    },
+    {
+      "link_id": 172,
+      "dk_pair": [
+        "superiorfrontal",
+        "caudalanteriorcingulate"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "mPFC",
+        "额上回"
+      ],
+      "regions_b": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "roles": [
+        "support"
+      ],
+      "role_scores": {
+        "support": 0.35,
+        "approach": 0.25,
+        "disrupt": 0.25
+      }
+    },
+    {
+      "link_id": 173,
       "dk_pair": [
         "superiorfrontal",
         "caudalmiddlefrontal"
@@ -3280,7 +4886,35 @@
       }
     },
     {
-      "link_id": 117,
+      "link_id": 174,
+      "dk_pair": [
+        "superiorfrontal",
+        "lateralorbitofrontal"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "mPFC",
+        "额上回"
+      ],
+      "regions_b": [
+        "OFC"
+      ],
+      "roles": [
+        "approach",
+        "attack_mental"
+      ],
+      "role_scores": {
+        "approach": 0.467,
+        "attack_mental": 0.3,
+        "support": 0.2
+      }
+    },
+    {
+      "link_id": 175,
       "dk_pair": [
         "superiorfrontal",
         "medialorbitofrontal"
@@ -3310,7 +4944,35 @@
       }
     },
     {
-      "link_id": 118,
+      "link_id": 176,
+      "dk_pair": [
+        "superiorfrontal",
+        "paracentral"
+      ],
+      "layers": [
+        5,
+        3
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "mPFC",
+        "额上回"
+      ],
+      "regions_b": [
+        "旁中央小叶"
+      ],
+      "roles": [
+        "perceive",
+        "attack_physical"
+      ],
+      "role_scores": {
+        "perceive": 0.5,
+        "attack_physical": 0.367,
+        "attack_mental": 0.2
+      }
+    },
+    {
+      "link_id": 177,
       "dk_pair": [
         "superiorfrontal",
         "parsopercularis"
@@ -3338,7 +5000,91 @@
       }
     },
     {
-      "link_id": 119,
+      "link_id": 178,
+      "dk_pair": [
+        "superiorfrontal",
+        "posteriorcingulate"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "mPFC",
+        "额上回"
+      ],
+      "regions_b": [
+        "后扣带"
+      ],
+      "roles": [
+        "support",
+        "attack_mental"
+      ],
+      "role_scores": {
+        "support": 0.467,
+        "attack_mental": 0.3,
+        "approach": 0.3
+      }
+    },
+    {
+      "link_id": 179,
+      "dk_pair": [
+        "superiorfrontal",
+        "precentral"
+      ],
+      "layers": [
+        5,
+        3
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "mPFC",
+        "额上回"
+      ],
+      "regions_b": [
+        "M1"
+      ],
+      "roles": [
+        "attack_physical",
+        "perceive"
+      ],
+      "role_scores": {
+        "attack_physical": 0.517,
+        "perceive": 0.35,
+        "attack_mental": 0.2
+      }
+    },
+    {
+      "link_id": 180,
+      "dk_pair": [
+        "superiorfrontal",
+        "rostralanteriorcingulate"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "mPFC",
+        "额上回"
+      ],
+      "regions_b": [
+        "ACC吻侧"
+      ],
+      "roles": [
+        "support",
+        "disrupt"
+      ],
+      "role_scores": {
+        "support": 0.517,
+        "disrupt": 0.35,
+        "attack_mental": 0.2
+      }
+    },
+    {
+      "link_id": 181,
       "dk_pair": [
         "superiorfrontal",
         "rostralmiddlefrontal"
@@ -3367,7 +5113,7 @@
       }
     },
     {
-      "link_id": 120,
+      "link_id": 182,
       "dk_pair": [
         "superiorfrontal",
         "superiorfrontal"
@@ -3396,7 +5142,7 @@
       }
     },
     {
-      "link_id": 121,
+      "link_id": 183,
       "dk_pair": [
         "superiorfrontal",
         "frontalpole"
@@ -3423,7 +5169,35 @@
       }
     },
     {
-      "link_id": 122,
+      "link_id": 184,
+      "dk_pair": [
+        "superiorfrontal",
+        "insula"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "mPFC",
+        "额上回"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "roles": [
+        "approach",
+        "disrupt"
+      ],
+      "role_scores": {
+        "approach": 0.26,
+        "disrupt": 0.26,
+        "perceive": 0.227
+      }
+    },
+    {
+      "link_id": 185,
       "dk_pair": [
         "superiorparietal",
         "superiortemporal"
@@ -3452,7 +5226,33 @@
       }
     },
     {
-      "link_id": 123,
+      "link_id": 186,
+      "dk_pair": [
+        "superiorparietal",
+        "insula"
+      ],
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "顶内沟"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "roles": [
+        "perceive"
+      ],
+      "role_scores": {
+        "perceive": 0.775,
+        "attack_mental": 0.2,
+        "approach": 0.2
+      }
+    },
+    {
+      "link_id": 187,
       "dk_pair": [
         "superiorparietal",
         "inferiorparietal"
@@ -3480,7 +5280,7 @@
       }
     },
     {
-      "link_id": 124,
+      "link_id": 188,
       "dk_pair": [
         "superiorparietal",
         "inferiortemporal"
@@ -3506,7 +5306,7 @@
       }
     },
     {
-      "link_id": 125,
+      "link_id": 189,
       "dk_pair": [
         "superiorparietal",
         "lateraloccipital"
@@ -3534,7 +5334,7 @@
       }
     },
     {
-      "link_id": 126,
+      "link_id": 190,
       "dk_pair": [
         "superiorparietal",
         "postcentral"
@@ -3561,7 +5361,7 @@
       }
     },
     {
-      "link_id": 127,
+      "link_id": 191,
       "dk_pair": [
         "superiorparietal",
         "superiorparietal"
@@ -3588,7 +5388,7 @@
       }
     },
     {
-      "link_id": 128,
+      "link_id": 192,
       "dk_pair": [
         "superiortemporal",
         "supramarginal"
@@ -3618,7 +5418,65 @@
       }
     },
     {
-      "link_id": 129,
+      "link_id": 193,
+      "dk_pair": [
+        "superiortemporal",
+        "temporalpole"
+      ],
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "Wernicke区",
+        "颞上回",
+        "颞上沟"
+      ],
+      "regions_b": [
+        "颞极"
+      ],
+      "roles": [
+        "attack_mental",
+        "perceive"
+      ],
+      "role_scores": {
+        "attack_mental": 0.75,
+        "perceive": 0.325,
+        "disrupt": 0.325
+      }
+    },
+    {
+      "link_id": 194,
+      "dk_pair": [
+        "superiortemporal",
+        "insula"
+      ],
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "Wernicke区",
+        "颞上回",
+        "颞上沟"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "roles": [
+        "attack_mental",
+        "perceive"
+      ],
+      "role_scores": {
+        "attack_mental": 0.45,
+        "perceive": 0.45,
+        "disrupt": 0.35
+      }
+    },
+    {
+      "link_id": 195,
       "dk_pair": [
         "superiortemporal",
         "precuneus"
@@ -3647,7 +5505,35 @@
       }
     },
     {
-      "link_id": 130,
+      "link_id": 196,
+      "dk_pair": [
+        "supramarginal",
+        "insula"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "TPJ",
+        "缘上回"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "roles": [
+        "disrupt",
+        "attack_mental"
+      ],
+      "role_scores": {
+        "disrupt": 0.517,
+        "attack_mental": 0.367,
+        "perceive": 0.317
+      }
+    },
+    {
+      "link_id": 197,
       "dk_pair": [
         "frontalpole",
         "medialorbitofrontal"
@@ -3676,7 +5562,7 @@
       }
     },
     {
-      "link_id": 131,
+      "link_id": 198,
       "dk_pair": [
         "frontalpole",
         "superiorfrontal"
@@ -3703,7 +5589,7 @@
       }
     },
     {
-      "link_id": 132,
+      "link_id": 199,
       "dk_pair": [
         "frontalpole",
         "frontalpole"
@@ -3729,7 +5615,7 @@
       }
     },
     {
-      "link_id": 133,
+      "link_id": 200,
       "dk_pair": [
         "temporalpole",
         "temporalpole"
@@ -3756,7 +5642,7 @@
       }
     },
     {
-      "link_id": 134,
+      "link_id": 201,
       "dk_pair": [
         "insula",
         "caudalanteriorcingulate"
@@ -3785,7 +5671,33 @@
       }
     },
     {
-      "link_id": 135,
+      "link_id": 202,
+      "dk_pair": [
+        "insula",
+        "caudalmiddlefrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "前脑岛"
+      ],
+      "regions_b": [
+        "额中回尾部"
+      ],
+      "roles": [
+        "approach"
+      ],
+      "role_scores": {
+        "approach": 0.3,
+        "perceive": 0.25,
+        "attack_mental": 0.2
+      }
+    },
+    {
+      "link_id": 203,
       "dk_pair": [
         "insula",
         "lateralorbitofrontal"
@@ -3811,7 +5723,36 @@
       }
     },
     {
-      "link_id": 136,
+      "link_id": 204,
+      "dk_pair": [
+        "insula",
+        "medialorbitofrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "前脑岛"
+      ],
+      "regions_b": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "roles": [
+        "approach",
+        "support"
+      ],
+      "role_scores": {
+        "approach": 0.5,
+        "support": 0.45,
+        "attack_mental": 0.2
+      }
+    },
+    {
+      "link_id": 205,
       "dk_pair": [
         "insula",
         "rostralanteriorcingulate"
@@ -3838,7 +5779,90 @@
       }
     },
     {
-      "link_id": 137,
+      "link_id": 206,
+      "dk_pair": [
+        "insula",
+        "superiorfrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "前脑岛"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "roles": [
+        "approach",
+        "disrupt"
+      ],
+      "role_scores": {
+        "approach": 0.26,
+        "disrupt": 0.26,
+        "perceive": 0.227
+      }
+    },
+    {
+      "link_id": 207,
+      "dk_pair": [
+        "insula",
+        "superiorparietal"
+      ],
+      "layers": [
+        2,
+        4
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "前脑岛"
+      ],
+      "regions_b": [
+        "顶内沟"
+      ],
+      "roles": [
+        "perceive"
+      ],
+      "role_scores": {
+        "perceive": 0.775,
+        "attack_mental": 0.2,
+        "approach": 0.2
+      }
+    },
+    {
+      "link_id": 208,
+      "dk_pair": [
+        "caudalanteriorcingulate",
+        "caudalmiddlefrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "regions_b": [
+        "额中回尾部"
+      ],
+      "roles": [
+        "approach",
+        "support"
+      ],
+      "role_scores": {
+        "approach": 0.5,
+        "support": 0.325,
+        "attack_mental": 0.2
+      }
+    },
+    {
+      "link_id": 209,
       "dk_pair": [
         "caudalanteriorcingulate",
         "lateralorbitofrontal"
@@ -3867,7 +5891,38 @@
       }
     },
     {
-      "link_id": 138,
+      "link_id": 210,
+      "dk_pair": [
+        "caudalanteriorcingulate",
+        "medialorbitofrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "regions_b": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "roles": [
+        "support",
+        "approach"
+      ],
+      "role_scores": {
+        "support": 0.55,
+        "approach": 0.3,
+        "attack_mental": 0.2
+      }
+    },
+    {
+      "link_id": 211,
       "dk_pair": [
         "caudalanteriorcingulate",
         "parahippocampal"
@@ -3896,7 +5951,36 @@
       }
     },
     {
-      "link_id": 139,
+      "link_id": 212,
+      "dk_pair": [
+        "caudalanteriorcingulate",
+        "parsopercularis"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "regions_b": [
+        "Broca区"
+      ],
+      "roles": [
+        "attack_mental",
+        "support"
+      ],
+      "role_scores": {
+        "attack_mental": 0.325,
+        "support": 0.325,
+        "disrupt": 0.3
+      }
+    },
+    {
+      "link_id": 213,
       "dk_pair": [
         "caudalanteriorcingulate",
         "posteriorcingulate"
@@ -3925,7 +6009,36 @@
       }
     },
     {
-      "link_id": 140,
+      "link_id": 214,
+      "dk_pair": [
+        "caudalanteriorcingulate",
+        "precuneus"
+      ],
+      "layers": [
+        2,
+        4
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "regions_b": [
+        "楔前叶"
+      ],
+      "roles": [
+        "support",
+        "perceive"
+      ],
+      "role_scores": {
+        "support": 0.75,
+        "perceive": 0.325,
+        "attack_mental": 0.2
+      }
+    },
+    {
+      "link_id": 215,
       "dk_pair": [
         "caudalanteriorcingulate",
         "rostralanteriorcingulate"
@@ -3954,7 +6067,66 @@
       }
     },
     {
-      "link_id": 141,
+      "link_id": 216,
+      "dk_pair": [
+        "caudalanteriorcingulate",
+        "rostralmiddlefrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "regions_b": [
+        "dlPFC",
+        "前额叶极",
+        "前额叶极·FPN"
+      ],
+      "roles": [
+        "support"
+      ],
+      "role_scores": {
+        "support": 0.45,
+        "attack_mental": 0.2,
+        "approach": 0.2
+      }
+    },
+    {
+      "link_id": 217,
+      "dk_pair": [
+        "caudalanteriorcingulate",
+        "superiorfrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "ACC",
+        "ACC背侧",
+        "前额叶极·SN"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "roles": [
+        "support"
+      ],
+      "role_scores": {
+        "support": 0.35,
+        "approach": 0.25,
+        "disrupt": 0.25
+      }
+    },
+    {
+      "link_id": 218,
       "dk_pair": [
         "caudalanteriorcingulate",
         "insula"
@@ -3983,7 +6155,7 @@
       }
     },
     {
-      "link_id": 142,
+      "link_id": 219,
       "dk_pair": [
         "caudalmiddlefrontal",
         "inferiorparietal"
@@ -4011,7 +6183,7 @@
       }
     },
     {
-      "link_id": 143,
+      "link_id": 220,
       "dk_pair": [
         "caudalmiddlefrontal",
         "inferiortemporal"
@@ -4037,7 +6209,7 @@
       }
     },
     {
-      "link_id": 144,
+      "link_id": 221,
       "dk_pair": [
         "caudalmiddlefrontal",
         "parsopercularis"
@@ -4063,7 +6235,7 @@
       }
     },
     {
-      "link_id": 145,
+      "link_id": 222,
       "dk_pair": [
         "caudalmiddlefrontal",
         "rostralmiddlefrontal"
@@ -4091,7 +6263,7 @@
       }
     },
     {
-      "link_id": 146,
+      "link_id": 223,
       "dk_pair": [
         "caudalmiddlefrontal",
         "superiorfrontal"
@@ -4118,7 +6290,7 @@
       }
     },
     {
-      "link_id": 147,
+      "link_id": 224,
       "dk_pair": [
         "caudalmiddlefrontal",
         "superiorparietal"
@@ -4144,7 +6316,33 @@
       }
     },
     {
-      "link_id": 148,
+      "link_id": 225,
+      "dk_pair": [
+        "caudalmiddlefrontal",
+        "insula"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "额中回尾部"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "roles": [
+        "approach"
+      ],
+      "role_scores": {
+        "approach": 0.3,
+        "perceive": 0.25,
+        "attack_mental": 0.2
+      }
+    },
+    {
+      "link_id": 226,
       "dk_pair": [
         "fusiform",
         "inferiorparietal"
@@ -4172,7 +6370,7 @@
       }
     },
     {
-      "link_id": 149,
+      "link_id": 227,
       "dk_pair": [
         "fusiform",
         "inferiortemporal"
@@ -4199,7 +6397,7 @@
       }
     },
     {
-      "link_id": 150,
+      "link_id": 228,
       "dk_pair": [
         "fusiform",
         "lateraloccipital"
@@ -4227,7 +6425,7 @@
       }
     },
     {
-      "link_id": 151,
+      "link_id": 229,
       "dk_pair": [
         "fusiform",
         "middletemporal"
@@ -4254,7 +6452,34 @@
       }
     },
     {
-      "link_id": 152,
+      "link_id": 230,
+      "dk_pair": [
+        "fusiform",
+        "parahippocampal"
+      ],
+      "layers": [
+        4,
+        1
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "纺锤体回"
+      ],
+      "regions_b": [
+        "海马旁回"
+      ],
+      "roles": [
+        "perceive",
+        "flee"
+      ],
+      "role_scores": {
+        "perceive": 0.85,
+        "flee": 0.455,
+        "attack_mental": 0.35
+      }
+    },
+    {
+      "link_id": 231,
       "dk_pair": [
         "fusiform",
         "precuneus"
@@ -4281,7 +6506,7 @@
       }
     },
     {
-      "link_id": 153,
+      "link_id": 232,
       "dk_pair": [
         "fusiform",
         "superiorparietal"
@@ -4308,7 +6533,7 @@
       }
     },
     {
-      "link_id": 154,
+      "link_id": 233,
       "dk_pair": [
         "fusiform",
         "superiortemporal"
@@ -4337,7 +6562,7 @@
       }
     },
     {
-      "link_id": 155,
+      "link_id": 234,
       "dk_pair": [
         "inferiorparietal",
         "inferiortemporal"
@@ -4365,7 +6590,7 @@
       }
     },
     {
-      "link_id": 156,
+      "link_id": 235,
       "dk_pair": [
         "inferiorparietal",
         "lateraloccipital"
@@ -4394,7 +6619,7 @@
       }
     },
     {
-      "link_id": 157,
+      "link_id": 236,
       "dk_pair": [
         "inferiorparietal",
         "medialorbitofrontal"
@@ -4424,7 +6649,7 @@
       }
     },
     {
-      "link_id": 158,
+      "link_id": 237,
       "dk_pair": [
         "inferiorparietal",
         "middletemporal"
@@ -4452,7 +6677,35 @@
       }
     },
     {
-      "link_id": 159,
+      "link_id": 238,
+      "dk_pair": [
+        "inferiorparietal",
+        "parahippocampal"
+      ],
+      "layers": [
+        4,
+        1
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "角回",
+        "顶叶"
+      ],
+      "regions_b": [
+        "海马旁回"
+      ],
+      "roles": [
+        "perceive",
+        "attack_mental"
+      ],
+      "role_scores": {
+        "perceive": 0.7,
+        "attack_mental": 0.667,
+        "flee": 0.26
+      }
+    },
+    {
+      "link_id": 239,
       "dk_pair": [
         "inferiorparietal",
         "parsopercularis"
@@ -4480,7 +6733,7 @@
       }
     },
     {
-      "link_id": 160,
+      "link_id": 240,
       "dk_pair": [
         "inferiorparietal",
         "postcentral"
@@ -4508,7 +6761,7 @@
       }
     },
     {
-      "link_id": 161,
+      "link_id": 241,
       "dk_pair": [
         "inferiorparietal",
         "precentral"
@@ -4536,7 +6789,7 @@
       }
     },
     {
-      "link_id": 162,
+      "link_id": 242,
       "dk_pair": [
         "inferiorparietal",
         "rostralmiddlefrontal"
@@ -4566,7 +6819,7 @@
       }
     },
     {
-      "link_id": 163,
+      "link_id": 243,
       "dk_pair": [
         "inferiorparietal",
         "superiorfrontal"
@@ -4595,7 +6848,7 @@
       }
     },
     {
-      "link_id": 164,
+      "link_id": 244,
       "dk_pair": [
         "inferiorparietal",
         "superiorparietal"
@@ -4623,7 +6876,7 @@
       }
     },
     {
-      "link_id": 165,
+      "link_id": 245,
       "dk_pair": [
         "inferiorparietal",
         "supramarginal"
@@ -4652,7 +6905,35 @@
       }
     },
     {
-      "link_id": 166,
+      "link_id": 246,
+      "dk_pair": [
+        "inferiorparietal",
+        "insula"
+      ],
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "角回",
+        "顶叶"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "roles": [
+        "perceive",
+        "attack_mental"
+      ],
+      "role_scores": {
+        "perceive": 0.85,
+        "attack_mental": 0.367,
+        "approach": 0.275
+      }
+    },
+    {
+      "link_id": 247,
       "dk_pair": [
         "inferiortemporal",
         "middletemporal"
@@ -4679,7 +6960,34 @@
       }
     },
     {
-      "link_id": 167,
+      "link_id": 248,
+      "dk_pair": [
+        "inferiortemporal",
+        "parahippocampal"
+      ],
+      "layers": [
+        4,
+        1
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "颞下回"
+      ],
+      "regions_b": [
+        "海马旁回"
+      ],
+      "roles": [
+        "perceive",
+        "attack_mental"
+      ],
+      "role_scores": {
+        "perceive": 0.7,
+        "attack_mental": 0.5,
+        "flee": 0.26
+      }
+    },
+    {
+      "link_id": 249,
       "dk_pair": [
         "inferiortemporal",
         "superiorparietal"
@@ -4705,7 +7013,7 @@
       }
     },
     {
-      "link_id": 168,
+      "link_id": 250,
       "dk_pair": [
         "inferiortemporal",
         "supramarginal"
@@ -4733,7 +7041,89 @@
       }
     },
     {
-      "link_id": 169,
+      "link_id": 251,
+      "dk_pair": [
+        "inferiortemporal",
+        "insula"
+      ],
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "颞下回"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "roles": [
+        "perceive"
+      ],
+      "role_scores": {
+        "perceive": 0.7,
+        "attack_mental": 0.2,
+        "approach": 0.2
+      }
+    },
+    {
+      "link_id": 252,
+      "dk_pair": [
+        "lateraloccipital",
+        "lateralorbitofrontal"
+      ],
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "外侧枕叶",
+        "枕顶联合"
+      ],
+      "regions_b": [
+        "OFC"
+      ],
+      "roles": [
+        "perceive",
+        "flee"
+      ],
+      "role_scores": {
+        "perceive": 0.833,
+        "flee": 0.39,
+        "approach": 0.367
+      }
+    },
+    {
+      "link_id": 253,
+      "dk_pair": [
+        "lateraloccipital",
+        "parahippocampal"
+      ],
+      "layers": [
+        4,
+        1
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "外侧枕叶",
+        "枕顶联合"
+      ],
+      "regions_b": [
+        "海马旁回"
+      ],
+      "roles": [
+        "perceive",
+        "flee"
+      ],
+      "role_scores": {
+        "perceive": 0.85,
+        "flee": 0.455,
+        "defend": 0.24
+      }
+    },
+    {
+      "link_id": 254,
       "dk_pair": [
         "lateraloccipital",
         "rostralmiddlefrontal"
@@ -4763,7 +7153,7 @@
       }
     },
     {
-      "link_id": 170,
+      "link_id": 255,
       "dk_pair": [
         "lateraloccipital",
         "superiorparietal"
@@ -4791,7 +7181,7 @@
       }
     },
     {
-      "link_id": 171,
+      "link_id": 256,
       "dk_pair": [
         "lateraloccipital",
         "superiortemporal"
@@ -4821,7 +7211,90 @@
       }
     },
     {
-      "link_id": 172,
+      "link_id": 257,
+      "dk_pair": [
+        "lateraloccipital",
+        "insula"
+      ],
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "外侧枕叶",
+        "枕顶联合"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "roles": [
+        "perceive"
+      ],
+      "role_scores": {
+        "perceive": 1.0,
+        "attack_mental": 0.2,
+        "approach": 0.2
+      }
+    },
+    {
+      "link_id": 258,
+      "dk_pair": [
+        "lateralorbitofrontal",
+        "medialorbitofrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "OFC"
+      ],
+      "regions_b": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "roles": [
+        "support",
+        "approach"
+      ],
+      "role_scores": {
+        "support": 0.45,
+        "approach": 0.425,
+        "attack_mental": 0.3
+      }
+    },
+    {
+      "link_id": 259,
+      "dk_pair": [
+        "lateralorbitofrontal",
+        "middletemporal"
+      ],
+      "layers": [
+        2,
+        4
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "OFC"
+      ],
+      "regions_b": [
+        "颞中回"
+      ],
+      "roles": [
+        "attack_mental",
+        "approach"
+      ],
+      "role_scores": {
+        "attack_mental": 0.75,
+        "approach": 0.45,
+        "perceive": 0.2
+      }
+    },
+    {
+      "link_id": 260,
       "dk_pair": [
         "lateralorbitofrontal",
         "parahippocampal"
@@ -4848,7 +7321,7 @@
       }
     },
     {
-      "link_id": 173,
+      "link_id": 261,
       "dk_pair": [
         "lateralorbitofrontal",
         "posteriorcingulate"
@@ -4875,7 +7348,62 @@
       }
     },
     {
-      "link_id": 174,
+      "link_id": 262,
+      "dk_pair": [
+        "lateralorbitofrontal",
+        "precuneus"
+      ],
+      "layers": [
+        2,
+        4
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "OFC"
+      ],
+      "regions_b": [
+        "楔前叶"
+      ],
+      "roles": [
+        "attack_mental",
+        "approach"
+      ],
+      "role_scores": {
+        "attack_mental": 0.5,
+        "approach": 0.45,
+        "perceive": 0.45
+      }
+    },
+    {
+      "link_id": 263,
+      "dk_pair": [
+        "lateralorbitofrontal",
+        "superiorfrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "OFC"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "roles": [
+        "approach",
+        "attack_mental"
+      ],
+      "role_scores": {
+        "approach": 0.467,
+        "attack_mental": 0.3,
+        "support": 0.2
+      }
+    },
+    {
+      "link_id": 264,
       "dk_pair": [
         "lateralorbitofrontal",
         "insula"
@@ -4901,7 +7429,36 @@
       }
     },
     {
-      "link_id": 175,
+      "link_id": 265,
+      "dk_pair": [
+        "medialorbitofrontal",
+        "posteriorcingulate"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "regions_b": [
+        "后扣带"
+      ],
+      "roles": [
+        "support",
+        "attack_mental"
+      ],
+      "role_scores": {
+        "support": 0.675,
+        "attack_mental": 0.3,
+        "approach": 0.3
+      }
+    },
+    {
+      "link_id": 266,
       "dk_pair": [
         "medialorbitofrontal",
         "precuneus"
@@ -4930,7 +7487,35 @@
       }
     },
     {
-      "link_id": 176,
+      "link_id": 267,
+      "dk_pair": [
+        "medialorbitofrontal",
+        "rostralanteriorcingulate"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "regions_b": [
+        "ACC吻侧"
+      ],
+      "roles": [
+        "support"
+      ],
+      "role_scores": {
+        "support": 0.875,
+        "attack_mental": 0.2,
+        "approach": 0.2
+      }
+    },
+    {
+      "link_id": 268,
       "dk_pair": [
         "medialorbitofrontal",
         "superiorfrontal"
@@ -4960,7 +7545,7 @@
       }
     },
     {
-      "link_id": 177,
+      "link_id": 269,
       "dk_pair": [
         "medialorbitofrontal",
         "frontalpole"
@@ -4989,7 +7574,92 @@
       }
     },
     {
-      "link_id": 178,
+      "link_id": 270,
+      "dk_pair": [
+        "medialorbitofrontal",
+        "temporalpole"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "regions_b": [
+        "颞极"
+      ],
+      "roles": [
+        "attack_mental",
+        "support"
+      ],
+      "role_scores": {
+        "attack_mental": 0.5,
+        "support": 0.45,
+        "disrupt": 0.325
+      }
+    },
+    {
+      "link_id": 271,
+      "dk_pair": [
+        "medialorbitofrontal",
+        "insula"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "roles": [
+        "approach",
+        "support"
+      ],
+      "role_scores": {
+        "approach": 0.5,
+        "support": 0.45,
+        "attack_mental": 0.2
+      }
+    },
+    {
+      "link_id": 272,
+      "dk_pair": [
+        "middletemporal",
+        "parahippocampal"
+      ],
+      "layers": [
+        4,
+        1
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "颞中回"
+      ],
+      "regions_b": [
+        "海马旁回"
+      ],
+      "roles": [
+        "attack_mental",
+        "perceive"
+      ],
+      "role_scores": {
+        "attack_mental": 0.75,
+        "perceive": 0.45,
+        "flee": 0.26
+      }
+    },
+    {
+      "link_id": 273,
       "dk_pair": [
         "middletemporal",
         "superiortemporal"
@@ -5018,7 +7688,7 @@
       }
     },
     {
-      "link_id": 179,
+      "link_id": 274,
       "dk_pair": [
         "middletemporal",
         "supramarginal"
@@ -5046,7 +7716,89 @@
       }
     },
     {
-      "link_id": 180,
+      "link_id": 275,
+      "dk_pair": [
+        "middletemporal",
+        "temporalpole"
+      ],
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "颞中回"
+      ],
+      "regions_b": [
+        "颞极"
+      ],
+      "roles": [
+        "attack_mental",
+        "disrupt"
+      ],
+      "role_scores": {
+        "attack_mental": 0.75,
+        "disrupt": 0.45,
+        "approach": 0.2
+      }
+    },
+    {
+      "link_id": 276,
+      "dk_pair": [
+        "parahippocampal",
+        "precuneus"
+      ],
+      "layers": [
+        1,
+        4
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "海马旁回"
+      ],
+      "regions_b": [
+        "楔前叶"
+      ],
+      "roles": [
+        "perceive",
+        "support"
+      ],
+      "role_scores": {
+        "perceive": 0.7,
+        "support": 0.4,
+        "attack_mental": 0.35
+      }
+    },
+    {
+      "link_id": 277,
+      "dk_pair": [
+        "parahippocampal",
+        "superiorfrontal"
+      ],
+      "layers": [
+        1,
+        5
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "海马旁回"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "roles": [
+        "flee",
+        "attack_mental"
+      ],
+      "role_scores": {
+        "flee": 0.39,
+        "attack_mental": 0.3,
+        "support": 0.3
+      }
+    },
+    {
+      "link_id": 278,
       "dk_pair": [
         "paracentral",
         "precentral"
@@ -5072,7 +7824,62 @@
       }
     },
     {
-      "link_id": 181,
+      "link_id": 279,
+      "dk_pair": [
+        "paracentral",
+        "superiorfrontal"
+      ],
+      "layers": [
+        3,
+        5
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "旁中央小叶"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "roles": [
+        "perceive",
+        "attack_physical"
+      ],
+      "role_scores": {
+        "perceive": 0.5,
+        "attack_physical": 0.367,
+        "attack_mental": 0.2
+      }
+    },
+    {
+      "link_id": 280,
+      "dk_pair": [
+        "parsopercularis",
+        "postcentral"
+      ],
+      "layers": [
+        5,
+        3
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "Broca区"
+      ],
+      "regions_b": [
+        "S1"
+      ],
+      "roles": [
+        "disrupt",
+        "attack_physical"
+      ],
+      "role_scores": {
+        "disrupt": 0.5,
+        "attack_physical": 0.45,
+        "attack_mental": 0.45
+      }
+    },
+    {
+      "link_id": 281,
       "dk_pair": [
         "parsopercularis",
         "rostralmiddlefrontal"
@@ -5101,7 +7908,7 @@
       }
     },
     {
-      "link_id": 182,
+      "link_id": 282,
       "dk_pair": [
         "parsopercularis",
         "superiorfrontal"
@@ -5129,7 +7936,7 @@
       }
     },
     {
-      "link_id": 183,
+      "link_id": 283,
       "dk_pair": [
         "parsopercularis",
         "superiorparietal"
@@ -5156,7 +7963,7 @@
       }
     },
     {
-      "link_id": 184,
+      "link_id": 284,
       "dk_pair": [
         "parsopercularis",
         "supramarginal"
@@ -5184,7 +7991,34 @@
       }
     },
     {
-      "link_id": 185,
+      "link_id": 285,
+      "dk_pair": [
+        "parsopercularis",
+        "insula"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "Broca区"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "roles": [
+        "attack_mental",
+        "perceive"
+      ],
+      "role_scores": {
+        "attack_mental": 0.45,
+        "perceive": 0.31,
+        "disrupt": 0.26
+      }
+    },
+    {
+      "link_id": 286,
       "dk_pair": [
         "postcentral",
         "precentral"
@@ -5210,7 +8044,7 @@
       }
     },
     {
-      "link_id": 186,
+      "link_id": 287,
       "dk_pair": [
         "postcentral",
         "superiorparietal"
@@ -5237,7 +8071,118 @@
       }
     },
     {
-      "link_id": 187,
+      "link_id": 288,
+      "dk_pair": [
+        "posteriorcingulate",
+        "precuneus"
+      ],
+      "layers": [
+        2,
+        4
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "后扣带"
+      ],
+      "regions_b": [
+        "楔前叶"
+      ],
+      "roles": [
+        "support",
+        "perceive"
+      ],
+      "role_scores": {
+        "support": 0.85,
+        "perceive": 0.45,
+        "attack_mental": 0.35
+      }
+    },
+    {
+      "link_id": 289,
+      "dk_pair": [
+        "posteriorcingulate",
+        "superiorfrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "后扣带"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "roles": [
+        "support",
+        "attack_mental"
+      ],
+      "role_scores": {
+        "support": 0.467,
+        "attack_mental": 0.3,
+        "approach": 0.3
+      }
+    },
+    {
+      "link_id": 290,
+      "dk_pair": [
+        "precentral",
+        "superiorfrontal"
+      ],
+      "layers": [
+        3,
+        5
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "M1"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "roles": [
+        "attack_physical",
+        "perceive"
+      ],
+      "role_scores": {
+        "attack_physical": 0.517,
+        "perceive": 0.35,
+        "attack_mental": 0.2
+      }
+    },
+    {
+      "link_id": 291,
+      "dk_pair": [
+        "precentral",
+        "supramarginal"
+      ],
+      "layers": [
+        3,
+        5
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "M1"
+      ],
+      "regions_b": [
+        "TPJ",
+        "缘上回"
+      ],
+      "roles": [
+        "perceive",
+        "attack_physical"
+      ],
+      "role_scores": {
+        "perceive": 0.5,
+        "attack_physical": 0.367,
+        "attack_mental": 0.367
+      }
+    },
+    {
+      "link_id": 292,
       "dk_pair": [
         "precentral",
         "insula"
@@ -5264,7 +8209,34 @@
       }
     },
     {
-      "link_id": 188,
+      "link_id": 293,
+      "dk_pair": [
+        "precuneus",
+        "rostralanteriorcingulate"
+      ],
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "楔前叶"
+      ],
+      "regions_b": [
+        "ACC吻侧"
+      ],
+      "roles": [
+        "support",
+        "perceive"
+      ],
+      "role_scores": {
+        "support": 1.0,
+        "perceive": 0.45,
+        "attack_mental": 0.2
+      }
+    },
+    {
+      "link_id": 294,
       "dk_pair": [
         "precuneus",
         "rostralmiddlefrontal"
@@ -5293,7 +8265,7 @@
       }
     },
     {
-      "link_id": 189,
+      "link_id": 295,
       "dk_pair": [
         "precuneus",
         "superiorfrontal"
@@ -5321,7 +8293,7 @@
       }
     },
     {
-      "link_id": 190,
+      "link_id": 296,
       "dk_pair": [
         "precuneus",
         "superiortemporal"
@@ -5350,7 +8322,62 @@
       }
     },
     {
-      "link_id": 191,
+      "link_id": 297,
+      "dk_pair": [
+        "precuneus",
+        "temporalpole"
+      ],
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "楔前叶"
+      ],
+      "regions_b": [
+        "颞极"
+      ],
+      "roles": [
+        "attack_mental",
+        "perceive"
+      ],
+      "role_scores": {
+        "attack_mental": 0.5,
+        "perceive": 0.45,
+        "support": 0.45
+      }
+    },
+    {
+      "link_id": 298,
+      "dk_pair": [
+        "rostralanteriorcingulate",
+        "superiorfrontal"
+      ],
+      "layers": [
+        2,
+        5
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "ACC吻侧"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "roles": [
+        "support",
+        "disrupt"
+      ],
+      "role_scores": {
+        "support": 0.517,
+        "disrupt": 0.35,
+        "attack_mental": 0.2
+      }
+    },
+    {
+      "link_id": 299,
       "dk_pair": [
         "rostralanteriorcingulate",
         "insula"
@@ -5377,7 +8404,7 @@
       }
     },
     {
-      "link_id": 192,
+      "link_id": 300,
       "dk_pair": [
         "rostralmiddlefrontal",
         "superiorfrontal"
@@ -5406,7 +8433,7 @@
       }
     },
     {
-      "link_id": 193,
+      "link_id": 301,
       "dk_pair": [
         "rostralmiddlefrontal",
         "superiorparietal"
@@ -5435,7 +8462,35 @@
       }
     },
     {
-      "link_id": 194,
+      "link_id": 302,
+      "dk_pair": [
+        "rostralmiddlefrontal",
+        "insula"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "dlPFC",
+        "前额叶极",
+        "前额叶极·FPN"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "roles": [
+        "support"
+      ],
+      "role_scores": {
+        "support": 0.45,
+        "perceive": 0.225,
+        "attack_mental": 0.2
+      }
+    },
+    {
+      "link_id": 303,
       "dk_pair": [
         "superiorfrontal",
         "superiorparietal"
@@ -5462,7 +8517,7 @@
       }
     },
     {
-      "link_id": 195,
+      "link_id": 304,
       "dk_pair": [
         "superiorfrontal",
         "frontalpole"
@@ -5489,7 +8544,35 @@
       }
     },
     {
-      "link_id": 196,
+      "link_id": 305,
+      "dk_pair": [
+        "superiorfrontal",
+        "insula"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "mPFC",
+        "额上回"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "roles": [
+        "approach",
+        "disrupt"
+      ],
+      "role_scores": {
+        "approach": 0.26,
+        "disrupt": 0.26,
+        "perceive": 0.227
+      }
+    },
+    {
+      "link_id": 306,
       "dk_pair": [
         "superiorparietal",
         "superiortemporal"
@@ -5518,7 +8601,33 @@
       }
     },
     {
-      "link_id": 197,
+      "link_id": 307,
+      "dk_pair": [
+        "superiorparietal",
+        "insula"
+      ],
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "顶内沟"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "roles": [
+        "perceive"
+      ],
+      "role_scores": {
+        "perceive": 0.775,
+        "attack_mental": 0.2,
+        "approach": 0.2
+      }
+    },
+    {
+      "link_id": 308,
       "dk_pair": [
         "superiortemporal",
         "supramarginal"
@@ -5548,7 +8657,93 @@
       }
     },
     {
-      "link_id": 198,
+      "link_id": 309,
+      "dk_pair": [
+        "superiortemporal",
+        "temporalpole"
+      ],
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "Wernicke区",
+        "颞上回",
+        "颞上沟"
+      ],
+      "regions_b": [
+        "颞极"
+      ],
+      "roles": [
+        "attack_mental",
+        "perceive"
+      ],
+      "role_scores": {
+        "attack_mental": 0.75,
+        "perceive": 0.325,
+        "disrupt": 0.325
+      }
+    },
+    {
+      "link_id": 310,
+      "dk_pair": [
+        "superiortemporal",
+        "insula"
+      ],
+      "layers": [
+        4,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "Wernicke区",
+        "颞上回",
+        "颞上沟"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "roles": [
+        "attack_mental",
+        "perceive"
+      ],
+      "role_scores": {
+        "attack_mental": 0.45,
+        "perceive": 0.45,
+        "disrupt": 0.35
+      }
+    },
+    {
+      "link_id": 311,
+      "dk_pair": [
+        "supramarginal",
+        "insula"
+      ],
+      "layers": [
+        5,
+        2
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "TPJ",
+        "缘上回"
+      ],
+      "regions_b": [
+        "前脑岛"
+      ],
+      "roles": [
+        "disrupt",
+        "attack_mental"
+      ],
+      "role_scores": {
+        "disrupt": 0.517,
+        "attack_mental": 0.367,
+        "perceive": 0.317
+      }
+    },
+    {
+      "link_id": 312,
       "dk_pair": [
         "PAG",
         "amygdala"
@@ -5575,7 +8770,7 @@
       }
     },
     {
-      "link_id": 199,
+      "link_id": 313,
       "dk_pair": [
         "PAG",
         "hypothalamus"
@@ -5602,7 +8797,7 @@
       }
     },
     {
-      "link_id": 200,
+      "link_id": 314,
       "dk_pair": [
         "PAG",
         "thalamus"
@@ -5629,7 +8824,7 @@
       }
     },
     {
-      "link_id": 201,
+      "link_id": 315,
       "dk_pair": [
         "PAG",
         "insula"
@@ -5656,7 +8851,7 @@
       }
     },
     {
-      "link_id": 202,
+      "link_id": 316,
       "dk_pair": [
         "PAG",
         "caudalanteriorcingulate"
@@ -5685,7 +8880,7 @@
       }
     },
     {
-      "link_id": 203,
+      "link_id": 317,
       "dk_pair": [
         "上丘",
         "amygdala"
@@ -5711,7 +8906,7 @@
       }
     },
     {
-      "link_id": 204,
+      "link_id": 318,
       "dk_pair": [
         "上丘",
         "thalamus"
@@ -5737,7 +8932,7 @@
       }
     },
     {
-      "link_id": 205,
+      "link_id": 319,
       "dk_pair": [
         "中缝背核",
         "hippocampus"
@@ -5764,7 +8959,7 @@
       }
     },
     {
-      "link_id": 206,
+      "link_id": 320,
       "dk_pair": [
         "中缝背核",
         "amygdala"
@@ -5791,7 +8986,7 @@
       }
     },
     {
-      "link_id": 207,
+      "link_id": 321,
       "dk_pair": [
         "中缝背核",
         "septum"
@@ -5818,7 +9013,7 @@
       }
     },
     {
-      "link_id": 208,
+      "link_id": 322,
       "dk_pair": [
         "中缝背核",
         "insula"
@@ -5845,7 +9040,7 @@
       }
     },
     {
-      "link_id": 209,
+      "link_id": 323,
       "dk_pair": [
         "中缝背核",
         "caudalanteriorcingulate"
@@ -5874,7 +9069,7 @@
       }
     },
     {
-      "link_id": 210,
+      "link_id": 324,
       "dk_pair": [
         "中缝正中核",
         "hippocampus"
@@ -5901,7 +9096,7 @@
       }
     },
     {
-      "link_id": 211,
+      "link_id": 325,
       "dk_pair": [
         "中缝正中核",
         "septum"
@@ -5928,7 +9123,7 @@
       }
     },
     {
-      "link_id": 212,
+      "link_id": 326,
       "dk_pair": [
         "蓝斑",
         "insula"
@@ -5955,7 +9150,7 @@
       }
     },
     {
-      "link_id": 213,
+      "link_id": 327,
       "dk_pair": [
         "蓝斑",
         "caudalanteriorcingulate"
@@ -5984,7 +9179,118 @@
       }
     },
     {
-      "link_id": 214,
+      "link_id": 328,
+      "dk_pair": [
+        "蓝斑",
+        "rostralmiddlefrontal"
+      ],
+      "layers": [
+        0,
+        5
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "蓝斑"
+      ],
+      "regions_b": [
+        "dlPFC",
+        "前额叶极",
+        "前额叶极·FPN"
+      ],
+      "roles": [
+        "support",
+        "defend"
+      ],
+      "role_scores": {
+        "support": 0.575,
+        "defend": 0.39,
+        "flee": 0.26
+      }
+    },
+    {
+      "link_id": 329,
+      "dk_pair": [
+        "蓝斑",
+        "superiorfrontal"
+      ],
+      "layers": [
+        0,
+        5
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "蓝斑"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "roles": [
+        "defend",
+        "support"
+      ],
+      "role_scores": {
+        "defend": 0.44,
+        "support": 0.367,
+        "flee": 0.26
+      }
+    },
+    {
+      "link_id": 330,
+      "dk_pair": [
+        "蓝斑",
+        "precentral"
+      ],
+      "layers": [
+        0,
+        3
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "蓝斑"
+      ],
+      "regions_b": [
+        "M1"
+      ],
+      "roles": [
+        "defend",
+        "attack_physical"
+      ],
+      "role_scores": {
+        "defend": 0.54,
+        "attack_physical": 0.45,
+        "support": 0.45
+      }
+    },
+    {
+      "link_id": 331,
+      "dk_pair": [
+        "蓝斑",
+        "pericalcarine"
+      ],
+      "layers": [
+        0,
+        3
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "蓝斑"
+      ],
+      "regions_b": [
+        "枕叶 V1"
+      ],
+      "roles": [
+        "defend",
+        "perceive"
+      ],
+      "role_scores": {
+        "defend": 0.54,
+        "perceive": 0.45,
+        "support": 0.45
+      }
+    },
+    {
+      "link_id": 332,
       "dk_pair": [
         "蓝斑",
         "amygdala"
@@ -6011,7 +9317,7 @@
       }
     },
     {
-      "link_id": 215,
+      "link_id": 333,
       "dk_pair": [
         "蓝斑",
         "thalamus"
@@ -6038,7 +9344,7 @@
       }
     },
     {
-      "link_id": 216,
+      "link_id": 334,
       "dk_pair": [
         "蓝斑",
         "hippocampus"
@@ -6065,7 +9371,34 @@
       }
     },
     {
-      "link_id": 217,
+      "link_id": 335,
+      "dk_pair": [
+        "蓝斑",
+        "entorhinal"
+      ],
+      "layers": [
+        0,
+        4
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "蓝斑"
+      ],
+      "regions_b": [
+        "内嗅皮层"
+      ],
+      "roles": [
+        "defend",
+        "perceive"
+      ],
+      "role_scores": {
+        "defend": 0.54,
+        "perceive": 0.45,
+        "support": 0.45
+      }
+    },
+    {
+      "link_id": 336,
       "dk_pair": [
         "VTA",
         "accumbens"
@@ -6092,7 +9425,64 @@
       }
     },
     {
-      "link_id": 218,
+      "link_id": 337,
+      "dk_pair": [
+        "VTA",
+        "medialorbitofrontal"
+      ],
+      "layers": [
+        0,
+        5
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "VTA"
+      ],
+      "regions_b": [
+        "DMN+OFC",
+        "vmPFC",
+        "前额叶极·DMN"
+      ],
+      "roles": [
+        "support",
+        "approach"
+      ],
+      "role_scores": {
+        "support": 0.45,
+        "approach": 0.325,
+        "flee": 0.26
+      }
+    },
+    {
+      "link_id": 338,
+      "dk_pair": [
+        "VTA",
+        "superiorfrontal"
+      ],
+      "layers": [
+        0,
+        5
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "VTA"
+      ],
+      "regions_b": [
+        "mPFC",
+        "额上回"
+      ],
+      "roles": [
+        "approach",
+        "flee"
+      ],
+      "role_scores": {
+        "approach": 0.367,
+        "flee": 0.26,
+        "defend": 0.24
+      }
+    },
+    {
+      "link_id": 339,
       "dk_pair": [
         "VTA",
         "amygdala"
@@ -6119,7 +9509,7 @@
       }
     },
     {
-      "link_id": 219,
+      "link_id": 340,
       "dk_pair": [
         "VTA",
         "hippocampus"
@@ -6146,7 +9536,7 @@
       }
     },
     {
-      "link_id": 220,
+      "link_id": 341,
       "dk_pair": [
         "VTA",
         "caudalanteriorcingulate"
@@ -6175,7 +9565,7 @@
       }
     },
     {
-      "link_id": 221,
+      "link_id": 342,
       "dk_pair": [
         "VTA",
         "insula"
@@ -6202,7 +9592,7 @@
       }
     },
     {
-      "link_id": 222,
+      "link_id": 343,
       "dk_pair": [
         "黑质致密部",
         "caudate"
@@ -6229,7 +9619,7 @@
       }
     },
     {
-      "link_id": 223,
+      "link_id": 344,
       "dk_pair": [
         "黑质致密部",
         "putamen"
@@ -6256,7 +9646,7 @@
       }
     },
     {
-      "link_id": 224,
+      "link_id": 345,
       "dk_pair": [
         "黑质致密部",
         "accumbens"
@@ -6283,7 +9673,7 @@
       }
     },
     {
-      "link_id": 225,
+      "link_id": 346,
       "dk_pair": [
         "脑桥网状核",
         "thalamus"
@@ -6310,7 +9700,61 @@
       }
     },
     {
-      "link_id": 226,
+      "link_id": 347,
+      "dk_pair": [
+        "脑桥网状核",
+        "precentral"
+      ],
+      "layers": [
+        0,
+        3
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "脑桥网状核"
+      ],
+      "regions_b": [
+        "M1"
+      ],
+      "roles": [
+        "attack_physical",
+        "defend"
+      ],
+      "role_scores": {
+        "attack_physical": 0.7,
+        "defend": 0.54,
+        "flee": 0.26
+      }
+    },
+    {
+      "link_id": 348,
+      "dk_pair": [
+        "脑桥网状核",
+        "postcentral"
+      ],
+      "layers": [
+        0,
+        3
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "脑桥网状核"
+      ],
+      "regions_b": [
+        "S1"
+      ],
+      "roles": [
+        "attack_physical",
+        "defend"
+      ],
+      "role_scores": {
+        "attack_physical": 0.7,
+        "defend": 0.54,
+        "perceive": 0.45
+      }
+    },
+    {
+      "link_id": 349,
       "dk_pair": [
         "小脑皮层",
         "thalamus"
@@ -6337,7 +9781,34 @@
       }
     },
     {
-      "link_id": 227,
+      "link_id": 350,
+      "dk_pair": [
+        "小脑皮层",
+        "precentral"
+      ],
+      "layers": [
+        0,
+        3
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "小脑皮层"
+      ],
+      "regions_b": [
+        "M1"
+      ],
+      "roles": [
+        "attack_physical",
+        "flee"
+      ],
+      "role_scores": {
+        "attack_physical": 0.7,
+        "flee": 0.26,
+        "defend": 0.24
+      }
+    },
+    {
+      "link_id": 351,
       "dk_pair": [
         "小脑皮层",
         "putamen"
@@ -6361,6 +9832,299 @@
         "attack_physical": 0.7,
         "flee": 0.26,
         "defend": 0.24
+      }
+    },
+    {
+      "link_id": 352,
+      "dk_pair": [
+        "小脑皮层",
+        "rostralmiddlefrontal"
+      ],
+      "layers": [
+        0,
+        5
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "小脑皮层"
+      ],
+      "regions_b": [
+        "dlPFC",
+        "前额叶极",
+        "前额叶极·FPN"
+      ],
+      "roles": [
+        "support",
+        "attack_physical"
+      ],
+      "role_scores": {
+        "support": 0.45,
+        "attack_physical": 0.325,
+        "flee": 0.26
+      }
+    },
+    {
+      "link_id": 353,
+      "dk_pair": null,
+      "layers": [
+        1,
+        1
+      ],
+      "direction": "lateral",
+      "regions_a": [
+        "杏仁核"
+      ],
+      "regions_b": [
+        "海马体 CA1"
+      ],
+      "roles": [
+        "flee",
+        "defend"
+      ],
+      "role_scores": {
+        "flee": 0.78,
+        "defend": 0.54,
+        "attack_physical": 0.2
+      }
+    },
+    {
+      "link_id": 354,
+      "dk_pair": null,
+      "layers": [
+        1,
+        1
+      ],
+      "direction": "lateral",
+      "regions_a": [
+        "海马体 CA1"
+      ],
+      "regions_b": [
+        "杏仁核"
+      ],
+      "roles": [
+        "flee",
+        "defend"
+      ],
+      "role_scores": {
+        "flee": 0.78,
+        "defend": 0.54,
+        "attack_physical": 0.2
+      }
+    },
+    {
+      "link_id": 355,
+      "dk_pair": null,
+      "layers": [
+        1,
+        2
+      ],
+      "direction": "feedforward",
+      "regions_a": [
+        "杏仁核"
+      ],
+      "regions_b": [
+        "OFC"
+      ],
+      "roles": [
+        "flee",
+        "defend"
+      ],
+      "role_scores": {
+        "flee": 0.78,
+        "defend": 0.72,
+        "approach": 0.45
+      }
+    },
+    {
+      "link_id": 356,
+      "dk_pair": null,
+      "layers": [
+        2,
+        1
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "OFC"
+      ],
+      "regions_b": [
+        "杏仁核"
+      ],
+      "roles": [
+        "defend",
+        "flee"
+      ],
+      "role_scores": {
+        "defend": 0.72,
+        "flee": 0.585,
+        "approach": 0.45
+      }
+    },
+    {
+      "link_id": 357,
+      "dk_pair": null,
+      "layers": [
+        1,
+        1
+      ],
+      "direction": "lateral",
+      "regions_a": [
+        "杏仁核"
+      ],
+      "regions_b": [
+        "伏隔核/NAcc"
+      ],
+      "roles": [
+        "flee",
+        "approach"
+      ],
+      "role_scores": {
+        "flee": 0.78,
+        "approach": 0.6,
+        "defend": 0.54
+      }
+    },
+    {
+      "link_id": 358,
+      "dk_pair": null,
+      "layers": [
+        1,
+        1
+      ],
+      "direction": "lateral",
+      "regions_a": [
+        "伏隔核/NAcc"
+      ],
+      "regions_b": [
+        "杏仁核"
+      ],
+      "roles": [
+        "flee",
+        "approach"
+      ],
+      "role_scores": {
+        "flee": 0.78,
+        "approach": 0.6,
+        "defend": 0.54
+      }
+    },
+    {
+      "link_id": 359,
+      "dk_pair": null,
+      "layers": [
+        1,
+        1
+      ],
+      "direction": "lateral",
+      "regions_a": [
+        "伏隔核/NAcc"
+      ],
+      "regions_b": [
+        "丘脑"
+      ],
+      "roles": [
+        "approach",
+        "attack_physical"
+      ],
+      "role_scores": {
+        "approach": 0.75,
+        "attack_physical": 0.45,
+        "flee": 0.26
+      }
+    },
+    {
+      "link_id": 360,
+      "dk_pair": null,
+      "layers": [
+        1,
+        1
+      ],
+      "direction": "lateral",
+      "regions_a": [
+        "伏隔核/NAcc"
+      ],
+      "regions_b": [
+        "海马体 CA1"
+      ],
+      "roles": [
+        "approach",
+        "flee"
+      ],
+      "role_scores": {
+        "approach": 0.6,
+        "flee": 0.26,
+        "defend": 0.24
+      }
+    },
+    {
+      "link_id": 361,
+      "dk_pair": null,
+      "layers": [
+        1,
+        1
+      ],
+      "direction": "lateral",
+      "regions_a": [
+        "海马体 CA1"
+      ],
+      "regions_b": [
+        "丘脑"
+      ],
+      "roles": [
+        "attack_physical",
+        "support"
+      ],
+      "role_scores": {
+        "attack_physical": 0.45,
+        "support": 0.3,
+        "flee": 0.26
+      }
+    },
+    {
+      "link_id": 362,
+      "dk_pair": null,
+      "layers": [
+        2,
+        1
+      ],
+      "direction": "feedback",
+      "regions_a": [
+        "OFC"
+      ],
+      "regions_b": [
+        "伏隔核/NAcc"
+      ],
+      "roles": [
+        "approach",
+        "flee"
+      ],
+      "role_scores": {
+        "approach": 1.0,
+        "flee": 0.26,
+        "defend": 0.24
+      }
+    },
+    {
+      "link_id": 363,
+      "dk_pair": null,
+      "layers": [
+        1,
+        1
+      ],
+      "direction": "lateral",
+      "regions_a": [
+        "壳核"
+      ],
+      "regions_b": [
+        "丘脑"
+      ],
+      "roles": [
+        "attack_physical",
+        "approach"
+      ],
+      "role_scores": {
+        "attack_physical": 0.85,
+        "approach": 0.45,
+        "flee": 0.26
       }
     }
   ]
