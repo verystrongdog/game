@@ -124,8 +124,8 @@
       "white_matter_tracts": [],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
-        "Extended Socio-Affective Default",
-        "Reward"
+        "Reward",
+        "Extended Socio-Affective Default"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -334,8 +334,8 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Cognitive Attention Control",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Cognitive Attention Control"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -371,11 +371,11 @@
       "white_matter_tracts": [],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
-        "Reward",
-        "Vigilant Attention",
         "Extended Socio-Affective Default",
+        "Reward",
         "Empathy",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Vigilant Attention"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -410,10 +410,10 @@
       "white_matter_tracts": [],
       "coactivated_networks": [
         "Reward",
-        "Vigilant Attention",
-        "Cognitive Attention Control",
         "Empathy",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Vigilant Attention",
+        "Cognitive Attention Control"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -450,12 +450,12 @@
       "white_matter_tracts": [],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
-        "Reward",
-        "Vigilant Attention",
         "Extended Socio-Affective Default",
-        "Cognitive Attention Control",
+        "Reward",
         "Empathy",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Vigilant Attention",
+        "Cognitive Attention Control"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -597,8 +597,8 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Cognitive Attention Control",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Cognitive Attention Control"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -634,11 +634,11 @@
       "white_matter_tracts": [],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
-        "Reward",
-        "Vigilant Attention",
         "Extended Socio-Affective Default",
+        "Reward",
         "Empathy",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Vigilant Attention"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -671,8 +671,8 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Reward",
-        "Working Memory"
+        "Working Memory",
+        "Reward"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -736,8 +736,8 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Extended Multiple Demand",
-        "Working Memory"
+        "Working Memory",
+        "Extended Multiple Demand"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -836,8 +836,8 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Reward",
-        "Working Memory"
+        "Working Memory",
+        "Reward"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -869,8 +869,8 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Extended Multiple Demand",
-        "Working Memory"
+        "Working Memory",
+        "Extended Multiple Demand"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -902,9 +902,9 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
+        "Working Memory",
         "Reward",
-        "Extended Multiple Demand",
-        "Working Memory"
+        "Extended Multiple Demand"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -936,8 +936,8 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Extended Multiple Demand",
-        "Working Memory"
+        "Working Memory",
+        "Extended Multiple Demand"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -1004,8 +1004,8 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Reward",
-        "Working Memory"
+        "Working Memory",
+        "Reward"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -1037,9 +1037,9 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
+        "Working Memory",
         "Reward",
-        "Extended Multiple Demand",
-        "Working Memory"
+        "Extended Multiple Demand"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -1142,8 +1142,8 @@
         "Inferior Fronto-Occipital Fasciculus (IFOF)"
       ],
       "coactivated_networks": [
-        "Mirror Neuron System",
-        "Emotional Scene and Face Processing"
+        "Emotional Scene and Face Processing",
+        "Mirror Neuron System"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -1346,8 +1346,8 @@
         "Inferior Fronto-Occipital Fasciculus (IFOF)"
       ],
       "coactivated_networks": [
-        "Mirror Neuron System",
-        "Emotional Scene and Face Processing"
+        "Emotional Scene and Face Processing",
+        "Mirror Neuron System"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -1448,8 +1448,8 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Vigilant Attention",
-        "Cognitive Attention Control"
+        "Cognitive Attention Control",
+        "Vigilant Attention"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -1552,8 +1552,8 @@
         "Arcuate Fasciculus (AF)"
       ],
       "coactivated_networks": [
-        "Cognitive Attention Control",
-        "Working Memory"
+        "Working Memory",
+        "Cognitive Attention Control"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -1657,8 +1657,8 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Cognitive Attention Control",
-        "Working Memory"
+        "Working Memory",
+        "Cognitive Attention Control"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -1692,11 +1692,11 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Working Memory",
         "Reward",
+        "Working Memory",
         "Vigilant Attention",
-        "Semantic Memory",
-        "Motor"
+        "Motor",
+        "Semantic Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -1729,8 +1729,8 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Cognitive Attention Control",
-        "Working Memory"
+        "Working Memory",
+        "Cognitive Attention Control"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -1798,10 +1798,10 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Vigilant Attention",
-        "Cognitive Attention Control",
         "Working Memory",
-        "Reward"
+        "Reward",
+        "Vigilant Attention",
+        "Cognitive Attention Control"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -1867,8 +1867,8 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Cognitive Attention Control",
-        "Working Memory"
+        "Working Memory",
+        "Cognitive Attention Control"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -2333,8 +2333,8 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Vigilant Attention",
-        "Cognitive Attention Control"
+        "Cognitive Attention Control",
+        "Vigilant Attention"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -2405,8 +2405,8 @@
       "white_matter_tracts": [],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
-        "Semantic Memory",
-        "Reward"
+        "Reward",
+        "Semantic Memory"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -2472,8 +2472,8 @@
       "white_matter_tracts": [],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
-        "Semantic Memory",
-        "Reward"
+        "Reward",
+        "Semantic Memory"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -2608,8 +2608,8 @@
       "white_matter_tracts": [],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
-        "Semantic Memory",
-        "Reward"
+        "Reward",
+        "Semantic Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -2644,8 +2644,8 @@
       "white_matter_tracts": [],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
-        "Semantic Memory",
-        "Reward"
+        "Reward",
+        "Semantic Memory"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -2679,8 +2679,8 @@
       "white_matter_tracts": [],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
-        "Semantic Memory",
-        "Reward"
+        "Reward",
+        "Semantic Memory"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -2746,8 +2746,8 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Semantic Memory",
-        "Theory of Mind"
+        "Theory of Mind",
+        "Semantic Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -2782,8 +2782,8 @@
       "white_matter_tracts": [],
       "coactivated_networks": [
         "Autobiographical Memory",
-        "Semantic Memory",
-        "Reward"
+        "Reward",
+        "Semantic Memory"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -2819,8 +2819,8 @@
       "coactivated_networks": [
         "Autobiographical Memory",
         "Extended Socio-Affective Default",
-        "Semantic Memory",
-        "Theory of Mind"
+        "Theory of Mind",
+        "Semantic Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -2926,10 +2926,10 @@
       "white_matter_tracts": [],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
-        "Reward",
         "Theory of Mind",
-        "Autobiographical Memory",
         "Extended Socio-Affective Default",
+        "Autobiographical Memory",
+        "Reward",
         "Semantic Memory"
       ],
       "rule_check": {
@@ -3105,8 +3105,8 @@
       "white_matter_tracts": [],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
-        "Extended Socio-Affective Default",
-        "Reward"
+        "Reward",
+        "Extended Socio-Affective Default"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -3175,8 +3175,8 @@
       "white_matter_tracts": [],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
-        "Semantic Memory",
-        "Reward"
+        "Reward",
+        "Semantic Memory"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -3213,10 +3213,10 @@
       "white_matter_tracts": [],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
-        "Reward",
         "Theory of Mind",
-        "Autobiographical Memory",
         "Extended Socio-Affective Default",
+        "Autobiographical Memory",
+        "Reward",
         "Semantic Memory"
       ],
       "rule_check": {
@@ -3251,8 +3251,8 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Semantic Memory",
-        "Theory of Mind"
+        "Theory of Mind",
+        "Semantic Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -3358,10 +3358,10 @@
       "white_matter_tracts": [],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
-        "Reward",
         "Theory of Mind",
-        "Autobiographical Memory",
         "Extended Socio-Affective Default",
+        "Autobiographical Memory",
+        "Reward",
         "Semantic Memory"
       ],
       "rule_check": {
@@ -3567,8 +3567,8 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Semantic Memory",
-        "Theory of Mind"
+        "Theory of Mind",
+        "Semantic Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -3965,9 +3965,9 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
+        "Emotion Regulation",
         "Cognitive Attention Control",
-        "Working Memory",
-        "Emotion Regulation"
+        "Working Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -4002,8 +4002,8 @@
       "coactivated_networks": [
         "Empathy",
         "Emotion Regulation",
-        "Working Memory",
-        "Theory of Mind"
+        "Theory of Mind",
+        "Working Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -4035,11 +4035,11 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Working Memory",
-        "Cognitive Attention Control",
-        "Extended Multiple Demand",
         "Mirror Neuron System",
-        "Emotion Regulation"
+        "Extended Multiple Demand",
+        "Working Memory",
+        "Emotion Regulation",
+        "Cognitive Attention Control"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -4076,9 +4076,9 @@
       ],
       "coactivated_networks": [
         "Empathy",
-        "Mirror Neuron System",
         "Emotion Regulation",
-        "Theory of Mind"
+        "Theory of Mind",
+        "Mirror Neuron System"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -4144,11 +4144,11 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Working Memory",
-        "Cognitive Attention Control",
         "Extended Multiple Demand",
         "Empathy",
-        "Emotion Regulation"
+        "Working Memory",
+        "Emotion Regulation",
+        "Cognitive Attention Control"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -4183,8 +4183,8 @@
       "white_matter_tracts": [],
       "coactivated_networks": [
         "Empathy",
-        "Cognitive Attention Control",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Cognitive Attention Control"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -4216,8 +4216,8 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Extended Multiple Demand",
-        "Working Memory"
+        "Working Memory",
+        "Extended Multiple Demand"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -4252,8 +4252,8 @@
       "coactivated_networks": [
         "Empathy",
         "Emotion Regulation",
-        "Working Memory",
-        "Theory of Mind"
+        "Theory of Mind",
+        "Working Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -4285,11 +4285,11 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Working Memory",
-        "Cognitive Attention Control",
         "Extended Multiple Demand",
         "Empathy",
-        "Emotion Regulation"
+        "Working Memory",
+        "Emotion Regulation",
+        "Cognitive Attention Control"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -4585,8 +4585,8 @@
       "white_matter_tracts": [],
       "coactivated_networks": [
         "Autobiographical Memory",
-        "Semantic Memory",
-        "Reward"
+        "Reward",
+        "Semantic Memory"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -4687,8 +4687,8 @@
       "white_matter_tracts": [],
       "coactivated_networks": [
         "Autobiographical Memory",
-        "Semantic Memory",
-        "Reward"
+        "Reward",
+        "Semantic Memory"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -4721,8 +4721,8 @@
       "white_matter_tracts": [],
       "coactivated_networks": [
         "Autobiographical Memory",
-        "Semantic Memory",
-        "Reward"
+        "Reward",
+        "Semantic Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -4789,8 +4789,8 @@
       "white_matter_tracts": [],
       "coactivated_networks": [
         "Autobiographical Memory",
-        "Semantic Memory",
-        "Reward"
+        "Reward",
+        "Semantic Memory"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -5121,8 +5121,8 @@
       "coactivated_networks": [
         "Autobiographical Memory",
         "Extended Socio-Affective Default",
-        "Semantic Memory",
-        "Theory of Mind"
+        "Theory of Mind",
+        "Semantic Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -5256,8 +5256,8 @@
       "coactivated_networks": [
         "Autobiographical Memory",
         "Extended Socio-Affective Default",
-        "Semantic Memory",
-        "Theory of Mind"
+        "Theory of Mind",
+        "Semantic Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -5292,8 +5292,8 @@
       "coactivated_networks": [
         "Autobiographical Memory",
         "Extended Socio-Affective Default",
-        "Semantic Memory",
-        "Theory of Mind"
+        "Theory of Mind",
+        "Semantic Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -5328,8 +5328,8 @@
       "coactivated_networks": [
         "Autobiographical Memory",
         "Extended Socio-Affective Default",
-        "Semantic Memory",
-        "Theory of Mind"
+        "Theory of Mind",
+        "Semantic Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -5599,8 +5599,8 @@
       "white_matter_tracts": [],
       "coactivated_networks": [
         "Autobiographical Memory",
-        "Working Memory",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Working Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -5634,9 +5634,9 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
+        "Emotion Regulation",
         "Cognitive Attention Control",
-        "Working Memory",
-        "Emotion Regulation"
+        "Working Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -5670,9 +5670,9 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
+        "Emotion Regulation",
         "Cognitive Attention Control",
-        "Working Memory",
-        "Emotion Regulation"
+        "Working Memory"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -5708,8 +5708,8 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Cognitive Attention Control",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Cognitive Attention Control"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -5816,9 +5816,9 @@
       "white_matter_tracts": [],
       "coactivated_networks": [
         "Autobiographical Memory",
+        "Emotion Regulation",
         "Cognitive Attention Control",
-        "Working Memory",
-        "Emotion Regulation"
+        "Working Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -5854,8 +5854,8 @@
       "white_matter_tracts": [],
       "coactivated_networks": [
         "Autobiographical Memory",
-        "Working Memory",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Working Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -5888,8 +5888,8 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Working Memory",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Working Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -5955,11 +5955,11 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Working Memory",
         "Reward",
-        "Vigilant Attention",
         "Empathy",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Working Memory",
+        "Vigilant Attention"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -5995,11 +5995,11 @@
       "white_matter_tracts": [],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
-        "Reward",
-        "Vigilant Attention",
         "Extended Socio-Affective Default",
+        "Reward",
         "Empathy",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Vigilant Attention"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -6032,8 +6032,8 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Reward",
-        "Working Memory"
+        "Working Memory",
+        "Reward"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -6067,8 +6067,8 @@
       "white_matter_tracts": [],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
-        "Semantic Memory",
-        "Reward"
+        "Reward",
+        "Semantic Memory"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -6104,10 +6104,10 @@
       "white_matter_tracts": [],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
-        "Reward",
         "Theory of Mind",
-        "Autobiographical Memory",
         "Extended Socio-Affective Default",
+        "Autobiographical Memory",
+        "Reward",
         "Semantic Memory"
       ],
       "rule_check": {
@@ -6176,8 +6176,8 @@
       "coactivated_networks": [
         "Empathy",
         "Emotion Regulation",
-        "Working Memory",
-        "Theory of Mind"
+        "Theory of Mind",
+        "Working Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -6211,8 +6211,8 @@
       "white_matter_tracts": [],
       "coactivated_networks": [
         "Autobiographical Memory",
-        "Semantic Memory",
-        "Reward"
+        "Reward",
+        "Semantic Memory"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -6316,8 +6316,8 @@
       "white_matter_tracts": [],
       "coactivated_networks": [
         "Autobiographical Memory",
-        "Working Memory",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Working Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -6352,16 +6352,16 @@
       "white_matter_tracts": [],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
-        "Reward",
         "Theory of Mind",
-        "Autobiographical Memory",
         "Extended Socio-Affective Default",
-        "Vigilant Attention",
-        "Working Memory",
-        "Semantic Memory",
-        "Motor",
+        "Autobiographical Memory",
+        "Reward",
         "Empathy",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Working Memory",
+        "Vigilant Attention",
+        "Motor",
+        "Semantic Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -6427,11 +6427,11 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Working Memory",
         "Reward",
-        "Vigilant Attention",
         "Empathy",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Working Memory",
+        "Vigilant Attention"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -6498,10 +6498,10 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Cognitive Attention Control",
-        "Extended Multiple Demand",
+        "Emotion Regulation",
         "Working Memory",
-        "Emotion Regulation"
+        "Cognitive Attention Control",
+        "Extended Multiple Demand"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -6534,8 +6534,8 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Cognitive Attention Control",
-        "Working Memory"
+        "Working Memory",
+        "Cognitive Attention Control"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -6667,11 +6667,11 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Working Memory",
-        "Cognitive Attention Control",
-        "Extended Multiple Demand",
         "Mirror Neuron System",
-        "Emotion Regulation"
+        "Extended Multiple Demand",
+        "Working Memory",
+        "Emotion Regulation",
+        "Cognitive Attention Control"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -6845,8 +6845,8 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Vigilant Attention",
-        "Empathy"
+        "Empathy",
+        "Vigilant Attention"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -7012,10 +7012,10 @@
       "white_matter_tracts": [],
       "coactivated_networks": [
         "Reward",
-        "Vigilant Attention",
-        "Cognitive Attention Control",
         "Empathy",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Vigilant Attention",
+        "Cognitive Attention Control"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -7047,9 +7047,9 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
+        "Working Memory",
         "Reward",
-        "Extended Multiple Demand",
-        "Working Memory"
+        "Extended Multiple Demand"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -7180,11 +7180,11 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Working Memory",
         "Reward",
-        "Vigilant Attention",
         "Empathy",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Working Memory",
+        "Vigilant Attention"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -7216,10 +7216,10 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Cognitive Attention Control",
-        "Extended Multiple Demand",
+        "Emotion Regulation",
         "Working Memory",
-        "Emotion Regulation"
+        "Cognitive Attention Control",
+        "Extended Multiple Demand"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -7327,8 +7327,8 @@
       "white_matter_tracts": [],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
-        "Extended Socio-Affective Default",
-        "Reward"
+        "Reward",
+        "Extended Socio-Affective Default"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -7397,8 +7397,8 @@
       "white_matter_tracts": [],
       "coactivated_networks": [
         "Empathy",
-        "Cognitive Attention Control",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Cognitive Attention Control"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -7539,8 +7539,8 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Cognitive Attention Control",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Cognitive Attention Control"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -7576,11 +7576,11 @@
       "white_matter_tracts": [],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
-        "Reward",
-        "Vigilant Attention",
         "Extended Socio-Affective Default",
+        "Reward",
         "Empathy",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Vigilant Attention"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -7615,10 +7615,10 @@
       "white_matter_tracts": [],
       "coactivated_networks": [
         "Reward",
-        "Vigilant Attention",
-        "Cognitive Attention Control",
         "Empathy",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Vigilant Attention",
+        "Cognitive Attention Control"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -7651,8 +7651,8 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Reward",
-        "Working Memory"
+        "Working Memory",
+        "Reward"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -7716,8 +7716,8 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Extended Multiple Demand",
-        "Working Memory"
+        "Working Memory",
+        "Extended Multiple Demand"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -7784,8 +7784,8 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Reward",
-        "Working Memory"
+        "Working Memory",
+        "Reward"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -7817,8 +7817,8 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Extended Multiple Demand",
-        "Working Memory"
+        "Working Memory",
+        "Extended Multiple Demand"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -7850,9 +7850,9 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
+        "Working Memory",
         "Reward",
-        "Extended Multiple Demand",
-        "Working Memory"
+        "Extended Multiple Demand"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -7955,8 +7955,8 @@
         "Inferior Fronto-Occipital Fasciculus (IFOF)"
       ],
       "coactivated_networks": [
-        "Mirror Neuron System",
-        "Emotional Scene and Face Processing"
+        "Emotional Scene and Face Processing",
+        "Mirror Neuron System"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -8192,8 +8192,8 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Vigilant Attention",
-        "Cognitive Attention Control"
+        "Cognitive Attention Control",
+        "Vigilant Attention"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -8228,8 +8228,8 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Semantic Memory",
-        "Reward"
+        "Reward",
+        "Semantic Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -8332,8 +8332,8 @@
         "Arcuate Fasciculus (AF)"
       ],
       "coactivated_networks": [
-        "Cognitive Attention Control",
-        "Working Memory"
+        "Working Memory",
+        "Cognitive Attention Control"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -8437,8 +8437,8 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Cognitive Attention Control",
-        "Working Memory"
+        "Working Memory",
+        "Cognitive Attention Control"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -8472,11 +8472,11 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Working Memory",
         "Reward",
+        "Working Memory",
         "Vigilant Attention",
-        "Semantic Memory",
-        "Motor"
+        "Motor",
+        "Semantic Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -8509,8 +8509,8 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Cognitive Attention Control",
-        "Working Memory"
+        "Working Memory",
+        "Cognitive Attention Control"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -8578,10 +8578,10 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Vigilant Attention",
-        "Cognitive Attention Control",
         "Working Memory",
-        "Reward"
+        "Reward",
+        "Vigilant Attention",
+        "Cognitive Attention Control"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -8951,8 +8951,8 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Vigilant Attention",
-        "Cognitive Attention Control"
+        "Cognitive Attention Control",
+        "Vigilant Attention"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -8987,8 +8987,8 @@
       "white_matter_tracts": [],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
-        "Semantic Memory",
-        "Reward"
+        "Reward",
+        "Semantic Memory"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -9085,8 +9085,8 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Semantic Memory",
-        "Reward"
+        "Reward",
+        "Semantic Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -9152,8 +9152,8 @@
       "white_matter_tracts": [],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
-        "Semantic Memory",
-        "Reward"
+        "Reward",
+        "Semantic Memory"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -9220,8 +9220,8 @@
       "white_matter_tracts": [],
       "coactivated_networks": [
         "Autobiographical Memory",
-        "Semantic Memory",
-        "Reward"
+        "Reward",
+        "Semantic Memory"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -9257,8 +9257,8 @@
       "coactivated_networks": [
         "Autobiographical Memory",
         "Extended Socio-Affective Default",
-        "Semantic Memory",
-        "Theory of Mind"
+        "Theory of Mind",
+        "Semantic Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -9328,10 +9328,10 @@
       "white_matter_tracts": [],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
-        "Reward",
         "Theory of Mind",
-        "Autobiographical Memory",
         "Extended Socio-Affective Default",
+        "Autobiographical Memory",
+        "Reward",
         "Semantic Memory"
       ],
       "rule_check": {
@@ -9535,8 +9535,8 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Semantic Memory",
-        "Theory of Mind"
+        "Theory of Mind",
+        "Semantic Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -9767,9 +9767,9 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
+        "Emotion Regulation",
         "Cognitive Attention Control",
-        "Working Memory",
-        "Emotion Regulation"
+        "Working Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -9804,8 +9804,8 @@
       "coactivated_networks": [
         "Empathy",
         "Emotion Regulation",
-        "Working Memory",
-        "Theory of Mind"
+        "Theory of Mind",
+        "Working Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -9837,11 +9837,11 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Working Memory",
-        "Cognitive Attention Control",
-        "Extended Multiple Demand",
         "Mirror Neuron System",
-        "Emotion Regulation"
+        "Extended Multiple Demand",
+        "Working Memory",
+        "Emotion Regulation",
+        "Cognitive Attention Control"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -9907,11 +9907,11 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Working Memory",
-        "Cognitive Attention Control",
         "Extended Multiple Demand",
         "Empathy",
-        "Emotion Regulation"
+        "Working Memory",
+        "Emotion Regulation",
+        "Cognitive Attention Control"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -10042,8 +10042,8 @@
       "white_matter_tracts": [],
       "coactivated_networks": [
         "Autobiographical Memory",
-        "Semantic Memory",
-        "Reward"
+        "Reward",
+        "Semantic Memory"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -10243,8 +10243,8 @@
       "coactivated_networks": [
         "Autobiographical Memory",
         "Extended Socio-Affective Default",
-        "Semantic Memory",
-        "Theory of Mind"
+        "Theory of Mind",
+        "Semantic Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -10414,8 +10414,8 @@
       "white_matter_tracts": [],
       "coactivated_networks": [
         "Autobiographical Memory",
-        "Working Memory",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Working Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -10449,9 +10449,9 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
+        "Emotion Regulation",
         "Cognitive Attention Control",
-        "Working Memory",
-        "Emotion Regulation"
+        "Working Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -10485,9 +10485,9 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
+        "Emotion Regulation",
         "Cognitive Attention Control",
-        "Working Memory",
-        "Emotion Regulation"
+        "Working Memory"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -10520,8 +10520,8 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Working Memory",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Working Memory"
       ],
       "rule_check": {
         "layer_adjacent": true,
@@ -10587,11 +10587,11 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Working Memory",
         "Reward",
-        "Vigilant Attention",
         "Empathy",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Working Memory",
+        "Vigilant Attention"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -10658,10 +10658,10 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Cognitive Attention Control",
-        "Extended Multiple Demand",
+        "Emotion Regulation",
         "Working Memory",
-        "Emotion Regulation"
+        "Cognitive Attention Control",
+        "Extended Multiple Demand"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -10801,8 +10801,8 @@
       ],
       "white_matter_tracts": [],
       "coactivated_networks": [
-        "Vigilant Attention",
-        "Empathy"
+        "Empathy",
+        "Vigilant Attention"
       ],
       "rule_check": {
         "layer_adjacent": false,
@@ -12028,16 +12028,14 @@
       "regions_b": [
         "海马体 CA1"
       ],
-      "white_matter_tracts": [
-        "Uncinate Fasciculus (UF)"
-      ],
+      "white_matter_tracts": [],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
         "Extended Socio-Affective Default"
       ],
-      "pathway": "杏仁核→海马体(钩束+杏仁核背侧束)",
-      "ref": "Zhou2015_MultipleSclerosis, Granger2020_NeuroImage, Clark2022_eLife, PMC6831033_amygdalofugal",
-      "fc_strength": 0.8,
+      "pathway": "杏仁核↔海马体(颞叶内侧短距联合纤维)",
+      "ref": "Zhou2015_MultipleSclerosis(PMID26229470)",
+      "fc_strength": 0.7,
       "enigma_strength": null,
       "rule_check": {
         "layer_adjacent": true,
@@ -12061,16 +12059,14 @@
       "regions_b": [
         "杏仁核"
       ],
-      "white_matter_tracts": [
-        "Uncinate Fasciculus (UF)"
-      ],
+      "white_matter_tracts": [],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
         "Extended Socio-Affective Default"
       ],
-      "pathway": "海马体→杏仁核(钩束双向连接)",
-      "ref": "Zhou2015_MultipleSclerosis, Clark2022_eLife",
-      "fc_strength": 0.8,
+      "pathway": "海马体↔杏仁核(颞叶内侧短距联合纤维)",
+      "ref": "Zhou2015_MultipleSclerosis(PMID26229470)",
+      "fc_strength": 0.7,
       "enigma_strength": null,
       "rule_check": {
         "layer_adjacent": true,
@@ -12102,7 +12098,7 @@
         "Emotion Regulation"
       ],
       "pathway": "杏仁核→OFC(钩束)",
-      "ref": "Passamonti2012_PLoS_ONE, Lee2020_Anxiety, Trostl_social_phobia_UF",
+      "ref": "Passamonti2012_PLoS_ONE(PMID23144970);Lee2020_Anxiety_review(PMID32002922)",
       "fc_strength": 0.85,
       "enigma_strength": null,
       "rule_check": {
@@ -12135,7 +12131,7 @@
         "Extended Socio-Affective Default"
       ],
       "pathway": "OFC→杏仁核(钩束,自上而下恐惧消退)",
-      "ref": "Passamonti2012_PLoS_ONE, Granger2020_NeuroImage",
+      "ref": "Passamonti2012_PLoS_ONE(PMID23144970);Granger2021_JNeurosci(PMID33328295)",
       "fc_strength": 0.85,
       "enigma_strength": null,
       "rule_check": {
@@ -12166,7 +12162,7 @@
         "Emotional Scene and Face Processing"
       ],
       "pathway": "杏仁核→NAcc(基底外侧杏仁核→腹侧纹状体)",
-      "ref": "Baliki2013_JNeurosci_NAcc_parcellation",
+      "ref": "Baliki2013_JNeurosci(PMID24107968)",
       "fc_strength": 0.75,
       "enigma_strength": null,
       "rule_check": {
@@ -12197,7 +12193,7 @@
         "Emotional Scene and Face Processing"
       ],
       "pathway": "NAcc→杏仁核(腹侧纹状体→基底外侧杏仁核)",
-      "ref": "Baliki2013_JNeurosci_NAcc_parcellation",
+      "ref": "Baliki2013_JNeurosci(PMID24107968)",
       "fc_strength": 0.7,
       "enigma_strength": null,
       "rule_check": {
@@ -12226,8 +12222,8 @@
       "coactivated_networks": [
         "Reward"
       ],
-      "pathway": "NAcc→丘脑(前丘脑辐射+accumbofrontal束)",
-      "ref": "Olivo2018_FrontHumNeurosci, Elliott2023_HCP_reward",
+      "pathway": "NAcc→丘脑背内侧(腹侧纹状体-丘脑皮质回路)",
+      "ref": "Rusche2021_HBM_NAc_dmThalamus(PMID34310758);Eckert_Thalamus_DTI;Zhao2025_MDD_NAcc_thalamus(PMID40185407)",
       "fc_strength": 0.75,
       "enigma_strength": null,
       "rule_check": {
@@ -12258,7 +12254,7 @@
         "Autobiographical Memory"
       ],
       "pathway": "NAcc→海马(奖赏-记忆回路)",
-      "ref": "Elliott2023_HCP_reward_628subjects, Baliki2013_JNeurosci",
+      "ref": "Elliott2024_Hippocampus_HCP628(PMID38700259);Baliki2013_JNeurosci(PMID24107968)",
       "fc_strength": 0.7,
       "enigma_strength": null,
       "rule_check": {
@@ -12288,8 +12284,8 @@
         "Autobiographical Memory",
         "Extended Socio-Affective Default"
       ],
-      "pathway": "海马→丘脑(穹窿→乳头体→丘脑前核)",
-      "ref": "Elliott2023_HCP_reward, Clark2022_eLife_fornix",
+      "pathway": "海马→丘脑(穹窿→乳头体→丘脑前核, Papez回路)",
+      "ref": "Concha2005_fornix_DTI(PMID15884013);Papez1937;Aggleton_Brown1999",
       "fc_strength": 0.75,
       "enigma_strength": null,
       "rule_check": {
@@ -12319,7 +12315,7 @@
         "Reward"
       ],
       "pathway": "OFC→NAcc(眶额-纹状体奖赏回路)",
-      "ref": "RDoC_reward_valuation, Haber2010_frontostriatal",
+      "ref": "Haber2010_frontostriatal(PMID19812543);RDoC_reward_valuation_framework",
       "fc_strength": 0.8,
       "enigma_strength": null,
       "rule_check": {
@@ -12349,8 +12345,8 @@
         "Motor",
         "Cognitive Attention Control"
       ],
-      "pathway": "壳核→丘脑(纹状体-丘脑,基底节直接通路)",
-      "ref": "CSTC_model_Alexander1986, Haber2010",
+      "pathway": "壳核→丘脑(纹状体-苍白球-丘脑, CSTC基底节直接通路)",
+      "ref": "Alexander1986_CSTC(PMID3085570);Haber2010(PMID19812543)",
       "fc_strength": 0.85,
       "enigma_strength": null,
       "rule_check": {

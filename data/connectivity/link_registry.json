@@ -100,8 +100,8 @@
       ],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
-        "Extended Socio-Affective Default",
-        "Reward"
+        "Reward",
+        "Extended Socio-Affective Default"
       ],
       "dk_pair": [
         "caudalanteriorcingulate",
@@ -302,8 +302,8 @@
         "前额叶极·FPN"
       ],
       "coactivated_networks": [
-        "Cognitive Attention Control",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Cognitive Attention Control"
       ],
       "dk_pair": [
         "caudalanteriorcingulate",
@@ -338,11 +338,11 @@
       ],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
-        "Reward",
-        "Vigilant Attention",
         "Extended Socio-Affective Default",
+        "Reward",
         "Empathy",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Vigilant Attention"
       ],
       "dk_pair": [
         "caudalanteriorcingulate",
@@ -376,10 +376,10 @@
       ],
       "coactivated_networks": [
         "Reward",
-        "Vigilant Attention",
-        "Cognitive Attention Control",
         "Empathy",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Vigilant Attention",
+        "Cognitive Attention Control"
       ],
       "dk_pair": [
         "caudalanteriorcingulate",
@@ -415,12 +415,12 @@
       ],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
-        "Reward",
-        "Vigilant Attention",
         "Extended Socio-Affective Default",
-        "Cognitive Attention Control",
+        "Reward",
         "Empathy",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Vigilant Attention",
+        "Cognitive Attention Control"
       ],
       "dk_pair": [
         "caudalanteriorcingulate",
@@ -556,8 +556,8 @@
         "前额叶极·FPN"
       ],
       "coactivated_networks": [
-        "Cognitive Attention Control",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Cognitive Attention Control"
       ],
       "dk_pair": [
         "caudalanteriorcingulate",
@@ -592,11 +592,11 @@
       ],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
-        "Reward",
-        "Vigilant Attention",
         "Extended Socio-Affective Default",
+        "Reward",
         "Empathy",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Vigilant Attention"
       ],
       "dk_pair": [
         "caudalanteriorcingulate",
@@ -628,8 +628,8 @@
         "顶叶"
       ],
       "coactivated_networks": [
-        "Reward",
-        "Working Memory"
+        "Working Memory",
+        "Reward"
       ],
       "dk_pair": [
         "caudalmiddlefrontal",
@@ -691,8 +691,8 @@
         "Broca区"
       ],
       "coactivated_networks": [
-        "Extended Multiple Demand",
-        "Working Memory"
+        "Working Memory",
+        "Extended Multiple Demand"
       ],
       "dk_pair": [
         "caudalmiddlefrontal",
@@ -788,8 +788,8 @@
         "额上回"
       ],
       "coactivated_networks": [
-        "Reward",
-        "Working Memory"
+        "Working Memory",
+        "Reward"
       ],
       "dk_pair": [
         "caudalmiddlefrontal",
@@ -820,8 +820,8 @@
         "顶内沟"
       ],
       "coactivated_networks": [
-        "Extended Multiple Demand",
-        "Working Memory"
+        "Working Memory",
+        "Extended Multiple Demand"
       ],
       "dk_pair": [
         "caudalmiddlefrontal",
@@ -852,9 +852,9 @@
         "额中回尾部"
       ],
       "coactivated_networks": [
+        "Working Memory",
         "Reward",
-        "Extended Multiple Demand",
-        "Working Memory"
+        "Extended Multiple Demand"
       ],
       "dk_pair": [
         "caudalmiddlefrontal",
@@ -885,8 +885,8 @@
         "Broca区"
       ],
       "coactivated_networks": [
-        "Extended Multiple Demand",
-        "Working Memory"
+        "Working Memory",
+        "Extended Multiple Demand"
       ],
       "dk_pair": [
         "caudalmiddlefrontal",
@@ -951,8 +951,8 @@
         "额上回"
       ],
       "coactivated_networks": [
-        "Reward",
-        "Working Memory"
+        "Working Memory",
+        "Reward"
       ],
       "dk_pair": [
         "caudalmiddlefrontal",
@@ -983,9 +983,9 @@
         "前脑岛"
       ],
       "coactivated_networks": [
+        "Working Memory",
         "Reward",
-        "Extended Multiple Demand",
-        "Working Memory"
+        "Extended Multiple Demand"
       ],
       "dk_pair": [
         "caudalmiddlefrontal",
@@ -1080,8 +1080,8 @@
         "枕顶联合"
       ],
       "coactivated_networks": [
-        "Mirror Neuron System",
-        "Emotional Scene and Face Processing"
+        "Emotional Scene and Face Processing",
+        "Mirror Neuron System"
       ],
       "dk_pair": [
         "fusiform",
@@ -1271,8 +1271,8 @@
         "枕顶联合"
       ],
       "coactivated_networks": [
-        "Mirror Neuron System",
-        "Emotional Scene and Face Processing"
+        "Emotional Scene and Face Processing",
+        "Mirror Neuron System"
       ],
       "dk_pair": [
         "fusiform",
@@ -1368,8 +1368,8 @@
         "枕顶联合"
       ],
       "coactivated_networks": [
-        "Vigilant Attention",
-        "Cognitive Attention Control"
+        "Cognitive Attention Control",
+        "Vigilant Attention"
       ],
       "dk_pair": [
         "inferiorparietal",
@@ -1465,8 +1465,8 @@
         "Broca区"
       ],
       "coactivated_networks": [
-        "Cognitive Attention Control",
-        "Working Memory"
+        "Working Memory",
+        "Cognitive Attention Control"
       ],
       "dk_pair": [
         "inferiorparietal",
@@ -1565,8 +1565,8 @@
         "前额叶极·FPN"
       ],
       "coactivated_networks": [
-        "Cognitive Attention Control",
-        "Working Memory"
+        "Working Memory",
+        "Cognitive Attention Control"
       ],
       "dk_pair": [
         "inferiorparietal",
@@ -1599,11 +1599,11 @@
         "额上回"
       ],
       "coactivated_networks": [
-        "Working Memory",
         "Reward",
+        "Working Memory",
         "Vigilant Attention",
-        "Semantic Memory",
-        "Motor"
+        "Motor",
+        "Semantic Memory"
       ],
       "dk_pair": [
         "inferiorparietal",
@@ -1635,8 +1635,8 @@
         "顶内沟"
       ],
       "coactivated_networks": [
-        "Cognitive Attention Control",
-        "Working Memory"
+        "Working Memory",
+        "Cognitive Attention Control"
       ],
       "dk_pair": [
         "inferiorparietal",
@@ -1702,10 +1702,10 @@
         "前脑岛"
       ],
       "coactivated_networks": [
-        "Vigilant Attention",
-        "Cognitive Attention Control",
         "Working Memory",
-        "Reward"
+        "Reward",
+        "Vigilant Attention",
+        "Cognitive Attention Control"
       ],
       "dk_pair": [
         "inferiorparietal",
@@ -1769,8 +1769,8 @@
         "顶内沟"
       ],
       "coactivated_networks": [
-        "Cognitive Attention Control",
-        "Working Memory"
+        "Working Memory",
+        "Cognitive Attention Control"
       ],
       "dk_pair": [
         "inferiorparietal",
@@ -2217,8 +2217,8 @@
         "前脑岛"
       ],
       "coactivated_networks": [
-        "Vigilant Attention",
-        "Cognitive Attention Control"
+        "Cognitive Attention Control",
+        "Vigilant Attention"
       ],
       "dk_pair": [
         "lateraloccipital",
@@ -2285,8 +2285,8 @@
       ],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
-        "Semantic Memory",
-        "Reward"
+        "Reward",
+        "Semantic Memory"
       ],
       "dk_pair": [
         "lateralorbitofrontal",
@@ -2350,8 +2350,8 @@
       ],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
-        "Semantic Memory",
-        "Reward"
+        "Reward",
+        "Semantic Memory"
       ],
       "dk_pair": [
         "lateralorbitofrontal",
@@ -2480,8 +2480,8 @@
       ],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
-        "Semantic Memory",
-        "Reward"
+        "Reward",
+        "Semantic Memory"
       ],
       "dk_pair": [
         "lateralorbitofrontal",
@@ -2515,8 +2515,8 @@
       ],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
-        "Semantic Memory",
-        "Reward"
+        "Reward",
+        "Semantic Memory"
       ],
       "dk_pair": [
         "lateralorbitofrontal",
@@ -2549,8 +2549,8 @@
       ],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
-        "Semantic Memory",
-        "Reward"
+        "Reward",
+        "Semantic Memory"
       ],
       "dk_pair": [
         "lateralorbitofrontal",
@@ -2614,8 +2614,8 @@
         "颞中回"
       ],
       "coactivated_networks": [
-        "Semantic Memory",
-        "Theory of Mind"
+        "Theory of Mind",
+        "Semantic Memory"
       ],
       "dk_pair": [
         "medialorbitofrontal",
@@ -2649,8 +2649,8 @@
       ],
       "coactivated_networks": [
         "Autobiographical Memory",
-        "Semantic Memory",
-        "Reward"
+        "Reward",
+        "Semantic Memory"
       ],
       "dk_pair": [
         "medialorbitofrontal",
@@ -2685,8 +2685,8 @@
       "coactivated_networks": [
         "Autobiographical Memory",
         "Extended Socio-Affective Default",
-        "Semantic Memory",
-        "Theory of Mind"
+        "Theory of Mind",
+        "Semantic Memory"
       ],
       "dk_pair": [
         "medialorbitofrontal",
@@ -2789,10 +2789,10 @@
       ],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
-        "Reward",
         "Theory of Mind",
-        "Autobiographical Memory",
         "Extended Socio-Affective Default",
+        "Autobiographical Memory",
+        "Reward",
         "Semantic Memory"
       ],
       "dk_pair": [
@@ -2963,8 +2963,8 @@
       ],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
-        "Extended Socio-Affective Default",
-        "Reward"
+        "Reward",
+        "Extended Socio-Affective Default"
       ],
       "dk_pair": [
         "medialorbitofrontal",
@@ -3031,8 +3031,8 @@
       ],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
-        "Semantic Memory",
-        "Reward"
+        "Reward",
+        "Semantic Memory"
       ],
       "dk_pair": [
         "medialorbitofrontal",
@@ -3068,10 +3068,10 @@
       ],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
-        "Reward",
         "Theory of Mind",
-        "Autobiographical Memory",
         "Extended Socio-Affective Default",
+        "Autobiographical Memory",
+        "Reward",
         "Semantic Memory"
       ],
       "dk_pair": [
@@ -3105,8 +3105,8 @@
         "颞中回"
       ],
       "coactivated_networks": [
-        "Semantic Memory",
-        "Theory of Mind"
+        "Theory of Mind",
+        "Semantic Memory"
       ],
       "dk_pair": [
         "medialorbitofrontal",
@@ -3209,10 +3209,10 @@
       ],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
-        "Reward",
         "Theory of Mind",
-        "Autobiographical Memory",
         "Extended Socio-Affective Default",
+        "Autobiographical Memory",
+        "Reward",
         "Semantic Memory"
       ],
       "dk_pair": [
@@ -3408,8 +3408,8 @@
         "缘上回"
       ],
       "coactivated_networks": [
-        "Semantic Memory",
-        "Theory of Mind"
+        "Theory of Mind",
+        "Semantic Memory"
       ],
       "dk_pair": [
         "middletemporal",
@@ -3792,9 +3792,9 @@
         "前额叶极·FPN"
       ],
       "coactivated_networks": [
+        "Emotion Regulation",
         "Cognitive Attention Control",
-        "Working Memory",
-        "Emotion Regulation"
+        "Working Memory"
       ],
       "dk_pair": [
         "parsopercularis",
@@ -3828,8 +3828,8 @@
       "coactivated_networks": [
         "Empathy",
         "Emotion Regulation",
-        "Working Memory",
-        "Theory of Mind"
+        "Theory of Mind",
+        "Working Memory"
       ],
       "dk_pair": [
         "parsopercularis",
@@ -3860,11 +3860,11 @@
         "顶内沟"
       ],
       "coactivated_networks": [
-        "Working Memory",
-        "Cognitive Attention Control",
-        "Extended Multiple Demand",
         "Mirror Neuron System",
-        "Emotion Regulation"
+        "Extended Multiple Demand",
+        "Working Memory",
+        "Emotion Regulation",
+        "Cognitive Attention Control"
       ],
       "dk_pair": [
         "parsopercularis",
@@ -3898,9 +3898,9 @@
       ],
       "coactivated_networks": [
         "Empathy",
-        "Mirror Neuron System",
         "Emotion Regulation",
-        "Theory of Mind"
+        "Theory of Mind",
+        "Mirror Neuron System"
       ],
       "dk_pair": [
         "parsopercularis",
@@ -3964,11 +3964,11 @@
         "前脑岛"
       ],
       "coactivated_networks": [
-        "Working Memory",
-        "Cognitive Attention Control",
         "Extended Multiple Demand",
         "Empathy",
-        "Emotion Regulation"
+        "Working Memory",
+        "Emotion Regulation",
+        "Cognitive Attention Control"
       ],
       "dk_pair": [
         "parsopercularis",
@@ -4002,8 +4002,8 @@
       ],
       "coactivated_networks": [
         "Empathy",
-        "Cognitive Attention Control",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Cognitive Attention Control"
       ],
       "dk_pair": [
         "parsopercularis",
@@ -4034,8 +4034,8 @@
         "额中回尾部"
       ],
       "coactivated_networks": [
-        "Extended Multiple Demand",
-        "Working Memory"
+        "Working Memory",
+        "Extended Multiple Demand"
       ],
       "dk_pair": [
         "parsopercularis",
@@ -4069,8 +4069,8 @@
       "coactivated_networks": [
         "Empathy",
         "Emotion Regulation",
-        "Working Memory",
-        "Theory of Mind"
+        "Theory of Mind",
+        "Working Memory"
       ],
       "dk_pair": [
         "parsopercularis",
@@ -4101,11 +4101,11 @@
         "前脑岛"
       ],
       "coactivated_networks": [
-        "Working Memory",
-        "Cognitive Attention Control",
         "Extended Multiple Demand",
         "Empathy",
-        "Emotion Regulation"
+        "Working Memory",
+        "Emotion Regulation",
+        "Cognitive Attention Control"
       ],
       "dk_pair": [
         "parsopercularis",
@@ -4392,8 +4392,8 @@
       ],
       "coactivated_networks": [
         "Autobiographical Memory",
-        "Semantic Memory",
-        "Reward"
+        "Reward",
+        "Semantic Memory"
       ],
       "dk_pair": [
         "posteriorcingulate",
@@ -4491,8 +4491,8 @@
       ],
       "coactivated_networks": [
         "Autobiographical Memory",
-        "Semantic Memory",
-        "Reward"
+        "Reward",
+        "Semantic Memory"
       ],
       "dk_pair": [
         "posteriorcingulate",
@@ -4524,8 +4524,8 @@
       ],
       "coactivated_networks": [
         "Autobiographical Memory",
-        "Semantic Memory",
-        "Reward"
+        "Reward",
+        "Semantic Memory"
       ],
       "dk_pair": [
         "posteriorcingulate",
@@ -4590,8 +4590,8 @@
       ],
       "coactivated_networks": [
         "Autobiographical Memory",
-        "Semantic Memory",
-        "Reward"
+        "Reward",
+        "Semantic Memory"
       ],
       "dk_pair": [
         "posteriorcingulate",
@@ -4912,8 +4912,8 @@
       "coactivated_networks": [
         "Autobiographical Memory",
         "Extended Socio-Affective Default",
-        "Semantic Memory",
-        "Theory of Mind"
+        "Theory of Mind",
+        "Semantic Memory"
       ],
       "dk_pair": [
         "precuneus",
@@ -5043,8 +5043,8 @@
       "coactivated_networks": [
         "Autobiographical Memory",
         "Extended Socio-Affective Default",
-        "Semantic Memory",
-        "Theory of Mind"
+        "Theory of Mind",
+        "Semantic Memory"
       ],
       "dk_pair": [
         "precuneus",
@@ -5078,8 +5078,8 @@
       "coactivated_networks": [
         "Autobiographical Memory",
         "Extended Socio-Affective Default",
-        "Semantic Memory",
-        "Theory of Mind"
+        "Theory of Mind",
+        "Semantic Memory"
       ],
       "dk_pair": [
         "precuneus",
@@ -5113,8 +5113,8 @@
       "coactivated_networks": [
         "Autobiographical Memory",
         "Extended Socio-Affective Default",
-        "Semantic Memory",
-        "Theory of Mind"
+        "Theory of Mind",
+        "Semantic Memory"
       ],
       "dk_pair": [
         "precuneus",
@@ -5376,8 +5376,8 @@
       ],
       "coactivated_networks": [
         "Autobiographical Memory",
-        "Working Memory",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Working Memory"
       ],
       "dk_pair": [
         "rostralmiddlefrontal",
@@ -5410,9 +5410,9 @@
         "顶内沟"
       ],
       "coactivated_networks": [
+        "Emotion Regulation",
         "Cognitive Attention Control",
-        "Working Memory",
-        "Emotion Regulation"
+        "Working Memory"
       ],
       "dk_pair": [
         "rostralmiddlefrontal",
@@ -5445,9 +5445,9 @@
         "前脑岛"
       ],
       "coactivated_networks": [
+        "Emotion Regulation",
         "Cognitive Attention Control",
-        "Working Memory",
-        "Emotion Regulation"
+        "Working Memory"
       ],
       "dk_pair": [
         "rostralmiddlefrontal",
@@ -5482,8 +5482,8 @@
         "前额叶极·SN"
       ],
       "coactivated_networks": [
-        "Cognitive Attention Control",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Cognitive Attention Control"
       ],
       "dk_pair": [
         "rostralmiddlefrontal",
@@ -5587,9 +5587,9 @@
       ],
       "coactivated_networks": [
         "Autobiographical Memory",
+        "Emotion Regulation",
         "Cognitive Attention Control",
-        "Working Memory",
-        "Emotion Regulation"
+        "Working Memory"
       ],
       "dk_pair": [
         "rostralmiddlefrontal",
@@ -5624,8 +5624,8 @@
       ],
       "coactivated_networks": [
         "Autobiographical Memory",
-        "Working Memory",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Working Memory"
       ],
       "dk_pair": [
         "rostralmiddlefrontal",
@@ -5657,8 +5657,8 @@
         "顶内沟"
       ],
       "coactivated_networks": [
-        "Working Memory",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Working Memory"
       ],
       "dk_pair": [
         "superiorfrontal",
@@ -5722,11 +5722,11 @@
         "前脑岛"
       ],
       "coactivated_networks": [
-        "Working Memory",
         "Reward",
-        "Vigilant Attention",
         "Empathy",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Working Memory",
+        "Vigilant Attention"
       ],
       "dk_pair": [
         "superiorfrontal",
@@ -5761,11 +5761,11 @@
       ],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
-        "Reward",
-        "Vigilant Attention",
         "Extended Socio-Affective Default",
+        "Reward",
         "Empathy",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Vigilant Attention"
       ],
       "dk_pair": [
         "superiorfrontal",
@@ -5797,8 +5797,8 @@
         "额中回尾部"
       ],
       "coactivated_networks": [
-        "Reward",
-        "Working Memory"
+        "Working Memory",
+        "Reward"
       ],
       "dk_pair": [
         "superiorfrontal",
@@ -5831,8 +5831,8 @@
       ],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
-        "Semantic Memory",
-        "Reward"
+        "Reward",
+        "Semantic Memory"
       ],
       "dk_pair": [
         "superiorfrontal",
@@ -5867,10 +5867,10 @@
       ],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
-        "Reward",
         "Theory of Mind",
-        "Autobiographical Memory",
         "Extended Socio-Affective Default",
+        "Autobiographical Memory",
+        "Reward",
         "Semantic Memory"
       ],
       "dk_pair": [
@@ -5937,8 +5937,8 @@
       "coactivated_networks": [
         "Empathy",
         "Emotion Regulation",
-        "Working Memory",
-        "Theory of Mind"
+        "Theory of Mind",
+        "Working Memory"
       ],
       "dk_pair": [
         "superiorfrontal",
@@ -5971,8 +5971,8 @@
       ],
       "coactivated_networks": [
         "Autobiographical Memory",
-        "Semantic Memory",
-        "Reward"
+        "Reward",
+        "Semantic Memory"
       ],
       "dk_pair": [
         "superiorfrontal",
@@ -6073,8 +6073,8 @@
       ],
       "coactivated_networks": [
         "Autobiographical Memory",
-        "Working Memory",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Working Memory"
       ],
       "dk_pair": [
         "superiorfrontal",
@@ -6108,16 +6108,16 @@
       ],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
-        "Reward",
         "Theory of Mind",
-        "Autobiographical Memory",
         "Extended Socio-Affective Default",
-        "Vigilant Attention",
-        "Working Memory",
-        "Semantic Memory",
-        "Motor",
+        "Autobiographical Memory",
+        "Reward",
         "Empathy",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Working Memory",
+        "Vigilant Attention",
+        "Motor",
+        "Semantic Memory"
       ],
       "dk_pair": [
         "superiorfrontal",
@@ -6181,11 +6181,11 @@
         "前脑岛"
       ],
       "coactivated_networks": [
-        "Working Memory",
         "Reward",
-        "Vigilant Attention",
         "Empathy",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Working Memory",
+        "Vigilant Attention"
       ],
       "dk_pair": [
         "superiorfrontal",
@@ -6250,10 +6250,10 @@
         "前脑岛"
       ],
       "coactivated_networks": [
-        "Cognitive Attention Control",
-        "Extended Multiple Demand",
+        "Emotion Regulation",
         "Working Memory",
-        "Emotion Regulation"
+        "Cognitive Attention Control",
+        "Extended Multiple Demand"
       ],
       "dk_pair": [
         "superiorparietal",
@@ -6285,8 +6285,8 @@
         "顶叶"
       ],
       "coactivated_networks": [
-        "Cognitive Attention Control",
-        "Working Memory"
+        "Working Memory",
+        "Cognitive Attention Control"
       ],
       "dk_pair": [
         "superiorparietal",
@@ -6412,11 +6412,11 @@
         "顶内沟"
       ],
       "coactivated_networks": [
-        "Working Memory",
-        "Cognitive Attention Control",
-        "Extended Multiple Demand",
         "Mirror Neuron System",
-        "Emotion Regulation"
+        "Extended Multiple Demand",
+        "Working Memory",
+        "Emotion Regulation",
+        "Cognitive Attention Control"
       ],
       "dk_pair": [
         "superiorparietal",
@@ -6583,8 +6583,8 @@
         "前脑岛"
       ],
       "coactivated_networks": [
-        "Vigilant Attention",
-        "Empathy"
+        "Empathy",
+        "Vigilant Attention"
       ],
       "dk_pair": [
         "supramarginal",
@@ -6745,10 +6745,10 @@
       ],
       "coactivated_networks": [
         "Reward",
-        "Vigilant Attention",
-        "Cognitive Attention Control",
         "Empathy",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Vigilant Attention",
+        "Cognitive Attention Control"
       ],
       "dk_pair": [
         "insula",
@@ -6779,9 +6779,9 @@
         "额中回尾部"
       ],
       "coactivated_networks": [
+        "Working Memory",
         "Reward",
-        "Extended Multiple Demand",
-        "Working Memory"
+        "Extended Multiple Demand"
       ],
       "dk_pair": [
         "insula",
@@ -6908,11 +6908,11 @@
         "额上回"
       ],
       "coactivated_networks": [
-        "Working Memory",
         "Reward",
-        "Vigilant Attention",
         "Empathy",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Working Memory",
+        "Vigilant Attention"
       ],
       "dk_pair": [
         "insula",
@@ -6943,10 +6943,10 @@
         "顶内沟"
       ],
       "coactivated_networks": [
-        "Cognitive Attention Control",
-        "Extended Multiple Demand",
+        "Emotion Regulation",
         "Working Memory",
-        "Emotion Regulation"
+        "Cognitive Attention Control",
+        "Extended Multiple Demand"
       ],
       "dk_pair": [
         "insula",
@@ -7049,8 +7049,8 @@
       ],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
-        "Extended Socio-Affective Default",
-        "Reward"
+        "Reward",
+        "Extended Socio-Affective Default"
       ],
       "dk_pair": [
         "caudalanteriorcingulate",
@@ -7117,8 +7117,8 @@
       ],
       "coactivated_networks": [
         "Empathy",
-        "Cognitive Attention Control",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Cognitive Attention Control"
       ],
       "dk_pair": [
         "caudalanteriorcingulate",
@@ -7253,8 +7253,8 @@
         "前额叶极·FPN"
       ],
       "coactivated_networks": [
-        "Cognitive Attention Control",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Cognitive Attention Control"
       ],
       "dk_pair": [
         "caudalanteriorcingulate",
@@ -7289,11 +7289,11 @@
       ],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
-        "Reward",
-        "Vigilant Attention",
         "Extended Socio-Affective Default",
+        "Reward",
         "Empathy",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Vigilant Attention"
       ],
       "dk_pair": [
         "caudalanteriorcingulate",
@@ -7327,10 +7327,10 @@
       ],
       "coactivated_networks": [
         "Reward",
-        "Vigilant Attention",
-        "Cognitive Attention Control",
         "Empathy",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Vigilant Attention",
+        "Cognitive Attention Control"
       ],
       "dk_pair": [
         "caudalanteriorcingulate",
@@ -7362,8 +7362,8 @@
         "顶叶"
       ],
       "coactivated_networks": [
-        "Reward",
-        "Working Memory"
+        "Working Memory",
+        "Reward"
       ],
       "dk_pair": [
         "caudalmiddlefrontal",
@@ -7425,8 +7425,8 @@
         "Broca区"
       ],
       "coactivated_networks": [
-        "Extended Multiple Demand",
-        "Working Memory"
+        "Working Memory",
+        "Extended Multiple Demand"
       ],
       "dk_pair": [
         "caudalmiddlefrontal",
@@ -7491,8 +7491,8 @@
         "额上回"
       ],
       "coactivated_networks": [
-        "Reward",
-        "Working Memory"
+        "Working Memory",
+        "Reward"
       ],
       "dk_pair": [
         "caudalmiddlefrontal",
@@ -7523,8 +7523,8 @@
         "顶内沟"
       ],
       "coactivated_networks": [
-        "Extended Multiple Demand",
-        "Working Memory"
+        "Working Memory",
+        "Extended Multiple Demand"
       ],
       "dk_pair": [
         "caudalmiddlefrontal",
@@ -7555,9 +7555,9 @@
         "前脑岛"
       ],
       "coactivated_networks": [
+        "Working Memory",
         "Reward",
-        "Extended Multiple Demand",
-        "Working Memory"
+        "Extended Multiple Demand"
       ],
       "dk_pair": [
         "caudalmiddlefrontal",
@@ -7652,8 +7652,8 @@
         "枕顶联合"
       ],
       "coactivated_networks": [
-        "Mirror Neuron System",
-        "Emotional Scene and Face Processing"
+        "Emotional Scene and Face Processing",
+        "Mirror Neuron System"
       ],
       "dk_pair": [
         "fusiform",
@@ -7876,8 +7876,8 @@
         "枕顶联合"
       ],
       "coactivated_networks": [
-        "Vigilant Attention",
-        "Cognitive Attention Control"
+        "Cognitive Attention Control",
+        "Vigilant Attention"
       ],
       "dk_pair": [
         "inferiorparietal",
@@ -7911,8 +7911,8 @@
         "前额叶极·DMN"
       ],
       "coactivated_networks": [
-        "Semantic Memory",
-        "Reward"
+        "Reward",
+        "Semantic Memory"
       ],
       "dk_pair": [
         "inferiorparietal",
@@ -8008,8 +8008,8 @@
         "Broca区"
       ],
       "coactivated_networks": [
-        "Cognitive Attention Control",
-        "Working Memory"
+        "Working Memory",
+        "Cognitive Attention Control"
       ],
       "dk_pair": [
         "inferiorparietal",
@@ -8108,8 +8108,8 @@
         "前额叶极·FPN"
       ],
       "coactivated_networks": [
-        "Cognitive Attention Control",
-        "Working Memory"
+        "Working Memory",
+        "Cognitive Attention Control"
       ],
       "dk_pair": [
         "inferiorparietal",
@@ -8142,11 +8142,11 @@
         "额上回"
       ],
       "coactivated_networks": [
-        "Working Memory",
         "Reward",
+        "Working Memory",
         "Vigilant Attention",
-        "Semantic Memory",
-        "Motor"
+        "Motor",
+        "Semantic Memory"
       ],
       "dk_pair": [
         "inferiorparietal",
@@ -8178,8 +8178,8 @@
         "顶内沟"
       ],
       "coactivated_networks": [
-        "Cognitive Attention Control",
-        "Working Memory"
+        "Working Memory",
+        "Cognitive Attention Control"
       ],
       "dk_pair": [
         "inferiorparietal",
@@ -8245,10 +8245,10 @@
         "前脑岛"
       ],
       "coactivated_networks": [
-        "Vigilant Attention",
-        "Cognitive Attention Control",
         "Working Memory",
-        "Reward"
+        "Reward",
+        "Vigilant Attention",
+        "Cognitive Attention Control"
       ],
       "dk_pair": [
         "inferiorparietal",
@@ -8603,8 +8603,8 @@
         "前脑岛"
       ],
       "coactivated_networks": [
-        "Vigilant Attention",
-        "Cognitive Attention Control"
+        "Cognitive Attention Control",
+        "Vigilant Attention"
       ],
       "dk_pair": [
         "lateraloccipital",
@@ -8638,8 +8638,8 @@
       ],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
-        "Semantic Memory",
-        "Reward"
+        "Reward",
+        "Semantic Memory"
       ],
       "dk_pair": [
         "lateralorbitofrontal",
@@ -8733,8 +8733,8 @@
         "后扣带"
       ],
       "coactivated_networks": [
-        "Semantic Memory",
-        "Reward"
+        "Reward",
+        "Semantic Memory"
       ],
       "dk_pair": [
         "lateralorbitofrontal",
@@ -8798,8 +8798,8 @@
       ],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
-        "Semantic Memory",
-        "Reward"
+        "Reward",
+        "Semantic Memory"
       ],
       "dk_pair": [
         "lateralorbitofrontal",
@@ -8864,8 +8864,8 @@
       ],
       "coactivated_networks": [
         "Autobiographical Memory",
-        "Semantic Memory",
-        "Reward"
+        "Reward",
+        "Semantic Memory"
       ],
       "dk_pair": [
         "medialorbitofrontal",
@@ -8900,8 +8900,8 @@
       "coactivated_networks": [
         "Autobiographical Memory",
         "Extended Socio-Affective Default",
-        "Semantic Memory",
-        "Theory of Mind"
+        "Theory of Mind",
+        "Semantic Memory"
       ],
       "dk_pair": [
         "medialorbitofrontal",
@@ -8969,10 +8969,10 @@
       ],
       "coactivated_networks": [
         "Emotional Scene and Face Processing",
-        "Reward",
         "Theory of Mind",
-        "Autobiographical Memory",
         "Extended Socio-Affective Default",
+        "Autobiographical Memory",
+        "Reward",
         "Semantic Memory"
       ],
       "dk_pair": [
@@ -9168,8 +9168,8 @@
         "缘上回"
       ],
       "coactivated_networks": [
-        "Semantic Memory",
-        "Theory of Mind"
+        "Theory of Mind",
+        "Semantic Memory"
       ],
       "dk_pair": [
         "middletemporal",
@@ -9393,9 +9393,9 @@
         "前额叶极·FPN"
       ],
       "coactivated_networks": [
+        "Emotion Regulation",
         "Cognitive Attention Control",
-        "Working Memory",
-        "Emotion Regulation"
+        "Working Memory"
       ],
       "dk_pair": [
         "parsopercularis",
@@ -9429,8 +9429,8 @@
       "coactivated_networks": [
         "Empathy",
         "Emotion Regulation",
-        "Working Memory",
-        "Theory of Mind"
+        "Theory of Mind",
+        "Working Memory"
       ],
       "dk_pair": [
         "parsopercularis",
@@ -9461,11 +9461,11 @@
         "顶内沟"
       ],
       "coactivated_networks": [
-        "Working Memory",
-        "Cognitive Attention Control",
-        "Extended Multiple Demand",
         "Mirror Neuron System",
-        "Emotion Regulation"
+        "Extended Multiple Demand",
+        "Working Memory",
+        "Emotion Regulation",
+        "Cognitive Attention Control"
       ],
       "dk_pair": [
         "parsopercularis",
@@ -9529,11 +9529,11 @@
         "前脑岛"
       ],
       "coactivated_networks": [
-        "Working Memory",
-        "Cognitive Attention Control",
         "Extended Multiple Demand",
         "Empathy",
-        "Emotion Regulation"
+        "Working Memory",
+        "Emotion Regulation",
+        "Cognitive Attention Control"
       ],
       "dk_pair": [
         "parsopercularis",
@@ -9660,8 +9660,8 @@
       ],
       "coactivated_networks": [
         "Autobiographical Memory",
-        "Semantic Memory",
-        "Reward"
+        "Reward",
+        "Semantic Memory"
       ],
       "dk_pair": [
         "posteriorcingulate",
@@ -9855,8 +9855,8 @@
       "coactivated_networks": [
         "Autobiographical Memory",
         "Extended Socio-Affective Default",
-        "Semantic Memory",
-        "Theory of Mind"
+        "Theory of Mind",
+        "Semantic Memory"
       ],
       "dk_pair": [
         "precuneus",
@@ -10019,8 +10019,8 @@
       ],
       "coactivated_networks": [
         "Autobiographical Memory",
-        "Working Memory",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Working Memory"
       ],
       "dk_pair": [
         "rostralmiddlefrontal",
@@ -10053,9 +10053,9 @@
         "顶内沟"
       ],
       "coactivated_networks": [
+        "Emotion Regulation",
         "Cognitive Attention Control",
-        "Working Memory",
-        "Emotion Regulation"
+        "Working Memory"
       ],
       "dk_pair": [
         "rostralmiddlefrontal",
@@ -10088,9 +10088,9 @@
         "前脑岛"
       ],
       "coactivated_networks": [
+        "Emotion Regulation",
         "Cognitive Attention Control",
-        "Working Memory",
-        "Emotion Regulation"
+        "Working Memory"
       ],
       "dk_pair": [
         "rostralmiddlefrontal",
@@ -10122,8 +10122,8 @@
         "顶内沟"
       ],
       "coactivated_networks": [
-        "Working Memory",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Working Memory"
       ],
       "dk_pair": [
         "superiorfrontal",
@@ -10187,11 +10187,11 @@
         "前脑岛"
       ],
       "coactivated_networks": [
-        "Working Memory",
         "Reward",
-        "Vigilant Attention",
         "Empathy",
-        "Emotion Regulation"
+        "Emotion Regulation",
+        "Working Memory",
+        "Vigilant Attention"
       ],
       "dk_pair": [
         "superiorfrontal",
@@ -10256,10 +10256,10 @@
         "前脑岛"
       ],
       "coactivated_networks": [
-        "Cognitive Attention Control",
-        "Extended Multiple Demand",
+        "Emotion Regulation",
         "Working Memory",
-        "Emotion Regulation"
+        "Cognitive Attention Control",
+        "Extended Multiple Demand"
       ],
       "dk_pair": [
         "superiorparietal",
@@ -10393,8 +10393,8 @@
         "前脑岛"
       ],
       "coactivated_networks": [
-        "Vigilant Attention",
-        "Empathy"
+        "Empathy",
+        "Vigilant Attention"
       ],
       "dk_pair": [
         "supramarginal",
