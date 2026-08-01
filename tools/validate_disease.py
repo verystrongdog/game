@@ -296,57 +296,108 @@ def validate_domain_roles(
 
 def validate_domain_count_constraints(
     func_table: list[dict],
+    cgi_table: list[dict],
     filepath: str,
 ) -> list[str]:
-    """检查域数约束: 轻度1-2核心 / 中度+关联 / 重度+边缘
+    """检查域数约束: 轻度1-2核心域 / 中度+关联域 / 重度+边缘域
+
+    从 CGI-S域扩展表 推断每个域的角色（核心/关联/边缘），
+    然后检查功能域表中的 m 偏移是否与域角色一致。
+
+    注意：功能域配置中的"角色"列是链路级重要性标记（核心链路 vs 关联链路），
+    与域级角色（核心域 vs 关联域）是不同的概念。本检查使用域级角色。
 
     规则来源: 决策树 [Grilling] 疾病系统独立建模 §域数 (2026-08-01)
     """
     warnings = []
 
-    # 按角色分组，收集每域的m偏移
-    roles = {"核心": [], "关联": [], "边缘": []}
+    if not cgi_table:
+        return warnings  # 无CGI-S表则跳过
+
+    # ── 从 CGI-S 域扩展表推断域级角色 ──
+    def _parse_domains(cell: str) -> set[str]:
+        """解析 CGI-S 表中的域列表"""
+        if not cell or cell.strip() in ("0", "-", ""):
+            return set()
+        result = set()
+        for d in cell.split(","):
+            d = d.strip().lstrip("+")
+            dnorm = _norm_domain(d)
+            if dnorm:
+                result.add(dnorm)
+        return result
+
+    core_domains = set()      # 在轻度核心域列出现的域
+    assoc_domains = set()     # 在中度关联域列出现（且不在轻度核心域列中）的域
+    peri_domains = set()      # 在重度边缘域列出现（且不在前两者中）的域
+
+    for row in cgi_table:
+        sev = row.get("严重度", "").strip()
+        if sev == "轻度":
+            core_domains = _parse_domains(row.get("核心域", ""))
+        elif sev == "中度":
+            mid_core = _parse_domains(row.get("核心域", ""))
+            mid_assoc_raw = _parse_domains(row.get("关联域", ""))
+            # 关联域 = 在中度新出现的（不在轻度核心域中）
+            assoc_domains = mid_assoc_raw - core_domains
+        elif sev == "重度":
+            sev_core = _parse_domains(row.get("核心域", ""))
+            sev_assoc = _parse_domains(row.get("关联域", ""))
+            sev_peri = _parse_domains(row.get("边缘域", ""))
+            # 边缘域 = 在重度新出现的（不在核心域+关联域中）
+            peri_domains = sev_peri - core_domains - assoc_domains
+
+    # ── 按域汇总 m 偏移 ──
+    # 对每个域，收集所有链路的 m 偏移，取最大绝对值作为"该域在该严重度的活跃度"
+    domain_m_max = {}  # {dnorm: [m_mild_max, m_moderate_max, m_severe_max]}
     for row in func_table:
         domain = row.get("域", "").strip()
-        role = row.get("角色", "").strip()
         m_str = row.get("m偏移(轻/中/重)", "").strip()
-        if not domain or role not in roles:
+        if not domain:
             continue
+        dnorm = _norm_domain(domain)
         m_str = m_str.replace("−", "-").replace("–", "-").replace("—", "-")
         parts = [p.strip() for p in m_str.split("/")]
         try:
-            m_vals = [float(p) if p else 0.0 for p in parts[:3]]
+            m_vals = [abs(float(p)) if p else 0.0 for p in parts[:3]]
         except ValueError:
             continue
-        roles[role].append({"domain": domain, "m": m_vals})
+        if dnorm not in domain_m_max:
+            domain_m_max[dnorm] = [0.0, 0.0, 0.0]
+        for i in range(3):
+            domain_m_max[dnorm][i] = max(domain_m_max[dnorm][i], m_vals[i])
 
-    # 检查1: 核心域数量（轻度有非零m偏移的核心域数）
-    core_active_mild = [d for d in roles["核心"] if d["m"][0] != 0.0]
-    if len(core_active_mild) < 1:
-        warnings.append(f"[域数约束] 轻度无核心域激活（至少需要1个）")
-    elif len(core_active_mild) > 2:
-        # 超过2个核心域产生警告（多域疾病如精神分裂症可能合理，但需审视）
-        pass  # 降级为不报告——精分等多域疾病天然需要>2核心域
+    # ── 检查1: 核心域在轻度应有非零 m ──
+    inactive_core = []
+    for d in core_domains:
+        max_m = domain_m_max.get(d, [0, 0, 0])
+        if max_m[0] == 0.0:
+            inactive_core.append(d)
+    if inactive_core:
+        warnings.append(f"[域数约束] 核心域在轻度无任何非零m偏移: {', '.join(inactive_core)}")
 
-    # 检查2: 关联域在轻度不应有非零m
-    assoc_early = [d for d in roles["关联"] if d["m"][0] != 0.0]
+    # ── 检查2: 关联域在轻度不应有非零 m ──
+    assoc_early = []
+    for d in assoc_domains:
+        max_m = domain_m_max.get(d, [0, 0, 0])
+        if max_m[0] != 0.0:
+            assoc_early.append(d)
     if assoc_early:
-        domains = ", ".join(d["domain"] for d in assoc_early)
-        warnings.append(f"[域数约束] 关联域在轻度有非零m偏移（应在中度才激活）: {domains}")
+        warnings.append(f"[域数约束] 关联域在轻度有非零m偏移（应在中度才激活）: {', '.join(assoc_early)}")
 
-    # 检查3: 边缘域在轻/中度不应有非零m
-    peri_early = [d for d in roles["边缘"] if d["m"][0] != 0.0 or d["m"][1] != 0.0]
+    # ── 检查3: 边缘域在轻/中度不应有非零 m ──
+    peri_early = []
+    for d in peri_domains:
+        max_m = domain_m_max.get(d, [0, 0, 0])
+        if max_m[0] != 0.0 or max_m[1] != 0.0:
+            peri_early.append(d)
     if peri_early:
-        domains = ", ".join(d["domain"] for d in peri_early)
-        warnings.append(f"[域数约束] 边缘域在轻/中度有非零m偏移（应在重度才激活）: {domains}")
+        warnings.append(f"[域数约束] 边缘域在轻/中度有非零m偏移（应在重度才激活）: {', '.join(peri_early)}")
 
-    # 检查4: 每个域在中度的CGI-S应有对应角色层级
-    # 关联域应在中度激活
-    assoc_mid = [d for d in roles["关联"] if d["m"][1] != 0.0]
-    assoc_not_mid = [d for d in roles["关联"] if d["m"][1] == 0.0 and d["m"][2] != 0.0]
-    if assoc_not_mid:
-        domains = ", ".join(d["domain"] for d in assoc_not_mid)
-        warnings.append(f"[域数约束] 关联域在中度无m偏移但重度有（应在中度激活）: {domains}")
+    # ── 检查4: 核心域数量（轻度）──
+    if len(core_domains) < 1:
+        warnings.append(f"[域数约束] CGI-S表中轻度无核心域")
+    # >2 核心域不报警告（多域疾病如精神分裂症天然需要）
 
     return warnings
 
@@ -390,7 +441,7 @@ def validate_file(filepath: Path, registry_by_name: dict) -> dict:
     # WARNING checks
     result["warnings"].extend(validate_cgi_consistency(func_table, cgi_table, str(filepath)))
     result["warnings"].extend(validate_drop_pool(drop_table, func_table, str(filepath)))
-    result["warnings"].extend(validate_domain_count_constraints(func_table, str(filepath)))
+    result["warnings"].extend(validate_domain_count_constraints(func_table, cgi_table, str(filepath)))
 
     return result
 
