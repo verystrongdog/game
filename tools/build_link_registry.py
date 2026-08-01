@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 链路注册表生成器
-从 link_legitimacy_matrix.json 提取全部 228 条链路（198 ENIGMA + 30 brainstem），
+从 link_legitimacy_matrix.json 提取全部 364 条链路（323 ENIGMA + 41 brainstem），
 分配唯一 ID，生成统一 display_name，输出 link_registry.json。
 每次链路矩阵更新后重新运行。
 """
@@ -61,7 +61,7 @@ def build_registry():
         matrix = json.load(f)
 
     registry = {
-        "_description": "统一链路注册表 — 228 条合法链路的唯一 ID 和显示名",
+        "_description": "统一链路注册表 — 364 条合法链路的唯一 ID 和显示名",
         "_generated_from": "data/connectivity/link_legitimacy_matrix.json",
         "_total": len(matrix["links"]),
         "_enigma_count": 0,

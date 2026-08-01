@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-228 链路行为角色自动分类
+364 链路行为角色自动分类
 基于脑区/网络/层级规则 → 为每条链路分配 1-2 个行为角色标签
 输出: data/connectivity/link_behavior_roles.json
 """
@@ -175,7 +175,7 @@ def classify_links():
 
     # 输出
     output = {
-        "_description": "228 条链路的行为角色分类 — 用于预烘焙管线采样校验和配置多样性保障",
+        "_description": "364 条链路的行为角色分类 — 用于预烘焙管线采样校验和配置多样性保障",
         "_note": "数值量化是后续内容填充工作，不在此文件中",
         "role_definitions": {
             "attack_physical": "M1通道物理攻击调制",

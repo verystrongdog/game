@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 性格标签 → 链路映射 自动生成
-基于标签的脑区群 + 行为角色偏好，从 228 条链路中自动匹配
+基于标签的脑区群 + 行为角色偏好，从 364 条链路中自动匹配
 输出: data/connectivity/personality_tag_links.json
 """
 

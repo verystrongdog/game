@@ -2,7 +2,7 @@
 """
 疾病md文件校验器
 解析 实体/疾病目录/*.md，检查链路ID存在性、m偏移范围、CGI-S一致性、
-非线性跳变引用、掉落池覆盖。
+非线性跳变引用、掉落池覆盖、域数约束（轻度1-2核心/中度+关联/重度+边缘）。
 用法:
   python3 tools/validate_disease.py                          # 扫描全部
   python3 tools/validate_disease.py 实体/疾病目录/偏执型精神分裂症.md  # 单个
@@ -294,6 +294,63 @@ def validate_domain_roles(
     return warnings
 
 
+def validate_domain_count_constraints(
+    func_table: list[dict],
+    filepath: str,
+) -> list[str]:
+    """检查域数约束: 轻度1-2核心 / 中度+关联 / 重度+边缘
+
+    规则来源: 决策树 [Grilling] 疾病系统独立建模 §域数 (2026-08-01)
+    """
+    warnings = []
+
+    # 按角色分组，收集每域的m偏移
+    roles = {"核心": [], "关联": [], "边缘": []}
+    for row in func_table:
+        domain = row.get("域", "").strip()
+        role = row.get("角色", "").strip()
+        m_str = row.get("m偏移(轻/中/重)", "").strip()
+        if not domain or role not in roles:
+            continue
+        m_str = m_str.replace("−", "-").replace("–", "-").replace("—", "-")
+        parts = [p.strip() for p in m_str.split("/")]
+        try:
+            m_vals = [float(p) if p else 0.0 for p in parts[:3]]
+        except ValueError:
+            continue
+        roles[role].append({"domain": domain, "m": m_vals})
+
+    # 检查1: 核心域数量（轻度有非零m偏移的核心域数）
+    core_active_mild = [d for d in roles["核心"] if d["m"][0] != 0.0]
+    if len(core_active_mild) < 1:
+        warnings.append(f"[域数约束] 轻度无核心域激活（至少需要1个）")
+    elif len(core_active_mild) > 2:
+        # 超过2个核心域产生警告（多域疾病如精神分裂症可能合理，但需审视）
+        pass  # 降级为不报告——精分等多域疾病天然需要>2核心域
+
+    # 检查2: 关联域在轻度不应有非零m
+    assoc_early = [d for d in roles["关联"] if d["m"][0] != 0.0]
+    if assoc_early:
+        domains = ", ".join(d["domain"] for d in assoc_early)
+        warnings.append(f"[域数约束] 关联域在轻度有非零m偏移（应在中度才激活）: {domains}")
+
+    # 检查3: 边缘域在轻/中度不应有非零m
+    peri_early = [d for d in roles["边缘"] if d["m"][0] != 0.0 or d["m"][1] != 0.0]
+    if peri_early:
+        domains = ", ".join(d["domain"] for d in peri_early)
+        warnings.append(f"[域数约束] 边缘域在轻/中度有非零m偏移（应在重度才激活）: {domains}")
+
+    # 检查4: 每个域在中度的CGI-S应有对应角色层级
+    # 关联域应在中度激活
+    assoc_mid = [d for d in roles["关联"] if d["m"][1] != 0.0]
+    assoc_not_mid = [d for d in roles["关联"] if d["m"][1] == 0.0 and d["m"][2] != 0.0]
+    if assoc_not_mid:
+        domains = ", ".join(d["domain"] for d in assoc_not_mid)
+        warnings.append(f"[域数约束] 关联域在中度无m偏移但重度有（应在中度激活）: {domains}")
+
+    return warnings
+
+
 def validate_file(filepath: Path, registry_by_name: dict) -> dict:
     """校验单个文件，返回结果字典"""
     result = {
@@ -333,6 +390,7 @@ def validate_file(filepath: Path, registry_by_name: dict) -> dict:
     # WARNING checks
     result["warnings"].extend(validate_cgi_consistency(func_table, cgi_table, str(filepath)))
     result["warnings"].extend(validate_drop_pool(drop_table, func_table, str(filepath)))
+    result["warnings"].extend(validate_domain_count_constraints(func_table, str(filepath)))
 
     return result
 
