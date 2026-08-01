@@ -271,29 +271,6 @@ def validate_drop_pool(
     return warnings
 
 
-def validate_domain_roles(
-    func_table: list[dict],
-    cgi_table: list[dict],
-    filepath: str,
-) -> list[str]:
-    """检查域角色在CGI-S表中是否体现"""
-    warnings = []
-    domain_role = {}
-    for row in func_table:
-        domain = row.get("域", "").strip()
-        role = row.get("角色", "").strip()
-        if domain:
-            domain_role[domain] = role
-
-    # 核心域应该在轻/中度就激活
-    for domain, role in domain_role.items():
-        if role == "核心":
-            pass  # 已经会在CGI-S一致性检查中覆盖
-        if role == "边缘":
-            pass
-    return warnings
-
-
 def validate_domain_count_constraints(
     func_table: list[dict],
     cgi_table: list[dict],
