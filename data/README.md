@@ -105,7 +105,7 @@ for a in attitudes['attitudes']:
 
 ### 现有模拟脚本复用
 
-项目中已有的 Python 脚本（`sim_battle.py`, `sim_cog_evo.py` 等）中重复定义的 `EMOTIONS`、`DRIVES` 等常量，后续应改为从 `data/` 目录加载，避免多处定义不一致。
+旧模拟脚本（sim_battle.py/sim_cog_evo.py 等）已废弃进垃圾桶（2026-08-03 #20）。新工具（tools/build_*/validate_*）从 `data/` 目录加载数据。
 
 ---
 
