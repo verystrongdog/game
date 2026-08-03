@@ -1450,13 +1450,13 @@
         "Cognitive Attention Control"
       ],
       "key_brain_regions": [
-        "TPJ",
-        "mPFC",
-        "杏仁核",
-        "ACC",
-        "dlPFC",
-        "前脑岛",
-        "vmPFC"
+        "SupramarginalTPJ",
+        "SuperiorFrontalMPFC",
+        "Amygdala",
+        "AnteriorCingulateCortex",
+        "RostralMiddleFrontalDLPFC",
+        "Insula",
+        "MedialOrbitalPrefrontalVMPFC"
       ],
       "levels_involved": [
         "L1",
@@ -1495,13 +1495,13 @@
         "Emotional Scene & Face Processing"
       ],
       "key_brain_regions": [
-        "PAG",
-        "上丘",
-        "杏仁核",
-        "蓝斑",
-        "ACC背侧",
-        "M1",
-        "反射环路·快速闪避"
+        "PeriaqueductalGray",
+        "SuperiorColliculus",
+        "Amygdala",
+        "LocusCoeruleus",
+        "AnteriorCingulateCortexDorsal",
+        "Precentral",
+        "ReflexEscape"
       ],
       "levels_involved": [
         "L0",
@@ -1541,13 +1541,13 @@
         "Cognitive Attention Control"
       ],
       "key_brain_regions": [
-        "海马体 CA1",
-        "上丘",
-        "蓝斑",
-        "前脑岛",
-        "ACC吻侧",
-        "dlPFC",
-        "楔前叶"
+        "HippocampusCA1",
+        "SuperiorColliculus",
+        "LocusCoeruleus",
+        "Insula",
+        "RostralAnteriorCingulateCortex",
+        "RostralMiddleFrontalDLPFC",
+        "Precuneus"
       ],
       "levels_involved": [
         "L0",
@@ -1588,13 +1588,13 @@
         "Emotion Regulation"
       ],
       "key_brain_regions": [
-        "vmPFC",
-        "mPFC",
-        "TPJ",
-        "ACC吻侧",
-        "前脑岛",
-        "OFC",
-        "dlPFC"
+        "MedialOrbitalPrefrontalVMPFC",
+        "SuperiorFrontalMPFC",
+        "SupramarginalTPJ",
+        "RostralAnteriorCingulateCortex",
+        "Insula",
+        "LateralOrbitofrontal",
+        "RostralMiddleFrontalDLPFC"
       ],
       "levels_involved": [
         "L2",
@@ -1633,13 +1633,13 @@
         "Theory of Mind"
       ],
       "key_brain_regions": [
-        "杏仁核",
-        "前脑岛",
-        "ACC",
-        "TPJ",
-        "mPFC",
-        "颞极",
-        "颞上沟岸"
+        "Amygdala",
+        "Insula",
+        "AnteriorCingulateCortex",
+        "SupramarginalTPJ",
+        "SuperiorFrontalMPFC",
+        "TemporalPole",
+        "BanksSTS"
       ],
       "levels_involved": [
         "L1",
@@ -1679,13 +1679,13 @@
         "Emotion Regulation"
       ],
       "key_brain_regions": [
-        "海马体 CA1",
-        "海马体 CA3",
-        "杏仁核",
-        "后扣带",
-        "楔前叶",
-        "前脑岛",
-        "vmPFC"
+        "HippocampusCA1",
+        "HippocampusCA3",
+        "Amygdala",
+        "PosteriorCingulate",
+        "Precuneus",
+        "Insula",
+        "MedialOrbitalPrefrontalVMPFC"
       ],
       "levels_involved": [
         "L1",
@@ -1726,14 +1726,14 @@
         "Motor"
       ],
       "key_brain_regions": [
-        "蓝斑",
-        "上丘",
-        "前脑岛",
-        "ACC背侧",
-        "M1",
-        "S1",
-        "dlPFC",
-        "小脑皮层"
+        "LocusCoeruleus",
+        "SuperiorColliculus",
+        "Insula",
+        "AnteriorCingulateCortexDorsal",
+        "Precentral",
+        "Postcentral",
+        "RostralMiddleFrontalDLPFC",
+        "CerebellumCortex"
       ],
       "levels_involved": [
         "L0",
@@ -1773,13 +1773,13 @@
         "Reward"
       ],
       "key_brain_regions": [
-        "TPJ",
-        "mPFC",
-        "vmPFC",
-        "Broca区",
-        "Wernicke区",
-        "OFC",
-        "伏隔核/NAcc"
+        "SupramarginalTPJ",
+        "SuperiorFrontalMPFC",
+        "MedialOrbitalPrefrontalVMPFC",
+        "ParsOpercularis",
+        "SuperiorTemporalWernicke",
+        "LateralOrbitofrontal",
+        "NucleusAccumbens"
       ],
       "levels_involved": [
         "L1",
@@ -1820,15 +1820,15 @@
         "Extended Multiple Demand"
       ],
       "key_brain_regions": [
-        "M1",
-        "S1",
-        "dlPFC",
-        "壳核",
-        "小脑皮层",
-        "顶内沟",
-        "ACC背侧",
-        "前脑岛",
-        "PAG"
+        "Precentral",
+        "Postcentral",
+        "RostralMiddleFrontalDLPFC",
+        "Putamen",
+        "CerebellumCortex",
+        "SuperiorParietal",
+        "AnteriorCingulateCortexDorsal",
+        "Insula",
+        "PeriaqueductalGray"
       ],
       "levels_involved": [
         "L0",
@@ -1871,13 +1871,13 @@
         "Reward"
       ],
       "key_brain_regions": [
-        "vmPFC",
-        "后扣带",
-        "楔前叶",
-        "隔区",
-        "前脑岛",
-        "ACC吻侧",
-        "蓝斑"
+        "MedialOrbitalPrefrontalVMPFC",
+        "PosteriorCingulate",
+        "Precuneus",
+        "SeptalRegion",
+        "Insula",
+        "RostralAnteriorCingulateCortex",
+        "LocusCoeruleus"
       ],
       "levels_involved": [
         "L0",
@@ -1918,14 +1918,14 @@
         "Vigilant Attention"
       ],
       "key_brain_regions": [
-        "枕叶 V1",
-        "外侧枕叶",
-        "顶内沟",
-        "前脑岛",
-        "dlPFC",
-        "ACC背侧",
-        "角回",
-        "颞下回"
+        "Pericalcarine",
+        "LateralOccipital",
+        "SuperiorParietal",
+        "Insula",
+        "RostralMiddleFrontalDLPFC",
+        "AnteriorCingulateCortexDorsal",
+        "InferiorParietalAngular",
+        "InferiorTemporal"
       ],
       "levels_involved": [
         "L2",
@@ -1965,13 +1965,13 @@
         "Extended Socio-Affective Default"
       ],
       "key_brain_regions": [
-        "TPJ",
-        "mPFC",
-        "前脑岛",
-        "ACC",
-        "杏仁核",
-        "vmPFC",
-        "海马体 CA1"
+        "SupramarginalTPJ",
+        "SuperiorFrontalMPFC",
+        "Insula",
+        "AnteriorCingulateCortex",
+        "Amygdala",
+        "MedialOrbitalPrefrontalVMPFC",
+        "HippocampusCA1"
       ],
       "levels_involved": [
         "L1",
@@ -2011,13 +2011,13 @@
         "Mirror Neuron System"
       ],
       "key_brain_regions": [
-        "前脑岛",
-        "ACC",
-        "TPJ",
-        "mPFC",
-        "vmPFC",
-        "纺锤体回",
-        "OFC"
+        "Insula",
+        "AnteriorCingulateCortex",
+        "SupramarginalTPJ",
+        "SuperiorFrontalMPFC",
+        "MedialOrbitalPrefrontalVMPFC",
+        "Fusiform",
+        "LateralOrbitofrontal"
       ],
       "levels_involved": [
         "L1",
@@ -2058,13 +2058,13 @@
         "Motor"
       ],
       "key_brain_regions": [
-        "上丘",
-        "PAG",
-        "杏仁核",
-        "蓝斑",
-        "前脑岛",
-        "ACC背侧",
-        "海马旁回"
+        "SuperiorColliculus",
+        "PeriaqueductalGray",
+        "Amygdala",
+        "LocusCoeruleus",
+        "Insula",
+        "AnteriorCingulateCortexDorsal",
+        "Parahippocampal"
       ],
       "levels_involved": [
         "L0",
@@ -2105,14 +2105,14 @@
         "Theory of Mind"
       ],
       "key_brain_regions": [
-        "楔前叶",
-        "mPFC",
-        "后扣带",
-        "TPJ",
-        "前脑岛",
-        "海马体 CA1",
-        "vmPFC",
-        "ACC"
+        "Precuneus",
+        "SuperiorFrontalMPFC",
+        "PosteriorCingulate",
+        "SupramarginalTPJ",
+        "Insula",
+        "HippocampusCA1",
+        "MedialOrbitalPrefrontalVMPFC",
+        "AnteriorCingulateCortex"
       ],
       "levels_involved": [
         "L1",
@@ -2155,14 +2155,14 @@
         "Extended Multiple Demand"
       ],
       "key_brain_regions": [
-        "dlPFC",
-        "ACC背侧",
-        "蓝斑",
-        "前脑岛",
-        "额中回尾部",
-        "顶内沟",
-        "壳核",
-        "丘脑"
+        "RostralMiddleFrontalDLPFC",
+        "AnteriorCingulateCortexDorsal",
+        "LocusCoeruleus",
+        "Insula",
+        "CaudalMiddleFrontal",
+        "SuperiorParietal",
+        "Putamen",
+        "Thalamus"
       ],
       "levels_involved": [
         "L0",
@@ -2202,13 +2202,13 @@
         "Extended Socio-Affective Default"
       ],
       "key_brain_regions": [
-        "蓝斑",
-        "前脑岛",
-        "后扣带",
-        "ACC",
-        "海马体 CA1",
-        "楔前叶",
-        "PAG"
+        "LocusCoeruleus",
+        "Insula",
+        "PosteriorCingulate",
+        "AnteriorCingulateCortex",
+        "HippocampusCA1",
+        "Precuneus",
+        "PeriaqueductalGray"
       ],
       "levels_involved": [
         "L0",
@@ -2250,14 +2250,14 @@
         "Vigilant Attention"
       ],
       "key_brain_regions": [
-        "dlPFC",
-        "ACC背侧",
-        "前脑岛",
-        "额中回尾部",
-        "顶内沟",
-        "蓝斑",
-        "丘脑",
-        "尾状核"
+        "RostralMiddleFrontalDLPFC",
+        "AnteriorCingulateCortexDorsal",
+        "Insula",
+        "CaudalMiddleFrontal",
+        "SuperiorParietal",
+        "LocusCoeruleus",
+        "Thalamus",
+        "Caudate"
       ],
       "levels_involved": [
         "L0",
@@ -2296,14 +2296,14 @@
         "Extended Socio-Affective Default"
       ],
       "key_brain_regions": [
-        "mPFC",
-        "vmPFC",
-        "TPJ",
-        "ACC",
-        "前脑岛",
-        "dlPFC",
-        "杏仁核",
-        "PAG"
+        "SuperiorFrontalMPFC",
+        "MedialOrbitalPrefrontalVMPFC",
+        "SupramarginalTPJ",
+        "AnteriorCingulateCortex",
+        "Insula",
+        "RostralMiddleFrontalDLPFC",
+        "Amygdala",
+        "PeriaqueductalGray"
       ],
       "levels_involved": [
         "L1",
@@ -2343,14 +2343,14 @@
         "Empathy"
       ],
       "key_brain_regions": [
-        "隔区",
-        "海马体 CA1",
-        "前脑岛",
-        "ACC吻侧",
-        "vmPFC",
-        "后扣带",
-        "楔前叶",
-        "伏隔核/NAcc"
+        "SeptalRegion",
+        "HippocampusCA1",
+        "Insula",
+        "RostralAnteriorCingulateCortex",
+        "MedialOrbitalPrefrontalVMPFC",
+        "PosteriorCingulate",
+        "Precuneus",
+        "NucleusAccumbens"
       ],
       "levels_involved": [
         "L1",
@@ -2390,13 +2390,13 @@
         "Extended Socio-Affective Default"
       ],
       "key_brain_regions": [
-        "蓝斑",
-        "上丘",
-        "丘脑",
-        "前脑岛",
-        "海马体 CA3",
-        "后扣带",
-        "楔前叶"
+        "LocusCoeruleus",
+        "SuperiorColliculus",
+        "Thalamus",
+        "Insula",
+        "HippocampusCA3",
+        "PosteriorCingulate",
+        "Precuneus"
       ],
       "levels_involved": [
         "L0",
@@ -2436,14 +2436,14 @@
         "Cognitive Attention Control"
       ],
       "key_brain_regions": [
-        "TPJ",
-        "mPFC",
-        "杏仁核",
-        "前脑岛",
-        "ACC",
-        "纺锤体回",
-        "颞上沟岸",
-        "dlPFC"
+        "SupramarginalTPJ",
+        "SuperiorFrontalMPFC",
+        "Amygdala",
+        "Insula",
+        "AnteriorCingulateCortex",
+        "Fusiform",
+        "BanksSTS",
+        "RostralMiddleFrontalDLPFC"
       ],
       "levels_involved": [
         "L1",
@@ -2485,14 +2485,14 @@
         "Mirror Neuron System"
       ],
       "key_brain_regions": [
-        "dlPFC",
-        "额中回尾部",
-        "小脑皮层",
-        "壳核",
-        "M1",
-        "角回",
-        "Broca区",
-        "海马体 CA1"
+        "RostralMiddleFrontalDLPFC",
+        "CaudalMiddleFrontal",
+        "CerebellumCortex",
+        "Putamen",
+        "Precentral",
+        "InferiorParietalAngular",
+        "ParsOpercularis",
+        "HippocampusCA1"
       ],
       "levels_involved": [
         "L1",
@@ -2533,15 +2533,15 @@
         "Cognitive Attention Control"
       ],
       "key_brain_regions": [
-        "PAG",
-        "上丘",
-        "蓝斑",
-        "杏仁核",
-        "M1",
-        "小脑皮层",
-        "反射环路·快速闪避",
-        "壳核",
-        "顶内沟"
+        "PeriaqueductalGray",
+        "SuperiorColliculus",
+        "LocusCoeruleus",
+        "Amygdala",
+        "Precentral",
+        "CerebellumCortex",
+        "ReflexEscape",
+        "Putamen",
+        "SuperiorParietal"
       ],
       "levels_involved": [
         "L0",
@@ -2581,14 +2581,14 @@
         "Extended Socio-Affective Default"
       ],
       "key_brain_regions": [
-        "杏仁核",
-        "前脑岛",
-        "ACC",
-        "纺锤体回",
-        "海马体 CA1",
-        "楔前叶",
-        "vmPFC",
-        "TPJ"
+        "Amygdala",
+        "Insula",
+        "AnteriorCingulateCortex",
+        "Fusiform",
+        "HippocampusCA1",
+        "Precuneus",
+        "MedialOrbitalPrefrontalVMPFC",
+        "SupramarginalTPJ"
       ],
       "levels_involved": [
         "L1",
@@ -2630,13 +2630,13 @@
         "Extended Multiple Demand"
       ],
       "key_brain_regions": [
-        "TPJ",
-        "mPFC",
-        "dlPFC",
-        "Broca区",
-        "颞上沟岸",
-        "小脑皮层",
-        "ACC"
+        "SupramarginalTPJ",
+        "SuperiorFrontalMPFC",
+        "RostralMiddleFrontalDLPFC",
+        "ParsOpercularis",
+        "BanksSTS",
+        "CerebellumCortex",
+        "AnteriorCingulateCortex"
       ],
       "levels_involved": [
         "L3",
@@ -2677,14 +2677,14 @@
         "Cognitive Attention Control"
       ],
       "key_brain_regions": [
-        "OFC",
-        "vmPFC",
-        "ACC",
-        "前脑岛",
-        "dlPFC",
-        "缰核",
-        "伏隔核/NAcc",
-        "TPJ"
+        "LateralOrbitofrontal",
+        "MedialOrbitalPrefrontalVMPFC",
+        "AnteriorCingulateCortex",
+        "Insula",
+        "RostralMiddleFrontalDLPFC",
+        "Habenula",
+        "NucleusAccumbens",
+        "SupramarginalTPJ"
       ],
       "levels_involved": [
         "L1",

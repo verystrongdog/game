@@ -1,0 +1,6502 @@
+{
+  "_description": "链路 → 上下文集合映射 (D17/D23) — 集合归属 × 主导角色",
+  "_rules": [
+    "contexts = {(network, primary_role) for network in coactivated_networks}",
+    "primary_network = coactivated_networks[0]（仅染色主色/候选池标签）",
+    "primary_role = role_scores 最高分角色"
+  ],
+  "links": {
+    "link_000_L": {
+      "networks": [
+        "Reward"
+      ],
+      "primary_role": "approach",
+      "primary_network": "Reward",
+      "contexts": [
+        [
+          "Reward",
+          "approach"
+        ]
+      ]
+    },
+    "link_001_L": {
+      "networks": [
+        "Emotional Scene and Face Processing",
+        "Reward"
+      ],
+      "primary_role": "approach",
+      "primary_network": "Emotional Scene and Face Processing",
+      "contexts": [
+        [
+          "Emotional Scene and Face Processing",
+          "approach"
+        ],
+        [
+          "Reward",
+          "approach"
+        ]
+      ]
+    },
+    "link_002_L": {
+      "networks": [
+        "Emotional Scene and Face Processing",
+        "Reward",
+        "Extended Socio-Affective Default"
+      ],
+      "primary_role": "support",
+      "primary_network": "Emotional Scene and Face Processing",
+      "contexts": [
+        [
+          "Emotional Scene and Face Processing",
+          "support"
+        ],
+        [
+          "Extended Socio-Affective Default",
+          "support"
+        ],
+        [
+          "Reward",
+          "support"
+        ]
+      ]
+    },
+    "link_003_L": {
+      "networks": [
+        "Emotional Scene and Face Processing"
+      ],
+      "primary_role": "flee",
+      "primary_network": "Emotional Scene and Face Processing",
+      "contexts": [
+        [
+          "Emotional Scene and Face Processing",
+          "flee"
+        ]
+      ]
+    },
+    "link_004_L": {
+      "networks": [
+        "Vigilant Attention"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Vigilant Attention",
+      "contexts": [
+        [
+          "Vigilant Attention",
+          "perceive"
+        ]
+      ]
+    },
+    "link_005_L": {
+      "networks": [
+        "Reward"
+      ],
+      "primary_role": "approach",
+      "primary_network": "Reward",
+      "contexts": [
+        [
+          "Reward",
+          "approach"
+        ]
+      ]
+    },
+    "link_006_L": {
+      "networks": [
+        "Extended Socio-Affective Default"
+      ],
+      "primary_role": "support",
+      "primary_network": "Extended Socio-Affective Default",
+      "contexts": [
+        [
+          "Extended Socio-Affective Default",
+          "support"
+        ]
+      ]
+    },
+    "link_007_L": {
+      "networks": [
+        "Empathy",
+        "Extended Socio-Affective Default"
+      ],
+      "primary_role": "support",
+      "primary_network": "Empathy",
+      "contexts": [
+        [
+          "Empathy",
+          "support"
+        ],
+        [
+          "Extended Socio-Affective Default",
+          "support"
+        ]
+      ]
+    },
+    "link_008_L": {
+      "networks": [
+        "Emotion Regulation",
+        "Cognitive Attention Control"
+      ],
+      "primary_role": "support",
+      "primary_network": "Emotion Regulation",
+      "contexts": [
+        [
+          "Cognitive Attention Control",
+          "support"
+        ],
+        [
+          "Emotion Regulation",
+          "support"
+        ]
+      ]
+    },
+    "link_009_L": {
+      "networks": [
+        "Emotional Scene and Face Processing",
+        "Extended Socio-Affective Default",
+        "Reward",
+        "Empathy",
+        "Emotion Regulation",
+        "Vigilant Attention"
+      ],
+      "primary_role": "support",
+      "primary_network": "Emotional Scene and Face Processing",
+      "contexts": [
+        [
+          "Emotion Regulation",
+          "support"
+        ],
+        [
+          "Emotional Scene and Face Processing",
+          "support"
+        ],
+        [
+          "Empathy",
+          "support"
+        ],
+        [
+          "Extended Socio-Affective Default",
+          "support"
+        ],
+        [
+          "Reward",
+          "support"
+        ],
+        [
+          "Vigilant Attention",
+          "support"
+        ]
+      ]
+    },
+    "link_010_L": {
+      "networks": [
+        "Reward",
+        "Empathy",
+        "Emotion Regulation",
+        "Vigilant Attention",
+        "Cognitive Attention Control"
+      ],
+      "primary_role": "support",
+      "primary_network": "Reward",
+      "contexts": [
+        [
+          "Cognitive Attention Control",
+          "support"
+        ],
+        [
+          "Emotion Regulation",
+          "support"
+        ],
+        [
+          "Empathy",
+          "support"
+        ],
+        [
+          "Reward",
+          "support"
+        ],
+        [
+          "Vigilant Attention",
+          "support"
+        ]
+      ]
+    },
+    "link_011_LR": {
+      "networks": [
+        "Emotional Scene and Face Processing",
+        "Extended Socio-Affective Default",
+        "Reward",
+        "Empathy",
+        "Emotion Regulation",
+        "Vigilant Attention",
+        "Cognitive Attention Control"
+      ],
+      "primary_role": "support",
+      "primary_network": "Emotional Scene and Face Processing",
+      "contexts": [
+        [
+          "Cognitive Attention Control",
+          "support"
+        ],
+        [
+          "Emotion Regulation",
+          "support"
+        ],
+        [
+          "Emotional Scene and Face Processing",
+          "support"
+        ],
+        [
+          "Empathy",
+          "support"
+        ],
+        [
+          "Extended Socio-Affective Default",
+          "support"
+        ],
+        [
+          "Reward",
+          "support"
+        ],
+        [
+          "Vigilant Attention",
+          "support"
+        ]
+      ]
+    },
+    "link_012": {
+      "networks": [
+        "Emotional Scene and Face Processing",
+        "Reward"
+      ],
+      "primary_role": "approach",
+      "primary_network": "Emotional Scene and Face Processing",
+      "contexts": [
+        [
+          "Emotional Scene and Face Processing",
+          "approach"
+        ],
+        [
+          "Reward",
+          "approach"
+        ]
+      ]
+    },
+    "link_013": {
+      "networks": [
+        "Reward"
+      ],
+      "primary_role": "approach",
+      "primary_network": "Reward",
+      "contexts": [
+        [
+          "Reward",
+          "approach"
+        ]
+      ]
+    },
+    "link_014": {
+      "networks": [
+        "Empathy",
+        "Extended Socio-Affective Default"
+      ],
+      "primary_role": "support",
+      "primary_network": "Empathy",
+      "contexts": [
+        [
+          "Empathy",
+          "support"
+        ],
+        [
+          "Extended Socio-Affective Default",
+          "support"
+        ]
+      ]
+    },
+    "link_015": {
+      "networks": [
+        "Emotion Regulation",
+        "Cognitive Attention Control"
+      ],
+      "primary_role": "support",
+      "primary_network": "Emotion Regulation",
+      "contexts": [
+        [
+          "Cognitive Attention Control",
+          "support"
+        ],
+        [
+          "Emotion Regulation",
+          "support"
+        ]
+      ]
+    },
+    "link_016": {
+      "networks": [
+        "Emotional Scene and Face Processing",
+        "Extended Socio-Affective Default",
+        "Reward",
+        "Empathy",
+        "Emotion Regulation",
+        "Vigilant Attention"
+      ],
+      "primary_role": "support",
+      "primary_network": "Emotional Scene and Face Processing",
+      "contexts": [
+        [
+          "Emotion Regulation",
+          "support"
+        ],
+        [
+          "Emotional Scene and Face Processing",
+          "support"
+        ],
+        [
+          "Empathy",
+          "support"
+        ],
+        [
+          "Extended Socio-Affective Default",
+          "support"
+        ],
+        [
+          "Reward",
+          "support"
+        ],
+        [
+          "Vigilant Attention",
+          "support"
+        ]
+      ]
+    },
+    "link_017_L": {
+      "networks": [
+        "Working Memory",
+        "Reward"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Working Memory",
+      "contexts": [
+        [
+          "Reward",
+          "perceive"
+        ],
+        [
+          "Working Memory",
+          "perceive"
+        ]
+      ]
+    },
+    "link_018_L": {
+      "networks": [
+        "Extended Multiple Demand"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Extended Multiple Demand",
+      "contexts": [
+        [
+          "Extended Multiple Demand",
+          "perceive"
+        ]
+      ]
+    },
+    "link_019_L": {
+      "networks": [
+        "Working Memory",
+        "Extended Multiple Demand"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Working Memory",
+      "contexts": [
+        [
+          "Extended Multiple Demand",
+          "attack_mental"
+        ],
+        [
+          "Working Memory",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_020_L": {
+      "networks": [
+        "Reward"
+      ],
+      "primary_role": "approach",
+      "primary_network": "Reward",
+      "contexts": [
+        [
+          "Reward",
+          "approach"
+        ]
+      ]
+    },
+    "link_021_L": {
+      "networks": [
+        "Working Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Working Memory",
+      "contexts": [
+        [
+          "Working Memory",
+          "support"
+        ]
+      ]
+    },
+    "link_022_L": {
+      "networks": [
+        "Working Memory",
+        "Reward"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Working Memory",
+      "contexts": [
+        [
+          "Reward",
+          "attack_mental"
+        ],
+        [
+          "Working Memory",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_023_L": {
+      "networks": [
+        "Working Memory",
+        "Extended Multiple Demand"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Working Memory",
+      "contexts": [
+        [
+          "Extended Multiple Demand",
+          "perceive"
+        ],
+        [
+          "Working Memory",
+          "perceive"
+        ]
+      ]
+    },
+    "link_024_LR": {
+      "networks": [
+        "Working Memory",
+        "Reward",
+        "Extended Multiple Demand"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Working Memory",
+      "contexts": [
+        [
+          "Extended Multiple Demand",
+          "attack_mental"
+        ],
+        [
+          "Reward",
+          "attack_mental"
+        ],
+        [
+          "Working Memory",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_025": {
+      "networks": [
+        "Working Memory",
+        "Extended Multiple Demand"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Working Memory",
+      "contexts": [
+        [
+          "Extended Multiple Demand",
+          "attack_mental"
+        ],
+        [
+          "Working Memory",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_026": {
+      "networks": [
+        "Working Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Working Memory",
+      "contexts": [
+        [
+          "Working Memory",
+          "support"
+        ]
+      ]
+    },
+    "link_027": {
+      "networks": [
+        "Working Memory",
+        "Reward"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Working Memory",
+      "contexts": [
+        [
+          "Reward",
+          "attack_mental"
+        ],
+        [
+          "Working Memory",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_028": {
+      "networks": [
+        "Working Memory",
+        "Reward",
+        "Extended Multiple Demand"
+      ],
+      "primary_role": "approach",
+      "primary_network": "Working Memory",
+      "contexts": [
+        [
+          "Extended Multiple Demand",
+          "approach"
+        ],
+        [
+          "Reward",
+          "approach"
+        ],
+        [
+          "Working Memory",
+          "approach"
+        ]
+      ]
+    },
+    "link_029_L": {
+      "networks": [
+        "Semantic Memory"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Semantic Memory",
+      "contexts": [
+        [
+          "Semantic Memory",
+          "perceive"
+        ]
+      ]
+    },
+    "link_030_L": {
+      "networks": [
+        "Semantic Memory"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Semantic Memory",
+      "contexts": [
+        [
+          "Semantic Memory",
+          "perceive"
+        ]
+      ]
+    },
+    "link_031_L": {
+      "networks": [
+        "Emotional Scene and Face Processing",
+        "Mirror Neuron System"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Emotional Scene and Face Processing",
+      "contexts": [
+        [
+          "Emotional Scene and Face Processing",
+          "perceive"
+        ],
+        [
+          "Mirror Neuron System",
+          "perceive"
+        ]
+      ]
+    },
+    "link_032_L": {
+      "networks": [
+        "Semantic Memory"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Semantic Memory",
+      "contexts": [
+        [
+          "Semantic Memory",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_033_L": {
+      "networks": [
+        "Emotional Scene and Face Processing",
+        "Semantic Memory"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Emotional Scene and Face Processing",
+      "contexts": [
+        [
+          "Emotional Scene and Face Processing",
+          "perceive"
+        ],
+        [
+          "Semantic Memory",
+          "perceive"
+        ]
+      ]
+    },
+    "link_034_L": {
+      "networks": [
+        "Mirror Neuron System"
+      ],
+      "primary_role": "disrupt",
+      "primary_network": "Mirror Neuron System",
+      "contexts": [
+        [
+          "Mirror Neuron System",
+          "disrupt"
+        ]
+      ]
+    },
+    "link_035_L": {
+      "networks": [
+        "Mirror Neuron System"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Mirror Neuron System",
+      "contexts": [
+        [
+          "Mirror Neuron System",
+          "perceive"
+        ]
+      ]
+    },
+    "link_036_L": {
+      "networks": [
+        "Mirror Neuron System"
+      ],
+      "primary_role": "disrupt",
+      "primary_network": "Mirror Neuron System",
+      "contexts": [
+        [
+          "Mirror Neuron System",
+          "disrupt"
+        ]
+      ]
+    },
+    "link_037": {
+      "networks": [
+        "Emotional Scene and Face Processing",
+        "Mirror Neuron System"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Emotional Scene and Face Processing",
+      "contexts": [
+        [
+          "Emotional Scene and Face Processing",
+          "perceive"
+        ],
+        [
+          "Mirror Neuron System",
+          "perceive"
+        ]
+      ]
+    },
+    "link_038": {
+      "networks": [
+        "Mirror Neuron System"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Mirror Neuron System",
+      "contexts": [
+        [
+          "Mirror Neuron System",
+          "perceive"
+        ]
+      ]
+    },
+    "link_039_L": {
+      "networks": [
+        "Semantic Memory"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Semantic Memory",
+      "contexts": [
+        [
+          "Semantic Memory",
+          "perceive"
+        ]
+      ]
+    },
+    "link_040_L": {
+      "networks": [
+        "Cognitive Attention Control",
+        "Vigilant Attention"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Cognitive Attention Control",
+      "contexts": [
+        [
+          "Cognitive Attention Control",
+          "perceive"
+        ],
+        [
+          "Vigilant Attention",
+          "perceive"
+        ]
+      ]
+    },
+    "link_041_L": {
+      "networks": [
+        "Semantic Memory"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Semantic Memory",
+      "contexts": [
+        [
+          "Semantic Memory",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_042_L": {
+      "networks": [
+        "Semantic Memory"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Semantic Memory",
+      "contexts": [
+        [
+          "Semantic Memory",
+          "perceive"
+        ]
+      ]
+    },
+    "link_043_L": {
+      "networks": [
+        "Working Memory",
+        "Cognitive Attention Control"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Working Memory",
+      "contexts": [
+        [
+          "Cognitive Attention Control",
+          "perceive"
+        ],
+        [
+          "Working Memory",
+          "perceive"
+        ]
+      ]
+    },
+    "link_044_L": {
+      "networks": [
+        "Motor"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Motor",
+      "contexts": [
+        [
+          "Motor",
+          "perceive"
+        ]
+      ]
+    },
+    "link_045_L": {
+      "networks": [
+        "Vigilant Attention",
+        "Motor"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Vigilant Attention",
+      "contexts": [
+        [
+          "Motor",
+          "perceive"
+        ],
+        [
+          "Vigilant Attention",
+          "perceive"
+        ]
+      ]
+    },
+    "link_046_L": {
+      "networks": [
+        "Working Memory",
+        "Cognitive Attention Control"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Working Memory",
+      "contexts": [
+        [
+          "Cognitive Attention Control",
+          "perceive"
+        ],
+        [
+          "Working Memory",
+          "perceive"
+        ]
+      ]
+    },
+    "link_047_L": {
+      "networks": [
+        "Reward",
+        "Working Memory",
+        "Vigilant Attention",
+        "Motor",
+        "Semantic Memory"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Reward",
+      "contexts": [
+        [
+          "Motor",
+          "perceive"
+        ],
+        [
+          "Reward",
+          "perceive"
+        ],
+        [
+          "Semantic Memory",
+          "perceive"
+        ],
+        [
+          "Vigilant Attention",
+          "perceive"
+        ],
+        [
+          "Working Memory",
+          "perceive"
+        ]
+      ]
+    },
+    "link_048_L": {
+      "networks": [
+        "Working Memory",
+        "Cognitive Attention Control"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Working Memory",
+      "contexts": [
+        [
+          "Cognitive Attention Control",
+          "perceive"
+        ],
+        [
+          "Working Memory",
+          "perceive"
+        ]
+      ]
+    },
+    "link_049_L": {
+      "networks": [
+        "Vigilant Attention",
+        "Semantic Memory"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Vigilant Attention",
+      "contexts": [
+        [
+          "Semantic Memory",
+          "attack_mental"
+        ],
+        [
+          "Vigilant Attention",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_050_L": {
+      "networks": [
+        "Working Memory",
+        "Reward",
+        "Vigilant Attention",
+        "Cognitive Attention Control"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Working Memory",
+      "contexts": [
+        [
+          "Cognitive Attention Control",
+          "perceive"
+        ],
+        [
+          "Reward",
+          "perceive"
+        ],
+        [
+          "Vigilant Attention",
+          "perceive"
+        ],
+        [
+          "Working Memory",
+          "perceive"
+        ]
+      ]
+    },
+    "link_051": {
+      "networks": [
+        "Semantic Memory"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Semantic Memory",
+      "contexts": [
+        [
+          "Semantic Memory",
+          "perceive"
+        ]
+      ]
+    },
+    "link_052": {
+      "networks": [
+        "Working Memory",
+        "Cognitive Attention Control"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Working Memory",
+      "contexts": [
+        [
+          "Cognitive Attention Control",
+          "perceive"
+        ],
+        [
+          "Working Memory",
+          "perceive"
+        ]
+      ]
+    },
+    "link_053_L": {
+      "networks": [
+        "Semantic Memory"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Semantic Memory",
+      "contexts": [
+        [
+          "Semantic Memory",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_054_L": {
+      "networks": [
+        "Semantic Memory"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Semantic Memory",
+      "contexts": [
+        [
+          "Semantic Memory",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_055_L": {
+      "networks": [
+        "Semantic Memory"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Semantic Memory",
+      "contexts": [
+        [
+          "Semantic Memory",
+          "perceive"
+        ]
+      ]
+    },
+    "link_056_L": {
+      "networks": [
+        "Extended Multiple Demand"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Extended Multiple Demand",
+      "contexts": [
+        [
+          "Extended Multiple Demand",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_057_L": {
+      "networks": [
+        "Semantic Memory"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Semantic Memory",
+      "contexts": [
+        [
+          "Semantic Memory",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_058_L": {
+      "networks": [
+        "Extended Multiple Demand"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Extended Multiple Demand",
+      "contexts": [
+        [
+          "Extended Multiple Demand",
+          "perceive"
+        ]
+      ]
+    },
+    "link_059_LR": {
+      "networks": [
+        "Extended Multiple Demand",
+        "Semantic Memory"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Extended Multiple Demand",
+      "contexts": [
+        [
+          "Extended Multiple Demand",
+          "perceive"
+        ],
+        [
+          "Semantic Memory",
+          "perceive"
+        ]
+      ]
+    },
+    "link_060": {
+      "networks": [
+        "Semantic Memory"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Semantic Memory",
+      "contexts": [
+        [
+          "Semantic Memory",
+          "perceive"
+        ]
+      ]
+    },
+    "link_061": {
+      "networks": [
+        "Extended Multiple Demand"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Extended Multiple Demand",
+      "contexts": [
+        [
+          "Extended Multiple Demand",
+          "perceive"
+        ]
+      ]
+    },
+    "link_062_L": {
+      "networks": [
+        "Emotional Scene and Face Processing"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Emotional Scene and Face Processing",
+      "contexts": [
+        [
+          "Emotional Scene and Face Processing",
+          "perceive"
+        ]
+      ]
+    },
+    "link_063_L": {
+      "networks": [
+        "Autobiographical Memory",
+        "Emotional Scene and Face Processing"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Autobiographical Memory",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "perceive"
+        ],
+        [
+          "Emotional Scene and Face Processing",
+          "perceive"
+        ]
+      ]
+    },
+    "link_064_L": {
+      "networks": [
+        "Mirror Neuron System",
+        "Cognitive Attention Control"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Mirror Neuron System",
+      "contexts": [
+        [
+          "Cognitive Attention Control",
+          "perceive"
+        ],
+        [
+          "Mirror Neuron System",
+          "perceive"
+        ]
+      ]
+    },
+    "link_065_L": {
+      "networks": [
+        "Mirror Neuron System"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Mirror Neuron System",
+      "contexts": [
+        [
+          "Mirror Neuron System",
+          "perceive"
+        ]
+      ]
+    },
+    "link_066_L": {
+      "networks": [
+        "Cognitive Attention Control",
+        "Vigilant Attention"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Cognitive Attention Control",
+      "contexts": [
+        [
+          "Cognitive Attention Control",
+          "perceive"
+        ],
+        [
+          "Vigilant Attention",
+          "perceive"
+        ]
+      ]
+    },
+    "link_067": {
+      "networks": [
+        "Mirror Neuron System",
+        "Cognitive Attention Control"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Mirror Neuron System",
+      "contexts": [
+        [
+          "Cognitive Attention Control",
+          "perceive"
+        ],
+        [
+          "Mirror Neuron System",
+          "perceive"
+        ]
+      ]
+    },
+    "link_068_L": {
+      "networks": [
+        "Emotional Scene and Face Processing",
+        "Reward",
+        "Semantic Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Emotional Scene and Face Processing",
+      "contexts": [
+        [
+          "Emotional Scene and Face Processing",
+          "support"
+        ],
+        [
+          "Reward",
+          "support"
+        ],
+        [
+          "Semantic Memory",
+          "support"
+        ]
+      ]
+    },
+    "link_069_L": {
+      "networks": [
+        "Semantic Memory"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Semantic Memory",
+      "contexts": [
+        [
+          "Semantic Memory",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_070_L": {
+      "networks": [
+        "Emotional Scene and Face Processing",
+        "Reward",
+        "Semantic Memory"
+      ],
+      "primary_role": "approach",
+      "primary_network": "Emotional Scene and Face Processing",
+      "contexts": [
+        [
+          "Emotional Scene and Face Processing",
+          "approach"
+        ],
+        [
+          "Reward",
+          "approach"
+        ],
+        [
+          "Semantic Memory",
+          "approach"
+        ]
+      ]
+    },
+    "link_071_L": {
+      "networks": [
+        "Semantic Memory"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Semantic Memory",
+      "contexts": [
+        [
+          "Semantic Memory",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_072_L": {
+      "networks": [
+        "Reward"
+      ],
+      "primary_role": "approach",
+      "primary_network": "Reward",
+      "contexts": [
+        [
+          "Reward",
+          "approach"
+        ]
+      ]
+    },
+    "link_073": {
+      "networks": [
+        "Emotional Scene and Face Processing",
+        "Reward"
+      ],
+      "primary_role": "approach",
+      "primary_network": "Emotional Scene and Face Processing",
+      "contexts": [
+        [
+          "Emotional Scene and Face Processing",
+          "approach"
+        ],
+        [
+          "Reward",
+          "approach"
+        ]
+      ]
+    },
+    "link_074_LR": {
+      "networks": [
+        "Emotional Scene and Face Processing",
+        "Reward",
+        "Semantic Memory"
+      ],
+      "primary_role": "approach",
+      "primary_network": "Emotional Scene and Face Processing",
+      "contexts": [
+        [
+          "Emotional Scene and Face Processing",
+          "approach"
+        ],
+        [
+          "Reward",
+          "approach"
+        ],
+        [
+          "Semantic Memory",
+          "approach"
+        ]
+      ]
+    },
+    "link_075": {
+      "networks": [
+        "Emotional Scene and Face Processing",
+        "Reward",
+        "Semantic Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Emotional Scene and Face Processing",
+      "contexts": [
+        [
+          "Emotional Scene and Face Processing",
+          "support"
+        ],
+        [
+          "Reward",
+          "support"
+        ],
+        [
+          "Semantic Memory",
+          "support"
+        ]
+      ]
+    },
+    "link_076": {
+      "networks": [
+        "Emotional Scene and Face Processing",
+        "Reward",
+        "Semantic Memory"
+      ],
+      "primary_role": "approach",
+      "primary_network": "Emotional Scene and Face Processing",
+      "contexts": [
+        [
+          "Emotional Scene and Face Processing",
+          "approach"
+        ],
+        [
+          "Reward",
+          "approach"
+        ],
+        [
+          "Semantic Memory",
+          "approach"
+        ]
+      ]
+    },
+    "link_077": {
+      "networks": [
+        "Reward"
+      ],
+      "primary_role": "approach",
+      "primary_network": "Reward",
+      "contexts": [
+        [
+          "Reward",
+          "approach"
+        ]
+      ]
+    },
+    "link_078_L": {
+      "networks": [
+        "Theory of Mind",
+        "Semantic Memory"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Theory of Mind",
+      "contexts": [
+        [
+          "Semantic Memory",
+          "attack_mental"
+        ],
+        [
+          "Theory of Mind",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_079_L": {
+      "networks": [
+        "Autobiographical Memory",
+        "Reward",
+        "Semantic Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Autobiographical Memory",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "support"
+        ],
+        [
+          "Reward",
+          "support"
+        ],
+        [
+          "Semantic Memory",
+          "support"
+        ]
+      ]
+    },
+    "link_080_L": {
+      "networks": [
+        "Autobiographical Memory",
+        "Extended Socio-Affective Default",
+        "Theory of Mind",
+        "Semantic Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Autobiographical Memory",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "support"
+        ],
+        [
+          "Extended Socio-Affective Default",
+          "support"
+        ],
+        [
+          "Semantic Memory",
+          "support"
+        ],
+        [
+          "Theory of Mind",
+          "support"
+        ]
+      ]
+    },
+    "link_081_L": {
+      "networks": [
+        "Extended Socio-Affective Default"
+      ],
+      "primary_role": "support",
+      "primary_network": "Extended Socio-Affective Default",
+      "contexts": [
+        [
+          "Extended Socio-Affective Default",
+          "support"
+        ]
+      ]
+    },
+    "link_082_L": {
+      "networks": [
+        "Autobiographical Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Autobiographical Memory",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "support"
+        ]
+      ]
+    },
+    "link_083_L": {
+      "networks": [
+        "Emotional Scene and Face Processing",
+        "Theory of Mind",
+        "Extended Socio-Affective Default",
+        "Autobiographical Memory",
+        "Reward",
+        "Semantic Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Emotional Scene and Face Processing",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "support"
+        ],
+        [
+          "Emotional Scene and Face Processing",
+          "support"
+        ],
+        [
+          "Extended Socio-Affective Default",
+          "support"
+        ],
+        [
+          "Reward",
+          "support"
+        ],
+        [
+          "Semantic Memory",
+          "support"
+        ],
+        [
+          "Theory of Mind",
+          "support"
+        ]
+      ]
+    },
+    "link_084_L": {
+      "networks": [
+        "Theory of Mind"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Theory of Mind",
+      "contexts": [
+        [
+          "Theory of Mind",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_085_L": {
+      "networks": [
+        "Theory of Mind"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Theory of Mind",
+      "contexts": [
+        [
+          "Theory of Mind",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_086_L": {
+      "networks": [
+        "Theory of Mind"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Theory of Mind",
+      "contexts": [
+        [
+          "Theory of Mind",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_087_L": {
+      "networks": [
+        "Reward"
+      ],
+      "primary_role": "approach",
+      "primary_network": "Reward",
+      "contexts": [
+        [
+          "Reward",
+          "approach"
+        ]
+      ]
+    },
+    "link_088": {
+      "networks": [
+        "Emotional Scene and Face Processing",
+        "Reward",
+        "Extended Socio-Affective Default"
+      ],
+      "primary_role": "support",
+      "primary_network": "Emotional Scene and Face Processing",
+      "contexts": [
+        [
+          "Emotional Scene and Face Processing",
+          "support"
+        ],
+        [
+          "Extended Socio-Affective Default",
+          "support"
+        ],
+        [
+          "Reward",
+          "support"
+        ]
+      ]
+    },
+    "link_089": {
+      "networks": [
+        "Semantic Memory"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Semantic Memory",
+      "contexts": [
+        [
+          "Semantic Memory",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_090": {
+      "networks": [
+        "Emotional Scene and Face Processing",
+        "Reward",
+        "Semantic Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Emotional Scene and Face Processing",
+      "contexts": [
+        [
+          "Emotional Scene and Face Processing",
+          "support"
+        ],
+        [
+          "Reward",
+          "support"
+        ],
+        [
+          "Semantic Memory",
+          "support"
+        ]
+      ]
+    },
+    "link_091_LR": {
+      "networks": [
+        "Emotional Scene and Face Processing",
+        "Theory of Mind",
+        "Extended Socio-Affective Default",
+        "Autobiographical Memory",
+        "Reward",
+        "Semantic Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Emotional Scene and Face Processing",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "support"
+        ],
+        [
+          "Emotional Scene and Face Processing",
+          "support"
+        ],
+        [
+          "Extended Socio-Affective Default",
+          "support"
+        ],
+        [
+          "Reward",
+          "support"
+        ],
+        [
+          "Semantic Memory",
+          "support"
+        ],
+        [
+          "Theory of Mind",
+          "support"
+        ]
+      ]
+    },
+    "link_092": {
+      "networks": [
+        "Theory of Mind",
+        "Semantic Memory"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Theory of Mind",
+      "contexts": [
+        [
+          "Semantic Memory",
+          "attack_mental"
+        ],
+        [
+          "Theory of Mind",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_093": {
+      "networks": [
+        "Extended Socio-Affective Default"
+      ],
+      "primary_role": "support",
+      "primary_network": "Extended Socio-Affective Default",
+      "contexts": [
+        [
+          "Extended Socio-Affective Default",
+          "support"
+        ]
+      ]
+    },
+    "link_094": {
+      "networks": [
+        "Autobiographical Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Autobiographical Memory",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "support"
+        ]
+      ]
+    },
+    "link_095": {
+      "networks": [
+        "Emotional Scene and Face Processing",
+        "Theory of Mind",
+        "Extended Socio-Affective Default",
+        "Autobiographical Memory",
+        "Reward",
+        "Semantic Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Emotional Scene and Face Processing",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "support"
+        ],
+        [
+          "Emotional Scene and Face Processing",
+          "support"
+        ],
+        [
+          "Extended Socio-Affective Default",
+          "support"
+        ],
+        [
+          "Reward",
+          "support"
+        ],
+        [
+          "Semantic Memory",
+          "support"
+        ],
+        [
+          "Theory of Mind",
+          "support"
+        ]
+      ]
+    },
+    "link_096": {
+      "networks": [
+        "Theory of Mind"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Theory of Mind",
+      "contexts": [
+        [
+          "Theory of Mind",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_097": {
+      "networks": [
+        "Theory of Mind"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Theory of Mind",
+      "contexts": [
+        [
+          "Theory of Mind",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_098": {
+      "networks": [
+        "Reward"
+      ],
+      "primary_role": "approach",
+      "primary_network": "Reward",
+      "contexts": [
+        [
+          "Reward",
+          "approach"
+        ]
+      ]
+    },
+    "link_099_L": {
+      "networks": [
+        "Theory of Mind"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Theory of Mind",
+      "contexts": [
+        [
+          "Theory of Mind",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_100_L": {
+      "networks": [
+        "Theory of Mind"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Theory of Mind",
+      "contexts": [
+        [
+          "Theory of Mind",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_101_L": {
+      "networks": [
+        "Theory of Mind",
+        "Semantic Memory"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Theory of Mind",
+      "contexts": [
+        [
+          "Semantic Memory",
+          "attack_mental"
+        ],
+        [
+          "Theory of Mind",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_102_L": {
+      "networks": [
+        "Theory of Mind"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Theory of Mind",
+      "contexts": [
+        [
+          "Theory of Mind",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_103": {
+      "networks": [
+        "Semantic Memory"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Semantic Memory",
+      "contexts": [
+        [
+          "Semantic Memory",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_104_L": {
+      "networks": [
+        "Autobiographical Memory",
+        "Semantic Memory"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Autobiographical Memory",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "perceive"
+        ],
+        [
+          "Semantic Memory",
+          "perceive"
+        ]
+      ]
+    },
+    "link_105_L": {
+      "networks": [
+        "Autobiographical Memory",
+        "Emotional Scene and Face Processing",
+        "Semantic Memory"
+      ],
+      "primary_role": "flee",
+      "primary_network": "Autobiographical Memory",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "flee"
+        ],
+        [
+          "Emotional Scene and Face Processing",
+          "flee"
+        ],
+        [
+          "Semantic Memory",
+          "flee"
+        ]
+      ]
+    },
+    "link_106_LR": {
+      "networks": [
+        "Autobiographical Memory",
+        "Emotional Scene and Face Processing",
+        "Semantic Memory"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Autobiographical Memory",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "perceive"
+        ],
+        [
+          "Emotional Scene and Face Processing",
+          "perceive"
+        ],
+        [
+          "Semantic Memory",
+          "perceive"
+        ]
+      ]
+    },
+    "link_107": {
+      "networks": [
+        "Autobiographical Memory",
+        "Semantic Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Autobiographical Memory",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "support"
+        ],
+        [
+          "Semantic Memory",
+          "support"
+        ]
+      ]
+    },
+    "link_108_L": {
+      "networks": [
+        "Vigilant Attention"
+      ],
+      "primary_role": "attack_physical",
+      "primary_network": "Vigilant Attention",
+      "contexts": [
+        [
+          "Vigilant Attention",
+          "attack_physical"
+        ]
+      ]
+    },
+    "link_109_L": {
+      "networks": [
+        "Vigilant Attention"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Vigilant Attention",
+      "contexts": [
+        [
+          "Vigilant Attention",
+          "perceive"
+        ]
+      ]
+    },
+    "link_110_LR": {
+      "networks": [
+        "Vigilant Attention"
+      ],
+      "primary_role": "attack_physical",
+      "primary_network": "Vigilant Attention",
+      "contexts": [
+        [
+          "Vigilant Attention",
+          "attack_physical"
+        ]
+      ]
+    },
+    "link_111": {
+      "networks": [
+        "Vigilant Attention"
+      ],
+      "primary_role": "attack_physical",
+      "primary_network": "Vigilant Attention",
+      "contexts": [
+        [
+          "Vigilant Attention",
+          "attack_physical"
+        ]
+      ]
+    },
+    "link_112": {
+      "networks": [
+        "Vigilant Attention"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Vigilant Attention",
+      "contexts": [
+        [
+          "Vigilant Attention",
+          "perceive"
+        ]
+      ]
+    },
+    "link_113_L": {
+      "networks": [
+        "Emotion Regulation",
+        "Cognitive Attention Control",
+        "Working Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Emotion Regulation",
+      "contexts": [
+        [
+          "Cognitive Attention Control",
+          "support"
+        ],
+        [
+          "Emotion Regulation",
+          "support"
+        ],
+        [
+          "Working Memory",
+          "support"
+        ]
+      ]
+    },
+    "link_114_L": {
+      "networks": [
+        "Empathy",
+        "Emotion Regulation",
+        "Theory of Mind",
+        "Working Memory"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Empathy",
+      "contexts": [
+        [
+          "Emotion Regulation",
+          "attack_mental"
+        ],
+        [
+          "Empathy",
+          "attack_mental"
+        ],
+        [
+          "Theory of Mind",
+          "attack_mental"
+        ],
+        [
+          "Working Memory",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_115_L": {
+      "networks": [
+        "Mirror Neuron System",
+        "Extended Multiple Demand",
+        "Working Memory",
+        "Emotion Regulation",
+        "Cognitive Attention Control"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Mirror Neuron System",
+      "contexts": [
+        [
+          "Cognitive Attention Control",
+          "perceive"
+        ],
+        [
+          "Emotion Regulation",
+          "perceive"
+        ],
+        [
+          "Extended Multiple Demand",
+          "perceive"
+        ],
+        [
+          "Mirror Neuron System",
+          "perceive"
+        ],
+        [
+          "Working Memory",
+          "perceive"
+        ]
+      ]
+    },
+    "link_116_L": {
+      "networks": [
+        "Empathy",
+        "Emotion Regulation",
+        "Theory of Mind",
+        "Mirror Neuron System"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Empathy",
+      "contexts": [
+        [
+          "Emotion Regulation",
+          "attack_mental"
+        ],
+        [
+          "Empathy",
+          "attack_mental"
+        ],
+        [
+          "Mirror Neuron System",
+          "attack_mental"
+        ],
+        [
+          "Theory of Mind",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_117_L": {
+      "networks": [
+        "Empathy",
+        "Theory of Mind"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Empathy",
+      "contexts": [
+        [
+          "Empathy",
+          "attack_mental"
+        ],
+        [
+          "Theory of Mind",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_118_L": {
+      "networks": [
+        "Extended Multiple Demand",
+        "Empathy",
+        "Working Memory",
+        "Emotion Regulation",
+        "Cognitive Attention Control"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Extended Multiple Demand",
+      "contexts": [
+        [
+          "Cognitive Attention Control",
+          "attack_mental"
+        ],
+        [
+          "Emotion Regulation",
+          "attack_mental"
+        ],
+        [
+          "Empathy",
+          "attack_mental"
+        ],
+        [
+          "Extended Multiple Demand",
+          "attack_mental"
+        ],
+        [
+          "Working Memory",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_119": {
+      "networks": [
+        "Empathy",
+        "Emotion Regulation",
+        "Cognitive Attention Control"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Empathy",
+      "contexts": [
+        [
+          "Cognitive Attention Control",
+          "attack_mental"
+        ],
+        [
+          "Emotion Regulation",
+          "attack_mental"
+        ],
+        [
+          "Empathy",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_120": {
+      "networks": [
+        "Working Memory",
+        "Extended Multiple Demand"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Working Memory",
+      "contexts": [
+        [
+          "Extended Multiple Demand",
+          "attack_mental"
+        ],
+        [
+          "Working Memory",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_121": {
+      "networks": [
+        "Empathy",
+        "Emotion Regulation",
+        "Theory of Mind",
+        "Working Memory"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Empathy",
+      "contexts": [
+        [
+          "Emotion Regulation",
+          "attack_mental"
+        ],
+        [
+          "Empathy",
+          "attack_mental"
+        ],
+        [
+          "Theory of Mind",
+          "attack_mental"
+        ],
+        [
+          "Working Memory",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_122": {
+      "networks": [
+        "Extended Multiple Demand",
+        "Empathy",
+        "Working Memory",
+        "Emotion Regulation",
+        "Cognitive Attention Control"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Extended Multiple Demand",
+      "contexts": [
+        [
+          "Cognitive Attention Control",
+          "attack_mental"
+        ],
+        [
+          "Emotion Regulation",
+          "attack_mental"
+        ],
+        [
+          "Empathy",
+          "attack_mental"
+        ],
+        [
+          "Extended Multiple Demand",
+          "attack_mental"
+        ],
+        [
+          "Working Memory",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_123_L": {
+      "networks": [
+        "Motor"
+      ],
+      "primary_role": "attack_physical",
+      "primary_network": "Motor",
+      "contexts": [
+        [
+          "Motor",
+          "attack_physical"
+        ]
+      ]
+    },
+    "link_124_L": {
+      "networks": [
+        "Mirror Neuron System"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Mirror Neuron System",
+      "contexts": [
+        [
+          "Mirror Neuron System",
+          "perceive"
+        ]
+      ]
+    },
+    "link_125_L": {
+      "networks": [
+        "Mirror Neuron System"
+      ],
+      "primary_role": "disrupt",
+      "primary_network": "Mirror Neuron System",
+      "contexts": [
+        [
+          "Mirror Neuron System",
+          "disrupt"
+        ]
+      ]
+    },
+    "link_126_LR": {
+      "networks": [
+        "Mirror Neuron System",
+        "Motor"
+      ],
+      "primary_role": "attack_physical",
+      "primary_network": "Mirror Neuron System",
+      "contexts": [
+        [
+          "Mirror Neuron System",
+          "attack_physical"
+        ],
+        [
+          "Motor",
+          "attack_physical"
+        ]
+      ]
+    },
+    "link_127": {
+      "networks": [
+        "Motor"
+      ],
+      "primary_role": "attack_physical",
+      "primary_network": "Motor",
+      "contexts": [
+        [
+          "Motor",
+          "attack_physical"
+        ]
+      ]
+    },
+    "link_128": {
+      "networks": [
+        "Mirror Neuron System"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Mirror Neuron System",
+      "contexts": [
+        [
+          "Mirror Neuron System",
+          "perceive"
+        ]
+      ]
+    },
+    "link_129": {
+      "networks": [
+        "Mirror Neuron System"
+      ],
+      "primary_role": "disrupt",
+      "primary_network": "Mirror Neuron System",
+      "contexts": [
+        [
+          "Mirror Neuron System",
+          "disrupt"
+        ]
+      ]
+    },
+    "link_130_L": {
+      "networks": [
+        "Autobiographical Memory",
+        "Semantic Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Autobiographical Memory",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "support"
+        ],
+        [
+          "Semantic Memory",
+          "support"
+        ]
+      ]
+    },
+    "link_131_L": {
+      "networks": [
+        "Autobiographical Memory",
+        "Reward",
+        "Semantic Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Autobiographical Memory",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "support"
+        ],
+        [
+          "Reward",
+          "support"
+        ],
+        [
+          "Semantic Memory",
+          "support"
+        ]
+      ]
+    },
+    "link_132_L": {
+      "networks": [
+        "Reward"
+      ],
+      "primary_role": "approach",
+      "primary_network": "Reward",
+      "contexts": [
+        [
+          "Reward",
+          "approach"
+        ]
+      ]
+    },
+    "link_133": {
+      "networks": [
+        "Reward"
+      ],
+      "primary_role": "approach",
+      "primary_network": "Reward",
+      "contexts": [
+        [
+          "Reward",
+          "approach"
+        ]
+      ]
+    },
+    "link_134": {
+      "networks": [
+        "Autobiographical Memory",
+        "Reward",
+        "Semantic Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Autobiographical Memory",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "support"
+        ],
+        [
+          "Reward",
+          "support"
+        ],
+        [
+          "Semantic Memory",
+          "support"
+        ]
+      ]
+    },
+    "link_135_LR": {
+      "networks": [
+        "Autobiographical Memory",
+        "Reward",
+        "Semantic Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Autobiographical Memory",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "support"
+        ],
+        [
+          "Reward",
+          "support"
+        ],
+        [
+          "Semantic Memory",
+          "support"
+        ]
+      ]
+    },
+    "link_136": {
+      "networks": [
+        "Autobiographical Memory",
+        "Semantic Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Autobiographical Memory",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "support"
+        ],
+        [
+          "Semantic Memory",
+          "support"
+        ]
+      ]
+    },
+    "link_137": {
+      "networks": [
+        "Autobiographical Memory",
+        "Reward",
+        "Semantic Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Autobiographical Memory",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "support"
+        ],
+        [
+          "Reward",
+          "support"
+        ],
+        [
+          "Semantic Memory",
+          "support"
+        ]
+      ]
+    },
+    "link_138_L": {
+      "networks": [
+        "Vigilant Attention",
+        "Motor"
+      ],
+      "primary_role": "attack_physical",
+      "primary_network": "Vigilant Attention",
+      "contexts": [
+        [
+          "Motor",
+          "attack_physical"
+        ],
+        [
+          "Vigilant Attention",
+          "attack_physical"
+        ]
+      ]
+    },
+    "link_139_L": {
+      "networks": [
+        "Vigilant Attention"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Vigilant Attention",
+      "contexts": [
+        [
+          "Vigilant Attention",
+          "perceive"
+        ]
+      ]
+    },
+    "link_140_L": {
+      "networks": [
+        "Vigilant Attention"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Vigilant Attention",
+      "contexts": [
+        [
+          "Vigilant Attention",
+          "perceive"
+        ]
+      ]
+    },
+    "link_141": {
+      "networks": [
+        "Vigilant Attention"
+      ],
+      "primary_role": "attack_physical",
+      "primary_network": "Vigilant Attention",
+      "contexts": [
+        [
+          "Vigilant Attention",
+          "attack_physical"
+        ]
+      ]
+    },
+    "link_142": {
+      "networks": [
+        "Motor"
+      ],
+      "primary_role": "attack_physical",
+      "primary_network": "Motor",
+      "contexts": [
+        [
+          "Motor",
+          "attack_physical"
+        ]
+      ]
+    },
+    "link_143_LR": {
+      "networks": [
+        "Vigilant Attention",
+        "Motor"
+      ],
+      "primary_role": "attack_physical",
+      "primary_network": "Vigilant Attention",
+      "contexts": [
+        [
+          "Motor",
+          "attack_physical"
+        ],
+        [
+          "Vigilant Attention",
+          "attack_physical"
+        ]
+      ]
+    },
+    "link_144": {
+      "networks": [
+        "Vigilant Attention",
+        "Motor"
+      ],
+      "primary_role": "attack_physical",
+      "primary_network": "Vigilant Attention",
+      "contexts": [
+        [
+          "Motor",
+          "attack_physical"
+        ],
+        [
+          "Vigilant Attention",
+          "attack_physical"
+        ]
+      ]
+    },
+    "link_145_L": {
+      "networks": [
+        "Extended Socio-Affective Default"
+      ],
+      "primary_role": "support",
+      "primary_network": "Extended Socio-Affective Default",
+      "contexts": [
+        [
+          "Extended Socio-Affective Default",
+          "support"
+        ]
+      ]
+    },
+    "link_146_L": {
+      "networks": [
+        "Autobiographical Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Autobiographical Memory",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "support"
+        ]
+      ]
+    },
+    "link_147_L": {
+      "networks": [
+        "Autobiographical Memory",
+        "Extended Socio-Affective Default",
+        "Theory of Mind",
+        "Semantic Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Autobiographical Memory",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "support"
+        ],
+        [
+          "Extended Socio-Affective Default",
+          "support"
+        ],
+        [
+          "Semantic Memory",
+          "support"
+        ],
+        [
+          "Theory of Mind",
+          "support"
+        ]
+      ]
+    },
+    "link_148_L": {
+      "networks": [
+        "Theory of Mind"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Theory of Mind",
+      "contexts": [
+        [
+          "Theory of Mind",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_149": {
+      "networks": [
+        "Autobiographical Memory"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Autobiographical Memory",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "perceive"
+        ]
+      ]
+    },
+    "link_150": {
+      "networks": [
+        "Autobiographical Memory",
+        "Semantic Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Autobiographical Memory",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "support"
+        ],
+        [
+          "Semantic Memory",
+          "support"
+        ]
+      ]
+    },
+    "link_151_LR": {
+      "networks": [
+        "Autobiographical Memory",
+        "Extended Socio-Affective Default",
+        "Theory of Mind",
+        "Semantic Memory"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Autobiographical Memory",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "perceive"
+        ],
+        [
+          "Extended Socio-Affective Default",
+          "perceive"
+        ],
+        [
+          "Semantic Memory",
+          "perceive"
+        ],
+        [
+          "Theory of Mind",
+          "perceive"
+        ]
+      ]
+    },
+    "link_152": {
+      "networks": [
+        "Autobiographical Memory",
+        "Extended Socio-Affective Default",
+        "Theory of Mind",
+        "Semantic Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Autobiographical Memory",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "support"
+        ],
+        [
+          "Extended Socio-Affective Default",
+          "support"
+        ],
+        [
+          "Semantic Memory",
+          "support"
+        ],
+        [
+          "Theory of Mind",
+          "support"
+        ]
+      ]
+    },
+    "link_153": {
+      "networks": [
+        "Autobiographical Memory",
+        "Extended Socio-Affective Default",
+        "Theory of Mind",
+        "Semantic Memory"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Autobiographical Memory",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "attack_mental"
+        ],
+        [
+          "Extended Socio-Affective Default",
+          "attack_mental"
+        ],
+        [
+          "Semantic Memory",
+          "attack_mental"
+        ],
+        [
+          "Theory of Mind",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_154_L": {
+      "networks": [
+        "Empathy",
+        "Extended Socio-Affective Default"
+      ],
+      "primary_role": "support",
+      "primary_network": "Empathy",
+      "contexts": [
+        [
+          "Empathy",
+          "support"
+        ],
+        [
+          "Extended Socio-Affective Default",
+          "support"
+        ]
+      ]
+    },
+    "link_155_L": {
+      "networks": [
+        "Empathy"
+      ],
+      "primary_role": "disrupt",
+      "primary_network": "Empathy",
+      "contexts": [
+        [
+          "Empathy",
+          "disrupt"
+        ]
+      ]
+    },
+    "link_156": {
+      "networks": [
+        "Empathy",
+        "Extended Socio-Affective Default"
+      ],
+      "primary_role": "support",
+      "primary_network": "Empathy",
+      "contexts": [
+        [
+          "Empathy",
+          "support"
+        ],
+        [
+          "Extended Socio-Affective Default",
+          "support"
+        ]
+      ]
+    },
+    "link_157": {
+      "networks": [
+        "Extended Socio-Affective Default"
+      ],
+      "primary_role": "support",
+      "primary_network": "Extended Socio-Affective Default",
+      "contexts": [
+        [
+          "Extended Socio-Affective Default",
+          "support"
+        ]
+      ]
+    },
+    "link_158_LR": {
+      "networks": [
+        "Empathy",
+        "Extended Socio-Affective Default"
+      ],
+      "primary_role": "support",
+      "primary_network": "Empathy",
+      "contexts": [
+        [
+          "Empathy",
+          "support"
+        ],
+        [
+          "Extended Socio-Affective Default",
+          "support"
+        ]
+      ]
+    },
+    "link_159": {
+      "networks": [
+        "Empathy",
+        "Extended Socio-Affective Default"
+      ],
+      "primary_role": "support",
+      "primary_network": "Empathy",
+      "contexts": [
+        [
+          "Empathy",
+          "support"
+        ],
+        [
+          "Extended Socio-Affective Default",
+          "support"
+        ]
+      ]
+    },
+    "link_160": {
+      "networks": [
+        "Empathy"
+      ],
+      "primary_role": "disrupt",
+      "primary_network": "Empathy",
+      "contexts": [
+        [
+          "Empathy",
+          "disrupt"
+        ]
+      ]
+    },
+    "link_161_L": {
+      "networks": [
+        "Autobiographical Memory",
+        "Emotion Regulation",
+        "Working Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Autobiographical Memory",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "support"
+        ],
+        [
+          "Emotion Regulation",
+          "support"
+        ],
+        [
+          "Working Memory",
+          "support"
+        ]
+      ]
+    },
+    "link_162_L": {
+      "networks": [
+        "Emotion Regulation",
+        "Cognitive Attention Control",
+        "Working Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Emotion Regulation",
+      "contexts": [
+        [
+          "Cognitive Attention Control",
+          "support"
+        ],
+        [
+          "Emotion Regulation",
+          "support"
+        ],
+        [
+          "Working Memory",
+          "support"
+        ]
+      ]
+    },
+    "link_163_L": {
+      "networks": [
+        "Emotion Regulation",
+        "Cognitive Attention Control",
+        "Working Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Emotion Regulation",
+      "contexts": [
+        [
+          "Cognitive Attention Control",
+          "support"
+        ],
+        [
+          "Emotion Regulation",
+          "support"
+        ],
+        [
+          "Working Memory",
+          "support"
+        ]
+      ]
+    },
+    "link_164": {
+      "networks": [
+        "Emotion Regulation",
+        "Cognitive Attention Control"
+      ],
+      "primary_role": "support",
+      "primary_network": "Emotion Regulation",
+      "contexts": [
+        [
+          "Cognitive Attention Control",
+          "support"
+        ],
+        [
+          "Emotion Regulation",
+          "support"
+        ]
+      ]
+    },
+    "link_165": {
+      "networks": [
+        "Working Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Working Memory",
+      "contexts": [
+        [
+          "Working Memory",
+          "support"
+        ]
+      ]
+    },
+    "link_166": {
+      "networks": [
+        "Autobiographical Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Autobiographical Memory",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "support"
+        ]
+      ]
+    },
+    "link_167_LR": {
+      "networks": [
+        "Autobiographical Memory",
+        "Emotion Regulation",
+        "Cognitive Attention Control",
+        "Working Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Autobiographical Memory",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "support"
+        ],
+        [
+          "Cognitive Attention Control",
+          "support"
+        ],
+        [
+          "Emotion Regulation",
+          "support"
+        ],
+        [
+          "Working Memory",
+          "support"
+        ]
+      ]
+    },
+    "link_168": {
+      "networks": [
+        "Autobiographical Memory",
+        "Emotion Regulation",
+        "Working Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Autobiographical Memory",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "support"
+        ],
+        [
+          "Emotion Regulation",
+          "support"
+        ],
+        [
+          "Working Memory",
+          "support"
+        ]
+      ]
+    },
+    "link_169_L": {
+      "networks": [
+        "Emotion Regulation",
+        "Working Memory"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Emotion Regulation",
+      "contexts": [
+        [
+          "Emotion Regulation",
+          "perceive"
+        ],
+        [
+          "Working Memory",
+          "perceive"
+        ]
+      ]
+    },
+    "link_170_L": {
+      "networks": [
+        "Theory of Mind"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Theory of Mind",
+      "contexts": [
+        [
+          "Theory of Mind",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_171_L": {
+      "networks": [
+        "Reward",
+        "Empathy",
+        "Emotion Regulation",
+        "Working Memory",
+        "Vigilant Attention"
+      ],
+      "primary_role": "approach",
+      "primary_network": "Reward",
+      "contexts": [
+        [
+          "Emotion Regulation",
+          "approach"
+        ],
+        [
+          "Empathy",
+          "approach"
+        ],
+        [
+          "Reward",
+          "approach"
+        ],
+        [
+          "Vigilant Attention",
+          "approach"
+        ],
+        [
+          "Working Memory",
+          "approach"
+        ]
+      ]
+    },
+    "link_172": {
+      "networks": [
+        "Emotional Scene and Face Processing",
+        "Extended Socio-Affective Default",
+        "Reward",
+        "Empathy",
+        "Emotion Regulation",
+        "Vigilant Attention"
+      ],
+      "primary_role": "support",
+      "primary_network": "Emotional Scene and Face Processing",
+      "contexts": [
+        [
+          "Emotion Regulation",
+          "support"
+        ],
+        [
+          "Emotional Scene and Face Processing",
+          "support"
+        ],
+        [
+          "Empathy",
+          "support"
+        ],
+        [
+          "Extended Socio-Affective Default",
+          "support"
+        ],
+        [
+          "Reward",
+          "support"
+        ],
+        [
+          "Vigilant Attention",
+          "support"
+        ]
+      ]
+    },
+    "link_173": {
+      "networks": [
+        "Working Memory",
+        "Reward"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Working Memory",
+      "contexts": [
+        [
+          "Reward",
+          "attack_mental"
+        ],
+        [
+          "Working Memory",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_174": {
+      "networks": [
+        "Emotional Scene and Face Processing",
+        "Reward",
+        "Semantic Memory"
+      ],
+      "primary_role": "approach",
+      "primary_network": "Emotional Scene and Face Processing",
+      "contexts": [
+        [
+          "Emotional Scene and Face Processing",
+          "approach"
+        ],
+        [
+          "Reward",
+          "approach"
+        ],
+        [
+          "Semantic Memory",
+          "approach"
+        ]
+      ]
+    },
+    "link_175": {
+      "networks": [
+        "Emotional Scene and Face Processing",
+        "Theory of Mind",
+        "Extended Socio-Affective Default",
+        "Autobiographical Memory",
+        "Reward",
+        "Semantic Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Emotional Scene and Face Processing",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "support"
+        ],
+        [
+          "Emotional Scene and Face Processing",
+          "support"
+        ],
+        [
+          "Extended Socio-Affective Default",
+          "support"
+        ],
+        [
+          "Reward",
+          "support"
+        ],
+        [
+          "Semantic Memory",
+          "support"
+        ],
+        [
+          "Theory of Mind",
+          "support"
+        ]
+      ]
+    },
+    "link_176": {
+      "networks": [
+        "Vigilant Attention"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Vigilant Attention",
+      "contexts": [
+        [
+          "Vigilant Attention",
+          "perceive"
+        ]
+      ]
+    },
+    "link_177": {
+      "networks": [
+        "Empathy",
+        "Emotion Regulation",
+        "Theory of Mind",
+        "Working Memory"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Empathy",
+      "contexts": [
+        [
+          "Emotion Regulation",
+          "attack_mental"
+        ],
+        [
+          "Empathy",
+          "attack_mental"
+        ],
+        [
+          "Theory of Mind",
+          "attack_mental"
+        ],
+        [
+          "Working Memory",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_178": {
+      "networks": [
+        "Autobiographical Memory",
+        "Reward",
+        "Semantic Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Autobiographical Memory",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "support"
+        ],
+        [
+          "Reward",
+          "support"
+        ],
+        [
+          "Semantic Memory",
+          "support"
+        ]
+      ]
+    },
+    "link_179": {
+      "networks": [
+        "Vigilant Attention",
+        "Motor"
+      ],
+      "primary_role": "attack_physical",
+      "primary_network": "Vigilant Attention",
+      "contexts": [
+        [
+          "Motor",
+          "attack_physical"
+        ],
+        [
+          "Vigilant Attention",
+          "attack_physical"
+        ]
+      ]
+    },
+    "link_180": {
+      "networks": [
+        "Empathy",
+        "Extended Socio-Affective Default"
+      ],
+      "primary_role": "support",
+      "primary_network": "Empathy",
+      "contexts": [
+        [
+          "Empathy",
+          "support"
+        ],
+        [
+          "Extended Socio-Affective Default",
+          "support"
+        ]
+      ]
+    },
+    "link_181": {
+      "networks": [
+        "Autobiographical Memory",
+        "Emotion Regulation",
+        "Working Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Autobiographical Memory",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "support"
+        ],
+        [
+          "Emotion Regulation",
+          "support"
+        ],
+        [
+          "Working Memory",
+          "support"
+        ]
+      ]
+    },
+    "link_182_LR": {
+      "networks": [
+        "Emotional Scene and Face Processing",
+        "Theory of Mind",
+        "Extended Socio-Affective Default",
+        "Autobiographical Memory",
+        "Reward",
+        "Empathy",
+        "Emotion Regulation",
+        "Working Memory",
+        "Vigilant Attention",
+        "Motor",
+        "Semantic Memory"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Emotional Scene and Face Processing",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "attack_mental"
+        ],
+        [
+          "Emotion Regulation",
+          "attack_mental"
+        ],
+        [
+          "Emotional Scene and Face Processing",
+          "attack_mental"
+        ],
+        [
+          "Empathy",
+          "attack_mental"
+        ],
+        [
+          "Extended Socio-Affective Default",
+          "attack_mental"
+        ],
+        [
+          "Motor",
+          "attack_mental"
+        ],
+        [
+          "Reward",
+          "attack_mental"
+        ],
+        [
+          "Semantic Memory",
+          "attack_mental"
+        ],
+        [
+          "Theory of Mind",
+          "attack_mental"
+        ],
+        [
+          "Vigilant Attention",
+          "attack_mental"
+        ],
+        [
+          "Working Memory",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_183": {
+      "networks": [
+        "Theory of Mind"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Theory of Mind",
+      "contexts": [
+        [
+          "Theory of Mind",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_184": {
+      "networks": [
+        "Reward",
+        "Empathy",
+        "Emotion Regulation",
+        "Working Memory",
+        "Vigilant Attention"
+      ],
+      "primary_role": "approach",
+      "primary_network": "Reward",
+      "contexts": [
+        [
+          "Emotion Regulation",
+          "approach"
+        ],
+        [
+          "Empathy",
+          "approach"
+        ],
+        [
+          "Reward",
+          "approach"
+        ],
+        [
+          "Vigilant Attention",
+          "approach"
+        ],
+        [
+          "Working Memory",
+          "approach"
+        ]
+      ]
+    },
+    "link_185_L": {
+      "networks": [
+        "Mirror Neuron System",
+        "Emotion Regulation"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Mirror Neuron System",
+      "contexts": [
+        [
+          "Emotion Regulation",
+          "attack_mental"
+        ],
+        [
+          "Mirror Neuron System",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_186_L": {
+      "networks": [
+        "Emotion Regulation",
+        "Working Memory",
+        "Cognitive Attention Control",
+        "Extended Multiple Demand"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Emotion Regulation",
+      "contexts": [
+        [
+          "Cognitive Attention Control",
+          "perceive"
+        ],
+        [
+          "Emotion Regulation",
+          "perceive"
+        ],
+        [
+          "Extended Multiple Demand",
+          "perceive"
+        ],
+        [
+          "Working Memory",
+          "perceive"
+        ]
+      ]
+    },
+    "link_187": {
+      "networks": [
+        "Working Memory",
+        "Cognitive Attention Control"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Working Memory",
+      "contexts": [
+        [
+          "Cognitive Attention Control",
+          "perceive"
+        ],
+        [
+          "Working Memory",
+          "perceive"
+        ]
+      ]
+    },
+    "link_188": {
+      "networks": [
+        "Extended Multiple Demand"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Extended Multiple Demand",
+      "contexts": [
+        [
+          "Extended Multiple Demand",
+          "perceive"
+        ]
+      ]
+    },
+    "link_189": {
+      "networks": [
+        "Mirror Neuron System",
+        "Cognitive Attention Control"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Mirror Neuron System",
+      "contexts": [
+        [
+          "Cognitive Attention Control",
+          "perceive"
+        ],
+        [
+          "Mirror Neuron System",
+          "perceive"
+        ]
+      ]
+    },
+    "link_190": {
+      "networks": [
+        "Mirror Neuron System"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Mirror Neuron System",
+      "contexts": [
+        [
+          "Mirror Neuron System",
+          "perceive"
+        ]
+      ]
+    },
+    "link_191_LR": {
+      "networks": [
+        "Mirror Neuron System",
+        "Extended Multiple Demand",
+        "Working Memory",
+        "Emotion Regulation",
+        "Cognitive Attention Control"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Mirror Neuron System",
+      "contexts": [
+        [
+          "Cognitive Attention Control",
+          "perceive"
+        ],
+        [
+          "Emotion Regulation",
+          "perceive"
+        ],
+        [
+          "Extended Multiple Demand",
+          "perceive"
+        ],
+        [
+          "Mirror Neuron System",
+          "perceive"
+        ],
+        [
+          "Working Memory",
+          "perceive"
+        ]
+      ]
+    },
+    "link_192_L": {
+      "networks": [
+        "Empathy",
+        "Theory of Mind"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Empathy",
+      "contexts": [
+        [
+          "Empathy",
+          "attack_mental"
+        ],
+        [
+          "Theory of Mind",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_193_L": {
+      "networks": [
+        "Theory of Mind"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Theory of Mind",
+      "contexts": [
+        [
+          "Theory of Mind",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_194_L": {
+      "networks": [
+        "Empathy",
+        "Emotion Regulation"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Empathy",
+      "contexts": [
+        [
+          "Emotion Regulation",
+          "attack_mental"
+        ],
+        [
+          "Empathy",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_195": {
+      "networks": [
+        "Theory of Mind"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Theory of Mind",
+      "contexts": [
+        [
+          "Theory of Mind",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_196_L": {
+      "networks": [
+        "Empathy",
+        "Vigilant Attention"
+      ],
+      "primary_role": "disrupt",
+      "primary_network": "Empathy",
+      "contexts": [
+        [
+          "Empathy",
+          "disrupt"
+        ],
+        [
+          "Vigilant Attention",
+          "disrupt"
+        ]
+      ]
+    },
+    "link_197": {
+      "networks": [
+        "Theory of Mind"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Theory of Mind",
+      "contexts": [
+        [
+          "Theory of Mind",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_198": {
+      "networks": [
+        "Theory of Mind"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Theory of Mind",
+      "contexts": [
+        [
+          "Theory of Mind",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_199_LR": {
+      "networks": [
+        "Theory of Mind"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Theory of Mind",
+      "contexts": [
+        [
+          "Theory of Mind",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_200_LR": {
+      "networks": [
+        "Theory of Mind"
+      ],
+      "primary_role": "disrupt",
+      "primary_network": "Theory of Mind",
+      "contexts": [
+        [
+          "Theory of Mind",
+          "disrupt"
+        ]
+      ]
+    },
+    "link_201": {
+      "networks": [
+        "Reward",
+        "Empathy",
+        "Emotion Regulation",
+        "Vigilant Attention",
+        "Cognitive Attention Control"
+      ],
+      "primary_role": "support",
+      "primary_network": "Reward",
+      "contexts": [
+        [
+          "Cognitive Attention Control",
+          "support"
+        ],
+        [
+          "Emotion Regulation",
+          "support"
+        ],
+        [
+          "Empathy",
+          "support"
+        ],
+        [
+          "Reward",
+          "support"
+        ],
+        [
+          "Vigilant Attention",
+          "support"
+        ]
+      ]
+    },
+    "link_202": {
+      "networks": [
+        "Working Memory",
+        "Reward",
+        "Extended Multiple Demand"
+      ],
+      "primary_role": "approach",
+      "primary_network": "Working Memory",
+      "contexts": [
+        [
+          "Extended Multiple Demand",
+          "approach"
+        ],
+        [
+          "Reward",
+          "approach"
+        ],
+        [
+          "Working Memory",
+          "approach"
+        ]
+      ]
+    },
+    "link_203": {
+      "networks": [
+        "Reward"
+      ],
+      "primary_role": "approach",
+      "primary_network": "Reward",
+      "contexts": [
+        [
+          "Reward",
+          "approach"
+        ]
+      ]
+    },
+    "link_204": {
+      "networks": [
+        "Reward"
+      ],
+      "primary_role": "approach",
+      "primary_network": "Reward",
+      "contexts": [
+        [
+          "Reward",
+          "approach"
+        ]
+      ]
+    },
+    "link_205": {
+      "networks": [
+        "Empathy"
+      ],
+      "primary_role": "disrupt",
+      "primary_network": "Empathy",
+      "contexts": [
+        [
+          "Empathy",
+          "disrupt"
+        ]
+      ]
+    },
+    "link_206": {
+      "networks": [
+        "Reward",
+        "Empathy",
+        "Emotion Regulation",
+        "Working Memory",
+        "Vigilant Attention"
+      ],
+      "primary_role": "approach",
+      "primary_network": "Reward",
+      "contexts": [
+        [
+          "Emotion Regulation",
+          "approach"
+        ],
+        [
+          "Empathy",
+          "approach"
+        ],
+        [
+          "Reward",
+          "approach"
+        ],
+        [
+          "Vigilant Attention",
+          "approach"
+        ],
+        [
+          "Working Memory",
+          "approach"
+        ]
+      ]
+    },
+    "link_207": {
+      "networks": [
+        "Emotion Regulation",
+        "Working Memory",
+        "Cognitive Attention Control",
+        "Extended Multiple Demand"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Emotion Regulation",
+      "contexts": [
+        [
+          "Cognitive Attention Control",
+          "perceive"
+        ],
+        [
+          "Emotion Regulation",
+          "perceive"
+        ],
+        [
+          "Extended Multiple Demand",
+          "perceive"
+        ],
+        [
+          "Working Memory",
+          "perceive"
+        ]
+      ]
+    },
+    "link_208_R": {
+      "networks": [
+        "Reward"
+      ],
+      "primary_role": "approach",
+      "primary_network": "Reward",
+      "contexts": [
+        [
+          "Reward",
+          "approach"
+        ]
+      ]
+    },
+    "link_209_R": {
+      "networks": [
+        "Emotional Scene and Face Processing",
+        "Reward"
+      ],
+      "primary_role": "approach",
+      "primary_network": "Emotional Scene and Face Processing",
+      "contexts": [
+        [
+          "Emotional Scene and Face Processing",
+          "approach"
+        ],
+        [
+          "Reward",
+          "approach"
+        ]
+      ]
+    },
+    "link_210_R": {
+      "networks": [
+        "Emotional Scene and Face Processing",
+        "Reward",
+        "Extended Socio-Affective Default"
+      ],
+      "primary_role": "support",
+      "primary_network": "Emotional Scene and Face Processing",
+      "contexts": [
+        [
+          "Emotional Scene and Face Processing",
+          "support"
+        ],
+        [
+          "Extended Socio-Affective Default",
+          "support"
+        ],
+        [
+          "Reward",
+          "support"
+        ]
+      ]
+    },
+    "link_211_R": {
+      "networks": [
+        "Emotional Scene and Face Processing"
+      ],
+      "primary_role": "flee",
+      "primary_network": "Emotional Scene and Face Processing",
+      "contexts": [
+        [
+          "Emotional Scene and Face Processing",
+          "flee"
+        ]
+      ]
+    },
+    "link_212_R": {
+      "networks": [
+        "Empathy",
+        "Emotion Regulation",
+        "Cognitive Attention Control"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Empathy",
+      "contexts": [
+        [
+          "Cognitive Attention Control",
+          "attack_mental"
+        ],
+        [
+          "Emotion Regulation",
+          "attack_mental"
+        ],
+        [
+          "Empathy",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_213_R": {
+      "networks": [
+        "Reward"
+      ],
+      "primary_role": "approach",
+      "primary_network": "Reward",
+      "contexts": [
+        [
+          "Reward",
+          "approach"
+        ]
+      ]
+    },
+    "link_214_R": {
+      "networks": [
+        "Extended Socio-Affective Default"
+      ],
+      "primary_role": "support",
+      "primary_network": "Extended Socio-Affective Default",
+      "contexts": [
+        [
+          "Extended Socio-Affective Default",
+          "support"
+        ]
+      ]
+    },
+    "link_215_R": {
+      "networks": [
+        "Empathy",
+        "Extended Socio-Affective Default"
+      ],
+      "primary_role": "support",
+      "primary_network": "Empathy",
+      "contexts": [
+        [
+          "Empathy",
+          "support"
+        ],
+        [
+          "Extended Socio-Affective Default",
+          "support"
+        ]
+      ]
+    },
+    "link_216_R": {
+      "networks": [
+        "Emotion Regulation",
+        "Cognitive Attention Control"
+      ],
+      "primary_role": "support",
+      "primary_network": "Emotion Regulation",
+      "contexts": [
+        [
+          "Cognitive Attention Control",
+          "support"
+        ],
+        [
+          "Emotion Regulation",
+          "support"
+        ]
+      ]
+    },
+    "link_217_R": {
+      "networks": [
+        "Emotional Scene and Face Processing",
+        "Extended Socio-Affective Default",
+        "Reward",
+        "Empathy",
+        "Emotion Regulation",
+        "Vigilant Attention"
+      ],
+      "primary_role": "support",
+      "primary_network": "Emotional Scene and Face Processing",
+      "contexts": [
+        [
+          "Emotion Regulation",
+          "support"
+        ],
+        [
+          "Emotional Scene and Face Processing",
+          "support"
+        ],
+        [
+          "Empathy",
+          "support"
+        ],
+        [
+          "Extended Socio-Affective Default",
+          "support"
+        ],
+        [
+          "Reward",
+          "support"
+        ],
+        [
+          "Vigilant Attention",
+          "support"
+        ]
+      ]
+    },
+    "link_218_R": {
+      "networks": [
+        "Reward",
+        "Empathy",
+        "Emotion Regulation",
+        "Vigilant Attention",
+        "Cognitive Attention Control"
+      ],
+      "primary_role": "support",
+      "primary_network": "Reward",
+      "contexts": [
+        [
+          "Cognitive Attention Control",
+          "support"
+        ],
+        [
+          "Emotion Regulation",
+          "support"
+        ],
+        [
+          "Empathy",
+          "support"
+        ],
+        [
+          "Reward",
+          "support"
+        ],
+        [
+          "Vigilant Attention",
+          "support"
+        ]
+      ]
+    },
+    "link_219_R": {
+      "networks": [
+        "Working Memory",
+        "Reward"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Working Memory",
+      "contexts": [
+        [
+          "Reward",
+          "perceive"
+        ],
+        [
+          "Working Memory",
+          "perceive"
+        ]
+      ]
+    },
+    "link_220_R": {
+      "networks": [
+        "Extended Multiple Demand"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Extended Multiple Demand",
+      "contexts": [
+        [
+          "Extended Multiple Demand",
+          "perceive"
+        ]
+      ]
+    },
+    "link_221_R": {
+      "networks": [
+        "Working Memory",
+        "Extended Multiple Demand"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Working Memory",
+      "contexts": [
+        [
+          "Extended Multiple Demand",
+          "attack_mental"
+        ],
+        [
+          "Working Memory",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_222_R": {
+      "networks": [
+        "Working Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Working Memory",
+      "contexts": [
+        [
+          "Working Memory",
+          "support"
+        ]
+      ]
+    },
+    "link_223_R": {
+      "networks": [
+        "Working Memory",
+        "Reward"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Working Memory",
+      "contexts": [
+        [
+          "Reward",
+          "attack_mental"
+        ],
+        [
+          "Working Memory",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_224_R": {
+      "networks": [
+        "Working Memory",
+        "Extended Multiple Demand"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Working Memory",
+      "contexts": [
+        [
+          "Extended Multiple Demand",
+          "perceive"
+        ],
+        [
+          "Working Memory",
+          "perceive"
+        ]
+      ]
+    },
+    "link_225_R": {
+      "networks": [
+        "Working Memory",
+        "Reward",
+        "Extended Multiple Demand"
+      ],
+      "primary_role": "approach",
+      "primary_network": "Working Memory",
+      "contexts": [
+        [
+          "Extended Multiple Demand",
+          "approach"
+        ],
+        [
+          "Reward",
+          "approach"
+        ],
+        [
+          "Working Memory",
+          "approach"
+        ]
+      ]
+    },
+    "link_226_R": {
+      "networks": [
+        "Semantic Memory"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Semantic Memory",
+      "contexts": [
+        [
+          "Semantic Memory",
+          "perceive"
+        ]
+      ]
+    },
+    "link_227_R": {
+      "networks": [
+        "Semantic Memory"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Semantic Memory",
+      "contexts": [
+        [
+          "Semantic Memory",
+          "perceive"
+        ]
+      ]
+    },
+    "link_228_R": {
+      "networks": [
+        "Emotional Scene and Face Processing",
+        "Mirror Neuron System"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Emotional Scene and Face Processing",
+      "contexts": [
+        [
+          "Emotional Scene and Face Processing",
+          "perceive"
+        ],
+        [
+          "Mirror Neuron System",
+          "perceive"
+        ]
+      ]
+    },
+    "link_229_R": {
+      "networks": [
+        "Semantic Memory"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Semantic Memory",
+      "contexts": [
+        [
+          "Semantic Memory",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_230_R": {
+      "networks": [
+        "Emotional Scene and Face Processing",
+        "Semantic Memory"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Emotional Scene and Face Processing",
+      "contexts": [
+        [
+          "Emotional Scene and Face Processing",
+          "perceive"
+        ],
+        [
+          "Semantic Memory",
+          "perceive"
+        ]
+      ]
+    },
+    "link_231_R": {
+      "networks": [
+        "Semantic Memory"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Semantic Memory",
+      "contexts": [
+        [
+          "Semantic Memory",
+          "perceive"
+        ]
+      ]
+    },
+    "link_232_R": {
+      "networks": [
+        "Mirror Neuron System"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Mirror Neuron System",
+      "contexts": [
+        [
+          "Mirror Neuron System",
+          "perceive"
+        ]
+      ]
+    },
+    "link_233_R": {
+      "networks": [
+        "Mirror Neuron System"
+      ],
+      "primary_role": "disrupt",
+      "primary_network": "Mirror Neuron System",
+      "contexts": [
+        [
+          "Mirror Neuron System",
+          "disrupt"
+        ]
+      ]
+    },
+    "link_234_R": {
+      "networks": [
+        "Semantic Memory"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Semantic Memory",
+      "contexts": [
+        [
+          "Semantic Memory",
+          "perceive"
+        ]
+      ]
+    },
+    "link_235_R": {
+      "networks": [
+        "Cognitive Attention Control",
+        "Vigilant Attention"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Cognitive Attention Control",
+      "contexts": [
+        [
+          "Cognitive Attention Control",
+          "perceive"
+        ],
+        [
+          "Vigilant Attention",
+          "perceive"
+        ]
+      ]
+    },
+    "link_236_R": {
+      "networks": [
+        "Reward",
+        "Semantic Memory"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Reward",
+      "contexts": [
+        [
+          "Reward",
+          "attack_mental"
+        ],
+        [
+          "Semantic Memory",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_237_R": {
+      "networks": [
+        "Semantic Memory"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Semantic Memory",
+      "contexts": [
+        [
+          "Semantic Memory",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_238_R": {
+      "networks": [
+        "Semantic Memory"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Semantic Memory",
+      "contexts": [
+        [
+          "Semantic Memory",
+          "perceive"
+        ]
+      ]
+    },
+    "link_239_R": {
+      "networks": [
+        "Working Memory",
+        "Cognitive Attention Control"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Working Memory",
+      "contexts": [
+        [
+          "Cognitive Attention Control",
+          "perceive"
+        ],
+        [
+          "Working Memory",
+          "perceive"
+        ]
+      ]
+    },
+    "link_240_R": {
+      "networks": [
+        "Motor"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Motor",
+      "contexts": [
+        [
+          "Motor",
+          "perceive"
+        ]
+      ]
+    },
+    "link_241_R": {
+      "networks": [
+        "Vigilant Attention",
+        "Motor"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Vigilant Attention",
+      "contexts": [
+        [
+          "Motor",
+          "perceive"
+        ],
+        [
+          "Vigilant Attention",
+          "perceive"
+        ]
+      ]
+    },
+    "link_242_R": {
+      "networks": [
+        "Working Memory",
+        "Cognitive Attention Control"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Working Memory",
+      "contexts": [
+        [
+          "Cognitive Attention Control",
+          "perceive"
+        ],
+        [
+          "Working Memory",
+          "perceive"
+        ]
+      ]
+    },
+    "link_243_R": {
+      "networks": [
+        "Reward",
+        "Working Memory",
+        "Vigilant Attention",
+        "Motor",
+        "Semantic Memory"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Reward",
+      "contexts": [
+        [
+          "Motor",
+          "perceive"
+        ],
+        [
+          "Reward",
+          "perceive"
+        ],
+        [
+          "Semantic Memory",
+          "perceive"
+        ],
+        [
+          "Vigilant Attention",
+          "perceive"
+        ],
+        [
+          "Working Memory",
+          "perceive"
+        ]
+      ]
+    },
+    "link_244_R": {
+      "networks": [
+        "Working Memory",
+        "Cognitive Attention Control"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Working Memory",
+      "contexts": [
+        [
+          "Cognitive Attention Control",
+          "perceive"
+        ],
+        [
+          "Working Memory",
+          "perceive"
+        ]
+      ]
+    },
+    "link_245_R": {
+      "networks": [
+        "Vigilant Attention",
+        "Semantic Memory"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Vigilant Attention",
+      "contexts": [
+        [
+          "Semantic Memory",
+          "attack_mental"
+        ],
+        [
+          "Vigilant Attention",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_246_R": {
+      "networks": [
+        "Working Memory",
+        "Reward",
+        "Vigilant Attention",
+        "Cognitive Attention Control"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Working Memory",
+      "contexts": [
+        [
+          "Cognitive Attention Control",
+          "perceive"
+        ],
+        [
+          "Reward",
+          "perceive"
+        ],
+        [
+          "Vigilant Attention",
+          "perceive"
+        ],
+        [
+          "Working Memory",
+          "perceive"
+        ]
+      ]
+    },
+    "link_247_R": {
+      "networks": [
+        "Semantic Memory"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Semantic Memory",
+      "contexts": [
+        [
+          "Semantic Memory",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_248_R": {
+      "networks": [
+        "Semantic Memory"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Semantic Memory",
+      "contexts": [
+        [
+          "Semantic Memory",
+          "perceive"
+        ]
+      ]
+    },
+    "link_249_R": {
+      "networks": [
+        "Extended Multiple Demand"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Extended Multiple Demand",
+      "contexts": [
+        [
+          "Extended Multiple Demand",
+          "perceive"
+        ]
+      ]
+    },
+    "link_250_R": {
+      "networks": [
+        "Semantic Memory"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Semantic Memory",
+      "contexts": [
+        [
+          "Semantic Memory",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_251_R": {
+      "networks": [
+        "Extended Multiple Demand"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Extended Multiple Demand",
+      "contexts": [
+        [
+          "Extended Multiple Demand",
+          "perceive"
+        ]
+      ]
+    },
+    "link_252_R": {
+      "networks": [
+        "Emotional Scene and Face Processing"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Emotional Scene and Face Processing",
+      "contexts": [
+        [
+          "Emotional Scene and Face Processing",
+          "perceive"
+        ]
+      ]
+    },
+    "link_253_R": {
+      "networks": [
+        "Autobiographical Memory",
+        "Emotional Scene and Face Processing"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Autobiographical Memory",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "perceive"
+        ],
+        [
+          "Emotional Scene and Face Processing",
+          "perceive"
+        ]
+      ]
+    },
+    "link_254_R": {
+      "networks": [
+        "Autobiographical Memory",
+        "Cognitive Attention Control"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Autobiographical Memory",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "perceive"
+        ],
+        [
+          "Cognitive Attention Control",
+          "perceive"
+        ]
+      ]
+    },
+    "link_255_R": {
+      "networks": [
+        "Mirror Neuron System",
+        "Cognitive Attention Control"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Mirror Neuron System",
+      "contexts": [
+        [
+          "Cognitive Attention Control",
+          "perceive"
+        ],
+        [
+          "Mirror Neuron System",
+          "perceive"
+        ]
+      ]
+    },
+    "link_256_R": {
+      "networks": [
+        "Mirror Neuron System"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Mirror Neuron System",
+      "contexts": [
+        [
+          "Mirror Neuron System",
+          "perceive"
+        ]
+      ]
+    },
+    "link_257_R": {
+      "networks": [
+        "Cognitive Attention Control",
+        "Vigilant Attention"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Cognitive Attention Control",
+      "contexts": [
+        [
+          "Cognitive Attention Control",
+          "perceive"
+        ],
+        [
+          "Vigilant Attention",
+          "perceive"
+        ]
+      ]
+    },
+    "link_258_R": {
+      "networks": [
+        "Emotional Scene and Face Processing",
+        "Reward",
+        "Semantic Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Emotional Scene and Face Processing",
+      "contexts": [
+        [
+          "Emotional Scene and Face Processing",
+          "support"
+        ],
+        [
+          "Reward",
+          "support"
+        ],
+        [
+          "Semantic Memory",
+          "support"
+        ]
+      ]
+    },
+    "link_259_R": {
+      "networks": [
+        "Semantic Memory"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Semantic Memory",
+      "contexts": [
+        [
+          "Semantic Memory",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_260_R": {
+      "networks": [
+        "Emotional Scene and Face Processing",
+        "Semantic Memory"
+      ],
+      "primary_role": "flee",
+      "primary_network": "Emotional Scene and Face Processing",
+      "contexts": [
+        [
+          "Emotional Scene and Face Processing",
+          "flee"
+        ],
+        [
+          "Semantic Memory",
+          "flee"
+        ]
+      ]
+    },
+    "link_261_R": {
+      "networks": [
+        "Reward",
+        "Semantic Memory"
+      ],
+      "primary_role": "approach",
+      "primary_network": "Reward",
+      "contexts": [
+        [
+          "Reward",
+          "approach"
+        ],
+        [
+          "Semantic Memory",
+          "approach"
+        ]
+      ]
+    },
+    "link_262_R": {
+      "networks": [
+        "Semantic Memory"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Semantic Memory",
+      "contexts": [
+        [
+          "Semantic Memory",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_263_R": {
+      "networks": [
+        "Emotional Scene and Face Processing",
+        "Reward",
+        "Semantic Memory"
+      ],
+      "primary_role": "approach",
+      "primary_network": "Emotional Scene and Face Processing",
+      "contexts": [
+        [
+          "Emotional Scene and Face Processing",
+          "approach"
+        ],
+        [
+          "Reward",
+          "approach"
+        ],
+        [
+          "Semantic Memory",
+          "approach"
+        ]
+      ]
+    },
+    "link_264_R": {
+      "networks": [
+        "Reward"
+      ],
+      "primary_role": "approach",
+      "primary_network": "Reward",
+      "contexts": [
+        [
+          "Reward",
+          "approach"
+        ]
+      ]
+    },
+    "link_265_R": {
+      "networks": [
+        "Autobiographical Memory",
+        "Reward",
+        "Semantic Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Autobiographical Memory",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "support"
+        ],
+        [
+          "Reward",
+          "support"
+        ],
+        [
+          "Semantic Memory",
+          "support"
+        ]
+      ]
+    },
+    "link_266_R": {
+      "networks": [
+        "Autobiographical Memory",
+        "Extended Socio-Affective Default",
+        "Theory of Mind",
+        "Semantic Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Autobiographical Memory",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "support"
+        ],
+        [
+          "Extended Socio-Affective Default",
+          "support"
+        ],
+        [
+          "Semantic Memory",
+          "support"
+        ],
+        [
+          "Theory of Mind",
+          "support"
+        ]
+      ]
+    },
+    "link_267_R": {
+      "networks": [
+        "Extended Socio-Affective Default"
+      ],
+      "primary_role": "support",
+      "primary_network": "Extended Socio-Affective Default",
+      "contexts": [
+        [
+          "Extended Socio-Affective Default",
+          "support"
+        ]
+      ]
+    },
+    "link_268_R": {
+      "networks": [
+        "Emotional Scene and Face Processing",
+        "Theory of Mind",
+        "Extended Socio-Affective Default",
+        "Autobiographical Memory",
+        "Reward",
+        "Semantic Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Emotional Scene and Face Processing",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "support"
+        ],
+        [
+          "Emotional Scene and Face Processing",
+          "support"
+        ],
+        [
+          "Extended Socio-Affective Default",
+          "support"
+        ],
+        [
+          "Reward",
+          "support"
+        ],
+        [
+          "Semantic Memory",
+          "support"
+        ],
+        [
+          "Theory of Mind",
+          "support"
+        ]
+      ]
+    },
+    "link_269_R": {
+      "networks": [
+        "Theory of Mind"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Theory of Mind",
+      "contexts": [
+        [
+          "Theory of Mind",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_270_R": {
+      "networks": [
+        "Theory of Mind"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Theory of Mind",
+      "contexts": [
+        [
+          "Theory of Mind",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_271_R": {
+      "networks": [
+        "Reward"
+      ],
+      "primary_role": "approach",
+      "primary_network": "Reward",
+      "contexts": [
+        [
+          "Reward",
+          "approach"
+        ]
+      ]
+    },
+    "link_272_R": {
+      "networks": [
+        "Semantic Memory"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Semantic Memory",
+      "contexts": [
+        [
+          "Semantic Memory",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_273_R": {
+      "networks": [
+        "Theory of Mind"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Theory of Mind",
+      "contexts": [
+        [
+          "Theory of Mind",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_274_R": {
+      "networks": [
+        "Theory of Mind",
+        "Semantic Memory"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Theory of Mind",
+      "contexts": [
+        [
+          "Semantic Memory",
+          "attack_mental"
+        ],
+        [
+          "Theory of Mind",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_275_R": {
+      "networks": [
+        "Theory of Mind"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Theory of Mind",
+      "contexts": [
+        [
+          "Theory of Mind",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_276_R": {
+      "networks": [
+        "Autobiographical Memory",
+        "Semantic Memory"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Autobiographical Memory",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "perceive"
+        ],
+        [
+          "Semantic Memory",
+          "perceive"
+        ]
+      ]
+    },
+    "link_277_R": {
+      "networks": [
+        "Autobiographical Memory",
+        "Emotional Scene and Face Processing",
+        "Semantic Memory"
+      ],
+      "primary_role": "flee",
+      "primary_network": "Autobiographical Memory",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "flee"
+        ],
+        [
+          "Emotional Scene and Face Processing",
+          "flee"
+        ],
+        [
+          "Semantic Memory",
+          "flee"
+        ]
+      ]
+    },
+    "link_278_R": {
+      "networks": [
+        "Vigilant Attention"
+      ],
+      "primary_role": "attack_physical",
+      "primary_network": "Vigilant Attention",
+      "contexts": [
+        [
+          "Vigilant Attention",
+          "attack_physical"
+        ]
+      ]
+    },
+    "link_279_R": {
+      "networks": [
+        "Vigilant Attention"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Vigilant Attention",
+      "contexts": [
+        [
+          "Vigilant Attention",
+          "perceive"
+        ]
+      ]
+    },
+    "link_280_R": {
+      "networks": [
+        "Mirror Neuron System"
+      ],
+      "primary_role": "disrupt",
+      "primary_network": "Mirror Neuron System",
+      "contexts": [
+        [
+          "Mirror Neuron System",
+          "disrupt"
+        ]
+      ]
+    },
+    "link_281_R": {
+      "networks": [
+        "Emotion Regulation",
+        "Cognitive Attention Control",
+        "Working Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Emotion Regulation",
+      "contexts": [
+        [
+          "Cognitive Attention Control",
+          "support"
+        ],
+        [
+          "Emotion Regulation",
+          "support"
+        ],
+        [
+          "Working Memory",
+          "support"
+        ]
+      ]
+    },
+    "link_282_R": {
+      "networks": [
+        "Empathy",
+        "Emotion Regulation",
+        "Theory of Mind",
+        "Working Memory"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Empathy",
+      "contexts": [
+        [
+          "Emotion Regulation",
+          "attack_mental"
+        ],
+        [
+          "Empathy",
+          "attack_mental"
+        ],
+        [
+          "Theory of Mind",
+          "attack_mental"
+        ],
+        [
+          "Working Memory",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_283_R": {
+      "networks": [
+        "Mirror Neuron System",
+        "Extended Multiple Demand",
+        "Working Memory",
+        "Emotion Regulation",
+        "Cognitive Attention Control"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Mirror Neuron System",
+      "contexts": [
+        [
+          "Cognitive Attention Control",
+          "perceive"
+        ],
+        [
+          "Emotion Regulation",
+          "perceive"
+        ],
+        [
+          "Extended Multiple Demand",
+          "perceive"
+        ],
+        [
+          "Mirror Neuron System",
+          "perceive"
+        ],
+        [
+          "Working Memory",
+          "perceive"
+        ]
+      ]
+    },
+    "link_284_R": {
+      "networks": [
+        "Empathy",
+        "Theory of Mind"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Empathy",
+      "contexts": [
+        [
+          "Empathy",
+          "attack_mental"
+        ],
+        [
+          "Theory of Mind",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_285_R": {
+      "networks": [
+        "Extended Multiple Demand",
+        "Empathy",
+        "Working Memory",
+        "Emotion Regulation",
+        "Cognitive Attention Control"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Extended Multiple Demand",
+      "contexts": [
+        [
+          "Cognitive Attention Control",
+          "attack_mental"
+        ],
+        [
+          "Emotion Regulation",
+          "attack_mental"
+        ],
+        [
+          "Empathy",
+          "attack_mental"
+        ],
+        [
+          "Extended Multiple Demand",
+          "attack_mental"
+        ],
+        [
+          "Working Memory",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_286_R": {
+      "networks": [
+        "Motor"
+      ],
+      "primary_role": "attack_physical",
+      "primary_network": "Motor",
+      "contexts": [
+        [
+          "Motor",
+          "attack_physical"
+        ]
+      ]
+    },
+    "link_287_R": {
+      "networks": [
+        "Mirror Neuron System"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Mirror Neuron System",
+      "contexts": [
+        [
+          "Mirror Neuron System",
+          "perceive"
+        ]
+      ]
+    },
+    "link_288_R": {
+      "networks": [
+        "Autobiographical Memory",
+        "Semantic Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Autobiographical Memory",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "support"
+        ],
+        [
+          "Semantic Memory",
+          "support"
+        ]
+      ]
+    },
+    "link_289_R": {
+      "networks": [
+        "Autobiographical Memory",
+        "Reward",
+        "Semantic Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Autobiographical Memory",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "support"
+        ],
+        [
+          "Reward",
+          "support"
+        ],
+        [
+          "Semantic Memory",
+          "support"
+        ]
+      ]
+    },
+    "link_290_R": {
+      "networks": [
+        "Vigilant Attention",
+        "Motor"
+      ],
+      "primary_role": "attack_physical",
+      "primary_network": "Vigilant Attention",
+      "contexts": [
+        [
+          "Motor",
+          "attack_physical"
+        ],
+        [
+          "Vigilant Attention",
+          "attack_physical"
+        ]
+      ]
+    },
+    "link_291_R": {
+      "networks": [
+        "Vigilant Attention"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Vigilant Attention",
+      "contexts": [
+        [
+          "Vigilant Attention",
+          "perceive"
+        ]
+      ]
+    },
+    "link_292_R": {
+      "networks": [
+        "Vigilant Attention"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Vigilant Attention",
+      "contexts": [
+        [
+          "Vigilant Attention",
+          "perceive"
+        ]
+      ]
+    },
+    "link_293_R": {
+      "networks": [
+        "Extended Socio-Affective Default"
+      ],
+      "primary_role": "support",
+      "primary_network": "Extended Socio-Affective Default",
+      "contexts": [
+        [
+          "Extended Socio-Affective Default",
+          "support"
+        ]
+      ]
+    },
+    "link_294_R": {
+      "networks": [
+        "Autobiographical Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Autobiographical Memory",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "support"
+        ]
+      ]
+    },
+    "link_295_R": {
+      "networks": [
+        "Autobiographical Memory",
+        "Extended Socio-Affective Default",
+        "Theory of Mind",
+        "Semantic Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Autobiographical Memory",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "support"
+        ],
+        [
+          "Extended Socio-Affective Default",
+          "support"
+        ],
+        [
+          "Semantic Memory",
+          "support"
+        ],
+        [
+          "Theory of Mind",
+          "support"
+        ]
+      ]
+    },
+    "link_296_R": {
+      "networks": [
+        "Theory of Mind"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Theory of Mind",
+      "contexts": [
+        [
+          "Theory of Mind",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_297_R": {
+      "networks": [
+        "Theory of Mind"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Theory of Mind",
+      "contexts": [
+        [
+          "Theory of Mind",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_298_R": {
+      "networks": [
+        "Empathy",
+        "Extended Socio-Affective Default"
+      ],
+      "primary_role": "support",
+      "primary_network": "Empathy",
+      "contexts": [
+        [
+          "Empathy",
+          "support"
+        ],
+        [
+          "Extended Socio-Affective Default",
+          "support"
+        ]
+      ]
+    },
+    "link_299_R": {
+      "networks": [
+        "Empathy"
+      ],
+      "primary_role": "disrupt",
+      "primary_network": "Empathy",
+      "contexts": [
+        [
+          "Empathy",
+          "disrupt"
+        ]
+      ]
+    },
+    "link_300_R": {
+      "networks": [
+        "Autobiographical Memory",
+        "Emotion Regulation",
+        "Working Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Autobiographical Memory",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "support"
+        ],
+        [
+          "Emotion Regulation",
+          "support"
+        ],
+        [
+          "Working Memory",
+          "support"
+        ]
+      ]
+    },
+    "link_301_R": {
+      "networks": [
+        "Emotion Regulation",
+        "Cognitive Attention Control",
+        "Working Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Emotion Regulation",
+      "contexts": [
+        [
+          "Cognitive Attention Control",
+          "support"
+        ],
+        [
+          "Emotion Regulation",
+          "support"
+        ],
+        [
+          "Working Memory",
+          "support"
+        ]
+      ]
+    },
+    "link_302_R": {
+      "networks": [
+        "Emotion Regulation",
+        "Cognitive Attention Control",
+        "Working Memory"
+      ],
+      "primary_role": "support",
+      "primary_network": "Emotion Regulation",
+      "contexts": [
+        [
+          "Cognitive Attention Control",
+          "support"
+        ],
+        [
+          "Emotion Regulation",
+          "support"
+        ],
+        [
+          "Working Memory",
+          "support"
+        ]
+      ]
+    },
+    "link_303_R": {
+      "networks": [
+        "Emotion Regulation",
+        "Working Memory"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Emotion Regulation",
+      "contexts": [
+        [
+          "Emotion Regulation",
+          "perceive"
+        ],
+        [
+          "Working Memory",
+          "perceive"
+        ]
+      ]
+    },
+    "link_304_R": {
+      "networks": [
+        "Theory of Mind"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Theory of Mind",
+      "contexts": [
+        [
+          "Theory of Mind",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_305_R": {
+      "networks": [
+        "Reward",
+        "Empathy",
+        "Emotion Regulation",
+        "Working Memory",
+        "Vigilant Attention"
+      ],
+      "primary_role": "approach",
+      "primary_network": "Reward",
+      "contexts": [
+        [
+          "Emotion Regulation",
+          "approach"
+        ],
+        [
+          "Empathy",
+          "approach"
+        ],
+        [
+          "Reward",
+          "approach"
+        ],
+        [
+          "Vigilant Attention",
+          "approach"
+        ],
+        [
+          "Working Memory",
+          "approach"
+        ]
+      ]
+    },
+    "link_306_R": {
+      "networks": [
+        "Mirror Neuron System",
+        "Emotion Regulation"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Mirror Neuron System",
+      "contexts": [
+        [
+          "Emotion Regulation",
+          "attack_mental"
+        ],
+        [
+          "Mirror Neuron System",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_307_R": {
+      "networks": [
+        "Emotion Regulation",
+        "Working Memory",
+        "Cognitive Attention Control",
+        "Extended Multiple Demand"
+      ],
+      "primary_role": "perceive",
+      "primary_network": "Emotion Regulation",
+      "contexts": [
+        [
+          "Cognitive Attention Control",
+          "perceive"
+        ],
+        [
+          "Emotion Regulation",
+          "perceive"
+        ],
+        [
+          "Extended Multiple Demand",
+          "perceive"
+        ],
+        [
+          "Working Memory",
+          "perceive"
+        ]
+      ]
+    },
+    "link_308_R": {
+      "networks": [
+        "Empathy",
+        "Theory of Mind"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Empathy",
+      "contexts": [
+        [
+          "Empathy",
+          "attack_mental"
+        ],
+        [
+          "Theory of Mind",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_309_R": {
+      "networks": [
+        "Theory of Mind"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Theory of Mind",
+      "contexts": [
+        [
+          "Theory of Mind",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_310_R": {
+      "networks": [
+        "Empathy",
+        "Emotion Regulation"
+      ],
+      "primary_role": "attack_mental",
+      "primary_network": "Empathy",
+      "contexts": [
+        [
+          "Emotion Regulation",
+          "attack_mental"
+        ],
+        [
+          "Empathy",
+          "attack_mental"
+        ]
+      ]
+    },
+    "link_311_R": {
+      "networks": [
+        "Empathy",
+        "Vigilant Attention"
+      ],
+      "primary_role": "disrupt",
+      "primary_network": "Empathy",
+      "contexts": [
+        [
+          "Empathy",
+          "disrupt"
+        ],
+        [
+          "Vigilant Attention",
+          "disrupt"
+        ]
+      ]
+    },
+    "link_312": {
+      "networks": [
+        "Hansen:GREEN"
+      ],
+      "primary_role": "flee",
+      "primary_network": "Hansen:GREEN",
+      "contexts": [
+        [
+          "Hansen:GREEN",
+          "flee"
+        ]
+      ]
+    },
+    "link_313": {
+      "networks": [
+        "Hansen:GREEN"
+      ],
+      "primary_role": "flee",
+      "primary_network": "Hansen:GREEN",
+      "contexts": [
+        [
+          "Hansen:GREEN",
+          "flee"
+        ]
+      ]
+    },
+    "link_314": {
+      "networks": [
+        "Hansen:GREEN"
+      ],
+      "primary_role": "flee",
+      "primary_network": "Hansen:GREEN",
+      "contexts": [
+        [
+          "Hansen:GREEN",
+          "flee"
+        ]
+      ]
+    },
+    "link_315": {
+      "networks": [
+        "Hansen:GREEN"
+      ],
+      "primary_role": "flee",
+      "primary_network": "Hansen:GREEN",
+      "contexts": [
+        [
+          "Hansen:GREEN",
+          "flee"
+        ]
+      ]
+    },
+    "link_316": {
+      "networks": [
+        "Hansen:GREEN"
+      ],
+      "primary_role": "flee",
+      "primary_network": "Hansen:GREEN",
+      "contexts": [
+        [
+          "Hansen:GREEN",
+          "flee"
+        ]
+      ]
+    },
+    "link_317": {
+      "networks": [
+        "Hansen:GREEN"
+      ],
+      "primary_role": "flee",
+      "primary_network": "Hansen:GREEN",
+      "contexts": [
+        [
+          "Hansen:GREEN",
+          "flee"
+        ]
+      ]
+    },
+    "link_318": {
+      "networks": [
+        "Hansen:GREEN"
+      ],
+      "primary_role": "flee",
+      "primary_network": "Hansen:GREEN",
+      "contexts": [
+        [
+          "Hansen:GREEN",
+          "flee"
+        ]
+      ]
+    },
+    "link_319": {
+      "networks": [
+        "Hansen:PINK"
+      ],
+      "primary_role": "defend",
+      "primary_network": "Hansen:PINK",
+      "contexts": [
+        [
+          "Hansen:PINK",
+          "defend"
+        ]
+      ]
+    },
+    "link_320": {
+      "networks": [
+        "Hansen:PINK"
+      ],
+      "primary_role": "defend",
+      "primary_network": "Hansen:PINK",
+      "contexts": [
+        [
+          "Hansen:PINK",
+          "defend"
+        ]
+      ]
+    },
+    "link_321": {
+      "networks": [
+        "Hansen:PINK"
+      ],
+      "primary_role": "defend",
+      "primary_network": "Hansen:PINK",
+      "contexts": [
+        [
+          "Hansen:PINK",
+          "defend"
+        ]
+      ]
+    },
+    "link_322": {
+      "networks": [
+        "Hansen:PINK"
+      ],
+      "primary_role": "defend",
+      "primary_network": "Hansen:PINK",
+      "contexts": [
+        [
+          "Hansen:PINK",
+          "defend"
+        ]
+      ]
+    },
+    "link_323": {
+      "networks": [
+        "Hansen:PINK"
+      ],
+      "primary_role": "support",
+      "primary_network": "Hansen:PINK",
+      "contexts": [
+        [
+          "Hansen:PINK",
+          "support"
+        ]
+      ]
+    },
+    "link_324": {
+      "networks": [
+        "Hansen:GREEN"
+      ],
+      "primary_role": "defend",
+      "primary_network": "Hansen:GREEN",
+      "contexts": [
+        [
+          "Hansen:GREEN",
+          "defend"
+        ]
+      ]
+    },
+    "link_325": {
+      "networks": [
+        "Hansen:GREEN"
+      ],
+      "primary_role": "defend",
+      "primary_network": "Hansen:GREEN",
+      "contexts": [
+        [
+          "Hansen:GREEN",
+          "defend"
+        ]
+      ]
+    },
+    "link_326": {
+      "networks": [
+        "Hansen:PINK"
+      ],
+      "primary_role": "defend",
+      "primary_network": "Hansen:PINK",
+      "contexts": [
+        [
+          "Hansen:PINK",
+          "defend"
+        ]
+      ]
+    },
+    "link_327": {
+      "networks": [
+        "Hansen:PINK"
+      ],
+      "primary_role": "support",
+      "primary_network": "Hansen:PINK",
+      "contexts": [
+        [
+          "Hansen:PINK",
+          "support"
+        ]
+      ]
+    },
+    "link_328": {
+      "networks": [
+        "Hansen:PINK"
+      ],
+      "primary_role": "support",
+      "primary_network": "Hansen:PINK",
+      "contexts": [
+        [
+          "Hansen:PINK",
+          "support"
+        ]
+      ]
+    },
+    "link_329": {
+      "networks": [
+        "Hansen:PINK"
+      ],
+      "primary_role": "defend",
+      "primary_network": "Hansen:PINK",
+      "contexts": [
+        [
+          "Hansen:PINK",
+          "defend"
+        ]
+      ]
+    },
+    "link_330": {
+      "networks": [
+        "Hansen:PINK"
+      ],
+      "primary_role": "defend",
+      "primary_network": "Hansen:PINK",
+      "contexts": [
+        [
+          "Hansen:PINK",
+          "defend"
+        ]
+      ]
+    },
+    "link_331": {
+      "networks": [
+        "Hansen:PINK"
+      ],
+      "primary_role": "defend",
+      "primary_network": "Hansen:PINK",
+      "contexts": [
+        [
+          "Hansen:PINK",
+          "defend"
+        ]
+      ]
+    },
+    "link_332": {
+      "networks": [
+        "Hansen:PINK"
+      ],
+      "primary_role": "defend",
+      "primary_network": "Hansen:PINK",
+      "contexts": [
+        [
+          "Hansen:PINK",
+          "defend"
+        ]
+      ]
+    },
+    "link_333": {
+      "networks": [
+        "Hansen:PINK"
+      ],
+      "primary_role": "defend",
+      "primary_network": "Hansen:PINK",
+      "contexts": [
+        [
+          "Hansen:PINK",
+          "defend"
+        ]
+      ]
+    },
+    "link_334": {
+      "networks": [
+        "Hansen:PINK"
+      ],
+      "primary_role": "defend",
+      "primary_network": "Hansen:PINK",
+      "contexts": [
+        [
+          "Hansen:PINK",
+          "defend"
+        ]
+      ]
+    },
+    "link_335": {
+      "networks": [
+        "Hansen:PINK"
+      ],
+      "primary_role": "defend",
+      "primary_network": "Hansen:PINK",
+      "contexts": [
+        [
+          "Hansen:PINK",
+          "defend"
+        ]
+      ]
+    },
+    "link_336": {
+      "networks": [
+        "Hansen:GREEN"
+      ],
+      "primary_role": "approach",
+      "primary_network": "Hansen:GREEN",
+      "contexts": [
+        [
+          "Hansen:GREEN",
+          "approach"
+        ]
+      ]
+    },
+    "link_337": {
+      "networks": [
+        "Hansen:GREEN"
+      ],
+      "primary_role": "support",
+      "primary_network": "Hansen:GREEN",
+      "contexts": [
+        [
+          "Hansen:GREEN",
+          "support"
+        ]
+      ]
+    },
+    "link_338": {
+      "networks": [
+        "Hansen:GREEN"
+      ],
+      "primary_role": "approach",
+      "primary_network": "Hansen:GREEN",
+      "contexts": [
+        [
+          "Hansen:GREEN",
+          "approach"
+        ]
+      ]
+    },
+    "link_339": {
+      "networks": [
+        "Hansen:GREEN"
+      ],
+      "primary_role": "approach",
+      "primary_network": "Hansen:GREEN",
+      "contexts": [
+        [
+          "Hansen:GREEN",
+          "approach"
+        ]
+      ]
+    },
+    "link_340": {
+      "networks": [
+        "Hansen:GREEN"
+      ],
+      "primary_role": "approach",
+      "primary_network": "Hansen:GREEN",
+      "contexts": [
+        [
+          "Hansen:GREEN",
+          "approach"
+        ]
+      ]
+    },
+    "link_341": {
+      "networks": [
+        "Hansen:GREEN"
+      ],
+      "primary_role": "approach",
+      "primary_network": "Hansen:GREEN",
+      "contexts": [
+        [
+          "Hansen:GREEN",
+          "approach"
+        ]
+      ]
+    },
+    "link_342": {
+      "networks": [
+        "Hansen:GREEN"
+      ],
+      "primary_role": "approach",
+      "primary_network": "Hansen:GREEN",
+      "contexts": [
+        [
+          "Hansen:GREEN",
+          "approach"
+        ]
+      ]
+    },
+    "link_343": {
+      "networks": [
+        "Hansen:GREEN"
+      ],
+      "primary_role": "attack_physical",
+      "primary_network": "Hansen:GREEN",
+      "contexts": [
+        [
+          "Hansen:GREEN",
+          "attack_physical"
+        ]
+      ]
+    },
+    "link_344": {
+      "networks": [
+        "Hansen:GREEN"
+      ],
+      "primary_role": "attack_physical",
+      "primary_network": "Hansen:GREEN",
+      "contexts": [
+        [
+          "Hansen:GREEN",
+          "attack_physical"
+        ]
+      ]
+    },
+    "link_345": {
+      "networks": [
+        "Hansen:GREEN"
+      ],
+      "primary_role": "attack_physical",
+      "primary_network": "Hansen:GREEN",
+      "contexts": [
+        [
+          "Hansen:GREEN",
+          "attack_physical"
+        ]
+      ]
+    },
+    "link_346": {
+      "networks": [
+        "Hansen:YELLOW"
+      ],
+      "primary_role": "defend",
+      "primary_network": "Hansen:YELLOW",
+      "contexts": [
+        [
+          "Hansen:YELLOW",
+          "defend"
+        ]
+      ]
+    },
+    "link_347": {
+      "networks": [
+        "Hansen:YELLOW"
+      ],
+      "primary_role": "attack_physical",
+      "primary_network": "Hansen:YELLOW",
+      "contexts": [
+        [
+          "Hansen:YELLOW",
+          "attack_physical"
+        ]
+      ]
+    },
+    "link_348": {
+      "networks": [
+        "Hansen:YELLOW"
+      ],
+      "primary_role": "attack_physical",
+      "primary_network": "Hansen:YELLOW",
+      "contexts": [
+        [
+          "Hansen:YELLOW",
+          "attack_physical"
+        ]
+      ]
+    },
+    "link_349": {
+      "networks": [
+        "Hansen:None"
+      ],
+      "primary_role": "attack_physical",
+      "primary_network": "Hansen:None",
+      "contexts": [
+        [
+          "Hansen:None",
+          "attack_physical"
+        ]
+      ]
+    },
+    "link_350": {
+      "networks": [
+        "Hansen:None"
+      ],
+      "primary_role": "attack_physical",
+      "primary_network": "Hansen:None",
+      "contexts": [
+        [
+          "Hansen:None",
+          "attack_physical"
+        ]
+      ]
+    },
+    "link_351": {
+      "networks": [
+        "Hansen:None"
+      ],
+      "primary_role": "attack_physical",
+      "primary_network": "Hansen:None",
+      "contexts": [
+        [
+          "Hansen:None",
+          "attack_physical"
+        ]
+      ]
+    },
+    "link_352": {
+      "networks": [
+        "Hansen:None"
+      ],
+      "primary_role": "support",
+      "primary_network": "Hansen:None",
+      "contexts": [
+        [
+          "Hansen:None",
+          "support"
+        ]
+      ]
+    },
+    "link_353": {
+      "networks": [
+        "Emotional Scene and Face Processing",
+        "Extended Socio-Affective Default"
+      ],
+      "primary_role": "flee",
+      "primary_network": "Emotional Scene and Face Processing",
+      "contexts": [
+        [
+          "Emotional Scene and Face Processing",
+          "flee"
+        ],
+        [
+          "Extended Socio-Affective Default",
+          "flee"
+        ]
+      ]
+    },
+    "link_354": {
+      "networks": [
+        "Emotional Scene and Face Processing",
+        "Extended Socio-Affective Default"
+      ],
+      "primary_role": "flee",
+      "primary_network": "Emotional Scene and Face Processing",
+      "contexts": [
+        [
+          "Emotional Scene and Face Processing",
+          "flee"
+        ],
+        [
+          "Extended Socio-Affective Default",
+          "flee"
+        ]
+      ]
+    },
+    "link_355": {
+      "networks": [
+        "Emotional Scene and Face Processing",
+        "Emotion Regulation"
+      ],
+      "primary_role": "flee",
+      "primary_network": "Emotional Scene and Face Processing",
+      "contexts": [
+        [
+          "Emotion Regulation",
+          "flee"
+        ],
+        [
+          "Emotional Scene and Face Processing",
+          "flee"
+        ]
+      ]
+    },
+    "link_356": {
+      "networks": [
+        "Emotion Regulation",
+        "Extended Socio-Affective Default"
+      ],
+      "primary_role": "defend",
+      "primary_network": "Emotion Regulation",
+      "contexts": [
+        [
+          "Emotion Regulation",
+          "defend"
+        ],
+        [
+          "Extended Socio-Affective Default",
+          "defend"
+        ]
+      ]
+    },
+    "link_357": {
+      "networks": [
+        "Reward",
+        "Emotional Scene and Face Processing"
+      ],
+      "primary_role": "flee",
+      "primary_network": "Reward",
+      "contexts": [
+        [
+          "Emotional Scene and Face Processing",
+          "flee"
+        ],
+        [
+          "Reward",
+          "flee"
+        ]
+      ]
+    },
+    "link_358": {
+      "networks": [
+        "Reward",
+        "Emotional Scene and Face Processing"
+      ],
+      "primary_role": "flee",
+      "primary_network": "Reward",
+      "contexts": [
+        [
+          "Emotional Scene and Face Processing",
+          "flee"
+        ],
+        [
+          "Reward",
+          "flee"
+        ]
+      ]
+    },
+    "link_359": {
+      "networks": [
+        "Reward"
+      ],
+      "primary_role": "approach",
+      "primary_network": "Reward",
+      "contexts": [
+        [
+          "Reward",
+          "approach"
+        ]
+      ]
+    },
+    "link_360": {
+      "networks": [
+        "Reward",
+        "Autobiographical Memory"
+      ],
+      "primary_role": "approach",
+      "primary_network": "Reward",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "approach"
+        ],
+        [
+          "Reward",
+          "approach"
+        ]
+      ]
+    },
+    "link_361": {
+      "networks": [
+        "Autobiographical Memory",
+        "Extended Socio-Affective Default"
+      ],
+      "primary_role": "attack_physical",
+      "primary_network": "Autobiographical Memory",
+      "contexts": [
+        [
+          "Autobiographical Memory",
+          "attack_physical"
+        ],
+        [
+          "Extended Socio-Affective Default",
+          "attack_physical"
+        ]
+      ]
+    },
+    "link_362": {
+      "networks": [
+        "Reward"
+      ],
+      "primary_role": "approach",
+      "primary_network": "Reward",
+      "contexts": [
+        [
+          "Reward",
+          "approach"
+        ]
+      ]
+    },
+    "link_363": {
+      "networks": [
+        "Motor",
+        "Cognitive Attention Control"
+      ],
+      "primary_role": "attack_physical",
+      "primary_network": "Motor",
+      "contexts": [
+        [
+          "Cognitive Attention Control",
+          "attack_physical"
+        ],
+        [
+          "Motor",
+          "attack_physical"
+        ]
+      ]
+    }
+  }
+}

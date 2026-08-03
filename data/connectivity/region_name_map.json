@@ -1,0 +1,724 @@
+{
+  "_description": "89 脑区三层 ID 映射表 (D25) — functional_id 唯一主键 / dk_name 解剖映射(一对多) / zh_name 显示层",
+  "_rules": [
+    "functional_id: 英文唯一主键 (D15 完整词拼接 + D25 消歧后缀)",
+    "dk_name: DK 图谱解剖映射，多 functional_id 可共享一个 dk_name",
+    "is_design_node: true = 无解剖实体（校验时跳过空间断言）"
+  ],
+  "regions": {
+    "TransverseTemporal": {
+      "zh_name": "A1",
+      "functional_id": "TransverseTemporal",
+      "dk_name": "transversetemporal",
+      "category": "cortical",
+      "level": 3,
+      "is_design_node": false
+    },
+    "AnteriorCingulateCortex": {
+      "zh_name": "ACC",
+      "functional_id": "AnteriorCingulateCortex",
+      "dk_name": "caudalanteriorcingulate",
+      "category": "cortical",
+      "level": 2,
+      "is_design_node": false
+    },
+    "RostralAnteriorCingulateCortex": {
+      "zh_name": "ACC吻侧",
+      "functional_id": "RostralAnteriorCingulateCortex",
+      "dk_name": "rostralanteriorcingulate",
+      "category": "cortical",
+      "level": 2,
+      "is_design_node": false
+    },
+    "AnteriorCingulateCortexDorsal": {
+      "zh_name": "ACC背侧",
+      "functional_id": "AnteriorCingulateCortexDorsal",
+      "dk_name": "caudalanteriorcingulate",
+      "category": "cortical",
+      "level": 2,
+      "is_design_node": false
+    },
+    "ParsOpercularis": {
+      "zh_name": "Broca区",
+      "functional_id": "ParsOpercularis",
+      "dk_name": "parsopercularis",
+      "category": "cortical",
+      "level": 5,
+      "is_design_node": false
+    },
+    "MedialOrbitalPrefrontalDMN": {
+      "zh_name": "DMN+OFC",
+      "functional_id": "MedialOrbitalPrefrontalDMN",
+      "dk_name": "medialorbitofrontal",
+      "category": "cortical",
+      "level": 5,
+      "is_design_node": false
+    },
+    "Precentral": {
+      "zh_name": "M1",
+      "functional_id": "Precentral",
+      "dk_name": "precentral",
+      "category": "cortical",
+      "level": 3,
+      "is_design_node": false
+    },
+    "LateralOrbitofrontal": {
+      "zh_name": "OFC",
+      "functional_id": "LateralOrbitofrontal",
+      "dk_name": "lateralorbitofrontal",
+      "category": "cortical",
+      "level": 2,
+      "is_design_node": false
+    },
+    "Postcentral": {
+      "zh_name": "S1",
+      "functional_id": "Postcentral",
+      "dk_name": "postcentral",
+      "category": "cortical",
+      "level": 3,
+      "is_design_node": false
+    },
+    "SupramarginalTPJ": {
+      "zh_name": "TPJ",
+      "functional_id": "SupramarginalTPJ",
+      "dk_name": "supramarginal",
+      "category": "cortical",
+      "level": 5,
+      "is_design_node": false
+    },
+    "SuperiorTemporalWernicke": {
+      "zh_name": "Wernicke区",
+      "functional_id": "SuperiorTemporalWernicke",
+      "dk_name": "superiortemporal",
+      "category": "cortical",
+      "level": 4,
+      "is_design_node": false
+    },
+    "RostralMiddleFrontalDLPFC": {
+      "zh_name": "dlPFC",
+      "functional_id": "RostralMiddleFrontalDLPFC",
+      "dk_name": "rostralmiddlefrontal",
+      "category": "cortical",
+      "level": 5,
+      "is_design_node": false
+    },
+    "SuperiorFrontalMPFC": {
+      "zh_name": "mPFC",
+      "functional_id": "SuperiorFrontalMPFC",
+      "dk_name": "superiorfrontal",
+      "category": "cortical",
+      "level": 5,
+      "is_design_node": false
+    },
+    "MedialOrbitalPrefrontalVMPFC": {
+      "zh_name": "vmPFC",
+      "functional_id": "MedialOrbitalPrefrontalVMPFC",
+      "dk_name": "medialorbitofrontal",
+      "category": "cortical",
+      "level": 5,
+      "is_design_node": false
+    },
+    "Entorhinal": {
+      "zh_name": "内嗅皮层",
+      "functional_id": "Entorhinal",
+      "dk_name": "entorhinal",
+      "category": "cortical",
+      "level": 4,
+      "is_design_node": false
+    },
+    "Insula": {
+      "zh_name": "前脑岛",
+      "functional_id": "Insula",
+      "dk_name": "insula",
+      "category": "cortical",
+      "level": 2,
+      "is_design_node": false
+    },
+    "FrontalPole": {
+      "zh_name": "前额叶极",
+      "functional_id": "FrontalPole",
+      "dk_name": "rostralmiddlefrontal",
+      "category": "cortical",
+      "level": 5,
+      "is_design_node": false
+    },
+    "FrontalPoleDMN": {
+      "zh_name": "前额叶极·DMN",
+      "functional_id": "FrontalPoleDMN",
+      "dk_name": "medialorbitofrontal",
+      "category": "cortical",
+      "level": 5,
+      "is_design_node": false
+    },
+    "FrontalPoleFPN": {
+      "zh_name": "前额叶极·FPN",
+      "functional_id": "FrontalPoleFPN",
+      "dk_name": "rostralmiddlefrontal",
+      "category": "cortical",
+      "level": 5,
+      "is_design_node": false
+    },
+    "FrontalPoleSN": {
+      "zh_name": "前额叶极·SN",
+      "functional_id": "FrontalPoleSN",
+      "dk_name": "caudalanteriorcingulate",
+      "category": "cortical",
+      "level": 5,
+      "is_design_node": false
+    },
+    "PosteriorCingulate": {
+      "zh_name": "后扣带",
+      "functional_id": "PosteriorCingulate",
+      "dk_name": "posteriorcingulate",
+      "category": "cortical",
+      "level": 2,
+      "is_design_node": false
+    },
+    "LateralOccipital": {
+      "zh_name": "外侧枕叶",
+      "functional_id": "LateralOccipital",
+      "dk_name": "lateraloccipital",
+      "category": "cortical",
+      "level": 4,
+      "is_design_node": false
+    },
+    "IsthmusCingulate": {
+      "zh_name": "峡部扣带",
+      "functional_id": "IsthmusCingulate",
+      "dk_name": "isthmuscingulate",
+      "category": "cortical",
+      "level": 2,
+      "is_design_node": false
+    },
+    "Paracentral": {
+      "zh_name": "旁中央小叶",
+      "functional_id": "Paracentral",
+      "dk_name": "paracentral",
+      "category": "cortical",
+      "level": 3,
+      "is_design_node": false
+    },
+    "Pericalcarine": {
+      "zh_name": "枕叶 V1",
+      "functional_id": "Pericalcarine",
+      "dk_name": "pericalcarine",
+      "category": "cortical",
+      "level": 3,
+      "is_design_node": false
+    },
+    "LateralOccipitalOccipitoParietal": {
+      "zh_name": "枕顶联合",
+      "functional_id": "LateralOccipitalOccipitoParietal",
+      "dk_name": "lateraloccipital",
+      "category": "cortical",
+      "level": 3,
+      "is_design_node": false
+    },
+    "Precuneus": {
+      "zh_name": "楔前叶",
+      "functional_id": "Precuneus",
+      "dk_name": "precuneus",
+      "category": "cortical",
+      "level": 4,
+      "is_design_node": false
+    },
+    "Cuneus": {
+      "zh_name": "楔叶",
+      "functional_id": "Cuneus",
+      "dk_name": "cuneus",
+      "category": "cortical",
+      "level": 3,
+      "is_design_node": false
+    },
+    "Parahippocampal": {
+      "zh_name": "海马旁回",
+      "functional_id": "Parahippocampal",
+      "dk_name": "parahippocampal",
+      "category": "cortical",
+      "level": 1,
+      "is_design_node": false
+    },
+    "Fusiform": {
+      "zh_name": "纺锤体回",
+      "functional_id": "Fusiform",
+      "dk_name": "fusiform",
+      "category": "cortical",
+      "level": 4,
+      "is_design_node": false
+    },
+    "Supramarginal": {
+      "zh_name": "缘上回",
+      "functional_id": "Supramarginal",
+      "dk_name": "supramarginal",
+      "category": "cortical",
+      "level": 5,
+      "is_design_node": false
+    },
+    "Lingual": {
+      "zh_name": "舌回",
+      "functional_id": "Lingual",
+      "dk_name": "lingual",
+      "category": "cortical",
+      "level": 4,
+      "is_design_node": false
+    },
+    "InferiorParietalAngular": {
+      "zh_name": "角回",
+      "functional_id": "InferiorParietalAngular",
+      "dk_name": "inferiorparietal",
+      "category": "cortical",
+      "level": 4,
+      "is_design_node": false
+    },
+    "SuperiorParietal": {
+      "zh_name": "顶内沟",
+      "functional_id": "SuperiorParietal",
+      "dk_name": "superiorparietal",
+      "category": "cortical",
+      "level": 4,
+      "is_design_node": false
+    },
+    "InferiorParietal": {
+      "zh_name": "顶叶",
+      "functional_id": "InferiorParietal",
+      "dk_name": "inferiorparietal",
+      "category": "cortical",
+      "level": 4,
+      "is_design_node": false
+    },
+    "SuperiorFrontal": {
+      "zh_name": "额上回",
+      "functional_id": "SuperiorFrontal",
+      "dk_name": "superiorfrontal",
+      "category": "cortical",
+      "level": 5,
+      "is_design_node": false
+    },
+    "CaudalMiddleFrontal": {
+      "zh_name": "额中回尾部",
+      "functional_id": "CaudalMiddleFrontal",
+      "dk_name": "caudalmiddlefrontal",
+      "category": "cortical",
+      "level": 5,
+      "is_design_node": false
+    },
+    "FrontalPoleExtreme": {
+      "zh_name": "额极",
+      "functional_id": "FrontalPoleExtreme",
+      "dk_name": "frontalpole",
+      "category": "cortical",
+      "level": 5,
+      "is_design_node": false
+    },
+    "SuperiorTemporal": {
+      "zh_name": "颞上回",
+      "functional_id": "SuperiorTemporal",
+      "dk_name": "superiortemporal",
+      "category": "cortical",
+      "level": 5,
+      "is_design_node": false
+    },
+    "SuperiorTemporalSulcus": {
+      "zh_name": "颞上沟",
+      "functional_id": "SuperiorTemporalSulcus",
+      "dk_name": "superiortemporal",
+      "category": "cortical",
+      "level": 4,
+      "is_design_node": false
+    },
+    "BanksSTS": {
+      "zh_name": "颞上沟岸",
+      "functional_id": "BanksSTS",
+      "dk_name": "bankssts",
+      "category": "cortical",
+      "level": 4,
+      "is_design_node": false
+    },
+    "InferiorTemporal": {
+      "zh_name": "颞下回",
+      "functional_id": "InferiorTemporal",
+      "dk_name": "inferiortemporal",
+      "category": "cortical",
+      "level": 4,
+      "is_design_node": false
+    },
+    "MiddleTemporal": {
+      "zh_name": "颞中回",
+      "functional_id": "MiddleTemporal",
+      "dk_name": "middletemporal",
+      "category": "cortical",
+      "level": 4,
+      "is_design_node": false
+    },
+    "TemporalPole": {
+      "zh_name": "颞极",
+      "functional_id": "TemporalPole",
+      "dk_name": "temporalpole",
+      "category": "cortical",
+      "level": 2,
+      "is_design_node": false
+    },
+    "BedNucleusStriaTerminalis": {
+      "zh_name": "BNST",
+      "functional_id": "BedNucleusStriaTerminalis",
+      "dk_name": null,
+      "category": "subcortical",
+      "level": 1,
+      "is_design_node": false
+    },
+    "AccumbensShell": {
+      "zh_name": "NAcc壳",
+      "functional_id": "AccumbensShell",
+      "dk_name": "Accumbens-area",
+      "category": "subcortical",
+      "level": 1,
+      "is_design_node": false
+    },
+    "AccumbensCore": {
+      "zh_name": "NAcc核",
+      "functional_id": "AccumbensCore",
+      "dk_name": "Accumbens-area",
+      "category": "subcortical",
+      "level": 1,
+      "is_design_node": false
+    },
+    "Hypothalamus": {
+      "zh_name": "下丘脑",
+      "functional_id": "Hypothalamus",
+      "dk_name": null,
+      "category": "subcortical",
+      "level": 1,
+      "is_design_node": false
+    },
+    "Thalamus": {
+      "zh_name": "丘脑",
+      "functional_id": "Thalamus",
+      "dk_name": "Thalamus-Proper",
+      "category": "subcortical",
+      "level": 1,
+      "is_design_node": false
+    },
+    "ThalamusPulvinar": {
+      "zh_name": "丘脑枕",
+      "functional_id": "ThalamusPulvinar",
+      "dk_name": "Thalamus-Proper",
+      "category": "subcortical",
+      "level": 1,
+      "is_design_node": false
+    },
+    "NucleusAccumbens": {
+      "zh_name": "伏隔核/NAcc",
+      "functional_id": "NucleusAccumbens",
+      "dk_name": "Accumbens-area",
+      "category": "subcortical",
+      "level": 1,
+      "is_design_node": false
+    },
+    "CerebellumCortex": {
+      "zh_name": "小脑皮层",
+      "functional_id": "CerebellumCortex",
+      "dk_name": "Cerebellum-Cortex",
+      "category": "subcortical",
+      "level": 0,
+      "is_design_node": false
+    },
+    "Caudate": {
+      "zh_name": "尾状核",
+      "functional_id": "Caudate",
+      "dk_name": "Caudate",
+      "category": "subcortical",
+      "level": 1,
+      "is_design_node": false
+    },
+    "Amygdala": {
+      "zh_name": "杏仁核",
+      "functional_id": "Amygdala",
+      "dk_name": "Amygdala",
+      "category": "subcortical",
+      "level": 1,
+      "is_design_node": false
+    },
+    "AmygdalaHippocampus": {
+      "zh_name": "杏仁核-海马",
+      "functional_id": "AmygdalaHippocampus",
+      "dk_name": "Amygdala",
+      "category": "subcortical",
+      "level": 1,
+      "is_design_node": false
+    },
+    "HippocampusCA1": {
+      "zh_name": "海马体 CA1",
+      "functional_id": "HippocampusCA1",
+      "dk_name": "Hippocampus",
+      "category": "subcortical",
+      "level": 1,
+      "is_design_node": false
+    },
+    "HippocampusCA3": {
+      "zh_name": "海马体 CA3",
+      "functional_id": "HippocampusCA3",
+      "dk_name": "Hippocampus",
+      "category": "subcortical",
+      "level": 1,
+      "is_design_node": false
+    },
+    "StriatumMatrix": {
+      "zh_name": "纹状体基质",
+      "functional_id": "StriatumMatrix",
+      "dk_name": "Caudate",
+      "category": "subcortical",
+      "level": 1,
+      "is_design_node": false
+    },
+    "Habenula": {
+      "zh_name": "缰核",
+      "functional_id": "Habenula",
+      "dk_name": null,
+      "category": "subcortical",
+      "level": 1,
+      "is_design_node": false
+    },
+    "VentralStriatum": {
+      "zh_name": "腹侧纹状体",
+      "functional_id": "VentralStriatum",
+      "dk_name": "Accumbens-area",
+      "category": "subcortical",
+      "level": 1,
+      "is_design_node": false
+    },
+    "Pallidum": {
+      "zh_name": "苍白球",
+      "functional_id": "Pallidum",
+      "dk_name": "Pallidum",
+      "category": "subcortical",
+      "level": 1,
+      "is_design_node": false
+    },
+    "SeptalRegion": {
+      "zh_name": "隔区",
+      "functional_id": "SeptalRegion",
+      "dk_name": null,
+      "category": "subcortical",
+      "level": 1,
+      "is_design_node": false
+    },
+    "Putamen": {
+      "zh_name": "壳核",
+      "functional_id": "Putamen",
+      "dk_name": "Putamen",
+      "category": "subcortical",
+      "level": 1,
+      "is_design_node": false
+    },
+    "BasalGangliaIndirectPathway": {
+      "zh_name": "基底节间接通路",
+      "functional_id": "BasalGangliaIndirectPathway",
+      "dk_name": "Putamen",
+      "category": "subcortical",
+      "level": 1,
+      "is_design_node": false
+    },
+    "PeriaqueductalGray": {
+      "zh_name": "PAG",
+      "functional_id": "PeriaqueductalGray",
+      "dk_name": null,
+      "category": "brainstem",
+      "level": 0,
+      "is_design_node": false
+    },
+    "VentralTegmentalArea": {
+      "zh_name": "VTA",
+      "functional_id": "VentralTegmentalArea",
+      "dk_name": null,
+      "category": "brainstem",
+      "level": 0,
+      "is_design_node": false
+    },
+    "VentralTegmentalAreaNAccPathway": {
+      "zh_name": "VTA-NAcc",
+      "functional_id": "VentralTegmentalAreaNAccPathway",
+      "dk_name": null,
+      "category": "brainstem",
+      "level": 0,
+      "is_design_node": true
+    },
+    "SuperiorColliculus": {
+      "zh_name": "上丘",
+      "functional_id": "SuperiorColliculus",
+      "dk_name": null,
+      "category": "brainstem",
+      "level": 0,
+      "is_design_node": false
+    },
+    "MedianRapheNucleus": {
+      "zh_name": "中缝正中核",
+      "functional_id": "MedianRapheNucleus",
+      "dk_name": null,
+      "category": "brainstem",
+      "level": 0,
+      "is_design_node": false
+    },
+    "DorsalRapheNucleus": {
+      "zh_name": "中缝背核",
+      "functional_id": "DorsalRapheNucleus",
+      "dk_name": null,
+      "category": "brainstem",
+      "level": 0,
+      "is_design_node": false
+    },
+    "ReflexPAGAmygdala": {
+      "zh_name": "反射环路·PAG→杏仁核",
+      "functional_id": "ReflexPAGAmygdala",
+      "dk_name": null,
+      "category": "brainstem",
+      "level": 0,
+      "is_design_node": true
+    },
+    "ReflexFreeze": {
+      "zh_name": "反射环路·冻结反应",
+      "functional_id": "ReflexFreeze",
+      "dk_name": null,
+      "category": "brainstem",
+      "level": 0,
+      "is_design_node": true
+    },
+    "ReflexEscape": {
+      "zh_name": "反射环路·快速闪避",
+      "functional_id": "ReflexEscape",
+      "dk_name": null,
+      "category": "brainstem",
+      "level": 0,
+      "is_design_node": true
+    },
+    "AmygdalaPAGPathway": {
+      "zh_name": "杏仁核-PAG",
+      "functional_id": "AmygdalaPAGPathway",
+      "dk_name": null,
+      "category": "brainstem",
+      "level": 0,
+      "is_design_node": true
+    },
+    "PontineReticularNucleus": {
+      "zh_name": "脑桥网状核",
+      "functional_id": "PontineReticularNucleus",
+      "dk_name": null,
+      "category": "brainstem",
+      "level": 0,
+      "is_design_node": false
+    },
+    "LocusCoeruleus": {
+      "zh_name": "蓝斑",
+      "functional_id": "LocusCoeruleus",
+      "dk_name": null,
+      "category": "brainstem",
+      "level": 0,
+      "is_design_node": false
+    },
+    "LocusCoeruleusRight": {
+      "zh_name": "蓝斑_R",
+      "functional_id": "LocusCoeruleusRight",
+      "dk_name": null,
+      "category": "brainstem",
+      "level": 0,
+      "is_design_node": false,
+      "hemisphere": "R"
+    },
+    "SubstantiaNigraParsCompacta": {
+      "zh_name": "黑质致密部",
+      "functional_id": "SubstantiaNigraParsCompacta",
+      "dk_name": null,
+      "category": "brainstem",
+      "level": 0,
+      "is_design_node": false
+    },
+    "SubstantiaNigraParsCompactaRight": {
+      "zh_name": "黑质致密部_R",
+      "functional_id": "SubstantiaNigraParsCompactaRight",
+      "dk_name": null,
+      "category": "brainstem",
+      "level": 0,
+      "is_design_node": false,
+      "hemisphere": "R"
+    },
+    "MPFCAmygdalaPathway": {
+      "zh_name": "mPFC-杏仁核",
+      "functional_id": "MPFCAmygdalaPathway",
+      "dk_name": null,
+      "category": "white_matter",
+      "level": 5,
+      "is_design_node": false
+    },
+    "VMPFCTPJPathway": {
+      "zh_name": "vmPFC-TPJ",
+      "functional_id": "VMPFCTPJPathway",
+      "dk_name": null,
+      "category": "white_matter",
+      "level": 5,
+      "is_design_node": false
+    },
+    "PrefrontalHippocampalPathway": {
+      "zh_name": "前额叶-海马",
+      "functional_id": "PrefrontalHippocampalPathway",
+      "dk_name": null,
+      "category": "white_matter",
+      "level": 5,
+      "is_design_node": false
+    },
+    "InsulaCingulumPathway": {
+      "zh_name": "岛叶-ACC",
+      "functional_id": "InsulaCingulumPathway",
+      "dk_name": null,
+      "category": "white_matter",
+      "level": 5,
+      "is_design_node": false
+    },
+    "InsulaACCVTAPathway": {
+      "zh_name": "岛叶-ACC-VTA",
+      "functional_id": "InsulaACCVTAPathway",
+      "dk_name": null,
+      "category": "white_matter",
+      "level": 5,
+      "is_design_node": false
+    },
+    "InsulaPFCAmygdalaPathway": {
+      "zh_name": "岛叶-PFC-杏仁核",
+      "functional_id": "InsulaPFCAmygdalaPathway",
+      "dk_name": null,
+      "category": "white_matter",
+      "level": 5,
+      "is_design_node": false
+    },
+    "InsulaVMPFCPathway": {
+      "zh_name": "岛叶-vmPFC",
+      "functional_id": "InsulaVMPFCPathway",
+      "dk_name": null,
+      "category": "white_matter",
+      "level": 5,
+      "is_design_node": false
+    },
+    "ArcuateFasciculus": {
+      "zh_name": "弓状束",
+      "functional_id": "ArcuateFasciculus",
+      "dk_name": null,
+      "category": "white_matter",
+      "level": 5,
+      "is_design_node": false
+    },
+    "WholeBrainIntegration": {
+      "zh_name": "全脑整合",
+      "functional_id": "WholeBrainIntegration",
+      "dk_name": null,
+      "category": "subcortical",
+      "level": 1,
+      "is_design_node": true
+    },
+    "FrontoparietalControlNetwork": {
+      "zh_name": "额顶网络",
+      "functional_id": "FrontoparietalControlNetwork",
+      "dk_name": null,
+      "category": "cortical",
+      "level": 4,
+      "is_design_node": true
+    }
+  }
+}

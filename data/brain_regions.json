@@ -1,53 +1,21 @@
 {
-  "_description": "完整脑功能层级图谱 — L0脑干反射→L6跨模态整合",
-  "_source": "brain-for-blender (brainder.org, CC BY-SA 3.0), Hansen et al. (2024) Nat Neurosci, MNI152, Harvard-Oxford, AAL3, literature",
-  "_created": "2026-07-11",
-  "_updated": "2026-07-26 — 功能重新分类: ACC/ACC吻侧/ACC背侧/OFC/前脑岛/后扣带 L5→L2, 颞极 L4→L2",
-  "_methodology": {
-    "brainstem_nuclei": "方案A: 文献MNI坐标 (Hansen2024, Paxinos&Mai2004). 无独立OBJ, 坐标点落在Brain-Stem.obj体积内",
-    "cortical_regions": "FreeSurfer Desikan-Killiany atlas OBJ质心",
-    "subcortical": "brain-for-blender subcortical/ OBJ质心"
-  },
+  "_description": "89 脑区 — functional_id 主键 (D25/D13)",
   "_coordinate_system": {
     "mni": "MNI152 (mm, RAS+): X=右, Y=前, Z=上",
     "game": "游戏世界空间: X=右, Y=上, Z=前",
     "bounds": "X∈[-1.1,+1.1], Y∈[0,1.1], Z∈[-0.8,+0.9]",
     "transform": "game_X=mni_X/90; game_Y=mni_Z/90+0.55; game_Z=mni_Y/126*0.85"
   },
-  "_functional_levels": {
-    "L0": "脑干反射 — 生存原子操作, ~10-30ms, 最强制/不可抑制",
-    "L1": "边缘系统 — 核心情绪与记忆, ~20-80ms, 经验依赖调制L0",
-    "L2": "旁边缘 — 内感受与突显, ~50-120ms, 决定'什么值得关注'",
-    "L3": "初级感觉皮层 — 原始外部输入, ~30-80ms, 被动接收",
-    "L4": "高级单模态 — 模式识别与分类, ~80-150ms, 给世界贴标签",
-    "L5": "跨模态皮层 — 认知与语言, ~150-300ms, 多模态整合与推理",
-    "L6": "跨模态整合 — 自我叙事, ~300ms+, 最高决策/框架改变"
-  },
-  "_stats": {
-    "total_regions": 89,
-    "by_level": {
-      "L0": 16,
-      "L1": 21,
-      "L2": 8,
-      "L3": 7,
-      "L4": 14,
-      "L5": 23,
-      "L6": 0
-    },
-    "by_category": {
-      "brainstem": 15,
-      "subcortical": 21,
-      "cortical": 45,
-      "white_matter": 8
-    }
-  },
   "regions": {
-    "A1": {
+    "TransverseTemporal": {
+      "zh_name": "A1",
+      "functional_id": "TransverseTemporal",
       "std_name": "Primary Auditory Cortex (A1, BA41, Heschl's Gyrus)",
-      "bfb_region": "transversetemporal",
+      "dk_name": "transversetemporal",
       "category": "cortical",
       "lobe": "temporal",
       "level": 3,
+      "is_design_node": false,
       "mni_xyz": [
         -42,
         -24,
@@ -59,207 +27,183 @@
         0.6611,
         -0.1619
       ],
+      "fs_xyz": null,
       "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.transversetemporal.obj",
       "notes": "听觉输入的第一站皮层. 音调/频率处理. 颞横回(Heschl回)"
     },
-    "ACC": {
+    "AnteriorCingulateCortex": {
+      "zh_name": "ACC",
+      "functional_id": "AnteriorCingulateCortex",
       "std_name": "Anterior Cingulate Cortex",
-      "bfb_region": "caudalanteriorcingulate",
+      "dk_name": "caudalanteriorcingulate",
       "category": "cortical",
       "lobe": "cingulate",
+      "level": 2,
+      "is_design_node": false,
       "mni_xyz": [
         4.416,
         23.64,
         2.159
       ],
+      "mni_xyz_source": "obj_centroid",
       "game_xyz": [
         -0.0832,
         0.5865,
         0.1503
       ],
-      "mni_xyz_source": "obj_centroid",
-      "mni_xyz_literature": [
-        -5,
-        22,
-        28
-      ],
-      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.caudalanteriorcingulate.obj",
       "fs_xyz": [
         -5.822,
         21.212,
         2.739
       ],
-      "coord_source": "obj_centroid_fs",
-      "mni_literature": [
-        4.416,
-        23.64,
-        2.159
-      ],
-      "level": 2
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.caudalanteriorcingulate.obj",
+      "notes": null
     },
-    "ACC吻侧": {
+    "RostralAnteriorCingulateCortex": {
+      "zh_name": "ACC吻侧",
+      "functional_id": "RostralAnteriorCingulateCortex",
       "std_name": "Rostral Anterior Cingulate Cortex",
-      "bfb_region": "rostralanteriorcingulate",
+      "dk_name": "rostralanteriorcingulate",
       "category": "cortical",
       "lobe": "cingulate",
+      "level": 2,
+      "is_design_node": false,
       "mni_xyz": [
         -4.547,
         29.591,
         -19.945
       ],
+      "mni_xyz_source": "obj_centroid",
       "game_xyz": [
         -0.065,
         0.2841,
         0.2096
       ],
-      "mni_xyz_source": "obj_centroid",
-      "mni_xyz_literature": [
-        -6,
-        36,
-        14
-      ],
-      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.rostralanteriorcingulate.obj",
       "fs_xyz": [
         -4.547,
         29.591,
         -19.945
       ],
-      "coord_source": "obj_centroid_fs",
-      "mni_literature": [
-        -4.547,
-        29.591,
-        -19.945
-      ],
-      "level": 2
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.rostralanteriorcingulate.obj",
+      "notes": null
     },
-    "ACC背侧": {
+    "AnteriorCingulateCortexDorsal": {
+      "zh_name": "ACC背侧",
+      "functional_id": "AnteriorCingulateCortexDorsal",
       "std_name": "Dorsal Anterior Cingulate Cortex",
-      "bfb_region": "caudalanteriorcingulate",
+      "dk_name": "caudalanteriorcingulate",
       "category": "cortical",
       "lobe": "cingulate",
+      "level": 2,
+      "is_design_node": false,
       "mni_xyz": [
         4.416,
         23.64,
         2.159
       ],
+      "mni_xyz_source": "obj_centroid",
       "game_xyz": [
         -0.0832,
         0.5865,
         0.1503
       ],
-      "mni_xyz_source": "obj_centroid",
-      "mni_xyz_literature": [
-        -6,
-        16,
-        32
-      ],
-      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.caudalanteriorcingulate.obj",
       "fs_xyz": [
         -5.822,
         21.212,
         2.739
       ],
-      "coord_source": "obj_centroid_fs",
-      "mni_literature": [
-        4.416,
-        23.64,
-        2.159
-      ],
-      "level": 2
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.caudalanteriorcingulate.obj",
+      "notes": null
     },
-    "BNST": {
+    "BedNucleusStriaTerminalis": {
+      "zh_name": "BNST",
+      "functional_id": "BedNucleusStriaTerminalis",
       "std_name": "Bed Nucleus of Stria Terminalis",
-      "bfb_region": null,
+      "dk_name": null,
       "category": "subcortical",
       "lobe": "basal_ganglia",
+      "level": 1,
+      "is_design_node": false,
       "mni_xyz": [
         -6,
         2,
         0
       ],
+      "mni_xyz_source": null,
       "game_xyz": [
         -0.0667,
         0.55,
         0.0135
       ],
-      "level": 1
+      "fs_xyz": null,
+      "obj_file": null,
+      "notes": null
     },
-    "Broca区": {
+    "ParsOpercularis": {
+      "zh_name": "Broca区",
+      "functional_id": "ParsOpercularis",
       "std_name": "Broca's Area (BA44/45)",
-      "bfb_region": "parsopercularis",
+      "dk_name": "parsopercularis",
       "category": "cortical",
       "lobe": "frontal",
+      "level": 5,
+      "is_design_node": false,
       "mni_xyz": [
         48.454,
         17.327,
         -7.565
       ],
+      "mni_xyz_source": "obj_centroid",
       "game_xyz": [
         -0.6345,
         0.5255,
         0.1483
       ],
-      "mni_xyz_source": "obj_centroid",
-      "mni_xyz_literature": [
-        -48,
-        14,
-        18
-      ],
-      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.parsopercularis.obj",
       "fs_xyz": [
         -44.418,
         20.936,
         -1.841
       ],
-      "coord_source": "obj_centroid_fs",
-      "mni_literature": [
-        48.454,
-        17.327,
-        -7.565
-      ],
-      "level": 5
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.parsopercularis.obj",
+      "notes": null
     },
-    "DMN+OFC": {
+    "MedialOrbitalPrefrontalDMN": {
+      "zh_name": "DMN+OFC",
+      "functional_id": "MedialOrbitalPrefrontalDMN",
       "std_name": "DMN-OFC Convergence",
-      "bfb_region": "medialorbitofrontal",
+      "dk_name": "medialorbitofrontal",
       "category": "cortical",
       "lobe": "frontal",
+      "level": 5,
+      "is_design_node": false,
       "mni_xyz": [
         4.739,
         28.263,
         -29.603
       ],
+      "mni_xyz_source": "obj_centroid",
       "game_xyz": [
         -0.1346,
         0.1343,
         0.1789
       ],
-      "mni_xyz_source": "obj_centroid",
-      "mni_xyz_literature": [
-        -4,
-        44,
-        -12
-      ],
-      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.medialorbitofrontal.obj",
       "fs_xyz": [
         -9.423,
         25.251,
         -31.18
       ],
-      "coord_source": "obj_centroid_fs",
-      "mni_literature": [
-        4.739,
-        28.263,
-        -29.603
-      ],
-      "level": 5
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.medialorbitofrontal.obj",
+      "notes": null
     },
-    "M1": {
+    "Precentral": {
+      "zh_name": "M1",
+      "functional_id": "Precentral",
       "std_name": "Primary Motor Cortex (M1, BA4)",
-      "bfb_region": "precentral",
+      "dk_name": "precentral",
       "category": "cortical",
       "lobe": "frontal",
       "level": 3,
+      "is_design_node": false,
       "mni_xyz": [
         -37,
         -22,
@@ -271,120 +215,103 @@
         1.1944,
         -0.1484
       ],
+      "fs_xyz": null,
       "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.precentral.obj",
       "notes": "运动输出的最终皮层端. 控制对侧身体运动. 皮质脊髓束起源"
     },
-    "NAcc壳": {
+    "AccumbensShell": {
+      "zh_name": "NAcc壳",
+      "functional_id": "AccumbensShell",
       "std_name": "NAcc Shell",
-      "bfb_region": "Accumbens-area",
+      "dk_name": "Accumbens-area",
       "category": "subcortical",
       "lobe": "basal_ganglia",
+      "level": 1,
+      "is_design_node": false,
       "mni_xyz": [
         8.377,
         7.176,
         -21.418
       ],
+      "mni_xyz_source": "obj_centroid",
       "game_xyz": [
         -0.1424,
         0.2842,
         0.0458
       ],
-      "mni_xyz_source": "obj_centroid",
-      "mni_xyz_literature": [
-        -8,
-        12,
-        -8
-      ],
-      "obj_file": "技能树系统/blender_assets/all_obj/subcortical/Left-Accumbens-area.obj",
       "fs_xyz": [
         -9.966,
         6.459,
         -19.934
       ],
-      "coord_source": "obj_centroid_fs",
-      "mni_literature": [
-        8.377,
-        7.176,
-        -21.418
-      ],
-      "level": 1
+      "obj_file": "技能树系统/blender_assets/all_obj/subcortical/Left-Accumbens-area.obj",
+      "notes": null
     },
-    "NAcc核": {
+    "AccumbensCore": {
+      "zh_name": "NAcc核",
+      "functional_id": "AccumbensCore",
       "std_name": "NAcc Core",
-      "bfb_region": "Accumbens-area",
+      "dk_name": "Accumbens-area",
       "category": "subcortical",
       "lobe": "basal_ganglia",
+      "level": 1,
+      "is_design_node": false,
       "mni_xyz": [
         8.377,
         7.176,
         -21.418
       ],
+      "mni_xyz_source": "obj_centroid",
       "game_xyz": [
         -0.1424,
         0.2842,
         0.0458
       ],
-      "mni_xyz_source": "obj_centroid",
-      "mni_xyz_literature": [
-        -11,
-        10,
-        -6
-      ],
-      "obj_file": "技能树系统/blender_assets/all_obj/subcortical/Left-Accumbens-area.obj",
       "fs_xyz": [
         -9.966,
         6.459,
         -19.934
       ],
-      "coord_source": "obj_centroid_fs",
-      "mni_literature": [
-        8.377,
-        7.176,
-        -21.418
-      ],
-      "level": 1
+      "obj_file": "技能树系统/blender_assets/all_obj/subcortical/Left-Accumbens-area.obj",
+      "notes": null
     },
-    "OFC": {
+    "LateralOrbitofrontal": {
+      "zh_name": "OFC",
+      "functional_id": "LateralOrbitofrontal",
       "std_name": "Orbitofrontal Cortex",
-      "bfb_region": "lateralorbitofrontal",
+      "dk_name": "lateralorbitofrontal",
       "category": "cortical",
       "lobe": "frontal",
+      "level": 2,
+      "is_design_node": false,
       "mni_xyz": [
         -24.419,
         28.528,
         -31.949
       ],
+      "mni_xyz_source": "obj_centroid",
       "game_xyz": [
         -0.3488,
         0.124,
         0.2021
       ],
-      "mni_xyz_source": "obj_centroid",
-      "mni_xyz_literature": [
-        -22,
-        34,
-        -16
-      ],
-      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.lateralorbitofrontal.obj",
       "fs_xyz": [
         -24.419,
         28.528,
         -31.949
       ],
-      "coord_source": "obj_centroid_fs",
-      "mni_literature": [
-        -24.419,
-        28.528,
-        -31.949
-      ],
-      "level": 2
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.lateralorbitofrontal.obj",
+      "notes": null
     },
-    "PAG": {
+    "PeriaqueductalGray": {
+      "zh_name": "PAG",
+      "functional_id": "PeriaqueductalGray",
       "std_name": "Periaqueductal Gray",
-      "bfb_region": null,
+      "dk_name": null,
       "category": "brainstem",
       "lobe": "midbrain",
       "level": 0,
+      "is_design_node": false,
       "mni_xyz": [
         0,
         -30,
@@ -396,14 +323,19 @@
         0.4611,
         -0.2024
       ],
+      "fs_xyz": null,
+      "obj_file": null,
       "notes": "防御行为选择(战/逃/冻). Hansen2024 GREEN社区核心. 柱状组织: dlPAG=主动防御, vlPAG=冻结"
     },
-    "S1": {
+    "Postcentral": {
+      "zh_name": "S1",
+      "functional_id": "Postcentral",
       "std_name": "Primary Somatosensory Cortex (S1, BA3/1/2)",
-      "bfb_region": "postcentral",
+      "dk_name": "postcentral",
       "category": "cortical",
       "lobe": "parietal",
       "level": 3,
+      "is_design_node": false,
       "mni_xyz": [
         -42,
         -26,
@@ -415,50 +347,47 @@
         1.15,
         -0.1754
       ],
+      "fs_xyz": null,
       "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.postcentral.obj",
       "notes": "触觉/本体感觉的初级皮层. 身体图式. 内感受的上游输入"
     },
-    "TPJ": {
+    "SupramarginalTPJ": {
+      "zh_name": "TPJ",
+      "functional_id": "SupramarginalTPJ",
       "std_name": "Temporo-Parietal Junction",
-      "bfb_region": "supramarginal",
+      "dk_name": "supramarginal",
       "category": "cortical",
       "lobe": "temporo-parietal",
+      "level": 5,
+      "is_design_node": false,
       "mni_xyz": [
         -48.268,
         -32.254,
         20.481
       ],
+      "mni_xyz_source": "obj_centroid",
       "game_xyz": [
         -0.6895,
         0.8231,
         -0.2285
       ],
-      "mni_xyz_source": "obj_centroid",
-      "mni_xyz_literature": [
-        -52,
-        -50,
-        28
-      ],
-      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.supramarginal.obj",
       "fs_xyz": [
         -48.268,
         -32.254,
         20.481
       ],
-      "coord_source": "obj_centroid_fs",
-      "mni_literature": [
-        -48.268,
-        -32.254,
-        20.481
-      ],
-      "level": 5
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.supramarginal.obj",
+      "notes": null
     },
-    "VTA": {
+    "VentralTegmentalArea": {
+      "zh_name": "VTA",
+      "functional_id": "VentralTegmentalArea",
       "std_name": "Ventral Tegmental Area",
-      "bfb_region": null,
+      "dk_name": null,
       "category": "brainstem",
       "lobe": "midbrain",
       "level": 0,
+      "is_design_node": false,
       "mni_xyz": [
         0,
         -16,
@@ -470,205 +399,203 @@
         0.4167,
         -0.1079
       ],
+      "fs_xyz": null,
+      "obj_file": null,
       "notes": "DA源头. Hansen2024 GREEN+BLUE社区. 动机突显(正/负)/目标导向. 投射至NAcc/PFC/杏仁核"
     },
-    "VTA-NAcc": {
+    "VentralTegmentalAreaNAccPathway": {
+      "zh_name": "VTA-NAcc",
+      "functional_id": "VentralTegmentalAreaNAccPathway",
       "std_name": "VTA-NAcc Dopamine Pathway",
-      "bfb_region": null,
+      "dk_name": null,
       "category": "brainstem",
       "lobe": "midbrain",
+      "level": 0,
+      "is_design_node": true,
       "mni_xyz": [
         -4,
         -16,
         -12
       ],
+      "mni_xyz_source": null,
       "game_xyz": [
         -0.0444,
         0.4167,
         -0.1079
       ],
-      "level": 0
+      "fs_xyz": null,
+      "obj_file": null,
+      "notes": null
     },
-    "Wernicke区": {
+    "SuperiorTemporalWernicke": {
+      "zh_name": "Wernicke区",
+      "functional_id": "SuperiorTemporalWernicke",
       "std_name": "Wernicke's Area (BA22)",
-      "bfb_region": "superiortemporal",
+      "dk_name": "superiortemporal",
       "category": "cortical",
       "lobe": "temporal",
+      "level": 4,
+      "is_design_node": false,
       "mni_xyz": [
         -52.561,
         -15.297,
         -14.654
       ],
+      "mni_xyz_source": "obj_centroid",
       "game_xyz": [
         -0.7509,
         0.3546,
         -0.1084
       ],
-      "mni_xyz_source": "obj_centroid",
-      "mni_xyz_literature": [
-        -56,
-        -42,
-        8
-      ],
-      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.superiortemporal.obj",
       "fs_xyz": [
         -52.561,
         -15.297,
         -14.654
       ],
-      "coord_source": "obj_centroid_fs",
-      "mni_literature": [
-        -52.561,
-        -15.297,
-        -14.654
-      ],
-      "level": 4
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.superiortemporal.obj",
+      "notes": null
     },
-    "dlPFC": {
+    "RostralMiddleFrontalDLPFC": {
+      "zh_name": "dlPFC",
+      "functional_id": "RostralMiddleFrontalDLPFC",
       "std_name": "Dorsolateral Prefrontal Cortex",
-      "bfb_region": "rostralmiddlefrontal",
+      "dk_name": "rostralmiddlefrontal",
       "category": "cortical",
       "lobe": "frontal",
+      "level": 5,
+      "is_design_node": false,
       "mni_xyz": [
         -31.121,
         46.689,
         -8.23
       ],
+      "mni_xyz_source": "obj_centroid",
       "game_xyz": [
         -0.4446,
         0.4403,
         0.3307
       ],
-      "mni_xyz_source": "obj_centroid",
-      "mni_xyz_literature": [
-        -38,
-        32,
-        34
-      ],
-      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.rostralmiddlefrontal.obj",
       "fs_xyz": [
         -31.121,
         46.689,
         -8.23
       ],
-      "coord_source": "obj_centroid_fs",
-      "mni_literature": [
-        -31.121,
-        46.689,
-        -8.23
-      ],
-      "level": 5
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.rostralmiddlefrontal.obj",
+      "notes": null
     },
-    "mPFC": {
+    "SuperiorFrontalMPFC": {
+      "zh_name": "mPFC",
+      "functional_id": "SuperiorFrontalMPFC",
       "std_name": "Medial Prefrontal Cortex",
-      "bfb_region": "superiorfrontal",
+      "dk_name": "superiorfrontal",
       "category": "cortical",
       "lobe": "frontal",
+      "level": 5,
+      "is_design_node": false,
       "mni_xyz": [
         11.888,
         35.226,
         13.382
       ],
+      "mni_xyz_source": "obj_centroid",
       "game_xyz": [
         -0.1382,
         0.7736,
         0.2147
       ],
-      "mni_xyz_source": "obj_centroid",
-      "mni_xyz_literature": [
-        -4,
-        48,
-        10
-      ],
-      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.superiorfrontal.obj",
       "fs_xyz": [
         -9.673,
         30.315,
         16.771
       ],
-      "coord_source": "obj_centroid_fs",
-      "mni_literature": [
-        11.888,
-        35.226,
-        13.382
-      ],
-      "level": 5
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.superiorfrontal.obj",
+      "notes": null
     },
-    "mPFC-杏仁核": {
+    "MPFCAmygdalaPathway": {
+      "zh_name": "mPFC-杏仁核",
+      "functional_id": "MPFCAmygdalaPathway",
       "std_name": "mPFC-Amygdala Circuit",
-      "bfb_region": null,
+      "dk_name": null,
       "category": "white_matter",
       "lobe": "frontal-temporal",
+      "level": 5,
+      "is_design_node": false,
       "mni_xyz": [
         -10,
         20,
         -10
       ],
+      "mni_xyz_source": null,
       "game_xyz": [
         -0.1111,
         0.4389,
         0.1349
       ],
-      "level": 5
+      "fs_xyz": null,
+      "obj_file": null,
+      "notes": null
     },
-    "vmPFC": {
+    "MedialOrbitalPrefrontalVMPFC": {
+      "zh_name": "vmPFC",
+      "functional_id": "MedialOrbitalPrefrontalVMPFC",
       "std_name": "Ventromedial Prefrontal Cortex",
-      "bfb_region": "medialorbitofrontal",
+      "dk_name": "medialorbitofrontal",
       "category": "cortical",
       "lobe": "frontal",
+      "level": 5,
+      "is_design_node": false,
       "mni_xyz": [
         4.739,
         28.263,
         -29.603
       ],
+      "mni_xyz_source": "obj_centroid",
       "game_xyz": [
         -0.1346,
         0.1343,
         0.1789
       ],
-      "mni_xyz_source": "obj_centroid",
-      "mni_xyz_literature": [
-        -4,
-        42,
-        -14
-      ],
-      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.medialorbitofrontal.obj",
       "fs_xyz": [
         -9.423,
         25.251,
         -31.18
       ],
-      "coord_source": "obj_centroid_fs",
-      "mni_literature": [
-        4.739,
-        28.263,
-        -29.603
-      ],
-      "level": 5
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.medialorbitofrontal.obj",
+      "notes": null
     },
-    "vmPFC-TPJ": {
+    "VMPFCTPJPathway": {
+      "zh_name": "vmPFC-TPJ",
+      "functional_id": "VMPFCTPJPathway",
       "std_name": "vmPFC-TPJ Connectivity",
-      "bfb_region": null,
+      "dk_name": null,
       "category": "white_matter",
       "lobe": "frontal-parietal",
+      "level": 5,
+      "is_design_node": false,
       "mni_xyz": [
         -20,
         8,
         48
       ],
+      "mni_xyz_source": null,
       "game_xyz": [
         -0.2222,
         1.0833,
         0.054
       ],
-      "level": 5
+      "fs_xyz": null,
+      "obj_file": null,
+      "notes": null
     },
-    "上丘": {
+    "SuperiorColliculus": {
+      "zh_name": "上丘",
+      "functional_id": "SuperiorColliculus",
       "std_name": "Superior Colliculus",
-      "bfb_region": null,
+      "dk_name": null,
       "category": "brainstem",
       "lobe": "midbrain",
       "level": 0,
+      "is_design_node": false,
       "mni_xyz": [
         0,
         -32,
@@ -680,31 +607,43 @@
         0.5056,
         -0.2159
       ],
+      "fs_xyz": null,
+      "obj_file": null,
       "notes": "视觉-运动接口, 威胁检测→启动PAG逃逸. 接收视网膜直接输入(Glu)"
     },
-    "下丘脑": {
+    "Hypothalamus": {
+      "zh_name": "下丘脑",
+      "functional_id": "Hypothalamus",
       "std_name": "Hypothalamus",
-      "bfb_region": null,
+      "dk_name": null,
       "category": "subcortical",
       "lobe": "diencephalon",
+      "level": 1,
+      "is_design_node": false,
       "mni_xyz": [
         0,
         -4,
         -8
       ],
+      "mni_xyz_source": null,
       "game_xyz": [
         0.0,
         0.4611,
         -0.027
       ],
-      "level": 1
+      "fs_xyz": null,
+      "obj_file": null,
+      "notes": null
     },
-    "丘脑": {
+    "Thalamus": {
+      "zh_name": "丘脑",
+      "functional_id": "Thalamus",
       "std_name": "Thalamus Proper",
-      "bfb_region": "Thalamus-Proper",
+      "dk_name": "Thalamus-Proper",
       "category": "subcortical",
       "lobe": "diencephalon",
       "level": 1,
+      "is_design_node": false,
       "mni_xyz": [
         -12,
         -18,
@@ -716,50 +655,47 @@
         0.6167,
         -0.1214
       ],
+      "fs_xyz": null,
       "obj_file": "技能树系统/blender_assets/all_obj/subcortical/Left-Thalamus-Proper.obj",
       "notes": "感觉中继/皮层间通信/CSTC环路中继. MD核=前额叶中继, 前核=海马中继"
     },
-    "丘脑枕": {
+    "ThalamusPulvinar": {
+      "zh_name": "丘脑枕",
+      "functional_id": "ThalamusPulvinar",
       "std_name": "Pulvinar (Thalamus)",
-      "bfb_region": "Thalamus-Proper",
+      "dk_name": "Thalamus-Proper",
       "category": "subcortical",
       "lobe": "diencephalon",
+      "level": 1,
+      "is_design_node": false,
       "mni_xyz": [
         12.196,
         -16.747,
         -6.331
       ],
+      "mni_xyz_source": "obj_centroid",
       "game_xyz": [
         -0.2073,
         0.4699,
         -0.1299
       ],
-      "mni_xyz_source": "obj_centroid",
-      "mni_xyz_literature": [
-        -15,
-        -28,
-        5
-      ],
-      "obj_file": "技能树系统/blender_assets/all_obj/subcortical/Left-Thalamus-Proper.obj",
       "fs_xyz": [
         -14.51,
         -18.337,
         -6.004
       ],
-      "coord_source": "obj_centroid_fs",
-      "mni_literature": [
-        12.196,
-        -16.747,
-        -6.331
-      ],
-      "level": 1
+      "obj_file": "技能树系统/blender_assets/all_obj/subcortical/Left-Thalamus-Proper.obj",
+      "notes": null
     },
-    "中缝正中核": {
+    "MedianRapheNucleus": {
+      "zh_name": "中缝正中核",
+      "functional_id": "MedianRapheNucleus",
       "std_name": "Median Raphe Nucleus",
-      "bfb_region": null,
+      "dk_name": null,
       "category": "brainstem",
       "lobe": "midbrain",
       "level": 0,
+      "is_design_node": false,
       "mni_xyz": [
         0,
         -30,
@@ -771,14 +707,19 @@
         0.35,
         -0.2024
       ],
+      "fs_xyz": null,
+      "obj_file": null,
       "notes": "5-HT. 投射至海马/隔区. Hansen2024 GREEN社区"
     },
-    "中缝背核": {
+    "DorsalRapheNucleus": {
+      "zh_name": "中缝背核",
+      "functional_id": "DorsalRapheNucleus",
       "std_name": "Dorsal Raphe Nucleus",
-      "bfb_region": null,
+      "dk_name": null,
       "category": "brainstem",
       "lobe": "midbrain",
       "level": 0,
+      "is_design_node": false,
       "mni_xyz": [
         0,
         -32,
@@ -790,414 +731,391 @@
         0.3944,
         -0.2159
       ],
+      "fs_xyz": null,
+      "obj_file": null,
       "notes": "5-HT源头. Hansen2024 PINK社区, 全脑关键hub. 感觉门控/冲动抑制/攻击调节"
     },
-    "伏隔核/NAcc": {
+    "NucleusAccumbens": {
+      "zh_name": "伏隔核/NAcc",
+      "functional_id": "NucleusAccumbens",
       "std_name": "Nucleus Accumbens",
-      "bfb_region": "Accumbens-area",
+      "dk_name": "Accumbens-area",
       "category": "subcortical",
       "lobe": "basal_ganglia",
+      "level": 1,
+      "is_design_node": false,
       "mni_xyz": [
         8.377,
         7.176,
         -21.418
       ],
+      "mni_xyz_source": "obj_centroid",
       "game_xyz": [
         -0.1424,
         0.2842,
         0.0458
       ],
-      "mni_xyz_source": "obj_centroid",
-      "mni_xyz_literature": [
-        -10,
-        10,
-        -8
-      ],
-      "obj_file": "技能树系统/blender_assets/all_obj/subcortical/Left-Accumbens-area.obj",
       "fs_xyz": [
         -9.966,
         6.459,
         -19.934
       ],
-      "coord_source": "obj_centroid_fs",
-      "mni_literature": [
-        8.377,
-        7.176,
-        -21.418
-      ],
-      "level": 1
+      "obj_file": "技能树系统/blender_assets/all_obj/subcortical/Left-Accumbens-area.obj",
+      "notes": null
     },
-    "全脑整合": {
+    "WholeBrainIntegration": {
+      "zh_name": "全脑整合",
+      "functional_id": "WholeBrainIntegration",
       "std_name": "Whole-Brain Integration (Rich Club)",
-      "bfb_region": null,
+      "dk_name": null,
       "category": "subcortical",
       "lobe": "diencephalon",
+      "level": 1,
+      "is_design_node": true,
       "mni_xyz": [
         0,
         -10,
         -2
       ],
+      "mni_xyz_source": null,
       "game_xyz": [
         0.0,
         0.5278,
         -0.0675
       ],
-      "level": 1
+      "fs_xyz": null,
+      "obj_file": null,
+      "notes": null
     },
-    "内嗅皮层": {
+    "Entorhinal": {
+      "zh_name": "内嗅皮层",
+      "functional_id": "Entorhinal",
       "std_name": "Entorhinal Cortex",
-      "bfb_region": "entorhinal",
+      "dk_name": "entorhinal",
       "category": "cortical",
       "lobe": "temporal",
+      "level": 4,
+      "is_design_node": false,
       "mni_xyz": [
         21.674,
         -14.841,
         -41.798
       ],
+      "mni_xyz_source": "obj_centroid",
       "game_xyz": [
         -0.3701,
         -0.0009,
         -0.0711
       ],
-      "mni_xyz_source": "obj_centroid",
-      "mni_xyz_literature": [
-        -24,
-        -10,
-        -30
-      ],
-      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.entorhinal.obj",
       "fs_xyz": [
         -25.91,
         -10.032,
         -41.316
       ],
-      "coord_source": "obj_centroid_fs",
-      "mni_literature": [
-        21.674,
-        -14.841,
-        -41.798
-      ],
-      "level": 4
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.entorhinal.obj",
+      "notes": null
     },
-    "前脑岛": {
+    "Insula": {
+      "zh_name": "前脑岛",
+      "functional_id": "Insula",
       "std_name": "Anterior Insula",
-      "bfb_region": "insula",
+      "dk_name": "insula",
       "category": "cortical",
       "lobe": "insula",
+      "level": 2,
+      "is_design_node": false,
       "mni_xyz": [
         -37.19,
         -2.272,
         -12.175
       ],
+      "mni_xyz_source": "obj_centroid",
       "game_xyz": [
         -0.5313,
         0.3877,
         -0.0161
       ],
-      "mni_xyz_source": "obj_centroid",
-      "mni_xyz_literature": [
-        -34,
-        16,
-        6
-      ],
-      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.insula.obj",
       "fs_xyz": [
         -37.19,
         -2.272,
         -12.175
       ],
-      "coord_source": "obj_centroid_fs",
-      "mni_literature": [
-        -37.19,
-        -2.272,
-        -12.175
-      ],
-      "level": 2
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.insula.obj",
+      "notes": null
     },
-    "前额叶-海马": {
+    "PrefrontalHippocampalPathway": {
+      "zh_name": "前额叶-海马",
+      "functional_id": "PrefrontalHippocampalPathway",
       "std_name": "Prefrontal-Hippocampal Pathway",
-      "bfb_region": null,
+      "dk_name": null,
       "category": "white_matter",
       "lobe": "frontal-temporal",
+      "level": 5,
+      "is_design_node": false,
       "mni_xyz": [
         -18,
         20,
         -12
       ],
+      "mni_xyz_source": null,
       "game_xyz": [
         -0.2,
         0.4167,
         0.1349
       ],
-      "level": 5
+      "fs_xyz": null,
+      "obj_file": null,
+      "notes": null
     },
-    "前额叶极": {
+    "FrontalPole": {
+      "zh_name": "前额叶极",
+      "functional_id": "FrontalPole",
       "std_name": "Frontal Pole (BA10)",
-      "bfb_region": "rostralmiddlefrontal",
+      "dk_name": "rostralmiddlefrontal",
       "category": "cortical",
       "lobe": "frontal",
+      "level": 5,
+      "is_design_node": false,
       "mni_xyz": [
         -31.121,
         46.689,
         -8.23
       ],
+      "mni_xyz_source": "obj_centroid",
       "game_xyz": [
         -0.4446,
         0.4403,
         0.3307
       ],
-      "mni_xyz_source": "obj_centroid",
-      "mni_xyz_literature": [
-        -10,
-        58,
-        8
-      ],
-      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.rostralmiddlefrontal.obj",
       "fs_xyz": [
         -31.121,
         46.689,
         -8.23
       ],
-      "coord_source": "obj_centroid_fs",
-      "mni_literature": [
-        -31.121,
-        46.689,
-        -8.23
-      ],
-      "level": 5
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.rostralmiddlefrontal.obj",
+      "notes": null
     },
-    "前额叶极·DMN": {
+    "FrontalPoleDMN": {
+      "zh_name": "前额叶极·DMN",
+      "functional_id": "FrontalPoleDMN",
       "std_name": "Prefrontal Pole (DMN hub)",
-      "bfb_region": "medialorbitofrontal",
+      "dk_name": "medialorbitofrontal",
       "category": "cortical",
       "lobe": "frontal",
+      "level": 5,
+      "is_design_node": false,
       "mni_xyz": [
         4.739,
         28.263,
         -29.603
       ],
+      "mni_xyz_source": "obj_centroid",
       "game_xyz": [
         -0.1346,
         0.1343,
         0.1789
       ],
-      "mni_xyz_source": "obj_centroid",
-      "mni_xyz_literature": [
-        -4,
-        50,
-        -8
-      ],
-      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.medialorbitofrontal.obj",
       "fs_xyz": [
         -9.423,
         25.251,
         -31.18
       ],
-      "coord_source": "obj_centroid_fs",
-      "mni_literature": [
-        4.739,
-        28.263,
-        -29.603
-      ],
-      "level": 5
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.medialorbitofrontal.obj",
+      "notes": null
     },
-    "前额叶极·FPN": {
+    "FrontalPoleFPN": {
+      "zh_name": "前额叶极·FPN",
+      "functional_id": "FrontalPoleFPN",
       "std_name": "Prefrontal Pole (FPN hub)",
-      "bfb_region": "rostralmiddlefrontal",
+      "dk_name": "rostralmiddlefrontal",
       "category": "cortical",
       "lobe": "frontal",
+      "level": 5,
+      "is_design_node": false,
       "mni_xyz": [
         -31.121,
         46.689,
         -8.23
       ],
+      "mni_xyz_source": "obj_centroid",
       "game_xyz": [
         -0.4446,
         0.4403,
         0.3307
       ],
-      "mni_xyz_source": "obj_centroid",
-      "mni_xyz_literature": [
-        -36,
-        46,
-        28
-      ],
-      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.rostralmiddlefrontal.obj",
       "fs_xyz": [
         -31.121,
         46.689,
         -8.23
       ],
-      "coord_source": "obj_centroid_fs",
-      "mni_literature": [
-        -31.121,
-        46.689,
-        -8.23
-      ],
-      "level": 5
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.rostralmiddlefrontal.obj",
+      "notes": null
     },
-    "前额叶极·SN": {
+    "FrontalPoleSN": {
+      "zh_name": "前额叶极·SN",
+      "functional_id": "FrontalPoleSN",
       "std_name": "Prefrontal Pole (Salience Network)",
-      "bfb_region": "caudalanteriorcingulate",
+      "dk_name": "caudalanteriorcingulate",
       "category": "cortical",
       "lobe": "cingulate",
+      "level": 5,
+      "is_design_node": false,
       "mni_xyz": [
         4.416,
         23.64,
         2.159
       ],
+      "mni_xyz_source": "obj_centroid",
       "game_xyz": [
         -0.0832,
         0.5865,
         0.1503
       ],
-      "mni_xyz_source": "obj_centroid",
-      "mni_xyz_literature": [
-        -6,
-        28,
-        28
-      ],
-      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.caudalanteriorcingulate.obj",
       "fs_xyz": [
         -5.822,
         21.212,
         2.739
       ],
-      "coord_source": "obj_centroid_fs",
-      "mni_literature": [
-        4.416,
-        23.64,
-        2.159
-      ],
-      "level": 5
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.caudalanteriorcingulate.obj",
+      "notes": null
     },
-    "反射环路·PAG→杏仁核": {
+    "ReflexPAGAmygdala": {
+      "zh_name": "反射环路·PAG→杏仁核",
+      "functional_id": "ReflexPAGAmygdala",
       "std_name": "PAG-Amygdala Pathway",
-      "bfb_region": null,
+      "dk_name": null,
       "category": "brainstem",
       "lobe": "brainstem",
+      "level": 0,
+      "is_design_node": true,
       "mni_xyz": [
         -4,
         -28,
         -8
       ],
+      "mni_xyz_source": null,
       "game_xyz": [
         -0.0444,
         0.4611,
         -0.1889
       ],
-      "level": 0
+      "fs_xyz": null,
+      "obj_file": null,
+      "notes": null
     },
-    "反射环路·冻结反应": {
+    "ReflexFreeze": {
+      "zh_name": "反射环路·冻结反应",
+      "functional_id": "ReflexFreeze",
       "std_name": "Freezing Circuit (PAG→Amygdala)",
-      "bfb_region": null,
+      "dk_name": null,
       "category": "brainstem",
       "lobe": "brainstem",
+      "level": 0,
+      "is_design_node": true,
       "mni_xyz": [
         -2,
         -30,
         -6
       ],
+      "mni_xyz_source": null,
       "game_xyz": [
         -0.0222,
         0.4833,
         -0.2024
       ],
-      "level": 0
+      "fs_xyz": null,
+      "obj_file": null,
+      "notes": null
     },
-    "反射环路·快速闪避": {
+    "ReflexEscape": {
+      "zh_name": "反射环路·快速闪避",
+      "functional_id": "ReflexEscape",
       "std_name": "Escape Circuit (PAG→Motor)",
-      "bfb_region": null,
+      "dk_name": null,
       "category": "brainstem",
       "lobe": "brainstem",
+      "level": 0,
+      "is_design_node": true,
       "mni_xyz": [
         2,
         -29,
         -10
       ],
+      "mni_xyz_source": null,
       "game_xyz": [
         0.0222,
         0.4389,
         -0.1956
       ],
-      "level": 0
+      "fs_xyz": null,
+      "obj_file": null,
+      "notes": null
     },
-    "后扣带": {
+    "PosteriorCingulate": {
+      "zh_name": "后扣带",
+      "functional_id": "PosteriorCingulate",
       "std_name": "Posterior Cingulate Cortex",
-      "bfb_region": "posteriorcingulate",
+      "dk_name": "posteriorcingulate",
       "category": "cortical",
       "lobe": "cingulate",
+      "level": 2,
+      "is_design_node": false,
       "mni_xyz": [
         -6.489,
         -14.686,
         20.494
       ],
+      "mni_xyz_source": "obj_centroid",
       "game_xyz": [
         -0.0927,
         0.8233,
         -0.104
       ],
-      "mni_xyz_source": "obj_centroid",
-      "mni_xyz_literature": [
-        -4,
-        -44,
-        28
-      ],
-      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.posteriorcingulate.obj",
       "fs_xyz": [
         -6.489,
         -14.686,
         20.494
       ],
-      "coord_source": "obj_centroid_fs",
-      "mni_literature": [
-        -6.489,
-        -14.686,
-        20.494
-      ],
-      "level": 2
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.posteriorcingulate.obj",
+      "notes": null
     },
-    "基底节间接通路": {
+    "BasalGangliaIndirectPathway": {
+      "zh_name": "基底节间接通路",
+      "functional_id": "BasalGangliaIndirectPathway",
       "std_name": "Basal Ganglia Indirect Pathway",
-      "bfb_region": "Putamen",
+      "dk_name": "Putamen",
       "category": "subcortical",
       "lobe": "basal_ganglia",
+      "level": 1,
+      "is_design_node": false,
       "mni_xyz": [
         -27.366,
         -2.288,
         -14.278
       ],
+      "mni_xyz_source": "obj_centroid",
       "game_xyz": [
         -0.3909,
         0.3596,
         -0.0162
       ],
-      "mni_xyz_source": "obj_centroid",
-      "mni_xyz_literature": [
-        -26,
-        0,
-        4
-      ],
-      "obj_file": "技能树系统/blender_assets/all_obj/subcortical/Left-Putamen.obj",
       "fs_xyz": [
         -27.366,
         -2.288,
         -14.278
       ],
-      "coord_source": "obj_centroid_fs",
-      "mni_literature": [
-        -27.366,
-        -2.288,
-        -14.278
-      ],
-      "level": 1
+      "obj_file": "技能树系统/blender_assets/all_obj/subcortical/Left-Putamen.obj",
+      "notes": null
     },
-    "壳核": {
+    "Putamen": {
+      "zh_name": "壳核",
+      "functional_id": "Putamen",
       "std_name": "Putamen",
-      "bfb_region": "Putamen",
+      "dk_name": "Putamen",
       "category": "subcortical",
       "lobe": "basal_ganglia",
       "level": 1,
+      "is_design_node": false,
       "mni_xyz": [
         -26,
         0,
@@ -1209,15 +1127,19 @@
         0.5944,
         0.0
       ],
+      "fs_xyz": null,
       "obj_file": "技能树系统/blender_assets/all_obj/subcortical/Left-Putamen.obj",
       "notes": "感觉运动环路的纹状体区(dlStr). 习惯形成/自动执行"
     },
-    "外侧枕叶": {
+    "LateralOccipital": {
+      "zh_name": "外侧枕叶",
+      "functional_id": "LateralOccipital",
       "std_name": "Lateral Occipital Cortex",
-      "bfb_region": "lateraloccipital",
+      "dk_name": "lateraloccipital",
       "category": "cortical",
       "lobe": "occipital",
       "level": 4,
+      "is_design_node": false,
       "mni_xyz": [
         -30,
         -82,
@@ -1229,15 +1151,19 @@
         0.6833,
         -0.5532
       ],
+      "fs_xyz": null,
       "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.lateraloccipital.obj",
       "notes": "物体识别的关键区(LO). 腹侧视觉通路"
     },
-    "小脑皮层": {
+    "CerebellumCortex": {
+      "zh_name": "小脑皮层",
+      "functional_id": "CerebellumCortex",
       "std_name": "Cerebellar Cortex",
-      "bfb_region": "Cerebellum-Cortex",
+      "dk_name": "Cerebellum-Cortex",
       "category": "subcortical",
       "lobe": "cerebellum",
       "level": 0,
+      "is_design_node": false,
       "mni_xyz": [
         -32,
         -58,
@@ -1249,15 +1175,19 @@
         0.2389,
         -0.3913
       ],
+      "fs_xyz": null,
       "obj_file": "技能树系统/blender_assets/all_obj/subcortical/Left-Cerebellum-Cortex.obj",
       "notes": "预测/时序/自动化. 内部模型. 技能熟练化→习惯形成的关键结构"
     },
-    "尾状核": {
+    "Caudate": {
+      "zh_name": "尾状核",
+      "functional_id": "Caudate",
       "std_name": "Caudate Nucleus",
-      "bfb_region": "Caudate",
+      "dk_name": "Caudate",
       "category": "subcortical",
       "lobe": "basal_ganglia",
       "level": 1,
+      "is_design_node": false,
       "mni_xyz": [
         -14,
         8,
@@ -1269,83 +1199,115 @@
         0.6611,
         0.054
       ],
+      "fs_xyz": null,
       "obj_file": "技能树系统/blender_assets/all_obj/subcortical/Left-Caudate.obj",
       "notes": "目标导向行为的纹状体区. 联合环路(dmStr)的皮层输入区"
     },
-    "岛叶-ACC": {
+    "InsulaCingulumPathway": {
+      "zh_name": "岛叶-ACC",
+      "functional_id": "InsulaCingulumPathway",
       "std_name": "Insula-ACC Salience Network",
-      "bfb_region": null,
+      "dk_name": null,
       "category": "white_matter",
       "lobe": "cingulate-insula",
+      "level": 5,
+      "is_design_node": false,
       "mni_xyz": [
         -20,
         20,
         14
       ],
+      "mni_xyz_source": null,
       "game_xyz": [
         -0.2222,
         0.7056,
         0.1349
       ],
-      "level": 5
+      "fs_xyz": null,
+      "obj_file": null,
+      "notes": null
     },
-    "岛叶-ACC-VTA": {
+    "InsulaACCVTAPathway": {
+      "zh_name": "岛叶-ACC-VTA",
+      "functional_id": "InsulaACCVTAPathway",
       "std_name": "Insula-ACC-VTA Circuit",
-      "bfb_region": null,
+      "dk_name": null,
       "category": "white_matter",
       "lobe": "limbic",
+      "level": 5,
+      "is_design_node": false,
       "mni_xyz": [
         -14,
         4,
         6
       ],
+      "mni_xyz_source": null,
       "game_xyz": [
         -0.1556,
         0.6167,
         0.027
       ],
-      "level": 5
+      "fs_xyz": null,
+      "obj_file": null,
+      "notes": null
     },
-    "岛叶-PFC-杏仁核": {
+    "InsulaPFCAmygdalaPathway": {
+      "zh_name": "岛叶-PFC-杏仁核",
+      "functional_id": "InsulaPFCAmygdalaPathway",
       "std_name": "Insula-PFC-Amygdala Circuit",
-      "bfb_region": null,
+      "dk_name": null,
       "category": "white_matter",
       "lobe": "frontal-temporal",
+      "level": 5,
+      "is_design_node": false,
       "mni_xyz": [
         -28,
         12,
         -6
       ],
+      "mni_xyz_source": null,
       "game_xyz": [
         -0.3111,
         0.4833,
         0.081
       ],
-      "level": 5
+      "fs_xyz": null,
+      "obj_file": null,
+      "notes": null
     },
-    "岛叶-vmPFC": {
+    "InsulaVMPFCPathway": {
+      "zh_name": "岛叶-vmPFC",
+      "functional_id": "InsulaVMPFCPathway",
       "std_name": "Insula-vmPFC Connectivity",
-      "bfb_region": null,
+      "dk_name": null,
       "category": "white_matter",
       "lobe": "frontal-insula",
+      "level": 5,
+      "is_design_node": false,
       "mni_xyz": [
         -20,
         28,
         -4
       ],
+      "mni_xyz_source": null,
       "game_xyz": [
         -0.2222,
         0.5056,
         0.1889
       ],
-      "level": 5
+      "fs_xyz": null,
+      "obj_file": null,
+      "notes": null
     },
-    "峡部扣带": {
+    "IsthmusCingulate": {
+      "zh_name": "峡部扣带",
+      "functional_id": "IsthmusCingulate",
       "std_name": "Isthmus Cingulate (Retrosplenial Cortex)",
-      "bfb_region": "isthmuscingulate",
+      "dk_name": "isthmuscingulate",
       "category": "cortical",
       "lobe": "cingulate",
       "level": 2,
+      "is_design_node": false,
       "mni_xyz": [
         -8,
         -46,
@@ -1357,32 +1319,43 @@
         0.6611,
         -0.3103
       ],
+      "fs_xyz": null,
       "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.isthmuscingulate.obj",
       "notes": "海马-默认网络接口. 空间记忆/场景构建. Alzheimer早期萎缩区"
     },
-    "弓状束": {
+    "ArcuateFasciculus": {
+      "zh_name": "弓状束",
+      "functional_id": "ArcuateFasciculus",
       "std_name": "Arcuate Fasciculus",
-      "bfb_region": null,
+      "dk_name": null,
       "category": "white_matter",
       "lobe": "frontal-temporal",
+      "level": 5,
+      "is_design_node": false,
       "mni_xyz": [
         -40,
         -10,
         24
       ],
+      "mni_xyz_source": null,
       "game_xyz": [
         -0.4444,
         0.8167,
         -0.0675
       ],
-      "level": 5
+      "fs_xyz": null,
+      "obj_file": null,
+      "notes": null
     },
-    "旁中央小叶": {
+    "Paracentral": {
+      "zh_name": "旁中央小叶",
+      "functional_id": "Paracentral",
       "std_name": "Paracentral Lobule",
-      "bfb_region": "paracentral",
+      "dk_name": "paracentral",
       "category": "cortical",
       "lobe": "frontal",
       "level": 3,
+      "is_design_node": false,
       "mni_xyz": [
         -8,
         -30,
@@ -1394,207 +1367,183 @@
         1.2167,
         -0.2024
       ],
+      "fs_xyz": null,
       "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.paracentral.obj",
       "notes": "下肢运动/感觉代表区. 连接M1和S1的内侧延伸"
     },
-    "杏仁核": {
+    "Amygdala": {
+      "zh_name": "杏仁核",
+      "functional_id": "Amygdala",
       "std_name": "Amygdala",
-      "bfb_region": "Amygdala",
+      "dk_name": "Amygdala",
       "category": "subcortical",
       "lobe": "temporal",
+      "level": 1,
+      "is_design_node": false,
       "mni_xyz": [
         23.5,
         -9.628,
         -30.642
       ],
+      "mni_xyz_source": "obj_centroid",
       "game_xyz": [
         -0.3665,
         0.16,
         -0.0737
       ],
-      "mni_xyz_source": "obj_centroid",
-      "mni_xyz_literature": [
-        -22,
-        -4,
-        -18
-      ],
-      "obj_file": "技能树系统/blender_assets/all_obj/subcortical/Left-Amygdala.obj",
       "fs_xyz": [
         -25.655,
         -10.398,
         -29.247
       ],
-      "coord_source": "obj_centroid_fs",
-      "mni_literature": [
-        23.5,
-        -9.628,
-        -30.642
-      ],
-      "level": 1
+      "obj_file": "技能树系统/blender_assets/all_obj/subcortical/Left-Amygdala.obj",
+      "notes": null
     },
-    "杏仁核-PAG": {
+    "AmygdalaPAGPathway": {
+      "zh_name": "杏仁核-PAG",
+      "functional_id": "AmygdalaPAGPathway",
       "std_name": "Amygdala-PAG Pathway",
-      "bfb_region": null,
+      "dk_name": null,
       "category": "brainstem",
       "lobe": "midbrain-temporal",
+      "level": 0,
+      "is_design_node": true,
       "mni_xyz": [
         -12,
         -16,
         -14
       ],
+      "mni_xyz_source": null,
       "game_xyz": [
         -0.1333,
         0.3944,
         -0.1079
       ],
-      "level": 0
+      "fs_xyz": null,
+      "obj_file": null,
+      "notes": null
     },
-    "杏仁核-海马": {
+    "AmygdalaHippocampus": {
+      "zh_name": "杏仁核-海马",
+      "functional_id": "AmygdalaHippocampus",
       "std_name": "Amygdala-Hippocampal Junction",
-      "bfb_region": "Amygdala",
+      "dk_name": "Amygdala",
       "category": "subcortical",
       "lobe": "temporal",
+      "level": 1,
+      "is_design_node": false,
       "mni_xyz": [
         23.5,
         -9.628,
         -30.642
       ],
+      "mni_xyz_source": "obj_centroid",
       "game_xyz": [
         -0.3665,
         0.16,
         -0.0737
       ],
-      "mni_xyz_source": "obj_centroid",
-      "mni_xyz_literature": [
-        -22,
-        -8,
-        -22
-      ],
-      "obj_file": "技能树系统/blender_assets/all_obj/subcortical/Left-Amygdala.obj",
       "fs_xyz": [
         -25.655,
         -10.398,
         -29.247
       ],
-      "coord_source": "obj_centroid_fs",
-      "mni_literature": [
-        23.5,
-        -9.628,
-        -30.642
-      ],
-      "level": 1
+      "obj_file": "技能树系统/blender_assets/all_obj/subcortical/Left-Amygdala.obj",
+      "notes": null
     },
-    "枕叶 V1": {
+    "Pericalcarine": {
+      "zh_name": "枕叶 V1",
+      "functional_id": "Pericalcarine",
       "std_name": "V1 (Primary Visual Cortex)",
-      "bfb_region": "pericalcarine",
+      "dk_name": "pericalcarine",
       "category": "cortical",
       "lobe": "occipital",
+      "level": 3,
+      "is_design_node": false,
       "mni_xyz": [
         7.895,
         -74.044,
         1.637
       ],
+      "mni_xyz_source": "obj_centroid",
       "game_xyz": [
         -0.1378,
         0.5563,
         -0.5418
       ],
-      "mni_xyz_source": "obj_centroid",
-      "mni_xyz_literature": [
-        -12,
-        -85,
-        2
-      ],
-      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.pericalcarine.obj",
       "fs_xyz": [
         -9.646,
         -76.489,
         0.472
       ],
-      "coord_source": "obj_centroid_fs",
-      "mni_literature": [
-        7.895,
-        -74.044,
-        1.637
-      ],
-      "level": 3
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.pericalcarine.obj",
+      "notes": null
     },
-    "枕顶联合": {
+    "LateralOccipitalOccipitoParietal": {
+      "zh_name": "枕顶联合",
+      "functional_id": "LateralOccipitalOccipitoParietal",
       "std_name": "Parieto-Occipital Junction",
-      "bfb_region": "lateraloccipital",
+      "dk_name": "lateraloccipital",
       "category": "cortical",
       "lobe": "parieto-occipital",
+      "level": 3,
+      "is_design_node": false,
       "mni_xyz": [
         30.974,
         -75.721,
         -5.6
       ],
+      "mni_xyz_source": "obj_centroid",
       "game_xyz": [
         -0.4317,
         0.4694,
         -0.5862
       ],
-      "mni_xyz_source": "obj_centroid",
-      "mni_xyz_literature": [
-        -20,
-        -75,
-        30
-      ],
-      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.lateraloccipital.obj",
       "fs_xyz": [
         -30.219,
         -82.762,
         -6.044
       ],
-      "coord_source": "obj_centroid_fs",
-      "mni_literature": [
-        30.974,
-        -75.721,
-        -5.6
-      ],
-      "level": 3
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.lateraloccipital.obj",
+      "notes": null
     },
-    "楔前叶": {
+    "Precuneus": {
+      "zh_name": "楔前叶",
+      "functional_id": "Precuneus",
       "std_name": "Precuneus",
-      "bfb_region": "precuneus",
+      "dk_name": "precuneus",
       "category": "cortical",
       "lobe": "parietal",
+      "level": 4,
+      "is_design_node": false,
       "mni_xyz": [
         8.26,
         -47.577,
         25.373
       ],
+      "mni_xyz_source": "obj_centroid",
       "game_xyz": [
         -0.1159,
         0.8773,
         -0.3531
       ],
-      "mni_xyz_source": "obj_centroid",
-      "mni_xyz_literature": [
-        -8,
-        -60,
-        40
-      ],
-      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.precuneus.obj",
       "fs_xyz": [
         -8.115,
         -49.852,
         24.55
       ],
-      "coord_source": "obj_centroid_fs",
-      "mni_literature": [
-        8.26,
-        -47.577,
-        25.373
-      ],
-      "level": 4
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.precuneus.obj",
+      "notes": null
     },
-    "楔叶": {
+    "Cuneus": {
+      "zh_name": "楔叶",
+      "functional_id": "Cuneus",
       "std_name": "Cuneus (Secondary Visual)",
-      "bfb_region": "cuneus",
+      "dk_name": "cuneus",
       "category": "cortical",
       "lobe": "occipital",
       "level": 3,
+      "is_design_node": false,
       "mni_xyz": [
         -8,
         -80,
@@ -1606,85 +1555,75 @@
         0.8611,
         -0.5397
       ],
+      "fs_xyz": null,
       "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.cuneus.obj",
       "notes": "背侧视觉通路的一部分. 空间视觉/运动检测"
     },
-    "海马体 CA1": {
+    "HippocampusCA1": {
+      "zh_name": "海马体 CA1",
+      "functional_id": "HippocampusCA1",
       "std_name": "Hippocampus CA1",
-      "bfb_region": "Hippocampus",
+      "dk_name": "Hippocampus",
       "category": "subcortical",
       "lobe": "temporal",
+      "level": 1,
+      "is_design_node": false,
       "mni_xyz": [
         24.903,
         -25.251,
         -22.186
       ],
+      "mni_xyz_source": "obj_centroid",
       "game_xyz": [
         -0.3721,
         0.261,
         -0.1875
       ],
-      "mni_xyz_source": "obj_centroid",
-      "mni_xyz_literature": [
-        -26,
-        -18,
-        -18
-      ],
-      "obj_file": "技能树系统/blender_assets/all_obj/subcortical/Left-Hippocampus.obj",
       "fs_xyz": [
         -26.047,
         -26.473,
         -21.672
       ],
-      "coord_source": "obj_centroid_fs",
-      "mni_literature": [
-        24.903,
-        -25.251,
-        -22.186
-      ],
-      "level": 1
+      "obj_file": "技能树系统/blender_assets/all_obj/subcortical/Left-Hippocampus.obj",
+      "notes": null
     },
-    "海马体 CA3": {
+    "HippocampusCA3": {
+      "zh_name": "海马体 CA3",
+      "functional_id": "HippocampusCA3",
       "std_name": "Hippocampus CA3",
-      "bfb_region": "Hippocampus",
+      "dk_name": "Hippocampus",
       "category": "subcortical",
       "lobe": "temporal",
+      "level": 1,
+      "is_design_node": false,
       "mni_xyz": [
         24.903,
         -25.251,
         -22.186
       ],
+      "mni_xyz_source": "obj_centroid",
       "game_xyz": [
         -0.3721,
         0.261,
         -0.1875
       ],
-      "mni_xyz_source": "obj_centroid",
-      "mni_xyz_literature": [
-        -28,
-        -22,
-        -16
-      ],
-      "obj_file": "技能树系统/blender_assets/all_obj/subcortical/Left-Hippocampus.obj",
       "fs_xyz": [
         -26.047,
         -26.473,
         -21.672
       ],
-      "coord_source": "obj_centroid_fs",
-      "mni_literature": [
-        24.903,
-        -25.251,
-        -22.186
-      ],
-      "level": 1
+      "obj_file": "技能树系统/blender_assets/all_obj/subcortical/Left-Hippocampus.obj",
+      "notes": null
     },
-    "海马旁回": {
+    "Parahippocampal": {
+      "zh_name": "海马旁回",
+      "functional_id": "Parahippocampal",
       "std_name": "Parahippocampal Cortex",
-      "bfb_region": "parahippocampal",
+      "dk_name": "parahippocampal",
       "category": "cortical",
       "lobe": "temporal",
       "level": 1,
+      "is_design_node": false,
       "mni_xyz": [
         -28,
         -36,
@@ -1696,50 +1635,47 @@
         0.35,
         -0.2429
       ],
+      "fs_xyz": null,
       "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.parahippocampal.obj",
       "notes": "空间导航/场景识别(PPA). 海马体的主要皮层输入. 内嗅皮层-海马的中继"
     },
-    "纹状体基质": {
+    "StriatumMatrix": {
+      "zh_name": "纹状体基质",
+      "functional_id": "StriatumMatrix",
       "std_name": "Striatum (Matrix)",
-      "bfb_region": "Caudate",
+      "dk_name": "Caudate",
       "category": "subcortical",
       "lobe": "basal_ganglia",
+      "level": 1,
+      "is_design_node": false,
       "mni_xyz": [
         -14.326,
         5.482,
         -5.453
       ],
+      "mni_xyz_source": "obj_centroid",
       "game_xyz": [
         -0.2047,
         0.4773,
         0.0388
       ],
-      "mni_xyz_source": "obj_centroid",
-      "mni_xyz_literature": [
-        -14,
-        8,
-        10
-      ],
-      "obj_file": "技能树系统/blender_assets/all_obj/subcortical/Left-Caudate.obj",
       "fs_xyz": [
         -14.326,
         5.482,
         -5.453
       ],
-      "coord_source": "obj_centroid_fs",
-      "mni_literature": [
-        -14.326,
-        5.482,
-        -5.453
-      ],
-      "level": 1
+      "obj_file": "技能树系统/blender_assets/all_obj/subcortical/Left-Caudate.obj",
+      "notes": null
     },
-    "纺锤体回": {
+    "Fusiform": {
+      "zh_name": "纺锤体回",
+      "functional_id": "Fusiform",
       "std_name": "Fusiform Gyrus",
-      "bfb_region": "fusiform",
+      "dk_name": "fusiform",
       "category": "cortical",
       "lobe": "temporal",
       "level": 4,
+      "is_design_node": false,
       "mni_xyz": [
         -40,
         -50,
@@ -1751,15 +1687,19 @@
         0.3056,
         -0.3373
       ],
+      "fs_xyz": null,
       "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.fusiform.obj",
       "notes": "面孔识别(FFA)/物体精细分类. 视觉词形区(VWFA)也在附近"
     },
-    "缘上回": {
+    "Supramarginal": {
+      "zh_name": "缘上回",
+      "functional_id": "Supramarginal",
       "std_name": "Supramarginal Gyrus",
-      "bfb_region": "supramarginal",
+      "dk_name": "supramarginal",
       "category": "cortical",
       "lobe": "parietal",
       "level": 5,
+      "is_design_node": false,
       "mni_xyz": [
         -52,
         -44,
@@ -1771,32 +1711,43 @@
         0.9056,
         -0.2968
       ],
+      "fs_xyz": null,
       "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.supramarginal.obj",
       "notes": "语音处理/工作记忆/模仿. TPJ的组成部分. 与角回一起构成感觉-语言界面"
     },
-    "缰核": {
+    "Habenula": {
+      "zh_name": "缰核",
+      "functional_id": "Habenula",
       "std_name": "Habenula",
-      "bfb_region": null,
+      "dk_name": null,
       "category": "subcortical",
       "lobe": "diencephalon",
+      "level": 1,
+      "is_design_node": false,
       "mni_xyz": [
         -4,
         -24,
         2
       ],
+      "mni_xyz_source": null,
       "game_xyz": [
         -0.0444,
         0.5722,
         -0.1619
       ],
-      "level": 1
+      "fs_xyz": null,
+      "obj_file": null,
+      "notes": null
     },
-    "脑桥网状核": {
+    "PontineReticularNucleus": {
+      "zh_name": "脑桥网状核",
+      "functional_id": "PontineReticularNucleus",
       "std_name": "Pontine Reticular Nucleus",
-      "bfb_region": null,
+      "dk_name": null,
       "category": "brainstem",
       "lobe": "pons",
       "level": 0,
+      "is_design_node": false,
       "mni_xyz": [
         0,
         -30,
@@ -1808,49 +1759,47 @@
         0.2389,
         -0.2024
       ],
+      "fs_xyz": null,
+      "obj_file": null,
       "notes": "Hansen2024 YELLOW社区. 脑桥网状结构, 运动/自主功能整合"
     },
-    "腹侧纹状体": {
+    "VentralStriatum": {
+      "zh_name": "腹侧纹状体",
+      "functional_id": "VentralStriatum",
       "std_name": "Ventral Striatum",
-      "bfb_region": "Accumbens-area",
+      "dk_name": "Accumbens-area",
       "category": "subcortical",
       "lobe": "basal_ganglia",
+      "level": 1,
+      "is_design_node": false,
       "mni_xyz": [
         8.377,
         7.176,
         -21.418
       ],
+      "mni_xyz_source": "obj_centroid",
       "game_xyz": [
         -0.1424,
         0.2842,
         0.0458
       ],
-      "mni_xyz_source": "obj_centroid",
-      "mni_xyz_literature": [
-        -12,
-        12,
-        -6
-      ],
-      "obj_file": "技能树系统/blender_assets/all_obj/subcortical/Left-Accumbens-area.obj",
       "fs_xyz": [
         -9.966,
         6.459,
         -19.934
       ],
-      "coord_source": "obj_centroid_fs",
-      "mni_literature": [
-        8.377,
-        7.176,
-        -21.418
-      ],
-      "level": 1
+      "obj_file": "技能树系统/blender_assets/all_obj/subcortical/Left-Accumbens-area.obj",
+      "notes": null
     },
-    "舌回": {
+    "Lingual": {
+      "zh_name": "舌回",
+      "functional_id": "Lingual",
       "std_name": "Lingual Gyrus",
-      "bfb_region": "lingual",
+      "dk_name": "lingual",
       "category": "cortical",
       "lobe": "occipital",
       "level": 4,
+      "is_design_node": false,
       "mni_xyz": [
         -16,
         -78,
@@ -1862,15 +1811,19 @@
         0.4833,
         -0.5262
       ],
+      "fs_xyz": null,
       "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.lingual.obj",
       "notes": "腹侧视觉通路. 颜色/文字处理. 连接V1与纺锤体回"
     },
-    "苍白球": {
+    "Pallidum": {
+      "zh_name": "苍白球",
+      "functional_id": "Pallidum",
       "std_name": "Globus Pallidus",
-      "bfb_region": "Pallidum",
+      "dk_name": "Pallidum",
       "category": "subcortical",
       "lobe": "basal_ganglia",
       "level": 1,
+      "is_design_node": false,
       "mni_xyz": [
         -20,
         -4,
@@ -1882,15 +1835,19 @@
         0.5056,
         -0.027
       ],
+      "fs_xyz": null,
       "obj_file": "技能树系统/blender_assets/all_obj/subcortical/Left-Pallidum.obj",
       "notes": "基底节间接通路输出核. 抑制丘脑→抑制运动. CSTC环路关键节点"
     },
-    "蓝斑": {
+    "LocusCoeruleus": {
+      "zh_name": "蓝斑",
+      "functional_id": "LocusCoeruleus",
       "std_name": "Locus Coeruleus",
-      "bfb_region": null,
+      "dk_name": null,
       "category": "brainstem",
       "lobe": "pons",
       "level": 0,
+      "is_design_node": false,
       "mni_xyz": [
         -8,
         -34,
@@ -1902,14 +1859,19 @@
         0.3056,
         -0.2294
       ],
+      "fs_xyz": null,
+      "obj_file": null,
       "notes": "NE源头. Hansen2024 PINK社区, 全脑最强hub. 唤醒/警觉/应激. 双侧, 左(-8,-34,-22) 右(+8,-34,-22)"
     },
-    "蓝斑_R": {
+    "LocusCoeruleusRight": {
+      "zh_name": "蓝斑_R",
+      "functional_id": "LocusCoeruleusRight",
       "std_name": "Locus Coeruleus (Right)",
-      "bfb_region": null,
+      "dk_name": null,
       "category": "brainstem",
       "lobe": "pons",
       "level": 0,
+      "is_design_node": false,
       "mni_xyz": [
         8,
         -34,
@@ -1921,136 +1883,128 @@
         0.3056,
         -0.2294
       ],
-      "notes": "蓝斑右侧对应. 与左侧共同构成双侧LC"
+      "fs_xyz": null,
+      "obj_file": null,
+      "notes": "蓝斑右侧对应. 与左侧共同构成双侧LC",
+      "hemisphere": "R"
     },
-    "角回": {
+    "InferiorParietalAngular": {
+      "zh_name": "角回",
+      "functional_id": "InferiorParietalAngular",
       "std_name": "Angular Gyrus",
-      "bfb_region": "inferiorparietal",
+      "dk_name": "inferiorparietal",
       "category": "cortical",
       "lobe": "parietal",
+      "level": 4,
+      "is_design_node": false,
       "mni_xyz": [
         38.355,
         -52.31,
         21.302
       ],
+      "mni_xyz_source": "obj_centroid",
       "game_xyz": [
         -0.5097,
         0.835,
         -0.4297
       ],
-      "mni_xyz_source": "obj_centroid",
-      "mni_xyz_literature": [
-        -44,
-        -62,
-        36
-      ],
-      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.inferiorparietal.obj",
       "fs_xyz": [
         -35.678,
         -60.668,
         21.375
       ],
-      "coord_source": "obj_centroid_fs",
-      "mni_literature": [
-        38.355,
-        -52.31,
-        21.302
-      ],
-      "level": 4
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.inferiorparietal.obj",
+      "notes": null
     },
-    "隔区": {
+    "SeptalRegion": {
+      "zh_name": "隔区",
+      "functional_id": "SeptalRegion",
       "std_name": "Septal Region",
-      "bfb_region": null,
+      "dk_name": null,
       "category": "subcortical",
       "lobe": "basal_ganglia",
+      "level": 1,
+      "is_design_node": false,
       "mni_xyz": [
         0,
         4,
         -2
       ],
+      "mni_xyz_source": null,
       "game_xyz": [
         0.0,
         0.5278,
         0.027
       ],
-      "level": 1
+      "fs_xyz": null,
+      "obj_file": null,
+      "notes": null
     },
-    "顶内沟": {
+    "SuperiorParietal": {
+      "zh_name": "顶内沟",
+      "functional_id": "SuperiorParietal",
       "std_name": "Intraparietal Sulcus",
-      "bfb_region": "superiorparietal",
+      "dk_name": "superiorparietal",
       "category": "cortical",
       "lobe": "parietal",
+      "level": 4,
+      "is_design_node": false,
       "mni_xyz": [
         19.978,
         -50.804,
         33.692
       ],
+      "mni_xyz_source": "obj_centroid",
       "game_xyz": [
         -0.2803,
         0.9868,
         -0.3829
       ],
-      "mni_xyz_source": "obj_centroid",
-      "mni_xyz_literature": [
-        -30,
-        -55,
-        45
-      ],
-      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.superiorparietal.obj",
       "fs_xyz": [
         -19.62,
         -54.056,
         32.762
       ],
-      "coord_source": "obj_centroid_fs",
-      "mni_literature": [
-        19.978,
-        -50.804,
-        33.692
-      ],
-      "level": 4
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.superiorparietal.obj",
+      "notes": null
     },
-    "顶叶": {
+    "InferiorParietal": {
+      "zh_name": "顶叶",
+      "functional_id": "InferiorParietal",
       "std_name": "Parietal Lobe",
-      "bfb_region": "inferiorparietal",
+      "dk_name": "inferiorparietal",
       "category": "cortical",
       "lobe": "parietal",
+      "level": 4,
+      "is_design_node": false,
       "mni_xyz": [
         38.355,
         -52.31,
         21.302
       ],
+      "mni_xyz_source": "obj_centroid",
       "game_xyz": [
         -0.5097,
         0.835,
         -0.4297
       ],
-      "mni_xyz_source": "obj_centroid",
-      "mni_xyz_literature": [
-        -35,
-        -60,
-        40
-      ],
-      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.inferiorparietal.obj",
       "fs_xyz": [
         -35.678,
         -60.668,
         21.375
       ],
-      "coord_source": "obj_centroid_fs",
-      "mni_literature": [
-        38.355,
-        -52.31,
-        21.302
-      ],
-      "level": 4
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.inferiorparietal.obj",
+      "notes": null
     },
-    "额上回": {
+    "SuperiorFrontal": {
+      "zh_name": "额上回",
+      "functional_id": "SuperiorFrontal",
       "std_name": "Superior Frontal Gyrus",
-      "bfb_region": "superiorfrontal",
+      "dk_name": "superiorfrontal",
       "category": "cortical",
       "lobe": "frontal",
       "level": 5,
+      "is_design_node": false,
       "mni_xyz": [
         -18,
         38,
@@ -2062,15 +2016,19 @@
         1.0167,
         0.2563
       ],
+      "fs_xyz": null,
       "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.superiorfrontal.obj",
       "notes": "高级认知/自我意识/工作记忆. 包含SMA前区(pre-SMA)"
     },
-    "额中回尾部": {
+    "CaudalMiddleFrontal": {
+      "zh_name": "额中回尾部",
+      "functional_id": "CaudalMiddleFrontal",
       "std_name": "Caudal Middle Frontal Gyrus",
-      "bfb_region": "caudalmiddlefrontal",
+      "dk_name": "caudalmiddlefrontal",
       "category": "cortical",
       "lobe": "frontal",
       "level": 5,
+      "is_design_node": false,
       "mni_xyz": [
         -34,
         14,
@@ -2082,67 +2040,71 @@
         1.0833,
         0.0944
       ],
+      "fs_xyz": null,
       "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.caudalmiddlefrontal.obj",
       "notes": "dlPFC后部. 工作记忆/执行控制的运动端"
     },
-    "额极": {
+    "FrontalPoleExtreme": {
+      "zh_name": "额极",
+      "functional_id": "FrontalPoleExtreme",
       "std_name": "Frontal Pole",
-      "bfb_region": "frontalpole",
+      "dk_name": "frontalpole",
       "category": "cortical",
       "lobe": "frontal",
+      "level": 5,
+      "is_design_node": false,
       "mni_xyz": [
         -8.185,
         60.177,
         -31.229
       ],
+      "mni_xyz_source": "obj_centroid",
       "game_xyz": [
         -0.1169,
         0.1336,
         0.4263
       ],
-      "mni_xyz_source": "obj_centroid",
-      "mni_xyz_literature": [
-        -8,
-        60,
-        4
-      ],
-      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.frontalpole.obj",
       "fs_xyz": [
         -8.185,
         60.177,
         -31.229
       ],
-      "coord_source": "obj_centroid_fs",
-      "mni_literature": [
-        -8.185,
-        60.177,
-        -31.229
-      ],
-      "level": 5
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.frontalpole.obj",
+      "notes": null
     },
-    "额顶网络": {
+    "FrontoparietalControlNetwork": {
+      "zh_name": "额顶网络",
+      "functional_id": "FrontoparietalControlNetwork",
       "std_name": "Frontoparietal Control Network",
-      "bfb_region": null,
+      "dk_name": null,
       "category": "cortical",
       "lobe": "frontal-parietal",
+      "level": 4,
+      "is_design_node": true,
       "mni_xyz": [
         -34,
         42,
         36
       ],
+      "mni_xyz_source": null,
       "game_xyz": [
         -0.3778,
         0.95,
         0.2833
       ],
-      "level": 4
+      "fs_xyz": null,
+      "obj_file": null,
+      "notes": null
     },
-    "颞上回": {
+    "SuperiorTemporal": {
+      "zh_name": "颞上回",
+      "functional_id": "SuperiorTemporal",
       "std_name": "Superior Temporal Gyrus",
-      "bfb_region": "superiortemporal",
+      "dk_name": "superiortemporal",
       "category": "cortical",
       "lobe": "temporal",
       "level": 5,
+      "is_design_node": false,
       "mni_xyz": [
         -54,
         -32,
@@ -2154,50 +2116,47 @@
         0.6389,
         -0.2159
       ],
+      "fs_xyz": null,
       "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.superiortemporal.obj",
       "notes": "含Wernicke区后部. 听觉联合皮层. 语言理解"
     },
-    "颞上沟": {
+    "SuperiorTemporalSulcus": {
+      "zh_name": "颞上沟",
+      "functional_id": "SuperiorTemporalSulcus",
       "std_name": "Superior Temporal Sulcus",
-      "bfb_region": "superiortemporal",
+      "dk_name": "superiortemporal",
       "category": "cortical",
       "lobe": "temporal",
+      "level": 4,
+      "is_design_node": false,
       "mni_xyz": [
         -52.561,
         -15.297,
         -14.654
       ],
+      "mni_xyz_source": "obj_centroid",
       "game_xyz": [
         -0.7509,
         0.3546,
         -0.1084
       ],
-      "mni_xyz_source": "obj_centroid",
-      "mni_xyz_literature": [
-        -54,
-        -38,
-        4
-      ],
-      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.superiortemporal.obj",
       "fs_xyz": [
         -52.561,
         -15.297,
         -14.654
       ],
-      "coord_source": "obj_centroid_fs",
-      "mni_literature": [
-        -52.561,
-        -15.297,
-        -14.654
-      ],
-      "level": 4
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.superiortemporal.obj",
+      "notes": null
     },
-    "颞上沟岸": {
+    "BanksSTS": {
+      "zh_name": "颞上沟岸",
+      "functional_id": "BanksSTS",
       "std_name": "Bank of Superior Temporal Sulcus",
-      "bfb_region": "bankssts",
+      "dk_name": "bankssts",
       "category": "cortical",
       "lobe": "temporal",
       "level": 4,
+      "is_design_node": false,
       "mni_xyz": [
         -52,
         -44,
@@ -2209,50 +2168,47 @@
         0.6389,
         -0.2968
       ],
+      "fs_xyz": null,
       "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.bankssts.obj",
       "notes": "社会知觉/生物运动检测. 意图感知/心理理论的前体"
     },
-    "颞下回": {
+    "InferiorTemporal": {
+      "zh_name": "颞下回",
+      "functional_id": "InferiorTemporal",
       "std_name": "Inferior Temporal Gyrus",
-      "bfb_region": "inferiortemporal",
+      "dk_name": "inferiortemporal",
       "category": "cortical",
       "lobe": "temporal",
+      "level": 4,
+      "is_design_node": false,
       "mni_xyz": [
         47.481,
         -34.137,
         -32.303
       ],
+      "mni_xyz_source": "obj_centroid",
       "game_xyz": [
         -0.7217,
         0.1828,
         -0.2733
       ],
-      "mni_xyz_source": "obj_centroid",
-      "mni_xyz_literature": [
-        -48,
-        -50,
-        -18
-      ],
-      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.inferiortemporal.obj",
       "fs_xyz": [
         -50.522,
         -38.584,
         -27.54
       ],
-      "coord_source": "obj_centroid_fs",
-      "mni_literature": [
-        47.481,
-        -34.137,
-        -32.303
-      ],
-      "level": 4
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.inferiortemporal.obj",
+      "notes": null
     },
-    "颞中回": {
+    "MiddleTemporal": {
+      "zh_name": "颞中回",
+      "functional_id": "MiddleTemporal",
       "std_name": "Middle Temporal Gyrus",
-      "bfb_region": "middletemporal",
+      "dk_name": "middletemporal",
       "category": "cortical",
       "lobe": "temporal",
       "level": 4,
+      "is_design_node": false,
       "mni_xyz": [
         -54,
         -42,
@@ -2264,50 +2220,47 @@
         0.4833,
         -0.2833
       ],
+      "fs_xyz": null,
       "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.middletemporal.obj",
       "notes": "运动处理(MT/MST). 语义记忆. 背侧听觉通路"
     },
-    "颞极": {
+    "TemporalPole": {
+      "zh_name": "颞极",
+      "functional_id": "TemporalPole",
       "std_name": "Temporal Pole",
-      "bfb_region": "temporalpole",
+      "dk_name": "temporalpole",
       "category": "cortical",
       "lobe": "temporal",
+      "level": 2,
+      "is_design_node": false,
       "mni_xyz": [
         -33.25,
         5.25,
         -45.329
       ],
+      "mni_xyz_source": "obj_centroid",
       "game_xyz": [
         -0.475,
         -0.0544,
         0.0372
       ],
-      "mni_xyz_source": "obj_centroid",
-      "mni_xyz_literature": [
-        -36,
-        10,
-        -34
-      ],
-      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.temporalpole.obj",
       "fs_xyz": [
         -33.25,
         5.25,
         -45.329
       ],
-      "coord_source": "obj_centroid_fs",
-      "mni_literature": [
-        -33.25,
-        5.25,
-        -45.329
-      ],
-      "level": 2
+      "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.temporalpole.obj",
+      "notes": null
     },
-    "黑质致密部": {
+    "SubstantiaNigraParsCompacta": {
+      "zh_name": "黑质致密部",
+      "functional_id": "SubstantiaNigraParsCompacta",
       "std_name": "Substantia Nigra pars compacta",
-      "bfb_region": null,
+      "dk_name": null,
       "category": "brainstem",
       "lobe": "midbrain",
       "level": 0,
+      "is_design_node": false,
       "mni_xyz": [
         -10,
         -18,
@@ -2319,14 +2272,19 @@
         0.3944,
         -0.1214
       ],
+      "fs_xyz": null,
+      "obj_file": null,
       "notes": "DA源头. Hansen2024 GREEN社区. 运动启动/奖励学习. 帕金森病关键结构"
     },
-    "黑质致密部_R": {
+    "SubstantiaNigraParsCompactaRight": {
+      "zh_name": "黑质致密部_R",
+      "functional_id": "SubstantiaNigraParsCompactaRight",
       "std_name": "Substantia Nigra pars compacta (Right)",
-      "bfb_region": null,
+      "dk_name": null,
       "category": "brainstem",
       "lobe": "midbrain",
       "level": 0,
+      "is_design_node": false,
       "mni_xyz": [
         10,
         -18,
@@ -2338,7 +2296,10 @@
         0.3944,
         -0.1214
       ],
-      "notes": "黑质右侧"
+      "fs_xyz": null,
+      "obj_file": null,
+      "notes": "黑质右侧",
+      "hemisphere": "R"
     }
   }
 }
