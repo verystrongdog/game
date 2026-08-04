@@ -22,14 +22,21 @@
       "old_model": "—（与项目定义一致，无偏离）",
       "deviation_reason": "—",
       "status": "active",
-      "numerical_locations": ["规则/核心机制.md §六", "data/emotions.json", "data/drives.json"],
+      "numerical_locations": [
+        "规则/核心机制.md §六",
+        "data/emotions.json",
+        "data/drives.json"
+      ],
       "added": "2026-08-03",
       "updated": "2026-08-03"
     },
     "7驱动": {
       "definition": "⚠️ 已废弃（2026-07-26）。反射/惩罚/奖励/道德/文化/价值/照护。NPC AI 改用脑区链路模型。data/ 中 drives.json 仍使用——标记为参考数据。",
       "status": "deprecated",
-      "numerical_locations": ["data/drives.json", "data/attitudes.json"],
+      "numerical_locations": [
+        "data/drives.json",
+        "data/attitudes.json"
+      ],
       "source": "CLAUDE.md §核心术语表",
       "old_model": "Panksepp 七大情感系统",
       "deviation_reason": "行为系统整体废弃——NPC 行为从驱动模型迁移至脑区链路预烘焙查表",
@@ -39,7 +46,9 @@
     "5模块": {
       "definition": "⚠️ 已废弃。知觉与注意/记忆/知识表征/表象与语言/推理与决策。data/cognition_cards.json 仍使用——标记为参考数据。",
       "status": "deprecated",
-      "numerical_locations": ["data/cognition_cards.json"],
+      "numerical_locations": [
+        "data/cognition_cards.json"
+      ],
       "source": "CLAUDE.md §核心术语表",
       "old_model": "认知心理学经典模块划分",
       "deviation_reason": "认知系统整体废弃——随 37 AI 操作技能移入垃圾桶（D20，2026-08-03）",
@@ -49,7 +58,10 @@
     "CPM": {
       "definition": "⚠️ 已废弃。Cognitive-Psychological Mechanism，4 步评估流程。",
       "status": "deprecated",
-      "numerical_locations": ["data/cognition_cards.json", "data/emotion_cards.json"],
+      "numerical_locations": [
+        "data/cognition_cards.json",
+        "data/emotion_cards.json"
+      ],
       "source": "CLAUDE.md §核心术语表",
       "old_model": "—（项目独创框架）",
       "deviation_reason": "随态度引擎一同废弃",
@@ -78,7 +90,10 @@
       "old_model": "Baumeister ego depletion 模型（2016 多中心复制失败——Hagger et al., 23实验室/2141被试, 效应量≈0）",
       "deviation_reason": "项目中的意志力是特定机制资源（硬解锁灰色技能）。脑功能层级模型 §L0 明确不用此模型",
       "status": "active",
-      "numerical_locations": ["规则/核心机制.md", "规则/技能树系统/脑功能层级模型.md §L0"],
+      "numerical_locations": [
+        "规则/核心机制.md",
+        "规则/技能树系统/脑功能层级模型.md §L0"
+      ],
       "added": "2026-08-03",
       "updated": "2026-08-03"
     },
@@ -103,7 +118,10 @@
       "old_model": "物理镜子——反射光线的光学设备",
       "deviation_reason": "镜子不是空间物体而是 UI 隐喻——反射内在状态（技能编排/链路聚焦/自我观察）",
       "status": "active",
-      "numerical_locations": ["事件/游戏循环.md §十", "规则/核心机制.md §七"],
+      "numerical_locations": [
+        "事件/游戏循环.md §十",
+        "规则/核心机制.md §七"
+      ],
       "added": "2026-08-03",
       "updated": "2026-08-03"
     },
@@ -170,7 +188,9 @@
       "old_model": "病原体传播——微生物通过接触/飞沫从感染者传播至易感者",
       "deviation_reason": "项目中的'感染'不是病原体传播——是月光场的相干耦合。场中暴露=被耦合进场的多源相位同步。没有'治愈感染'——感染是存在状态，不是疾病",
       "status": "active",
-      "numerical_locations": ["docs/决策树.md line 1363（M5）"],
+      "numerical_locations": [
+        "docs/决策树.md line 1363（M5）"
+      ],
       "added": "2026-08-03",
       "updated": "2026-08-03"
     },
@@ -190,15 +210,18 @@
     "场相变": {
       "definition": "对称相（白天/'太阳'）↔ 破缺相（夜晚/'月亮'）。由生物节律驱动——不是天体运行。M3: 昼夜=场相变表观。",
       "source": "决策树.md M3（2026-08-02）",
-      "old_model": "—（项目独创术语——借用了凝聚态物理的'相变'概念，赋予全新语义）",
-      "deviation_reason": "—",
+      "old_model": "凝聚态物理中对称性破缺驱动的相变——借用了术语但赋予全新语义",
+      "deviation_reason": "项目中的场相变不是45°投影轴偏移（那是观察者交互层的简化类比——见月光场-量子擦除模型.md §六）。场本体的相变是KK额外维几何中紧致半径R在有效势下的周期性振荡，由集体生物节律驱动。文献: Horoto & Scholtz (2024) + Clark & Love (2000)。日=对称相(R收缩)，夜=破缺相(R膨胀)",
       "status": "active",
       "numerical_locations": [
         "docs/决策树.md line 1361（M3）",
-        "实体/敌人与事件.md §4.7（Boss阶段过渡: 场相变表观, 暂停2-3s）"
+        "实体/敌人与事件.md §4.7（Boss阶段过渡: 场相变表观, 暂停2-3s）",
+        "事件/月光场-量子擦除模型.md §8.4",
+        "事件/月光场-量子擦除模型.md §十",
+        "参考/文献/月光场-KK理论-文献数据源.md"
       ],
       "added": "2026-08-03",
-      "updated": "2026-08-03"
+      "updated": "2026-08-04"
     },
     "零号病人": {
       "definition": "场的第一激发源——精神病院出生的孩子，从未接触外界，无精神疾病。不同的观察基线激发了第一个场。不可见，已将自己关起来。不是流行病学 index case——是场的种子。",
@@ -206,7 +229,9 @@
       "old_model": "流行病学 index case（指示病例）——疾病爆发的第一个确诊病例",
       "deviation_reason": "不是疾病传播的起点——是场的第一激发源。不是因为他'有病'，恰恰因为他从未接触外界（无精神疾病），拥有不同的观察基线",
       "status": "active",
-      "numerical_locations": ["docs/决策树.md line 1359（M1）"],
+      "numerical_locations": [
+        "docs/决策树.md line 1359（M1）"
+      ],
       "added": "2026-08-03",
       "updated": "2026-08-03"
     },
