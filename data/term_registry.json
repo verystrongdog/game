@@ -904,6 +904,163 @@
       ],
       "added": "2026-08-03",
       "updated": "2026-08-03"
+    },
+    "AP": {
+      "definition": "⚠️ 已废弃（2026-07-28）。项目不使用 Action Points 系统。基础行动表中'动作'列指消耗 1 个 M1 或 Broca 通道动作。",
+      "source": "规则/回合战斗流程.md §一（不设AP决策）; 规则/核心机制.md §2.5（基底节门控替代AP）",
+      "old_model": "RPG Action Points——每回合可分配的行动点数池（消耗AP执行动作，不同动作消耗不同AP量）",
+      "deviation_reason": "项目明确否决AP系统——行动约束来自基底节CSTC环路门控（M1/Broca各自每回合独立放行1个动作），不是点数池。2026-08-05 grilling #21发现基础行动设计.md表头使用'AP'缩写触发了RPG旧模型",
+      "status": "deprecated",
+      "numerical_locations": [
+        "规则/技能树系统/操作层/基础行动设计.md（⚠️ 已修复——表头'AP'→'动作', 2026-08-05）",
+        "规则/核心机制.md §2.5/§4.1/§十一（⚠️ 已修复——同上去缩写, 2026-08-05）"
+      ],
+      "added": "2026-08-05",
+      "updated": "2026-08-05"
+    },
+    "HP": {
+      "definition": "物理生命值。玩家基线50（±10 by 角色类型）。与SAN可互转（HP→SAN 1:2, SAN→HP 2:1）。HP=0→物理压制，被击败离开战斗。分难度复活规则。",
+      "source": "规则/核心机制.md §4.5（胜负条件）/§5.3（互转）/§十（基线）; 事件/游戏循环.md §五（死亡/复活）",
+      "old_model": "RPG Hit Points——线性血量条，0=死亡/战斗不能",
+      "deviation_reason": "与SAN互转机制、分难度复活规则、非二元死亡（HP=0→灵魂跟随都灵之马7回合）——偏离传统HP的'0=永久死亡'模型",
+      "status": "active",
+      "numerical_locations": [
+        "规则/核心机制.md §4.5（HP=0即时退出队列）",
+        "规则/核心机制.md §5.3（HP↔SAN互转公式）",
+        "规则/核心机制.md §十（玩家HP基线50±10）",
+        "实体/敌人与事件.md §四（敌人HP范围）"
+      ],
+      "added": "2026-08-05",
+      "updated": "2026-08-05"
+    },
+    "CD": {
+      "definition": "冷却（Cooldown）。在自己行动窗口开始时递减（非回合边界）。'冷却X回合'=必须经历X次自己的行动窗口（非X个全局回合）。",
+      "source": "规则/回合战斗流程.md §9.1/§9.2; 规则/核心机制.md §五（SAN恢复技能CD）",
+      "old_model": "RPG Cooldown——回合开始/结束时统一递减（全局回合边界），所有参与者共享同一冷却时钟",
+      "deviation_reason": "递减时机与计数口径不同——每个参与者有自己的'回合时钟'（行动窗口）。冷却3回合≠全局3回合——快的人冷却转得更快",
+      "status": "active",
+      "numerical_locations": [
+        "规则/回合战斗流程.md §9.1/§9.2",
+        "规则/核心机制.md §5.2（内省CD4/自省CD5）"
+      ],
+      "added": "2026-08-05",
+      "updated": "2026-08-05"
+    },
+    "N": {
+      "definition": "组件稀有度——常见（Normal）/轻度破损。N=80%杂兵掉落权重。",
+      "source": "实体/角色与面具.md §8.5; 事件/奖励掉落系统.md",
+      "old_model": "—（游戏稀有度体系通用缩写Normal，无显著偏离）",
+      "deviation_reason": "—",
+      "status": "active",
+      "numerical_locations": [
+        "实体/角色与面具.md §8.5（N轻/R中/SR重）",
+        "事件/奖励掉落系统.md（掉落权重表）"
+      ],
+      "added": "2026-08-05",
+      "updated": "2026-08-05"
+    },
+    "R": {
+      "definition": "组件稀有度——不常见（Rare）/中度破损。R=20%杂兵/50%精英掉落权重。",
+      "source": "实体/角色与面具.md §8.5; 事件/奖励掉落系统.md",
+      "old_model": "—（与游戏稀有度体系Rare一致，无偏离）",
+      "deviation_reason": "—",
+      "status": "active",
+      "numerical_locations": [
+        "实体/角色与面具.md §8.5",
+        "事件/奖励掉落系统.md"
+      ],
+      "added": "2026-08-05",
+      "updated": "2026-08-05"
+    },
+    "SR": {
+      "definition": "组件稀有度——极稀有（Super Rare）/重度破损。SR=0%杂兵/10%精英/40%Boss掉落权重。",
+      "source": "实体/角色与面具.md §8.5; 事件/奖励掉落系统.md",
+      "old_model": "—（源自gacha游戏稀有度体系Super Rare，项目沿用无偏离）",
+      "deviation_reason": "—",
+      "status": "active",
+      "numerical_locations": [
+        "实体/角色与面具.md §8.5",
+        "事件/奖励掉落系统.md"
+      ],
+      "added": "2026-08-05",
+      "updated": "2026-08-05"
+    },
+    "Δm": {
+      "definition": "髓鞘化增量。公式: Δm = base(L) × f(m) × g(n) × 标记倍率。Δ=变化量，m=髓鞘化值。",
+      "source": "规则/核心机制.md §1.3（髓鞘化增长公式）",
+      "old_model": "—（数学符号Δ=差分/变化量 + m=myelination项目独创缩写）",
+      "deviation_reason": "—",
+      "status": "active",
+      "numerical_locations": [
+        "规则/核心机制.md §1.3（Δm公式: base L0 0.03→L6 0.08）",
+        "规则/核心机制.md §十（Δm参数表）"
+      ],
+      "added": "2026-08-05",
+      "updated": "2026-08-05"
+    },
+    "HP↔SAN": {
+      "definition": "生命值与精神护盾互转机制。HP→SAN: 前10HP 1:2, 后5HP 1:1, 单次上限15HP, 单场上限30SAN。SAN→HP: 前10SAN 2:1, 后10SAN 3:1, 单次上限20SAN, 单场上限15HP。均占M1通道。",
+      "source": "规则/核心机制.md §5.3",
+      "old_model": "—（项目独创机制——传统RPG无HP↔精神值互转）",
+      "deviation_reason": "—",
+      "status": "active",
+      "numerical_locations": [
+        "规则/核心机制.md §5.3（互转公式+上下限）",
+        "规则/核心机制.md §十（参数表）"
+      ],
+      "added": "2026-08-05",
+      "updated": "2026-08-05"
+    },
+    "L0-L6": {
+      "definition": "七层功能层级标识符。L0脑干核团（生存反射）→L6跨模态整合（自我叙事）。延迟L0~10-30ms→L6~300ms+。⚠️ 与空间层L0/L1/L2同前缀但语义完全不同——上下文决定含义。",
+      "source": "规则/核心机制.md §1.1; 规则/技能树系统/脑功能层级模型.md §二",
+      "old_model": "L1/L2/L3 CPU缓存层级（计算机体系结构——访问速度分级）",
+      "deviation_reason": "7层脑功能层级（L0-L6）——不是CPU缓存。L0=脑干（最低层），L6=跨模态整合（最高层）。与空间层L0/L1/L2共用前缀但语义完全不同——AI极易混淆",
+      "status": "active",
+      "numerical_locations": [
+        "规则/核心机制.md §1.1（L0-L6延迟/可控性/设计含义表）",
+        "规则/技能树系统/脑功能层级模型.md §二（89脑区层级分布）",
+        "规则/核心机制.md §1.3（base(L)层级基数: L0 0.03→L6 0.08）"
+      ],
+      "added": "2026-08-05",
+      "updated": "2026-08-05"
+    },
+    "force_mod": {
+      "definition": "物理伤害force通道调制量。force=运动输出（稳定），cap +50%。伤害公式中与motivation_mod加法叠加。",
+      "source": "规则/核心机制.md §4.2（物理攻击伤害公式）; 规则/技能树系统/操作层/基础行动设计.md §四",
+      "old_model": "—（项目独创——来自神经科学force概念: 运动输出的物理力维度）",
+      "deviation_reason": "—",
+      "status": "active",
+      "numerical_locations": [
+        "规则/核心机制.md §4.2（公式: 4×(1+force_mod+motivation_mod)）",
+        "规则/技能树系统/操作层/基础行动设计.md §四（force cap +50%）"
+      ],
+      "added": "2026-08-05",
+      "updated": "2026-08-05"
+    },
+    "motivation_mod": {
+      "definition": "物理伤害motivation通道调制量。motivation=动机驱动（情境敏感），cap +100%。伤害公式中与force_mod加法叠加。精神攻击公式中单独出现（无force分量）。",
+      "source": "规则/核心机制.md §4.2/§4.3（伤害公式）; 规则/技能树系统/操作层/基础行动设计.md §四",
+      "old_model": "—（项目独创——来自神经科学motivation概念: 动机/情绪对运动输出的增益）",
+      "deviation_reason": "—",
+      "status": "active",
+      "numerical_locations": [
+        "规则/核心机制.md §4.2（物理: 4×(1+force+motivation)）",
+        "规则/核心机制.md §4.3（精神: 2×(1+motivation)×(1+负载)−忍耐）",
+        "规则/技能树系统/操作层/基础行动设计.md §四（motivation cap +100%）"
+      ],
+      "added": "2026-08-05",
+      "updated": "2026-08-05"
+    },
+    "克罗尔14网络": {
+      "definition": "连接组学14社区（Kroell et al. 2024），替代Hansen社区作为网络集合基线。联合Hansen社区构成50个网络集合（含混合+边缘）。",
+      "source": "规则/技能树系统/技能生成机制.md §二; 规则/技能树系统/脑功能层级模型.md",
+      "old_model": "—（项目独创术语）",
+      "deviation_reason": "—",
+      "status": "active",
+      "numerical_locations": [],
+      "added": "2026-08-05",
+      "updated": "2026-08-05"
     }
   }
 }
