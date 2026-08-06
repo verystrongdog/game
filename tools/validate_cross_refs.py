@@ -159,13 +159,30 @@ def check_section_exists(filepath: Path, anchor: str) -> bool:
     anchor = urllib.parse.unquote(anchor).lstrip("§")
     CN_NUM = {"一":"1","二":"2","三":"3","四":"4","五":"5","六":"6","七":"7","八":"8","九":"9","十":"10",
               "十一":"11","十二":"12","十三":"13","十四":"14"}
-    patterns = [re.escape(anchor)]
-    if anchor in CN_NUM: patterns.append(CN_NUM[anchor])
+    raw_patterns = [anchor]
+    if anchor in CN_NUM: raw_patterns.append(CN_NUM[anchor])
     for cn, num in CN_NUM.items():
-        if num == anchor: patterns.append(cn)
-    for pat in patterns:
-        if re.search(rf'^#+\s+.*?{pat}[、.,\s）\)]', text, re.MULTILINE): return True
-        if re.search(rf'(?:§|#|章节\s*){pat}\b', text): return True
+        if num == anchor: raw_patterns.append(cn)
+    # 扫描所有章节标题，逐标题尝试匹配（支持 GitHub 锚点格式）
+    for line in text.split("\n"):
+        sec = re.match(r'^#{1,6}\s+(.+)$', line)
+        if not sec:
+            continue
+        heading = sec.group(1).strip()
+
+        # GitHub 锚点风格：小写英文 + 去标点 + 空格变连字符
+        githubified = heading.lower()
+        githubified = re.sub(r'[^\w\s一-鿿-]', '', githubified)
+        githubified = re.sub(r'\s+', '-', githubified)
+        githubified = re.sub(r'-{2,}', '-', githubified)  # 合并连续连字符
+
+        for raw in raw_patterns:
+            escaped = re.escape(raw)
+            for cand in (heading, githubified):
+                if raw in cand:
+                    return True
+                if re.search(rf'(?:^|\s){escaped}(?:[\s、.,:：]|$)', cand):
+                    return True
     return False
 
 

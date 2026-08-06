@@ -19,8 +19,24 @@ description: 基于符号执行的方案/规格文档审查。追踪数据从定
 ## 执行流程
 
 ```
-1. 解析 → 2. 排序 → 3. Trace → [3.5 交叉比对] → [4. L1.5抽查] → 5. 输出
+0. Layer 1 强制执行 → 1. 解析 → 2. 排序 → 3. Trace → [3.5 交叉比对] → [4. L1.5抽查] → 5. 输出
 ```
+
+### Step 0 — Layer 1 强制预检查（不可跳过）
+
+**每次 `/review-plan` 被调用时，AI 必须首先自动运行 Layer 1 脚本。** 不传 `--pre-check` 不再允许——AI 自己跑脚本、自己消费输出。
+
+执行方式：
+```
+python3 tools/run_all_checks.py --format json
+```
+
+AI 必须：
+- [ ] 运行 `run_all_checks.py`，收集 JSON 输出
+- [ ] 如有 FAIL（blocker > 0）→ 打印死链/参数冲突清单，询问用户"是否忽略这些错误继续审查？"
+- [ ] 如有 WARN → 在 trace 输出中标注"Layer 1 发现 N 个警告，详见预检查报告"
+- [ ] 将 JSON 输出中的 `blocker` 和 `warn` 数组作为 `--pre-check` 等效输入传给 Step 3.5
+- [ ] 如果脚本无法运行（exit code = -1 或 ModuleNotFoundError）→ 报告用户并降级为纯 AI 模式，标注"⚠️ Layer 1 不可用，审查结果可能遗漏基础错误"
 
 ### Step 1 — 解析
 
