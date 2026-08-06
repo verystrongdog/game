@@ -200,7 +200,7 @@ def main():
 
     # 模板占位符跳过
     PLACEHOLDER = ["相对路径", "xxx.md", "示例", "example"]
-    dead_links, dir_links, section_warns = [], [], []
+    dead_links, section_warns = [], []
     pass_count = 0
 
     for link in all_links:
@@ -211,7 +211,7 @@ def main():
         if resolved is None:
             dead_links.append(link)
         elif is_dir:
-            dir_links.append(link)
+            pass_count += 1  # 目录引用是合法的，不报
         elif link["anchor"] and not check_section_exists(resolved, link["anchor"]):
             section_warns.append(link)
         else:
@@ -223,13 +223,11 @@ def main():
             "script": "validate_cross_refs.py",
             "timestamp": datetime.now().isoformat(),
             "summary": {"total": len(all_links), "passed": pass_count,
-                        "blocker": len(dead_links), "warn": len(dir_links) + len(section_warns), "info": 0},
+                        "blocker": len(dead_links), "warn": len(section_warns), "info": 0},
             "blocker": [{"source_file": l["source_file"], "source_line": l["source_line"],
                          "reason": f"死链: {l['target']}"} for l in dead_links],
-            "warn": ([{"source_file": l["source_file"], "source_line": l["source_line"],
-                       "reason": f"目录引用: {l['target']}/"} for l in dir_links] +
-                     [{"source_file": l["source_file"], "source_line": l["source_line"],
-                       "reason": f"段引用可能失效: §{l['anchor']}"} for l in section_warns]),
+            "warn": [{"source_file": l["source_file"], "source_line": l["source_line"],
+                       "reason": f"段引用可能失效: §{l['anchor']}"} for l in section_warns],
             "info": [],
         }
         out = json.dumps(output, ensure_ascii=False, indent=2)
@@ -241,17 +239,13 @@ def main():
             lines.append(f"\n### 🔴 死链 ({len(dead_links)} 个)\n")
             for l in dead_links:
                 lines.append(f"FAIL  cross_ref  [{l['source_file']}:{l['source_line']}] → `{l['target']}` (文件不存在)")
-        if dir_links:
-            lines.append(f"\n### 🟡 目录引用 ({len(dir_links)} 个)\n")
-            for l in dir_links[:15]:
-                lines.append(f"WARN  cross_ref  [{l['source_file']}:{l['source_line']}] → `{l['target']}/` (目录引用)")
         if section_warns:
             lines.append(f"\n### 🟡 段引用可能失效 ({len(section_warns)} 个)\n")
             for l in section_warns[:20]:
                 lines.append(f"WARN  cross_ref  [{l['source_file']}:{l['source_line']}] → `{l['target']} §{l['anchor']}` (段未找到)")
         lines.append(f"\nPASS  cross_ref  {pass_count} 个引用有效")
         lines.append(f"\n## 汇总")
-        lines.append(f"{len(all_links)} refs: {pass_count} passed, {len(dead_links)} dead, {len(dir_links)} dir-refs, {len(section_warns)} section warnings")
+        lines.append(f"{len(all_links)} refs: {pass_count} passed, {len(dead_links)} dead, {len(section_warns)} section warnings")
         out = "\n".join(lines)
 
     if args.output:
