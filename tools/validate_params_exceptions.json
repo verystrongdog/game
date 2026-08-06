@@ -1,0 +1,6 @@
+{
+  "_description": "validate_params.py 例外配置。记录合法的同名异义参数及其理由。由人类逐条审核后添加。",
+  "_usage": "每次 validate_params.py 报出新的 FAIL 时，人类判断是否合法→如合法则添加条目到此文件→后续运行自动排除。",
+  "exceptions": [
+  ]
+}
