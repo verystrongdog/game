@@ -1,5 +1,5 @@
 {
-  "_description": "50 解剖实体 (2026-08-07 Grilling #25 — 解剖基座重构) + Grilling #26 三体神经模型 | 58 皮层/皮下 + 11 脑干核团 = 69 functional_id | dk_name 主键 | 新增 STN (SubthalamicNucleus), 删除 2 功能聚合体, 首批 23 个 function_profile (含 mirror_of)",
+  "_description": "50 解剖实体 (2026-08-07 Grilling #25/26) | 58 皮层/皮下 + 11 脑干核团 = 69 functional_id | 67 功能剖面 + 2 mirror_of = 69 已剖绘",
   "_coordinate_system": {
     "mni": "MNI152 (mm, RAS+): X=右, Y=前, Z=上",
     "game": "游戏世界空间: X=右, Y=上, Z=前",
@@ -73,7 +73,26 @@
         2.739
       ],
       "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.caudalanteriorcingulate.obj",
-      "notes": null
+      "notes": null,
+      "function_profile": {
+        "primary_function": "Salience detection and conflict monitoring; dorsal ACC (dACC/MCC) for error detection and cognitive control engagement",
+        "input_types": [
+          "excitation/cognitive_goal",
+          "excitation/emotional_salience",
+          "modulation/pain_opioid"
+        ],
+        "output_types": [
+          "excitation/cognitive_goal",
+          "excitation/emotional_salience"
+        ],
+        "timescale": "medium",
+        "neurotransmitter_dominant": "glutamate",
+        "oscillatory_band": "theta",
+        "cstc_loop": "limbic",
+        "cstc_role": "cortical_input",
+        "hierarchy_direction": "both",
+        "gameplay_domain": "cognitive_control"
+      }
     },
     "RostralAnteriorCingulateCortex": {
       "zh_name": "ACC吻侧",
@@ -101,7 +120,26 @@
         -19.945
       ],
       "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.rostralanteriorcingulate.obj",
-      "notes": null
+      "notes": null,
+      "function_profile": {
+        "primary_function": "Rostral/pregenual ACC: emotion regulation and affective appraisal; top-down modulation of amygdala and autonomic responses",
+        "input_types": [
+          "excitation/emotional_salience",
+          "excitation/cognitive_goal",
+          "modulation/mood_5HT"
+        ],
+        "output_types": [
+          "excitation/cognitive_goal",
+          "modulation/pain_opioid"
+        ],
+        "timescale": "medium",
+        "neurotransmitter_dominant": "glutamate",
+        "oscillatory_band": "theta",
+        "cstc_loop": "limbic",
+        "cstc_role": "cortical_input",
+        "hierarchy_direction": "feedback",
+        "gameplay_domain": "threat_defense"
+      }
     },
     "AnteriorCingulateCortexDorsal": {
       "zh_name": "ACC背侧",
@@ -129,7 +167,26 @@
         2.739
       ],
       "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.caudalanteriorcingulate.obj",
-      "notes": null
+      "notes": null,
+      "function_profile": {
+        "primary_function": "Dorsal ACC: cognitive control, effort-based decision making, pain processing; mid-cingulate for action-outcome monitoring",
+        "input_types": [
+          "excitation/cognitive_goal",
+          "excitation/motor_command",
+          "modulation/pain_opioid"
+        ],
+        "output_types": [
+          "excitation/cognitive_goal",
+          "modulation/pain_opioid"
+        ],
+        "timescale": "medium",
+        "neurotransmitter_dominant": "glutamate",
+        "oscillatory_band": "theta",
+        "cstc_loop": "cognitive",
+        "cstc_role": "cortical_input",
+        "hierarchy_direction": "both",
+        "gameplay_domain": "cognitive_control"
+      }
     },
     "ParsOpercularis": {
       "zh_name": "Broca区",
@@ -157,7 +214,26 @@
         -1.841
       ],
       "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.parsopercularis.obj",
-      "notes": null
+      "notes": null,
+      "function_profile": {
+        "primary_function": "Broca's area (pars opercularis): language production — phonological encoding, syntactic processing, and speech motor planning",
+        "input_types": [
+          "excitation/social_intention",
+          "excitation/cognitive_goal",
+          "gating/disinhibition_thalamic"
+        ],
+        "output_types": [
+          "excitation/social_intention",
+          "excitation/motor_command"
+        ],
+        "timescale": "fast",
+        "neurotransmitter_dominant": "glutamate",
+        "oscillatory_band": "gamma",
+        "cstc_loop": "cognitive",
+        "cstc_role": "cortical_input",
+        "hierarchy_direction": "feedforward",
+        "gameplay_domain": "social_cognition"
+      }
     },
     "MedialOrbitalPrefrontalDMN": {
       "zh_name": "DMN+OFC",
@@ -185,7 +261,26 @@
         -31.18
       ],
       "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.medialorbitofrontal.obj",
-      "notes": null
+      "notes": null,
+      "function_profile": {
+        "primary_function": "Medial OFC (DMN): self-referential value — personal preference, introspective valuation, and self-related reward processing",
+        "input_types": [
+          "excitation/emotional_salience",
+          "modulation/reward_DA",
+          "excitation/social_intention"
+        ],
+        "output_types": [
+          "excitation/emotional_salience",
+          "excitation/social_intention"
+        ],
+        "timescale": "slow",
+        "neurotransmitter_dominant": "glutamate",
+        "oscillatory_band": "alpha",
+        "cstc_loop": "limbic",
+        "cstc_role": "cortical_input",
+        "hierarchy_direction": "both",
+        "gameplay_domain": "reward_learning"
+      }
     },
     "Precentral": {
       "zh_name": "M1",
@@ -349,7 +444,26 @@
         -31.949
       ],
       "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.lateralorbitofrontal.obj",
-      "notes": null
+      "notes": null,
+      "function_profile": {
+        "primary_function": "Lateral OFC: value-based decision making, reversal learning, and punishment prediction; updates stimulus-outcome associations",
+        "input_types": [
+          "excitation/sensory_feature",
+          "excitation/emotional_salience",
+          "modulation/reward_DA"
+        ],
+        "output_types": [
+          "excitation/cognitive_goal",
+          "excitation/emotional_salience"
+        ],
+        "timescale": "medium",
+        "neurotransmitter_dominant": "glutamate",
+        "oscillatory_band": "theta",
+        "cstc_loop": "limbic",
+        "cstc_role": "cortical_input",
+        "hierarchy_direction": "both",
+        "gameplay_domain": "reward_learning"
+      }
     },
     "PeriaqueductalGray": {
       "zh_name": "PAG",
@@ -460,7 +574,25 @@
         20.481
       ],
       "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.supramarginal.obj",
-      "notes": null
+      "notes": null,
+      "function_profile": {
+        "primary_function": "Temporo-parietal junction (TPJ): theory of mind and attention reorienting — mental state attribution, perspective-taking, and ventral attention network hub for stimulus-driven reorienting",
+        "input_types": [
+          "excitation/sensory_feature",
+          "excitation/social_intention",
+          "excitation/memory_trace"
+        ],
+        "output_types": [
+          "excitation/social_intention"
+        ],
+        "timescale": "medium",
+        "neurotransmitter_dominant": "glutamate",
+        "oscillatory_band": "theta",
+        "cstc_loop": "none",
+        "cstc_role": "none",
+        "hierarchy_direction": "both",
+        "gameplay_domain": "social_cognition"
+      }
     },
     "VentralTegmentalArea": {
       "zh_name": "VTA",
@@ -530,7 +662,25 @@
         -14.654
       ],
       "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.superiortemporal.obj",
-      "notes": null
+      "notes": null,
+      "function_profile": {
+        "primary_function": "Wernicke's area: language comprehension — phonological decoding, semantic access, and auditory-motor speech interface",
+        "input_types": [
+          "excitation/sensory_feature",
+          "excitation/social_intention"
+        ],
+        "output_types": [
+          "excitation/social_intention",
+          "excitation/memory_trace"
+        ],
+        "timescale": "medium",
+        "neurotransmitter_dominant": "glutamate",
+        "oscillatory_band": "gamma",
+        "cstc_loop": "none",
+        "cstc_role": "none",
+        "hierarchy_direction": "both",
+        "gameplay_domain": "social_cognition"
+      }
     },
     "RostralMiddleFrontalDLPFC": {
       "zh_name": "dlPFC",
@@ -558,7 +708,28 @@
         -8.23
       ],
       "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.rostralmiddlefrontal.obj",
-      "notes": null
+      "notes": null,
+      "function_profile": {
+        "primary_function": "Dorsolateral PFC: executive control hub — working memory maintenance, cognitive flexibility, planning, and top-down attention regulation. Cognitive CSTC loop cortical input",
+        "input_types": [
+          "excitation/sensory_feature",
+          "excitation/memory_trace",
+          "excitation/emotional_salience",
+          "modulation/arousal_NE",
+          "gating/disinhibition_thalamic"
+        ],
+        "output_types": [
+          "excitation/cognitive_goal",
+          "plasticity/ltp_consolidation"
+        ],
+        "timescale": "medium",
+        "neurotransmitter_dominant": "glutamate",
+        "oscillatory_band": "theta",
+        "cstc_loop": "cognitive",
+        "cstc_role": "cortical_input",
+        "hierarchy_direction": "both",
+        "gameplay_domain": "cognitive_control"
+      }
     },
     "SuperiorFrontalMPFC": {
       "zh_name": "mPFC",
@@ -586,7 +757,27 @@
         16.771
       ],
       "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.superiorfrontal.obj",
-      "notes": null
+      "notes": null,
+      "function_profile": {
+        "primary_function": "Medial prefrontal cortex (mPFC): social cognition and DMN — mentalizing, self-other distinction, person perception, and social value integration",
+        "input_types": [
+          "excitation/social_intention",
+          "excitation/emotional_salience",
+          "excitation/memory_trace",
+          "modulation/mood_5HT"
+        ],
+        "output_types": [
+          "excitation/social_intention",
+          "excitation/cognitive_goal"
+        ],
+        "timescale": "slow",
+        "neurotransmitter_dominant": "glutamate",
+        "oscillatory_band": "alpha",
+        "cstc_loop": "limbic",
+        "cstc_role": "cortical_input",
+        "hierarchy_direction": "both",
+        "gameplay_domain": "social_cognition"
+      }
     },
     "MedialOrbitalPrefrontalVMPFC": {
       "zh_name": "vmPFC",
@@ -614,7 +805,28 @@
         -31.18
       ],
       "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.medialorbitofrontal.obj",
-      "notes": null
+      "notes": null,
+      "function_profile": {
+        "primary_function": "Ventromedial PFC: value integration and emotion regulation — integrates reward value with affective context; top-down amygdala inhibition for fear extinction",
+        "input_types": [
+          "excitation/emotional_salience",
+          "modulation/reward_DA",
+          "excitation/social_intention",
+          "modulation/mood_5HT"
+        ],
+        "output_types": [
+          "excitation/emotional_salience",
+          "excitation/cognitive_goal",
+          "excitation/social_intention"
+        ],
+        "timescale": "medium",
+        "neurotransmitter_dominant": "glutamate",
+        "oscillatory_band": "theta",
+        "cstc_loop": "limbic",
+        "cstc_role": "cortical_input",
+        "hierarchy_direction": "feedback",
+        "gameplay_domain": "threat_defense"
+      }
     },
     "SuperiorColliculus": {
       "zh_name": "上丘",
@@ -638,7 +850,25 @@
       ],
       "fs_xyz": null,
       "obj_file": null,
-      "notes": "视觉-运动接口, 威胁检测→启动PAG逃逸. 接收视网膜直接输入(Glu)"
+      "notes": "视觉-运动接口, 威胁检测→启动PAG逃逸. 接收视网膜直接输入(Glu)",
+      "function_profile": {
+        "primary_function": "Superior colliculus: multimodal orienting — visual/auditory/tactile spatial map for saccade generation and attention orienting; subcortical visual pathway",
+        "input_types": [
+          "excitation/sensory_feature",
+          "excitation/emotional_salience"
+        ],
+        "output_types": [
+          "excitation/motor_command",
+          "excitation/sensory_feature"
+        ],
+        "timescale": "fast",
+        "neurotransmitter_dominant": "glutamate",
+        "oscillatory_band": "gamma",
+        "cstc_loop": "none",
+        "cstc_role": "none",
+        "hierarchy_direction": "feedforward",
+        "gameplay_domain": "sensory_perception"
+      }
     },
     "Thalamus": {
       "zh_name": "丘脑",
@@ -750,7 +980,24 @@
       ],
       "fs_xyz": null,
       "obj_file": null,
-      "notes": "5-HT. 投射至海马/隔区. Hansen2024 GREEN社区"
+      "notes": "5-HT. 投射至海马/隔区. Hansen2024 GREEN社区",
+      "function_profile": {
+        "primary_function": "Median raphe nucleus: serotonin (5-HT) source for hippocampus and septum — anxiety regulation, stress resilience, and theta rhythm modulation",
+        "input_types": [
+          "excitation/emotional_salience",
+          "excitation/cognitive_goal"
+        ],
+        "output_types": [
+          "modulation/mood_5HT"
+        ],
+        "timescale": "slow",
+        "neurotransmitter_dominant": "serotonin",
+        "oscillatory_band": "theta",
+        "cstc_loop": "none",
+        "cstc_role": "modulator",
+        "hierarchy_direction": "feedforward",
+        "gameplay_domain": "arousal_modulation"
+      }
     },
     "DorsalRapheNucleus": {
       "zh_name": "中缝背核",
@@ -774,7 +1021,24 @@
       ],
       "fs_xyz": null,
       "obj_file": null,
-      "notes": "5-HT源头. Hansen2024 PINK社区, 全脑关键hub. 感觉门控/冲动抑制/攻击调节"
+      "notes": "5-HT源头. Hansen2024 PINK社区, 全脑关键hub. 感觉门控/冲动抑制/攻击调节",
+      "function_profile": {
+        "primary_function": "Dorsal raphe nucleus: serotonin (5-HT) source for forebrain — mood regulation, impulse control, and stress coping. Diffuse broadcast to cortex and limbic system",
+        "input_types": [
+          "excitation/emotional_salience",
+          "excitation/cognitive_goal"
+        ],
+        "output_types": [
+          "modulation/mood_5HT"
+        ],
+        "timescale": "slow",
+        "neurotransmitter_dominant": "serotonin",
+        "oscillatory_band": "theta",
+        "cstc_loop": "none",
+        "cstc_role": "modulator",
+        "hierarchy_direction": "feedforward",
+        "gameplay_domain": "arousal_modulation"
+      }
     },
     "NucleusAccumbens": {
       "zh_name": "伏隔核/NAcc",
@@ -849,7 +1113,27 @@
         -41.316
       ],
       "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.entorhinal.obj",
-      "notes": null
+      "notes": null,
+      "function_profile": {
+        "primary_function": "Entorhinal cortex: hippocampal gateway — grid cell spatial coding, sensory-mnemonic translation, and cortical-hippocampal information bridge",
+        "input_types": [
+          "excitation/sensory_feature",
+          "excitation/memory_trace",
+          "plasticity/context_code"
+        ],
+        "output_types": [
+          "plasticity/context_code",
+          "excitation/memory_trace",
+          "plasticity/ltp_consolidation"
+        ],
+        "timescale": "medium",
+        "neurotransmitter_dominant": "glutamate",
+        "oscillatory_band": "theta",
+        "cstc_loop": "none",
+        "cstc_role": "none",
+        "hierarchy_direction": "both",
+        "gameplay_domain": "memory_consolidation"
+      }
     },
     "Insula": {
       "zh_name": "前脑岛",
@@ -877,7 +1161,26 @@
         -12.175
       ],
       "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.insula.obj",
-      "notes": null
+      "notes": null,
+      "function_profile": {
+        "primary_function": "Anterior insula: interoceptive awareness and salience network hub; integrates visceral signals with emotional context for subjective feeling states",
+        "input_types": [
+          "excitation/sensory_feature",
+          "excitation/emotional_salience",
+          "modulation/pain_opioid"
+        ],
+        "output_types": [
+          "excitation/emotional_salience",
+          "excitation/cognitive_goal"
+        ],
+        "timescale": "fast",
+        "neurotransmitter_dominant": "glutamate",
+        "oscillatory_band": "theta",
+        "cstc_loop": "limbic",
+        "cstc_role": "cortical_input",
+        "hierarchy_direction": "both",
+        "gameplay_domain": "interoception"
+      }
     },
     "FrontalPole": {
       "zh_name": "前额叶极",
@@ -905,7 +1208,25 @@
         -8.23
       ],
       "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.rostralmiddlefrontal.obj",
-      "notes": null
+      "notes": null,
+      "function_profile": {
+        "primary_function": "Frontal pole (BA10): cognitive branching — multi-tasking, subgoal monitoring, prospective memory, and exploratory decision making",
+        "input_types": [
+          "excitation/cognitive_goal",
+          "excitation/memory_trace",
+          "excitation/emotional_salience"
+        ],
+        "output_types": [
+          "excitation/cognitive_goal"
+        ],
+        "timescale": "slow",
+        "neurotransmitter_dominant": "glutamate",
+        "oscillatory_band": "theta",
+        "cstc_loop": "cognitive",
+        "cstc_role": "cortical_input",
+        "hierarchy_direction": "both",
+        "gameplay_domain": "cognitive_control"
+      }
     },
     "FrontalPoleDMN": {
       "zh_name": "前额叶极·DMN",
@@ -933,7 +1254,26 @@
         -31.18
       ],
       "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.medialorbitofrontal.obj",
-      "notes": null
+      "notes": null,
+      "function_profile": {
+        "primary_function": "Frontal pole (DMN): self-projection and mental time travel — future thinking, autobiographical planning, and introspective evaluation",
+        "input_types": [
+          "excitation/memory_trace",
+          "excitation/emotional_salience",
+          "excitation/social_intention"
+        ],
+        "output_types": [
+          "excitation/social_intention",
+          "plasticity/ltp_consolidation"
+        ],
+        "timescale": "slow",
+        "neurotransmitter_dominant": "glutamate",
+        "oscillatory_band": "alpha",
+        "cstc_loop": "limbic",
+        "cstc_role": "cortical_input",
+        "hierarchy_direction": "both",
+        "gameplay_domain": "social_cognition"
+      }
     },
     "FrontalPoleFPN": {
       "zh_name": "前额叶极·FPN",
@@ -961,7 +1301,25 @@
         -8.23
       ],
       "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.rostralmiddlefrontal.obj",
-      "notes": null
+      "notes": null,
+      "function_profile": {
+        "primary_function": "Frontal pole (FPN): frontoparietal control — task set maintenance, cognitive flexibility, and adaptive goal-directed processing",
+        "input_types": [
+          "excitation/cognitive_goal",
+          "excitation/sensory_feature",
+          "modulation/arousal_NE"
+        ],
+        "output_types": [
+          "excitation/cognitive_goal"
+        ],
+        "timescale": "medium",
+        "neurotransmitter_dominant": "glutamate",
+        "oscillatory_band": "theta",
+        "cstc_loop": "cognitive",
+        "cstc_role": "cortical_input",
+        "hierarchy_direction": "both",
+        "gameplay_domain": "cognitive_control"
+      }
     },
     "FrontalPoleSN": {
       "zh_name": "前额叶极·SN",
@@ -989,7 +1347,26 @@
         2.739
       ],
       "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.caudalanteriorcingulate.obj",
-      "notes": null
+      "notes": null,
+      "function_profile": {
+        "primary_function": "Frontal pole (salience network): salience-driven cognitive engagement — detects behaviorally relevant stimuli and recruits cognitive control",
+        "input_types": [
+          "excitation/emotional_salience",
+          "excitation/cognitive_goal",
+          "modulation/arousal_NE"
+        ],
+        "output_types": [
+          "excitation/cognitive_goal",
+          "excitation/emotional_salience"
+        ],
+        "timescale": "fast",
+        "neurotransmitter_dominant": "glutamate",
+        "oscillatory_band": "theta",
+        "cstc_loop": "limbic",
+        "cstc_role": "cortical_input",
+        "hierarchy_direction": "both",
+        "gameplay_domain": "cognitive_control"
+      }
     },
     "PosteriorCingulate": {
       "zh_name": "后扣带",
@@ -1017,7 +1394,26 @@
         20.494
       ],
       "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.posteriorcingulate.obj",
-      "notes": null
+      "notes": null,
+      "function_profile": {
+        "primary_function": "Posterior cingulate cortex: DMN core hub for self-referential processing, autobiographical memory retrieval, and internal attention",
+        "input_types": [
+          "excitation/memory_trace",
+          "excitation/emotional_salience",
+          "plasticity/context_code"
+        ],
+        "output_types": [
+          "excitation/memory_trace",
+          "plasticity/ltp_consolidation"
+        ],
+        "timescale": "slow",
+        "neurotransmitter_dominant": "glutamate",
+        "oscillatory_band": "alpha",
+        "cstc_loop": "none",
+        "cstc_role": "none",
+        "hierarchy_direction": "both",
+        "gameplay_domain": "memory_consolidation"
+      }
     },
     "Putamen": {
       "zh_name": "壳核",
@@ -1084,7 +1480,23 @@
       ],
       "fs_xyz": null,
       "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.lateraloccipital.obj",
-      "notes": "物体识别的关键区(LO). 腹侧视觉通路"
+      "notes": "物体识别的关键区(LO). 腹侧视觉通路",
+      "function_profile": {
+        "primary_function": "Lateral occipital cortex: object shape processing (LOC), visual object recognition, and figure-ground segregation",
+        "input_types": [
+          "excitation/sensory_feature"
+        ],
+        "output_types": [
+          "excitation/sensory_feature"
+        ],
+        "timescale": "fast",
+        "neurotransmitter_dominant": "glutamate",
+        "oscillatory_band": "gamma",
+        "cstc_loop": "none",
+        "cstc_role": "none",
+        "hierarchy_direction": "feedforward",
+        "gameplay_domain": "sensory_perception"
+      }
     },
     "CerebellumCortex": {
       "zh_name": "小脑皮层",
@@ -1108,7 +1520,25 @@
       ],
       "fs_xyz": null,
       "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/subcortical/Left-Cerebellum-Cortex.obj",
-      "notes": "预测/时序/自动化. 内部模型. 技能熟练化→习惯形成的关键结构"
+      "notes": "预测/时序/自动化. 内部模型. 技能熟练化→习惯形成的关键结构",
+      "function_profile": {
+        "primary_function": "Cerebellar cortex: internal model for motor learning and timing — predictive feedforward control, error correction, and procedural skill automation",
+        "input_types": [
+          "excitation/motor_command",
+          "excitation/sensory_feature"
+        ],
+        "output_types": [
+          "excitation/motor_command",
+          "plasticity/ltd_depression"
+        ],
+        "timescale": "fast",
+        "neurotransmitter_dominant": "GABA",
+        "oscillatory_band": "beta",
+        "cstc_loop": "none",
+        "cstc_role": "none",
+        "hierarchy_direction": "both",
+        "gameplay_domain": "motor_execution"
+      }
     },
     "Caudate": {
       "zh_name": "尾状核",
@@ -1175,7 +1605,26 @@
       ],
       "fs_xyz": null,
       "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.isthmuscingulate.obj",
-      "notes": "海马-默认网络接口. 空间记忆/场景构建. Alzheimer早期萎缩区"
+      "notes": "海马-默认网络接口. 空间记忆/场景构建. Alzheimer早期萎缩区",
+      "function_profile": {
+        "primary_function": "Retrosplenial cortex: spatial navigation, scene construction, and episodic memory retrieval; hub between hippocampus and default mode network",
+        "input_types": [
+          "excitation/memory_trace",
+          "excitation/sensory_feature",
+          "plasticity/context_code"
+        ],
+        "output_types": [
+          "excitation/memory_trace",
+          "plasticity/ltp_consolidation"
+        ],
+        "timescale": "medium",
+        "neurotransmitter_dominant": "glutamate",
+        "oscillatory_band": "theta",
+        "cstc_loop": "none",
+        "cstc_role": "none",
+        "hierarchy_direction": "both",
+        "gameplay_domain": "memory_consolidation"
+      }
     },
     "Paracentral": {
       "zh_name": "旁中央小叶",
@@ -1199,7 +1648,25 @@
       ],
       "fs_xyz": null,
       "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.paracentral.obj",
-      "notes": "下肢运动/感觉代表区. 连接M1和S1的内侧延伸"
+      "notes": "下肢运动/感觉代表区. 连接M1和S1的内侧延伸",
+      "function_profile": {
+        "primary_function": "Paracentral lobule: primary motor (leg/foot M1) and somatosensory (leg/foot S1) cortex for lower limb execution",
+        "input_types": [
+          "excitation/cognitive_goal",
+          "gating/go_direct",
+          "gating/stop_hyperdirect"
+        ],
+        "output_types": [
+          "excitation/motor_command"
+        ],
+        "timescale": "fast",
+        "neurotransmitter_dominant": "glutamate",
+        "oscillatory_band": "gamma",
+        "cstc_loop": "somatic",
+        "cstc_role": "cortical_input",
+        "hierarchy_direction": "feedforward",
+        "gameplay_domain": "motor_execution"
+      }
     },
     "Amygdala": {
       "zh_name": "杏仁核",
@@ -1318,7 +1785,24 @@
         -6.044
       ],
       "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.lateraloccipital.obj",
-      "notes": null
+      "notes": null,
+      "function_profile": {
+        "primary_function": "Occipito-parietal junction: visuospatial transformation — dorsal stream linking visual input to parietal spatial attention maps",
+        "input_types": [
+          "excitation/sensory_feature"
+        ],
+        "output_types": [
+          "excitation/sensory_feature",
+          "excitation/cognitive_goal"
+        ],
+        "timescale": "fast",
+        "neurotransmitter_dominant": "glutamate",
+        "oscillatory_band": "gamma",
+        "cstc_loop": "none",
+        "cstc_role": "none",
+        "hierarchy_direction": "feedforward",
+        "gameplay_domain": "sensory_perception"
+      }
     },
     "Precuneus": {
       "zh_name": "楔前叶",
@@ -1346,7 +1830,26 @@
         24.55
       ],
       "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.precuneus.obj",
-      "notes": null
+      "notes": null,
+      "function_profile": {
+        "primary_function": "Precuneus: DMN core — self-referential processing, visuospatial imagery, episodic memory retrieval, and consciousness; highest resting metabolic rate in cortex",
+        "input_types": [
+          "excitation/memory_trace",
+          "excitation/sensory_feature",
+          "excitation/social_intention"
+        ],
+        "output_types": [
+          "excitation/memory_trace",
+          "plasticity/ltp_consolidation"
+        ],
+        "timescale": "slow",
+        "neurotransmitter_dominant": "glutamate",
+        "oscillatory_band": "alpha",
+        "cstc_loop": "none",
+        "cstc_role": "none",
+        "hierarchy_direction": "both",
+        "gameplay_domain": "memory_consolidation"
+      }
     },
     "Cuneus": {
       "zh_name": "楔叶",
@@ -1370,7 +1873,24 @@
       ],
       "fs_xyz": null,
       "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.cuneus.obj",
-      "notes": "背侧视觉通路的一部分. 空间视觉/运动检测"
+      "notes": "背侧视觉通路的一部分. 空间视觉/运动检测",
+      "function_profile": {
+        "primary_function": "Cuneus: dorsal visual stream — visuospatial processing, motion detection, and visual attention allocation",
+        "input_types": [
+          "excitation/sensory_feature",
+          "gating/disinhibition_thalamic"
+        ],
+        "output_types": [
+          "excitation/sensory_feature"
+        ],
+        "timescale": "fast",
+        "neurotransmitter_dominant": "glutamate",
+        "oscillatory_band": "gamma",
+        "cstc_loop": "none",
+        "cstc_role": "none",
+        "hierarchy_direction": "feedforward",
+        "gameplay_domain": "sensory_perception"
+      }
     },
     "HippocampusCA1": {
       "zh_name": "海马体 CA1",
@@ -1487,7 +2007,26 @@
       ],
       "fs_xyz": null,
       "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.parahippocampal.obj",
-      "notes": "空间导航/场景识别(PPA). 海马体的主要皮层输入. 内嗅皮层-海马的中继"
+      "notes": "空间导航/场景识别(PPA). 海马体的主要皮层输入. 内嗅皮层-海马的中继",
+      "function_profile": {
+        "primary_function": "Spatial/scene processing and memory encoding gateway; parahippocampal place area (PPA) for scene recognition",
+        "input_types": [
+          "excitation/sensory_feature",
+          "plasticity/context_code",
+          "modulation/arousal_NE"
+        ],
+        "output_types": [
+          "excitation/memory_trace",
+          "plasticity/context_code"
+        ],
+        "timescale": "medium",
+        "neurotransmitter_dominant": "glutamate",
+        "oscillatory_band": "theta",
+        "cstc_loop": "none",
+        "cstc_role": "none",
+        "hierarchy_direction": "both",
+        "gameplay_domain": "memory_consolidation"
+      }
     },
     "StriatumMatrix": {
       "zh_name": "纹状体基质",
@@ -1558,7 +2097,24 @@
       ],
       "fs_xyz": null,
       "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.fusiform.obj",
-      "notes": "面孔识别(FFA)/物体精细分类. 视觉词形区(VWFA)也在附近"
+      "notes": "面孔识别(FFA)/物体精细分类. 视觉词形区(VWFA)也在附近",
+      "function_profile": {
+        "primary_function": "Fusiform gyrus: high-level visual object recognition — fusiform face area (FFA), visual word form area, and object category representation",
+        "input_types": [
+          "excitation/sensory_feature"
+        ],
+        "output_types": [
+          "excitation/sensory_feature",
+          "excitation/social_intention"
+        ],
+        "timescale": "fast",
+        "neurotransmitter_dominant": "glutamate",
+        "oscillatory_band": "gamma",
+        "cstc_loop": "none",
+        "cstc_role": "none",
+        "hierarchy_direction": "feedforward",
+        "gameplay_domain": "sensory_perception"
+      }
     },
     "Supramarginal": {
       "zh_name": "缘上回",
@@ -1582,7 +2138,26 @@
       ],
       "fs_xyz": null,
       "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.supramarginal.obj",
-      "notes": "语音处理/工作记忆/模仿. TPJ的组成部分. 与角回一起构成感觉-语言界面"
+      "notes": "语音处理/工作记忆/模仿. TPJ的组成部分. 与角回一起构成感觉-语言界面",
+      "function_profile": {
+        "primary_function": "Supramarginal gyrus: phonological processing and somatosensory association — phonological loop, attention reorienting, and tactile-motor integration",
+        "input_types": [
+          "excitation/sensory_feature",
+          "excitation/social_intention",
+          "excitation/cognitive_goal"
+        ],
+        "output_types": [
+          "excitation/social_intention",
+          "excitation/cognitive_goal"
+        ],
+        "timescale": "medium",
+        "neurotransmitter_dominant": "glutamate",
+        "oscillatory_band": "beta",
+        "cstc_loop": "none",
+        "cstc_role": "none",
+        "hierarchy_direction": "both",
+        "gameplay_domain": "social_cognition"
+      }
     },
     "PontineReticularNucleus": {
       "zh_name": "脑桥网状核",
@@ -1606,7 +2181,24 @@
       ],
       "fs_xyz": null,
       "obj_file": null,
-      "notes": "Hansen2024 YELLOW社区. 脑桥网状结构, 运动/自主功能整合"
+      "notes": "Hansen2024 YELLOW社区. 脑桥网状结构, 运动/自主功能整合",
+      "function_profile": {
+        "primary_function": "Pontine reticular nucleus: brainstem arousal and REM sleep generator — reticular activating system component for consciousness and wakefulness",
+        "input_types": [
+          "excitation/sensory_feature",
+          "excitation/emotional_salience"
+        ],
+        "output_types": [
+          "modulation/arousal_NE"
+        ],
+        "timescale": "slow",
+        "neurotransmitter_dominant": "glutamate",
+        "oscillatory_band": "theta",
+        "cstc_loop": "none",
+        "cstc_role": "modulator",
+        "hierarchy_direction": "feedforward",
+        "gameplay_domain": "arousal_modulation"
+      }
     },
     "VentralStriatum": {
       "zh_name": "腹侧纹状体",
@@ -1677,7 +2269,23 @@
       ],
       "fs_xyz": null,
       "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.lingual.obj",
-      "notes": "腹侧视觉通路. 颜色/文字处理. 连接V1与纺锤体回"
+      "notes": "腹侧视觉通路. 颜色/文字处理. 连接V1与纺锤体回",
+      "function_profile": {
+        "primary_function": "Lingual gyrus: ventral visual stream — visual word form area, color processing, and ventral occipital visual integration",
+        "input_types": [
+          "excitation/sensory_feature"
+        ],
+        "output_types": [
+          "excitation/sensory_feature"
+        ],
+        "timescale": "fast",
+        "neurotransmitter_dominant": "glutamate",
+        "oscillatory_band": "gamma",
+        "cstc_loop": "none",
+        "cstc_role": "none",
+        "hierarchy_direction": "feedforward",
+        "gameplay_domain": "sensory_perception"
+      }
     },
     "Pallidum": {
       "zh_name": "苍白球",
@@ -1816,7 +2424,26 @@
         21.375
       ],
       "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.inferiorparietal.obj",
-      "notes": null
+      "notes": null,
+      "function_profile": {
+        "primary_function": "Angular gyrus: semantic processing, number cognition, and default mode network hub; cross-modal conceptual integration",
+        "input_types": [
+          "excitation/sensory_feature",
+          "excitation/memory_trace",
+          "excitation/social_intention"
+        ],
+        "output_types": [
+          "excitation/social_intention",
+          "excitation/memory_trace"
+        ],
+        "timescale": "medium",
+        "neurotransmitter_dominant": "glutamate",
+        "oscillatory_band": "alpha",
+        "cstc_loop": "none",
+        "cstc_role": "none",
+        "hierarchy_direction": "both",
+        "gameplay_domain": "social_cognition"
+      }
     },
     "SuperiorParietal": {
       "zh_name": "顶内沟",
@@ -1844,7 +2471,24 @@
         32.762
       ],
       "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.superiorparietal.obj",
-      "notes": null
+      "notes": null,
+      "function_profile": {
+        "primary_function": "Superior parietal lobule: dorsal attention network — spatial attention, visuomotor transformation, and reaching/grasping coordination",
+        "input_types": [
+          "excitation/sensory_feature",
+          "excitation/cognitive_goal"
+        ],
+        "output_types": [
+          "excitation/cognitive_goal"
+        ],
+        "timescale": "fast",
+        "neurotransmitter_dominant": "glutamate",
+        "oscillatory_band": "beta",
+        "cstc_loop": "none",
+        "cstc_role": "none",
+        "hierarchy_direction": "both",
+        "gameplay_domain": "sensory_perception"
+      }
     },
     "InferiorParietal": {
       "zh_name": "顶叶",
@@ -1872,7 +2516,25 @@
         21.375
       ],
       "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.inferiorparietal.obj",
-      "notes": null
+      "notes": null,
+      "function_profile": {
+        "primary_function": "Inferior parietal lobule: multimodal sensory integration, spatial attention, and body schema; ventral attention network component",
+        "input_types": [
+          "excitation/sensory_feature",
+          "excitation/cognitive_goal"
+        ],
+        "output_types": [
+          "excitation/cognitive_goal",
+          "excitation/sensory_feature"
+        ],
+        "timescale": "medium",
+        "neurotransmitter_dominant": "glutamate",
+        "oscillatory_band": "beta",
+        "cstc_loop": "none",
+        "cstc_role": "none",
+        "hierarchy_direction": "both",
+        "gameplay_domain": "sensory_perception"
+      }
     },
     "SuperiorFrontal": {
       "zh_name": "额上回",
@@ -1896,7 +2558,26 @@
       ],
       "fs_xyz": null,
       "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.superiorfrontal.obj",
-      "notes": "高级认知/自我意识/工作记忆. 包含SMA前区(pre-SMA)"
+      "notes": "高级认知/自我意识/工作记忆. 包含SMA前区(pre-SMA)",
+      "function_profile": {
+        "primary_function": "Superior frontal gyrus: supplementary motor area (SMA) and pre-SMA — motor planning, action sequencing, and response inhibition",
+        "input_types": [
+          "excitation/cognitive_goal",
+          "excitation/sensory_feature",
+          "gating/disinhibition_thalamic"
+        ],
+        "output_types": [
+          "excitation/motor_command",
+          "excitation/cognitive_goal"
+        ],
+        "timescale": "medium",
+        "neurotransmitter_dominant": "glutamate",
+        "oscillatory_band": "beta",
+        "cstc_loop": "somatic",
+        "cstc_role": "cortical_input",
+        "hierarchy_direction": "feedforward",
+        "gameplay_domain": "motor_execution"
+      }
     },
     "CaudalMiddleFrontal": {
       "zh_name": "额中回尾部",
@@ -1920,7 +2601,26 @@
       ],
       "fs_xyz": null,
       "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.caudalmiddlefrontal.obj",
-      "notes": "dlPFC后部. 工作记忆/执行控制的运动端"
+      "notes": "dlPFC后部. 工作记忆/执行控制的运动端",
+      "function_profile": {
+        "primary_function": "Caudal middle frontal gyrus: dorsal premotor cortex — motor planning, spatial working memory, and action sequence organization",
+        "input_types": [
+          "excitation/cognitive_goal",
+          "excitation/sensory_feature",
+          "gating/disinhibition_thalamic"
+        ],
+        "output_types": [
+          "excitation/motor_command",
+          "excitation/cognitive_goal"
+        ],
+        "timescale": "medium",
+        "neurotransmitter_dominant": "glutamate",
+        "oscillatory_band": "beta",
+        "cstc_loop": "cognitive",
+        "cstc_role": "cortical_input",
+        "hierarchy_direction": "feedforward",
+        "gameplay_domain": "motor_execution"
+      }
     },
     "FrontalPoleExtreme": {
       "zh_name": "额极",
@@ -1948,7 +2648,25 @@
         -31.229
       ],
       "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.frontalpole.obj",
-      "notes": null
+      "notes": null,
+      "function_profile": {
+        "primary_function": "Extreme frontal pole: highest-order abstraction — meta-cognition, counterfactual reasoning, and complex relational integration",
+        "input_types": [
+          "excitation/cognitive_goal",
+          "excitation/memory_trace",
+          "excitation/social_intention"
+        ],
+        "output_types": [
+          "excitation/cognitive_goal"
+        ],
+        "timescale": "slow",
+        "neurotransmitter_dominant": "glutamate",
+        "oscillatory_band": "theta",
+        "cstc_loop": "cognitive",
+        "cstc_role": "cortical_input",
+        "hierarchy_direction": "both",
+        "gameplay_domain": "cognitive_control"
+      }
     },
     "SuperiorTemporal": {
       "zh_name": "颞上回",
@@ -1972,7 +2690,24 @@
       ],
       "fs_xyz": null,
       "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.superiortemporal.obj",
-      "notes": "含Wernicke区后部. 听觉联合皮层. 语言理解"
+      "notes": "含Wernicke区后部. 听觉联合皮层. 语言理解",
+      "function_profile": {
+        "primary_function": "Superior temporal gyrus: auditory association — spectrotemporal analysis, voice identity, and auditory object recognition",
+        "input_types": [
+          "excitation/sensory_feature"
+        ],
+        "output_types": [
+          "excitation/sensory_feature",
+          "excitation/social_intention"
+        ],
+        "timescale": "fast",
+        "neurotransmitter_dominant": "glutamate",
+        "oscillatory_band": "gamma",
+        "cstc_loop": "none",
+        "cstc_role": "none",
+        "hierarchy_direction": "both",
+        "gameplay_domain": "sensory_perception"
+      }
     },
     "SuperiorTemporalSulcus": {
       "zh_name": "颞上沟",
@@ -2000,7 +2735,24 @@
         -14.654
       ],
       "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.superiortemporal.obj",
-      "notes": null
+      "notes": null,
+      "function_profile": {
+        "primary_function": "Superior temporal sulcus: social cognition hub — biological motion, face/voice integration, theory of mind, and social perception",
+        "input_types": [
+          "excitation/sensory_feature",
+          "excitation/social_intention"
+        ],
+        "output_types": [
+          "excitation/social_intention"
+        ],
+        "timescale": "medium",
+        "neurotransmitter_dominant": "glutamate",
+        "oscillatory_band": "gamma",
+        "cstc_loop": "none",
+        "cstc_role": "none",
+        "hierarchy_direction": "both",
+        "gameplay_domain": "social_cognition"
+      }
     },
     "BanksSTS": {
       "zh_name": "颞上沟岸",
@@ -2024,7 +2776,24 @@
       ],
       "fs_xyz": null,
       "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.bankssts.obj",
-      "notes": "社会知觉/生物运动检测. 意图感知/心理理论的前体"
+      "notes": "社会知觉/生物运动检测. 意图感知/心理理论的前体",
+      "function_profile": {
+        "primary_function": "Banks of superior temporal sulcus: social perception — biological motion, gaze direction, face/voice integration for social cognition",
+        "input_types": [
+          "excitation/sensory_feature",
+          "excitation/social_intention"
+        ],
+        "output_types": [
+          "excitation/social_intention"
+        ],
+        "timescale": "fast",
+        "neurotransmitter_dominant": "glutamate",
+        "oscillatory_band": "gamma",
+        "cstc_loop": "none",
+        "cstc_role": "none",
+        "hierarchy_direction": "both",
+        "gameplay_domain": "social_cognition"
+      }
     },
     "InferiorTemporal": {
       "zh_name": "颞下回",
@@ -2052,7 +2821,23 @@
         -27.54
       ],
       "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.inferiortemporal.obj",
-      "notes": null
+      "notes": null,
+      "function_profile": {
+        "primary_function": "Inferior temporal cortex: ventral visual stream — complex object recognition, color perception, and visual memory",
+        "input_types": [
+          "excitation/sensory_feature"
+        ],
+        "output_types": [
+          "excitation/sensory_feature"
+        ],
+        "timescale": "fast",
+        "neurotransmitter_dominant": "glutamate",
+        "oscillatory_band": "gamma",
+        "cstc_loop": "none",
+        "cstc_role": "none",
+        "hierarchy_direction": "feedforward",
+        "gameplay_domain": "sensory_perception"
+      }
     },
     "MiddleTemporal": {
       "zh_name": "颞中回",
@@ -2076,7 +2861,25 @@
       ],
       "fs_xyz": null,
       "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.middletemporal.obj",
-      "notes": "运动处理(MT/MST). 语义记忆. 背侧听觉通路"
+      "notes": "运动处理(MT/MST). 语义记忆. 背侧听觉通路",
+      "function_profile": {
+        "primary_function": "Middle temporal gyrus: motion processing (MT/V5), semantic language, and multimodal association; dorsal visual stream motion hub",
+        "input_types": [
+          "excitation/sensory_feature",
+          "excitation/social_intention"
+        ],
+        "output_types": [
+          "excitation/sensory_feature",
+          "excitation/social_intention"
+        ],
+        "timescale": "fast",
+        "neurotransmitter_dominant": "glutamate",
+        "oscillatory_band": "gamma",
+        "cstc_loop": "none",
+        "cstc_role": "none",
+        "hierarchy_direction": "both",
+        "gameplay_domain": "sensory_perception"
+      }
     },
     "TemporalPole": {
       "zh_name": "颞极",
@@ -2104,7 +2907,26 @@
         -45.329
       ],
       "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.temporalpole.obj",
-      "notes": null
+      "notes": null,
+      "function_profile": {
+        "primary_function": "Temporal pole: semantic hub for person knowledge, social concepts, and cross-modal semantic integration; anterior temporal lobe semantic hub",
+        "input_types": [
+          "excitation/sensory_feature",
+          "excitation/memory_trace",
+          "excitation/social_intention"
+        ],
+        "output_types": [
+          "excitation/social_intention",
+          "excitation/memory_trace"
+        ],
+        "timescale": "medium",
+        "neurotransmitter_dominant": "glutamate",
+        "oscillatory_band": "theta",
+        "cstc_loop": "none",
+        "cstc_role": "none",
+        "hierarchy_direction": "both",
+        "gameplay_domain": "social_cognition"
+      }
     },
     "SubstantiaNigraParsCompacta": {
       "zh_name": "黑质致密部",
