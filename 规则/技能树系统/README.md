@@ -1,6 +1,6 @@
 # 技能树系统 — 目录索引
 
-> 脑区链路技能树系统。正典：[脑功能层级模型](./脑功能层级模型.md) — 89 脑区 L0-L6 七层功能层级。
+> 脑区链路技能树系统。正典：[脑功能层级模型](./脑功能层级模型.md) — 50 解剖实体 L0-L5 六层功能层级。
 
 ---
 
@@ -58,8 +58,8 @@
 
 | 文件 | 说明 |
 |------|------|
-| [brain_regions.json](../data/brain_regions.json) | 89 脑区 MNI/游戏坐标、层级 |
-| [link_legitimacy_matrix.json](../data/connectivity/link_legitimacy_matrix.json) | 364 条合法神经链路 |
+| [brain_regions.json](../data/brain_regions.json) | 50 解剖实体 MNI/游戏坐标、层级 |
+| [link_legitimacy_matrix.json](../data/connectivity/tripartite_model.json) | 364 条合法神经链路 |
 | [link_modulation_ceiling_v2.json](../data/connectivity/link_modulation_ceiling_v2.json) | 链路调制天花板 |
 | [situation_primitives.json](../data/connectivity/situation_primitives.json) | 27 情境原型 |
 

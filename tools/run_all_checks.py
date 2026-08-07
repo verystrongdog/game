@@ -25,7 +25,7 @@ from tools.md_utils import ROOT, collect_md_files
 
 # 校验脚本注册表（单一列表，不再用三个分散列表）
 VALIDATOR_REGISTRY = {
-    "validate_link_data.py":       {"status": "active", "json": True},
+    "validate_link_data.py":       {"status": "deprecated", "json": True, "replaced_by": "build_tripartite_model.py + build_function_labels.py"},
     "validate_disease.py":         {"status": "active", "json": False},
     "validate_spatial.py":         {"status": "active", "json": True},
     "validate_trash_isolation.py": {"status": "active", "json": False},
