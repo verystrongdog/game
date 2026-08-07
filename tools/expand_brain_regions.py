@@ -35,9 +35,9 @@ def mni_to_game(mni_x, mni_y, mni_z):
 # SECTION 2: 全部脑区定义（保留原有 + 新增）
 # ═══════════════════════════════════════════════════════════
 
-# 功能层级标记 (L0-L6)
+# 功能层级标记 (L0-L5)
 # L0=脑干反射, L1=边缘系统, L2=旁边缘, L3=初级感觉,
-# L4=高级单模态, L5=跨模态认知, L6=整合
+# L4=高级单模态, L5=跨模态认知（原L6整合并入）
 
 ALL_REGIONS = {}
 
@@ -526,7 +526,7 @@ def generate(output_path):
     cat_count = Counter(r["category"] for r in ALL_REGIONS.values())
 
     output = {
-        "_description": "完整脑功能层级图谱 — L0脑干反射→L6跨模态整合",
+        "_description": "完整脑功能层级图谱 — L0脑干反射→L5跨模态认知",
         "_source": "brain-for-blender (brainder.org, CC BY-SA 3.0), Hansen et al. (2024) Nat Neurosci, MNI152, Harvard-Oxford, AAL3, literature",
         "_created": "2026-07-11",
         "_updated": "2026-07-12 — 扩展: 脑干核团(方案A文献坐标) + 皮下全结构 + DK皮层补全",
@@ -547,8 +547,7 @@ def generate(output_path):
             "L2": "旁边缘 — 内感受与突显, ~50-120ms, 决定'什么值得关注'",
             "L3": "初级感觉皮层 — 原始外部输入, ~30-80ms, 被动接收",
             "L4": "高级单模态 — 模式识别与分类, ~80-150ms, 给世界贴标签",
-            "L5": "跨模态皮层 — 认知与语言, ~150-300ms, 多模态整合与推理",
-            "L6": "跨模态整合 — 自我叙事, ~300ms+, 最高决策/框架改变",
+            "L5": "跨模态皮层 — 认知与语言, ~150-300ms, 多模态整合与推理；原L6整合层（自我叙事/全脑协调/裁决）并入（2026-08-07 Grilling #25）",
         },
         "_stats": {
             "total_regions": len(ALL_REGIONS),

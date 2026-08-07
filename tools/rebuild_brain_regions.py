@@ -52,7 +52,7 @@ def main():
         new_regions[fid] = entry
 
     out = {
-        '_description': '89 脑区 — functional_id 主键 (D25/D13)',
+        '_description': '50 解剖实体（70 条目）— functional_id 主键 (D25/D13)',
         '_coordinate_system': data.get('_coordinate_system'),
         'regions': new_regions,
     }

@@ -16,7 +16,7 @@ gen_modulation_ceiling.py — 从文献数据推导链路调制上限
   modulation_ceiling = sc_norm × layer_weight × direction_factor
   其中:
     sc_norm = min(sc_value / sc_p95, 1.0) 归一化到 [0, 1]
-    layer_weight = 0.5 + 0.1 × target_layer (L0→0.5, L6→1.1)
+    layer_weight = 0.5 + 0.1 × target_layer (L0→0.5, L5→1.0)
     direction_factor = 1.0 (feedforward 上行) or 0.7 (feedback 下行)
 
   actual_modulation = ceiling × myelination (myelination ∈ [0, 1])
@@ -32,7 +32,7 @@ ROOT = Path(__file__).parent.parent
 # === 1. 加载数据 ===
 
 def load_brain_regions():
-    """加载 89 脑区，映射到 ENIGMA DK 标签"""
+    """加载 70 条目（50 解剖实体），映射到 ENIGMA DK 标签"""
     with open(ROOT / 'data/brain_regions.json') as f:
         d = json.load(f)
 
@@ -267,7 +267,7 @@ def normalize_sc(value, source):
 
 def layer_weight(layer):
     """层级权重: 高层链路的调制天花板更高"""
-    # L0=0.50, L1=0.60, L2=0.70, L3=0.80, L4=0.90, L5=1.00, L6=1.10
+    # L0=0.50, L1=0.60, L2=0.70, L3=0.80, L4=0.90, L5=1.00
     if layer is None:
         return 0.70
     return 0.50 + 0.10 * layer
@@ -275,7 +275,7 @@ def layer_weight(layer):
 
 # === 3. 定义合法链路 ===
 
-# 所有 L0-L6 文档中定义的"技能/操作"本质上就是链路调制的具名形式。
+# 所有 L0-L5 文档中定义的"技能/操作"本质上就是链路调制的具名形式。
 # 每条操作对应一条或多条链路: 源脑区 → 目标脑区(对下层脑区的调制)
 # 我们用"操作"名称作为链路标识符。
 
@@ -331,7 +331,7 @@ L4_LINKS = [
     ('想象', ['楔前叶', '顶内沟', '顶叶'], ['dlPFC'], 'feedback', 'simulate'),
 ]
 
-# L5 操作: 跨模态 → L4/L3/L2/L1/L0 认知框架
+# L5 操作: 跨模态 → L4/L3/L2/L1/L0 认知框架 + 原L6整合操作（2026-08-07 Grilling #25 L6删除后并入L5）
 L5_LINKS = [
     ('计划', ['dlPFC', '额极', '额上回', '额中回尾部'], ['M1', '壳核'], 'feedback', 'plan'),
     ('命名', ['Broca区', 'Wernicke区', '弓状束', '颞上回'], ['纺锤体回'], 'feedback', 'naming'),
@@ -339,10 +339,7 @@ L5_LINKS = [
     ('决策', ['vmPFC', 'OFC'], ['壳核', '腹侧纹状体'], 'feedback', 'decide'),
     ('控制', ['dlPFC', '额顶网络', 'ACC背侧'], ['杏仁核', 'PAG'], 'feedback', 'suppress'),
     ('自省', ['mPFC', '额上回'], ['后扣带'], 'feedback', 'metacog'),
-]
-
-# L6 操作: 全脑整合 → 全局叙事
-L6_LINKS = [
+    # ── 原L6操作（#25 L6删除 → L5吸收）──
     ('叙事重构', ['前额叶极·DMN', 'DMN+OFC'], [], 'global', 'narrative'),
     ('全脑协调', ['前额叶极·FPN', '全脑整合'], [], 'global', 'coordinate'),
     ('裁决', ['前额叶极·SN'], [], 'global', 'arbitrate'),
@@ -360,7 +357,7 @@ def compute_all_links():
     NORMALIZATION_REF['ENIGMA_p95'] = enigma_data['sc_p95']
 
     all_links = (L0_LINKS + L1_LINKS + L2_LINKS + L3_LINKS +
-                 L4_LINKS + L5_LINKS + L6_LINKS)
+                 L4_LINKS + L5_LINKS)
 
     results = []
 
@@ -575,7 +572,7 @@ def gen_markdown(results, json_output):
     lines.append('| 参数 | 值 | 说明 |')
     lines.append('|------|-----|------|')
     lines.append(f'| ENIGMA SC p95 | {NORMALIZATION_REF["ENIGMA_p95"]:.2f} | 结构连接 95 百分位 (归一化分母) |')
-    lines.append('| 层级权重 | L0=0.50, L1=0.60, ..., L6=1.10 | 高层链路的调制天花板更高 |')
+    lines.append('| 层级权重 | L0=0.50, L1=0.60, ..., L5=1.00 | 高层链路的调制天花板更高 |')
     lines.append('| 方向因子 | 上行1.0, 下行0.7, 广播1.0, 全局1.0 | 下行调制更"费力" |')
     lines.append('| 髓鞘化缩放 | 0.0(无) → 1.0(满) | 线性缩放调制上限 |')
     lines.append('')

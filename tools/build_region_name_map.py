@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""构建 region_name_map.json — 89 脑区三层 ID 映射表 (D25/D13/D15)
+"""构建 region_name_map.json — 70 条目三层 ID 映射表 (D25/D13/D15)
 
-功能: 为 89 脑区生成 functional_id（英文唯一主键）+ dk_name（解剖映射）+ zh_name（显示）
+功能: 为 50 解剖实体生成 functional_id（英文唯一主键）+ dk_name（解剖映射）+ zh_name（显示）
 输入: data/brain_regions.json
 输出: data/connectivity/region_name_map.json
-校验: functional_id 全局唯一、89 全覆盖、is_design_node 标记
+校验: functional_id 全局唯一、70 条目全覆盖、is_design_node 标记（2026-08-07 Grilling #25 后已全部移除）
 """
 import json
 import sys
@@ -161,7 +161,7 @@ def main():
         sys.exit(1)
 
     out = {
-        '_description': '89 脑区三层 ID 映射表 (D25) — functional_id 唯一主键 / dk_name 解剖映射(一对多) / zh_name 显示层',
+        '_description': '50 解剖实体（70 条目）三层 ID 映射表 (D25) — functional_id 唯一主键 / dk_name 解剖映射(一对多) / zh_name 显示层',
         '_rules': [
             'functional_id: 英文唯一主键 (D15 完整词拼接 + D25 消歧后缀)',
             'dk_name: DK 图谱解剖映射，多 functional_id 可共享一个 dk_name',

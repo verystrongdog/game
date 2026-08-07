@@ -21196,6 +21196,36 @@
       "role": "modulating"
     },
     {
+      "source": "MedianRapheNucleus",
+      "target": "Hippocampus",
+      "type": "brainstem_broadcast",
+      "system": "Raphe_5HT",
+      "neurotransmitter": "serotonin",
+      "projection": "targeted_broadcast",
+      "description": "MedianRapheNucleus→Hippocampus: 5-HT 皮层下靶向调制",
+      "function_label": [],
+      "gameplay_labels": [
+        "arousal_modulation",
+        "memory_consolidation"
+      ],
+      "role": "modulating"
+    },
+    {
+      "source": "MedianRapheNucleus",
+      "target": "Amygdala",
+      "type": "brainstem_broadcast",
+      "system": "Raphe_5HT",
+      "neurotransmitter": "serotonin",
+      "projection": "targeted_broadcast",
+      "description": "MedianRapheNucleus→Amygdala: 5-HT 皮层下靶向调制",
+      "function_label": [],
+      "gameplay_labels": [
+        "arousal_modulation",
+        "threat_defense"
+      ],
+      "role": "modulating"
+    },
+    {
       "source": "DorsalRapheNucleus",
       "target": "transversetemporal",
       "type": "brainstem_broadcast",
@@ -21702,6 +21732,36 @@
       "role": "modulating"
     },
     {
+      "source": "DorsalRapheNucleus",
+      "target": "Hippocampus",
+      "type": "brainstem_broadcast",
+      "system": "Raphe_5HT",
+      "neurotransmitter": "serotonin",
+      "projection": "targeted_broadcast",
+      "description": "DorsalRapheNucleus→Hippocampus: 5-HT 皮层下靶向调制",
+      "function_label": [],
+      "gameplay_labels": [
+        "arousal_modulation",
+        "memory_consolidation"
+      ],
+      "role": "modulating"
+    },
+    {
+      "source": "DorsalRapheNucleus",
+      "target": "Amygdala",
+      "type": "brainstem_broadcast",
+      "system": "Raphe_5HT",
+      "neurotransmitter": "serotonin",
+      "projection": "targeted_broadcast",
+      "description": "DorsalRapheNucleus→Amygdala: 5-HT 皮层下靶向调制",
+      "function_label": [],
+      "gameplay_labels": [
+        "arousal_modulation",
+        "threat_defense"
+      ],
+      "role": "modulating"
+    },
+    {
       "source": "VentralTegmentalArea",
       "target": "Putamen",
       "type": "brainstem_broadcast",
@@ -21874,6 +21934,21 @@
       "role": "modulating"
     },
     {
+      "source": "VentralTegmentalArea",
+      "target": "Amygdala",
+      "type": "brainstem_broadcast",
+      "system": "VTA_DA",
+      "neurotransmitter": "dopamine",
+      "projection": "targeted_broadcast",
+      "description": "VentralTegmentalArea→Amygdala: DA 奖赏预测误差",
+      "function_label": [],
+      "gameplay_labels": [
+        "reward_learning",
+        "threat_defense"
+      ],
+      "role": "modulating"
+    },
+    {
       "source": "SubstantiaNigraParsCompacta",
       "target": "Putamen",
       "type": "brainstem_broadcast",
@@ -21938,6 +22013,2554 @@
         "reward_learning"
       ],
       "role": "active"
+    }
+  ],
+  "privileged_pathways": [
+    {
+      "source": "entorhinal",
+      "target": "Hippocampus",
+      "type": "privileged_pathway",
+      "pathway_class": "perforant_path",
+      "anatomical_basis": "Witter et al. (1989) — perforant path EC→DG/CA3; subiculum→EC return",
+      "direction": "feedback",
+      "distance_mm": 22.4,
+      "edr_probability": 0.6071,
+      "level_diff": -3,
+      "function_label": [
+        {
+          "signal_type": "plasticity/context_code",
+          "category": "plasticity",
+          "subtype": "context_code",
+          "definition": "情境编码/模式分离——将相似输入映射到不同的神经表征，防止记忆干扰"
+        }
+      ],
+      "gameplay_labels": [
+        "memory_consolidation"
+      ],
+      "description": "entorhinal→Hippocampus: 传递 context_code [memory_consolidation]",
+      "role": "active"
+    },
+    {
+      "source": "Hippocampus",
+      "target": "entorhinal",
+      "type": "privileged_pathway",
+      "pathway_class": "perforant_path",
+      "anatomical_basis": "Witter et al. (1989) — perforant path EC→DG/CA3; subiculum→EC return",
+      "direction": "feedforward",
+      "distance_mm": 22.4,
+      "edr_probability": 0.6071,
+      "level_diff": 3,
+      "function_label": [
+        {
+          "signal_type": "excitation/memory_trace",
+          "category": "excitation",
+          "subtype": "memory_trace",
+          "definition": "记忆痕迹——已编码和巩固的信息模式（情节/语义/空间）"
+        },
+        {
+          "signal_type": "plasticity/context_code",
+          "category": "plasticity",
+          "subtype": "context_code",
+          "definition": "情境编码/模式分离——将相似输入映射到不同的神经表征，防止记忆干扰"
+        }
+      ],
+      "gameplay_labels": [
+        "memory_consolidation"
+      ],
+      "description": "Hippocampus→entorhinal: 传递 memory_trace, context_code [memory_consolidation]",
+      "role": "active"
+    },
+    {
+      "source": "entorhinal",
+      "target": "parahippocampal",
+      "type": "privileged_pathway",
+      "pathway_class": "perforant_path",
+      "anatomical_basis": "PHC→EC→HC relay — parahippocampal is primary cortical input to entorhinal",
+      "direction": "feedback",
+      "distance_mm": 59.0,
+      "edr_probability": 0.3508,
+      "level_diff": -3,
+      "function_label": [
+        {
+          "signal_type": "plasticity/context_code",
+          "category": "plasticity",
+          "subtype": "context_code",
+          "definition": "情境编码/模式分离——将相似输入映射到不同的神经表征，防止记忆干扰"
+        }
+      ],
+      "gameplay_labels": [
+        "memory_consolidation"
+      ],
+      "description": "entorhinal→parahippocampal: 传递 context_code [memory_consolidation]",
+      "role": "active"
+    },
+    {
+      "source": "parahippocampal",
+      "target": "entorhinal",
+      "type": "privileged_pathway",
+      "pathway_class": "perforant_path",
+      "anatomical_basis": "PHC→EC→HC relay — parahippocampal is primary cortical input to entorhinal",
+      "direction": "feedforward",
+      "distance_mm": 59.0,
+      "edr_probability": 0.3508,
+      "level_diff": 3,
+      "function_label": [
+        {
+          "signal_type": "excitation/memory_trace",
+          "category": "excitation",
+          "subtype": "memory_trace",
+          "definition": "记忆痕迹——已编码和巩固的信息模式（情节/语义/空间）"
+        },
+        {
+          "signal_type": "plasticity/context_code",
+          "category": "plasticity",
+          "subtype": "context_code",
+          "definition": "情境编码/模式分离——将相似输入映射到不同的神经表征，防止记忆干扰"
+        }
+      ],
+      "gameplay_labels": [
+        "memory_consolidation"
+      ],
+      "description": "parahippocampal→entorhinal: 传递 memory_trace, context_code [memory_consolidation]",
+      "role": "active"
+    },
+    {
+      "source": "Amygdala",
+      "target": "entorhinal",
+      "type": "privileged_pathway",
+      "pathway_class": "amygdalofugal",
+      "anatomical_basis": "McGaugh (2004) — amygdala modulation of memory encoding via EC",
+      "direction": "feedforward",
+      "distance_mm": 12.4,
+      "edr_probability": 0.7052,
+      "level_diff": 3,
+      "function_label": [],
+      "gameplay_labels": [
+        "threat_defense",
+        "memory_consolidation"
+      ],
+      "description": "Amygdala→entorhinal: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "entorhinal",
+      "target": "Amygdala",
+      "type": "privileged_pathway",
+      "pathway_class": "amygdalofugal",
+      "anatomical_basis": "McGaugh (2004) — amygdala modulation of memory encoding via EC",
+      "direction": "feedback",
+      "distance_mm": 12.4,
+      "edr_probability": 0.7052,
+      "level_diff": -3,
+      "function_label": [
+        {
+          "signal_type": "plasticity/context_code",
+          "category": "plasticity",
+          "subtype": "context_code",
+          "definition": "情境编码/模式分离——将相似输入映射到不同的神经表征，防止记忆干扰"
+        }
+      ],
+      "gameplay_labels": [
+        "memory_consolidation",
+        "threat_defense"
+      ],
+      "description": "entorhinal→Amygdala: 传递 context_code [memory_consolidation, threat_defense]",
+      "role": "active"
+    },
+    {
+      "source": "Hippocampus",
+      "target": "inferiortemporal",
+      "type": "privileged_pathway",
+      "pathway_class": "perforant_path",
+      "anatomical_basis": "IT (ventral visual stream) → HC via perirhinal cortex — visual memory encoding",
+      "direction": "feedforward",
+      "distance_mm": 26.3,
+      "edr_probability": 0.573,
+      "level_diff": 3,
+      "function_label": [],
+      "gameplay_labels": [
+        "memory_consolidation",
+        "sensory_perception"
+      ],
+      "description": "Hippocampus→inferiortemporal: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "inferiortemporal",
+      "target": "Hippocampus",
+      "type": "privileged_pathway",
+      "pathway_class": "perforant_path",
+      "anatomical_basis": "IT (ventral visual stream) → HC via perirhinal cortex — visual memory encoding",
+      "direction": "feedback",
+      "distance_mm": 26.3,
+      "edr_probability": 0.573,
+      "level_diff": -3,
+      "function_label": [
+        {
+          "signal_type": "excitation/sensory_feature",
+          "category": "excitation",
+          "subtype": "sensory_feature",
+          "definition": "感觉特征——原始或处理后的感觉信息（视觉/听觉/触觉）"
+        }
+      ],
+      "gameplay_labels": [
+        "sensory_perception",
+        "memory_consolidation"
+      ],
+      "description": "inferiortemporal→Hippocampus: 传递 sensory_feature [memory_consolidation, sensory_perception]",
+      "role": "active"
+    },
+    {
+      "source": "Hippocampus",
+      "target": "fusiform",
+      "type": "privileged_pathway",
+      "pathway_class": "perforant_path",
+      "anatomical_basis": "FFA/object recognition → HC memory trace consolidation",
+      "direction": "feedforward",
+      "distance_mm": 69.5,
+      "edr_probability": 0.2999,
+      "level_diff": 3,
+      "function_label": [],
+      "gameplay_labels": [
+        "memory_consolidation",
+        "sensory_perception"
+      ],
+      "description": "Hippocampus→fusiform: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "fusiform",
+      "target": "Hippocampus",
+      "type": "privileged_pathway",
+      "pathway_class": "perforant_path",
+      "anatomical_basis": "FFA/object recognition → HC memory trace consolidation",
+      "direction": "feedback",
+      "distance_mm": 69.5,
+      "edr_probability": 0.2999,
+      "level_diff": -3,
+      "function_label": [
+        {
+          "signal_type": "excitation/sensory_feature",
+          "category": "excitation",
+          "subtype": "sensory_feature",
+          "definition": "感觉特征——原始或处理后的感觉信息（视觉/听觉/触觉）"
+        }
+      ],
+      "gameplay_labels": [
+        "sensory_perception",
+        "memory_consolidation"
+      ],
+      "description": "fusiform→Hippocampus: 传递 sensory_feature [memory_consolidation, sensory_perception]",
+      "role": "active"
+    },
+    {
+      "source": "isthmuscingulate",
+      "target": "entorhinal",
+      "type": "privileged_pathway",
+      "pathway_class": "dmn_core",
+      "anatomical_basis": "RSC↔EC — retrosplenial spatial-navigation network hub",
+      "direction": "feedforward",
+      "distance_mm": 67.3,
+      "edr_probability": 0.3096,
+      "level_diff": 2,
+      "function_label": [
+        {
+          "signal_type": "excitation/memory_trace",
+          "category": "excitation",
+          "subtype": "memory_trace",
+          "definition": "记忆痕迹——已编码和巩固的信息模式（情节/语义/空间）"
+        }
+      ],
+      "gameplay_labels": [
+        "memory_consolidation"
+      ],
+      "description": "isthmuscingulate→entorhinal: 传递 memory_trace [memory_consolidation]",
+      "role": "active"
+    },
+    {
+      "source": "entorhinal",
+      "target": "isthmuscingulate",
+      "type": "privileged_pathway",
+      "pathway_class": "dmn_core",
+      "anatomical_basis": "RSC↔EC — retrosplenial spatial-navigation network hub",
+      "direction": "feedback",
+      "distance_mm": 67.3,
+      "edr_probability": 0.3096,
+      "level_diff": -2,
+      "function_label": [
+        {
+          "signal_type": "plasticity/context_code",
+          "category": "plasticity",
+          "subtype": "context_code",
+          "definition": "情境编码/模式分离——将相似输入映射到不同的神经表征，防止记忆干扰"
+        },
+        {
+          "signal_type": "excitation/memory_trace",
+          "category": "excitation",
+          "subtype": "memory_trace",
+          "definition": "记忆痕迹——已编码和巩固的信息模式（情节/语义/空间）"
+        }
+      ],
+      "gameplay_labels": [
+        "memory_consolidation"
+      ],
+      "description": "entorhinal→isthmuscingulate: 传递 context_code, memory_trace [memory_consolidation]",
+      "role": "active"
+    },
+    {
+      "source": "isthmuscingulate",
+      "target": "precuneus",
+      "type": "privileged_pathway",
+      "pathway_class": "dmn_core",
+      "anatomical_basis": "RSC↔precuneus — adjacent DMN/memory hubs, strong rs-FC",
+      "direction": "feedforward",
+      "distance_mm": 22.4,
+      "edr_probability": 0.6071,
+      "level_diff": 2,
+      "function_label": [
+        {
+          "signal_type": "excitation/memory_trace",
+          "category": "excitation",
+          "subtype": "memory_trace",
+          "definition": "记忆痕迹——已编码和巩固的信息模式（情节/语义/空间）"
+        }
+      ],
+      "gameplay_labels": [
+        "memory_consolidation"
+      ],
+      "description": "isthmuscingulate→precuneus: 传递 memory_trace [memory_consolidation]",
+      "role": "active"
+    },
+    {
+      "source": "precuneus",
+      "target": "isthmuscingulate",
+      "type": "privileged_pathway",
+      "pathway_class": "dmn_core",
+      "anatomical_basis": "RSC↔precuneus — adjacent DMN/memory hubs, strong rs-FC",
+      "direction": "feedback",
+      "distance_mm": 22.4,
+      "edr_probability": 0.6071,
+      "level_diff": -2,
+      "function_label": [
+        {
+          "signal_type": "excitation/memory_trace",
+          "category": "excitation",
+          "subtype": "memory_trace",
+          "definition": "记忆痕迹——已编码和巩固的信息模式（情节/语义/空间）"
+        }
+      ],
+      "gameplay_labels": [
+        "memory_consolidation"
+      ],
+      "description": "precuneus→isthmuscingulate: 传递 memory_trace [memory_consolidation]",
+      "role": "active"
+    },
+    {
+      "source": "posteriorcingulate",
+      "target": "precuneus",
+      "type": "privileged_pathway",
+      "pathway_class": "dmn_core",
+      "anatomical_basis": "PCC↔precuneus — DMN core-to-core, highest resting-state metabolic rate",
+      "direction": "feedforward",
+      "distance_mm": 36.4,
+      "edr_probability": 0.4926,
+      "level_diff": 2,
+      "function_label": [
+        {
+          "signal_type": "excitation/memory_trace",
+          "category": "excitation",
+          "subtype": "memory_trace",
+          "definition": "记忆痕迹——已编码和巩固的信息模式（情节/语义/空间）"
+        }
+      ],
+      "gameplay_labels": [
+        "memory_consolidation"
+      ],
+      "description": "posteriorcingulate→precuneus: 传递 memory_trace [memory_consolidation]",
+      "role": "active"
+    },
+    {
+      "source": "precuneus",
+      "target": "posteriorcingulate",
+      "type": "privileged_pathway",
+      "pathway_class": "dmn_core",
+      "anatomical_basis": "PCC↔precuneus — DMN core-to-core, highest resting-state metabolic rate",
+      "direction": "feedback",
+      "distance_mm": 36.4,
+      "edr_probability": 0.4926,
+      "level_diff": -2,
+      "function_label": [
+        {
+          "signal_type": "excitation/memory_trace",
+          "category": "excitation",
+          "subtype": "memory_trace",
+          "definition": "记忆痕迹——已编码和巩固的信息模式（情节/语义/空间）"
+        }
+      ],
+      "gameplay_labels": [
+        "memory_consolidation"
+      ],
+      "description": "precuneus→posteriorcingulate: 传递 memory_trace [memory_consolidation]",
+      "role": "active"
+    },
+    {
+      "source": "posteriorcingulate",
+      "target": "entorhinal",
+      "type": "privileged_pathway",
+      "pathway_class": "dmn_core",
+      "anatomical_basis": "PCC→EC memory/context flow — episodic memory retrieval",
+      "direction": "feedforward",
+      "distance_mm": 68.4,
+      "edr_probability": 0.3048,
+      "level_diff": 2,
+      "function_label": [
+        {
+          "signal_type": "excitation/memory_trace",
+          "category": "excitation",
+          "subtype": "memory_trace",
+          "definition": "记忆痕迹——已编码和巩固的信息模式（情节/语义/空间）"
+        }
+      ],
+      "gameplay_labels": [
+        "memory_consolidation"
+      ],
+      "description": "posteriorcingulate→entorhinal: 传递 memory_trace [memory_consolidation]",
+      "role": "active"
+    },
+    {
+      "source": "entorhinal",
+      "target": "posteriorcingulate",
+      "type": "privileged_pathway",
+      "pathway_class": "dmn_core",
+      "anatomical_basis": "PCC→EC memory/context flow — episodic memory retrieval",
+      "direction": "feedback",
+      "distance_mm": 68.4,
+      "edr_probability": 0.3048,
+      "level_diff": -2,
+      "function_label": [
+        {
+          "signal_type": "plasticity/context_code",
+          "category": "plasticity",
+          "subtype": "context_code",
+          "definition": "情境编码/模式分离——将相似输入映射到不同的神经表征，防止记忆干扰"
+        },
+        {
+          "signal_type": "excitation/memory_trace",
+          "category": "excitation",
+          "subtype": "memory_trace",
+          "definition": "记忆痕迹——已编码和巩固的信息模式（情节/语义/空间）"
+        }
+      ],
+      "gameplay_labels": [
+        "memory_consolidation"
+      ],
+      "description": "entorhinal→posteriorcingulate: 传递 context_code, memory_trace [memory_consolidation]",
+      "role": "active"
+    },
+    {
+      "source": "fusiform",
+      "target": "parahippocampal",
+      "type": "privileged_pathway",
+      "pathway_class": "ventral_stream_emotion",
+      "anatomical_basis": "FFA↔PPA — neighboring ventral-temporal gyri, scene/object perception",
+      "direction": "feedback",
+      "distance_mm": 18.9,
+      "edr_probability": 0.6405,
+      "level_diff": -3,
+      "function_label": [
+        {
+          "signal_type": "excitation/sensory_feature",
+          "category": "excitation",
+          "subtype": "sensory_feature",
+          "definition": "感觉特征——原始或处理后的感觉信息（视觉/听觉/触觉）"
+        }
+      ],
+      "gameplay_labels": [
+        "sensory_perception",
+        "memory_consolidation"
+      ],
+      "description": "fusiform→parahippocampal: 传递 sensory_feature [memory_consolidation, sensory_perception]",
+      "role": "active"
+    },
+    {
+      "source": "parahippocampal",
+      "target": "fusiform",
+      "type": "privileged_pathway",
+      "pathway_class": "ventral_stream_emotion",
+      "anatomical_basis": "FFA↔PPA — neighboring ventral-temporal gyri, scene/object perception",
+      "direction": "feedforward",
+      "distance_mm": 18.9,
+      "edr_probability": 0.6405,
+      "level_diff": 3,
+      "function_label": [],
+      "gameplay_labels": [
+        "memory_consolidation",
+        "sensory_perception"
+      ],
+      "description": "parahippocampal→fusiform: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "lingual",
+      "target": "parahippocampal",
+      "type": "privileged_pathway",
+      "pathway_class": "ventral_stream_emotion",
+      "anatomical_basis": "Ventral visual stream → PPA scene processing",
+      "direction": "feedback",
+      "distance_mm": 45.3,
+      "edr_probability": 0.4308,
+      "level_diff": -3,
+      "function_label": [
+        {
+          "signal_type": "excitation/sensory_feature",
+          "category": "excitation",
+          "subtype": "sensory_feature",
+          "definition": "感觉特征——原始或处理后的感觉信息（视觉/听觉/触觉）"
+        }
+      ],
+      "gameplay_labels": [
+        "sensory_perception",
+        "memory_consolidation"
+      ],
+      "description": "lingual→parahippocampal: 传递 sensory_feature [memory_consolidation, sensory_perception]",
+      "role": "active"
+    },
+    {
+      "source": "parahippocampal",
+      "target": "lingual",
+      "type": "privileged_pathway",
+      "pathway_class": "ventral_stream_emotion",
+      "anatomical_basis": "Ventral visual stream → PPA scene processing",
+      "direction": "feedforward",
+      "distance_mm": 45.3,
+      "edr_probability": 0.4308,
+      "level_diff": 3,
+      "function_label": [],
+      "gameplay_labels": [
+        "memory_consolidation",
+        "sensory_perception"
+      ],
+      "description": "parahippocampal→lingual: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "lateraloccipital",
+      "target": "parahippocampal",
+      "type": "privileged_pathway",
+      "pathway_class": "ventral_stream_emotion",
+      "anatomical_basis": "LO object recognition → PPA — object-in-scene integration",
+      "direction": "feedback",
+      "distance_mm": 55.0,
+      "edr_probability": 0.3728,
+      "level_diff": -3,
+      "function_label": [
+        {
+          "signal_type": "excitation/sensory_feature",
+          "category": "excitation",
+          "subtype": "sensory_feature",
+          "definition": "感觉特征——原始或处理后的感觉信息（视觉/听觉/触觉）"
+        }
+      ],
+      "gameplay_labels": [
+        "sensory_perception",
+        "memory_consolidation"
+      ],
+      "description": "lateraloccipital→parahippocampal: 传递 sensory_feature [memory_consolidation, sensory_perception]",
+      "role": "active"
+    },
+    {
+      "source": "parahippocampal",
+      "target": "lateraloccipital",
+      "type": "privileged_pathway",
+      "pathway_class": "ventral_stream_emotion",
+      "anatomical_basis": "LO object recognition → PPA — object-in-scene integration",
+      "direction": "feedforward",
+      "distance_mm": 55.0,
+      "edr_probability": 0.3728,
+      "level_diff": 3,
+      "function_label": [],
+      "gameplay_labels": [
+        "memory_consolidation",
+        "sensory_perception"
+      ],
+      "description": "parahippocampal→lateraloccipital: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "fusiform",
+      "target": "Amygdala",
+      "type": "privileged_pathway",
+      "pathway_class": "ventral_stream_emotion",
+      "anatomical_basis": "Pessoa & Adolphs (2010) — FFA→amygdala face-emotion pathway;面孔→情绪皮层下捷径",
+      "direction": "feedback",
+      "distance_mm": 75.7,
+      "edr_probability": 0.2729,
+      "level_diff": -3,
+      "function_label": [
+        {
+          "signal_type": "excitation/sensory_feature",
+          "category": "excitation",
+          "subtype": "sensory_feature",
+          "definition": "感觉特征——原始或处理后的感觉信息（视觉/听觉/触觉）"
+        }
+      ],
+      "gameplay_labels": [
+        "sensory_perception",
+        "threat_defense"
+      ],
+      "description": "fusiform→Amygdala: 传递 sensory_feature [sensory_perception, threat_defense]",
+      "role": "active"
+    },
+    {
+      "source": "Amygdala",
+      "target": "fusiform",
+      "type": "privileged_pathway",
+      "pathway_class": "ventral_stream_emotion",
+      "anatomical_basis": "Pessoa & Adolphs (2010) — FFA→amygdala face-emotion pathway;面孔→情绪皮层下捷径",
+      "direction": "feedforward",
+      "distance_mm": 75.7,
+      "edr_probability": 0.2729,
+      "level_diff": 3,
+      "function_label": [],
+      "gameplay_labels": [
+        "threat_defense",
+        "sensory_perception"
+      ],
+      "description": "Amygdala→fusiform: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "Amygdala",
+      "target": "inferiortemporal",
+      "type": "privileged_pathway",
+      "pathway_class": "amygdalofugal",
+      "anatomical_basis": "LeDoux (1996) — ventral visual stream→amygdala 'high road' (cortical threat processing)",
+      "direction": "feedforward",
+      "distance_mm": 34.3,
+      "edr_probability": 0.5079,
+      "level_diff": 3,
+      "function_label": [],
+      "gameplay_labels": [
+        "threat_defense",
+        "sensory_perception"
+      ],
+      "description": "Amygdala→inferiortemporal: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "inferiortemporal",
+      "target": "Amygdala",
+      "type": "privileged_pathway",
+      "pathway_class": "amygdalofugal",
+      "anatomical_basis": "LeDoux (1996) — ventral visual stream→amygdala 'high road' (cortical threat processing)",
+      "direction": "feedback",
+      "distance_mm": 34.3,
+      "edr_probability": 0.5079,
+      "level_diff": -3,
+      "function_label": [
+        {
+          "signal_type": "excitation/sensory_feature",
+          "category": "excitation",
+          "subtype": "sensory_feature",
+          "definition": "感觉特征——原始或处理后的感觉信息（视觉/听觉/触觉）"
+        }
+      ],
+      "gameplay_labels": [
+        "sensory_perception",
+        "threat_defense"
+      ],
+      "description": "inferiortemporal→Amygdala: 传递 sensory_feature [sensory_perception, threat_defense]",
+      "role": "active"
+    },
+    {
+      "source": "Amygdala",
+      "target": "superiortemporal",
+      "type": "privileged_pathway",
+      "pathway_class": "amygdalofugal",
+      "anatomical_basis": "STG voice/auditory emotion processing → amygdala",
+      "direction": "feedforward",
+      "distance_mm": 77.9,
+      "edr_probability": 0.2641,
+      "level_diff": 3,
+      "function_label": [],
+      "gameplay_labels": [
+        "threat_defense",
+        "social_cognition",
+        "sensory_perception"
+      ],
+      "description": "Amygdala→superiortemporal: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "superiortemporal",
+      "target": "Amygdala",
+      "type": "privileged_pathway",
+      "pathway_class": "amygdalofugal",
+      "anatomical_basis": "STG voice/auditory emotion processing → amygdala",
+      "direction": "feedback",
+      "distance_mm": 77.9,
+      "edr_probability": 0.2641,
+      "level_diff": -3,
+      "function_label": [
+        {
+          "signal_type": "excitation/sensory_feature",
+          "category": "excitation",
+          "subtype": "sensory_feature",
+          "definition": "感觉特征——原始或处理后的感觉信息（视觉/听觉/触觉）"
+        }
+      ],
+      "gameplay_labels": [
+        "social_cognition",
+        "sensory_perception",
+        "threat_defense"
+      ],
+      "description": "superiortemporal→Amygdala: 传递 sensory_feature [sensory_perception, social_cognition, threat_defense]",
+      "role": "active"
+    },
+    {
+      "source": "Amygdala",
+      "target": "bankssts",
+      "type": "privileged_pathway",
+      "pathway_class": "amygdalofugal",
+      "anatomical_basis": "STS biological motion/gaze direction → amygdala social salience",
+      "direction": "feedforward",
+      "distance_mm": 91.5,
+      "edr_probability": 0.2154,
+      "level_diff": 3,
+      "function_label": [],
+      "gameplay_labels": [
+        "threat_defense",
+        "social_cognition"
+      ],
+      "description": "Amygdala→bankssts: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "bankssts",
+      "target": "Amygdala",
+      "type": "privileged_pathway",
+      "pathway_class": "amygdalofugal",
+      "anatomical_basis": "STS biological motion/gaze direction → amygdala social salience",
+      "direction": "feedback",
+      "distance_mm": 91.5,
+      "edr_probability": 0.2154,
+      "level_diff": -3,
+      "function_label": [],
+      "gameplay_labels": [
+        "social_cognition",
+        "threat_defense"
+      ],
+      "description": "bankssts→Amygdala: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "Amygdala",
+      "target": "middletemporal",
+      "type": "privileged_pathway",
+      "pathway_class": "amygdalofugal",
+      "anatomical_basis": "MT/hMT+ looming/approaching threat motion → amygdala",
+      "direction": "feedforward",
+      "distance_mm": 87.5,
+      "edr_probability": 0.2287,
+      "level_diff": 3,
+      "function_label": [],
+      "gameplay_labels": [
+        "threat_defense",
+        "sensory_perception"
+      ],
+      "description": "Amygdala→middletemporal: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "middletemporal",
+      "target": "Amygdala",
+      "type": "privileged_pathway",
+      "pathway_class": "amygdalofugal",
+      "anatomical_basis": "MT/hMT+ looming/approaching threat motion → amygdala",
+      "direction": "feedback",
+      "distance_mm": 87.5,
+      "edr_probability": 0.2287,
+      "level_diff": -3,
+      "function_label": [
+        {
+          "signal_type": "excitation/sensory_feature",
+          "category": "excitation",
+          "subtype": "sensory_feature",
+          "definition": "感觉特征——原始或处理后的感觉信息（视觉/听觉/触觉）"
+        }
+      ],
+      "gameplay_labels": [
+        "sensory_perception",
+        "threat_defense"
+      ],
+      "description": "middletemporal→Amygdala: 传递 sensory_feature [sensory_perception, threat_defense]",
+      "role": "active"
+    },
+    {
+      "source": "Amygdala",
+      "target": "lateraloccipital",
+      "type": "privileged_pathway",
+      "pathway_class": "amygdalofugal",
+      "anatomical_basis": "LO complex object recognition → amygdala affective tagging",
+      "direction": "feedforward",
+      "distance_mm": 99.6,
+      "edr_probability": 0.1908,
+      "level_diff": 3,
+      "function_label": [],
+      "gameplay_labels": [
+        "threat_defense",
+        "sensory_perception"
+      ],
+      "description": "Amygdala→lateraloccipital: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "lateraloccipital",
+      "target": "Amygdala",
+      "type": "privileged_pathway",
+      "pathway_class": "amygdalofugal",
+      "anatomical_basis": "LO complex object recognition → amygdala affective tagging",
+      "direction": "feedback",
+      "distance_mm": 99.6,
+      "edr_probability": 0.1908,
+      "level_diff": -3,
+      "function_label": [
+        {
+          "signal_type": "excitation/sensory_feature",
+          "category": "excitation",
+          "subtype": "sensory_feature",
+          "definition": "感觉特征——原始或处理后的感觉信息（视觉/听觉/触觉）"
+        }
+      ],
+      "gameplay_labels": [
+        "sensory_perception",
+        "threat_defense"
+      ],
+      "description": "lateraloccipital→Amygdala: 传递 sensory_feature [sensory_perception, threat_defense]",
+      "role": "active"
+    },
+    {
+      "source": "Amygdala",
+      "target": "lingual",
+      "type": "privileged_pathway",
+      "pathway_class": "amygdalofugal",
+      "anatomical_basis": "Ventral occipital visual → amygdala low-level affective visual processing",
+      "direction": "feedforward",
+      "distance_mm": 82.7,
+      "edr_probability": 0.2458,
+      "level_diff": 3,
+      "function_label": [],
+      "gameplay_labels": [
+        "threat_defense",
+        "sensory_perception"
+      ],
+      "description": "Amygdala→lingual: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "lingual",
+      "target": "Amygdala",
+      "type": "privileged_pathway",
+      "pathway_class": "amygdalofugal",
+      "anatomical_basis": "Ventral occipital visual → amygdala low-level affective visual processing",
+      "direction": "feedback",
+      "distance_mm": 82.7,
+      "edr_probability": 0.2458,
+      "level_diff": -3,
+      "function_label": [
+        {
+          "signal_type": "excitation/sensory_feature",
+          "category": "excitation",
+          "subtype": "sensory_feature",
+          "definition": "感觉特征——原始或处理后的感觉信息（视觉/听觉/触觉）"
+        }
+      ],
+      "gameplay_labels": [
+        "sensory_perception",
+        "threat_defense"
+      ],
+      "description": "lingual→Amygdala: 传递 sensory_feature [sensory_perception, threat_defense]",
+      "role": "active"
+    },
+    {
+      "source": "pericalcarine",
+      "target": "Amygdala",
+      "type": "privileged_pathway",
+      "pathway_class": "amygdalofugal",
+      "anatomical_basis": "Méndez-Bértolo et al. (2016) — V1→amygdala ~50ms fast visual-threat channel (subcortical pulvinar-mediated + direct)",
+      "direction": "feedback",
+      "distance_mm": 73.7,
+      "edr_probability": 0.2813,
+      "level_diff": -2,
+      "function_label": [
+        {
+          "signal_type": "excitation/sensory_feature",
+          "category": "excitation",
+          "subtype": "sensory_feature",
+          "definition": "感觉特征——原始或处理后的感觉信息（视觉/听觉/触觉）"
+        }
+      ],
+      "gameplay_labels": [
+        "sensory_perception",
+        "threat_defense"
+      ],
+      "description": "pericalcarine→Amygdala: 传递 sensory_feature [sensory_perception, threat_defense]",
+      "role": "active"
+    },
+    {
+      "source": "medialorbitofrontal",
+      "target": "Amygdala",
+      "type": "privileged_pathway",
+      "pathway_class": "prefrontal_limbic",
+      "anatomical_basis": "Milad & Quirk (2012) — vmPFC→amygdala fear extinction; design doc赴汤蹈火skill requires dlPFC→amygdala",
+      "direction": "feedback",
+      "distance_mm": 42.3,
+      "edr_probability": 0.4507,
+      "level_diff": -4,
+      "function_label": [
+        {
+          "signal_type": "excitation/emotional_salience",
+          "category": "excitation",
+          "subtype": "emotional_salience",
+          "definition": "情绪突显/威胁标记——刺激的情感价值标签（正/负/威胁）"
+        }
+      ],
+      "gameplay_labels": [
+        "reward_learning",
+        "threat_defense",
+        "social_cognition"
+      ],
+      "description": "medialorbitofrontal→Amygdala: 传递 emotional_salience [reward_learning, social_cognition, threat_defense]",
+      "role": "active"
+    },
+    {
+      "source": "Amygdala",
+      "target": "medialorbitofrontal",
+      "type": "privileged_pathway",
+      "pathway_class": "prefrontal_limbic",
+      "anatomical_basis": "Milad & Quirk (2012) — vmPFC→amygdala fear extinction; design doc赴汤蹈火skill requires dlPFC→amygdala",
+      "direction": "feedforward",
+      "distance_mm": 42.3,
+      "edr_probability": 0.4507,
+      "level_diff": 4,
+      "function_label": [
+        {
+          "signal_type": "excitation/emotional_salience",
+          "category": "excitation",
+          "subtype": "emotional_salience",
+          "definition": "情绪突显/威胁标记——刺激的情感价值标签（正/负/威胁）"
+        }
+      ],
+      "gameplay_labels": [
+        "threat_defense",
+        "reward_learning",
+        "social_cognition"
+      ],
+      "description": "Amygdala→medialorbitofrontal: 传递 emotional_salience [reward_learning, social_cognition, threat_defense]",
+      "role": "active"
+    },
+    {
+      "source": "medialorbitofrontal",
+      "target": "Hippocampus",
+      "type": "privileged_pathway",
+      "pathway_class": "prefrontal_limbic",
+      "anatomical_basis": "vmPFC↔HC memory-emotion integration — DMN core coupling",
+      "direction": "feedback",
+      "distance_mm": 57.7,
+      "edr_probability": 0.3579,
+      "level_diff": -4,
+      "function_label": [
+        {
+          "signal_type": "excitation/emotional_salience",
+          "category": "excitation",
+          "subtype": "emotional_salience",
+          "definition": "情绪突显/威胁标记——刺激的情感价值标签（正/负/威胁）"
+        },
+        {
+          "signal_type": "excitation/cognitive_goal",
+          "category": "excitation",
+          "subtype": "cognitive_goal",
+          "definition": "认知目标/策略——前额决策输出、行动计划、规则表征"
+        }
+      ],
+      "gameplay_labels": [
+        "reward_learning",
+        "threat_defense",
+        "social_cognition",
+        "memory_consolidation"
+      ],
+      "description": "medialorbitofrontal→Hippocampus: 传递 emotional_salience, cognitive_goal [memory_consolidation, reward_learning, social_cognition, threat_defense]",
+      "role": "active"
+    },
+    {
+      "source": "Hippocampus",
+      "target": "medialorbitofrontal",
+      "type": "privileged_pathway",
+      "pathway_class": "prefrontal_limbic",
+      "anatomical_basis": "vmPFC↔HC memory-emotion integration — DMN core coupling",
+      "direction": "feedforward",
+      "distance_mm": 57.7,
+      "edr_probability": 0.3579,
+      "level_diff": 4,
+      "function_label": [
+        {
+          "signal_type": "excitation/memory_trace",
+          "category": "excitation",
+          "subtype": "memory_trace",
+          "definition": "记忆痕迹——已编码和巩固的信息模式（情节/语义/空间）"
+        }
+      ],
+      "gameplay_labels": [
+        "memory_consolidation",
+        "reward_learning",
+        "threat_defense",
+        "social_cognition"
+      ],
+      "description": "Hippocampus→medialorbitofrontal: 传递 memory_trace [memory_consolidation, reward_learning, social_cognition, threat_defense]",
+      "role": "active"
+    },
+    {
+      "source": "medialorbitofrontal",
+      "target": "parahippocampal",
+      "type": "privileged_pathway",
+      "pathway_class": "prefrontal_limbic",
+      "anatomical_basis": "vmPFC↔PHC — DMN extended network, context-emotion binding",
+      "direction": "feedback",
+      "distance_mm": 73.0,
+      "edr_probability": 0.2841,
+      "level_diff": -4,
+      "function_label": [],
+      "gameplay_labels": [
+        "reward_learning",
+        "threat_defense",
+        "social_cognition",
+        "memory_consolidation"
+      ],
+      "description": "medialorbitofrontal→parahippocampal: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "parahippocampal",
+      "target": "medialorbitofrontal",
+      "type": "privileged_pathway",
+      "pathway_class": "prefrontal_limbic",
+      "anatomical_basis": "vmPFC↔PHC — DMN extended network, context-emotion binding",
+      "direction": "feedforward",
+      "distance_mm": 73.0,
+      "edr_probability": 0.2841,
+      "level_diff": 4,
+      "function_label": [
+        {
+          "signal_type": "excitation/memory_trace",
+          "category": "excitation",
+          "subtype": "memory_trace",
+          "definition": "记忆痕迹——已编码和巩固的信息模式（情节/语义/空间）"
+        }
+      ],
+      "gameplay_labels": [
+        "memory_consolidation",
+        "reward_learning",
+        "threat_defense",
+        "social_cognition"
+      ],
+      "description": "parahippocampal→medialorbitofrontal: 传递 memory_trace [memory_consolidation, reward_learning, social_cognition, threat_defense]",
+      "role": "active"
+    },
+    {
+      "source": "superiorfrontal",
+      "target": "Amygdala",
+      "type": "privileged_pathway",
+      "pathway_class": "prefrontal_limbic",
+      "anatomical_basis": "Amodio & Frith (2006) — mPFC→amygdala social emotion regulation",
+      "direction": "feedback",
+      "distance_mm": 63.9,
+      "edr_probability": 0.3259,
+      "level_diff": -4,
+      "function_label": [],
+      "gameplay_labels": [
+        "social_cognition",
+        "motor_execution",
+        "threat_defense"
+      ],
+      "description": "superiorfrontal→Amygdala: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "Amygdala",
+      "target": "superiorfrontal",
+      "type": "privileged_pathway",
+      "pathway_class": "prefrontal_limbic",
+      "anatomical_basis": "Amodio & Frith (2006) — mPFC→amygdala social emotion regulation",
+      "direction": "feedforward",
+      "distance_mm": 63.9,
+      "edr_probability": 0.3259,
+      "level_diff": 4,
+      "function_label": [
+        {
+          "signal_type": "excitation/emotional_salience",
+          "category": "excitation",
+          "subtype": "emotional_salience",
+          "definition": "情绪突显/威胁标记——刺激的情感价值标签（正/负/威胁）"
+        }
+      ],
+      "gameplay_labels": [
+        "threat_defense",
+        "social_cognition",
+        "motor_execution"
+      ],
+      "description": "Amygdala→superiorfrontal: 传递 emotional_salience [motor_execution, social_cognition, threat_defense]",
+      "role": "active"
+    },
+    {
+      "source": "rostralmiddlefrontal",
+      "target": "Amygdala",
+      "type": "privileged_pathway",
+      "pathway_class": "prefrontal_limbic",
+      "anatomical_basis": "Ochsner et al. (2012) — dlPFC→amygdala cognitive reappraisal of emotion",
+      "direction": "feedback",
+      "distance_mm": 81.6,
+      "edr_probability": 0.25,
+      "level_diff": -4,
+      "function_label": [],
+      "gameplay_labels": [
+        "cognitive_control",
+        "threat_defense"
+      ],
+      "description": "rostralmiddlefrontal→Amygdala: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "Amygdala",
+      "target": "rostralmiddlefrontal",
+      "type": "privileged_pathway",
+      "pathway_class": "prefrontal_limbic",
+      "anatomical_basis": "Ochsner et al. (2012) — dlPFC→amygdala cognitive reappraisal of emotion",
+      "direction": "feedforward",
+      "distance_mm": 81.6,
+      "edr_probability": 0.25,
+      "level_diff": 4,
+      "function_label": [
+        {
+          "signal_type": "excitation/emotional_salience",
+          "category": "excitation",
+          "subtype": "emotional_salience",
+          "definition": "情绪突显/威胁标记——刺激的情感价值标签（正/负/威胁）"
+        }
+      ],
+      "gameplay_labels": [
+        "threat_defense",
+        "cognitive_control"
+      ],
+      "description": "Amygdala→rostralmiddlefrontal: 传递 emotional_salience [cognitive_control, threat_defense]",
+      "role": "active"
+    },
+    {
+      "source": "parsopercularis",
+      "target": "Amygdala",
+      "type": "privileged_pathway",
+      "pathway_class": "prefrontal_limbic",
+      "anatomical_basis": "IFG↔amygdala emotional prosody/speech — ventral language-emotion pathway",
+      "direction": "feedback",
+      "distance_mm": 43.4,
+      "edr_probability": 0.4434,
+      "level_diff": -4,
+      "function_label": [],
+      "gameplay_labels": [
+        "social_cognition",
+        "threat_defense"
+      ],
+      "description": "parsopercularis→Amygdala: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "Amygdala",
+      "target": "parsopercularis",
+      "type": "privileged_pathway",
+      "pathway_class": "prefrontal_limbic",
+      "anatomical_basis": "IFG↔amygdala emotional prosody/speech — ventral language-emotion pathway",
+      "direction": "feedforward",
+      "distance_mm": 43.4,
+      "edr_probability": 0.4434,
+      "level_diff": 4,
+      "function_label": [],
+      "gameplay_labels": [
+        "threat_defense",
+        "social_cognition"
+      ],
+      "description": "Amygdala→parsopercularis: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "frontalpole",
+      "target": "Amygdala",
+      "type": "privileged_pathway",
+      "pathway_class": "prefrontal_limbic",
+      "anatomical_basis": "BA10 (frontopolar)↔amygdala — highest-order cognitive-emotional integration",
+      "direction": "feedback",
+      "distance_mm": 76.7,
+      "edr_probability": 0.2692,
+      "level_diff": -4,
+      "function_label": [],
+      "gameplay_labels": [
+        "cognitive_control",
+        "threat_defense"
+      ],
+      "description": "frontalpole→Amygdala: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "Amygdala",
+      "target": "frontalpole",
+      "type": "privileged_pathway",
+      "pathway_class": "prefrontal_limbic",
+      "anatomical_basis": "BA10 (frontopolar)↔amygdala — highest-order cognitive-emotional integration",
+      "direction": "feedforward",
+      "distance_mm": 76.7,
+      "edr_probability": 0.2692,
+      "level_diff": 4,
+      "function_label": [],
+      "gameplay_labels": [
+        "threat_defense",
+        "cognitive_control"
+      ],
+      "description": "Amygdala→frontalpole: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "superiorfrontal",
+      "target": "Hippocampus",
+      "type": "privileged_pathway",
+      "pathway_class": "prefrontal_limbic",
+      "anatomical_basis": "mPFC↔HC — episodic memory/self-referential processing",
+      "direction": "feedback",
+      "distance_mm": 71.4,
+      "edr_probability": 0.2915,
+      "level_diff": -4,
+      "function_label": [
+        {
+          "signal_type": "excitation/cognitive_goal",
+          "category": "excitation",
+          "subtype": "cognitive_goal",
+          "definition": "认知目标/策略——前额决策输出、行动计划、规则表征"
+        }
+      ],
+      "gameplay_labels": [
+        "social_cognition",
+        "motor_execution",
+        "memory_consolidation"
+      ],
+      "description": "superiorfrontal→Hippocampus: 传递 cognitive_goal [memory_consolidation, motor_execution, social_cognition]",
+      "role": "active"
+    },
+    {
+      "source": "Hippocampus",
+      "target": "superiorfrontal",
+      "type": "privileged_pathway",
+      "pathway_class": "prefrontal_limbic",
+      "anatomical_basis": "mPFC↔HC — episodic memory/self-referential processing",
+      "direction": "feedforward",
+      "distance_mm": 71.4,
+      "edr_probability": 0.2915,
+      "level_diff": 4,
+      "function_label": [
+        {
+          "signal_type": "excitation/memory_trace",
+          "category": "excitation",
+          "subtype": "memory_trace",
+          "definition": "记忆痕迹——已编码和巩固的信息模式（情节/语义/空间）"
+        }
+      ],
+      "gameplay_labels": [
+        "memory_consolidation",
+        "social_cognition",
+        "motor_execution"
+      ],
+      "description": "Hippocampus→superiorfrontal: 传递 memory_trace [memory_consolidation, motor_execution, social_cognition]",
+      "role": "active"
+    },
+    {
+      "source": "rostralmiddlefrontal",
+      "target": "Hippocampus",
+      "type": "privileged_pathway",
+      "pathway_class": "prefrontal_limbic",
+      "anatomical_basis": "dlPFC↔HC — working memory ↔ long-term encoding interface",
+      "direction": "feedback",
+      "distance_mm": 92.2,
+      "edr_probability": 0.2131,
+      "level_diff": -4,
+      "function_label": [
+        {
+          "signal_type": "excitation/cognitive_goal",
+          "category": "excitation",
+          "subtype": "cognitive_goal",
+          "definition": "认知目标/策略——前额决策输出、行动计划、规则表征"
+        }
+      ],
+      "gameplay_labels": [
+        "cognitive_control",
+        "memory_consolidation"
+      ],
+      "description": "rostralmiddlefrontal→Hippocampus: 传递 cognitive_goal [cognitive_control, memory_consolidation]",
+      "role": "active"
+    },
+    {
+      "source": "Hippocampus",
+      "target": "rostralmiddlefrontal",
+      "type": "privileged_pathway",
+      "pathway_class": "prefrontal_limbic",
+      "anatomical_basis": "dlPFC↔HC — working memory ↔ long-term encoding interface",
+      "direction": "feedforward",
+      "distance_mm": 92.2,
+      "edr_probability": 0.2131,
+      "level_diff": 4,
+      "function_label": [
+        {
+          "signal_type": "excitation/memory_trace",
+          "category": "excitation",
+          "subtype": "memory_trace",
+          "definition": "记忆痕迹——已编码和巩固的信息模式（情节/语义/空间）"
+        }
+      ],
+      "gameplay_labels": [
+        "memory_consolidation",
+        "cognitive_control"
+      ],
+      "description": "Hippocampus→rostralmiddlefrontal: 传递 memory_trace [cognitive_control, memory_consolidation]",
+      "role": "active"
+    },
+    {
+      "source": "Accumbens-area",
+      "target": "medialorbitofrontal",
+      "type": "privileged_pathway",
+      "pathway_class": "prefrontal_limbic",
+      "anatomical_basis": "Haber & Knutson (2010) — OFC↔NAcc reward loop (reciprocal of CSTC go_direct); vmPFC profile explicitly cites Hansen2024 core loop",
+      "direction": "feedforward",
+      "distance_mm": 22.9,
+      "edr_probability": 0.6028,
+      "level_diff": 4,
+      "function_label": [],
+      "gameplay_labels": [
+        "reward_learning",
+        "threat_defense",
+        "social_cognition"
+      ],
+      "description": "Accumbens-area→medialorbitofrontal: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "medialorbitofrontal",
+      "target": "Accumbens-area",
+      "type": "privileged_pathway",
+      "pathway_class": "prefrontal_limbic",
+      "anatomical_basis": "Haber & Knutson (2010) — OFC↔NAcc reward loop (reciprocal of CSTC go_direct); vmPFC profile explicitly cites Hansen2024 core loop",
+      "direction": "feedback",
+      "distance_mm": 22.9,
+      "edr_probability": 0.6028,
+      "level_diff": -4,
+      "function_label": [
+        {
+          "signal_type": "excitation/emotional_salience",
+          "category": "excitation",
+          "subtype": "emotional_salience",
+          "definition": "情绪突显/威胁标记——刺激的情感价值标签（正/负/威胁）"
+        }
+      ],
+      "gameplay_labels": [
+        "reward_learning",
+        "threat_defense",
+        "social_cognition"
+      ],
+      "description": "medialorbitofrontal→Accumbens-area: 传递 emotional_salience [reward_learning, social_cognition, threat_defense]",
+      "role": "active"
+    },
+    {
+      "source": "Accumbens-area",
+      "target": "superiorfrontal",
+      "type": "privileged_pathway",
+      "pathway_class": "prefrontal_limbic",
+      "anatomical_basis": "mPFC↔NAcc — reward-guided decision making",
+      "direction": "feedforward",
+      "distance_mm": 44.8,
+      "edr_probability": 0.4339,
+      "level_diff": 4,
+      "function_label": [],
+      "gameplay_labels": [
+        "reward_learning",
+        "social_cognition",
+        "motor_execution"
+      ],
+      "description": "Accumbens-area→superiorfrontal: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "superiorfrontal",
+      "target": "Accumbens-area",
+      "type": "privileged_pathway",
+      "pathway_class": "prefrontal_limbic",
+      "anatomical_basis": "mPFC↔NAcc — reward-guided decision making",
+      "direction": "feedback",
+      "distance_mm": 44.8,
+      "edr_probability": 0.4339,
+      "level_diff": -4,
+      "function_label": [],
+      "gameplay_labels": [
+        "social_cognition",
+        "motor_execution",
+        "reward_learning"
+      ],
+      "description": "superiorfrontal→Accumbens-area: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "Accumbens-area",
+      "target": "rostralmiddlefrontal",
+      "type": "privileged_pathway",
+      "pathway_class": "prefrontal_limbic",
+      "anatomical_basis": "dlPFC↔NAcc — cognitive control of reward seeking",
+      "direction": "feedforward",
+      "distance_mm": 57.4,
+      "edr_probability": 0.3593,
+      "level_diff": 4,
+      "function_label": [],
+      "gameplay_labels": [
+        "reward_learning",
+        "cognitive_control"
+      ],
+      "description": "Accumbens-area→rostralmiddlefrontal: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "rostralmiddlefrontal",
+      "target": "Accumbens-area",
+      "type": "privileged_pathway",
+      "pathway_class": "prefrontal_limbic",
+      "anatomical_basis": "dlPFC↔NAcc — cognitive control of reward seeking",
+      "direction": "feedback",
+      "distance_mm": 57.4,
+      "edr_probability": 0.3593,
+      "level_diff": -4,
+      "function_label": [],
+      "gameplay_labels": [
+        "cognitive_control",
+        "reward_learning"
+      ],
+      "description": "rostralmiddlefrontal→Accumbens-area: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "caudalanteriorcingulate",
+      "target": "superiorfrontal",
+      "type": "privileged_pathway",
+      "pathway_class": "prefrontal_limbic",
+      "anatomical_basis": "dACC↔mPFC salience-SN interface — physically adjacent (17.8mm), strongest cross-level PFC coupling",
+      "direction": "feedforward",
+      "distance_mm": 17.8,
+      "edr_probability": 0.651,
+      "level_diff": 3,
+      "function_label": [
+        {
+          "signal_type": "excitation/cognitive_goal",
+          "category": "excitation",
+          "subtype": "cognitive_goal",
+          "definition": "认知目标/策略——前额决策输出、行动计划、规则表征"
+        },
+        {
+          "signal_type": "excitation/emotional_salience",
+          "category": "excitation",
+          "subtype": "emotional_salience",
+          "definition": "情绪突显/威胁标记——刺激的情感价值标签（正/负/威胁）"
+        }
+      ],
+      "gameplay_labels": [
+        "cognitive_control",
+        "social_cognition",
+        "motor_execution"
+      ],
+      "description": "caudalanteriorcingulate→superiorfrontal: 传递 cognitive_goal, emotional_salience [cognitive_control, motor_execution, social_cognition]",
+      "role": "active"
+    },
+    {
+      "source": "superiorfrontal",
+      "target": "caudalanteriorcingulate",
+      "type": "privileged_pathway",
+      "pathway_class": "prefrontal_limbic",
+      "anatomical_basis": "dACC↔mPFC salience-SN interface — physically adjacent (17.8mm), strongest cross-level PFC coupling",
+      "direction": "feedback",
+      "distance_mm": 17.8,
+      "edr_probability": 0.651,
+      "level_diff": -3,
+      "function_label": [
+        {
+          "signal_type": "excitation/cognitive_goal",
+          "category": "excitation",
+          "subtype": "cognitive_goal",
+          "definition": "认知目标/策略——前额决策输出、行动计划、规则表征"
+        },
+        {
+          "signal_type": "excitation/motor_command",
+          "category": "excitation",
+          "subtype": "motor_command",
+          "definition": "运动指令——最终皮层运动输出，编码动作参数"
+        }
+      ],
+      "gameplay_labels": [
+        "social_cognition",
+        "motor_execution",
+        "cognitive_control"
+      ],
+      "description": "superiorfrontal→caudalanteriorcingulate: 传递 cognitive_goal, motor_command [cognitive_control, motor_execution, social_cognition]",
+      "role": "active"
+    },
+    {
+      "source": "rostralanteriorcingulate",
+      "target": "medialorbitofrontal",
+      "type": "privileged_pathway",
+      "pathway_class": "prefrontal_limbic",
+      "anatomical_basis": "rACC↔vmPFC — affective appraisal↔value representation (13.5mm, max EDR p)",
+      "direction": "feedforward",
+      "distance_mm": 13.5,
+      "edr_probability": 0.6946,
+      "level_diff": 3,
+      "function_label": [],
+      "gameplay_labels": [
+        "threat_defense",
+        "reward_learning",
+        "social_cognition"
+      ],
+      "description": "rostralanteriorcingulate→medialorbitofrontal: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "medialorbitofrontal",
+      "target": "rostralanteriorcingulate",
+      "type": "privileged_pathway",
+      "pathway_class": "prefrontal_limbic",
+      "anatomical_basis": "rACC↔vmPFC — affective appraisal↔value representation (13.5mm, max EDR p)",
+      "direction": "feedback",
+      "distance_mm": 13.5,
+      "edr_probability": 0.6946,
+      "level_diff": -3,
+      "function_label": [
+        {
+          "signal_type": "excitation/emotional_salience",
+          "category": "excitation",
+          "subtype": "emotional_salience",
+          "definition": "情绪突显/威胁标记——刺激的情感价值标签（正/负/威胁）"
+        },
+        {
+          "signal_type": "excitation/cognitive_goal",
+          "category": "excitation",
+          "subtype": "cognitive_goal",
+          "definition": "认知目标/策略——前额决策输出、行动计划、规则表征"
+        }
+      ],
+      "gameplay_labels": [
+        "reward_learning",
+        "threat_defense",
+        "social_cognition"
+      ],
+      "description": "medialorbitofrontal→rostralanteriorcingulate: 传递 emotional_salience, cognitive_goal [reward_learning, social_cognition, threat_defense]",
+      "role": "active"
+    },
+    {
+      "source": "caudalanteriorcingulate",
+      "target": "medialorbitofrontal",
+      "type": "privileged_pathway",
+      "pathway_class": "prefrontal_limbic",
+      "anatomical_basis": "dACC↔vmPFC — salience↔value convergence",
+      "direction": "feedforward",
+      "distance_mm": 32.1,
+      "edr_probability": 0.5252,
+      "level_diff": 3,
+      "function_label": [
+        {
+          "signal_type": "excitation/emotional_salience",
+          "category": "excitation",
+          "subtype": "emotional_salience",
+          "definition": "情绪突显/威胁标记——刺激的情感价值标签（正/负/威胁）"
+        }
+      ],
+      "gameplay_labels": [
+        "cognitive_control",
+        "reward_learning",
+        "threat_defense",
+        "social_cognition"
+      ],
+      "description": "caudalanteriorcingulate→medialorbitofrontal: 传递 emotional_salience [cognitive_control, reward_learning, social_cognition, threat_defense]",
+      "role": "active"
+    },
+    {
+      "source": "medialorbitofrontal",
+      "target": "caudalanteriorcingulate",
+      "type": "privileged_pathway",
+      "pathway_class": "prefrontal_limbic",
+      "anatomical_basis": "dACC↔vmPFC — salience↔value convergence",
+      "direction": "feedback",
+      "distance_mm": 32.1,
+      "edr_probability": 0.5252,
+      "level_diff": -3,
+      "function_label": [
+        {
+          "signal_type": "excitation/emotional_salience",
+          "category": "excitation",
+          "subtype": "emotional_salience",
+          "definition": "情绪突显/威胁标记——刺激的情感价值标签（正/负/威胁）"
+        },
+        {
+          "signal_type": "excitation/cognitive_goal",
+          "category": "excitation",
+          "subtype": "cognitive_goal",
+          "definition": "认知目标/策略——前额决策输出、行动计划、规则表征"
+        }
+      ],
+      "gameplay_labels": [
+        "reward_learning",
+        "threat_defense",
+        "social_cognition",
+        "cognitive_control"
+      ],
+      "description": "medialorbitofrontal→caudalanteriorcingulate: 传递 emotional_salience, cognitive_goal [cognitive_control, reward_learning, social_cognition, threat_defense]",
+      "role": "active"
+    },
+    {
+      "source": "caudalanteriorcingulate",
+      "target": "frontalpole",
+      "type": "privileged_pathway",
+      "pathway_class": "prefrontal_limbic",
+      "anatomical_basis": "ACC↔BA10 — cognitive branching/monitoring↔abstract reasoning",
+      "direction": "feedforward",
+      "distance_mm": 51.1,
+      "edr_probability": 0.3951,
+      "level_diff": 3,
+      "function_label": [
+        {
+          "signal_type": "excitation/cognitive_goal",
+          "category": "excitation",
+          "subtype": "cognitive_goal",
+          "definition": "认知目标/策略——前额决策输出、行动计划、规则表征"
+        }
+      ],
+      "gameplay_labels": [
+        "cognitive_control"
+      ],
+      "description": "caudalanteriorcingulate→frontalpole: 传递 cognitive_goal [cognitive_control]",
+      "role": "active"
+    },
+    {
+      "source": "frontalpole",
+      "target": "caudalanteriorcingulate",
+      "type": "privileged_pathway",
+      "pathway_class": "prefrontal_limbic",
+      "anatomical_basis": "ACC↔BA10 — cognitive branching/monitoring↔abstract reasoning",
+      "direction": "feedback",
+      "distance_mm": 51.1,
+      "edr_probability": 0.3951,
+      "level_diff": -3,
+      "function_label": [
+        {
+          "signal_type": "excitation/cognitive_goal",
+          "category": "excitation",
+          "subtype": "cognitive_goal",
+          "definition": "认知目标/策略——前额决策输出、行动计划、规则表征"
+        }
+      ],
+      "gameplay_labels": [
+        "cognitive_control"
+      ],
+      "description": "frontalpole→caudalanteriorcingulate: 传递 cognitive_goal [cognitive_control]",
+      "role": "active"
+    },
+    {
+      "source": "insula",
+      "target": "superiortemporal",
+      "type": "privileged_pathway",
+      "pathway_class": "prefrontal_limbic",
+      "anatomical_basis": "Insula↔STG — auditory salience/Salience Network extended",
+      "direction": "feedforward",
+      "distance_mm": 20.3,
+      "edr_probability": 0.6269,
+      "level_diff": 2,
+      "function_label": [],
+      "gameplay_labels": [
+        "interoception",
+        "social_cognition",
+        "sensory_perception"
+      ],
+      "description": "insula→superiortemporal: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "superiortemporal",
+      "target": "insula",
+      "type": "privileged_pathway",
+      "pathway_class": "prefrontal_limbic",
+      "anatomical_basis": "Insula↔STG — auditory salience/Salience Network extended",
+      "direction": "feedback",
+      "distance_mm": 20.3,
+      "edr_probability": 0.6269,
+      "level_diff": -2,
+      "function_label": [
+        {
+          "signal_type": "excitation/sensory_feature",
+          "category": "excitation",
+          "subtype": "sensory_feature",
+          "definition": "感觉特征——原始或处理后的感觉信息（视觉/听觉/触觉）"
+        }
+      ],
+      "gameplay_labels": [
+        "social_cognition",
+        "sensory_perception",
+        "interoception"
+      ],
+      "description": "superiortemporal→insula: 传递 sensory_feature [interoception, sensory_perception, social_cognition]",
+      "role": "active"
+    },
+    {
+      "source": "insula",
+      "target": "middletemporal",
+      "type": "privileged_pathway",
+      "pathway_class": "prefrontal_limbic",
+      "anatomical_basis": "Salience Network↔MT — motion salience detection",
+      "direction": "feedforward",
+      "distance_mm": 43.6,
+      "edr_probability": 0.4421,
+      "level_diff": 2,
+      "function_label": [],
+      "gameplay_labels": [
+        "interoception",
+        "sensory_perception"
+      ],
+      "description": "insula→middletemporal: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "middletemporal",
+      "target": "insula",
+      "type": "privileged_pathway",
+      "pathway_class": "prefrontal_limbic",
+      "anatomical_basis": "Salience Network↔MT — motion salience detection",
+      "direction": "feedback",
+      "distance_mm": 43.6,
+      "edr_probability": 0.4421,
+      "level_diff": -2,
+      "function_label": [
+        {
+          "signal_type": "excitation/sensory_feature",
+          "category": "excitation",
+          "subtype": "sensory_feature",
+          "definition": "感觉特征——原始或处理后的感觉信息（视觉/听觉/触觉）"
+        }
+      ],
+      "gameplay_labels": [
+        "sensory_perception",
+        "interoception"
+      ],
+      "description": "middletemporal→insula: 传递 sensory_feature [interoception, sensory_perception]",
+      "role": "active"
+    },
+    {
+      "source": "superiortemporal",
+      "target": "temporalpole",
+      "type": "privileged_pathway",
+      "pathway_class": "prefrontal_limbic",
+      "anatomical_basis": "STG↔TP — ventral language/semantic network",
+      "direction": "feedback",
+      "distance_mm": 41.7,
+      "edr_probability": 0.455,
+      "level_diff": -2,
+      "function_label": [
+        {
+          "signal_type": "excitation/social_intention",
+          "category": "excitation",
+          "subtype": "social_intention",
+          "definition": "社会意图/心理化——他人心理状态推断、语言含义"
+        },
+        {
+          "signal_type": "excitation/memory_trace",
+          "category": "excitation",
+          "subtype": "memory_trace",
+          "definition": "记忆痕迹——已编码和巩固的信息模式（情节/语义/空间）"
+        },
+        {
+          "signal_type": "excitation/sensory_feature",
+          "category": "excitation",
+          "subtype": "sensory_feature",
+          "definition": "感觉特征——原始或处理后的感觉信息（视觉/听觉/触觉）"
+        }
+      ],
+      "gameplay_labels": [
+        "social_cognition",
+        "sensory_perception"
+      ],
+      "description": "superiortemporal→temporalpole: 传递 social_intention, memory_trace, sensory_feature [sensory_perception, social_cognition]",
+      "role": "active"
+    },
+    {
+      "source": "temporalpole",
+      "target": "superiortemporal",
+      "type": "privileged_pathway",
+      "pathway_class": "prefrontal_limbic",
+      "anatomical_basis": "STG↔TP — ventral language/semantic network",
+      "direction": "feedforward",
+      "distance_mm": 41.7,
+      "edr_probability": 0.455,
+      "level_diff": 2,
+      "function_label": [
+        {
+          "signal_type": "excitation/social_intention",
+          "category": "excitation",
+          "subtype": "social_intention",
+          "definition": "社会意图/心理化——他人心理状态推断、语言含义"
+        }
+      ],
+      "gameplay_labels": [
+        "social_cognition",
+        "sensory_perception"
+      ],
+      "description": "temporalpole→superiortemporal: 传递 social_intention [sensory_perception, social_cognition]",
+      "role": "active"
+    },
+    {
+      "source": "temporalpole",
+      "target": "entorhinal",
+      "type": "privileged_pathway",
+      "pathway_class": "prefrontal_limbic",
+      "anatomical_basis": "TP semantic hub ↔ EC — paralimbic semantic↔memory gateway",
+      "direction": "feedforward",
+      "distance_mm": 58.6,
+      "edr_probability": 0.353,
+      "level_diff": 2,
+      "function_label": [
+        {
+          "signal_type": "excitation/memory_trace",
+          "category": "excitation",
+          "subtype": "memory_trace",
+          "definition": "记忆痕迹——已编码和巩固的信息模式（情节/语义/空间）"
+        }
+      ],
+      "gameplay_labels": [
+        "social_cognition",
+        "memory_consolidation"
+      ],
+      "description": "temporalpole→entorhinal: 传递 memory_trace [memory_consolidation, social_cognition]",
+      "role": "active"
+    },
+    {
+      "source": "entorhinal",
+      "target": "temporalpole",
+      "type": "privileged_pathway",
+      "pathway_class": "prefrontal_limbic",
+      "anatomical_basis": "TP semantic hub ↔ EC — paralimbic semantic↔memory gateway",
+      "direction": "feedback",
+      "distance_mm": 58.6,
+      "edr_probability": 0.353,
+      "level_diff": -2,
+      "function_label": [
+        {
+          "signal_type": "excitation/memory_trace",
+          "category": "excitation",
+          "subtype": "memory_trace",
+          "definition": "记忆痕迹——已编码和巩固的信息模式（情节/语义/空间）"
+        }
+      ],
+      "gameplay_labels": [
+        "memory_consolidation",
+        "social_cognition"
+      ],
+      "description": "entorhinal→temporalpole: 传递 memory_trace [memory_consolidation, social_cognition]",
+      "role": "active"
+    },
+    {
+      "source": "temporalpole",
+      "target": "fusiform",
+      "type": "privileged_pathway",
+      "pathway_class": "prefrontal_limbic",
+      "anatomical_basis": "TP↔FFA — semantic-person knowledge↔face identity",
+      "direction": "feedforward",
+      "distance_mm": 60.4,
+      "edr_probability": 0.3438,
+      "level_diff": 2,
+      "function_label": [],
+      "gameplay_labels": [
+        "social_cognition",
+        "sensory_perception"
+      ],
+      "description": "temporalpole→fusiform: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "fusiform",
+      "target": "temporalpole",
+      "type": "privileged_pathway",
+      "pathway_class": "prefrontal_limbic",
+      "anatomical_basis": "TP↔FFA — semantic-person knowledge↔face identity",
+      "direction": "feedback",
+      "distance_mm": 60.4,
+      "edr_probability": 0.3438,
+      "level_diff": -2,
+      "function_label": [
+        {
+          "signal_type": "excitation/sensory_feature",
+          "category": "excitation",
+          "subtype": "sensory_feature",
+          "definition": "感觉特征——原始或处理后的感觉信息（视觉/听觉/触觉）"
+        },
+        {
+          "signal_type": "excitation/social_intention",
+          "category": "excitation",
+          "subtype": "social_intention",
+          "definition": "社会意图/心理化——他人心理状态推断、语言含义"
+        }
+      ],
+      "gameplay_labels": [
+        "sensory_perception",
+        "social_cognition"
+      ],
+      "description": "fusiform→temporalpole: 传递 sensory_feature, social_intention [sensory_perception, social_cognition]",
+      "role": "active"
+    },
+    {
+      "source": "insula",
+      "target": "entorhinal",
+      "type": "privileged_pathway",
+      "pathway_class": "prefrontal_limbic",
+      "anatomical_basis": "Insula↔EC — interoceptive↔contextual memory binding (visceral learning)",
+      "direction": "feedforward",
+      "distance_mm": 67.1,
+      "edr_probability": 0.3107,
+      "level_diff": 2,
+      "function_label": [],
+      "gameplay_labels": [
+        "interoception",
+        "memory_consolidation"
+      ],
+      "description": "insula→entorhinal: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "entorhinal",
+      "target": "insula",
+      "type": "privileged_pathway",
+      "pathway_class": "prefrontal_limbic",
+      "anatomical_basis": "Insula↔EC — interoceptive↔contextual memory binding (visceral learning)",
+      "direction": "feedback",
+      "distance_mm": 67.1,
+      "edr_probability": 0.3107,
+      "level_diff": -2,
+      "function_label": [],
+      "gameplay_labels": [
+        "memory_consolidation",
+        "interoception"
+      ],
+      "description": "entorhinal→insula: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "Thalamus-Proper",
+      "target": "pericalcarine",
+      "type": "privileged_pathway",
+      "pathway_class": "thalamocortical_relay",
+      "anatomical_basis": "LGN→V1 first-order thalamocortical relay — V1 profile inputs gating/disinhibition_thalamic",
+      "direction": "feedforward",
+      "distance_mm": 59.6,
+      "edr_probability": 0.3475,
+      "level_diff": 2,
+      "function_label": [
+        {
+          "signal_type": "gating/disinhibition_thalamic",
+          "category": "gating",
+          "subtype": "disinhibition_thalamic",
+          "definition": "丘脑去抑制释放——苍白球输出，终止对丘脑的 tonic GABA 抑制→丘脑兴奋皮层"
+        }
+      ],
+      "gameplay_labels": [
+        "thalamic_relay",
+        "sensory_perception"
+      ],
+      "description": "Thalamus-Proper→pericalcarine: 传递 disinhibition_thalamic [sensory_perception, thalamic_relay]",
+      "role": "active"
+    },
+    {
+      "source": "Thalamus-Proper",
+      "target": "postcentral",
+      "type": "privileged_pathway",
+      "pathway_class": "thalamocortical_relay",
+      "anatomical_basis": "VPL/VPM→S1 first-order thalamocortical relay — S1 profile inputs gating/disinhibition_thalamic",
+      "direction": "feedforward",
+      "distance_mm": 57.2,
+      "edr_probability": 0.3606,
+      "level_diff": 2,
+      "function_label": [
+        {
+          "signal_type": "gating/disinhibition_thalamic",
+          "category": "gating",
+          "subtype": "disinhibition_thalamic",
+          "definition": "丘脑去抑制释放——苍白球输出，终止对丘脑的 tonic GABA 抑制→丘脑兴奋皮层"
+        }
+      ],
+      "gameplay_labels": [
+        "thalamic_relay",
+        "sensory_perception"
+      ],
+      "description": "Thalamus-Proper→postcentral: 传递 disinhibition_thalamic [sensory_perception, thalamic_relay]",
+      "role": "active"
+    },
+    {
+      "source": "Thalamus-Proper",
+      "target": "transversetemporal",
+      "type": "privileged_pathway",
+      "pathway_class": "thalamocortical_relay",
+      "anatomical_basis": "MGN→A1 first-order thalamocortical relay — A1 profile inputs gating/disinhibition_thalamic",
+      "direction": "feedforward",
+      "distance_mm": 30.9,
+      "edr_probability": 0.5351,
+      "level_diff": 2,
+      "function_label": [
+        {
+          "signal_type": "gating/disinhibition_thalamic",
+          "category": "gating",
+          "subtype": "disinhibition_thalamic",
+          "definition": "丘脑去抑制释放——苍白球输出，终止对丘脑的 tonic GABA 抑制→丘脑兴奋皮层"
+        }
+      ],
+      "gameplay_labels": [
+        "thalamic_relay",
+        "sensory_perception"
+      ],
+      "description": "Thalamus-Proper→transversetemporal: 传递 disinhibition_thalamic [sensory_perception, thalamic_relay]",
+      "role": "active"
+    },
+    {
+      "source": "Thalamus-Proper",
+      "target": "cuneus",
+      "type": "privileged_pathway",
+      "pathway_class": "thalamocortical_relay",
+      "anatomical_basis": "Pulvinar→visual association cortex relay",
+      "direction": "feedforward",
+      "distance_mm": 65.9,
+      "edr_probability": 0.3163,
+      "level_diff": 2,
+      "function_label": [
+        {
+          "signal_type": "gating/disinhibition_thalamic",
+          "category": "gating",
+          "subtype": "disinhibition_thalamic",
+          "definition": "丘脑去抑制释放——苍白球输出，终止对丘脑的 tonic GABA 抑制→丘脑兴奋皮层"
+        }
+      ],
+      "gameplay_labels": [
+        "thalamic_relay",
+        "sensory_perception"
+      ],
+      "description": "Thalamus-Proper→cuneus: 传递 disinhibition_thalamic [sensory_perception, thalamic_relay]",
+      "role": "active"
+    },
+    {
+      "source": "Thalamus-Proper",
+      "target": "superiortemporal",
+      "type": "privileged_pathway",
+      "pathway_class": "thalamocortical_relay",
+      "anatomical_basis": "MGN→STG auditory association/higher-order thalamocortical",
+      "direction": "feedforward",
+      "distance_mm": 45.6,
+      "edr_probability": 0.4289,
+      "level_diff": 3,
+      "function_label": [],
+      "gameplay_labels": [
+        "thalamic_relay",
+        "social_cognition",
+        "sensory_perception"
+      ],
+      "description": "Thalamus-Proper→superiortemporal: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "superiortemporal",
+      "target": "Thalamus-Proper",
+      "type": "privileged_pathway",
+      "pathway_class": "thalamocortical_relay",
+      "anatomical_basis": "MGN→STG auditory association/higher-order thalamocortical",
+      "direction": "feedback",
+      "distance_mm": 45.6,
+      "edr_probability": 0.4289,
+      "level_diff": -3,
+      "function_label": [
+        {
+          "signal_type": "excitation/sensory_feature",
+          "category": "excitation",
+          "subtype": "sensory_feature",
+          "definition": "感觉特征——原始或处理后的感觉信息（视觉/听觉/触觉）"
+        }
+      ],
+      "gameplay_labels": [
+        "social_cognition",
+        "sensory_perception",
+        "thalamic_relay"
+      ],
+      "description": "superiortemporal→Thalamus-Proper: 传递 sensory_feature [sensory_perception, social_cognition, thalamic_relay]",
+      "role": "active"
+    },
+    {
+      "source": "Thalamus-Proper",
+      "target": "entorhinal",
+      "type": "privileged_pathway",
+      "pathway_class": "thalamocortical_relay",
+      "anatomical_basis": "Midline thalamic nuclei (N.Reuniens) → EC — hippocampal gateway modulation",
+      "direction": "feedforward",
+      "distance_mm": 58.6,
+      "edr_probability": 0.3532,
+      "level_diff": 3,
+      "function_label": [],
+      "gameplay_labels": [
+        "thalamic_relay",
+        "memory_consolidation"
+      ],
+      "description": "Thalamus-Proper→entorhinal: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "entorhinal",
+      "target": "Thalamus-Proper",
+      "type": "privileged_pathway",
+      "pathway_class": "thalamocortical_relay",
+      "anatomical_basis": "Midline thalamic nuclei (N.Reuniens) → EC — hippocampal gateway modulation",
+      "direction": "feedback",
+      "distance_mm": 58.6,
+      "edr_probability": 0.3532,
+      "level_diff": -3,
+      "function_label": [],
+      "gameplay_labels": [
+        "memory_consolidation",
+        "thalamic_relay"
+      ],
+      "description": "entorhinal→Thalamus-Proper: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "Cerebellum-Cortex",
+      "target": "precentral",
+      "type": "privileged_pathway",
+      "pathway_class": "cerebellothalamic",
+      "anatomical_basis": "Dentate→VL→M1 — cerebello-thalamo-cortical motor-learning loop (classic)",
+      "direction": "feedforward",
+      "distance_mm": 93.4,
+      "edr_probability": 0.2095,
+      "level_diff": 3,
+      "function_label": [],
+      "gameplay_labels": [
+        "motor_execution"
+      ],
+      "description": "Cerebellum-Cortex→precentral: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "precentral",
+      "target": "Cerebellum-Cortex",
+      "type": "privileged_pathway",
+      "pathway_class": "cerebellothalamic",
+      "anatomical_basis": "Dentate→VL→M1 — cerebello-thalamo-cortical motor-learning loop (classic)",
+      "direction": "feedback",
+      "distance_mm": 93.4,
+      "edr_probability": 0.2095,
+      "level_diff": -3,
+      "function_label": [
+        {
+          "signal_type": "excitation/motor_command",
+          "category": "excitation",
+          "subtype": "motor_command",
+          "definition": "运动指令——最终皮层运动输出，编码动作参数"
+        }
+      ],
+      "gameplay_labels": [
+        "motor_execution"
+      ],
+      "description": "precentral→Cerebellum-Cortex: 传递 motor_command [motor_execution]",
+      "role": "active"
+    },
+    {
+      "source": "Cerebellum-Cortex",
+      "target": "paracentral",
+      "type": "privileged_pathway",
+      "pathway_class": "cerebellothalamic",
+      "anatomical_basis": "Cerebellum↔leg M1 — somatotopic motor loop",
+      "direction": "feedforward",
+      "distance_mm": 95.4,
+      "edr_probability": 0.2032,
+      "level_diff": 3,
+      "function_label": [],
+      "gameplay_labels": [
+        "motor_execution"
+      ],
+      "description": "Cerebellum-Cortex→paracentral: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "paracentral",
+      "target": "Cerebellum-Cortex",
+      "type": "privileged_pathway",
+      "pathway_class": "cerebellothalamic",
+      "anatomical_basis": "Cerebellum↔leg M1 — somatotopic motor loop",
+      "direction": "feedback",
+      "distance_mm": 95.4,
+      "edr_probability": 0.2032,
+      "level_diff": -3,
+      "function_label": [
+        {
+          "signal_type": "excitation/motor_command",
+          "category": "excitation",
+          "subtype": "motor_command",
+          "definition": "运动指令——最终皮层运动输出，编码动作参数"
+        }
+      ],
+      "gameplay_labels": [
+        "motor_execution"
+      ],
+      "description": "paracentral→Cerebellum-Cortex: 传递 motor_command [motor_execution]",
+      "role": "active"
+    },
+    {
+      "source": "Cerebellum-Cortex",
+      "target": "postcentral",
+      "type": "privileged_pathway",
+      "pathway_class": "cerebellothalamic",
+      "anatomical_basis": "Cerebellum↔S1 — proprioceptive error correction",
+      "direction": "feedforward",
+      "distance_mm": 88.6,
+      "edr_probability": 0.2251,
+      "level_diff": 3,
+      "function_label": [],
+      "gameplay_labels": [
+        "motor_execution",
+        "sensory_perception"
+      ],
+      "description": "Cerebellum-Cortex→postcentral: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "postcentral",
+      "target": "Cerebellum-Cortex",
+      "type": "privileged_pathway",
+      "pathway_class": "cerebellothalamic",
+      "anatomical_basis": "Cerebellum↔S1 — proprioceptive error correction",
+      "direction": "feedback",
+      "distance_mm": 88.6,
+      "edr_probability": 0.2251,
+      "level_diff": -3,
+      "function_label": [
+        {
+          "signal_type": "excitation/sensory_feature",
+          "category": "excitation",
+          "subtype": "sensory_feature",
+          "definition": "感觉特征——原始或处理后的感觉信息（视觉/听觉/触觉）"
+        }
+      ],
+      "gameplay_labels": [
+        "sensory_perception",
+        "motor_execution"
+      ],
+      "description": "postcentral→Cerebellum-Cortex: 传递 sensory_feature [motor_execution, sensory_perception]",
+      "role": "active"
+    },
+    {
+      "source": "Cerebellum-Cortex",
+      "target": "superiorfrontal",
+      "type": "privileged_pathway",
+      "pathway_class": "cerebellothalamic",
+      "anatomical_basis": "Cerebellum↔SMA/pre-SMA — action sequencing/internal model updating",
+      "direction": "feedforward",
+      "distance_mm": 111.0,
+      "edr_probability": 0.1607,
+      "level_diff": 5,
+      "function_label": [],
+      "gameplay_labels": [
+        "motor_execution",
+        "social_cognition"
+      ],
+      "description": "Cerebellum-Cortex→superiorfrontal: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "superiorfrontal",
+      "target": "Cerebellum-Cortex",
+      "type": "privileged_pathway",
+      "pathway_class": "cerebellothalamic",
+      "anatomical_basis": "Cerebellum↔SMA/pre-SMA — action sequencing/internal model updating",
+      "direction": "feedback",
+      "distance_mm": 111.0,
+      "edr_probability": 0.1607,
+      "level_diff": -5,
+      "function_label": [
+        {
+          "signal_type": "excitation/motor_command",
+          "category": "excitation",
+          "subtype": "motor_command",
+          "definition": "运动指令——最终皮层运动输出，编码动作参数"
+        }
+      ],
+      "gameplay_labels": [
+        "social_cognition",
+        "motor_execution"
+      ],
+      "description": "superiorfrontal→Cerebellum-Cortex: 传递 motor_command [motor_execution, social_cognition]",
+      "role": "active"
+    },
+    {
+      "source": "Cerebellum-Cortex",
+      "target": "caudalmiddlefrontal",
+      "type": "privileged_pathway",
+      "pathway_class": "cerebellothalamic",
+      "anatomical_basis": "Cerebellum↔PMd — dorsal premotor learning loop",
+      "direction": "feedforward",
+      "distance_mm": 104.7,
+      "edr_probability": 0.1767,
+      "level_diff": 5,
+      "function_label": [],
+      "gameplay_labels": [
+        "motor_execution"
+      ],
+      "description": "Cerebellum-Cortex→caudalmiddlefrontal: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "caudalmiddlefrontal",
+      "target": "Cerebellum-Cortex",
+      "type": "privileged_pathway",
+      "pathway_class": "cerebellothalamic",
+      "anatomical_basis": "Cerebellum↔PMd — dorsal premotor learning loop",
+      "direction": "feedback",
+      "distance_mm": 104.7,
+      "edr_probability": 0.1767,
+      "level_diff": -5,
+      "function_label": [
+        {
+          "signal_type": "excitation/motor_command",
+          "category": "excitation",
+          "subtype": "motor_command",
+          "definition": "运动指令——最终皮层运动输出，编码动作参数"
+        }
+      ],
+      "gameplay_labels": [
+        "motor_execution"
+      ],
+      "description": "caudalmiddlefrontal→Cerebellum-Cortex: 传递 motor_command [motor_execution]",
+      "role": "active"
+    },
+    {
+      "source": "Cerebellum-Cortex",
+      "target": "supramarginal",
+      "type": "privileged_pathway",
+      "pathway_class": "cerebellothalamic",
+      "anatomical_basis": "Cerebellum↔SMG — phonological loop/verbal working memory",
+      "direction": "feedforward",
+      "distance_mm": 57.3,
+      "edr_probability": 0.3601,
+      "level_diff": 5,
+      "function_label": [],
+      "gameplay_labels": [
+        "motor_execution",
+        "social_cognition"
+      ],
+      "description": "Cerebellum-Cortex→supramarginal: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "supramarginal",
+      "target": "Cerebellum-Cortex",
+      "type": "privileged_pathway",
+      "pathway_class": "cerebellothalamic",
+      "anatomical_basis": "Cerebellum↔SMG — phonological loop/verbal working memory",
+      "direction": "feedback",
+      "distance_mm": 57.3,
+      "edr_probability": 0.3601,
+      "level_diff": -5,
+      "function_label": [],
+      "gameplay_labels": [
+        "social_cognition",
+        "motor_execution"
+      ],
+      "description": "supramarginal→Cerebellum-Cortex: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "Amygdala",
+      "target": "PeriaqueductalGray",
+      "type": "privileged_pathway",
+      "pathway_class": "brainstem_subcortical",
+      "anatomical_basis": "Paxinos (2004) — amygdala Ce→PAG dorsolateral column;哺乳动物最保守的神经环路; amygdala profile explicitly documents subcortical shortcut",
+      "direction": "feedback",
+      "distance_mm": 38.5,
+      "edr_probability": 0.4773,
+      "level_diff": -1,
+      "function_label": [
+        {
+          "signal_type": "excitation/emotional_salience",
+          "category": "excitation",
+          "subtype": "emotional_salience",
+          "definition": "情绪突显/威胁标记——刺激的情感价值标签（正/负/威胁）"
+        }
+      ],
+      "gameplay_labels": [
+        "threat_defense"
+      ],
+      "description": "Amygdala→PeriaqueductalGray: 传递 emotional_salience [threat_defense]",
+      "role": "active"
+    },
+    {
+      "source": "PeriaqueductalGray",
+      "target": "Amygdala",
+      "type": "privileged_pathway",
+      "pathway_class": "brainstem_subcortical",
+      "anatomical_basis": "Paxinos (2004) — amygdala Ce→PAG dorsolateral column;哺乳动物最保守的神经环路; amygdala profile explicitly documents subcortical shortcut",
+      "direction": "feedforward",
+      "distance_mm": 38.5,
+      "edr_probability": 0.4773,
+      "level_diff": 1,
+      "function_label": [],
+      "gameplay_labels": [
+        "threat_defense"
+      ],
+      "description": "PeriaqueductalGray→Amygdala: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "Amygdala",
+      "target": "LocusCoeruleus",
+      "type": "privileged_pathway",
+      "pathway_class": "brainstem_subcortical",
+      "anatomical_basis": "Foote & Morrison (1987) — amygdala→LC NE arousal loop; bidirectional (LC→amygdala NE already via broadcast)",
+      "direction": "feedback",
+      "distance_mm": 40.8,
+      "edr_probability": 0.4612,
+      "level_diff": -1,
+      "function_label": [
+        {
+          "signal_type": "excitation/emotional_salience",
+          "category": "excitation",
+          "subtype": "emotional_salience",
+          "definition": "情绪突显/威胁标记——刺激的情感价值标签（正/负/威胁）"
+        }
+      ],
+      "gameplay_labels": [
+        "threat_defense",
+        "arousal_modulation"
+      ],
+      "description": "Amygdala→LocusCoeruleus: 传递 emotional_salience [arousal_modulation, threat_defense]",
+      "role": "active"
+    },
+    {
+      "source": "LocusCoeruleus",
+      "target": "Amygdala",
+      "type": "privileged_pathway",
+      "pathway_class": "brainstem_subcortical",
+      "anatomical_basis": "Foote & Morrison (1987) — amygdala→LC NE arousal loop; bidirectional (LC→amygdala NE already via broadcast)",
+      "direction": "feedforward",
+      "distance_mm": 40.8,
+      "edr_probability": 0.4612,
+      "level_diff": 1,
+      "function_label": [],
+      "gameplay_labels": [
+        "arousal_modulation",
+        "threat_defense"
+      ],
+      "description": "LocusCoeruleus→Amygdala: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "VentralTegmentalArea",
+      "target": "Amygdala",
+      "type": "privileged_pathway",
+      "pathway_class": "brainstem_subcortical",
+      "anatomical_basis": "Stuber et al. (2011) — VTA→amygdala DA reward modulation; VTA profile explicitly documents投射至杏仁核. NOTE: also handled by VTA_TARGETS brainstem broadcast (2026-08-07 fix).",
+      "direction": "feedforward",
+      "distance_mm": 30.7,
+      "edr_probability": 0.5366,
+      "level_diff": 1,
+      "function_label": [],
+      "gameplay_labels": [
+        "reward_learning",
+        "threat_defense"
+      ],
+      "description": "VentralTegmentalArea→Amygdala: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "MedianRapheNucleus",
+      "target": "Hippocampus",
+      "type": "privileged_pathway",
+      "pathway_class": "brainstem_subcortical",
+      "anatomical_basis": "Vertes et al. (1999) — MR→HC 5-HT theta modulation; MR profile: 5-HT source for hippocampus and septum",
+      "direction": "feedforward",
+      "distance_mm": 25.7,
+      "edr_probability": 0.5781,
+      "level_diff": 1,
+      "function_label": [],
+      "gameplay_labels": [
+        "arousal_modulation",
+        "memory_consolidation"
+      ],
+      "description": "MedianRapheNucleus→Hippocampus: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "SuperiorColliculus",
+      "target": "PeriaqueductalGray",
+      "type": "privileged_pathway",
+      "pathway_class": "brainstem_subcortical",
+      "anatomical_basis": "Dean et al. (1989) — SC deep layers→PAG dorsolateral; threat detection→escape initiation",
+      "direction": "lateral",
+      "distance_mm": 4.5,
+      "edr_probability": 0.7949,
+      "level_diff": 0,
+      "function_label": [],
+      "gameplay_labels": [
+        "sensory_perception",
+        "threat_defense"
+      ],
+      "description": "SuperiorColliculus→PeriaqueductalGray: silent (无功能信号交集)",
+      "role": "silent"
+    },
+    {
+      "source": "SuperiorColliculus",
+      "target": "Amygdala",
+      "type": "privileged_pathway",
+      "pathway_class": "brainstem_subcortical",
+      "anatomical_basis": "Morris et al. (1999) — SC→amygdala via pulvinar; subcortical threat shortcut (non-geniculate visual→emotion)",
+      "direction": "feedforward",
+      "distance_mm": 42.0,
+      "edr_probability": 0.4528,
+      "level_diff": 1,
+      "function_label": [
+        {
+          "signal_type": "excitation/sensory_feature",
+          "category": "excitation",
+          "subtype": "sensory_feature",
+          "definition": "感觉特征——原始或处理后的感觉信息（视觉/听觉/触觉）"
+        }
+      ],
+      "gameplay_labels": [
+        "sensory_perception",
+        "threat_defense"
+      ],
+      "description": "SuperiorColliculus→Amygdala: 传递 sensory_feature [sensory_perception, threat_defense]",
+      "role": "active"
+    },
+    {
+      "source": "DorsalRapheNucleus",
+      "target": "Amygdala",
+      "type": "privileged_pathway",
+      "pathway_class": "brainstem_subcortical",
+      "anatomical_basis": "Lowry et al. (2008) — DR→amygdala 5-HT fear/anxiety modulation",
+      "direction": "feedforward",
+      "distance_mm": 36.5,
+      "edr_probability": 0.4919,
+      "level_diff": 1,
+      "function_label": [],
+      "gameplay_labels": [
+        "arousal_modulation",
+        "threat_defense"
+      ],
+      "description": "DorsalRapheNucleus→Amygdala: silent (无功能信号交集)",
+      "role": "silent"
     }
   ],
   "_function_labels_applied": true,

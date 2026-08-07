@@ -358,14 +358,6 @@
       "level": 2,
       "is_design_node": false
     },
-    "BedNucleusStriaTerminalis": {
-      "zh_name": "BNST",
-      "functional_id": "BedNucleusStriaTerminalis",
-      "dk_name": null,
-      "category": "subcortical",
-      "level": 1,
-      "is_design_node": false
-    },
     "AccumbensShell": {
       "zh_name": "NAcc壳",
       "functional_id": "AccumbensShell",
@@ -378,14 +370,6 @@
       "zh_name": "NAcc核",
       "functional_id": "AccumbensCore",
       "dk_name": "Accumbens-area",
-      "category": "subcortical",
-      "level": 1,
-      "is_design_node": false
-    },
-    "Hypothalamus": {
-      "zh_name": "下丘脑",
-      "functional_id": "Hypothalamus",
-      "dk_name": null,
       "category": "subcortical",
       "level": 1,
       "is_design_node": false
@@ -470,14 +454,6 @@
       "level": 1,
       "is_design_node": false
     },
-    "Habenula": {
-      "zh_name": "缰核",
-      "functional_id": "Habenula",
-      "dk_name": null,
-      "category": "subcortical",
-      "level": 1,
-      "is_design_node": false
-    },
     "VentralStriatum": {
       "zh_name": "腹侧纹状体",
       "functional_id": "VentralStriatum",
@@ -490,14 +466,6 @@
       "zh_name": "苍白球",
       "functional_id": "Pallidum",
       "dk_name": "Pallidum",
-      "category": "subcortical",
-      "level": 1,
-      "is_design_node": false
-    },
-    "SeptalRegion": {
-      "zh_name": "隔区",
-      "functional_id": "SeptalRegion",
-      "dk_name": null,
       "category": "subcortical",
       "level": 1,
       "is_design_node": false
@@ -534,14 +502,6 @@
       "level": 0,
       "is_design_node": false
     },
-    "VentralTegmentalAreaNAccPathway": {
-      "zh_name": "VTA-NAcc",
-      "functional_id": "VentralTegmentalAreaNAccPathway",
-      "dk_name": null,
-      "category": "brainstem",
-      "level": 0,
-      "is_design_node": true
-    },
     "SuperiorColliculus": {
       "zh_name": "上丘",
       "functional_id": "SuperiorColliculus",
@@ -565,38 +525,6 @@
       "category": "brainstem",
       "level": 0,
       "is_design_node": false
-    },
-    "ReflexPAGAmygdala": {
-      "zh_name": "反射环路·PAG→杏仁核",
-      "functional_id": "ReflexPAGAmygdala",
-      "dk_name": null,
-      "category": "brainstem",
-      "level": 0,
-      "is_design_node": true
-    },
-    "ReflexFreeze": {
-      "zh_name": "反射环路·冻结反应",
-      "functional_id": "ReflexFreeze",
-      "dk_name": null,
-      "category": "brainstem",
-      "level": 0,
-      "is_design_node": true
-    },
-    "ReflexEscape": {
-      "zh_name": "反射环路·快速闪避",
-      "functional_id": "ReflexEscape",
-      "dk_name": null,
-      "category": "brainstem",
-      "level": 0,
-      "is_design_node": true
-    },
-    "AmygdalaPAGPathway": {
-      "zh_name": "杏仁核-PAG",
-      "functional_id": "AmygdalaPAGPathway",
-      "dk_name": null,
-      "category": "brainstem",
-      "level": 0,
-      "is_design_node": true
     },
     "PontineReticularNucleus": {
       "zh_name": "脑桥网状核",
@@ -639,86 +567,6 @@
       "level": 0,
       "is_design_node": false,
       "hemisphere": "R"
-    },
-    "MPFCAmygdalaPathway": {
-      "zh_name": "mPFC-杏仁核",
-      "functional_id": "MPFCAmygdalaPathway",
-      "dk_name": null,
-      "category": "white_matter",
-      "level": 5,
-      "is_design_node": false
-    },
-    "VMPFCTPJPathway": {
-      "zh_name": "vmPFC-TPJ",
-      "functional_id": "VMPFCTPJPathway",
-      "dk_name": null,
-      "category": "white_matter",
-      "level": 5,
-      "is_design_node": false
-    },
-    "PrefrontalHippocampalPathway": {
-      "zh_name": "前额叶-海马",
-      "functional_id": "PrefrontalHippocampalPathway",
-      "dk_name": null,
-      "category": "white_matter",
-      "level": 5,
-      "is_design_node": false
-    },
-    "InsulaCingulumPathway": {
-      "zh_name": "岛叶-ACC",
-      "functional_id": "InsulaCingulumPathway",
-      "dk_name": null,
-      "category": "white_matter",
-      "level": 5,
-      "is_design_node": false
-    },
-    "InsulaACCVTAPathway": {
-      "zh_name": "岛叶-ACC-VTA",
-      "functional_id": "InsulaACCVTAPathway",
-      "dk_name": null,
-      "category": "white_matter",
-      "level": 5,
-      "is_design_node": false
-    },
-    "InsulaPFCAmygdalaPathway": {
-      "zh_name": "岛叶-PFC-杏仁核",
-      "functional_id": "InsulaPFCAmygdalaPathway",
-      "dk_name": null,
-      "category": "white_matter",
-      "level": 5,
-      "is_design_node": false
-    },
-    "InsulaVMPFCPathway": {
-      "zh_name": "岛叶-vmPFC",
-      "functional_id": "InsulaVMPFCPathway",
-      "dk_name": null,
-      "category": "white_matter",
-      "level": 5,
-      "is_design_node": false
-    },
-    "ArcuateFasciculus": {
-      "zh_name": "弓状束",
-      "functional_id": "ArcuateFasciculus",
-      "dk_name": null,
-      "category": "white_matter",
-      "level": 5,
-      "is_design_node": false
-    },
-    "WholeBrainIntegration": {
-      "zh_name": "全脑整合",
-      "functional_id": "WholeBrainIntegration",
-      "dk_name": null,
-      "category": "subcortical",
-      "level": 1,
-      "is_design_node": true
-    },
-    "FrontoparietalControlNetwork": {
-      "zh_name": "额顶网络",
-      "functional_id": "FrontoparietalControlNetwork",
-      "dk_name": null,
-      "category": "cortical",
-      "level": 4,
-      "is_design_node": true
     }
   }
 }

@@ -6,7 +6,7 @@ gen_modulation_ceiling_v2.py — 三因子链路调制模型
   A. Momi et al. (2025) Nature Communications — 皮层兴奋性梯度
      36名患者, 颅内电刺激(iES)+EEG. 高阶网络(DMN/FPN/SN)诱发电位
      显著强于低阶网络(视觉/感觉运动), 由递归反馈强度驱动.
-     → 调制天花板(excitability): L6>L5>L4>L3>L2>L1>L0
+     → 调制天花板(excitability): L5>L4>L3>L2>L1>L0
 
   B. TMS-fMRI 有效连接 — 因果调制强度直接测量
      单脉冲TMS+同步fMRI: 刺激A→记录B的BOLD%信号变化.
@@ -73,7 +73,7 @@ MOMI_EXCITABILITY = {
     # L5 跨模态: 高递归 — Momi发现FPN/DMN刺激后诱发电位最强
     'transmodal': 0.85,    # dlPFC/TPJ/Broca — 最依赖递归整合
 
-    # L6 整合: 最高递归
+    # L5 跨模态（原L6整合并入）: 最高递归
     'integration': 0.95,   # DMN/FPN/SN交汇 — 全脑递归
 
     # 白质通路(连接本身不是灰质节点, 使用端点中值)
@@ -294,7 +294,7 @@ def neuromodulator_gain(region_name, category, level):
     elif level <= 5:
         return 'precision', 1.2
     else:
-        return 'neutral', 1.3  # L6: 全局, 无特定偏向但系数高
+        return 'neutral', 1.3  # L5: 全局（原L6整合层）, 无特定偏向但系数高
 
 
 # ═══════════════════════════════════════════════════
@@ -670,8 +670,8 @@ def gen_markdown(results):
     lines.append('')
     lines.append('| 因子 | 文献 | 测量内容 | 游戏映射 |')
     lines.append('|------|------|---------|---------|')
-    lines.append('| **兴奋性** | Momi et al. (2025) *Nature Comms* | 颅内电刺激诱发电位强度 — 高阶网络~3×低阶网络 | 调制天花板: L6>L5>L4>L3>L2>L1>L0 |')
-    lines.append('| **传导速度** | TMS-fMRI 有效连接 + Hansen 2024 时间层级 | 刺激→下游响应延迟 (ms) | 结算优先级: 脑干(1) → 边缘(2) → 旁边缘(3) → 单模态(4) → 跨模态(5) → 整合(6) |')
+    lines.append('| **兴奋性** | Momi et al. (2025) *Nature Comms* | 颅内电刺激诱发电位强度 — 高阶网络~3×低阶网络 | 调制天花板: L5>L4>L3>L2>L1>L0 |')
+    lines.append('| **传导速度** | TMS-fMRI 有效连接 + Hansen 2024 时间层级 | 刺激→下游响应延迟 (ms) | 结算优先级: 脑干(1) → 边缘(2) → 旁边缘(3) → 单模态(4) → 跨模态(5) |')
     lines.append('| **神经调质增益** | Hansen et al. (2024) *Nature Neurosci* | 5大社区 × 9种递质系统 | 效果类型专精: DA=伤害, NE=精度, 5-HT=防御, ACh=信息 |')
     lines.append('| **髓鞘化同步** | Pajevic et al. (2023) *eLife* | 少突胶质细胞 10-40ms 窗口传导同步 | 前30%几乎无效, 40-60%快速增长, 80%+满效(sigmoid) |')
     lines.append('')
@@ -731,8 +731,7 @@ def gen_markdown(results):
     lines.append('| 2 | L1 边缘 + L3 感觉 | 恐惧条件化, 期待, 注视 | 情绪调制, 感官信息获取 |')
     lines.append('| 3 | L2 旁边缘 | 冲突感知, 内感受, 识人 | 异常检测, 阈值显示 |')
     lines.append('| 4 | L4 单模态 | 识别, 读意图, 想象 | 分类标签, 意图预测 |')
-    lines.append('| 5 | L5 跨模态 | 计划, 命名, 控制, 决策 | 认知框架, 伤害计算 |')
-    lines.append('| 6 | L6 整合 | 叙事重构, 全脑协调, 裁决 | 全局规则改变 |')
+    lines.append('| 5 | L5 跨模态 | 计划, 命名, 控制, 决策, 叙事重构, 全脑协调, 裁决 | 认知框架, 伤害计算, 全局规则改变 |')
     lines.append('')
     lines.append('> **设计含义**: 身体反应(闪避/恐慌)永远比理性决策(计划/命名)先发生。你想压制恐惧→先用 L5 控制, 但 L0 的恐惧已经在 priority=1 时执行了——你得预判。')
     lines.append('')

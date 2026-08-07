@@ -7,6 +7,7 @@ build_tripartite_model.py — 三体神经模型生成器
   1. CSTC 环路 —— 门控决策（GO/NO-GO/STOP），闭环去抑制
   2. 皮层-皮层连接 —— 信息传递，EDR + 层级 + 双向互惠 + 功能标签四层筛选
   3. 脑干广播 —— 全局状态调制，弥漫投射非点对点
+  4. 特权跨层通路 —— 绕过|Δlevel|≤1和脑干排除的 curated whitelist
 
 数据源:
   - data/brain_regions.json: 69 functional_id (50 dk_name + STN), 含 function_profile
@@ -49,10 +50,11 @@ CSTC_PATHWAYS = {
 # DK_TARGETS: LC/中缝/VTA-SNc 投射的 dk_name 目标集
 LC_TARGETS = []       # all cortical dk_names (动态填充)
 RAPHE_TARGETS = []    # all cortical dk_names (动态填充)
-VTA_TARGETS = [       # DA: 纹状体 + 前额叶 (D5)
+VTA_TARGETS = [       # DA: 纹状体 + 前额叶 + 杏仁核 (D5 + 闭合后修正)
     "Putamen", "Caudate", "Accumbens-area",
     "rostralmiddlefrontal", "superiorfrontal", "medialorbitofrontal",
-    "frontalpole", "caudalmiddlefrontal", "lateralorbitofrontal", "parsopercularis"
+    "frontalpole", "caudalmiddlefrontal", "lateralorbitofrontal", "parsopercularis",
+    "Amygdala",  # Stuber et al. 2011 + VTA profile 明确标注投射至杏仁核
 ]
 SNc_TARGETS = [       # 运动 DA: 纹状体为主 (D5)
     "Putamen", "Caudate", "Accumbens-area"
@@ -70,6 +72,15 @@ def load_brain_regions():
 def load_signal_types():
     """加载 signal_types.json，返回受控词表"""
     with open(ROOT / "data/signal_types.json") as f:
+        return json.load(f)
+
+
+def load_privileged_pathways():
+    """加载 privileged_pathways.json，返回白名单"""
+    path = ROOT / "data/connectivity/privileged_pathways.json"
+    if not path.exists():
+        return {"pathways": []}
+    with open(path) as f:
         return json.load(f)
 
 
@@ -472,7 +483,8 @@ def generate_brainstem_broadcasts(nodes, regions):
                 "description": f"{lc}→{ctx}: NE 全皮层唤醒广播"
             })
 
-    # 中缝→5-HT: 全皮层广播
+    # 中缝→5-HT: 全皮层广播 + 海马体（Vertes et al. 1999）
+    raphe_subcortical = ["Hippocampus", "Amygdala"]  # MR profile: 5-HT source for hippocampus
     for rap in raphe_sources:
         for ctx in cortical_dks:
             connections.append({
@@ -484,6 +496,17 @@ def generate_brainstem_broadcasts(nodes, regions):
                 "projection": "diffuse_broadcast",
                 "description": f"{rap}→{ctx}: 5-HT 全皮层情绪调制广播"
             })
+        for sc in raphe_subcortical:
+            if sc in nodes:
+                connections.append({
+                    "source": rap,
+                    "target": sc,
+                    "type": "brainstem_broadcast",
+                    "system": "Raphe_5HT",
+                    "neurotransmitter": "serotonin",
+                    "projection": "targeted_broadcast",
+                    "description": f"{rap}→{sc}: 5-HT 皮层下靶向调制"
+                })
 
     # VTA→DA: 纹状体 + 前额叶
     for vta in vta_sources:
@@ -516,6 +539,80 @@ def generate_brainstem_broadcasts(nodes, regions):
     return connections
 
 
+# ─── 特权跨层通路生成 ───────────────────────────────────────────
+
+def generate_privileged_pathways(nodes, regions, privileged):
+    """
+    生成特权跨层连接——绕过 |Δlevel|≤1 (R5) 和脑干排除 (R9) 约束。
+
+    从 curated whitelist (privileged_pathways.json) 读取 (source_dk, target_dk) 对。
+    仍强制 EDR p≥0.10 (D11 解剖天花板)。
+
+    返回:
+      connections: [{source, target, type, pathway_class, anatomical_basis, ...}, ...]
+    """
+    connections = []
+    edge_set = set()
+
+    # 构建坐标索引
+    coord_map = {}
+    for fid, r in regions.items():
+        mni = r.get("mni_xyz")
+        if mni and len(mni) == 3:
+            dk = r.get("dk_name") or fid
+            if dk not in coord_map:
+                coord_map[dk] = mni
+
+    for entry in privileged.get("pathways", []):
+        src_dk = entry["source"]
+        tgt_dk = entry["target"]
+        pclass = entry.get("class", entry.get("pathway_class", ""))
+        basis = entry.get("basis", entry.get("anatomical_basis", ""))
+        bidirectional = entry.get("bidirectional", True)
+
+        # 生成单向或双向连接
+        directions = [(src_dk, tgt_dk)]
+        if bidirectional:
+            directions.append((tgt_dk, src_dk))
+
+        for src, tgt in directions:
+            if (src, tgt) in edge_set:
+                continue
+            if src not in nodes or tgt not in nodes:
+                continue
+
+            # EDR 解剖天花板检查
+            src_coord = coord_map.get(src)
+            tgt_coord = coord_map.get(tgt)
+            dist = edr_distance(src_coord, tgt_coord)
+            if dist is not None and not edr_passes(dist):
+                continue
+
+            edge_set.add((src, tgt))
+
+            src_lvl = nodes[src].get("level")
+            tgt_lvl = nodes[tgt].get("level")
+            level_diff = (tgt_lvl - src_lvl) if (src_lvl is not None and tgt_lvl is not None) else None
+
+            direction = "feedforward" if (level_diff and level_diff > 0) else (
+                "feedback" if (level_diff and level_diff < 0) else "lateral"
+            )
+
+            connections.append({
+                "source": src,
+                "target": tgt,
+                "type": "privileged_pathway",
+                "pathway_class": pclass,
+                "anatomical_basis": basis,
+                "direction": direction,
+                "distance_mm": round(dist, 1) if dist else None,
+                "edr_probability": round(edr_probability(dist), 4) if dist else None,
+                "level_diff": level_diff,
+            })
+
+    return connections
+
+
 # ─── 验证 ───────────────────────────────────────────────────────
 
 def validate_model(model, nodes, signal_types):
@@ -532,7 +629,8 @@ def validate_model(model, nodes, signal_types):
     # 检查所有连接的 source/target 是否在图节点中
     all_dks = set(nodes.keys())
     all_connections = (model["cstc"] + model["corticocortical"] +
-                       model["brainstem"] + model.get("stn_hyperdirect", []))
+                       model["brainstem"] + model.get("stn_hyperdirect", []) +
+                       model.get("privileged_pathways", []))
 
     for conn in all_connections:
         src = conn["source"]
@@ -559,14 +657,14 @@ def main():
     print("=" * 60)
 
     # 加载数据
-    print("\n[1/5] 加载数据...")
+    print("\n[1/6] 加载数据...")
     regions = load_brain_regions()
     signal_types = load_signal_types()
     print(f"  brain_regions.json: {len(regions)} functional_ids")
     print(f"  signal_types.json: {len(signal_types['_categories'])} categories")
 
     # 构建图节点
-    print("\n[2/5] 构建图节点 (dk_name 主键)...")
+    print("\n[2/6] 构建图节点 (dk_name 主键)...")
     nodes, fids_by_dk, all_regions = build_graph_nodes(regions)
 
     profiled = sum(1 for n in nodes.values() if not n["profile_missing"])
@@ -574,7 +672,7 @@ def main():
     print(f"  含 profile: {profiled}/{len(nodes)}")
 
     # 生成 CSTC 环路
-    print("\n[3/5] 生成 CSTC 环路...")
+    print("\n[3/6] 生成 CSTC 环路...")
     cstc = generate_cstc_loops(nodes)
     print(f"  CSTC 连接: {len(cstc)}")
     # 统计
@@ -589,7 +687,7 @@ def main():
         print(f"    {pw}: {by_pathway[pw]}")
 
     # 生成皮层-皮层连接
-    print("\n[4/5] 生成皮层-皮层连接...")
+    print("\n[4/6] 生成皮层-皮层连接...")
     corticocortical = generate_corticocortical(nodes, regions)
     print(f"  皮层-皮层连接: {len(corticocortical)} (双向)")
     # 统计 EDR
@@ -602,7 +700,7 @@ def main():
         print(f"    前馈: {ff}, 反馈: {fb}, 同层: {lat}")
 
     # 生成脑干广播
-    print("\n[5/5] 生成脑干广播...")
+    print("\n[5/6] 生成脑干广播...")
     brainstem = generate_brainstem_broadcasts(nodes, regions)
     print(f"  脑干广播: {len(brainstem)}")
     by_system = defaultdict(int)
@@ -610,6 +708,18 @@ def main():
         by_system[c["system"]] += 1
     for sys in sorted(by_system):
         print(f"    {sys}: {by_system[sys]}")
+
+    # 生成特权跨层通路
+    print("\n[6/6] 生成特权跨层通路...")
+    privileged_data = load_privileged_pathways()
+    privileged = generate_privileged_pathways(nodes, regions, privileged_data)
+    print(f"  特权跨层通路: {len(privileged)}")
+    if privileged:
+        by_class = defaultdict(int)
+        for c in privileged:
+            by_class[c["pathway_class"]] += 1
+        for cls in sorted(by_class):
+            print(f"    {cls}: {by_class[cls]}")
 
     # 组装模型
     model = {
@@ -639,6 +749,7 @@ def main():
         "cstc": cstc,
         "corticocortical": corticocortical,
         "brainstem": brainstem,
+        "privileged_pathways": privileged,
     }
 
     # 验证
@@ -661,12 +772,13 @@ def main():
     print(f"\n✅ 三体神经模型已写入: {output_path}")
 
     # 摘要
-    total = len(cstc) + len(corticocortical) + len(brainstem)
+    total = len(cstc) + len(corticocortical) + len(brainstem) + len(privileged)
     print(f"\n{'=' * 60}")
     print(f"摘要: {len(nodes)} 图节点, {total} 连接")
     print(f"  CSTC 环路:       {len(cstc):>5}")
     print(f"  皮层-皮层:       {len(corticocortical):>5}")
     print(f"  脑干广播:        {len(brainstem):>5}")
+    print(f"  特权跨层通路:    {len(privileged):>5}")
     print(f"{'=' * 60}")
 
 

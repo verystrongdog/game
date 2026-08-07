@@ -14,7 +14,7 @@ from pathlib import Path
 ROOT = Path(__file__).parent.parent
 
 def load_canonical():
-    """加载 brain_regions.json 的89个规范key"""
+    """加载 brain_regions.json 的70个规范key"""
     with open(ROOT / "data/brain_regions.json") as f:
         br = json.load(f)
     keys = list(br["regions"].keys())
