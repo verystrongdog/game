@@ -1,0 +1,318 @@
+{
+  "_description": "Kroell et al. (2024): 14 meta-analytically defined functional networks. Grilling #26 D14 — 从 build_link_legitimacy_matrix.py 硬编码 dict 迁移为独立 JSON 数据文件。",
+  "_source": {
+    "authors": "Kroell JP, Eickhoff SB, et al.",
+    "year": 2024,
+    "institution": "Institute of Neuroscience and Medicine (INM-1), Research Centre Juelich, Germany",
+    "manuscript_url": "https://juser.fz-juelich.de/record/1006698",
+    "related_publication": "Dugré JR, Potvin S (2023). Towards a Neurobiologically-driven Ontology of Mental Functions. bioRxiv 2023.03.29.534795"
+  },
+  "_usage": "链路上下文（link_context）中 dominant_network 字段的取值来源。与 Hansen 社区（data/connectivity/hansen_communities.json）联合构成 50 个网络集合（含混合+边缘）。",
+  "_created": "2026-08-07",
+  "_grilling": "Grilling #26 (GitHub #27) — 三体神经模型",
+  "networks": [
+    {
+      "id": 1,
+      "name": "Autobiographical Memory",
+      "abbrev": "AM",
+      "nodes": 22,
+      "functional_role": "Recall of personally experienced past events (episodic memory), self-projection, scene construction",
+      "key_regions": [
+        "Medial temporal cortex / hippocampus / parahippocampus",
+        "Lateral temporal cortex",
+        "Precuneus / posterior cingulate cortex / retrosplenial cortex",
+        "Temporo-parietal junction (TPJ)",
+        "Lateral prefrontal cortex (dlPFC)",
+        "Lateral occipital cortex",
+        "Medial prefrontal cortex (mPFC)"
+      ],
+      "gameplay_domains": ["memory_consolidation", "social_cognition"]
+    },
+    {
+      "id": 2,
+      "name": "Cognitive Attention Control",
+      "abbrev": "CogAC",
+      "nodes": 19,
+      "functional_role": "Goal-directed attention, cognitive control, task switching",
+      "key_regions": [
+        "Anterior insula (bilateral)",
+        "Inferior frontal gyrus (IFG)",
+        "Dorsolateral prefrontal cortex (dlPFC)",
+        "Dorsal premotor cortex",
+        "Intraparietal sulcus (IPS, bilateral)",
+        "Superior parietal lobule",
+        "Right temporo-parietal junction (rTPJ)",
+        "Left inferior occipital gyrus",
+        "Pre-supplementary motor area (pre-SMA)",
+        "Anterior mid-cingulate cortex (aMCC)",
+        "Right thalamus",
+        "Right caudate"
+      ],
+      "gameplay_domains": ["cognitive_control", "sensory_perception"]
+    },
+    {
+      "id": 3,
+      "name": "Extended Multiple Demand Network",
+      "abbrev": "eMDN",
+      "nodes": 17,
+      "functional_role": "Executive functions, cognitive flexibility, task-demand adaptation",
+      "reference": "Camilleri et al. (2016)",
+      "key_regions": [
+        "Bilateral inferior frontal gyrus (IFG)",
+        "Insula (bilateral)",
+        "Supplementary motor area (SMA)",
+        "Intraparietal sulcus (bilateral)",
+        "Middle frontal gyrus",
+        "Dorsal premotor cortex",
+        "Putamen (bilateral)",
+        "Thalamus (bilateral)",
+        "Left inferior temporal gyrus"
+      ],
+      "gameplay_domains": ["cognitive_control", "motor_execution"]
+    },
+    {
+      "id": 4,
+      "name": "Emotional Scene and Face Processing",
+      "abbrev": "EmoSF",
+      "nodes": 24,
+      "functional_role": "Perception of emotional faces and scenes, affective salience detection",
+      "key_regions": [
+        "Medial prefrontal cortex",
+        "Bilateral inferior/middle/superior frontal gyrus",
+        "Amygdala (bilateral)",
+        "Parahippocampal gyrus",
+        "Fusiform gyrus (includes FFA)",
+        "Orbitofrontal cortex",
+        "Lateral occipital cortex",
+        "Thalamus / pulvinar",
+        "Right middle temporal gyrus",
+        "Right anterior cingulate cortex"
+      ],
+      "gameplay_domains": ["threat_defense", "social_cognition"]
+    },
+    {
+      "id": 5,
+      "name": "Empathy",
+      "abbrev": "EMP",
+      "nodes": 18,
+      "functional_role": "Empathic understanding, affective sharing, mentalizing about others' pain",
+      "key_regions": [
+        "Bilateral dorsomedial prefrontal cortex (dmPFC)",
+        "Anterior insula (bilateral)",
+        "Inferior frontal gyrus (bilateral)",
+        "Supplementary motor area (SMA)",
+        "Cingulate cortex (aMCC / ACC)",
+        "Temporo-parietal junction (TPJ)",
+        "Right amygdala",
+        "Right middle temporal gyrus",
+        "Right posterior superior temporal sulcus (pSTS)",
+        "Left anterior thalamus",
+        "Right posterior thalamus",
+        "Right hippocampus",
+        "Midbrain",
+        "Right pallidum"
+      ],
+      "gameplay_domains": ["social_cognition", "interoception"]
+    },
+    {
+      "id": 6,
+      "name": "Emotion Regulation",
+      "abbrev": "ER",
+      "nodes": 14,
+      "functional_role": "Cognitive reappraisal, emotion suppression, regulation of affective responses",
+      "key_regions": [
+        "Bilateral inferior/middle frontal gyrus (vlPFC, dlPFC)",
+        "Superior parietal lobule",
+        "Right amygdala",
+        "Right medial frontal gyrus",
+        "Left anterior cingulate cortex",
+        "Left anterior insula",
+        "Left superior/middle temporal gyrus"
+      ],
+      "gameplay_domains": ["cognitive_control", "threat_defense"]
+    },
+    {
+      "id": 7,
+      "name": "Extended Socio-Affective Default Network",
+      "abbrev": "eSAD",
+      "nodes": 12,
+      "functional_role": "Self-referential thought, social cognition, affective processing, introspection, autobiographical memory",
+      "reference": "Amft et al. (2015)",
+      "key_regions": [
+        "Anterior cingulate cortex (ACC)",
+        "Bilateral amygdala and hippocampus",
+        "Temporo-parietal junction (TPJ)",
+        "Ventral basal ganglia (ventral striatum)",
+        "Precuneus",
+        "Subgenual cingulate cortex",
+        "Ventromedial prefrontal cortex (vmPFC)",
+        "Dorsomedial prefrontal cortex (dmPFC)",
+        "Left middle temporal gyrus and sulcus"
+      ],
+      "gameplay_domains": ["social_cognition", "memory_consolidation"]
+    },
+    {
+      "id": 8,
+      "name": "Mirror Neuron System",
+      "abbrev": "MNS",
+      "nodes": 11,
+      "functional_role": "Action observation, imitation, understanding others' actions",
+      "key_regions": [
+        "Bilateral inferior frontal gyrus (pars opercularis, BA44)",
+        "Primary somatosensory cortex (S1)",
+        "Lateral occipital lobe",
+        "Right fusiform face/body area",
+        "Left medial premotor cortex",
+        "Left posterior middle temporal gyrus (pMTG)",
+        "Right superior parietal lobule"
+      ],
+      "gameplay_domains": ["social_cognition", "motor_execution"]
+    },
+    {
+      "id": 9,
+      "name": "Motor",
+      "abbrev": "MOT",
+      "nodes": 9,
+      "functional_role": "Motor execution, movement planning",
+      "key_regions": [
+        "Bilateral sensorimotor cortex (M1/S1)",
+        "Basal ganglia (putamen, pallidum)",
+        "Anterior cerebellum (Lobule IV-V)",
+        "Inferior parietal cortex",
+        "Left ventral premotor cortex",
+        "Supplementary motor area (SMA)"
+      ],
+      "gameplay_domains": ["motor_execution", "habit_learning"]
+    },
+    {
+      "id": 10,
+      "name": "Reward",
+      "abbrev": "Rew",
+      "nodes": 23,
+      "functional_role": "Reward processing, motivation, hedonic evaluation",
+      "key_regions": [
+        "Bilateral insula",
+        "Thalamus (bilateral)",
+        "Brainstem (VTA / substantia nigra)",
+        "Mid-orbitofrontal cortex (mOFC)",
+        "Middle frontal gyrus",
+        "Right nucleus accumbens",
+        "Left pallidum",
+        "Left dorsomedial prefrontal cortex",
+        "Left medial orbitofrontal cortex",
+        "Right amygdala",
+        "Supplementary motor area (SMA)",
+        "Anterior/posterior cingulate cortex",
+        "Left inferior parietal lobule (IPL)",
+        "Right angular gyrus",
+        "Left frontal pole",
+        "Left superior frontal gyrus"
+      ],
+      "gameplay_domains": ["reward_learning", "action_gating"]
+    },
+    {
+      "id": 11,
+      "name": "Semantic Memory",
+      "abbrev": "SM",
+      "nodes": 23,
+      "functional_role": "Conceptual knowledge, word meaning, factual memory",
+      "reference": "Binder et al. (2009)",
+      "key_regions": [
+        "Angular gyrus / supramarginal gyrus",
+        "Middle temporal gyrus",
+        "Posterior inferior temporal gyrus",
+        "Mid-fusiform gyrus",
+        "Parahippocampus",
+        "Dorsomedial prefrontal cortex (dmPFC)",
+        "Ventromedial prefrontal cortex (vmPFC)",
+        "Orbital prefrontal cortex",
+        "Superior/middle/inferior frontal gyrus",
+        "Posterior cingulate gyrus",
+        "Ventral precuneus"
+      ],
+      "gameplay_domains": ["memory_consolidation", "sensory_perception"]
+    },
+    {
+      "id": 12,
+      "name": "Theory of Mind",
+      "abbrev": "ToM",
+      "nodes": 15,
+      "functional_role": "Mentalizing, belief attribution, understanding others' intentions and mental states",
+      "key_regions": [
+        "Ventromedial prefrontal cortex (vmPFC)",
+        "Dorsomedial prefrontal cortex (dmPFC)",
+        "Frontopolar cortex (BA10)",
+        "Precuneus",
+        "Bilateral temporo-parietal junction (TPJ)",
+        "Temporal pole",
+        "Middle temporal gyrus",
+        "Posterior superior temporal sulcus (pSTS)",
+        "Inferior frontal gyrus",
+        "Right V5/MT+"
+      ],
+      "gameplay_domains": ["social_cognition"]
+    },
+    {
+      "id": 13,
+      "name": "Vigilant Attention",
+      "abbrev": "VigAtt",
+      "nodes": 16,
+      "functional_role": "Sustained attention, alertness, vigilance decrement resistance",
+      "key_regions": [
+        "Anterior paracentral lobule",
+        "Right medial posterior superior frontal gyrus",
+        "Dorsal mid-cingulate cortex (dMCC)",
+        "Bilateral inferior frontal junction",
+        "Anterior insula (bilateral)",
+        "Thalamus (bilateral)",
+        "Right inferior frontal sulcus",
+        "Left precentral gyrus",
+        "Left inferior occipital gyrus",
+        "Right temporo-parietal junction (rTPJ)",
+        "Right middle occipital gyrus",
+        "Right inferior parietal lobule (IPL)",
+        "Cerebellum"
+      ],
+      "gameplay_domains": ["arousal_modulation", "sensory_perception"]
+    },
+    {
+      "id": 14,
+      "name": "Working Memory",
+      "abbrev": "WM",
+      "nodes": 23,
+      "functional_role": "Maintenance and manipulation of information online, cognitive control, executive function",
+      "key_regions": [
+        "Bilateral anterior insula",
+        "Inferior frontal gyrus (bilateral)",
+        "Caudal lateral PFC (dlPFC)",
+        "Rostral lateral PFC",
+        "Posterior superior frontal gyrus (pre-SMA / SMA)",
+        "Thalamus (bilateral)",
+        "Cerebellum (Lobule VI / Crus I)",
+        "Intraparietal sulcus (IPS, bilateral)",
+        "Superior parietal lobule",
+        "Left caudate",
+        "Left globus pallidus"
+      ],
+      "gameplay_domains": ["cognitive_control", "memory_consolidation"]
+    }
+  ],
+  "_summary": {
+    "total_networks": 14,
+    "total_nodes_range": "9-24",
+    "abbreviations": ["AM", "CogAC", "eMDN", "EmoSF", "EMP", "ER", "eSAD", "MNS", "MOT", "Rew", "SM", "ToM", "VigAtt", "WM"],
+    "gameplay_domain_coverage": {
+      "motor_execution": ["eMDN", "MNS", "MOT"],
+      "sensory_perception": ["CogAC", "VigAtt", "SM"],
+      "reward_learning": ["Rew"],
+      "threat_defense": ["EmoSF", "ER"],
+      "arousal_modulation": ["VigAtt"],
+      "memory_consolidation": ["AM", "eSAD", "SM", "WM"],
+      "cognitive_control": ["CogAC", "eMDN", "ER", "WM"],
+      "social_cognition": ["AM", "EmoSF", "EMP", "eSAD", "MNS", "ToM"],
+      "action_gating": ["Rew"],
+      "interoception": ["EMP"],
+      "habit_learning": ["MOT"]
+    }
+  }
+}

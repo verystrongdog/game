@@ -2,9 +2,9 @@
   "_description": "术语注册表 — Grilling §3.0 定义基线声明的唯一数据源。术语定义/旧模型/偏离原因集中管理，避免 AI 在生成时被术语的旧现实世界模型劫持。",
   "_maintenance": "入库触发: 新核心术语 | 定义被修改 | Step 4 清扫发现未注册高频术语。numerical_locations 更新: 注册时填充 + grilling 新增引用时追加 + 定义变更时遍历复查。",
   "_created": "2026-08-03",
-  "_updated": "2026-08-05",
-  "_batch": "v1 — 首批23条 + 第二批30条 = 53条。v1.1 (2026-08-05): +7条(grilling #22 月光场数值校准: g_0/η/c(SAN)/κ/η_crit/ρ_off/lunar) → 60条",
-  "_pending_candidates": "见 data/term_registry_candidates.md — 约20条P3级+单文档术语，后续grilling中逐批入库",
+  "_updated": "2026-08-07",
+  "_batch": "v1 — 首批23条 + 第二批30条 = 53条。v1.1 (2026-08-05): +7条(grilling #22 月光场数值校准: g_0/η/c(SAN)/κ/η_crit/ρ_off/lunar) → 60条 + v1.2 (2026-08-07): +14条 (Grilling #26 三体神经模型)",
+  "_pending_candidates": "见 data/term_registry_candidates.md — 约20条P3级+单文档术语，后续grilling中逐批入库 Grilling #26-27: CSTC/EDR/CTC/三体神经模型/function_profile/cstc_loop/cstc_role/signal_type/gameplay_domain/STN/脑干广播/皮层-皮层连接/功能剖面/基底节门控 (14条已入库).",
   "terms": {
     "态度": {
       "definition": "⚠️ 已废弃（2026-07-26）。认知 + 情绪 + 行为 = 态度，是三种成分的组合结算结果，不是独立实体。",
@@ -1161,6 +1161,189 @@
       ],
       "added": "2026-08-05",
       "updated": "2026-08-05"
+    },
+    "CSTC": {
+      "definition": "Cortico-Striato-Thalamo-Cortical 环路——基底节门控模型的核心回路。皮层→纹状体→苍白球→丘脑→回皮层。默认状态为苍白球 tonic 抑制丘脑，纹状体 D1 通路去抑制=动作释放（GO），D2 通路增强抑制=动作钳制（NO-GO），STN 超直接通路全局急停（STOP）。三环路：躯体（Putamen）、认知（Caudate）、边缘（NAcc，调节器非动作通道）。",
+      "source": "规则/技能树系统/脑功能层级模型.md §二十.3; Alexander et al. 1986; Nambu 2015",
+      "old_model": "一般 neuroanatomy 中的 CSTC loop——作为解剖连接描述，不强调门控功能和三条通路的竞争动态",
+      "deviation_reason": "项目中 CSTC 是三种通信原语之一（门控决策），与皮层-皮层（信息传递）、脑干广播（全局调制）并列为三体神经模型的支柱。不是解剖描述——是 gameplay action gating 的神经基础",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/脑功能层级模型.md §二十.3",
+        "data/brain_regions.json (cstc_loop/cstc_role 字段)",
+        "data/signal_types.json (gating 大类)"
+      ],
+      "added": "2026-08-07",
+      "updated": "2026-08-07"
+    },
+    "EDR": {
+      "definition": "Exponential Distance Rule——皮层-皮层连接概率随解剖距离指数衰减。p(connection) = 0.85 × e^(−0.015×d)，d = 欧氏距离 (mm)。来自 Molnár et al. (2024)。项目中设为 p≥0.10 作为解剖天花板（anatomical ceiling），不做功能筛选——功能筛选交 function_label 层的 output_types ∩ input_types 交集。",
+      "source": "规则/技能树系统/脑功能层级模型.md §二十.4; Molnár et al. 2024",
+      "old_model": "一般连接组学中的 distance rule——作为单一连接规则使用",
+      "deviation_reason": "项目中 EDR 仅为解剖可行性天花板（第一步粗筛），语义匹配和 gameplay 价值在后续层中筛选。不是唯一的连接规则",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/脑功能层级模型.md §二十.4",
+        "data/brain_regions.json (game_xyz 坐标用于 d 计算)"
+      ],
+      "added": "2026-08-07",
+      "updated": "2026-08-07"
+    },
+    "CTC": {
+      "definition": "Communication through Coherence——Fries (2015) 提出的跨频段通信理论。只有相干振荡的神经群体之间才能有效通信。gamma=feedforward（前馈信息），alpha/beta=feedback（反馈调制），theta=attention sampling（注意采样）。项目中用于 function_profile 的 oscillatory_band 字段和皮层-皮层功能标签筛选。",
+      "source": "规则/技能树系统/脑功能层级模型.md §二十.4; Fries 2015",
+      "old_model": "—（与项目定义一致，无偏离）",
+      "deviation_reason": "—",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/脑功能层级模型.md §二十.4",
+        "data/brain_regions.json (oscillatory_band 字段)"
+      ],
+      "added": "2026-08-07",
+      "updated": "2026-08-07"
+    },
+    "三体神经模型": {
+      "definition": "替代旧 364 链路 pairwise 有向模型的神经网络建模框架。三种通信原语：(1) CSTC 环路——门控决策（GO/NO-GO/STOP），闭环去抑制；(2) 皮层-皮层连接——信息传递，EDR+层级+双向互惠+功能标签交集四层筛选；(3) 脑干广播——全局状态调制（LC-NE/中缝-5HT/VTA-SNc-DA），弥漫投射非点对点。三种原语不平压为同质边。图以 dk_name 为节点（50+STN=51），functional_id 为通信模式标签。Grilling #26 (2026-08-07) 确立。",
+      "source": "规则/技能树系统/脑功能层级模型.md §二十; Grilling #26 (GitHub #27)",
+      "old_model": "旧 364 链路模型——所有脑区之间的连接平压为 pairwise 有向边，四种规则（解剖/功能/情境/髓鞘）筛选",
+      "deviation_reason": "旧模型在三个层面不准确：(a) CSTC 是闭环门控非 A→B 连接，(b) 皮层-皮层双向互惠（Markov 2013, 66% 二元密度），(c) 脑干核团弥漫广播（LC 单个神经元投射全皮层）非点对点",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/脑功能层级模型.md §二十",
+        "data/brain_regions.json",
+        "data/signal_types.json",
+        "data/connectivity/kroell14_networks.json"
+      ],
+      "added": "2026-08-07",
+      "updated": "2026-08-07"
+    },
+    "function_profile": {
+      "definition": "功能剖面——每个 functional_id 的 10 字段结构化通信能力描述。字段：primary_function（一句话功能描述）、input_types/output_types（signal_type 受控词表取值，交集匹配推导连接语义）、timescale（fast/medium/slow）、neurotransmitter_dominant、oscillatory_band（CTC 频段）、cstc_loop（CSTC 环路归属）、cstc_role（环路内角色，用于 4 站匹配）、hierarchy_direction（层级方向）、gameplay_domain（12 项受控 gameplay 域）。镜像变体（LC_R, SNc_R）用 mirror_of 引用共享。Grilling #26 D8 确立。",
+      "source": "规则/技能树系统/脑功能层级模型.md §二十.7; Grilling #26 (GitHub #27) D8",
+      "old_model": "旧模型无此概念——链路角色（8 类行为角色）直接附着于 pairwise 连接边",
+      "deviation_reason": "功能剖面将通信能力从连接边转移到节点——连接是否存在取决于 source.output_types ∩ target.input_types，而非预定义边",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/脑功能层级模型.md §二十.7",
+        "data/brain_regions.json (function_profile 字段)"
+      ],
+      "added": "2026-08-07",
+      "updated": "2026-08-07"
+    },
+    "cstc_loop": {
+      "definition": "function_profile 的 CSTC 环路归属字段。取值：somatic（躯体环路—Putamen）、cognitive（认知环路—Caudate）、limbic（边缘环路—NAcc，调节器）、none（非环路节点：Pallidum/Thalamus/STN/脑干核团/感觉皮层）。脚本按同 cstc_loop 分组 + cstc_role 匹配 4 站生成 CSTC 连接。none 节点可跨环路匹配（如 Pallidum 服务所有 3 环路，野生卡）。Grilling #26 D9 确立。",
+      "source": "规则/技能树系统/脑功能层级模型.md §二十.7; Grilling #26 (GitHub #27) D9",
+      "old_model": "—（新字段，无旧模型对应）",
+      "deviation_reason": "—",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/脑功能层级模型.md §二十.3/§二十.7",
+        "data/brain_regions.json (function_profile.cstc_loop)"
+      ],
+      "added": "2026-08-07",
+      "updated": "2026-08-07"
+    },
+    "cstc_role": {
+      "definition": "function_profile 的 CSTC 环路内角色字段。取值：cortical_input（皮层输入站—M1/dlPFC/Amygdala）、striatal_gate（纹状体门控站—Putamen/Caudate/NAcc/StriatumMatrix）、pallidal_output（苍白球输出站—Pallidum，野生卡匹配所有环路）、thalamic_relay（丘脑中继站—Thalamus，闭合环路回皮层）、modulator（调质输入—VTA/SNc/LC/中缝）、none（不参与环路）。脚本按环路站序（cortical_input→striatal_gate→pallidal_output→thalamic_relay→回cortical_input）生成 CSTC 连接。Grilling #26 D9 确立。",
+      "source": "规则/技能树系统/脑功能层级模型.md §二十.3/§二十.7; Grilling #26 (GitHub #27) D9",
+      "old_model": "—（新字段，无旧模型对应）",
+      "deviation_reason": "—",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/脑功能层级模型.md §二十.3/§二十.7",
+        "data/brain_regions.json (function_profile.cstc_role)"
+      ],
+      "added": "2026-08-07",
+      "updated": "2026-08-07"
+    },
+    "signal_type": {
+      "definition": "信号类型受控词表——所有 function_profile 的 input_types/output_types 必须从此词表取值。4 大类 × 19 子类：excitation（motor_command/sensory_feature/cognitive_goal/emotional_salience/memory_trace/social_intention）、modulation（arousal_NE/reward_DA/motor_DA/mood_5HT/pain_opioid）、gating（go_direct/nogo_indirect/stop_hyperdirect/disinhibition_thalamic）、plasticity（ltp_consolidation/ltd_depression/context_code）。格式：category/subtype。build_function_labels.py 用此词表做精确字符串交集匹配推导连接语义。数据文件：data/signal_types.json。Grilling #26 D10 确立。",
+      "source": "data/signal_types.json; 规则/技能树系统/脑功能层级模型.md §二十.8; Grilling #26 (GitHub #27) D10",
+      "old_model": "离散的行为角色标签（8 类：Go/NoGo/Stop/Modulate/Encode/Retrieve/Gate/Relay）",
+      "deviation_reason": "行为角色附着于连接边，无法表达节点的多角色能力。signal_type 附着于节点 profile，通过交集推导语义——同一节点可同时发出多种信号类型",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/脑功能层级模型.md §二十.8",
+        "data/signal_types.json",
+        "data/brain_regions.json (function_profile.input_types/output_types)"
+      ],
+      "added": "2026-08-07",
+      "updated": "2026-08-07"
+    },
+    "gameplay_domain": {
+      "definition": "游戏玩法域受控词表——function_profile 的 gameplay_domain 字段取值。12 项：motor_execution/sensory_perception/reward_learning/threat_defense/arousal_modulation/memory_consolidation/cognitive_control/social_cognition/action_gating/thalamic_relay/interoception/habit_learning。用于皮层-皮层连接的功能筛选第三层（gameplay_domain 组合价值的语义判断）。Grilling #26 D13 确立。",
+      "source": "规则/技能树系统/脑功能层级模型.md §二十.9; Grilling #26 (GitHub #27) D13",
+      "old_model": "—（新受控词表，无旧模型对应）",
+      "deviation_reason": "—",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/脑功能层级模型.md §二十.9",
+        "data/brain_regions.json (function_profile.gameplay_domain)"
+      ],
+      "added": "2026-08-07",
+      "updated": "2026-08-07"
+    },
+    "STN": {
+      "definition": "Subthalamic Nucleus（底丘脑核）——超直接通路 STOP 信号源。皮层→STN→GPi 快速谷氨酸兴奋，全局抑制所有正在进行的动作（Nambu 2015）。MNI 坐标 (10, -14, -6)，源自 Paxinos & Mai (2004)。dk_name=None, category=brainstem, level=0。服务所有 3 条 CSTC 环路的全局急停。Grilling #26 D6 新增到解剖实体基座。",
+      "source": "规则/技能树系统/脑功能层级模型.md §二十.3; Nambu 2015; Paxinos & Mai 2004; Grilling #26 (GitHub #27) D6",
+      "old_model": "一般神经解剖学的 STN——仅作为基底节间接通路的一个中继站",
+      "deviation_reason": "项目中 STN 是超直接通路的独立紧急刹车——cortex→STN→GPi，不经过纹状体。功能上独立于间接通路（striatum→GPe→STN→GPi）",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/脑功能层级模型.md §二十.3",
+        "data/brain_regions.json (SubthalamicNucleus)"
+      ],
+      "added": "2026-08-07",
+      "updated": "2026-08-07"
+    },
+    "脑干广播": {
+      "definition": "脑干核团向全脑的弥漫性神经调质投射——三体神经模型的三种通信原语之一（全局状态调制）。3 系统：(1) LC→NE——蓝斑去甲肾上腺素全皮层广播，增强信噪比/唤醒（Foote & Morrison 1987），(2) 中缝→5-HT——中缝核血清素全皮层广播，情绪稳定性/冲动控制，(3) VTA/SNc→DA——腹侧被盖区/黑质多巴胺纹状体+PFC 广播，奖赏预测误差/运动启动。投射模式：diffuse_broadcast（全皮层）或 targeted_broadcast（纹状体+PFC）。非点对点连接——不进入 pairwise 边模型。",
+      "source": "规则/技能树系统/脑功能层级模型.md §二十.5; Foote & Morrison 1987; Grilling #26 (GitHub #27) D5",
+      "old_model": "旧模型将脑干核团当作普通节点生成 pairwise 连接（364 链路中 ~41 条脑干链路）",
+      "deviation_reason": "脑干核团是 diffuse broadcast 而非点到点连接——LC 单个神经元轴突分支覆盖整个皮层。强制建模为 pairwise 边从根本上错了",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/脑功能层级模型.md §二十.5",
+        "data/signal_types.json (modulation 大类)"
+      ],
+      "added": "2026-08-07",
+      "updated": "2026-08-07"
+    },
+    "皮层-皮层连接": {
+      "definition": "大脑皮层区域之间的双向信息传递连接——三体神经模型的三种通信原语之一（信息传递）。四层渐降筛选：(1) EDR 解剖天花板 p≥0.10，(2) 层级相邻 |Δlevel|≤1，(3) 双向互惠（Markov et al. 2013——皮层-皮层 66% 二元密度，绝大部分双向），(4) function_label 交集筛选——source.output_types ∩ target.input_types 非空 + oscillatory_band 兼容（CTC）+ gameplay_domain 语义组合有价值。Empty 交集→role:silent。",
+      "source": "规则/技能树系统/脑功能层级模型.md §二十.4; Molnár et al. 2024; Markov et al. 2013; Fries 2015; Grilling #26 (GitHub #27) D4/D11",
+      "old_model": "旧模型将皮层-皮层连接与 CSTC 环路、脑干投射混在一起，统一用四种规则筛选 pairwise 边",
+      "deviation_reason": "皮层-皮层连接本质双向互惠（Markov 2013），与 CSTC 的去抑制闭环门控是两类物理上完全不同的通信机制，不应压入同一筛选管道",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/脑功能层级模型.md §二十.4",
+        "data/brain_regions.json (game_xyz 用于 EDR, level 用于层级筛选)"
+      ],
+      "added": "2026-08-07",
+      "updated": "2026-08-07"
+    },
+    "功能剖面": {
+      "definition": "功能剖面的中文名——同 function_profile。",
+      "source": "规则/技能树系统/脑功能层级模型.md §二十.7",
+      "old_model": "—",
+      "deviation_reason": "—",
+      "status": "active",
+      "numerical_locations": [],
+      "added": "2026-08-07",
+      "updated": "2026-08-07"
+    },
+    "基底节门控": {
+      "definition": "基底节通过 tonic 抑制→phasic 去抑制实现的动作选择机制。GPe/GPi/SNr 默认持续高频放电抑制丘脑（~80Hz GABA），纹状体 D1 MSN 被皮层驱动时抑制 GPi/SNr→丘脑去抑制→动作释放（GO）。D2 MSN 间接通路（striatum→GPe→STN→GPi/SNr）增强对丘脑的抑制（NO-GO）。STN 超直接通路快速兴奋 GPi/SNr（STOP）。核心公式：action = GO ∧ ¬NO-GO ∧ ¬STOP。来源：Albin, Young & Penney (1989); Chevalier & Deniau (1990); Nambu (2015)。",
+      "source": "规则/技能树系统/脑功能层级模型.md §二十.3; Albin et al. 1989; Chevalier & Deniau 1990; Nambu 2015; Grilling #26 (GitHub #27) D2/D3",
+      "old_model": "一般 BG 解剖中的概念——作为解剖名词而非门控计算模型",
+      "deviation_reason": "项目中基底节门控是回合制战斗的三门逻辑门（GO/NO-GO/STOP），直接映射到游戏 action resolution",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/脑功能层级模型.md §二十.3",
+        "规则/回合战斗流程.md"
+      ],
+      "added": "2026-08-07",
+      "updated": "2026-08-07"
     }
   }
 }
