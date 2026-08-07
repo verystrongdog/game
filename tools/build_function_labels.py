@@ -204,6 +204,47 @@ def process_connections(model, signal_types):
             conn["role"] = "modulating"
             stats["labeled"] += 1
 
+    # 处理特权跨层通路 — 逻辑同皮层-皮层（signal_type 交集推导）
+    for conn in model.get("privileged_pathways", []):
+        stats["total"] += 1
+        src = conn["source"]
+        tgt = conn["target"]
+
+        src_profile = node_profiles.get(src, {})
+        tgt_profile = node_profiles.get(tgt, {})
+
+        src_outputs = src_profile.get("output_types", [])
+        tgt_inputs = tgt_profile.get("input_types", [])
+
+        if not src_outputs and not tgt_inputs:
+            stats["no_profile"] += 1
+            conn["role"] = "unknown"
+            conn["function_label"] = []
+            conn["gameplay_labels"] = []
+            conn["description"] = f"{src}→{tgt}: 缺少功能剖面"
+            continue
+
+        labels = derive_function_label(src_outputs, tgt_inputs, signal_types)
+        gameplay = derive_gameplay_labels(
+            src_profile.get("gameplay_domains", []),
+            tgt_profile.get("gameplay_domains", [])
+        )
+
+        conn["function_label"] = labels
+        conn["gameplay_labels"] = gameplay
+        conn["description"] = describe_connection(
+            src, tgt, labels,
+            src_profile.get("gameplay_domains", []),
+            tgt_profile.get("gameplay_domains", [])
+        )
+
+        if not labels:
+            conn["role"] = "silent"
+            stats["silent"] += 1
+        else:
+            conn["role"] = "active"
+            stats["labeled"] += 1
+
     return stats
 
 
@@ -229,9 +270,17 @@ def report(stats, model):
         if len(silent_cc) > 5:
             print(f"    ... +{len(silent_cc)-5} more")
 
+    silent_pp = [c for c in model.get("privileged_pathways", []) if c.get("role") == "silent"]
+    if silent_pp:
+        print(f"\n  Silent 特权跨层通路 ({len(silent_pp)}):")
+        for c in silent_pp[:5]:
+            print(f"    {c['source']} → {c['target']}")
+        if len(silent_pp) > 5:
+            print(f"    ... +{len(silent_pp)-5} more")
+
     # 按 gameplay domain 统计
     domain_counts = defaultdict(int)
-    for conn_list_name in ["corticocortical", "cstc", "brainstem"]:
+    for conn_list_name in ["corticocortical", "cstc", "brainstem", "privileged_pathways"]:
         for conn in model.get(conn_list_name, []):
             for d in conn.get("gameplay_labels", []):
                 domain_counts[d] += 1
