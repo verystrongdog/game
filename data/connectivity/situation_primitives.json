@@ -334,7 +334,7 @@
             "L2",
             "L5"
           ],
-          "game_notes": "压制恐慌、维持策略、在混乱中保持专注——消耗认知槽"
+          "game_notes": "压制恐慌、维持策略、在混乱中保持专注——消耗 SAN"
         },
         "working_memory": {
           "display_name": "工作记忆",
@@ -520,7 +520,7 @@
             "L0",
             "L1"
           ],
-          "game_notes": "医院中睡眠被剥夺 → SAN恢复受损 → 认知槽上限下降"
+          "game_notes": "医院中睡眠被剥夺 → SAN恢复受损 → SAN 恢复受损加剧"
         }
       }
     },
@@ -596,7 +596,7 @@
             "L0",
             "L1"
           ],
-          "game_notes": "熟练技能不消耗认知槽——训练后的反射性动作"
+          "game_notes": "熟练技能不消耗 SAN——训练后的反射性动作"
         },
         "innate_motor_patterns": {
           "display_name": "先天运动模式",
@@ -703,7 +703,7 @@
         "L2",
         "L5"
       ],
-      "game_mechanics": "高相关性→占据认知槽；低相关性→被SN过滤忽略"
+      "game_mechanics": "高相关性→占据注意力；低相关性→被SN过滤忽略"
     },
     "coping_potential": {
       "display_name": "应对潜力",
@@ -1250,7 +1250,7 @@
         "Sensorimotor → innate_motor_patterns",
         "Negative Valence → acute_threat"
       ],
-      "game_role": "原子操作——被动技能，自动触发。L0技能不消耗认知槽"
+      "game_role": "原子操作——被动技能，自动触发。L0技能不消耗 SAN"
     },
     "L1": {
       "display_name": "边缘系统 (Limbic)",
@@ -1283,7 +1283,7 @@
         "Positive Valence → reward_responsiveness, reward_learning",
         "Cognitive Systems → declarative_memory"
       ],
-      "game_role": "情绪学习+记忆形成。调制L0防御阈值。消耗0-1认知槽"
+      "game_role": "情绪学习+记忆形成。调制L0防御阈值。自动触发或占 Broca 通道"
     },
     "L2": {
       "display_name": "旁边缘 (Paralimbic / Salience)",
@@ -1399,7 +1399,7 @@
         "Social Processes → perception_of_others",
         "Appraisal → coping_potential, certainty"
       ],
-      "game_role": "最灵活但最贵——高AP消耗，长冷却。命名是核心机制(观察者效应)。消耗1-2认知槽"
+      "game_role": "最灵活但最贵——高AP消耗，长冷却。命名是核心机制(观察者效应)。占 Broca 通道"
     },
     "L6": {
       "display_name": "跨模态整合 (Whole-Brain Integration)",
@@ -1422,7 +1422,7 @@
         "Social Processes → perception_of_self",
         "Cognitive Systems → cognitive_control"
       ],
-      "game_role": "终极技能层——长冷却(8-12回合)。一场战斗1-2次。月光下效果最强。消耗2-3认知槽"
+      "game_role": "终极技能层——长冷却(8-12回合)。一场战斗1-2次。月光下效果最强。占 Broca 通道，需要高聚焦"
     }
   },
   "situation_archetypes": [
@@ -1891,7 +1891,7 @@
         "acc吻侧→蓝斑(抑制)",
         "楔前叶→后扣带"
       ],
-      "typical_game_scenario": "找到一个相对安全的房间，玩家进行冥想/记录/简易治疗。L5框架重置→释放认知槽。抑制蓝斑→降低唤醒→减少恐慌触发概率。但在月光下，内心平静也可能反向具象化。"
+      "typical_game_scenario": "找到一个相对安全的房间，玩家进行冥想/记录/简易治疗。L5框架重置→释放注意力资源。抑制蓝斑→降低唤醒→减少恐慌触发概率。但在月光下，内心平静也可能反向具象化。"
     },
     {
       "name": "investigation_search",
@@ -2175,7 +2175,7 @@
         "dlpfc→壳核(习惯化动作)",
         "额中回尾部→顶内沟(快速工作记忆轮换)"
       ],
-      "typical_game_scenario": "月光污染的涟漪正在蔓延——玩家有5回合内到达安全房间。每回合污染增加，SAN逐渐减少。需要快速决策+高效路径规划。认知槽压力最大——必须优先考虑哪些冲突需要压制，哪些可以放任。"
+      "typical_game_scenario": "月光污染的涟漪正在蔓延——玩家有5回合内到达安全房间。每回合污染增加，SAN逐渐减少。需要快速决策+高效路径规划。注意力压力最大——必须优先考虑哪些冲突需要压制，哪些可以放任。"
     },
     {
       "name": "social_isolation",
@@ -2270,7 +2270,7 @@
         "蓝斑→dlpfc(唤醒增强但效率下降)",
         "ACC背侧→顶内沟(注意力碎片化)"
       ],
-      "typical_game_scenario": "同时面对:1)扭曲怪物攻击 2)NPC呼救 3)月光污染上升 4)关键道具即将消失。认知槽满额→所有L5技能AP+1→压制L0反射困难。玩家必须战略性放弃一些处理任务。"
+      "typical_game_scenario": "同时面对:1)扭曲怪物攻击 2)NPC呼救 3)月光污染上升 4)关键道具即将消失。注意力过载→压制 L0 反射困难。玩家必须战略性放弃一些处理任务。"
     },
     {
       "name": "authority_conflict",
@@ -2554,7 +2554,7 @@
         "杏仁核→PAG(恐惧增强逃跑)",
         "PAG→M1(强制运动输出)"
       ],
-      "typical_game_scenario": "不可击败的'沉默护士'实体发现玩家——PAG强制触发逃跑反射。L0原子操作不可压制(需要2认知槽才能尝试压制)。玩家必须快速空间导航(海马旁回+顶内沟)找逃跑路线。小脑皮层负责复杂地形的运动协调。"
+      "typical_game_scenario": "不可击败的'沉默护士'实体发现玩家——PAG强制触发逃跑反射。L0原子操作不可压制(需要占用 Broca 通道才能尝试压制)。玩家必须快速空间导航(海马旁回+顶内沟)找逃跑路线。小脑皮层负责复杂地形的运动协调。"
     },
     {
       "name": "witnessing_trauma",
@@ -2731,7 +2731,7 @@
           "time_pressure_race"
         ],
         "result": "Being chased while managing limited cognitive resources against a deadline. Maximum L0 panic pressure combined with L5 strategy failure risk. RDoC: sensorimotor + cognitive competing for priority. Brain: PAG (flee) vs dlPFC (plan) — cognitive load determines which wins.",
-        "game_example": "被实体追逐时必须同时导航迷宫出口+管理认知槽。如果认知槽满额→无法压制恐慌→强制冻结=死亡。月光下逃跑路径也在变化。"
+        "game_example": "被实体追逐时必须同时导航迷宫出口+管理注意力。如果注意力过载→无法压制恐慌→强制冻结=死亡。月光下逃跑路径也在变化。"
       },
       {
         "name": "betrayal_in_combat",
@@ -2740,7 +2740,7 @@
           "betrayal_reversal"
         ],
         "result": "An ally turns hostile mid-fight. Sudden re-evaluation of all combat assumptions. RDoC: social_processes spike during combat, splitting attention. Brain: TPJ-mPFC belief updating competes with M1 motor execution.",
-        "game_example": "正在对抗怪物时，信任的NPC从背后攻击玩家。需要同时维持战斗节奏+重新评估盟友状态→认知槽双倍占用。"
+        "game_example": "正在对抗怪物时，信任的NPC从背后攻击玩家。需要同时维持战斗节奏+重新评估盟友状态→注意力双倍占用。"
       },
       {
         "name": "healing_under_threat",
