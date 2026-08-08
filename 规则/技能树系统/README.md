@@ -10,7 +10,7 @@
 
 | 文件 | 说明 |
 |------|------|
-| [脑功能层级模型](./脑功能层级模型.md) | 七层功能层级、链路模型、髓鞘化、资源体系 |
+| [脑功能层级模型](./脑功能层级模型.md) | 六层功能层级、三体神经模型、髓鞘化、聚焦容量 |
 
 ### 操作层
 
@@ -30,8 +30,6 @@
 
 | 文件 | 说明 |
 |------|------|
-| [链路槽位与激活系统](./激活系统/链路槽位与激活系统.md) | 槽位规则、情境→自动激活、SAN 恢复、休息与偷袭 |
-
 ### NPC AI
 
 | 文件 | 说明 |
@@ -59,7 +57,7 @@
 | 文件 | 说明 |
 |------|------|
 | [brain_regions.json](../data/brain_regions.json) | 50 解剖实体 MNI/游戏坐标、层级 |
-| [link_legitimacy_matrix.json](../data/connectivity/tripartite_model.json) | 364 条合法神经链路 |
+| [tripartite_model.json](../data/connectivity/tripartite_model.json) | 三体神经模型（CSTC环路+皮层-皮层+脑干广播） |
 | [link_modulation_ceiling_v2.json](../data/connectivity/link_modulation_ceiling_v2.json) | 链路调制天花板 |
 | [situation_primitives.json](../data/connectivity/situation_primitives.json) | 27 情境原型 |
 
