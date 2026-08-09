@@ -74,7 +74,7 @@ def main():
 
     # S4: is_design_node 跳过解剖断言（统计）
     design = [fid for fid, r in regions.items() if r.get('is_design_node')]
-    results.append(check('S4', len(design) >= 7, f"is_design_node 标记 {len(design)} 个（≥7 预期）"))
+    results.append(check('S4', len(design) >= 6, f"is_design_node 标记 {len(design)} 个（≥6 预期，L0-L5 六层）"))
 
     n_pass = sum(1 for r in results if r)
     print(f"\n## 汇总")
