@@ -1,0 +1,1311 @@
+{
+  "description": "W_sensory — anatomical mapping from 6 sensory modalities to 69 functional_ids",
+  "grilling": "Grilling #34 战斗事件空间 (2026-08-09)",
+  "dimensions": {
+    "functional_ids": 69,
+    "modalities": 6
+  },
+  "modalities": [
+    "visual",
+    "auditory",
+    "somatosensory",
+    "pain",
+    "social_cognition",
+    "language_cognition"
+  ],
+  "rows": {
+    "AccumbensCore": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "AccumbensShell": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "Amygdala": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "AnteriorCingulateCortex": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 1,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "AnteriorCingulateCortexDorsal": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 1,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "BanksSTS": {
+      "visual": 0,
+      "auditory": 1,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 1,
+      "language_cognition": 0
+    },
+    "CaudalMiddleFrontal": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "Caudate": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "CerebellumCortex": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "Cuneus": {
+      "visual": 1,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "DorsalRapheNucleus": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "Entorhinal": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "FrontalPole": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 1
+    },
+    "FrontalPoleDMN": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 1,
+      "language_cognition": 0
+    },
+    "FrontalPoleExtreme": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 1
+    },
+    "FrontalPoleFPN": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 1
+    },
+    "FrontalPoleSN": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 1,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "Fusiform": {
+      "visual": 1,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "HippocampusCA1": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "HippocampusCA3": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "InferiorParietal": {
+      "visual": 1,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 1,
+      "language_cognition": 0
+    },
+    "InferiorParietalAngular": {
+      "visual": 1,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 1,
+      "language_cognition": 0
+    },
+    "InferiorTemporal": {
+      "visual": 1,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "Insula": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 1,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "IsthmusCingulate": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "LateralOccipital": {
+      "visual": 1,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "LateralOccipitalOccipitoParietal": {
+      "visual": 1,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "LateralOrbitofrontal": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "Lingual": {
+      "visual": 1,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "LocusCoeruleus": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "LocusCoeruleusRight": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "MedialOrbitalPrefrontalDMN": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 1,
+      "language_cognition": 0
+    },
+    "MedialOrbitalPrefrontalVMPFC": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 1,
+      "language_cognition": 0
+    },
+    "MedianRapheNucleus": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "MiddleTemporal": {
+      "visual": 1,
+      "auditory": 1,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "NucleusAccumbens": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "Pallidum": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "Paracentral": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 1,
+      "pain": 1,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "Parahippocampal": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "ParsOpercularis": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 1
+    },
+    "PeriaqueductalGray": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "Pericalcarine": {
+      "visual": 1,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "PontineReticularNucleus": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "Postcentral": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 1,
+      "pain": 1,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "PosteriorCingulate": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "Precentral": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "Precuneus": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 1,
+      "language_cognition": 0
+    },
+    "Putamen": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "RostralAnteriorCingulateCortex": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 1,
+      "social_cognition": 1,
+      "language_cognition": 0
+    },
+    "RostralMiddleFrontalDLPFC": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 1
+    },
+    "StriatumMatrix": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "SubstantiaNigraParsCompacta": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "SubstantiaNigraParsCompactaRight": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "SubthalamicNucleus": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "SuperiorColliculus": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "SuperiorFrontal": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 1,
+      "language_cognition": 0
+    },
+    "SuperiorFrontalMPFC": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 1,
+      "language_cognition": 0
+    },
+    "SuperiorParietal": {
+      "visual": 1,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "SuperiorTemporal": {
+      "visual": 0,
+      "auditory": 1,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 1,
+      "language_cognition": 0
+    },
+    "SuperiorTemporalSulcus": {
+      "visual": 0,
+      "auditory": 1,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 1,
+      "language_cognition": 0
+    },
+    "SuperiorTemporalWernicke": {
+      "visual": 0,
+      "auditory": 1,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 1
+    },
+    "Supramarginal": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 1,
+      "pain": 0,
+      "social_cognition": 1,
+      "language_cognition": 0
+    },
+    "SupramarginalTPJ": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 1,
+      "pain": 0,
+      "social_cognition": 1,
+      "language_cognition": 0
+    },
+    "TemporalPole": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 1,
+      "language_cognition": 0
+    },
+    "Thalamus": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "ThalamusPulvinar": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "TransverseTemporal": {
+      "visual": 0,
+      "auditory": 1,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "VentralStriatum": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 0
+    },
+    "VentralTegmentalArea": {
+      "visual": 0,
+      "auditory": 0,
+      "somatosensory": 0,
+      "pain": 0,
+      "social_cognition": 0,
+      "language_cognition": 0
+    }
+  },
+  "matrix_2d": [
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      1,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      1,
+      0,
+      0
+    ],
+    [
+      0,
+      1,
+      0,
+      0,
+      1,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      1,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    [
+      0,
+      0,
+      0,
+      1,
+      0,
+      0
+    ],
+    [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      1,
+      0,
+      0,
+      0,
+      1,
+      0
+    ],
+    [
+      1,
+      0,
+      0,
+      0,
+      1,
+      0
+    ],
+    [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      1,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      1,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      1,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      1,
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      1,
+      1,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      1,
+      1,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      1,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      1,
+      1,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      1,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      1,
+      0
+    ],
+    [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      1,
+      0,
+      0,
+      1,
+      0
+    ],
+    [
+      0,
+      1,
+      0,
+      0,
+      1,
+      0
+    ],
+    [
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    [
+      0,
+      0,
+      1,
+      0,
+      1,
+      0
+    ],
+    [
+      0,
+      0,
+      1,
+      0,
+      1,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      1,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  ],
+  "modality_nodes": {
+    "visual": [
+      "Cuneus",
+      "Fusiform",
+      "InferiorParietal",
+      "InferiorParietalAngular",
+      "InferiorTemporal",
+      "LateralOccipital",
+      "LateralOccipitalOccipitoParietal",
+      "Lingual",
+      "MiddleTemporal",
+      "Pericalcarine",
+      "SuperiorParietal"
+    ],
+    "auditory": [
+      "BanksSTS",
+      "MiddleTemporal",
+      "SuperiorTemporal",
+      "SuperiorTemporalSulcus",
+      "SuperiorTemporalWernicke",
+      "TransverseTemporal"
+    ],
+    "somatosensory": [
+      "Paracentral",
+      "Postcentral",
+      "Supramarginal",
+      "SupramarginalTPJ"
+    ],
+    "pain": [
+      "AnteriorCingulateCortex",
+      "AnteriorCingulateCortexDorsal",
+      "FrontalPoleSN",
+      "Insula",
+      "Paracentral",
+      "Postcentral",
+      "RostralAnteriorCingulateCortex"
+    ],
+    "social_cognition": [
+      "BanksSTS",
+      "FrontalPoleDMN",
+      "InferiorParietal",
+      "InferiorParietalAngular",
+      "MedialOrbitalPrefrontalDMN",
+      "MedialOrbitalPrefrontalVMPFC",
+      "Precuneus",
+      "RostralAnteriorCingulateCortex",
+      "SuperiorFrontal",
+      "SuperiorFrontalMPFC",
+      "SuperiorTemporal",
+      "SuperiorTemporalSulcus",
+      "Supramarginal",
+      "SupramarginalTPJ",
+      "TemporalPole"
+    ],
+    "language_cognition": [
+      "FrontalPole",
+      "FrontalPoleExtreme",
+      "FrontalPoleFPN",
+      "ParsOpercularis",
+      "RostralMiddleFrontalDLPFC",
+      "SuperiorTemporalWernicke"
+    ]
+  },
+  "cortical_nodes_with_sensory_input": [
+    "AnteriorCingulateCortex",
+    "AnteriorCingulateCortexDorsal",
+    "BanksSTS",
+    "Cuneus",
+    "FrontalPole",
+    "FrontalPoleDMN",
+    "FrontalPoleExtreme",
+    "FrontalPoleFPN",
+    "FrontalPoleSN",
+    "Fusiform",
+    "InferiorParietal",
+    "InferiorParietalAngular",
+    "InferiorTemporal",
+    "Insula",
+    "LateralOccipital",
+    "LateralOccipitalOccipitoParietal",
+    "Lingual",
+    "MedialOrbitalPrefrontalDMN",
+    "MedialOrbitalPrefrontalVMPFC",
+    "MiddleTemporal",
+    "Paracentral",
+    "ParsOpercularis",
+    "Pericalcarine",
+    "Postcentral",
+    "Precuneus",
+    "RostralAnteriorCingulateCortex",
+    "RostralMiddleFrontalDLPFC",
+    "SuperiorFrontal",
+    "SuperiorFrontalMPFC",
+    "SuperiorParietal",
+    "SuperiorTemporal",
+    "SuperiorTemporalSulcus",
+    "SuperiorTemporalWernicke",
+    "Supramarginal",
+    "SupramarginalTPJ",
+    "TemporalPole",
+    "TransverseTemporal"
+  ],
+  "cortical_nodes_without_sensory_input": [
+    "CaudalMiddleFrontal",
+    "Entorhinal",
+    "IsthmusCingulate",
+    "LateralOrbitofrontal",
+    "Parahippocampal",
+    "PosteriorCingulate",
+    "Precentral"
+  ],
+  "metadata": {
+    "mapping_strategy": "DK atlas gyrus → modality based on standard functional neuroanatomy. functional_id-level overrides for sub-types where DK granularity is insufficient.",
+    "split_criterion": "Two modalities are split into separate columns iff ∃ event needing to activate one without the other (Grilling #34 D7, 2026-08-09).",
+    "dk_reference_table": {
+      "visual": {
+        "pericalcarine": "V1, primary visual — Desikan et al. 2006",
+        "cuneus": "Dorsal extrastriate V2/V3 — Glasser et al. 2016",
+        "lingual": "Ventral V2/V3, V4 — Glasser et al. 2016",
+        "lateraloccipital": "LOC, object recognition — Grill-Spector et al. 2001",
+        "fusiform": "FFA/object, ventral stream — Kanwisher et al. 1997",
+        "inferiortemporal": "IT, high-level object — Logothetis & Sheinberg 1996",
+        "middletemporal": "MT/V5, visual motion — Glasser et al. 2016",
+        "superiorparietal": "Dorsal stream, spatial attention — Ungerleider & Mishkin 1982",
+        "inferiorparietal": "Angular gyrus, dorsal stream endpoint — Mars et al. 2012"
+      },
+      "auditory": {
+        "transversetemporal": "Heschl's gyrus, A1 — Desikan et al. 2006",
+        "superiortemporal": "STG belt/parabelt, voice processing — Belin et al. 2000",
+        "middletemporal": "MTG, higher-order auditory — Glasser et al. 2016",
+        "bankssts": "STS, voice/speech perception — Desikan et al. 2006"
+      },
+      "somatosensory": {
+        "postcentral": "S1, primary somatosensory — Penfield & Boldrey 1937",
+        "paracentral": "Somatosensory leg/foot — Penfield & Boldrey 1937",
+        "supramarginal": "S2, secondary somatosensory — Eickhoff et al. 2006"
+      },
+      "pain": {
+        "insula": "Anterior insula, interoceptive/affective pain — Craig 2002",
+        "caudalanteriorcingulate": "dACC, affective-motivational pain — Wager et al. 2013",
+        "rostralanteriorcingulate": "rACC, pain modulation/regulation — Vogt 2005",
+        "postcentral": "S1, sensory-discriminative pain (localization) — Wager et al. 2013",
+        "paracentral": "S1 leg, pain localization — shared somatosensory substrate"
+      },
+      "social_cognition": {
+        "superiortemporal": "STS, biological motion, face, theory of mind — Allison et al. 2000",
+        "bankssts": "STS, social perception — Desikan et al. 2006",
+        "temporalpole": "Social semantic knowledge, person identity — Olson et al. 2007",
+        "medialorbitofrontal": "vmPFC, social valuation, moral cognition — Damasio 1994",
+        "rostralanteriorcingulate": "rACC, empathy, social pain — Eisenberger et al. 2003",
+        "precuneus": "DMN, self-referential, theory of mind — Cavanna & Trimble 2006",
+        "superiorfrontal": "mPFC, social cognition, mentalizing — Amodio & Frith 2006",
+        "inferiorparietal": "TPJ, theory of mind — Saxe & Kanwisher 2003",
+        "supramarginal": "TPJ, empathy, body ownership — Decety & Lamm 2007"
+      },
+      "language_cognition": {
+        "parsopercularis": "Broca's area, language production — Amunts et al. 1999",
+        "superiortemporal": "Wernicke's area, language comprehension (via SuperiorTemporalWernicke override)",
+        "rostralmiddlefrontal": "DLPFC, verbal working memory — Petrides 2005",
+        "frontalpole": "Frontopolar, semantic integration/abstract thought — Koechlin 2016"
+      }
+    },
+    "fid_overrides": {
+      "SuperiorTemporalWernicke": {
+        "dk_default": [
+          "auditory",
+          "social_cognition"
+        ],
+        "override": [
+          "auditory",
+          "language_cognition"
+        ],
+        "reason": "Wernicke's area (posterior STG) is language comprehension, not social perception. The social function of STG is in STS/mid-STG (SuperiorTemporal, SuperiorTemporalSulcus)."
+      }
+    },
+    "non_cortical_note": "25 nodes (14 subcortical + 11 brainstem) have all-zero W_sensory rows. Per runtime state model §4.1, only category=cortical nodes participate in WC dynamics and receive s(t). Amygdala pain/social processing arrives through corticocortical connections, not direct s(t).",
+    "nodes_without_direct_sensory": "7 cortical nodes lack direct modality-specific s(t): CaudalMiddleFrontal (premotor), Entorhinal (MTL memory), IsthmusCingulate (RSC spatial), LateralOrbitofrontal (reward), Parahippocampal (context), PosteriorCingulate (DMN hub), Precentral (M1 motor). They participate in WC dynamics through W·a and b_j inputs.",
+    "sources": [
+      "data/brain_regions.json — 69 functional_id inventory",
+      "data/connectivity/tripartite_model.json — node_profiles",
+      "Grilling #34 — sensory modality M=6 definition + α pattern table",
+      "Desikan et al. (2006) NeuroImage 31:968-980",
+      "Glasser et al. (2016) Nature 536:171-178",
+      "Eisenberger et al. (2003) Science 302:290-292",
+      "Wager et al. (2013) NEJM 368:1388-1397"
+    ]
+  }
+}
