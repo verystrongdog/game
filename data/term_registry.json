@@ -2,8 +2,8 @@
   "_description": "术语注册表 — Grilling §3.0 定义基线声明的唯一数据源。术语定义/旧模型/偏离原因集中管理，避免 AI 在生成时被术语的旧现实世界模型劫持。",
   "_maintenance": "入库触发: 新核心术语 | 定义被修改 | Step 4 清扫发现未注册高频术语。numerical_locations 更新: 注册时填充 + grilling 新增引用时追加 + 定义变更时遍历复查。",
   "_created": "2026-08-03",
-  "_updated": "2026-08-07",
-  "_batch": "v1 — 首批23条 + 第二批30条 = 53条。v1.1 (2026-08-05): +7条(grilling #22 月光场数值校准: g_0/η/c(SAN)/κ/η_crit/ρ_off/lunar) → 60条 + v1.2 (2026-08-07): +14条 (Grilling #26 三体神经模型)",
+  "_updated": "2026-08-09",
+  "_batch": "v1 — 首批23条 + 第二批30条 = 53条。v1.1 (2026-08-05): +7条(grilling #22 月光场数值校准: g_0/η/c(SAN)/κ/η_crit/ρ_off/lunar) → 60条 + v1.2 (2026-08-07): +14条 (Grilling #26 三体神经模型) + v1.3 (2026-08-09): +19条 (#32/#34遗漏补录——a(t)/tone/δ_event/s(t)/b_j/c_loop/gate_bonus/tone_bias/O_GPi/可供性竞争/T/W_sensory/α_pattern/w_perception/w_execution/scale_mental/θ_mem/Wilson-Cowan/Gurney模型)",
   "_pending_candidates": "见 data/term_registry_candidates.md — 约20条P3级+单文档术语，后续grilling中逐批入库 Grilling #26-27: CSTC/EDR/CTC/三体神经模型/function_profile/cstc_loop/cstc_role/signal_type/gameplay_domain/STN/脑干广播/皮层-皮层连接/功能剖面/基底节门控 (14条已入库).",
   "terms": {
     "态度": {
@@ -1381,6 +1381,255 @@
       ],
       "added": "2026-08-07",
       "updated": "2026-08-07"
+    },
+    "a(t)": {
+      "definition": "激活变量——附着在 69 个 functional_id 上的神经群体发放率，值域 [0,1]。由 Wilson-Cowan 方程驱动：τ·da/dt = −a + σ(W·a + b + s)。替代旧链路级 m×rel×focus 公式。a(0)=0.10（静息基线）。每回合 Phase 1 步进一步，Δt=1.0s。",
+      "source": "运行时状态模型.md §三-§四; 皮层动力学-通用层.md §3",
+      "old_model": "链路级激活水平 = m × rel × focus（逐链路乘数，旧 pairwise 364 链路模型）",
+      "deviation_reason": "激活从链路级迁移到节点级——m 进 W 权重间接驱动传播，不再作为直接乘数。节点动力学更接近真实神经群体行为（Wilson & Cowan 1972）",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/运行时状态模型.md §三-§四（69个a_j(t) + WC方程 + 离散更新规则）",
+        "规则/技能树系统/皮层动力学-通用层.md §3-§5（详细动力学 + W矩阵构建 + τ映射）",
+        "规则/核心机制.md §2.1（三层因果链摘要）",
+        "规则/回合战斗流程.md §三（速度排序数据源）"
+      ],
+      "added": "2026-08-09",
+      "updated": "2026-08-09"
+    },
+    "tone": {
+      "definition": "脑干神经调质浓度——4 个标量（NE/DA_VTA/DA_SNc/5HT），值域 [0,1]。动力学：τ·d(tone)/dt = −(tone−baseline) + δ_event，离散 Euler 步+clip。tone 通过 b_j = Σ tone×w(j) 注入皮层 WC 方程。baseline 由角色 7 参数化性格决定（默认 NE=0.3, DA_VTA=0.4, DA_SNc=0.5, 5HT=0.5）。不经过 sigmoid——调质浓度非发放率。",
+      "source": "运行时状态模型.md §五; tripartite_model.json brainstem",
+      "old_model": "离散的神经递质标签——无动力学、无连续值域、无基线/事件分离",
+      "deviation_reason": "tone 是连续动力学变量（非离散标签），有 baseline+δ_event 双层结构（静息基线+事件冲击），有 τ 衰减常数",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/运行时状态模型.md §五（动力学+δ pattern+magnitude+注入时序）",
+        "规则/技能树系统/NPC AI 行为模型.md §3.3（tone_bias 权重表）",
+        "data/connectivity/tripartite_model.json（brainstem 114条投射）"
+      ],
+      "added": "2026-08-09",
+      "updated": "2026-08-09"
+    },
+    "δ_event": {
+      "definition": "事件对脑干 tone 的冲击脉冲——pattern_δ ∈ {−1,0,+1}⁴ × magnitude m ∈ [0,∞)。14 种事件类型（A1-A7 行动者, B1-B4 承受者, C1 SAN突破, D1-D2 战局观察）各有固定 pattern。实时注入 tone（非 Phase 1 打包），同回合多事件加法叠加，下游 clip(tone,0,1) 提供饱和保护。m < 0.01 时跳过 emit。",
+      "source": "运行时状态模型.md §5.5; Grilling #34",
+      "old_model": "—（项目独创——将战斗事件转化为神经调质脉冲的量化模型）",
+      "deviation_reason": "—",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/运行时状态模型.md §5.5（δ pattern表 + magnitude公式 + 注入时序）"
+      ],
+      "added": "2026-08-09",
+      "updated": "2026-08-09"
+    },
+    "s(t)": {
+      "definition": "外部感官输入向量——69 维，通过 W_sensory（69×6 解剖映射矩阵）从 α（6 模态强度向量）展开。α=pattern_α × m_α，pattern_α ∈ {0,1}⁶。打包到下一回合 Phase 1 注入 WC（皮层慢加工 200ms+）。15 种事件 α pattern（A1-A7, B1-B4, C1, D1-D2）。A6（技能使用）α=0——技能走 WC 内部通路。",
+      "source": "运行时状态模型.md §4.5; Grilling #34; data/connectivity/W_sensory.json",
+      "old_model": "离散的事件标签——无模态分解、无解剖映射、无连续强度",
+      "deviation_reason": "s(t) 是多模态连续向量——6 模态（视觉/听觉/躯体/痛觉/社会/语言）× 69 节点解剖映射，支持模态分离（防御成功有体感无痛）和双模态节点叠加",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/运行时状态模型.md §4.5（W_sensory + α pattern表 + 注入时序）",
+        "data/connectivity/W_sensory.json（69×6 二值映射矩阵）"
+      ],
+      "added": "2026-08-09",
+      "updated": "2026-08-09"
+    },
+    "b_j": {
+      "definition": "脑干 tone 对皮层节点 j 的加法调制——b_j = NE×w_NE(j) + DA_VTA×w_VTA(j) + DA_SNc×w_SNc(j) + 5HT×w_5HT(j)。投射权重 w 两档：active=1.0（15/114）、modulating=0.5（99/114）。注入 WC 输入 h_j = W·a + b + s。clip [0,2.0] 防止过度驱动。",
+      "source": "运行时状态模型.md §5.6; tripartite_model.json brainstem.role",
+      "old_model": "—（项目独创——四个神经调质的线性加权注入）",
+      "deviation_reason": "—",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/运行时状态模型.md §5.6（投射权重两档 + b_j上限2.0）"
+      ],
+      "added": "2026-08-09",
+      "updated": "2026-08-09"
+    },
+    "c_loop": {
+      "definition": "CSTC 环路 salience——c_loop = mean(a(ci) for ci ∈ loop.cortical_inputs)。3 个标量（somatic/cognitive/limbic），从该环路所有皮层输入节点的 a(t) 取均值。驱动 Gurney 门控模型的皮层输入项 u。caudalanteriorcingulate 和 superiorfrontal 跨两个环路——a(t) 双重贡献（解剖事实非设计缺陷）。",
+      "source": "运行时状态模型.md §6.1-§6.2",
+      "old_model": "—（项目独创——从WC节点激活到CSTC门控的桥接变量）",
+      "deviation_reason": "—",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/运行时状态模型.md §6.1-§6.3（环路CI列表+c_loop定义+Gurney输入）"
+      ],
+      "added": "2026-08-09",
+      "updated": "2026-08-09"
+    },
+    "gate_bonus": {
+      "definition": "CSTC 门控输出——gate_loop = 1 − O_GPi_loop ∈ [0,1]。GPi tonic 抑制强 → gate 低（动作被钳制），去抑制 → gate 高（动作放行）。技能效果 = skill_base_effect × gate_bonus(role)。8 行为角色→环路映射：attack_physical→somatic, attack_mental→cognitive, defend/approach/flee/disrupt→limbic, perceive/support→bypass(1.0)。",
+      "source": "运行时状态模型.md §6.4-§6.5; Gurney, Prescott & Redgrave (2001)",
+      "old_model": "二元门控（动作可执行/不可执行）——旧 CSTC 门控作为开关",
+      "deviation_reason": "gate 是连续值 [0,1]——不是二元开关，是连续放行度。部分抑制 = 效果打折非完全阻止",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/运行时状态模型.md §6.4-§6.5（gate输出+技能映射表+bypass规则）",
+        "规则/技能树系统/技能生成机制.md §五（skill_effect=base×gate_bonus）"
+      ],
+      "added": "2026-08-09",
+      "updated": "2026-08-09"
+    },
+    "tone_bias": {
+      "definition": "脑干 tone 对行为角色的偏置——tone_bias(role) = Σ_t w_t(role) × (tone_t − baseline_t)。8 行为角色 × 4 tone 权重矩阵。tone 处于 baseline 时 tone_bias=0（选择由 WC+CSTC 主导）。权重符号方向来自文献（NE→警觉/防御, DA→趋近/行动, 5HT→抑制/忍耐），具体数值 ±0.2~±0.5 为设计校准层。用于 NPC affordance competition salience 公式。",
+      "source": "NPC AI 行为模型.md §3.3; Aston-Jones (2005); Schultz (1997); Daw (2002)",
+      "old_model": "性格标签→m 偏移（旧 6 标签 pairwise 链路模型）",
+      "deviation_reason": "tone_bias 是 tone 偏离基线的动态偏置——不是静态 m 偏移。同一 NPC 在不同 tone 状态下对同一技能的偏置不同",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/NPC AI 行为模型.md §3.3（权重表+文献锚点+计算公式）"
+      ],
+      "added": "2026-08-09",
+      "updated": "2026-08-09"
+    },
+    "O_GPi": {
+      "definition": "苍白球内侧部输出——Gurney 模型的最终群体发放率，值域 [0,1]。GPi tonic 抑制丘脑——O_GPi 高=动作被钳制，低=去抑制放行。gate = 1 − O_GPi。3 环路各一个 O_GPi。Gurney 动力学独立于 WC（τ_gurney=0.04s, Δ=1s→解析解稳态 a→u）。",
+      "source": "运行时状态模型.md §6.3-§6.4; Gurney, Prescott & Redgrave (2001) Biol Cybern",
+      "old_model": "—（项目独创——基于GPR 2001的5群体BG模型输出）",
+      "deviation_reason": "—",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/运行时状态模型.md §6.3-§6.4（Gurney 5群体+连接权重+ramp输出+gate公式）"
+      ],
+      "added": "2026-08-09",
+      "updated": "2026-08-09"
+    },
+    "可供性竞争": {
+      "definition": "Affordance Competition——NPC 行动选择的实时框架（Cisek 2007 + GPR 2001）。Salience_i = mean(a_j) × gate_bonus(role) × (1 + tone_bias(role))。三项分别对应 Cisek 的皮层并行指定 + BG 偏置 + 神经调质全局调制。NPC 行动 = argmax Salience（Boss/确定性）或 Softmax Salience/T（杂兵/概率性）。替代旧离线预烘焙管线。",
+      "source": "NPC AI 行为模型.md §三; Cisek (2007) Phil Trans R Soc B; GPR (2001) Biol Cybern",
+      "old_model": "离线预烘焙——Softmax P(i) ∝ exp(β×m_i×rel_i)，基于旧 pairwise 364 链路模型，27情境×3 SAN段预计算",
+      "deviation_reason": "实时 salience 从 WC+CSTC+tone 动力学中直接计算——不引入独立 AI 决策层、不需要离线烘焙、不需要情境-SAN 分段查表",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/NPC AI 行为模型.md §三（salience公式+tone_bias权重+T温度+文献锚点）",
+        "规则/技能树系统/运行时状态模型.md §8.4（NPC行动选择cross-ref）"
+      ],
+      "added": "2026-08-09",
+      "updated": "2026-08-09"
+    },
+    "T": {
+      "definition": "Softmax 采样温度——控制 NPC 行动选择的随机性。T = T_base(0.15) + T_SAN(SAN%)。SAN≥60%→+0（理性）, 30-59%→+0.10, <30%→+0.30, =0→∞（均匀随机）。替代旧 β 参数（β 已废弃）。文献基础：应激→认知紊乱（Arnsten 2009; Liston et al. 2009）。",
+      "source": "NPC AI 行为模型.md §3.4; 运行时状态模型.md §十二",
+      "old_model": "β = clamp(β_base(SAN)+Σβ_tag_mod, 0.1, 5.0)——6 标签驱动的 Softmax 逆温度，旧 pairwise 链路模型",
+      "deviation_reason": "T（温度）而非 β（逆温度）——方向直觉（高热=随机）。T 由 SAN 连续调制非标签离散偏移。T_base=0.15 而非 β 的 0.5-5.0 范围",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/NPC AI 行为模型.md §3.4（T公式+SAN分段+T→∞规则）"
+      ],
+      "added": "2026-08-09",
+      "updated": "2026-08-09"
+    },
+    "W_sensory": {
+      "definition": "感官模态→解剖节点的映射矩阵——W_sensory ∈ {0,1}^{69×6}。69 个 functional_id 行 × 6 感官模态列（视觉/听觉/躯体感觉/痛觉/社会认知/语言认知）。二值矩阵：节点 j 是否接收模态 m 的初级输入。25 个 subcortical/brainstem 行全零（不参与 WC 皮层动力学）。12 个双模态节点在全强度双模态事件中 s_j 可达 2.0。",
+      "source": "Grilling #34 (2026-08-09); data/connectivity/W_sensory.json",
+      "old_model": "—（项目独创——将事件感官维度映射到解剖节点的设计矩阵）",
+      "deviation_reason": "—",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/运行时状态模型.md §4.5（W_sensory定义+双模态节点+非皮层排除）",
+        "data/connectivity/W_sensory.json（69×6 矩阵）"
+      ],
+      "added": "2026-08-09",
+      "updated": "2026-08-09"
+    },
+    "α_pattern": {
+      "definition": "感官模态强度模式——α = pattern_α × m_α。pattern_α ∈ {0,1}⁶ 为 6 模态的二值开关。15 种事件类型各有固定 pattern（如物理攻击命中=视觉+躯体，精神攻击=社会+语言）。A 类 m_α=1.0（自身行动感官完整），B/C/D 类 m_α=m（同δ magnitude）。A6（技能使用）α=0。α 恒≤1.0（A类固定1.0，B/C/D类m公式均≤1.0）。",
+      "source": "运行时状态模型.md §4.5 α pattern表; Grilling #34",
+      "old_model": "—（项目独创——将感知量化为6维二值模式向量的设计工具）",
+      "deviation_reason": "—",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/运行时状态模型.md §4.5（α pattern 15行表 + m_α规则 + 双模态叠加）"
+      ],
+      "added": "2026-08-09",
+      "updated": "2026-08-09"
+    },
+    "w_perception": {
+      "definition": "察觉分缩放权重——perception_score = mean(a of L3 sensory nodes) × w_perception。将 L3 感官节点（V1/A1/S1/insula/ACC）的 a(t) 均值映射为速度排序的察觉成分。⚠️ 值待校准——Grilling #35 中定义。",
+      "source": "运行时状态模型.md §8.1; 回合战斗流程.md §三",
+      "old_model": "—（项目独创——新三层动力学输出映射的自由参数）",
+      "deviation_reason": "—",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/运行时状态模型.md §8.1（察觉分公式）",
+        "规则/技能树系统/皮层动力学-通用层.md §6",
+        "规则/技能树系统/技能生成机制.md §五",
+        "规则/回合战斗流程.md §三"
+      ],
+      "added": "2026-08-09",
+      "updated": "2026-08-09"
+    },
+    "w_execution": {
+      "definition": "执行分缩放权重——execution_score = a(Precentral) × w_execution。将中央前回（M1 输出节点）的 a(t) 映射为速度排序的执行成分。⚠️ 值待校准——Grilling #35 中定义。",
+      "source": "运行时状态模型.md §8.1; 回合战斗流程.md §三",
+      "old_model": "—（项目独创——新三层动力学输出映射的自由参数）",
+      "deviation_reason": "—",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/运行时状态模型.md §8.1（执行分公式）",
+        "规则/技能树系统/皮层动力学-通用层.md §6",
+        "规则/技能树系统/技能生成机制.md §五",
+        "规则/回合战斗流程.md §三"
+      ],
+      "added": "2026-08-09",
+      "updated": "2026-08-09"
+    },
+    "scale_mental": {
+      "definition": "精神攻击缩放系数——mental_attack_base = mean(a of cognitive nodes) × scale_mental。将认知节点（dlPFC/Broca/frontalpole 等）的 a(t) 均值映射为 SAN 伤害基数。替代旧公式 2×(1+motivation_mod)。⚠️ 值待校准——Grilling #35 中定义。",
+      "source": "运行时状态模型.md §8.1; 核心机制.md §4.3",
+      "old_model": "固定基数 2 SAN × (1+motivation_mod)——不依赖节点动力学",
+      "deviation_reason": "精神攻击伤害从固定基数变为 WC 动力学涌现——认知节点激活越高伤害越大，同一角色在不同战斗/回合中精神攻击效果不同",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/运行时状态模型.md §8.1（精神攻击公式）",
+        "规则/技能树系统/皮层动力学-通用层.md §6",
+        "规则/技能树系统/技能生成机制.md §五",
+        "规则/核心机制.md §4.3（旧公式对照）"
+      ],
+      "added": "2026-08-09",
+      "updated": "2026-08-09"
+    },
+    "θ_mem": {
+      "definition": "记忆检索阈值——memory_success = σ(mean(a of MTL nodes) − θ_mem)。MTL（内侧颞叶：海马CA1/CA3+旁海马+内嗅皮层）节点 a(t) 均值需超过 θ_mem 才有 >50% 检索成功率。sigmoid σ 将差值映射为概率。⚠️ 值待校准——Grilling #35 中定义。",
+      "source": "运行时状态模型.md §8.1; 皮层动力学-通用层.md §6",
+      "old_model": "—（项目独创——将记忆检索变为依赖 MTL 节点激活的概率函数）",
+      "deviation_reason": "—",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/运行时状态模型.md §8.1（记忆检索公式）",
+        "规则/技能树系统/皮层动力学-通用层.md §6"
+      ],
+      "added": "2026-08-09",
+      "updated": "2026-08-09"
+    },
+    "Wilson-Cowan": {
+      "definition": "Wilson-Cowan 方程——皮层群体发放率动力学模型（Wilson & Cowan 1972 Biophys J）。τ·da/dt = −a + σ(W·a + b + s)。a=发放率 [0,1]，σ=sigmoid(v=1.0, θ=0.5)，W=连接权重矩阵，b=脑干调制，s=感官输入。离散更新：fast 节点（Δ/τ≥50）用解析解 a←σ(h)，其他用 Euler 步。69 functional_id 共享方程形式，差异化 τ 和 W。",
+      "source": "运行时状态模型.md §四; 皮层动力学-通用层.md §3-§5; Wilson & Cowan (1972)",
+      "old_model": "链路激活 = m × rel × focus 线性乘数——无动力学、无相互抑制、无意涌现",
+      "deviation_reason": "WC 引入真正的群体动力学——相互抑制/兴奋、时间常数、sigmoid 饱和、解析解/Euler 混合数值方案",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/运行时状态模型.md §四（通用方程+离散更新+τ映射+W矩阵构建）",
+        "规则/技能树系统/皮层动力学-通用层.md（完整规格——120行）"
+      ],
+      "added": "2026-08-09",
+      "updated": "2026-08-09"
+    },
+    "Gurney模型": {
+      "definition": "基底节去抑制选择模型（Gurney, Prescott & Redgrave 2001 Biol Cybern）。每CSTC环路5群体：SD1（GO/D1直接通路）、SD2（NO-GO/D2间接通路）、STN（STOP/超直接通路）、GPe（间接中间站）、GPi（输出门）。动力学一阶衰减 τ=0.04s，Δ=1s→解析解稳态。DA调制D1/D2 ramp斜率：m_SD1=1+DA_loop, m_SD2=1−DA_loop。",
+      "source": "运行时状态模型.md §6.3; Gurney, Prescott & Redgrave (2001) Biol Cybern 84:413-423",
+      "old_model": "二元门控——基底节=动作开关（GO/NO-GO 二元）",
+      "deviation_reason": "Gurney 是连续竞争模型——5群体连续动力学+分段线性ramp输出+DA连续调制ramp斜率，非二元开关",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/运行时状态模型.md §6.3（5群体+连接权重表+DA调制+ramp输出）",
+        "data/connectivity/README_gurney_model.md"
+      ],
+      "added": "2026-08-09",
+      "updated": "2026-08-09"
     }
   },
   "_metadata": {
