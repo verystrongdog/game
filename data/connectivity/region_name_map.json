@@ -1,5 +1,5 @@
 {
-  "_description": "89 脑区三层 ID 映射表 (D25) — functional_id 唯一主键 / dk_name 解剖映射(一对多) / zh_name 显示层",
+  "_description": "70 functional_id 三层 ID 映射表 (D25) — functional_id 唯一主键 (50 解剖实体 + 镜像变体) / dk_name 解剖映射(一对多) / zh_name 显示层",
   "_rules": [
     "functional_id: 英文唯一主键 (D15 完整词拼接 + D25 消歧后缀)",
     "dk_name: DK 图谱解剖映射，多 functional_id 可共享一个 dk_name",

@@ -1,7 +1,8 @@
 {
-  "_description": "统一链路注册表 — 364 条链路的显式主键和三层 ID (D24/D25/D23)",
-  "_generated_from": "data/connectivity/link_legitimacy_matrix.json + region_name_map.json",
+  "_description": "⚠️ 已废弃（2026-08-07 Grilling #26）— 旧 364 链路注册表。已被三体神经模型替代：data/connectivity/tripartite_model.json。保留为历史参考。",
+  "_generated_from": "data/connectivity/link_legitimacy_matrix.json + region_name_map.json（均已废弃）",
   "_stats": {
+    "_note": "以下为历史快照，三体模型不再使用 pairwise 链路计数",
     "total": 364,
     "single_sided": 20,
     "hemisphere_pair": 17,

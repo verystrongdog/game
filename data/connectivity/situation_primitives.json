@@ -4,14 +4,14 @@
     "version": "1.0",
     "created": "2026-07-26",
     "project": "Mask (面具) — Psychiatric Hospital Supernatural Observer-Effect Game",
-    "purpose": "Bridge RDoC domains, appraisal dimensions, Kroell14 networks, and game levels (L0-L6) into composable situation archetypes for NPC AI and combat design.",
+    "purpose": "Bridge RDoC domains, appraisal dimensions, Kroell14 networks, and game levels (L0-L5) into composable situation archetypes for NPC AI and combat design.",
     "sources": [
       "RDoC 2024 Matrix (NIMH): 6 domains, 32 sub-constructs",
       "Scherer (2001, 2009); Lazarus (1991); Smith & Ellsworth (1985): 7 appraisal dimensions",
       "Kroell et al. (2024): 14 meta-analytically derived functional networks",
       "Hansen et al. (2024) Nat Neurosci: brainstem-cortical FC hierarchy",
-      "Mesulam (1998): 7-level cortical hierarchy (L0-L6)",
-      "Desikan-Killiany atlas via brain-for-blender (89 regions)"
+      "Mesulam (1998): 6-level cortical hierarchy (L0-L5)",
+      "FreeSurfer DK/aseg atlas (50 anatomical entities) + Hansen 2024 brainstem nuclei (10)"
     ],
     "how_to_use": "Each situation archetype defines a game-relevant scenario. NPC AI uses the rdoc_profile + appraisal_profile to select which skills to activate. The primary_networks and levels_involved determine which brain-region skill tree nodes are relevant. auto_activated_links define reflex neural links that fire immediately upon entering the situation."
   },
@@ -432,7 +432,7 @@
             "L4",
             "L5"
           ],
-          "game_notes": "面具系统——玩家角色在月光下反思自己是谁，技能树L6叙事框架的入口"
+          "game_notes": "面具系统——玩家角色在月光下反思自己是谁，技能树L5叙事框架的入口"
         },
         "perception_of_others": {
           "display_name": "他人知觉",
@@ -1011,7 +1011,7 @@
           "Affective processing",
           "Introspection"
         ],
-        "game_level_span": "L1→L6 (L1 affect → L6 self-narrative)",
+        "game_level_span": "L1→L5 (L1 affect → L5 self-narrative)",
         "auto_links": [
           "vmPFC→杏仁核",
           "tpj→楔前叶",
@@ -1223,7 +1223,7 @@
     ]
   },
   "game_levels": {
-    "_description": "Maps the 7-level Mesulam/Hansen hierarchy (L0-L6) to brain regions, Kroell networks, and RDoC domains.",
+    "_description": "Maps the 6-level functional hierarchy (L0-L5) to brain regions, Kroell networks, and RDoC domains. ⚠️ L6 level was removed (2026-08-07 Grilling #25) — L5 absorbs top-level functions.",
     "L0": {
       "display_name": "脑干反射 (Brainstem Reflexes)",
       "description": "Survival atoms. Fastest (~10-30ms), most mandatory, cannot be fully suppressed.",
@@ -1402,27 +1402,14 @@
       "game_role": "最灵活但最贵——高AP消耗，长冷却。命名是核心机制(观察者效应)。占 Broca 通道"
     },
     "L6": {
-      "display_name": "跨模态整合 (Whole-Brain Integration)",
-      "description": "Self-narrative, highest decision-making, frame-changing. ~300ms+ recursive.",
-      "region_count": 5,
-      "example_regions": [
-        "前额叶极·DMN",
-        "前额叶极·FPN",
-        "前额叶极·SN",
-        "DMN+OFC",
-        "全脑整合"
-      ],
-      "associated_kroell_networks": [
-        "eSAD (DMN hub)",
-        "AM (DMN)",
-        "ToM (DMN)",
-        "Rew (vmPFC/OFC)"
-      ],
-      "associated_rdoc": [
-        "Social Processes → perception_of_self",
-        "Cognitive Systems → cognitive_control"
-      ],
-      "game_role": "终极技能层——长冷却(8-12回合)。一场战斗1-2次。月光下效果最强。占 Broca 通道，需要高聚焦"
+      "_deprecated": "⚠️ L6 层级已删除（2026-08-07 Grilling #25）。旧 L6 功能（DMN/FPN/SN 自我叙事、跨网络协调）已并入 L5 + L2 网络涌现属性。此条目保留为数据兼容占位。",
+      "display_name": "跨模态整合 (Whole-Brain Integration) — ⚠️ 已废弃",
+      "description": "⚠️ 已废弃。功能已迁移至 L5。",
+      "region_count": 0,
+      "example_regions": [],
+      "associated_kroell_networks": [],
+      "associated_rdoc": [],
+      "game_role": "⚠️ 已废弃——终极技能层约束（长冷却8-12回合、一场战斗1-2次、月光最强）已并入 L5 最顶级链路。"
     }
   },
   "situation_archetypes": [
@@ -2119,7 +2106,7 @@
         "L2",
         "L4",
         "L5",
-        "L6"
+        "L5"
       ],
       "auto_activated_links": [
         "楔前叶→后扣带(自我参照)",
@@ -2127,7 +2114,7 @@
         "海马体 ca1→ACC(记忆冲突)",
         "前脑岛→vmPFC(谁在感受?)"
       ],
-      "typical_game_scenario": "月光强烈时，玩家经过一面镜子看到自己变成了另一个人的脸。海马体+楔前叶的自我叙事网络(L6 DMN)与现实视觉输入冲突——'我是谁'的答案不再确定。可能需要L6技能重建自我叙事。"
+      "typical_game_scenario": "月光强烈时，玩家经过一面镜子看到自己变成了另一个人的脸。海马体+楔前叶的自我叙事网络(L5 DMN)与现实视觉输入冲突——'我是谁'的答案不再确定。可能需要L5技能重建自我叙事。"
     },
     {
       "name": "time_pressure_race",
@@ -2363,7 +2350,7 @@
         "vmPFC→后扣带(意义重构)",
         "NAcc→隔区(奖赏缺失信号)"
       ],
-      "typical_game_scenario": "一路陪伴的NPC在战斗中牺牲。隔区(社会依恋)和ACC吻侧(社会排斥/痛苦)激活。海马体回放共同经历的记忆。月光中，失去之人的幻影可能出现——是真的灵魂还是观察者效应?玩家可通过L6叙事技能将丧失整合入自我叙事。"
+      "typical_game_scenario": "一路陪伴的NPC在战斗中牺牲。隔区(社会依恋)和ACC吻侧(社会排斥/痛苦)激活。海马体回放共同经历的记忆。月光中，失去之人的幻影可能出现——是真的灵魂还是观察者效应?玩家可通过L5叙事技能将丧失整合入自我叙事。"
     },
     {
       "name": "sensory_deprivation",
@@ -2690,7 +2677,7 @@
         "L1",
         "L2",
         "L5",
-        "L6"
+        "L5"
       ],
       "auto_activated_links": [
         "OFC→vmPFC(得失计算)",
@@ -2699,7 +2686,7 @@
         "缰核→NAcc(放弃奖赏)",
         "TPJ→前脑岛(社会成本)"
       ],
-      "typical_game_scenario": "实体提出交易:交出你最重要的记忆(永久降低某技能等级)换取通过这扇门。OFC计算价值损失，前脑岛感觉痛苦，dlPFC执行最终决定。在L6层面，这可能改变玩家的叙事——'我愿意为前行付出什么代价?'"
+      "typical_game_scenario": "实体提出交易:交出你最重要的记忆(永久降低某技能等级)换取通过这扇门。OFC计算价值损失，前脑岛感觉痛苦，dlPFC执行最终决定。在L5层面，这可能改变玩家的叙事——'我愿意为前行付出什么代价?'"
     }
   ],
   "composition_rules": {
@@ -2794,7 +2781,7 @@
           "investigation_search"
         ],
         "result": "Investigating the mystery of the hospital leads to discoveries that challenge the player's own identity. The investigation subject IS the player. RDoC: social (self) + cognitive (search). Brain: DMN (self-narrative) + FPN (investigation) compete for SN routing.",
-        "game_example": "搜索医院记录时发现一份患者档案——档案描述的经历与玩家自己的记忆完全吻合。我是调查者还是被调查者?L6 DMN自我叙事必须整合这一矛盾。"
+        "game_example": "搜索医院记录时发现一份患者档案——档案描述的经历与玩家自己的记忆完全吻合。我是调查者还是被调查者?L5 DMN自我叙事必须整合这一矛盾。"
       }
     ],
     "merge_rules": [
