@@ -1,5 +1,7 @@
 # 方案 C：标准 QM 退相干抑制 — 文献数据源
 
+> **⚠️ 已废弃（2026-08-11 [Grilling #38](.scratch/grilling-38-moonlight-field/)）**：DFS + 集体退相干 + Zeno 子空间是月光场 v2 模型（静态标量场 / 退相干抑制方向）的文献数据源，与 CGL+AGC 不同方向。保留完整内容作为学术文献参考。
+
 > 月光场的物理基础——如何在不借助额外维（KK/4D 投影）的前提下，用标准量子力学的 DFS + 集体退相干 + Zeno 子空间三个机制，解释宏观观察者效应的解放。六篇核心文献构成从数学定义到物理机制的完整链。
 
 ---
@@ -234,4 +236,4 @@ Step 3: 场维持 Zeno 切割
 ---
 
 *创建: 2026-08-04 | 更新: 2026-08-04*
-*关联: [月光场-标量场模型](../事件/月光场-标量场模型.md), [DD/QZE统一](quant-ph-0303132.pdf), [DFS定义](quant-ph-9807004.pdf), [Subdecoherence](quant-ph-9702001.pdf), [Einselection](quant-ph-0105127.pdf), [Zeno子空间](quant-ph-0403205.pdf), [DFS综述](quant-ph-0301032.pdf)*
+*关联: 月光场-标量场模型 ⚠️ 已废弃→垃圾桶（`垃圾桶/月光场-标量场模型.md`）, [DD/QZE统一](quant-ph-0303132.pdf), [DFS定义](quant-ph-9807004.pdf), [Subdecoherence](quant-ph-9702001.pdf), [Einselection](quant-ph-0105127.pdf), [Zeno子空间](quant-ph-0403205.pdf), [DFS综述](quant-ph-0301032.pdf)*
