@@ -28,3 +28,44 @@ Used by `/wayfinder`. The **map** is a file with one **child** file per ticket.
 - **Frontier**: scan `.scratch/<effort>/issues/` for files that are open, unblocked, and unclaimed; first by number wins.
 - **Claim**: set `Status: claimed` and save before any work.
 - **Resolve**: append the answer under an `## Answer` heading, set `Status: resolved`, then append a context pointer (gist + link) to the map's Decisions-so-far in `map.md`.
+
+## 二层布局（2026-08-12 新增）
+
+开发流水线将 `.scratch/<feature-slug>/` 分为两层：
+
+```
+.scratch/<feature-slug>/
+├── map.md                  ← 顶层 wayfinding
+├── design/                 ← 任务层：规格定义 + 审计 + 签字
+│   ├── spec.md             ← 实现规格（带版本号 + 变更日志）
+│   ├── issues/             ← 任务issue（task 类型）
+│   └── audit/              ← report.md + sign-off.md
+└── impl/                   ← 实现层：代码 + 证据式自审
+    ├── issues/             ← 工作issue（implementation 类型）
+    └── fixtures/           ← 共享测试数据，归 01 号工作issue 管理
+```
+
+- 任务issue 产出 spec.md → AI workflow 审计 → 人类 sign-off 批准 → 工作issue 按 spec@版本号实现
+- 工作issue 内完成证据式自审（build/test 输出 + AC 逐条对照）后置 `resolved`
+- 变更管理：实现中发现 spec 缺陷时分级处理（L1 笔误直接修 / L2 语义修正→升版+Δ审计 / L3 推翻设计→退回任务层）
+- 完整流水线定义见 `/home/dog/.claude/plans/enumerated-wandering-mitten.md`
+
+## GitHub 镜像同步（2026-08-12 新增）
+
+本地 issue 文件为真相源，通过 `tools/sync_issues.py` 镜像到 GitHub（幂等，可随时重复运行）：
+
+```bash
+python3 tools/sync_issues.py           # 全量同步
+python3 tools/sync_issues.py --dry-run # 预览将执行的操作
+```
+
+约定：
+
+- 每个 issue 文件的元数据行包含 `Status:` / `Type:` / `维度:` / `GitHub: #NN`（`维度:` 用于 GitHub label `维度:X`）
+- H1 标题 = GitHub issue 标题；元数据行之后的内容 = GitHub issue body（body 首行自动加 `本地: <相对路径>` 指针）
+- 无 `GitHub:` ref → 脚本创建 GitHub issue 并把 ref 写回本地文件
+- 有 ref → 脚本用本地内容覆盖更新 GitHub body
+- 本地 `Status: resolved` 或 `closed` → 脚本关闭对应 GitHub issue
+- Type → GitHub label 映射：`task`→`ready-for-agent`，`implementation`→`implementation`，`hotfix`→`hotfix`，`grilling`→`grilling, needs-triage`
+
+流水线操作本地 issue（创建/更新状态）后立即运行一次同步脚本。

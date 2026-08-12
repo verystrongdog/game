@@ -1487,8 +1487,7 @@
         "Amygdala",
         "LocusCoeruleus",
         "AnteriorCingulateCortexDorsal",
-        "Precentral",
-        "ReflexEscape"
+        "Precentral"
       ],
       "levels_involved": [
         "L0",
@@ -1861,10 +1860,10 @@
         "MedialOrbitalPrefrontalVMPFC",
         "PosteriorCingulate",
         "Precuneus",
-        "SeptalRegion",
         "Insula",
         "RostralAnteriorCingulateCortex",
-        "LocusCoeruleus"
+        "LocusCoeruleus",
+        "NucleusAccumbens"
       ],
       "levels_involved": [
         "L0",
@@ -2330,7 +2329,6 @@
         "Empathy"
       ],
       "key_brain_regions": [
-        "SeptalRegion",
         "HippocampusCA1",
         "Insula",
         "RostralAnteriorCingulateCortex",
@@ -2526,7 +2524,6 @@
         "Amygdala",
         "Precentral",
         "CerebellumCortex",
-        "ReflexEscape",
         "Putamen",
         "SuperiorParietal"
       ],
@@ -2669,9 +2666,9 @@
         "AnteriorCingulateCortex",
         "Insula",
         "RostralMiddleFrontalDLPFC",
-        "Habenula",
         "NucleusAccumbens",
-        "SupramarginalTPJ"
+        "SupramarginalTPJ",
+        "VentralTegmentalArea"
       ],
       "levels_involved": [
         "L1",
