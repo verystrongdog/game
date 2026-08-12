@@ -29,6 +29,14 @@ term_registry.json 是术语参考，不是运行时数据——暂不纳入 C# 
 
 ## 产出
 
-- [ ] spec.md v1.0
-- [ ] spec.md 通过审计
+- [x] spec.md v1.0 → v1.1（v1.0 审计退回：E1-E6，见 design/audit/report.md）
+- [ ] spec.md v1.1 通过 Δ审计
 - [ ] sign-off.md 获批
+
+## Comments
+
+### 2026-08-12 审计 v1.0 结果与修复
+
+- v1.0 审计结论：退回修改（6 Error + 10 Warning）——E1 [JsonPropertyName] 全面缺失、E2 bool→int、E3 词表过时（19→18）、E4 RdocProfile 6 域、E5 悬挂引用、E6 agency/valence 值域
+- 数据修复（commit 0063ae9 + d3eee7d）：situation_primitives.json 悬挂引用清扫（#25 D1/D3 补执行）+ primary_networks 注册表对齐（16 处）
+- spec v1.1 已产出，Δ审计进行中

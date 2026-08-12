@@ -1,6 +1,6 @@
 # C# Data Layer — 实现规格
 
-> 加载 brain_regions.json + tripartite_model.json + W_sensory.json + situation_primitives.json + signal_types.json 全部数据文件。版本: v1.1
+> 加载 brain_regions.json + tripartite_model.json + W_sensory.json + situation_primitives.json + signal_types.json 全部数据文件。版本: v1.2
 
 ## 一、范围与依赖
 
@@ -220,7 +220,7 @@ public static class GameDataLoader
 
 所有方法：`File.ReadAllText` → `JsonSerializer.Deserialize<T>`。
 
-**异常行为**（三个分支均有测试）：
+**异常行为**（三个分支由 AC-11 测试）：
 - 文件不存在 → `FileNotFoundException`（.NET 内建，不包装）
 - JSON 格式错误 → `JsonException`（.NET 内建，不包装）
 - JSON 为 `null` 字面量 → `InvalidOperationException`（现有 `?? throw` 模式）
@@ -241,11 +241,11 @@ JsonSerializerOptions: `PropertyNameCaseInsensitive = true`, `ReadCommentHandlin
 | W_sensory matrix_2d 行序 = rows key 序 | matrix_2d[i] | rows 第 i 个 key 的 {modality: 0\|1} | **逐行逐模态值比对**（69×6 全比对，非只查行数） |
 | situation key_brain_regions | KeyBrainRegions[] | BrainRegionsData.Regions.Keys | 每个引用 ∈ regions（数据 2026-08-12 已修复，0 悬挂） |
 | situation levels_involved | LevelsInvolved[] | "L0".."L5" | 枚举值合法 |
-| signal_types 词表 membership | function_label 的 "category/subtype" | Categories.Keys + Subtypes.Keys | membership 校验（非正则格式校验） |
-| function_profile input/output_types | InputTypes[] / OutputTypes[] | 词表 "category/subtype" | membership 校验（词表最大消费方） |
+| signal_types 词表 membership | function_label 的 "category/subtype" | Categories.Keys + Subtypes.Keys | membership 校验（非正则格式校验；词表最大消费方——588 引用） |
+| function_profile input/output_types | InputTypes[] / OutputTypes[] | 词表 "category/subtype" | membership 校验（283 引用） |
 | function_label 内部一致性 | signal_type | category + "/" + subtype 拼接 | 全量比对 |
-| mirror_of | MirrorOf | BrainRegionsData.Regions.Keys | 每个引用 ∈ regions |
-| tripartite 边 source/target | 4 类边 | graph_nodes（小写 dk_name）∪ brain_regions functional_ids | 全量比对（brainstem source 为 functional_id） |
+| mirror_of | FunctionProfile.MirrorOf | BrainRegionsData.Regions.Keys | 每个引用 ∈ regions |
+| tripartite 边 source/target | 4 类边 | graph_nodes（小写 dk_name） | 全量比对：全部端点 ∈ graph_nodes；brainstem source 同时 ∈ brain_regions functional_ids（交集语义） |
 | primary_networks | PrimaryNetworks[] | 同文件 functional_networks.networks 注册表 | membership（数据 2026-08-12 已修复，0 失配） |
 | ~~auto_activated_links~~ | — | — | ⚠️ legacy 不校验（指向已废弃 364 链路模型，待 CSTC 迁移） |
 
@@ -265,6 +265,10 @@ JsonSerializerOptions: `PropertyNameCaseInsensitive = true`, `ReadCommentHandlin
 | AC-10 | function_label signal_type 与 input/output_types 全部 ∈ 词表；signal_type == category/subtype 拼接 | membership 测试 |
 | AC-11 | loader 异常三分支：缺文件 → FileNotFoundException；坏 JSON → JsonException；null 字面量 → InvalidOperationException | 测试 |
 | AC-12 | primary_networks 全部 ∈ 同文件 functional_networks 注册表 | membership 测试 |
+| AC-13 | mirror_of 目标全部 ∈ functional_ids（2 条） | membership 测试 |
+| AC-14 | tripartite 4 类边 1049 条 source/target 全部 ∈ graph_nodes；brainstem source 同时 ∈ functional_ids | membership 测试 |
+
+> 注：auto_activated_links 为 legacy 字段（见 §五 C11），有意不做 membership 校验，不在任何 AC 中要求。
 
 ## 七、本 spec 自检清单
 
@@ -282,8 +286,9 @@ JsonSerializerOptions: `PropertyNameCaseInsensitive = true`, `ReadCommentHandlin
 | 版本 | 日期 | 变更 | 触发 | 审计范围 |
 |------|------|------|------|----------|
 | v1.0 | 2026-08-12 | 初稿——覆盖全部 Data Layer | 任务issue 01 | 全量审计 |
-| v1.1 | 2026-08-12 | 修复审计 E1-E6 + W 级：§2.2 补 [JsonPropertyName]×19；Matrix→int[][]; RdocProfile 6 域可空；SignalSubtype 异构字段全量可空；signal_types 词表更新为实测 18 子类；agency/valence 值域修正；AC-4/AC-12 数据修复（悬挂引用+注册表对齐）；AC-6 改为一次性审计产物；AC-8~12 新增；约束表扩至 11 条 | 审计退回（report.md 2026-08-12） | Δ审计（§2.2 + §五 + §六 + §七） |
+| v1.1 | 2026-08-12 | 修复审计 E1-E6 + W 级：§2.2 补 [JsonPropertyName]×41；Matrix→int[][]; RdocProfile 6 域可空；SignalSubtype 异构字段全量可空；signal_types 词表更新为实测 18 子类；agency/valence 值域修正；AC-4/AC-12 数据修复（悬挂引用+注册表对齐）；AC-6 改为一次性审计产物；AC-8~12 新增；约束表扩至 11 条 | 审计退回（report.md 2026-08-12） | Δ审计（§2.2 + §五 + §六 + §七） |
+| v1.2 | 2026-08-12 | Δ审计"有条件通过"补修：AC-13（mirror_of membership）/AC-14（1049 三体边 membership）新增；auto_activated_links 豁免在 AC 层注明；文本修正（词表最大消费方备注移位、约束8 来源列、异常行为时态、约束9 交集语义） | Δ审计结论（report.md v1.1 段） | 免重审（数据侧三路实测闭环） |
 
 ---
-*创建: 2026-08-12 | 更新: 2026-08-12 | 版本: v1.1*
+*创建: 2026-08-12 | 更新: 2026-08-12 | 版本: v1.2*
 *关联: [脑功能层级模型](规则/技能树系统/脑功能层级模型.md), [三体神经模型](规则/技能树系统/脑功能层级模型.md) §二十*

@@ -134,5 +134,48 @@ spec 引用了 Grilling #26 时代的旧词表，数据文件已更新但 spec �
 | primary_networks 对齐 | functional_networks.networks 注册表 | 待修复后复查 |
 
 ---
-*创建: 2026-08-12*
-*关联: [spec.md](../spec.md) v1.0, [任务issue 01](../issues/01-data-layer-spec.md)*
+
+# Δ审计报告（v1.1 → v1.2）
+
+> 审计日期: 2026-08-12 | 审计方法: workflow 3 专家 agent（数据结构Δ + 交叉引用Δ + 完整性Δ）→ 综合 | spec 版本: v1.1 → v1.2
+
+## 审计结论
+
+**⚠️ 有条件通过**（v1.2 已满足条件，数据侧免重审）
+
+### 数据侧：完全通过
+
+三路独立实测一致：
+- E1-E6 修复全部实测确认（41 个 `[JsonPropertyName]` 逐字段吻合、69×6 int 矩阵、18 子类词表、RdocProfile 6 域、0 悬挂引用、agency/valence 值域吻合）
+- §五 11 条约束 11/11 通过：C1 69/69 双向双射、C2 逐行逐模态 0 mismatch、C3 201 引用 0 悬挂、C5 588/588 ∈ 词表、C7 拼接 0 不一致、C9 1049 条边 0 坏引用、C10 88 引用 0 失配
+
+### 规格侧：2 个 AC 覆盖缺口（已在 v1.2 修复）
+
+| # | 缺口 | v1.2 处置 |
+|---|------|-----------|
+| E-Δ1 | 约束8（mirror_of）无 AC | ✅ AC-13 新增 |
+| E-Δ2 | 约束9（1049 三体边，最大引用面）无 AC——v1.0 核心问题只修复一半 | ✅ AC-14 新增（显式覆盖 brainstem target + privileged_pathways） |
+
+### 文本修正（v1.2 同批）
+
+- 变更日志 ×19→×41；「词表最大消费方」备注移至约束5（588 vs 283）；约束8 来源列注明 `function_profile.mirror_of`；§三 异常行为时态修正（AC-11 测试）；约束9 交集语义注明
+- auto_activated_links 豁免在 AC 层注明（§六 表下注）
+
+### Warning 级（非阻断，进结转清单）
+
+| # | 发现 | 处置 |
+|---|------|------|
+| W-6 | Matrix 行序依赖 Dictionary 反序列化保序（实践行为非语言保证），loader 后处理 `Rows.Keys.ToArray()` 依赖此序 | 工作issue 测试加显式断言（Matrix 行序 == Rows.Keys 序） |
+| W-7 | agency/valence 值域仅注释声明，无 AC 强制（已记录设计决定：保持 string） | 接受风险 |
+| W-8 | rdoc_profile 各 archetype 仅 3-4 域子集，无全 6 域者——nullable 设计正确 | 信息项 |
+
+### 半径扩张（工作issue 创建时的硬性前置）
+
+1. 测试 issue 的 scope 必须显式包含：brainstem target + privileged_pathways source/target membership（约束9 未覆盖面）
+2. AC-12 测试需另读原始 JSON 获取 functional_networks 注册表（SituationPrimitives 未映射该 key）
+3. AC-11 异常三分支测试须进测试 issue 范围（当前 0 异常测试）
+4. 现有测试扩展：`EnumFieldsAreParsedCorrectly` 追加 mirror_of membership 断言；`PrivilegedPathwayFieldsExist` 扩展为 membership 校验
+
+---
+*创建: 2026-08-12 | 更新: 2026-08-12*
+*关联: [spec.md](../spec.md) v1.2, [任务issue 01](../issues/01-data-layer-spec.md)*
