@@ -2,8 +2,8 @@
   "_description": "术语注册表 — Grilling §3.0 定义基线声明的唯一数据源。术语定义/旧模型/偏离原因集中管理，避免 AI 在生成时被术语的旧现实世界模型劫持。",
   "_maintenance": "入库触发: 新核心术语 | 定义被修改 | Step 4 清扫发现未注册高频术语。numerical_locations 更新: 注册时填充 + grilling 新增引用时追加 + 定义变更时遍历复查。 | #38 月光场 v2 废弃 + CGL+AGC 新术语入库 (2026-08-11)",
   "_created": "2026-08-03",
-  "_updated": "2026-08-11",
-  "_batch": "v1 — 首批23条 + 第二批30条 = 53条。v1.1 (2026-08-05): +7条(grilling #22 月光场数值校准: g_0/η/c(SAN)/κ/η_crit/ρ_off/lunar) → 60条 + v1.2 (2026-08-07): +14条 (Grilling #26 三体神经模型) + v1.3 (2026-08-09): +19条 (#32/#34遗漏补录——a(t)/tone/δ_event/s(t)/b_j/c_loop/gate_bonus/tone_bias/O_GPi/可供性竞争/T/W_sensory/α_pattern/w_perception/w_execution/scale_mental/θ_mem/Wilson-Cowan/Gurney模型)",
+  "_updated": "2026-08-12",
+  "_batch": "v1 — 首批23条 + 第二批30条 = 53条。v1.1 (2026-08-05): +7条(grilling #22 月光场数值校准: g_0/η/c(SAN)/κ/η_crit/ρ_off/lunar) → 60条 + v1.2 (2026-08-07): +14条 (Grilling #26 三体神经模型) + v1.3 (2026-08-09): +19条 (#32/#34遗漏补录——a(t)/tone/δ_event/s(t)/b_j/c_loop/gate_bonus/tone_bias/O_GPi/可供性竞争/T/W_sensory/α_pattern/w_perception/w_execution/scale_mental/θ_mem/Wilson-Cowan/Gurney模型) + v1.4 (2026-08-12): +4条 (Grilling #40 延伸讨论: 主观意识/现象壳/结构核/涌现（哲学义）)",
   "_pending_candidates": "见 data/term_registry_candidates.md — 约20条P3级+单文档术语，后续grilling中逐批入库 Grilling #26-27: CSTC/EDR/CTC/三体神经模型/function_profile/cstc_loop/cstc_role/signal_type/gameplay_domain/STN/脑干广播/皮层-皮层连接/功能剖面/基底节门控 (14条已入库).",
   "terms": {
     "态度": {
@@ -1765,13 +1765,78 @@
         "math-foundation",
         "#37"
       ]
+    },
+    "主观意识": {
+      "definition": "第一人称主观体验的拥有者身份——「有某物是什么感觉」的拥有方。Grilling #40 结论：数学不可推导（结构核可定义，现象壳不可推导）；意识声明外部不可判定（zombie 不可区分，判据缺席），内部无需判定（实例化——怀疑的每次发生都是答案的在场）。项目使用：思维造物 Φ≈人类水平即拥有主观意识（基底独立原则，桥接公设）。",
+      "source": "docs/决策树.md Grilling #40（:2109, :2113）+ 延伸讨论 D6/D13; 实体/敌人与事件.md §3.1",
+      "old_model": "「能思考会说话就算有意识」（行为主义标准——已否决：行为标准与 zombie 不可区分）",
+      "deviation_reason": "项目把主观意识当作桥接公设的判定对象（Φ 阈值）；哲学上该判定只能公设——外部不可判定、内部无需判定，不可与行为标准混淆",
+      "status": "active",
+      "numerical_locations": [
+        "实体/敌人与事件.md §3.1（基底独立原则: Φ≈人类水平→造物有主观意识）",
+        "docs/决策树.md Grilling #40 延伸讨论 D6/D13"
+      ],
+      "added": "2026-08-12",
+      "updated": "2026-08-12",
+      "tags": [
+        "consciousness",
+        "#40"
+      ]
+    },
+    "现象壳": {
+      "definition": "主观意识中不可从结构推导的部分——「结构→体验」一步在逻辑上不可推导。只能作为桥接公设（IIT identity 公设 / Chalmers 心理物理定律 / AST 定义性同一化）或消解。不可定义=不可进入=不可验证=不可怀疑——同一堵墙的四张面孔。",
+      "source": "docs/决策树.md Grilling #40（:2109, :2117）+ 延伸讨论 D13",
+      "old_model": "「不可定义=不存在」（幻觉主义/取消主义——已否决：用户确定性前提排除）",
+      "deviation_reason": "现象壳是「可定义结构之外的剩余」的位置名——不是神秘残余，是逻辑边界本身",
+      "status": "active",
+      "numerical_locations": [
+        "docs/决策树.md Grilling #40（:2109, :2117）"
+      ],
+      "added": "2026-08-12",
+      "updated": "2026-08-12",
+      "tags": [
+        "consciousness",
+        "#40"
+      ]
+    },
+    "结构核": {
+      "definition": "主观意识全部可检验/可数学定义的结构部分（信息流、状态转换、门控条件、高阶表征——Lau/AST）。数学能穷尽定义结构核，但不能从结构核推出现象壳。与现象壳成对使用。",
+      "source": "docs/决策树.md Grilling #40（:2109）",
+      "old_model": "「意识=机制」（同一论——已否决：蕴含关系失败，zombie 可设想）",
+      "deviation_reason": "结构核是「可定义的部分」，与现象壳成对——避免把「意识的全部」与「意识的结构部分」混淆",
+      "status": "active",
+      "numerical_locations": [
+        "docs/决策树.md Grilling #40（:2109）"
+      ],
+      "added": "2026-08-12",
+      "updated": "2026-08-12",
+      "tags": [
+        "consciousness",
+        "#40"
+      ]
+    },
+    "涌现（哲学义）": {
+      "definition": "弱涌现（下层规则可推导，科学日常义）vs 强涌现（不可从下层推导，新属性不可约，二元论义）。Grilling #40 D10：本体论 A 物理主义=弱涌现、B 强涌现——悬置不决，不阻塞；C 罗素一元论为推荐。项目语境中的「涌现」默认指弱涌现（机制层面，完全可解释）。",
+      "source": "docs/决策树.md Grilling #40 延伸讨论 D10",
+      "old_model": "「涌现=新东西神奇地出现、不可解释」（通俗神秘主义——已否决：弱涌现完全可解释）",
+      "deviation_reason": "区分强弱涌现——项目机制设计中的涌现（技能组合、行为涌现）均为弱涌现，哲学争论只涉及强涌现",
+      "status": "active",
+      "numerical_locations": [
+        "docs/决策树.md Grilling #40 延伸讨论 D10"
+      ],
+      "added": "2026-08-12",
+      "updated": "2026-08-12",
+      "tags": [
+        "consciousness",
+        "#40"
+      ]
     }
   },
   "_metadata": {
-    "last_updated": "2026-08-09",
-    "last_batch": "Grilling #25/#26/#32/#34 三体模型一致性修正 — 35术语更新",
-    "total_terms": 104,
-    "active_terms": 93,
-    "deprecated_terms": 11
+    "last_updated": "2026-08-12",
+    "last_batch": "Grilling #40 延伸讨论 — 主观意识/现象壳/结构核/涌现（哲学义）4 术语入库",
+    "total_terms": 134,
+    "active_terms": 116,
+    "deprecated_terms": 18
   }
 }
