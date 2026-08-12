@@ -1,6 +1,6 @@
 # 任务issue 01: Data Layer 完整规格
 
-> Status: claimed | Type: task | 维度: 管线 | GitHub: [#42](https://github.com/verystrongdog/game/issues/42)
+> Status: resolved | Type: task | 维度: 管线 | GitHub: [#42](https://github.com/verystrongdog/game/issues/42)
 
 ## 范围
 
@@ -29,9 +29,10 @@ term_registry.json 是术语参考，不是运行时数据——暂不纳入 C# 
 
 ## 产出
 
-- [x] spec.md v1.0 → v1.1（v1.0 审计退回：E1-E6，见 design/audit/report.md）
-- [ ] spec.md v1.1 通过 Δ审计
-- [ ] sign-off.md 获批
+- [x] spec.md v1.0 → v1.2（v1.0 审计退回：E1-E6，v1.1 Δ审计有条件通过，v1.2 补修）
+- [x] spec.md v1.2 通过 Δ审计
+- [x] sign-off.md 获批（2026-08-12）
+- [x] 工作issue 01 实现 + 自审闭合（GitHub #43）
 
 ## Comments
 
