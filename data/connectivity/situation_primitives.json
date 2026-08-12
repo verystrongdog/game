@@ -1432,7 +1432,7 @@
         "norm_compatibility": 0.7
       },
       "primary_networks": [
-        "ToM",
+        "Theory of Mind",
         "Emotion Regulation",
         "Cognitive Attention Control"
       ],
@@ -1569,7 +1569,7 @@
         "norm_compatibility": 0.9
       },
       "primary_networks": [
-        "Extended Socio-Affective Default",
+        "Extended Socio-Affective Default Network",
         "Theory of Mind",
         "Emotion Regulation"
       ],
@@ -1661,7 +1661,7 @@
       },
       "primary_networks": [
         "Autobiographical Memory",
-        "Extended Socio-Affective Default",
+        "Extended Socio-Affective Default Network",
         "Emotion Regulation"
       ],
       "key_brain_regions": [
@@ -1803,7 +1803,7 @@
         "Motor",
         "Working Memory",
         "Cognitive Attention Control",
-        "Extended Multiple Demand"
+        "Extended Multiple Demand Network"
       ],
       "key_brain_regions": [
         "Precentral",
@@ -1852,7 +1852,7 @@
         "norm_compatibility": 0.8
       },
       "primary_networks": [
-        "Extended Socio-Affective Default",
+        "Extended Socio-Affective Default Network",
         "Emotion Regulation",
         "Reward"
       ],
@@ -1948,7 +1948,7 @@
       "primary_networks": [
         "Theory of Mind",
         "Empathy",
-        "Extended Socio-Affective Default"
+        "Extended Socio-Affective Default Network"
       ],
       "key_brain_regions": [
         "SupramarginalTPJ",
@@ -2087,7 +2087,7 @@
       },
       "primary_networks": [
         "Autobiographical Memory",
-        "Extended Socio-Affective Default",
+        "Extended Socio-Affective Default Network",
         "Theory of Mind"
       ],
       "key_brain_regions": [
@@ -2138,7 +2138,7 @@
         "Cognitive Attention Control",
         "Working Memory",
         "Vigilant Attention",
-        "Extended Multiple Demand"
+        "Extended Multiple Demand Network"
       ],
       "key_brain_regions": [
         "RostralMiddleFrontalDLPFC",
@@ -2185,7 +2185,7 @@
       "primary_networks": [
         "Vigilant Attention",
         "Autobiographical Memory",
-        "Extended Socio-Affective Default"
+        "Extended Socio-Affective Default Network"
       ],
       "key_brain_regions": [
         "LocusCoeruleus",
@@ -2232,7 +2232,7 @@
       "primary_networks": [
         "Working Memory",
         "Cognitive Attention Control",
-        "Extended Multiple Demand",
+        "Extended Multiple Demand Network",
         "Vigilant Attention"
       ],
       "key_brain_regions": [
@@ -2279,7 +2279,7 @@
       "primary_networks": [
         "Theory of Mind",
         "Emotion Regulation",
-        "Extended Socio-Affective Default"
+        "Extended Socio-Affective Default Network"
       ],
       "key_brain_regions": [
         "SuperiorFrontalMPFC",
@@ -2325,7 +2325,7 @@
       },
       "primary_networks": [
         "Autobiographical Memory",
-        "Extended Socio-Affective Default",
+        "Extended Socio-Affective Default Network",
         "Empathy"
       ],
       "key_brain_regions": [
@@ -2372,7 +2372,7 @@
       "primary_networks": [
         "Vigilant Attention",
         "Autobiographical Memory",
-        "Extended Socio-Affective Default"
+        "Extended Socio-Affective Default Network"
       ],
       "key_brain_regions": [
         "LocusCoeruleus",
@@ -2562,7 +2562,7 @@
       "primary_networks": [
         "Emotional Scene & Face Processing",
         "Empathy",
-        "Extended Socio-Affective Default"
+        "Extended Socio-Affective Default Network"
       ],
       "key_brain_regions": [
         "Amygdala",
@@ -2611,7 +2611,7 @@
         "Theory of Mind",
         "Mirror Neuron System",
         "Working Memory",
-        "Extended Multiple Demand"
+        "Extended Multiple Demand Network"
       ],
       "key_brain_regions": [
         "SupramarginalTPJ",
@@ -2657,7 +2657,7 @@
       "primary_networks": [
         "Reward",
         "Emotion Regulation",
-        "Extended Socio-Affective Default",
+        "Extended Socio-Affective Default Network",
         "Cognitive Attention Control"
       ],
       "key_brain_regions": [
