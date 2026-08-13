@@ -93,8 +93,8 @@ Putamen 是 CSTC 节点（无 WC a(t)）。plan §十三-4：计划用 somatic �
 - [x] 设计文档修正写回（Q1/Q3 决议关联：回合战斗流程 §3.2/Phase 3 图、plan §4.5/§十三-4、运行时状态模型 §8.1——D6/D7/D11/D12；补全：§3.2/§3.3 求和→均值形态，commit cb68803）
 - [x] spec.md v1.0 → v1.1（§一~§八 + 变更日志 + 参数速查表；AC-1~15 + 偏差 B1-B4；v1.1 = 审计 7⚠️ 全修 + L1 批）
 - [x] workflow 多专家审计 → report.md（全量 v1.0：0❌/7⚠️ CONFIRMED/2 REFUTED/15 info，有条件通过）
-- [ ] Δ审计（v1.1 变更章节 + 半径扩张）→ report.md 追加
-- [ ] 人类复核 → sign-off.md
+- [x] Δ审计（v1.1 变更章节 + 半径扩张）→ report.md 追加（0❌/0⚠️/3info L1 已修，等效通过）
+- [x] 人类复核 → sign-off.md（2026-08-13 批准）
 - [ ] 工作issue 01 → 实现 + 证据式自审
 - [ ] map.md 更新 + 回顾段（feature 闭合）
 
