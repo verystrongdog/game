@@ -2,6 +2,29 @@
 
 > Status: resolved | Type: implementation | 维度: 管线 | Spec: ../../design/spec.md@v1.2 | Blocked by: sign-off ✅ (2026-08-12) | GitHub: [#43](https://github.com/verystrongdog/game/issues/43)
 
+## 目标
+
+按 spec v1.2 实现 W_sensory / situation_primitives / signal_types 三个加载器及对应 record，让 C# Data Layer 完整收官——运行时代码可加载全部设计数据，且行序、词表、交叉引用逐条有测试兜底。
+
+## 指标
+
+- AC-1~5、AC-8~14 共 12 条验收标准逐条 ✅（AC-6 一次性审计产物、AC-7 build/test 门禁）
+- `dotnet build` 零错误
+- `dotnet test` 24/24 全绿（+14 个新测试）
+- sign-off 5 项结转全部回填验证
+
+## 工作方式
+
+- **先 record 后 loader 扩展**：类型定义与加载逻辑分两个 commit（4c752c2 / e480707），测试随实现同 commit
+- **证据式自审**：build/test 输出原文作门禁证据 + AC 逐条对照到具体测试名 + spec §七 自检清单 8 项逐条打勾 + 结转回填
+- **发现的问题如实记录**：不修不藏，进「发现的问题」表
+
+## 判断与取舍
+
+- **AC-11 异常分支用「目录存在 + 文件缺失」路径**——.NET 平台行为差异（目录不存在抛 DirectoryNotFoundException），测试保持 AC 真实语义而非凑异常类型
+- **NU1900 警告如实记录为环境问题**（NuGet 网络不可达）——不算门禁失败，也不偷偷修
+- **RegionIds 派生填充放 LoadWsensory 内 `with` 表达式**——避免构造器静默计算，派生逻辑可见于加载路径
+
 ## 范围
 
 按 spec v1.2 §2.2 + §三 实现：
@@ -92,3 +115,10 @@ spec v1.2 §六 AC-1~5、AC-8~14 逐条 ✅ + `dotnet build` 零错误 + `dotnet
 | 2 | 解决方案级 build 出现 NU1900 警告（NuGet 网络不可达） | 环境问题，与代码无关；已如实记录 |
 
 ## Comments
+
+### 2026-08-13 收尾简要（closed）
+
+- **目标达成**：3 个加载器 + 8 个新 record 落地，Data Layer 收官
+- **指标**：12/12 AC ✅、build 0 错误、24/24 测试绿、5 项结转全部回填
+- **审计全拦截验证**：实现阶段 0 个数据/规格错误——spec 审计的价值兑现
+- **遗留**：无阻塞项；NU1900 为环境警告

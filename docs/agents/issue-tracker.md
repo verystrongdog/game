@@ -69,3 +69,35 @@ python3 tools/sync_issues.py --dry-run # 预览将执行的操作
 - Type → GitHub label 映射：`task`→`ready-for-agent`，`implementation`→`implementation`，`hotfix`→`hotfix`，`grilling`→`grilling, needs-triage`
 
 流水线操作本地 issue（创建/更新状态）后立即运行一次同步脚本。
+
+## Issue 内容充实规范（2026-08-13 新增）
+
+GitHub issue 的读者是人类——issue 是 **brief 层**（目标/指标/判断），资产细节留在 spec.md / plan.md / audit/report.md。每个 issue 元数据行之后必须携带以下章节，默认顺序：
+
+**任务issue**（design/issues/）：
+
+```markdown
+## 目标
+<!-- 一段话：本 issue 要达成什么，为什么现在做 -->
+
+## 指标
+<!-- 可衡量的成功标准（数字）：修复数/AC 数/测试数/专家 verdict/门禁 -->
+
+## 工作方式
+<!-- agent 怎么干活的：读了什么、workflow 结构（几个专家、什么角色）、核实路径 -->
+
+## 判断与取舍
+<!-- 关键整合判断 + 理由：采纳/不采纳什么、冲突怎么升级、风险怎么处置 -->
+
+## 范围
+## 追问
+## 决策
+## 产出
+## Comments
+```
+
+**工作issue**（impl/issues/）：`目标` + `指标` 必须，`工作方式`/`判断与取舍` 按实际复杂度取舍。
+
+**收尾简要**：issue 置 `resolved` 时，在 `## Comments` 末尾追加一条 dated 条目：目标达成与否 → 指标实际值 → 遗留项。格式参考 `csharp-data-layer/impl/issues/01-data-loaders.md`。
+
+**不进 issue 的内容**：完整思考轨迹（tool 调用日志）——那会让 issue 不可读；保留 distilled 判断链 + 指向 report.md Trace Table / 会话 transcript 的链接。
