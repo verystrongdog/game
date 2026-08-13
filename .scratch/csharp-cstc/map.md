@@ -10,9 +10,11 @@
 
 ## Decisions-so-far
 
-- [任务issue 01](design/issues/01-cstc-spec.md) → 数据实测第一轮（CI 成员与 §6.1 逐条一致 / 字段形状 / **gate≡1 惰性实测** / ModelDB 原始阈值 / 收敛性质）+ Q1-Q3 草案 → claimed（2026-08-13）
+- [任务issue 01](design/issues/01-cstc-spec.md) → 数据实测第一轮（CI 成员与 §6.1 逐条一致 / 字段形状 / **gate≡1 惰性实测** / ModelDB 原始阈值 / 收敛性质）→ claimed（2026-08-13）
+- **Q 裁决（2026-08-13 用户）**：Q1=A（W_SEL_GPe=0.0 补入权重表）、Q2=A（per-population e 表对齐 ModelDB 83560 + 取消 clamp，值域 [−1.5, 2.0]）、Q3=B（c_loop 按 fid 级取——同 dk 不同 fid 分属两环）
+- **设计文档修正写回**（commit f039f93）：运行时状态模型 §6.1/§6.2/§6.3/§三/§十一 + plan §4.4 + README_gurney_model.md + term_registry（c_loop/gate_bonus/Gurney模型）+ 决策树 #33 D9/D10/D13 🔧 + GitHub #33 闭合后修正评论 + GurneyState 值域注
+- **spec v1.0**（commit a46ba24）：[spec.md](design/spec.md) 构造 + Step + AC-1~15 + 偏差 B1（gate=1−O(a_new) 时刻）/B2（m≤0→O≡0 除零防护）/B3（残差上界 3.5×e−25）。锚点经第二轮实测复算（CI fid 名单 3/7/12、c=0 fp gate 0.843421、静息 gate2=1.0、c 0.665469/0.696963/0.692102、跨环路 c 值、m_SD2=0 锚点、float32 逐位安全域 |u|≥0.01）
 
 ## Fog
 
-- 任务issue 数据实测 ✓ → Q1/Q2/Q3 用户裁决 → spec v1.0 → 全量审计 → Δ审计（如需）→ sign-off → 工作issue 01 实现 → 自审 → 设计文档修正写回 → feature 闭合
-- 待办：Q2 决议关联的设计文档修正清单（§6.3 e 表 / §三 值域 / 权重表补 W_SEL_GPe / plan §4.4 step 5 文本）
+- 任务issue 数据实测 ✓ → Q 裁决 ✓ → 设计文档写回 ✓ → spec v1.0 ✓ → **全量审计（workflow 运行中）** → Δ审计（如需）→ sign-off → 工作issue 01 实现 → 自审 → map.md 回顾 → feature 闭合
