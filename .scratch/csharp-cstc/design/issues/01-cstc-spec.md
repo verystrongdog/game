@@ -45,7 +45,7 @@ csharp-engine plan §十一 step 6 = **CstcGating**——Layer 3 CSTC 门控（�
 | 10 | ModelDB 83560 原始实现（GPR_engine.m，GitHub 实测） | **tonic 来自 per-population 负阈值**：e_SEL=e_CONT=0.2、e_STN=−0.25、e_GPe=−0.2、**e_GPi=−0.2**；无任何输入基线项；**W_SEL_GPe 默认 = 0**（无 SD1→GPe 连接；'g' 选项才 −0.25）；**a 无 clamp**（可为负——负阈值机制要求） |
 | 11 | 原始阈值下 gate 行为（per-population e + 无 clamp + W_SEL_GPe=0，固定点扫描） | c=0 → gate=0.843（门控抑制恢复 ✓）；DA≥0.5 且 c≥0.4 → gate=1.0（全放行）；静息（c≈0.67, DA≈0.45）→ gate=1.0；DA=0 时 gate 范围 0.777–0.843（窄——选择对比主要来自 DA 轴） |
 | 12 | clamp[0,1] 与负阈值互斥 | a_GPi ≥ 0 → O_GPi ≥ 0.2 → gate ≤ 0.8 恒（放行上限被 clamp 锁死）→ 负阈值必须配无 clamp |
-| 13 | 解析收敛 | exp(−25) = 1.39e-11；\|a−u\| ≤ 2.2 时残差 ≤ 3e-11 < float32 ulp(2.0)/2 → **a(t+Δ) 与 u 逐位相等**（float32 舍入） |
+| 13 | 解析收敛 | exp(−25) = 1.39e-11；\|a−u\| ≤ 3.5（值域 [−1.5, 2.0]）时残差 ≤ 4.9e-11（🔧 2026-08-13 修正：原「2.2 → 3e-11」按旧值域 [0,1] 推导）；\|u\| ≥ 0.01 时 **a(t+Δ) 与 u 逐位相等**（float32 舍入，实测失败边界 \|u\| ≤ 0.0004） |
 | 14 | DA 极端 ramp | DA=1 → m_SD2=0 → O_SD2≡0（恒零合法）；m_SD1=2 饱和点 a ≥ 0.7 |
 | 15 | 文献 PDF 错标 | 参考/文献/ 两个「Gurney-2001」PDF 实测为 BMJ 论文与 White Rose eprints（文件名与内容不符，不可引用）。真源 = data/connectivity/README_gurney_model.md + ModelDBRepository/83560 GitHub（本 issue 行 #10 数据即来自后者原始代码） |
 
@@ -89,15 +89,16 @@ GPe 输入方程引用 `W_SEL_GPe`，但设计权重表（§6.3）与 README_gur
 
 ## 产出
 
-- [ ] 数据实测第一轮（本 issue，已完成——见上表）
-- [ ] Q1/Q2/Q3 用户裁决
-- [ ] spec.md v1.0（§一~§七 + 变更日志）
+- [x] 数据实测第一轮（本 issue，已完成——见上表）
+- [x] Q1/Q2/Q3 用户裁决（Q1=A / Q2=A / Q3=B）
+- [x] spec.md v1.0（§一~§七 + 变更日志 + 参数速查表；AC-1~15；偏差 B1-B3）
 - [ ] workflow 多专家审计 → report.md
 - [ ] 人类复核 → sign-off.md（批准）
 - [ ] 工作issue 01 → 实现 + 证据式自审
-- [ ] 设计文档修正写回（Q2 决议关联：运行时状态模型 §6.3/§三 + 权重表 + plan §4.4）
+- [x] 设计文档修正写回（Q2 决议关联：运行时状态模型 §6.3/§三 + 权重表 + plan §4.4——commit f039f93）
 - [ ] map.md 更新 + 回顾段
 
 ## Comments
 
 - 2026-08-13：创建。数据实测第一轮完成（CI 成员/字段形状/gate≡1 惰性/ModelDB 原始实现/收敛性质）。三个阻塞疑问提交用户裁决（Q1 权重缺值、Q2 惰性处置、Q3 粒度）。
+- 2026-08-13：裁决完成（Q1=A / Q2=A / Q3=B）+ 设计文档修正写回（f039f93：运行时状态模型 §6.1/§6.2/§6.3/§三/§十一、plan §4.4、README_gurney_model.md、term_registry、决策树 #33 D9/D10/D13 🔧、GurneyState 值域注）+ GitHub #33 闭合后修正评论。spec v1.0 完成（锚点经第二轮实测复算：gate 时刻语义 B1、m_SD2=0 除零防护 B2、残差上界修正 B3）。:13 行按 B3 同步修正。
