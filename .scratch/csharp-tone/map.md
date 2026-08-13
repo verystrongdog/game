@@ -1,6 +1,6 @@
 # map: csharp-tone
 
-> csharp-engine step 5（plan §十一）——ToneUpdater.Step（4 tone 解析解）+ CorticalBias.Compute（tone → b_j 69 维）+ M1 静息 trace 里程碑。Status: open
+> csharp-engine step 5（plan §十一）——ToneUpdater.Step（4 tone 解析解）+ CorticalBias.Compute（tone → b_j 69 维）+ M1 静息 trace 里程碑。Status: closed（2026-08-13）
 
 ## Notes
 
@@ -12,9 +12,11 @@
 ## Decisions-so-far
 
 - [任务issue 01](design/issues/01-tone-spec.md) → 数据实测表 + Q1/Q2 裁决 + D1-D12 → claimed（2026-08-13）
-- spec v1.0 → 全量审计 conditional（0❌/5⚠️/1 refuted，[report.md](design/audit/report.md)）→ v1.1 修复（E1-E5+F6，2026-08-13）→ Δ审计
+- spec v1.0 → 全量审计 conditional（0❌/5⚠️/1 refuted，[report.md](design/audit/report.md)）→ v1.1 修复（E1-E5+F6，2026-08-13）→ Δ审计（通过，2 info refuted）→ [sign-off.md](design/audit/sign-off.md) 批准（2026-08-13，无结转项）
+- [工作issue 01](impl/issues/01-tone.md) → 实现（ToneUpdater/CorticalBias/M1 测试）→ 自审（AC-1~16 全 ✅，100/100 绿）→ 文档写回（plan §十三-8 清扫 + M1 实测入运行时状态模型 §7.3.1）→ resolved
+- **闭合总结**：ToneUpdater.Step（解析解 + δ_scale，偏差 B1-B3）+ CorticalBias.Compute（role 两档 + per-target 唯一 + clamp [0,2]，C1-C6）+ M1 静息不动点实测（active 48 ∈ [0.535174, 0.771229]、排除 21 = σ(b_j) 三组 14/3/4、maxΔ=0）。24 新测试，全库 100/100 绿。
 
 ## Fog
 
-- spec v1.0 写作 ✓ → 全量审计 ✓（conditional）→ v1.1 修复 ✓ → Δ审计 → sign-off → 实现 + M1 → 文档写回（plan §十三-8 + wc-dynamics 结转 #4）
-- 向后结转：δ 聚合/实时发射时序归 step 9 EventProcessor；7 参数化性格→baseline 映射为设计延迟项
+- spec v1.0 写作 ✓ → 全量审计 ✓（conditional）→ v1.1 修复 ✓ → Δ审计 ✓ → sign-off ✓ → 实现 + M1 ✓ → 文档写回（plan §十三-8 + wc-dynamics 结转 #4）✓ → feature 闭合 ✓
+- 向后结转：δ 聚合/实时发射时序归 step 9 EventProcessor；7 参数化性格→baseline 映射为设计延迟项；fid→dk「名不符实」陷阱（dk 名 ≠ fid 名前缀）进预防性结转——step 6+ 数据依赖断言继续 RowOf/数据推导模式

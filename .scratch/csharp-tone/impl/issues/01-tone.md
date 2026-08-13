@@ -1,6 +1,6 @@
 # 工作issue 01: ToneUpdater + CorticalBias 实现 + M1 里程碑
 
-> Status: claimed | Type: implementation | Spec: ../../design/spec.md@v1.1 | Blocked by: sign-off（✅ 2026-08-13 批准） | GitHub: [#55](https://github.com/verystrongdog/game/issues/55)
+> Status: resolved | Type: implementation | Spec: ../../design/spec.md@v1.1 | Blocked by: sign-off（✅ 2026-08-13 批准） | GitHub: [#55](https://github.com/verystrongdog/game/issues/55)
 
 ## 范围
 

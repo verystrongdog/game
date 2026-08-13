@@ -1,6 +1,6 @@
 # 任务issue 01: Tone 规格（ToneUpdater + CorticalBias + M1 里程碑）
 
-> Status: claimed | Type: task | 维度: 管线 | GitHub: [#54](https://github.com/verystrongdog/game/issues/54)
+> Status: resolved | Type: task | 维度: 管线 | GitHub: [#54](https://github.com/verystrongdog/game/issues/54)
 
 ## 问题（这件事要解决什么）
 
@@ -96,3 +96,4 @@ Layer 2（脑干广播调制）的两个引擎函数是 csharp-engine plan §十
 
 - 2026-08-13：创建。数据实测第一轮完成（114 边结构 / w 权重两口径 / b_j 分布 / k_t 锚点 / M1 预览）。Q1/Q2 用户裁决完成（Q1=A per-target 唯一；Q2=A Step 加参），进入 spec 写作。
 - 2026-08-13 🔧 审计修正：全量审计（design/audit/report.md，conditional 0❌/5⚠️/1 refuted）发现数据实测表两处错误——M1 预览行 active 口径误标全节点口径、15 零清单 fid 名 PAG/Thalamus×2 不精确。已修正（原值保留在行内 🔧 注）。spec 升版 v1.1（E1-E5+F6）后走 Δ审计。
+- 2026-08-13：resolved。spec v1.1 通过 Δ审计（0❌/0⚠️）→ sign-off 批准（无结转项）→ 工作issue 01 实现完成（AC-1~16，100/100 绿）→ M1 文档写回完成。feature 闭合（map.md closed）。
