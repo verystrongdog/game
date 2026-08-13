@@ -184,7 +184,7 @@ hp_damage = floor1(san_damage × 0.5)
 
 - 忍耐被动 = −1（最低受到 1.0）；忍耐主动 = −2 CD2 占 Broca（demo 未实现，接口预留）。
 - 防御状态：物理伤害 ×0.5（−50%，仅物理）；force/motivation 生产者见 §六。
-- **一位小数结算（2026-08-13 csharp-damage Q3=D 裁决，替代原 round/floor 取整）**：round1 = `MathF.Round(x, 1, MidpointRounding.AwayFromZero)`（.NET 委托 double 精度）；floor1 = `MathF.Floor(x × 10f) × 0.1f`（保留「向下取整」语义，粒度 0.1）。每步结算后立即量化 → 状态恒在 0.1 网格 → 跨回合无漂移。关联类型变更：ParticipantState HP/SAN 与 CombatEvents 数值字段 int→float（共 18 字段，见 csharp-damage spec 偏差 B）。
+- **一位小数结算（2026-08-13 csharp-damage Q3=D 裁决，替代原 round/floor 取整）**：round1 = `MathF.Round(x, 1, MidpointRounding.AwayFromZero)`（.NET 委托 double 精度）；floor1 = `MathF.Floor(x × 10f) / 10f`（保留「向下取整」语义，粒度 0.1；/10f 精确除法落回 f32(0.1k) 网格点——×0.1f 乘法离格实测，csharp-damage spec 写作期复测）。每步结算后立即量化 → 状态恒在 0.1 网格 → 跨回合无漂移。关联类型变更：ParticipantState HP/SAN 与 CombatEvents 数值字段 int→float（共 22 字段——ParticipantState 4 + PhysicalDamageEvent 6 + MentalDamageEvent 8 + CalibrationConfig 4 demo 模板，见 csharp-damage spec 偏差 B5）。
 
 ### 4.7 EventProcessor
 

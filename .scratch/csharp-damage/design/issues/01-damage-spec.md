@@ -46,7 +46,7 @@ csharp-engine plan §十一 step 8 = **DamageCalculator**——物理/精神伤�
 | # | 断言 | 实测值 |
 |---|------|--------|
 | 10 | round1（主伤害，半进位） | 5.6→**5.6** / 1.5→**1.5** / 2.6→**2.6**（三敏感值全保留）/ 1.95→**2.0**（half 案例）/ 1.3→**1.3** / 0.75→**0.8** / 3.36→**3.4** / 1.2→**1.2** |
-| 11 | floor1（HP 成分，向下取至 0.1：`MathF.Floor(x×10f)×0.1f`） | 5.6→**5.6** / 1.95→**1.9** / 0.75→**0.7** / 3.36→**3.3**；HP 成分 1.5/2→**0.7**、2.6/2→**1.3**、2.0/2→**1.0** |
+| 11 | floor1（HP 成分，向下取至 0.1：`MathF.Floor(x×10f)/10f`——2026-08-13 复测：×0.1f 乘法离格 1.3f→1.3000000715，/10f 精确落回 f32 网格点） | 5.6→**5.6** / 1.95→**1.9** / 0.75→**0.7** / 3.36→**3.3**；HP 成分 1.5/2→**0.7**、2.6/2→**1.3**、2.0/2→**1.0** |
 | 12 | 穿透在最低伤害生效 | 1.0×1.3→round1=**1.3**（整数世界 round/floor 皆 1——一位小数救活最低档穿透）；2.0×1.3→**2.6** |
 | 13 | 存储网格 f32 | 0.7 网格点存储 = **0.699999988079071**（f32 最近值）——显示层格式化「0.7」；每步量化 → 状态恒在 0.1 网格 → 跨回合无漂移 |
 | 14 | 精神 inner（m=0.25） | round1(2×1.25−1) = **1.5** 精确（动机不再被取整吞掉；整数世界 floor 1 / round 2） |
@@ -104,8 +104,8 @@ plan §六 motivation_mod 行字面写 `clamp(tone_bias(attack_physical), −1, 
 | D10 | 生产者公式（motivation = clamp(tone_bias(role), −1, 1)——物理 attack_physical / 精神 attack_mental（Q2=A）、force = clamp(DA_SNc − 0.5, 0, 0.5)）在 spec §五 文档化，**实现归 step 10**（plan §十一 step 8 范围仅 DamageCalculator；§六 为接线规格） | plan §六 + §十一 + Q2=A |
 | D11 | 穿透倍率与 gate 乘法可交换（max(1.0,·) 在两者之前）→ 结算顺序无歧义，spec 固定「inner → ×gate → ×pen → round1」叙述序 | 数学交换律；实测 #12 |
 | D12 | 异常契约：null（config/rng）→ ArgumentNullException；参数值域（gate/motivation/ratio 等）不校验——文档化未定义行为（镜像 speed/WcState 姿态） | csharp-speed spec 先例 |
-| D13 | **量化函数（Q3=D）**：round1 = `MathF.Round(x, 1, MidpointRounding.AwayFromZero)`（.NET 8 委托 double 精度，无 f32 ×10 乘法误差）；floor1 = `MathF.Floor(x × 10f) × DamagePrecision`。**每步结算产物立即量化** → 状态恒在 0.1 网格的 f32 最近值 → 跨回合无漂移、确定性（实测 #13） | 实测 #10/#11/#13 |
-| D14 | **L2 跨 feature 类型变更（Q3=D）**：18 字段 int→float——ParticipantState 4（Hp/HpMax/San/SanMax，CreateDefault 签名同步）+ PhysicalDamageEvent 6（DamageDealt/DamageBlocked/IncomingDamage/TargetHpBefore/TargetHpAfter/TargetHpMax）+ MentalDamageEvent 8（SanDamage/HpDamage/TargetSanBefore/TargetSanAfter/TargetSanMax/TargetHpBefore/TargetHpAfter/TargetHpMax）。BaseDamage/WeaponBonus/HealEvent.HealAmount 保持 int（整数值输入/占位）。spec §二 数据结构声明 + 偏差 B（跨 feature L2）；types spec 变更日志补 🔧 修正行指向本 spec；文件所有权归 damage 工作issue（types 文件当前零消费者——grep 验证 .Hp/.San 无引擎引用） | Q3=D 用户确认；变更管理回路 L2 |
+| D13 | **量化函数（Q3=D）**：round1 = `MathF.Round(x, 1, MidpointRounding.AwayFromZero)`（.NET 8 委托 double 精度，无 f32 ×10 乘法误差）；floor1 = `MathF.Floor(x × 10f) / 10f`（2026-08-13 复测：×DamagePrecision 乘法使 1.3f→1.3000000715 离格，/10f 精确除法落回 f32(0.1k) 网格点）。**每步结算产物立即量化** → 状态恒在 0.1 网格的 f32 最近值 → 跨回合无漂移、确定性（实测 #13） | 实测 #10/#11/#13 |
+| D14 | **L2 跨 feature 类型变更（Q3=D）**：22 字段 int→float——ParticipantState 4（Hp/HpMax/San/SanMax，CreateDefault 签名同步）+ PhysicalDamageEvent 6（DamageDealt/DamageBlocked/IncomingDamage/TargetHpBefore/TargetHpAfter/TargetHpMax）+ MentalDamageEvent 8（SanDamage/HpDamage/TargetSanBefore/TargetSanAfter/TargetSanMax/TargetHpBefore/TargetHpAfter/TargetHpMax）+ CalibrationConfig 4 demo 模板（PlayerHp/PlayerSan/NpcHp/NpcSan 50/80/15/60 → 50f/80f/15f/60f，供 CreateDefault(float,float) 直传）。BaseDamage/WeaponBonus/HealEvent.HealAmount 保持 int（整数值输入/占位）。spec §二 数据结构声明 + 偏差 B（跨 feature L2）；types spec 变更日志补 🔧 修正行指向本 spec；文件所有权归 damage 工作issue（types 文件当前零消费者——grep 验证 .Hp/.San 无引擎引用） | Q3=D 用户确认；变更管理回路 L2 |
 | D15 | **设计文档写回（Q1/Q2/Q3 关联）**：基础行动设计 行动2 叙述行改双档百分比（Q1=A）/ §四 速查表「HP伤害 = SAN伤害的 1/2（向下取整）」→「1/2（向下取至 0.1）」+ 数值语义注（Q3=D）/ plan §六 motivation_mod 拆物理·精神两行（Q2=A）/ 核心机制 §4.2 结算量化注（Q3=D）/ term_registry HP·SAN·向下取整相关条目复查更新 | 一致性清扫原则；垃圾桶隔离原则 |
 | D16 | 呈现层显示规则：HP/SAN 显示格式（1 位小数 vs trim 尾零）属 呈现 维度决策，本 feature 不阻塞——spec 记录为「展示不覆盖」 | plan §十一 step 8 范围 |
 
@@ -116,10 +116,10 @@ plan §六 motivation_mod 行字面写 `clamp(tone_bias(attack_physical), −1, 
 - [ ] 设计文档修正写回（D15 清单：基础行动设计 行动2/§四、plan §六、核心机制 §4.2、term_registry）
 - [ ] spec.md v1.0 → 审计 → 修复升版 → Δ审计
 - [ ] 人类复核 → sign-off.md
-- [ ] 工作issue 01 → 实现 + 证据式自审（含 D14 类型变更 18 字段）
+- [ ] 工作issue 01 → 实现 + 证据式自审（含 D14 类型变更 22 字段）
 - [ ] map.md 更新 + 回顾段（feature 闭合）
 
 ## Comments
 
 - 2026-08-13：创建。数据实测第一轮完成（tone_bias 值域/穿透阈值/RED 算术/取整可见差异/命中边界 f32）。三个疑问提交用户裁决（Q1 穿透双档、Q2 精神 motivation 生产者、Q3 取整链）。
-- 2026-08-13：裁决完成——Q1=A（双档百分比；基础行动设计 §四 速查表与核心机制 §4.3 本就一致，仅行动2 叙述行离群）、Q2=A（attack_mental；plan §六 行写回拆两行）、Q3=D（**用户反提案：一位小数结算**——放弃整数取整，全程 float + 每步量化到 0.1）。Q3=D 引发 L2 跨 feature 类型变更（18 字段 int→float，D14）+ 设计文档数值语义写回（D15），代价已向用户确认。数据实测第二轮完成（量化仿真 5 条：round1/floor1 对照、最低档穿透救活 1.0×1.3→1.3、存储网格 f32、inner 动机保留）。进入设计文档修正写回 + spec v1.0。
+- 2026-08-13：裁决完成——Q1=A（双档百分比；基础行动设计 §四 速查表与核心机制 §4.3 本就一致，仅行动2 叙述行离群）、Q2=A（attack_mental；plan §六 行写回拆两行）、Q3=D（**用户反提案：一位小数结算**——放弃整数取整，全程 float + 每步量化到 0.1）。Q3=D 引发 L2 跨 feature 类型变更（22 字段 int→float，D14；18→22 补正：CalibrationConfig 4 demo 模板加入，2026-08-13 spec 写作期发现）+ 设计文档数值语义写回（D15），代价已向用户确认。数据实测第二轮完成（量化仿真 5 条：round1/floor1 对照、最低档穿透救活 1.0×1.3→1.3、存储网格 f32、inner 动机保留）。进入设计文档修正写回 + spec v1.0。
