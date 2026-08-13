@@ -1,6 +1,6 @@
 # WcDynamics — 实现规格
 
-> WC 69 节点单步动力学（解析指数解）——运行时状态模型 Layer 1 每回合 Phase 1 步骤 3 的落地。版本: v1.0
+> WC 69 节点单步动力学（解析指数解）——运行时状态模型 Layer 1 每回合 Phase 1 步骤 3 的落地。版本: v1.1
 
 ## 目录
 
@@ -19,10 +19,10 @@
 | 项 | 内容 |
 |----|------|
 | 覆盖 | `WcDynamics.Step`——WC 69 节点一轮更新（csharp-engine plan §4.2），含解析解公式、同步更新语义、排除节点行为、契约防御 |
-| 不覆盖 | ToneUpdater/CorticalBias（step 5，b_j 生产方）；CstcGating（step 6）；CombatState 初始化 a(0)=0.10（step 10 职责）；M1 静息 trace 里程碑（2026-08-13 任务issue Q1 裁决：随 step 5 执行） |
+| 不覆盖 | ToneUpdater/CorticalBias（step 5，b_j 生产方）；CstcGating（step 6）；SpeedScoreCalculator（step 7，消费 a 的下游）；EventProcessor（step 9，s 生产方）；CombatState 初始化 a(0)=0.10（step 10 职责）；M1 静息 trace 里程碑（2026-08-13 任务issue Q1 裁决：随 step 5 执行） |
 | 前置依赖 | `WcState`（Types/，engine-types 交付：float[69] A 防御拷贝）；`WMatrix`（Types/ 契约 + Engine/WMatrixBuilder，step 3 交付：W[69,69]/Tau[69]/RowFids[69]） |
 | 阻塞 | step 5 tone/b_j（本 spec 定义 b 向量的消费契约）；M1 里程碑（step 5 起始时执行） |
-| 结转 | 无——engine-types 结转 #1-3 归 step 9、#4 归 step 6/10；wmatrix 结转已全部闭合 |
+| 结转 | 无指向 step 4——engine-types 结转 #1-3 归 step 9、#4 归 step 6/10、#5 已由 step 3 交付闭合；wmatrix 结转 #1/#2 在 feature 内闭合、#3（5 处设计文档修正）已于 2026-08-13 执行完毕（wmatrix 工作issue 01 结转验证表 ✅） |
 
 ## 二、数学模型
 
@@ -43,15 +43,15 @@ a_j(t+Δ) = σ(h_j) + (a_j(t) − σ(h_j)) · exp(−Δ/τ_j)
 - σ(x) = 1 / (1 + exp(−(x − 0.5)))——即 [皮层动力学-通用层 §4.2](../../../规则/技能树系统/皮层动力学-通用层.md) 的 v=1.0、θ=0.5
 - **同步更新**：所有 h_j 由 t 时刻（上一回合末）的 a 计算完毕后，再统一写出全部 a_j(t+Δ)——[运行时状态模型 §7.1](../../../规则/技能树系统/运行时状态模型.md) 步骤 3「W·a 使用上一回合末的 a 值（同步更新避免顺序偏倚）」
 - **排除节点**：W 行=0 → Σ_k 0·a_k = 0 → h_j = b_j + s_j，由统一公式自然覆盖，**无特判分支**（任务issue D7）
-- **快节点精度**：e^(−100) = 3.72e-44（float32 次正规数，非零）。修正项 (a−σ)·k ≤ 3.8e-44，而 σ 的 float32 ulp ≈ 6e-8 → 浮点加法舍入后 a' 与 σ(h_j) **逐位相等**（python 实测验证，2026-08-13）。实现无需任何分支即可获得精确稳态。
+- **快节点精度**：e^(−100) 数学真值 = 3.72e-44（double）；float32 存储值 = 3.78e-44（次正规网格舍入，非零——np.float32 与 C# MathF.Exp(−100f) 双实测一致）。修正项 (a−σ)·k ≤ 3.8e-44，而 σ 的 float32 ulp ≈ 6e-8 → 浮点加法舍入后 a' 与 σ(h_j) **逐位相等**（.NET 8 实测 bit-exact，2026-08-13）。实现无需任何分支即可获得精确稳态。
 
 ### 偏差声明
 
 | # | 偏差 | 设计文档原文 | 本 spec 采用 | 理由 |
 |---|------|------------|-------------|------|
 | B1 | WC 更新用统一解析解（无 Δ/τ≥50 分支） | 运行时状态模型 §4.1 离散更新 `IF Δ/τ_j ≥ 50: a_j ← σ(h_j) ELSE: Euler + clip` | 单一解析指数解（上公式） | csharp-engine plan §十二-1：审计数值证明设计自身参数（Δ=1、τ=0.01-0.15）下 Euler 产生 bang-bang 振荡；快节点两者等价（e^(−100) 修正项低于舍入粒度） |
-| B2 | 静息吸引子 ≈0.5 非 0.10 | [回合战斗流程](../../../规则/回合战斗流程.md) §3.3「未显著激活回到静息基线 0.10」 | a(t) 实测吸引子 ≈0.5（0.10 仅初始值，运行时状态模型 §7.3） | csharp-engine plan §十二-5：审计数值证明 0.10 非不动点；b=0 实测 48 活跃节点吸引子 ∈ [0.4986, 0.4995]（2026-08-13 python） |
-| B3 | 解析解推论：动力学实质 = 固定点迭代 | [皮层动力学-通用层 §4.3](../../../规则/技能树系统/皮层动力学-通用层.md)「slow 节点跨回合平滑过渡，保留历史」 | 全节点单回合收敛 ≥99.9%（slow e^(−6.67)=1.27e-3）→ 每回合 a ← σ(W·a+b+s) 近乎无记忆 | 2026-08-13 任务issue Q2 裁决：实现照解析解，文档叙述修正并入 plan §十三-8 Euler 一致性清扫（§4.3 已在清单内），本 spec 只声明不修订。顺带修正项：皮层动力学 §4.2「σ(0)≈0.006」实测应为 0.377541——一并列入清扫清单 |
+| B2 | 静息吸引子 ≈0.5 非 0.10 | [回合战斗流程](../../../规则/回合战斗流程.md) §3.3「未显著激活回到静息基线 0.10」 | a(t) 实测吸引子 ≈0.5（0.10 仅初始值，运行时状态模型 §7.3） | csharp-engine plan §十二-5：审计数值证明 0.10 非不动点；b=0 实测 48 活跃节点吸引子 ∈ [0.4986, 0.49951]（max=0.4995055，2026-08-13 python + 审计三专家独立复算） |
+| B3 | 解析解推论：动力学实质 = 固定点迭代 | [皮层动力学-通用层 §4.3](../../../规则/技能树系统/皮层动力学-通用层.md)「slow 节点跨回合平滑过渡，保留历史」 | 全节点单回合收敛 ≥99.87%（slow e^(−6.67)=1.27e-3 残留 0.127%）→ 每回合 a ← σ(W·a+b+s) 近乎无记忆 | 2026-08-13 任务issue Q2 裁决：实现照解析解，文档叙述修正并入 plan §十三-8 Euler 一致性清扫（§4.3 已在清单内），本 spec 只声明不修订。顺带修正项：皮层动力学 §4.2「σ(0)≈0.006」实测应为 0.377541——一并列入清扫清单 |
 
 **a_j 值域**：[0, 1]。解析解自动保证（σ ∈ (0,1)，a' 是 a 与 σ 的凸组合加舍入），无需 clip（Euler 方案需要 clip 的原因已随 B1 消除）。
 
@@ -72,6 +72,7 @@ public static class WcDynamics
 - 输入：a 旧状态（69 维，行序 = canonical 69）；b 脑干调制（69 维，[0,2]——运行时状态模型 §7.2）；s 感官输入（69 维，≤2.0——运行时状态模型 §4.5）；w 权重矩阵（W[69,69] 行归一化 / Tau[69] / RowFids[69]）
 - 输出：新 WcState（防御拷贝，不改输入）
 - 异常：ArgumentNullException（a/b/s/w 任一 null）；ArgumentException（b.Length ≠ 69、s.Length ≠ 69、w.W 非 69×69、w.Tau.Length ≠ 69、任一 τ_j ≤ 0）
+- 未定义行为（不校验，调用方契约）：输入 a 含 NaN/Infinity 时输出未定义——生产方（CombatState/EventProcessor）保证输入有限（值域见参数速查表）
 - 来源：csharp-engine plan §4.2 + 运行时状态模型 §4.1/§7.1 步骤 3
 - 偏差：B1（解析解替代 Euler+clip）、B2（吸引子 ≈0.5）、B3（固定点迭代推论）——见 spec §二
 
@@ -92,6 +93,7 @@ public static class WcDynamics
 | SigmaThreshold（θ） | 0.5f | private const | 皮层动力学-通用层 §4.2 |
 
 - σ 与 Δ 均**不扩 CalibrationConfig**（现无此字段，已核实；两参数设计文档已定值、无校准需求——任务issue D3，待校准需求出现再走 L2）
+- **Δ 复用漂移风险注**（审计信息项）：step 5（ToneUpdater τ_t 0.3-1.5，Δ/τ 0.67-3.33 非平凡衰减）与 step 6（Gurney k=25 隐含 Δ）将复用同一 Δ=1.0——后续 feature 的 spec 应显式引用本 spec §四 常量来源，不得各自重新定义。σ 不被 step 6 复用（Gurney 输出为分段线性 ramp，无 sigmoid）
 - 私有辅助：`private static float Sigma(float x) => 1f / (1f + MathF.Exp(-(x - SigmaThreshold)));`（v=1.0 时与 §4.2 公式等价）
 - 更新系数：`float k = MathF.Exp(-DeltaSeconds / tau_j);` 每节点现算（69 次指数/回合，成本可忽略；不缓存——纯函数无状态）
 
@@ -99,7 +101,7 @@ public static class WcDynamics
 
 | # | 约束 | 说明 |
 |---|------|------|
-| C1 | 行序 = canonical 69 = WsensoryMatrix.RegionIds（WcState/WMatrix 既有契约） | Step 按索引对齐 a/b/s/W，**不做名字解析**（名字→行序是 WMatrixBuilder 的职责，step 3 已交付 RowFids） |
+| C1 | 行序 = canonical 69 = WsensoryMatrix.RegionIds（WcState/WMatrix 既有契约） | Step 按索引对齐 a/b/s/W，**不做名字解析**（名字→行序是 WMatrixBuilder 的职责，step 3 已交付 RowFids）；**RowFids 不参与计算、不校验**（其 ==RegionIds 已由 step 3 测试锁定） |
 | C2 | 方向 = 行=接收者 | W 矩阵已按 B3 方向契约构建（wmatrix spec D8）；Step 直接消费行序，**不得转置**（AC-9 哨兵锚点锁定） |
 | C3 | 排除节点零行自然覆盖 | 无特判分支（任务issue D7）；21 排除 fid 的 h_j = b_j + s_j |
 | C4 | τ 来源 = WMatrix.Tau | WMatrixBuilder 已查表（四档映射），Step 不重查 brain_regions |
@@ -116,14 +118,14 @@ public static class WcDynamics
 | AC-2 | 快节点精确收敛：合成 W=0、τ=0.01、b=1.0、s=0、a=0.10 → a' 与 σ(1.0) **逐位相等**（e^(−100) 修正项低于 float32 舍入粒度） | 0.622459331（σ(1.0)） |
 | AC-3 | 解析解公式锚点（slow，合成 W=0、τ=0.15）：(a) b=1.0、a=0.10 → 0.621794432；(b) b=0、a=0.90 → 0.378205568 | 0.621794432 / 0.378205568 |
 | AC-4 | 单调不振荡：τ=0.15 下 a' 严格介于 a 与 σ(h) 之间（解析解保证；Euler 违反——B1 的动机） | a=0.10 < a' < σ(1.0) |
-| AC-5 | 静息吸引子（真实 W，b=s=0，a(0)=0.10，30 回合迭代）：终态 48 活跃节点 ∈ [0.49, 0.50]；21 排除节点 == σ(0)（1e-5）；round30 vs 31 max\|Δ\| < 1e-4；终态 ≠ 0.10（B2：0.10 是初始值非吸引子） | 排除节点 0.377540669；活跃 ∈ [0.4986, 0.4995]（实测） |
+| AC-5 | 静息吸引子（真实 W，b=s=0，a(0)=0.10，30 回合迭代）：终态 48 活跃节点 ∈ [0.49, 0.50]；21 排除节点 == σ(0)（1e-5）；round30 vs 31 max\|Δ\| < 1e-4；终态 ≠ 0.10（B2：0.10 是初始值非吸引子） | 排除节点 0.377540669；活跃 ∈ [0.4986, 0.49951]（实测 max=0.4995055） |
 | AC-6 | 排除节点响应 b/s（真实 W）：任取 1 个排除 fid（W 行=0），a 任意（如全 1.0）、b_j=0.7、s_j=0.3 → h_j = 1.0（与 a 无关）→ a' = 公式值（测试按实际 τ_j 自算期望） | σ(1.0)=0.622459331（τ fast 时逐位） |
-| AC-7 | bimodal s=2.0（合成 W=0、τ=0.01、s=2.0、b=0）→ a' == σ(2.0)；输出 ∈ [0,1]、无 NaN/溢出 | 0.817574476 |
+| AC-7 | bimodal s=2.0（合成 W=0、τ=0.01、s=2.0、b=0）→ a' == σ(2.0)；输出 ∈ [0,1]、无 NaN/溢出。**期望值用 MathF 自算**（同 AC-6/AC-9 模式），不写字面量——float32 计算值 0.81757444 与字面量 np.float32(0.817574476)=0.81757450 差 1 ulp | 0.817574476 |
 | AC-8 | 同步更新（合成 W[1][0]=0.5、τ 全 fast、a=[1,0,…]、b=s=0）：a'_0 == σ(0)；a'_1 == σ(0.5)（就地逐行更新会先写 a'_0 再算 h_1 → 得到 0.422814620 → 失败） | 0.377540669 / 0.5；反例 0.422814620 |
-| AC-9 | 方向契约哨兵（真实 W）：a 仅 pericalcarine=1.0、其余 0，b=s=0 → h_Amygdala == W[Amygdala][pericalcarine] > 0（a'_Amy 按实际 τ 自算期望）；h_pericalcarine == 0（W[pericalcarine][Amygdala]=0——wmatrix AC-7 唯一非互惠对）→ a'_pericalcarine 按公式自算。若实现转置 W，a'_Amy == σ(0) → 失败 | 结构性锚点，无硬编码浮点 |
+| AC-9 | 方向契约哨兵（真实 W）：a 仅 **Pericalcarine**=1.0、其余 0，b=s=0 → h_Amygdala == W[Amygdala][Pericalcarine] > 0（a'_Amy 按实际 τ 自算期望）；h_Pericalcarine == 0 → a'_Pericalcarine 按公式自算。**注意大小写**：RowFids 中是 fid 名 `Pericalcarine`（大写 P），graph_nodes 的 dk 键才是小写 `pericalcarine`（wmatrix 结转 #1 警告过的坑）。两个机制分句：h_Pericalcarine==0 的运算理由是自连接 w(A,A)=0（a 仅 Pericalcarine=1，行内其他项全 0）；W[Pericalcarine][Amygdala]=0 本身对 h_Pericalcarine 无贡献（Amygdala 的 a=0）——但正是这个唯一非互惠对使转置实现必失败（转置时 h_Amygdala==0 → a'_Amy==σ(0)） | 结构性锚点，无硬编码浮点 |
 | AC-10 | 确定性：同输入两次调用逐位相等 | 逐位 |
 | AC-11 | 契约防御：a/b/s/w 任一 null → ArgumentNullException；b.Length≠69、s.Length≠69、w.W 非 69×69、w.Tau.Length≠69、任一 τ_j≤0 → ArgumentException | 异常类型 |
-| AC-12 | 极端输入无 NaN/上溢（真实 W，a 全 1.0、b 全 2.0、s 全 2.0）→ 输出 69 维全部有限 ∈ [0,1] | h ≤ 行和+4 ≤ 5 → σ ≤ 0.989 |
+| AC-12 | 极端输入无 NaN/上溢（真实 W，a 全 1.0、b 全 2.0、s 全 2.0）→ 输出 69 维全部有限 ∈ [0,1] | h ≤ 行和+4 ≤ 5 → σ(5)=0.989013；实测真实输出 max=0.988984 ∈ [0.9707, 0.9890] |
 
 ## 七、本 spec 自检清单
 
@@ -154,8 +156,9 @@ public static class WcDynamics
 
 | 版本 | 日期 | 变更 | 触发 | 审计范围 |
 |------|------|------|------|----------|
-| v1.0 | 2026-08-13 | 初稿：解析解公式 + 12 条 AC + 偏差 B1-B3（固化任务issue D1-D8 + Q1/Q2 裁决） | 任务issue 01 | 全量审计 |
+| v1.0 | 2026-08-13 | 初稿：解析解公式 + 12 条 AC + 偏差 B1-B3（固化任务issue D1-D8 + Q1/Q2 裁决） | 任务issue 01 | 全量审计（3 专家，退回：3❌/5⚠️/7ℹ️） |
+| v1.1 | 2026-08-13 | 修正：E1 B3「≥99.9%」→「≥99.87%」；E2 AC-9 名字 Pericalcarine 大小写 + 分句说明；E3 B2/AC-5 上界 0.4995→0.49951；W1 任务issue bimodal 名单修正（5/12 错）；W2 e^(−100) double/float32 双值标注；W3 AC-12 σ(5)=0.989013；ℹ️ 结转精确化、不覆盖补 step 7/9、C1 RowFids 不校验、AC-7 MathF 自算注、§三 NaN 行为声明、§四 Δ 共享漂移注 | 全量审计退回（3❌） | Δ审计 |
 
 ---
-*创建: 2026-08-13 | 更新: 2026-08-13 | 版本: v1.0*
+*创建: 2026-08-13 | 更新: 2026-08-13 | 版本: v1.1*
 *关联: [csharp-engine plan](../csharp-engine/design/plan.md), [运行时状态模型](../../../规则/技能树系统/运行时状态模型.md), [皮层动力学-通用层](../../../规则/技能树系统/皮层动力学-通用层.md), [任务issue 01](issues/01-wc-dynamics-spec.md)*

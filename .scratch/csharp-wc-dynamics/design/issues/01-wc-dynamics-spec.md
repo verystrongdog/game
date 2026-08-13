@@ -33,11 +33,11 @@ WcDynamics.Step 是 WC 引擎 Layer 1 的单步动力学——运行时状态模
 
 | 断言 | 实测值 |
 |------|--------|
-| bimodal 节点数（W_sensory 行和 = 2） | 12 个：BanksSTS、InferiorParietal、InferiorParietalAngular、MiddleTemporal、Paracentral、Postcentral、PosteriorCingulate、Precuneus、SuperiorFrontal、SuperiorParietal、Supramarginal、TransverseTemporal |
+| bimodal 节点数（W_sensory 行和 = 2） | 12 个：BanksSTS、InferiorParietal、InferiorParietalAngular、MiddleTemporal、Paracentral、Postcentral、RostralAnteriorCingulateCortex、SuperiorTemporal、SuperiorTemporalSulcus、SuperiorTemporalWernicke、Supramarginal、SupramarginalTPJ（🔧 2026-08-13 审计修正：原名单 5 个非双模态、漏 5 个真实双模态——凭记忆补全名单的错误，审计 3/3 专家命中） |
 | e^(−Δ/τ) 解析解系数（Δ=1，τ 三档） | fast τ=0.01 → e^(−100)=3.72e-44（float32 **次正规数，非零**；修正项 (a−σ)·k ≈ 2e-44 低于 float32 舍入粒度 ulp≈6e-8 → a' 与 σ(h) **逐位相等**）；medium τ=0.05 → e^(−20)=2.06e-9；slow τ=0.15 → e^(−6.67)=**1.27e-3** |
 | σ 锚点（v=1, θ=0.5） | σ(0.5)=0.5（不动点 x=σ(x) 验证）；σ(0)=**0.3775**——皮层动力学 §4.2 叙述「σ(0)≈0.006」实测有误（正确 0.3775） |
-| b=0 固定点预览（真实 W 归一化矩阵，a(0)=0.10，30 回合迭代 a←σ(W·a)） | 第 2-3 回合即收敛（round30 vs 31 max\|Δ\|=0.00e+00）；**48 活跃节点终态 ∈ [0.4986, 0.4995]**（≈0.5）；21 排除节点（W 行=0）终态 = σ(0) = 0.3775 |
-| 解析解推论（由 e^(−Δ/τ) 行推导） | 全部节点单回合收敛 ≥99.9%（slow 残留 0.13%）→ 动力学实质 = 固定点迭代 a ← σ(W·a + b + s)，「慢节点跨回合平滑过渡、保留历史」叙述在解析解下不成立 |
+| b=0 固定点预览（真实 W 归一化矩阵，a(0)=0.10，30 回合迭代 a←σ(W·a)） | 第 2-3 回合即收敛（round30 vs 31 max\|Δ\|=0.00e+00）；**48 活跃节点终态 ∈ [0.4986, 0.49951]**（≈0.5，max=0.4995055；🔧 2026-08-13 审计修正：原上界 0.4995 是把 0.4995055 舍成 6 位的产物）；21 排除节点（W 行=0）终态 = σ(0) = 0.3775 |
+| 解析解推论（由 e^(−Δ/τ) 行推导） | 全部节点单回合收敛 ≥99.87%（slow 残留 0.13%；🔧 2026-08-13 审计修正：99.8727% < 99.9%，原「≥99.9%」算术不成立）→ 动力学实质 = 固定点迭代 a ← σ(W·a + b + s)，「慢节点跨回合平滑过渡、保留历史」叙述在解析解下不成立 |
 
 ## 追问
 
