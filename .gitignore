@@ -22,9 +22,10 @@ Thumbs.db
 [Tt]emp/
 [Oo]bj/
 [Bb]uild/
-*.csproj
+[Bb]in/
+/*.csproj
 *.unityproj
-*.sln
+/*.sln
 *.userprefs
 
 # Godot (if ever used)
