@@ -8,8 +8,8 @@
 
 产出：
 - [x] design/plan.md v1.0（审计修订版）——10 修复 + 13 改进 + 6 条件 + 范围表 + 偏差声明 + 待决清单 + 修订实施序
-- [ ] plan.md 通过 workflow 再审计（审计条件 2：重跑公式 + 架构审计，验证 10 修复是否真正吸收）
-- [ ] sign-off.md 获批
+- [x] plan.md 通过 workflow 再审计（审计条件 2：3 专家 conditional → v1.1 修正全部处置）
+- [ ] sign-off.md 获批（待用户复核）
 
 ## 追问
 
@@ -29,8 +29,14 @@ plan.md 是 umbrella 计划（跨 feature），不走 spec.md 机制；每个实
 
 ## 产出
 
-- [x] plan.md v1.0
-- [ ] workflow 再审计报告（audit/report.md）
+- [x] plan.md v1.0 → v1.1
+- [x] workflow 再审计报告（audit/report.md）
 - [ ] sign-off.md
 
 ## Comments
+
+### 2026-08-13 再审计结果与 v1.1 修正
+
+- 3 专家（修复吸收/公式一致性/架构分层）全部 conditional；10 修复全部真实吸收 ✅
+- 关键发现：§十二-4 虚构文档矛盾（回合战斗流程 §9.1 实际一致）、事件类型/LoopSalience/方法签名缺失、速度分量求和→均值未声明——v1.1 全部修正
+- 详见 [audit/report.md](../audit/report.md)

@@ -31,7 +31,7 @@
 | 项 | 内容 |
 |----|------|
 | 覆盖 | WC 69 节点动力学（解析解）、脑干 4 tone、b_j 注入、CSTC 3 环路 Gurney 门控、速度排序（察觉/决断/执行）、物理/精神伤害结算、14 事件 δ/s 处理、NPC 3 基础行动 salience、5 Phase 回合编排、控制台 demo（2 参与者 1v1） |
-| 不覆盖 | 空间系统（12 格/控制区/AOE/借机攻击/视线——[回合战斗流程](../../规则/回合战斗流程.md) §十，原型期推迟）、逃跑/投降（§8.2-8.3）、HP↔SAN 互转（[核心机制](../../规则/核心机制.md) §5.3）、响应窗口 link 交互全文（L1 期待/L3 精准/L5 叙事重构等——demo 无 link）、观察者效应"相信被打败"（待设计）、技能树/LinkState 全量（demo 仅 m_default） |
+| 不覆盖 | 空间系统（12 格/控制区/AOE/借机攻击/视线——[回合战斗流程](../../规则/回合战斗流程.md) §十，原型期推迟）、逃跑/投降（§8.2-8.3）、HP↔SAN 互转（[核心机制](../../规则/核心机制.md) §5.3）、响应窗口 link 交互全文（L1 期待/L3 精准/L5 叙事重构等——demo 无 link）、观察者效应"相信被打败"（待设计）、技能树/LinkState 全量（demo 仅 m_default）、情境原型 archetype 选择（demo 不消费 situation archetype，s 由事件驱动、默认 α=0 中性原型） |
 | 前置依赖 | csharp-data-layer ✅ 已交付（2026-08-12，24/24 测试绿）、[运行时状态模型](../../规则/技能树系统/运行时状态模型.md)、[回合战斗流程](../../规则/回合战斗流程.md)、[核心机制](../../规则/核心机制.md)、[皮层动力学-通用层](../../规则/技能树系统/皮层动力学-通用层.md)、[NPC AI 行为模型](../../规则/技能树系统/NPC AI 行为模型.md)、[基础行动设计](../../规则/技能树系统/操作层/基础行动设计.md) |
 | 阻塞 | 后续 link/技能/装备 feature 依赖本引擎核心；NPC Affordance Competition 全量（7 参数化）依赖 demo 验证 |
 
@@ -43,14 +43,15 @@
 
 ```
 L1 Data  (已交付)    YouAreNotTheFish.Core/Data/      JSON → 不可变 record，无行为
-L2 Engine            YouAreNotTheFish.Core/Engine/    纯函数、无副作用、RNG 注入、产事件不产状态
+L2 Engine            YouAreNotTheFish.Core/Engine/    纯函数、无副作用、RNG 注入、产事件不产实体状态
 L3 Entity            YouAreNotTheFish.Core/Entity/    可变战斗状态，自己 Apply 引擎产出
 L4 Flow              YouAreNotTheFish.Core/Flow/      编排（回合循环/行动分发），无结算逻辑
 L5 Presentation      Unity（本阶段无）
-共享值类型            YouAreNotTheFish.Core/Types/     (SpeedComponents.cs 已存在)
+共享值类型            YouAreNotTheFish.Core/Types/     (SpeedComponents.cs 为空占位文件，Step 7 从零实现)
 ```
 
 - **修复 #9**：TurnManager/ActionResolver 移入 `Flow/` 命名空间（L4 纳入本期范围）；LinkState 移入 Data 层为不可变 record（本期 demo 不实例化，仅 m_default 常量生效，见 §七）。
+- **L2 语义澄清**："产事件不产状态"指不修改**实体**状态（框架 D1）；数值动力学 Step（WcDynamics/ToneUpdater/CstcGating）返回**新**状态值，由 L3 Apply。
 - **框架约束 D1**：引擎产出事件列表 → 实体自己 Apply。**D3**：速度排序算法在 L2，循环调度编排在 L4。
 - **确定性原则**：L2 全部 static 纯函数，RNG 经 `IRng` 注入（NextFloat/NextInt），GameData 以参数传入，禁止 static 可变状态。
 
@@ -71,6 +72,8 @@ L5 Presentation      Unity（本阶段无）
 | CombatContext | Types/ | IRng + GameData + CalibrationConfig——只读上下文，**无**可变回合计数（归 CombatState） | 框架 memory |
 | WMatrix | Types/ | `float[69,69]` + τ[69] + fid→index 行序映射 | 运行时状态模型 §4.2 |
 | SpeedWeights | Types/ | w1/w2/w3 | 回合战斗流程 §3.1 |
+| LoopSalience | Types/ | c_loop[3] + DA_loop[3]（环路 salience 与 DA 混合值） | 运行时状态模型 §6.2/§6.3 |
+| TurnResult | Types/ | 回合结果：参与者快照 + DamageEvent/HealEvent/StatusChangeEvent/LinkGrowthEvent 事件列表（引擎输出） | 框架 memory 核心类型 §3.5 |
 
 91 floats 构成：69 a_j + 4 tone + 15 Gurney + 3 gate = 91（运行时状态模型 §三）。ParticipantState 在此之上携带 HP/SAN/防守状态/CD。
 
@@ -121,15 +124,15 @@ tone_t(t+Δ) = clip(baseline_t + δ_t + (tone_t(t) − baseline_t − δ_t) · e
 
 - **δ 实时注入**（修复 #5）：ToneUpdater.Step 在 Phase 4 事件**发射时刻**调用（非 Phase 1 批量），对齐 §5.5 注入时序表。同窗口多事件 δ 加法叠加（§5.5 首段）。
 - δ 全局缩放 lever δ_scale（§七，[NEW] 0.3）——文档自身 §5.5 已标 ⚠️ 数值校准延迟（DA_VTA 单次命中即饱和）。
-- **b_j 计算**（§5.6）：`b_j = Σ_t tone_t × w_t(j)`，w 从 brainstem 的 **role 字段**取（active→1.0 / modulating→0.5，修复 #8b——不是 projection 字段），clamp [0, 2]（§7.2）。
+- **b_j 计算**（§5.6）：`CorticalBias.Compute(ToneState tone, GameData data) → float[69]`——独立方法（Phase 1 步骤 2 调用点），`b_j = Σ_t tone_t × w_t(j)`，w 从 brainstem 的 **role 字段**取（active→1.0 / modulating→0.5，修复 #8b——不是 projection 字段），clamp [0, 2]（§7.2）。
 
 ### 4.4 CstcGating
 
-`CstcGating.Step(WcState a, ToneState tone, GurneyState prev) → (GurneyState, GateState)`
+`CstcGating.Step(WcState a, ToneState tone, GurneyState prev) → (GurneyState, GateState, LoopSalience)`
 
 每环路（somatic/cognitive/limbic）独立，§6.3 正典：
 
-1. `c_loop = mean(a[ci])`，ci = `cstc_role == "cortical_input" && cstc_loop == loop`（§6.2；role 字段绑定，修复 #8b）。跨环路节点（caudalanteriorcingulate、superiorfrontal）同时贡献两环路（§6.1）。
+1. `c_loop = mean(a[ci])`，ci = function_profile 中 `CstcRole.CorticalInput ∈ cstc_roles && loop ∈ cstc_loops`（§6.2；数据字段为复数数组，枚举用 Data 层已交付的 CstcRole——修复 #8b）。跨环路节点（caudalanteriorcingulate、superiorfrontal）同时贡献两环路（§6.1）。
 2. DA 混合：limbic 0.8VTA+0.2SNc / cognitive 0.4+0.6 / somatic 0.2+0.8（§6.3）。
 3. 5 群体输入 u（§6.3 表）：
    - SD1: `u = c × W_SEL × (1 + DA_loop)`；SD2: `u = c × W_CONT × (1 − DA_loop)`
@@ -144,7 +147,7 @@ tone_t(t+Δ) = clip(baseline_t + δ_t + (tone_t(t) − baseline_t − δ_t) · e
 
 ### 4.5 SpeedScoreCalculator（方案B）
 
-暂停点已定方案B（2026-08-06 D4/D5）：`SpeedScoreCalculator`（纯数值）+ `TurnOrderBuilder`（排序 + coin-flip 破平）两个类；SpeedComponents.cs 已存在，补 SpeedWeights record。
+暂停点已定方案B（2026-08-06 D4/D5）：`SpeedScoreCalculator`（纯数值）+ `TurnOrderBuilder`（排序 + coin-flip 破平）两个类；SpeedComponents.cs 为空占位文件（0 字节），SpeedComponents/SpeedWeights 两个 record 均在 Step 7 从零实现。
 
 ```
 speed = w1 × 察觉 + w2 × 决断 + w3 × 执行          (w1=w2=w3=1/3 默认，回合战斗流程 §3.1)
@@ -153,8 +156,10 @@ speed = w1 × 察觉 + w2 × 决断 + w3 × 执行          (w1=w2=w3=1/3 默认
 执行 = mean(a(Precentral), a_SD1_somatic) + M1 占用惩罚                                       (§3.3；Putamen 代理见 §十三-4)
 ```
 
+- **分量归一化 [NEW]**：文档为节点求和（察觉 4 节点和、执行 2 节点和，§3.2/§3.3），计划统一取均值——三成分量纲可比、等权 1/3 语义成立；偏差声明见 §十二-8。
 - "未显著激活回静息基线 0.10"（§3.3）以 [NEW] 阈值 0.15 实现（CalibrationConfig，§七）。
 - 破平：硬币（IRng），§3.4。
+- `TurnOrderBuilder.BuildOrder(float[] scores, IRng rng) → int[]`（排序 + 破平）。
 - RED 用例（2026-08-06 已定）：等权 (0.5,0.5,0.5)→0.5 / 权重(0.5,0.25,0.25) 偏察觉 (0.5,0.4,0.4)→0.45 / 全满 (1,1,1)→1.0。
 
 ### 4.6 DamageCalculator
@@ -162,6 +167,7 @@ speed = w1 × 察觉 + w2 × 决断 + w3 × 执行          (w1=w2=w3=1/3 默认
 物理（[核心机制](../../规则/核心机制.md) §4.2 + [基础行动设计](../../规则/技能树系统/操作层/基础行动设计.md) §四）：
 
 ```
+CalcPhysicalDamage(int baseDamage, int weaponBonus, float forceMod, float motivationMod, float gateBonus, IRng rng) → (int damage, bool hit)
 damage = (4 + weapon_bonus) × (1 + clamp(force, 0, 0.5) + clamp(motivation, 0, 1.0)) × gate_bonus(attack_physical)
 hit = roll < 0.85 − 0.10 (L0 回避自动触发, 回合战斗流程 §6.2)      [demo 无 link 修正项]
 ```
@@ -169,7 +175,8 @@ hit = roll < 0.85 − 0.10 (L0 回避自动触发, 回合战斗流程 §6.2)    
 精神（核心机制 §4.3 + 基础行动设计 §四）：
 
 ```
-san_damage = max(1, round(2 × (1 + motivation) − 忍耐被动)) × gate_bonus(attack_mental)
+CalcMentalDamage(int baseDamage, float motivationMod, int endurance, float enemySanRatio, float gateBonus) → (int sanDamage, int hpDamage)
+san_damage = max(1, round(2 × (1 + motivation) − 忍耐被动)) × gate_bonus(attack_mental)   [round 取整方式 [NEW]——文档仅对 HP 部分定义向下取整]
 hp_damage = floor(san_damage / 2)
 低 SAN 穿透: 敌方 SAN < 30%×SAN_max → +30%；< 15% → ×2        (核心机制 §4.3——敌方的 SAN)
 永远命中
@@ -179,6 +186,8 @@ hp_damage = floor(san_damage / 2)
 - 防御状态：物理伤害 ×0.5（−50%，仅物理）；force/motivation 生产者见 §六。
 
 ### 4.7 EventProcessor
+
+`ProcessEvents(IReadOnlyList<CombatEvent> events, ...) → 实时 δ 发射（对发射者调用 ToneUpdater.Step）+ 累计 s（float[69] 返回，Phase 1 注入）`
 
 14 事件 δ pattern 表 + magnitude 表完整实现（运行时状态模型 §5.5 两张表）：
 
@@ -204,7 +213,7 @@ Salience(skill) = mean(a_j, j ∈ skill.cortical_nodes) × gate_bonus(role) × (
 tone_bias(role) = Σ_t w_t(role) × (tone_t − baseline_t)        (NPC AI §3.3 权重表)
 ```
 
-- 选择：Boss argmax / 杂兵 Softmax，`T = T_base + T_SAN`，**T_base = 0.15**（NPC AI §3.4 正典值——审计建议的 1.0 临时值不采纳，文档优先），T_SAN = 0 / +0.10 / +0.30 / ∞（SAN ≥60% / 30-60% / <30% / =0，§9.1）。
+- 选择：`SelectAction(ParticipantState state, CombatContext ctx) → CombatAction`；Boss argmax / 杂兵 Softmax，`T = T_base + T_SAN`，**T_base = 0.15**（NPC AI §3.4 正典值——审计建议的 1.0 临时值不采纳，文档优先），T_SAN = 0 / +0.10 / +0.30 / ∞（SAN ≥60% / 30-60% / <30% / =0，§9.1）。
 - demo 固定 Softmax（杂兵模板），Boss 模板留接口。
 
 ---
@@ -213,7 +222,7 @@ tone_bias(role) = Σ_t w_t(role) × (tone_t − baseline_t)        (NPC AI §3.3
 
 ### 5.1 CombatState（Entity）
 
-可变状态：per-participant ParticipantState + 回合计数 + 事件日志 + 行动队列。Apply 方法：ApplyDamage / ApplyTone / ApplyGurney / ApplyDefense。
+可变状态：per-participant ParticipantState（含 s_pending `float[69]` 累计槽）+ 回合计数 + 事件日志（TurnResult 列表）+ 行动队列。Apply 方法：ApplyDamage / ApplyTone / ApplyGurney / ApplyDefense。
 
 ### 5.2 TurnManager（Flow）——修复 #7 后的回合管线
 
@@ -222,8 +231,8 @@ Phase 1 (情境更新, 回合开始):
   1. tone 继承（δ 主体已在 Phase 4 实时注入——修复 #5；此处仅处理 D1/D2 等跨窗口残留，如有）
   2. b_j = Σ tone × w
   3. WcDynamics.Step(prev_a, b, 上回合累计 s, W) → a
-  4. c_loop + DA_loop 混合
-  5. CstcGating.Step → gurney, gates
+  4. c_loop + DA_loop 混合 → LoopSalience（供 Phase 3 决断分）
+  5. CstcGating.Step → gurney, gates, LoopSalience
 
 Phase 2 (继承): 连续状态（a/tone/gurney/gate）原样带入，不递减 CD
 
@@ -308,11 +317,12 @@ Phase 4 声明→响应→结算 dispatch。响应窗口内容按 §一范围 st
 
 | 模块 | 用例 |
 |------|------|
+| WMatrixBuilder | fan-out 广播（同 dk_name 共享行权重）；w 公式与行归一化（ε=0.01）；排除清单行=列=0；τ 数组四档；privileged_pathways 入 W |
 | WcDynamics | 快节点 exp(−100)≈0 → σ(h)；慢节点平滑过渡；静息吸引子 ≈0.5（非 0.10）；bimodal s=2.0 输入；排除节点 W 行=0 仍响应 b/s；init 0.10 |
 | ToneUpdater | 解析解：δ=0 回基线；大 δ clip [0,1]；连续双脉冲（back-to-back）；DA 饱和边界 |
 | CstcGating | DA 极端 0/1 下 ramp 斜率（m_SD2=0 at DA=1.0）；c_loop=0 门控抑制；跨环路节点双贡献；解析收敛到 u |
 | SpeedScore | 3 RED 用例（§4.5）；破平 coin flip 固定 RNG 确定性 |
-| Damage | 命中率分布（固定 RNG）；精神永远命中 + 最低 1；低 SAN 穿透边界（敌方恰好 30%/15%）；防御 −50% 仅物理 |
+| Damage | 命中率分布（固定 RNG）；L0 回避 −10% 命中；精神永远命中 + 最低 1；低 SAN 穿透边界（敌方恰好 30%/15%）；防御 −50% 仅物理 |
 | EventProcessor | A1/B1 pattern；A6 sign 固定符号；m<0.01 skip；C1 guard（被动 SAN_max 变化不触发）；D1/D2 即时到所有 HP>0；s 打包与 α |
 | NpcSalience | 3 行动候选；tone_bias 计算；T=0.15 与 T_SAN 分段；SAN=0 均匀随机 |
 | Flow | 整回合 Phase 1-5；CD 在自己窗口起点递减；HP=0 即时移出队列；防御后 M1 被占 |
@@ -339,6 +349,8 @@ Phase 4 声明→响应→结算 dispatch。响应窗口内容按 §一范围 st
 
 每 step 一个 feature：任务issue → spec → 审计 → sign-off → 工作issue → 自审（二层流水线）。Step 2 的 spec 同时建立引擎层 spec 模板（§七自检清单：数学公式逐项 vs 设计文档对照、边界值、确定性）。
 
+- **"设计两次"约束**（框架 memory）：关键模块必须设计两次——先写接口注释，再实现。本期 8 个引擎模块中 6 个数值核心（WMatrixBuilder / WcDynamics / ToneUpdater / CstcGating / SpeedScoreCalculator / DamageCalculator）按此执行，其 spec §七自检清单含"接口注释先行"检查项。
+
 ---
 
 ## 十二、对设计文档的偏差声明（审计条件 6）
@@ -348,10 +360,11 @@ Phase 4 声明→响应→结算 dispatch。响应窗口内容按 §一范围 st
 | 1 | WC 更新用解析解 | 运行时状态模型 §4.3 Euler + clip | 解析指数解 | 审计数值证明：设计自身参数（Δ=1, τ=0.01-0.15）下 Euler 产生 bang-bang 振荡。先例：§6.3 Gurney 已用解析解（"Δ/τ 大但 k 也大，exp(−25)≈0，a→u"）。快节点两者等价（exp(−100)≈0） |
 | 2 | tone 更新用解析解 | §5.2 Euler（§7.1 步骤 1 亦 Euler） | 解析指数解 | 同上（τ_tone 0.3-1.5，Δ/τ 0.67-3.33） |
 | 3 | δ 注入时序 | §7.1 步骤 1 写"Phase 1 批量"；§5.5 注入时序表写"实时" | 实时（§5.5 为准） | 文档内部不一致，取 §5.5（更细粒度章节 + 神经科学理由）；审计修复 #5 |
-| 4 | CD 递减时机 | 回合战斗流程 §9.1 "每回合开始" | 自己行动窗口起点（§5.1/§四 更细粒度表述） | 文档内部不一致，取行动窗口版本；审计修复 #7 |
-| 5 | 静息吸引子 | 回合战斗流程 §3.2 "未显著激活回到静息基线 0.10" | a(t) 实测吸引子 ≈0.5（0.10 仅初始值 §7.3） | 审计数值证明 0.10 非不动点 |
+| 4 | CD 递减时机 | 原计划在 Phase 2（回合边界）统一递减——与文档不符 | 自己行动窗口起点（回合战斗流程 §9.1 "冷却在你**自己行动窗口的开始时**递减。不是回合边界统一减"；§5.1 同） | 修正的是原计划的错误，文档本身一致；审计修复 #7 |
+| 5 | 静息吸引子 | 回合战斗流程 §3.3 "未显著激活回到静息基线 0.10" | a(t) 实测吸引子 ≈0.5（0.10 仅初始值 §7.3） | 审计数值证明 0.10 非不动点 |
 | 6 | 决断分 | 回合战斗流程 §3.3 `mean(c_loop)(t)` | 同左（mean(c_loop)） | 与运行时状态模型 §8.1 "GPi 竞争解决时间代理"冲突——取 §3.3 具体公式，§8.1 为指针。冲突记录见 §十三-1 |
 | 7 | tone 基线范围 | 核心机制 §十一 [0.1, 2.0] | NPC AI §4.1 [0, 1] + clip | 文档内部冲突，取 NPC AI（与 tone ∈ [0,1] 一致）。冲突记录见 §十三-2 |
+| 8 | 速度分量归一化 | 回合战斗流程 §3.2/§3.3：察觉 = 4 节点和、执行 = 2 节点和（求和形态，无归一） | 统一取均值（[NEW]，§4.5） | 三成分量纲可比（0-1）、等权 1/3 语义成立；文档求和形态下察觉实际权重 4×。若需严格文档形态改回求和即可（序数结果按成分缩放平移） |
 
 ---
 
@@ -364,6 +377,7 @@ Phase 4 声明→响应→结算 dispatch。响应窗口内容按 §一范围 st
 5. **M1 持续占用惩罚、察觉"未显著激活"阈值**：设计引用但未给值 → CalibrationConfig [NEW] 占位（§七）。
 6. **A6 sign 依赖 NPC AI §3.3 权重表**——demo 仅 3 基础行动不触发 A6，实现保留。
 7. **observer_filter 函数**（运行时状态模型 §5.5 [NEW] 延迟）——demo 不实现。
+8. **设计文档 Euler 段落修订**：运行时状态模型 §4.1 离散更新、§5.2、§7.1 步骤 1 与皮层动力学-通用层 §4.3 仍写 Euler+clip——待引擎解析解实测验证后执行一致性清扫（含决策树 Grilling #32 相关记录）；本计划范围内只声明不修订。
 
 ---
 
@@ -373,7 +387,7 @@ Phase 4 声明→响应→结算 dispatch。响应窗口内容按 §一范围 st
 |------|------|--------|------|
 | WC 时间常数 | τ_j | 0.01/0.05/0.15/0.05 | 运行时状态模型 §4.4 |
 | WC 初始激活 | a_j(0) | 0.10 | §7.3 |
-| sigmoid 中点 | σ 中点 | 0.5 | §4.1 |
+| sigmoid 阈值/增益 | θ / v | 0.5 / 1.0 | 皮层动力学-通用层 §4.2（σ(x)=1/(1+exp(−v·(x−θ)))；运行时状态模型 §十一参数速查同值） |
 | 归一化 ε | ε | 0.01 | 皮层动力学 §5.4 |
 | m 默认值 | m_default | 0.3 | 皮层动力学 §5.3 |
 | tone 时间常数 | τ_tone | 0.5/0.3/0.8/1.5 | 运行时状态模型 §5.3 |
@@ -406,6 +420,7 @@ Phase 4 声明→响应→结算 dispatch。响应窗口内容按 §一范围 st
 | 版本 | 日期 | 变更 | 触发 |
 |------|------|------|------|
 | v1.0 | 2026-08-13 | 审计修订版——吸收 10 关键修复 + 13 重要改进 + 6 放行条件 | 2026-08-12 workflow 审计（有条件放行） |
+| v1.1 | 2026-08-13 | 再审计修正（3 专家 conditional）：§十二-4 虚构文档矛盾改为原计划修正、新增 §十二-8 分量归一化偏差、§十二-5 段号修正、补事件类型/LoopSalience/s_pending/方法签名、字段名对齐数据（cstc_roles 复数+CstcRole 枚举）、round [NEW]、σ 引用修正、范围表补 archetype、§十补 WMatrixBuilder/L0 用例、§十一补设计两次约束、§十三补 Euler 文档修订项 | 2026-08-13 workflow 再审计（审计条件 2） |
 
 ---
 *创建: 2026-08-13 | 更新: 2026-08-13*
