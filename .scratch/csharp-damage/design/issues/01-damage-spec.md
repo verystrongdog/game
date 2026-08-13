@@ -21,7 +21,7 @@ csharp-engine plan §十一 step 8 = **DamageCalculator**——物理/精神伤�
 
 ## 范围
 
-- **覆盖**：`DamageCalculator`（物理：`CalcPhysicalDamage`；精神：`CalcMentalDamage`）+ CalibrationConfig 新增伤害常量（11 个 [NEW]）
+- **覆盖**：`DamageCalculator`（物理：`CalcPhysicalDamage`；精神：`CalcMentalDamage`）+ CalibrationConfig 新增伤害常量（12 个 [NEW]）
 - **不覆盖**：force/motivation/gate 的**生产者**（tone_bias 计算、DA_SNc clamp——公式在 spec §五 文档化，实现归 step 10 接线层）、命中链路调制（L1 失望/L3 精准——demo 无 link 修正项）、武器数据与 weapon_hit_mod（demo 空手）、护甲减伤（demo 无护甲）、忍耐·主动（CD2 占 Broca，demo 未实现——签名经 endurance 参数预留）、事件产出（CombatEvent——step 10）
 - **输入**：csharp-engine-types ✅（CalibrationConfig/IRng/ParticipantState.IsDefending）、csharp-cstc ✅（GateState 三 gate 语义）、csharp-speed ✅（速度排序→行动顺序，本 feature 的行动顺序消费者在 step 10）
 
@@ -41,7 +41,7 @@ csharp-engine plan §十一 step 8 = **DamageCalculator**——物理/精神伤�
 
 ### 第二轮（2026-08-13，Q3=D 一位小数量化仿真）
 
-注：round1/floor1 仿真基于 .NET 8 `MathF.Round(x,1,AwayFromZero)` 委托 double 精度（`Math.Round((double)x, 1, mode)`）的文档化实现语义 + python f32 复算；实现测试以真实 MathF.Round 输出钉 AC 锚点（RED 阶段实测）。
+注（2026-08-13 审计 F1 修正）：本注原称 `MathF.Round` 委托 double 精度——**前提错误**。.NET 8 `MathF.Round(float, int, AwayFromZero)` 为全 f32 域实现（第三轮 #15 实测 + dotnet/runtime v8.0.0 源码）。本表 #10-#14 各行锚点与真实运行时输出复验一致（第三轮 #15/#16 覆盖）；唯一失真的推论是「1.5f×1.3f 的积低于 1.95 → round1 得 1.9」——真实输出 **2**（第三轮 #17）。锚点依据以第三轮（本地运行时实测）为准。
 
 | # | 断言 | 实测值 |
 |---|------|--------|
@@ -50,6 +50,20 @@ csharp-engine plan §十一 step 8 = **DamageCalculator**——物理/精神伤�
 | 12 | 穿透在最低伤害生效 | 1.0×1.3→round1=**1.3**（整数世界 round/floor 皆 1——一位小数救活最低档穿透）；2.0×1.3→**2.6** |
 | 13 | 存储网格 f32 | 0.7 网格点存储 = **0.699999988079071**（f32 最近值）——显示层格式化「0.7」；每步量化 → 状态恒在 0.1 网格 → 跨回合无漂移 |
 | 14 | 精神 inner（m=0.25） | round1(2×1.25−1) = **1.5** 精确（动机不再被取整吞掉；整数世界 floor 1 / round 2） |
+
+### 第三轮（2026-08-13，本地 .NET SDK 8.0.29 运行时实测——审计 F1 修正前提后）
+
+> 全部为真实运行时输出（/tmp f32probe 控制台）。此轮为 spec v1.1 锚点依据。
+
+| # | 断言 | 实测值 |
+|---|------|--------|
+| 15 | round1 真实语义锚点 | 1.5f×1.3f = 1.9499999（0x3FF99999）→ **2（0x40000000）**；1.95f→2（0x40000000）；0.75f→**0.8**（0x3F4CCCCD）；3.36f→3.4（0x4059999A）；1.3f→1.3；−0.62f→−0.6（0xBF19999A）；2.6f→2.6；5.6f→5.6 |
+| 16 | floor1 /10f vs ×0.1f 位模式 | /10f 精确落网格：1.3→0x3FA66666（×0.1f 离格 0x3FA66667）、0.95→0x3F666666（0x3F666667）、1.8→0x3FE66666（0x3FE66667）；0.75/0.5/1/3.36 两法一致 |
+| 17 | 精神链 (2, 0.25, 1, 0.299, 1.0f) | raw 1.5 → inner 1.5 → ×1.3 = 1.9499999（0x3FF99999）→ round1 **san 2（0x40000000）**、hp **1（0x3F800000）**——AC-14 第二行锚点（v1.1 回退 1.9/0.9） |
+| 18 | 3.6 链 (2, 0, 0, 0.149, 0.9f) | san **3.6（0x40666666）**、hp **1.8（0x3FE66666）** |
+| 19 | 命中阈值 | thr = 0.85f−0.10f = **0.75（0x3F400000）**；f32 次邻 0.74999994f < 0.75f → **True**（严格小于生效） |
+
+另：死参数演示——写死 2f 公式下 (3, 0, 0, 1, 1) 输出 2（baseDamage=3 无效果——审计 F2 证据，v1.1 已修为消费 baseDamage）。
 
 ## 追问
 
@@ -94,7 +108,7 @@ plan §六 motivation_mod 行字面写 `clamp(tone_bias(attack_physical), −1, 
 |----|------|------|
 | D1 | DamageCalculator = 实例类 + CalibrationConfig 构造注入（镜像 SpeedScoreCalculator；plan §4.6 只给了方法签名未定类形态——types 结转 #4 校准 sweep 需要实例化） | csharp-speed 先例；CalibrationConfig 实例 record |
 | D2 | 物理：`damage = round1((base + weapon_bonus) × (1 + clamp(force,0,ForceCap) + clamp(motivation,0,MotivationCap)) × gate × (defenderIsDefending ? DefendReduction : 1))`；`hit = rng.NextFloat() < BaseHitChance − L0EvadePenalty`（0.85−0.10=0.75，L0 回避无条件自动触发——回合战斗流程 §6.2，plan 修复 #10 demo 无 link 修正项） | plan §4.6 + §六；实测 #5/#6/#9/#10 |
-| D3 | 精神：`inner = max(1.0, round1(2×(1+motivation) − endurance))`；`san = round1(inner × gate × penMultiplier)`（penMultiplier ∈ {1.0, 1.3, 2.0} 互斥取高档——Q1=A）；`hp = floor1(san × 0.5)`（向下取至 0.1——Q3=D） | plan §4.6 + 核心机制 §4.3 + 基础行动设计 §四；实测 #11/#12/#14 |
+| D3 | 精神：`inner = max(1.0, round1(baseDamage×(1+motivation) − endurance))`；`san = round1(inner × gate × penMultiplier)`（penMultiplier ∈ {1.0, 1.3, 2.0} 互斥取高档——Q1=A）；`hp = floor1(san × 0.5)`（向下取至 0.1——Q3=D）。**2026-08-13 审计 F2 修正**：v1.0 写死 `2×` 使 baseDamage 死参数 | plan §4.6 + 核心机制 §4.3 + 基础行动设计 §四；实测 #11/#12/#14/#17 |
 | D4 | 低 SAN 穿透用**受击前** SAN（caller 传 ratio = San/SanMax，受击前状态）；阈值严格小于（ratio < 0.30 / < 0.15——恰好 30%/15% 不触发，plan §十 RED 边界） | plan §十 Damage 行「敌方恰好 30%/15%」；实测 #4 |
 | D5 | 精神永远命中（无 rng 参数）；防御 −50% 仅物理（精神攻击无视物理防御——「闪避/格挡无效——对方的言语/凝视必然进入感知」） | 核心机制 §4.3；基础行动设计 行动2/§四 速查表 |
 | D6 | `defenderIsDefending` 入 CalcPhysicalDamage 签名（plan §4.6 签名缺失但 §六 明确属结算职责——偏差 B 声明） | plan §六 接线表 |
@@ -104,7 +118,7 @@ plan §六 motivation_mod 行字面写 `clamp(tone_bias(attack_physical), −1, 
 | D10 | 生产者公式（motivation = clamp(tone_bias(role), −1, 1)——物理 attack_physical / 精神 attack_mental（Q2=A）、force = clamp(DA_SNc − 0.5, 0, 0.5)）在 spec §五 文档化，**实现归 step 10**（plan §十一 step 8 范围仅 DamageCalculator；§六 为接线规格） | plan §六 + §十一 + Q2=A |
 | D11 | 穿透倍率与 gate 乘法可交换（max(1.0,·) 在两者之前）→ 结算顺序无歧义，spec 固定「inner → ×gate → ×pen → round1」叙述序 | 数学交换律；实测 #12 |
 | D12 | 异常契约：null（config/rng）→ ArgumentNullException；参数值域（gate/motivation/ratio 等）不校验——文档化未定义行为（镜像 speed/WcState 姿态） | csharp-speed spec 先例 |
-| D13 | **量化函数（Q3=D）**：round1 = `MathF.Round(x, 1, MidpointRounding.AwayFromZero)`（.NET 8 委托 double 精度，无 f32 ×10 乘法误差）；floor1 = `MathF.Floor(x × 10f) / 10f`（2026-08-13 复测：×DamagePrecision 乘法使 1.3f→1.3000000715 离格，/10f 精确除法落回 f32(0.1k) 网格点）。**每步结算产物立即量化** → 状态恒在 0.1 网格的 f32 最近值 → 跨回合无漂移、确定性（实测 #13） | 实测 #10/#11/#13 |
+| D13 | **量化函数（Q3=D）**：round1 = `MathF.Round(x, 1, MidpointRounding.AwayFromZero)`（.NET 8 全 f32 域实现：`x*=power10 → Truncate(x + CopySign(0.49999997f, x)) → x/=power10`，非 double 委托——2026-08-13 审计 F1 修正，实测 #15/#17）；floor1 = `MathF.Floor(x × 10f) / 10f`（2026-08-13 复测：×DamagePrecision 乘法使 1.3f→1.3000000715 离格，/10f 精确除法落回 f32(0.1k) 网格点）。**每步结算产物立即量化** → 状态恒在 0.1 网格的 f32 最近值 → 跨回合无漂移、确定性（实测 #13） | 实测 #10/#11/#13/#15/#16 |
 | D14 | **L2 跨 feature 类型变更（Q3=D）**：22 字段 int→float——ParticipantState 4（Hp/HpMax/San/SanMax，CreateDefault 签名同步）+ PhysicalDamageEvent 6（DamageDealt/DamageBlocked/IncomingDamage/TargetHpBefore/TargetHpAfter/TargetHpMax）+ MentalDamageEvent 8（SanDamage/HpDamage/TargetSanBefore/TargetSanAfter/TargetSanMax/TargetHpBefore/TargetHpAfter/TargetHpMax）+ CalibrationConfig 4 demo 模板（PlayerHp/PlayerSan/NpcHp/NpcSan 50/80/15/60 → 50f/80f/15f/60f，供 CreateDefault(float,float) 直传）。BaseDamage/WeaponBonus/HealEvent.HealAmount 保持 int（整数值输入/占位）。spec §二 数据结构声明 + 偏差 B（跨 feature L2）；types spec 变更日志补 🔧 修正行指向本 spec；文件所有权归 damage 工作issue（types 文件当前零消费者——grep 验证 .Hp/.San 无引擎引用） | Q3=D 用户确认；变更管理回路 L2 |
 | D15 | **设计文档写回（Q1/Q2/Q3 关联）**：基础行动设计 行动2 叙述行改双档百分比（Q1=A）/ §四 速查表「HP伤害 = SAN伤害的 1/2（向下取整）」→「1/2（向下取至 0.1）」+ 数值语义注（Q3=D）/ plan §六 motivation_mod 拆物理·精神两行（Q2=A）/ 核心机制 §4.2 结算量化注（Q3=D）/ term_registry HP·SAN·向下取整相关条目复查更新 | 一致性清扫原则；垃圾桶隔离原则 |
 | D16 | 呈现层显示规则：HP/SAN 显示格式（1 位小数 vs trim 尾零）属 呈现 维度决策，本 feature 不阻塞——spec 记录为「展示不覆盖」 | plan §十一 step 8 范围 |
@@ -115,7 +129,7 @@ plan §六 motivation_mod 行字面写 `clamp(tone_bias(attack_physical), −1, 
 - [x] Q1/Q2/Q3 用户裁决（Q1=A 双档百分比 / Q2=A attack_mental / Q3=D 一位小数结算）
 - [x] 设计文档修正写回（D15 清单：基础行动设计 行动2/§四、plan §六、核心机制 §4.2、term_registry）——commit 112616c/bddae18
 - [x] spec.md v1.0（AC-1~18 + B1-B6）——commit fb1aebe；审计前自修正 2 处（AC-14 链锚点 f32 复测 1.9f/0.9f、Floor1 /10f）——commit b780980
-- [ ] 全量审计（workflow 进行中）→ 修复升版 → Δ审计
+- [x] 全量审计（workflow 3 专家 + 对抗验证——report.md：退回修改 1❌+8⚠️+5ℹ️）→ spec v1.1 修复 14 项 → Δ审计（待启动）
 - [ ] 人类复核 → sign-off.md
 - [ ] 工作issue 01 → 实现 + 证据式自审（含 D14 类型变更 22 字段）
 - [ ] map.md 更新 + 回顾段（feature 闭合）
@@ -125,3 +139,4 @@ plan §六 motivation_mod 行字面写 `clamp(tone_bias(attack_physical), −1, 
 - 2026-08-13：创建。数据实测第一轮完成（tone_bias 值域/穿透阈值/RED 算术/取整可见差异/命中边界 f32）。三个疑问提交用户裁决（Q1 穿透双档、Q2 精神 motivation 生产者、Q3 取整链）。
 - 2026-08-13：裁决完成——Q1=A（双档百分比；基础行动设计 §四 速查表与核心机制 §4.3 本就一致，仅行动2 叙述行离群）、Q2=A（attack_mental；plan §六 行写回拆两行）、Q3=D（**用户反提案：一位小数结算**——放弃整数取整，全程 float + 每步量化到 0.1）。Q3=D 引发 L2 跨 feature 类型变更（22 字段 int→float，D14；18→22 补正：CalibrationConfig 4 demo 模板加入，2026-08-13 spec 写作期发现）+ 设计文档数值语义写回（D15），代价已向用户确认。数据实测第二轮完成（量化仿真 5 条：round1/floor1 对照、最低档穿透救活 1.0×1.3→1.3、存储网格 f32、inner 动机保留）。进入设计文档修正写回 + spec v1.0。
 - 2026-08-13：spec v1.0 完成（fb1aebe）。审计前自修正 2 处（b780980）：① AC-14 第二行锚点——1.5f×1.3f 的 f32 精确积 = 1.9499999284744263（低于 1.95），round1 得 1.9 而非 2.0（此前仿真 float64 泄漏），锚点改为 san 1.9f/hp 0.9f；② Floor1 scale-back 由 ×0.1f 改为 /10f——×0.1f 乘法实测离格（1.3f→1.3000000715、0.95f→0.9000000358，逐位锚点会挂），/10f 精确除法落回 f32(0.1k) 网格点。两处均已同步写回实测表 #11、D13、plan、term_registry。全量审计启动（workflow 3 专家 + 对抗验证）。
+- 2026-08-13：全量审计退回（report.md：1 ❌ + 8 ⚠️ + 5 ℹ️）。**F1**：本 issue「MathF.Round 委托 double 精度」前提被推翻——.NET 8 真实实现全 f32 域（×10f→+0.49999997f→trunc→/10f），1.9499999f→**2**（0x40000000）；审计前自修正 #1（AC-14 锚点 2.0→1.9）系误修正，v1.1 已回退为 san 2.0f/hp 1.0f。**F2**：精神公式写死 2f 使 baseDamage 死参数——D3 修正为消费 baseDamage。第三轮实测表 #15-#19（本地 SDK 8.0.29 运行时输出）取代第二轮仿真为锚点依据；第二轮注前提已标注修正。spec v1.1 修复全部 14 项发现，进入 Δ审计。

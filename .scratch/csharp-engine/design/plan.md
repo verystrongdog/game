@@ -176,7 +176,7 @@ hit = roll < 0.85 − 0.10 (L0 回避自动触发, 回合战斗流程 §6.2)    
 
 ```
 CalcMentalDamage(int baseDamage, float motivationMod, int endurance, float enemySanRatio, float gateBonus) → (float sanDamage, float hpDamage)
-san_damage = round1(max(1.0, round1(2 × (1 + motivation) − 忍耐被动)) × gate_bonus(attack_mental) × 穿透倍率)
+san_damage = round1(max(1.0, round1(baseDamage × (1 + motivation) − 忍耐被动)) × gate_bonus(attack_mental) × 穿透倍率)
 hp_damage = floor1(san_damage × 0.5)
 低 SAN 穿透: 敌方 SAN < 30%×SAN_max → ×1.3；< 15% → ×2        (核心机制 §4.3——敌方的 SAN，受击前比值，互斥取高档)
 永远命中
@@ -184,7 +184,7 @@ hp_damage = floor1(san_damage × 0.5)
 
 - 忍耐被动 = −1（最低受到 1.0）；忍耐主动 = −2 CD2 占 Broca（demo 未实现，接口预留）。
 - 防御状态：物理伤害 ×0.5（−50%，仅物理）；force/motivation 生产者见 §六。
-- **一位小数结算（2026-08-13 csharp-damage Q3=D 裁决，替代原 round/floor 取整）**：round1 = `MathF.Round(x, 1, MidpointRounding.AwayFromZero)`（.NET 委托 double 精度）；floor1 = `MathF.Floor(x × 10f) / 10f`（保留「向下取整」语义，粒度 0.1；/10f 精确除法落回 f32(0.1k) 网格点——×0.1f 乘法离格实测，csharp-damage spec 写作期复测）。每步结算后立即量化 → 状态恒在 0.1 网格 → 跨回合无漂移。关联类型变更：ParticipantState HP/SAN 与 CombatEvents 数值字段 int→float（共 22 字段——ParticipantState 4 + PhysicalDamageEvent 6 + MentalDamageEvent 8 + CalibrationConfig 4 demo 模板，见 csharp-damage spec 偏差 B5）。
+- **一位小数结算（2026-08-13 csharp-damage Q3=D 裁决，替代原 round/floor 取整）**：round1 = `MathF.Round(x, 1, MidpointRounding.AwayFromZero)`（.NET 8 全 f32 域实现：`x*=power10 → Truncate(x + CopySign(0.49999997f, x)) → x/=power10`，非 double 委托——2026-08-13 csharp-damage 审计 F1 修正）；floor1 = `MathF.Floor(x × 10f) / 10f`（保留「向下取整」语义，粒度 0.1；/10f 精确除法落回 f32(0.1k) 网格点——×0.1f 乘法离格实测，csharp-damage spec 写作期复测）。每步结算后立即量化 → 状态恒在 0.1 网格 → 跨回合无漂移。关联类型变更：ParticipantState HP/SAN 与 CombatEvents 数值字段 int→float（共 22 字段——ParticipantState 4 + PhysicalDamageEvent 6 + MentalDamageEvent 8 + CalibrationConfig 4 demo 模板，见 csharp-damage spec 偏差 B5）。
 
 ### 4.7 EventProcessor
 

@@ -14,7 +14,7 @@
 
 - [任务issue 01](design/issues/01-damage-spec.md) → 数据实测第一轮（9 条）+ 第二轮（5 条量化仿真）→ claimed（2026-08-13）
 - **Q 裁决（2026-08-13 用户）**：Q1=A（低 SAN 穿透双档百分比 <30%→×1.3 / <15%→×2.0——核心机制 §4.3 + 基础行动设计 §四 速查表一致，仅行动2 叙述行离群）、Q2=A（精神 motivation = tone_bias(attack_mental)——plan §六 行拆物理/精神两行）、Q3=D（**用户反提案：一位小数结算**——放弃整数取整，伤害/SAN/HP 全程 float + 每步量化到 0.1：主伤害 round1 半进位 / HP 成分 floor1 向下取至 0.1）
-- Q3=D 连带决策：D13 量化函数（MathF.Round(x,1,AwayFromZero) 委托 double 精度 + MathF.Floor(x×10f)×0.1f，每步结算后量化防 f32 漂移）、D14 **L2 跨 feature 类型变更 22 字段 int→float**（ParticipantState 4 + PhysicalDamageEvent 6 + MentalDamageEvent 8 + CalibrationConfig 4 demo 模板 PlayerHp/PlayerSan/NpcHp/NpcSan——types 文件当前零消费者）、D15 设计文档写回（基础行动设计 行动2/§四 + plan §六 + 核心机制 §4.2 + term_registry）、D16 呈现层显示规则不覆盖
+- Q3=D 连带决策：D13 量化函数（MathF.Round(x,1,AwayFromZero)——.NET 8 全 f32 域（2026-08-13 审计 F1 修正）+ MathF.Floor(x×10f)/10f，每步结算后量化防 f32 漂移）、D14 **L2 跨 feature 类型变更 22 字段 int→float**（ParticipantState 4 + PhysicalDamageEvent 6 + MentalDamageEvent 8 + CalibrationConfig 4 demo 模板 PlayerHp/PlayerSan/NpcHp/NpcSan——types 文件当前零消费者）、D15 设计文档写回（基础行动设计 行动2/§四 + plan §六 + 核心机制 §4.2 + term_registry）、D16 呈现层显示规则不覆盖
 - 关键实测（第二轮）：三敏感值全保留（5.6/1.5/2.6）；**最低档穿透救活** 1.0×1.3→1.3（整数世界两法皆 1）；inner m=0.25→1.5（动机不再被取整吞掉）；0.7 网格点 f32 存储 0.699999988079071
 
 ## Fog
