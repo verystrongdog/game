@@ -1,6 +1,6 @@
 # 任务issue 00: 引擎实施计划修订（审计 step 0）
 
-> Status: claimed | Type: task | 维度: 管线 | GitHub: [#44](https://github.com/verystrongdog/game/issues/44)
+> Status: resolved | Type: task | 维度: 管线 | GitHub: [#44](https://github.com/verystrongdog/game/issues/44)
 
 ## 问题（这件事要解决什么）
 
@@ -106,7 +106,7 @@ sign-off.md 草稿已交付，**等待用户批准/退回**（批准 → plan v1
 产出：
 - [x] design/plan.md v1.0（审计修订版）——10 修复 + 13 改进 + 6 条件 + 范围表 + 偏差声明 + 待决清单 + 修订实施序
 - [x] plan.md 通过 workflow 再审计（审计条件 2：3 专家 conditional → v1.1 修正全部处置）
-- [ ] sign-off.md 获批（待用户复核）
+- [x] sign-off.md 获批（2026-08-13）
 
 ## 追问
 
@@ -128,7 +128,7 @@ plan.md 是 umbrella 计划（跨 feature），不走 spec.md 机制；每个实
 
 - [x] plan.md v1.0 → v1.1
 - [x] workflow 再审计报告（audit/report.md）
-- [ ] sign-off.md
+- [x] sign-off.md（2026-08-13 获批）
 
 ## Comments
 
@@ -137,3 +137,9 @@ plan.md 是 umbrella 计划（跨 feature），不走 spec.md 机制；每个实
 - 3 专家（修复吸收/公式一致性/架构分层）全部 conditional；10 修复全部真实吸收 ✅
 - 关键发现：§十二-4 虚构文档矛盾（回合战斗流程 §9.1 实际一致）、事件类型/LoopSalience/方法签名缺失、速度分量求和→均值未声明——v1.1 全部修正
 - 详见 [audit/report.md](../audit/report.md)
+
+### 2026-08-13 收尾简要（closed）
+
+- **目标达成**：plan v1.1 获批，成为 csharp-engine 各实施 feature 的引用基线
+- **指标**：F1-F10 全部真实吸收 ✅、6 放行条件全覆、再审计 3 专家 0 未处置、sign-off 获批
+- **遗留**：5 项结转清单随实施验证（静息吸引子实测 / Euler 文档修订 / W_SEL_GPe 权重表 / [NEW] 校准 / 归一化确认）
