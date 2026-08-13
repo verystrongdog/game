@@ -1,6 +1,6 @@
 # 任务issue 01: 速度排序规格（SpeedScoreCalculator + TurnOrderBuilder）
 
-> Status: claimed | Type: task | 维度: 管线 | GitHub: 待 sync_issues.py 创建
+> Status: claimed | Type: task | 维度: 管线 | GitHub: [#60](https://github.com/verystrongdog/game/issues/60)
 
 ## 问题（这件事要解决什么）
 
