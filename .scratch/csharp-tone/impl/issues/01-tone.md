@@ -82,4 +82,81 @@ commit `8239459`（feat: ToneUpdater + CorticalBias 实现 + M1 里程碑测试�
 ## Comments
 
 - 2026-08-13：创建，实现 + 自审完成。M1 实测值表已捕获（69 行，active 48 ∈ [0.53517413, 0.7712287]，maxΔ=0），转入 Task 文档写回（plan §十三-8 + wc-dynamics 结转 #4）。
+- 2026-08-13：文档写回完成（运行时状态模型 §4.1/§5.2/§5.5/§7.1/§7.2/§7.3.1、皮层动力学-通用层 §3.3/§4.2/§4.3、回合战斗流程 §3.2/§3.3、决策树 #32 D3/D6/D7 🔧、term_registry v1.6）。M1 实测值表附录如下。
+
+## M1 实测值表（附录，M1RestingTraceTests 输出）
+
+30 回合静息 trace（tone=baseline、s=0、a(0)=0.10）；round 30 vs 29 maxΔ=0；active 48 ∈ [0.53517413, 0.7712287]；排除 21 = σ(b_j) 三组 14/3/4。
+
+| fid | b_j | a(round30) |
+|-----|-----|------------|
+| AccumbensCore | 0.9000000 | 0.5986876 |
+| AccumbensShell | 0.9000000 | 0.5986876 |
+| Amygdala | 0.4500000 | 0.6489847 |
+| AnteriorCingulateCortex | 0.5500000 | 0.6751733 |
+| AnteriorCingulateCortexDorsal | 0.5500000 | 0.6751733 |
+| BanksSTS | 0.4000000 | 0.6340001 |
+| CaudalMiddleFrontal | 0.6000000 | 0.6827380 |
+| Caudate | 0.7000000 | 0.5498340 |
+| CerebellumCortex | 0.0000000 | 0.5351741 |
+| Cuneus | 0.4000000 | 0.6307744 |
+| DorsalRapheNucleus | 0.0000000 | 0.3775407 |
+| Entorhinal | 0.4000000 | 0.6358709 |
+| FrontalPole | 0.7500000 | 0.7157741 |
+| FrontalPoleDMN | 1.0500000 | 0.7712287 |
+| FrontalPoleExtreme | 0.6000000 | 0.6880417 |
+| FrontalPoleFPN | 0.7500000 | 0.7157741 |
+| FrontalPoleSN | 0.5500000 | 0.6751733 |
+| Fusiform | 0.4000000 | 0.6339693 |
+| HippocampusCA1 | 0.2500000 | 0.6040916 |
+| HippocampusCA3 | 0.2500000 | 0.6040916 |
+| InferiorParietal | 0.4000000 | 0.6349315 |
+| InferiorParietalAngular | 0.4000000 | 0.6349315 |
+| InferiorTemporal | 0.4000000 | 0.6350031 |
+| Insula | 0.4000000 | 0.6327866 |
+| IsthmusCingulate | 0.4000000 | 0.6316203 |
+| LateralOccipital | 0.4000000 | 0.6333711 |
+| LateralOccipitalOccipitoParietal | 0.4000000 | 0.6333711 |
+| LateralOrbitofrontal | 0.8000000 | 0.7200740 |
+| Lingual | 0.4000000 | 0.6336310 |
+| LocusCoeruleus | 0.0000000 | 0.3775407 |
+| LocusCoeruleusRight | 0.0000000 | 0.3775407 |
+| MedialOrbitalPrefrontalDMN | 1.0500000 | 0.7712287 |
+| MedialOrbitalPrefrontalVMPFC | 1.0500000 | 0.7712287 |
+| MedianRapheNucleus | 0.0000000 | 0.3775407 |
+| MiddleTemporal | 0.4000000 | 0.6340925 |
+| NucleusAccumbens | 0.9000000 | 0.5986876 |
+| Pallidum | 0.0000000 | 0.3775407 |
+| Paracentral | 0.4000000 | 0.6306826 |
+| Parahippocampal | 0.5500000 | 0.6673833 |
+| ParsOpercularis | 0.6000000 | 0.6854688 |
+| PeriaqueductalGray | 0.0000000 | 0.3775407 |
+| Pericalcarine | 0.4000000 | 0.6309757 |
+| PontineReticularNucleus | 0.0000000 | 0.3775407 |
+| Postcentral | 0.4000000 | 0.6305829 |
+| PosteriorCingulate | 0.4000000 | 0.6324062 |
+| Precentral | 0.4000000 | 0.6306536 |
+| Precuneus | 0.4000000 | 0.6339999 |
+| Putamen | 0.7000000 | 0.5498340 |
+| RostralAnteriorCingulateCortex | 0.6500000 | 0.6960939 |
+| RostralMiddleFrontalDLPFC | 0.7500000 | 0.7157741 |
+| StriatumMatrix | 0.7000000 | 0.5498340 |
+| SubstantiaNigraParsCompacta | 0.0000000 | 0.3775407 |
+| SubstantiaNigraParsCompactaRight | 0.0000000 | 0.3775407 |
+| SubthalamicNucleus | 0.0000000 | 0.3775407 |
+| SuperiorColliculus | 0.0000000 | 0.3775407 |
+| SuperiorFrontal | 0.8500000 | 0.7350714 |
+| SuperiorFrontalMPFC | 0.8500000 | 0.7350714 |
+| SuperiorParietal | 0.4000000 | 0.6342828 |
+| SuperiorTemporal | 0.4000000 | 0.6359175 |
+| SuperiorTemporalSulcus | 0.4000000 | 0.6359175 |
+| SuperiorTemporalWernicke | 0.4000000 | 0.6359175 |
+| Supramarginal | 0.4000000 | 0.6350251 |
+| SupramarginalTPJ | 0.4000000 | 0.6350251 |
+| TemporalPole | 0.4000000 | 0.6332459 |
+| Thalamus | 0.0000000 | 0.3775407 |
+| ThalamusPulvinar | 0.0000000 | 0.3775407 |
+| TransverseTemporal | 0.4000000 | 0.6316023 |
+| VentralStriatum | 0.9000000 | 0.5986876 |
+| VentralTegmentalArea | 0.0000000 | 0.3775407 |
 
