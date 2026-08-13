@@ -339,8 +339,8 @@ Phase 4 声明→响应→结算 dispatch。响应窗口内容按 §一范围 st
 | 3 | csharp-wmatrix | WMatrixBuilder | ✅ 已交付（2026-08-13） |
 | 4 | csharp-wc-dynamics | WcDynamics | ✅ 已交付（2026-08-13）——解析解 + AC-1~12（14 测试），76/76 绿；**M1 静息 trace 里程碑随 step 5 执行**（2026-08-13 任务issue Q1 裁决：M1 需 tone=baseline 的 b_j，b_j 生产方 CorticalBias 在 step 5） |
 | 5 | csharp-tone | ToneUpdater + b_j | ✅ 已交付（2026-08-13）——解析解 + AC-1~16（24 测试），100/100 绿；M1 里程碑完成（§八）+ Euler 文档清扫（§十三-8） |
-| 6 | csharp-cstc | CstcGating | 待开始 |
-| 7 | csharp-speed | SpeedScoreCalculator + TurnOrderBuilder（含 2026-08-06 RED 用例） | 待开始 |
+| 6 | csharp-cstc | CstcGating | ✅ 已交付（2026-08-13）——115/115 绿；E1 迭代判据实测修正、迭代语义统一声明 |
+| 7 | csharp-speed | SpeedScoreCalculator + TurnOrderBuilder（含 2026-08-06 RED 用例） | ✅ 已交付（2026-08-13）——AC-1~15（25 测试），140/140 绿；静息三分量直算（B1 无特判） |
 | 8 | csharp-damage | DamageCalculator | 待开始 |
 | 9 | csharp-events | EventProcessor | 待开始 |
 | 10 | csharp-flow | CombatState + TurnManager + ActionResolver | 待开始 |

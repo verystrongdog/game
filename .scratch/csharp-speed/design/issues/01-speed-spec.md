@@ -1,6 +1,6 @@
 # 任务issue 01: 速度排序规格（SpeedScoreCalculator + TurnOrderBuilder）
 
-> Status: claimed | Type: task | 维度: 管线 | GitHub: [#60](https://github.com/verystrongdog/game/issues/60)
+> Status: resolved | Type: task | 维度: 管线 | GitHub: [#60](https://github.com/verystrongdog/game/issues/60)
 
 ## 问题（这件事要解决什么）
 
@@ -95,11 +95,13 @@ Putamen 是 CSTC 节点（无 WC a(t)）。plan §十三-4：计划用 somatic �
 - [x] workflow 多专家审计 → report.md（全量 v1.0：0❌/7⚠️ CONFIRMED/2 REFUTED/15 info，有条件通过）
 - [x] Δ审计（v1.1 变更章节 + 半径扩张）→ report.md 追加（0❌/0⚠️/3info L1 已修，等效通过）
 - [x] 人类复核 → sign-off.md（2026-08-13 批准）
-- [ ] 工作issue 01 → 实现 + 证据式自审
-- [ ] map.md 更新 + 回顾段（feature 闭合）
+- [x] 工作issue 01 → 实现 + 证据式自审
+- [x] map.md 更新 + 回顾段（feature 闭合）
 
 ## Comments
 
 - 2026-08-13：创建。数据实测第一轮完成（4 察觉节点存在性/静息锚点/🔑a_SD1 一步==300回合逐位相等/首回合 speed 两变体/回落粒度对比/RED 算术）。三个疑问提交用户裁决（Q1 首回合语义、Q2 回落粒度、Q3 Putamen 代理）。
 - 2026-08-13：裁决完成（Q1=A 静息值 / Q2=A 逐节点回落 / Q3=A a_SD1_somatic）。Q3 用户要求详细说明后裁决——SD1 = 壳核直接通路的 Gurney 结构同构映射。进入设计文档修正写回 + spec v1.0。
 - 2026-08-13：全量审计 v1.0 完成（12 agent 工作流：3 专家 → 去重 → 9 条 error/warning 对抗验证）——0 ❌ / 7 ⚠️ CONFIRMED / 2 REFUTED / 15 info，有条件通过。数学公式与全部数值锚点经独立复算通过；7 个 ⚠️ 全为 spec 层可修（引用指针/防御声明/AC 补强）。spec → v1.1（F1-F7 + L1 批 12 条）；设计文档 §3.2/§3.3 求和→均值写回补全（commit cb68803）。进入 Δ审计。
+
+- 2026-08-13：feature 闭合。工作issue 01 resolved（5 小步提交，140/140 全绿，AC-1~15 全 ✅ + §七 9 项 + 结转 6 项回填）；map.md 回顾段写回；流水线文档六航回顾追加。
