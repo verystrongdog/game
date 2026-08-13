@@ -38,8 +38,10 @@ W 矩阵（69×69 皮层-皮层连接权重 + τ[69]）是 WC 引擎的输入—
 | privileged_pathways 边 | 112 条、112 唯一 dk 对、与 CC 零重叠、无自环 |
 | PP/CC 端点可解析性 | CC 40 dk 全部 ∈ graph_nodes；PP 端点全部可解析（100% 按 dk_name）；15 个 dk/fid 同名（歧义名） |
 | 排除集（CSTC 6 + brainstem） | 21 fids（10 皮下 CSTC + 11 脑干）→ W 活跃节点 = 48 fids |
-| 触及排除 dk 的边 | CC 130 / PP 23 → 幸存边 646 + 89 = 735 |
-| 无 CC 且无 PP 的皮层 dk | 3 个：inferiorparietal / superiorparietal / lateralorbitofrontal → W 行=列=0 |
+| 触及排除 dk 的边 | CC 130 / PP 23 → 幸存边 646 + 89 = 735（CC∩PP 重叠 0） |
+| 孤立节点 | **无**——48 个参与 fids 全部有边；PP-only 的皮层 dk = 0（PP 端点全部同时有 CC 边）；CC-only 5 个（cuneus / inferiorparietal / lateralorbitofrontal / superiorparietal / transversetemporal） |
+| 无对向边的幸存对 | 仅 1 条：pericalcarine→Amygdala（amygdalofugal, edr 0.2813）；其余全部双向且双向 edr 相等 → **归一化前权重全对称；归一化后一般不对称**（行和不同，实测 tt↔cac 归一化后 0.02819 vs 0.03621），唯一例外单元格对 pericalcarine→Amygdala |
+| fan-out 后 fid 级非零元 | 1389（= Σ|fids(source)|×|fids(target)| over 735 幸存对） |
 | Amygdala/HC/Cerebellum 参与 | CC 40 条 + PP 51 条——它们在 W 内有真实连接（支撑 D1） |
 | timescale 分布（brain_regions.function_profile） | fast 27 / medium 29 / slow 11 / mirror 2（LC-Right、SNc-Right 无 timescale 字段，只有 mirror_of） |
 | brainstem 的 brain_regions.dk_name | 全部 None（11 个）——「dk_name=None」指 brain_regions 数据，非 graph_nodes |
@@ -54,7 +56,8 @@ W 矩阵（69×69 皮层-皮层连接权重 + τ[69]）是 WC 引擎的输入—
 | D4 | 边端点解析：dk_name 优先（graph_nodes key），无法匹配时按 functional_id 解析；解析失败 = 数据错误（测试拦截） | 实测当前数据 100% 可解析；15 个歧义名（如 Amygdala 既是 dk 又是 fid）dk 优先无副作用（其 dk 单 fid） |
 | D5 | 自连接 w(A,A)=0 + fan-out 推论：**同 dk 内 fid 对 = 0**；CC∩PP 无重复 dk 对（实测 0）→ 无需去重策略 | 皮层动力学-通用层 §5.2 + 实测 |
 | D6 | τ 查表 per-fid：brain_regions.function_profile.timescale（fast 0.01 / medium 0.05 / slow 0.15）；2 个 mirror fid 继承 mirror_of 目标的 timescale；缺失 → 0.05（§4.4 默认） | 皮层动力学-通用层 §4.4 + 实测（67 有值 + 2 mirror） |
-| D7 | 触及排除 dk 的边不入 W（CC 130 + PP 23 跳过）；孤岛皮层 dk 行全 0 合法（归一化分母 ε=0.01 兜底） | 运行时状态模型 §4.2「行=列=0」+ 实测 |
+| D7 | 触及排除 dk 的边不入 W（CC 130 + PP 23 跳过）；零行仅 21 个排除 fids（48 参与 fids 全部有边，无孤岛）；归一化分母 ε=0.01 兜底 | 运行时状态模型 §4.2「行=列=0」+ 实测（修正：早前误测「3 孤岛皮层 dk」为脚本 bug，已澄清） |
+| D8 | **方向契约：W[行=接收者][列=发送者]**（h_j = Σ_k W_jk·a_k，运行时状态模型 §4.1）；皮层动力学-通用层 §5.1 的 `W[fid_A][fid_B]=w(dk(A),dk(B))` 是 [源][目标] 序——两者互为转置，demo 归一化前对称时数值无差，但归一化后行和不同会分叉 → spec 以运行时方程方向为准 | 运行时状态模型 §4.1 方程是 step 4 WcDynamics 的直接消费端；索引序旧文记为偏差声明 |
 
 ## 追问
 

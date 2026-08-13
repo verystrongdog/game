@@ -6,7 +6,7 @@
 
 - 依赖 csharp-engine plan v1.1 §4.1（6 条）+ csharp-engine-types 交付的 WMatrix 契约（W/Tau/RowFids）
 - 结转 #5（csharp-engine-types sign-off）：`W.RowFids == RegionIds` 行序对齐断言在本 feature 落地
-- **数据实测已完成第一轮**（见任务issue「数据实测」表）：48 活跃 fids / 735 幸存边 / 3 孤岛皮层 dk / mirror 2 fids
+- **数据实测已完成第一轮**（见任务issue「数据实测」表）：48 参与 fids / 735 幸存边 / 1389 非零元 / 无孤立节点 / 唯一无对向边 pericalcarine→Amygdala / mirror 2 fids
 - **设计文档冲突待规格澄清**（任务issue D1）：皮层动力学-通用层 §5.1「仅 cortical」vs 运行时状态模型 §4.2 排除清单——按后者写 spec
 
 ## Decisions-so-far
