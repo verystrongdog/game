@@ -1,6 +1,6 @@
 # 任务issue 01: csharp-events 规格（EventProcessor）
 
-> Status: claimed | Type: task | 维度: 管线 | Blocked by: csharp-damage ✅（2026-08-13 闭合） | GitHub: 待同步
+> Status: claimed | Type: task | 维度: 管线 | Blocked by: csharp-damage ✅（2026-08-13 闭合） | GitHub: [#65](https://github.com/verystrongdog/game/issues/65)
 
 ## 范围
 
