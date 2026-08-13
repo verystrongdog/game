@@ -81,7 +81,7 @@ Putamen 是 CSTC 节点（无 WC a(t)）。plan §十三-4：计划用 somatic �
 | D6 | 首回合语义（Q1=A）→ spec 固化 + 设计文档写回（§3.2 残留注 / Phase 3 图行） | 实测 #6/#7；Q1=A |
 | D7 | Putamen 代理（Q3=A）→ spec 固化 + plan §十三-4 由待决转已决 | plan §十三-4；Q3=A |
 | D8 | 行序 = canonical 69（Wsensory.RegionIds 契约）；4 察觉 fid→行号解析镜像 WMatrixBuilder Step 1-2 | csharp-wmatrix 行序契约复用 |
-| D9 | TurnOrderBuilder.BuildOrder：排序（分数降序）+ 同速组内掷硬币破平（每回合重新破平，IRng.NextFloat()）；输出 = 参与者索引数组（0 = 最快）。**排序稳定策略 + 破平算法写死**（确定性测试：固定 RNG） | §3.4；plan §十 测试行「破平 coin flip 固定 RNG 确定性」 |
+| D9 | TurnOrderBuilder.BuildOrder：排序（分数降序）+ 同速组内破平（每回合重新破平）。**破平算法写死**（确定性测试：固定 RNG）——spec §三 3.2 定为 `IRng.NextInt(i+1)` Fisher-Yates（m 面骰；本表草案原写 NextFloat() 作废，以 spec 为准） | §3.4；plan §十 测试行「破平 coin flip 固定 RNG 确定性」 |
 | D10 | 权重偏移逻辑（§3.1 偏移表）不覆盖——本 feature 用默认等权；偏移属后续 feature（demo 不需要） | plan §4.5 公式块无偏移项（范围声明） |
 | D11 | plan §4.5 行「未显著激活回静息基线 0.10」已过时——§3.3 于 2026-08-13 M1 写回更新为「回落至静息不动点」（0.10 仅初始化值）→ 设计文档写回时同步 plan 该行 | 回合战斗流程.md 更新日志（2026-08-13）；§3.3 原文 |
 | D12 | 运行时状态模型 §8.1 输出映射表（察觉/决断/执行分公式与 §3.2/§3.3 冲突，plan §十二-6 已裁定按 §3.3 实现）→ 设计文档写回：§8.1 改为指针式引用 §3.2/§3.3 现行公式 | plan §十二-6 |
@@ -90,9 +90,10 @@ Putamen 是 CSTC 节点（无 WC a(t)）。plan §十三-4：计划用 somatic �
 
 - [x] 数据实测第一轮（本 issue，已完成——见上表）
 - [x] Q1/Q2/Q3 用户裁决（Q1=A / Q2=A / Q3=A）
-- [ ] 设计文档修正写回（Q1/Q3 决议关联：回合战斗流程 §3.2/Phase 3 图、plan §4.5/§十三-4、运行时状态模型 §8.1——D6/D7/D11/D12）
-- [ ] spec.md v1.0（§一~§七 + 变更日志 + 参数速查表；AC + 偏差 B）
-- [ ] workflow 多专家审计 → report.md
+- [x] 设计文档修正写回（Q1/Q3 决议关联：回合战斗流程 §3.2/Phase 3 图、plan §4.5/§十三-4、运行时状态模型 §8.1——D6/D7/D11/D12；补全：§3.2/§3.3 求和→均值形态，commit cb68803）
+- [x] spec.md v1.0 → v1.1（§一~§八 + 变更日志 + 参数速查表；AC-1~15 + 偏差 B1-B4；v1.1 = 审计 7⚠️ 全修 + L1 批）
+- [x] workflow 多专家审计 → report.md（全量 v1.0：0❌/7⚠️ CONFIRMED/2 REFUTED/15 info，有条件通过）
+- [ ] Δ审计（v1.1 变更章节 + 半径扩张）→ report.md 追加
 - [ ] 人类复核 → sign-off.md
 - [ ] 工作issue 01 → 实现 + 证据式自审
 - [ ] map.md 更新 + 回顾段（feature 闭合）
@@ -101,3 +102,4 @@ Putamen 是 CSTC 节点（无 WC a(t)）。plan §十三-4：计划用 somatic �
 
 - 2026-08-13：创建。数据实测第一轮完成（4 察觉节点存在性/静息锚点/🔑a_SD1 一步==300回合逐位相等/首回合 speed 两变体/回落粒度对比/RED 算术）。三个疑问提交用户裁决（Q1 首回合语义、Q2 回落粒度、Q3 Putamen 代理）。
 - 2026-08-13：裁决完成（Q1=A 静息值 / Q2=A 逐节点回落 / Q3=A a_SD1_somatic）。Q3 用户要求详细说明后裁决——SD1 = 壳核直接通路的 Gurney 结构同构映射。进入设计文档修正写回 + spec v1.0。
+- 2026-08-13：全量审计 v1.0 完成（12 agent 工作流：3 专家 → 去重 → 9 条 error/warning 对抗验证）——0 ❌ / 7 ⚠️ CONFIRMED / 2 REFUTED / 15 info，有条件通过。数学公式与全部数值锚点经独立复算通过；7 个 ⚠️ 全为 spec 层可修（引用指针/防御声明/AC 补强）。spec → v1.1（F1-F7 + L1 批 12 条）；设计文档 §3.2/§3.3 求和→均值写回补全（commit cb68803）。进入 Δ审计。
