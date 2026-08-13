@@ -1,6 +1,6 @@
 # 任务issue 01: 引擎共享状态类型（plan §三）
 
-> Status: claimed | Type: task | 维度: 管线 | Blocked by: csharp-engine sign-off ✅ (2026-08-13) | GitHub: [#45](https://github.com/verystrongdog/game/issues/45)
+> Status: resolved | Type: task | 维度: 管线 | Blocked by: csharp-engine sign-off ✅ (2026-08-13) | GitHub: [#45](https://github.com/verystrongdog/game/issues/45)
 
 ## 问题（这件事要解决什么）
 
@@ -73,7 +73,37 @@ Data/（L1 聚合，csharp-data-layer 已交付 5 个加载方法但未含聚合
 ## 产出
 
 - [x] spec.md v1.0
-- [x] spec.md 通过 workflow 审计（v1.0 全量审计：2 reject + 1 conditional → **退回**；v1.1 吸收 1❌+7⚠️+10ℹ️ → Δ审计进行中）
-- [ ] sign-off.md 获批
+- [x] spec.md 通过 workflow 审计（v1.0 全量审计：2 reject + 1 conditional → **退回**；v1.1 吸收 1❌+5⚠️+9ℹ️ → Δ审计 pass → L1 修正 ×4）
+- [x] sign-off.md 获批（2026-08-13）
 
 ## Comments
+
+### 关闭总结（2026-08-13）
+
+**决策表**（4 决策全部落实到 spec v1.1）：
+
+| D# | 决策 | 落地 |
+|----|------|------|
+| D1 | SpeedWeights 排除（归 step 7） | §一 不覆盖 |
+| D2 | GameData 聚合放 Data/ | §2.12 字段表（5 字段，类型名与已交付 record 核对） |
+| D3 | CalibrationConfig instance record + Default | §四 4.2（对 plan §七 字面 static class 的偏差，结转 #4 蒙特卡洛需要） |
+| D4 | 事件装客观结果，A/B 视角归 step 9 | §二 2.11 + §五 C5 映射表 |
+
+**审计拦截的关键错误**：v1.0 断言「WcState 行序 = Regions 顺序 = RegionIds」——实测两 JSON 69 key 集合相同、顺序第 0 位即不同（TransverseTemporal vs AccumbensCore）。3/3 专家独立命中。v1.1 改为唯一 canonical = RegionIds（plan §三 原文）+ spec 内实测警示。
+
+**受影响文件**：
+
+- `.scratch/csharp-engine-types/design/spec.md` — v1.0 → v1.1（15 项发现吸收 + 4 项 L1 修正）
+- `.scratch/csharp-engine-types/design/audit/report.md` — 新建（Trace Table 15 行 + 半径扩张 + Δ审计 结论）
+- `.scratch/csharp-engine-types/design/audit/sign-off.md` — 新建（批准 2026-08-13）
+- `.scratch/csharp-engine-types/map.md`
+
+**推迟清单**（sign-off 结转，实现时验证）：
+
+| # | 项 | 目标 |
+|---|----|------|
+| 1 | 防御判别 DamageBlocked>0 取整边界 | step 9 |
+| 2 | C5 A5 归属复核（§5.5 未定义互斥） | step 9 |
+| 3 | A4 忍耐常量 −1 + 低 SAN 穿透 | step 9 |
+| 4 | gates=1.0 覆盖时序（CstcGating.Step 前不消费） | step 6/10 |
+| 5 | 行序对齐由 step 3 承接（RowFids == RegionIds） | step 3 |
