@@ -72,8 +72,8 @@ Data/（L1 聚合，csharp-data-layer 已交付 5 个加载方法但未含聚合
 
 ## 产出
 
-- [ ] spec.md v1.0
-- [ ] spec.md 通过 workflow 审计
+- [x] spec.md v1.0
+- [x] spec.md 通过 workflow 审计（v1.0 全量审计：2 reject + 1 conditional → **退回**；v1.1 吸收 1❌+7⚠️+10ℹ️ → Δ审计进行中）
 - [ ] sign-off.md 获批
 
 ## Comments
