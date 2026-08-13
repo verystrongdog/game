@@ -1,6 +1,6 @@
 # 任务issue 01: Tone 规格（ToneUpdater + CorticalBias + M1 里程碑）
 
-> Status: claimed | Type: task | 维度: 管线
+> Status: claimed | Type: task | 维度: 管线 | GitHub: [#54](https://github.com/verystrongdog/game/issues/54)
 
 ## 问题（这件事要解决什么）
 
@@ -85,7 +85,7 @@ Layer 2（脑干广播调制）的两个引擎函数是 csharp-engine plan §十
 
 ## 产出
 
-- [ ] spec.md v1.0（§一~§七 + 变更日志，AC 覆盖 plan §十 ToneUpdater 行 + M1）
+- [x] spec.md v1.0（§一~§七 + 变更日志，AC-1~15 覆盖 plan §十 ToneUpdater 行 + M1）
 - [ ] workflow 多专家审计 → report.md
 - [ ] 人类复核 → sign-off.md（批准）
 - [ ] 工作issue 01 → 实现 + M1 里程碑 + 证据式自审
