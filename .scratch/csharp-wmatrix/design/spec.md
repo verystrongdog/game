@@ -161,14 +161,14 @@ public static class WMatrixBuilder
 | AC-4 | 非零元计数 == 1389（C8） | 全量计数 |
 | AC-5 | 48 行 0 < sum < 1；21 行 sum == 0（C7） | 全量行和断言 |
 | AC-6 | fan-out 广播：全部 735 幸存 dk 对，块内单元格等值（全量扫描）；数据层不变量「CC∩PP 幸存 dk 对重叠 = 0」同步锁定 | 全量块等值 + 数据对集断言 |
-| AC-7 | 锚点值（2026-08-13 由数据文件独立计算所得，**绝对容差 1e-5**；float32 实测偏差 <2e-7，余量 ~100×；数据文件变更时同步更新——本组锚点兼作数据漂移哨兵）：<br>· W[接收=Amygdala][发送=Pericalcarine] ≈ 0.02277450（唯一非互惠边，方向契约哨兵）<br>· W[接收=Pericalcarine][发送=Amygdala] == 0<br>· W[接收 dk=caudalanteriorcingulate][发送 dk=transversetemporal] ≈ 0.03620595（3 fid 行等值）<br>· W[接收 dk=transversetemporal][发送 dk=caudalanteriorcingulate] ≈ 0.02819380（锁定归一化后不对称）<br>· W[接收 dk=Hippocampus][发送 dk=entorhinal] ≈ 0.07386513（PP 边锚点，2 fid 行等值） | 锚点以 **dk 名**标识（Amygdala/Pericalcarine 同时是 fid 名）：测试经 §二 Step 2 的 fid→dk 映射展开 dk→fids，对块内每个单元格断言；fid 索引经 RowFids 查得（v1.1 修正命名粒度） |
+| AC-7 | 锚点值（2026-08-13 由数据文件独立计算所得，**绝对容差 1e-5**；float32 实测偏差 <2e-7，余量 ~100×；数据文件变更时同步更新——本组锚点兼作数据漂移哨兵）：<br>· W[接收=Amygdala][发送=Pericalcarine] ≈ 0.02277450（唯一非互惠边，方向契约哨兵）<br>· W[接收=Pericalcarine][发送=Amygdala] == 0<br>· W[接收 dk=caudalanteriorcingulate][发送 dk=transversetemporal] ≈ 0.03620595（3 fid 行等值）<br>· W[接收 dk=transversetemporal][发送 dk=caudalanteriorcingulate] ≈ 0.02819380（锁定归一化后不对称）<br>· W[接收 dk=Hippocampus][发送 dk=entorhinal] ≈ 0.07386513（PP 边锚点，2 fid 行等值） | 锚点以 **dk 名**标识（Amygdala/Pericalcarine 同时是 fid 名）：锚点标识符按 §二 Step 4.3 端点解析规则展开（graph_nodes 键优先 → fid→dk 兜底），dk→fids 经 GraphNodes.functional_ids 展开，对块内每个单元格断言；fid 索引经 RowFids 查得（v1.1 修正命名粒度；Δ审计后补解析规则引用） |
 | AC-8 | τ 分布（**继承后最终 Tau[69]**）：27 个 fid == 0.01、30 == 0.05、12 == 0.15；LocusCoeruleusRight == 0.15、SubstantiaNigraParsCompactaRight == 0.05（mirror 继承；v1.1 修正——29/11 只对 67 个非 mirror 原始字段成立） | 计数 + 点名断言 |
 | AC-9 | 确定性：同一 GameData 两次 Build 结果逐元相等 | 双调用逐元对拍 |
 | AC-10 | 端点不可解析 → InvalidDataException（合成 GameData：构造伪 tripartite 边） | 异常断言 |
 | AC-11 | 自连接与同 dk：69 对角线全 0；同 dk 内**非对角** fid 对共 Σ_dk n(n−1) = 50 个单元格全 0（C5 推论，计数由 graph_nodes 全量推导；v1.1 修正——82 口径含对角，与 69 对角断言重复计数） | 全量扫描 + 计数断言 |
 | AC-12 | 21 个排除 fid 的 Tau 均 > 0（排除节点仍 WC 驱动，C9） | 全量断言 |
 
-> 数据漂移哨兵：AC-4/6/7/8/11 均为数据依赖断言（计数/锚点/分布），数据 JSON 变更时同步更新期望值——它们兼作数据回归测试。
+> 数据漂移哨兵：AC-3/4/5/6/7/8/11/12 的期望计数/锚点/分布均源自数据 JSON（AC-5 的行数分界 48/21 与 AC-12 的 21 亦含数据计数），数据文件变更时同步复核期望值——它们兼作数据回归测试。
 
 ## 七、本 spec 自检清单
 
@@ -190,6 +190,7 @@ public static class WMatrixBuilder
 |------|------|------|------|----------|
 | v1.0 | 2026-08-13 | 初稿：6 步构建算法 + 12 条 AC + 偏差声明 B1-B4（任务issue D1-D8 固化） | 任务issue 01 | 全量审计（3 专家退回：AC-11 计数 82 错 / AC-8 分布口径矛盾 / B2 数字误挂） |
 | v1.1 | 2026-08-13 | 审计修正：AC-11 82→50（Σ_dk n(n−1) 非对角口径）、AC-8 改继承后最终分布 27/30/12、B2 支撑数字改 Cerebellum-Cortex 幸存口径（CC 6 + PP 12）、AC-7 锚点改 dk 名标识 + 绝对容差声明、Step 4.3 歧义名理由修正（Caudate 2 fids）、B1 补完整修正清单（5 处）、Step 5 段号 §4.2→§4.3、数据漂移哨兵统一标注、§七/§三 同步 | v1.0 全量审计退回 | Δ审计（变更章节 + 半径扩张） |
+| v1.1 🔧 | 2026-08-13 | Δ审计后 L1 修正（免重审，表述类）：AC-7 测试方式补 Step 4.3 端点解析规则引用、数据漂移哨兵扩展至 AC-3/5/12 | Δ审计 conditional（0 error / 2 warning） | 免重审 |
 
 ## 参数速查表
 

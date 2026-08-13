@@ -39,10 +39,10 @@ W 矩阵（69×69 皮层-皮层连接权重 + τ[69]）是 WC 引擎的输入—
 | PP/CC 端点可解析性 | CC 40 dk 全部 ∈ graph_nodes；PP 端点全部可解析（100% 按 dk_name）；15 个 dk/fid 同名（歧义名） |
 | 排除集（CSTC 6 + brainstem） | 21 fids（10 皮下 CSTC + 11 脑干）→ W 活跃节点 = 48 fids |
 | 触及排除 dk 的边 | CC 130 / PP 23 → 幸存边 646 + 89 = 735（CC∩PP 重叠 0） |
-| 孤立节点 | **无**——48 个参与 fids 全部有边；PP-only 的皮层 dk = 0（PP 端点全部同时有 CC 边）；CC-only 三种口径（审计澄清）：无任何 PP 边 6 个（Caudate/Pallidum/Putamen/inferiorparietal/lateralorbitofrontal/superiorparietal，前 3 为 CSTC 排除 dk）；活跃 dk 中无幸存 PP 边 5 个（cuneus/inferiorparietal/lateralorbitofrontal/superiorparietal/transversetemporal——cuneus 与 transversetemporal 的 PP 边全部触及排除 dk）；活跃且无 PP 边 3 个（inferiorparietal/lateralorbitofrontal/superiorparietal） |
+| 孤立节点 | **无**——48 个参与 fids 全部有边；PP-only 的皮层 dk = 0（PP 端点全部同时有 CC 边）；CC-only 三种口径（审计澄清）：有 CC 边且无 PP 边 6 个（Caudate/Pallidum/Putamen/inferiorparietal/lateralorbitofrontal/superiorparietal，前 3 为 CSTC 排除 dk；另有 5 个 brainstem dk 两边皆无，不计入）；活跃 dk 中无幸存 PP 边 5 个（cuneus/inferiorparietal/lateralorbitofrontal/superiorparietal/transversetemporal——cuneus 与 transversetemporal 的 PP 边全部触及排除 dk）；活跃且无 PP 边 3 个（inferiorparietal/lateralorbitofrontal/superiorparietal） |
 | 无对向边的幸存对 | 仅 1 条：pericalcarine→Amygdala（amygdalofugal, edr 0.2813）；其余全部双向且双向 edr 相等 → **归一化前权重全对称；归一化后一般不对称**（行和不同，实测 tt↔cac 归一化后 0.02819 vs 0.03621），唯一例外单元格对 pericalcarine→Amygdala |
 | fan-out 后 fid 级非零元 | 1389（= Σ|fids(source)|×|fids(target)| over 735 幸存对） |
-| Amygdala/HC/Cerebellum 参与 | CC 40 条 + PP 51 条——它们在 W 内有真实连接（支撑 D1） |
+| Amygdala/HC/Cerebellum 参与 | CC 40 条 + PP 51 条（三 dk **并集**幸存口径；Cerebellum-Cortex 单节点幸存 CC 6 + PP 12）——它们在 W 内有真实连接（支撑 D1） |
 | timescale 分布（brain_regions.function_profile） | fast 27 / medium 29 / slow 11 / mirror 2（LC-Right、SNc-Right 无 timescale 字段，只有 mirror_of） |
 | brainstem 的 brain_regions.dk_name | 全部 None（11 个）——「dk_name=None」指 brain_regions 数据，非 graph_nodes |
 
@@ -53,7 +53,7 @@ W 矩阵（69×69 皮层-皮层连接权重 + τ[69]）是 WC 引擎的输入—
 | D1 | **W 节点集 = 48 fids**（44 皮层 + Amygdala + Hippocampus×2 + Cerebellum-Cortex）；排除 = category=brainstem + 6 个 CSTC dk（Pallidum/Thalamus-Proper/Putamen/Caudate/Accumbens-area/SubthalamicNucleus）。排除节点 W 行=列=0，仍由 WC 驱动（h_j = b_j + s_j） | 运行时状态模型 §4.2 的排除清单是操作性规则；皮层动力学-通用层 §5.1「W 仅包含 category=cortical」措辞与 §5.5（特权通路 EC→HC 必须落 W 内）、§4.5（Amygdala 经皮层连接间接接收）矛盾——取运行时状态模型为正典。plan §4.1-3 括注「brainstem dk_name=None 节点（PAG、上丘、脑桥网状核、小脑皮层）」中「小脑皮层」归类有误（实测 category=subcortical 且不在排除清单）——spec 记录偏差声明 |
 | D2 | demo 无 LinkState → m_mean ≡ m_default = 0.3（CalibrationConfig.MDefault）；focus_multiplier ≡ 1.0 | plan §4.1（demo 范围）；Build 签名无 focus 参数，接口以注释预留 |
 | D3 | **行序契约：canonical = WsensoryMatrix.RegionIds**（69）；W.RowFids = RegionIds；W 行=接收者（target） | csharp-engine-types spec §2.1/§2.8 已确立；结转 #5 在本 feature 落地（测试断言 RowFids == RegionIds） |
-| D4 | 边端点解析：dk_name 优先（graph_nodes key），无法匹配时按 functional_id 解析；解析失败 = 数据错误（测试拦截） | 实测当前数据 100% 可解析；15 个歧义名（如 Amygdala 既是 dk 又是 fid）dk 优先无副作用（其 dk 单 fid） |
+| D4 | 边端点解析：dk_name 优先（graph_nodes key），无法匹配时按 functional_id 解析；解析失败 = 数据错误（测试拦截） | 实测当前数据 100% 可解析；15 个歧义名（如 Amygdala 既是 dk 又是 fid）中非排除 dk 全为单 fid（仅 Amygdala）；Caudate（2 fids）∈ CSTC 排除集，排除检查先于解析，歧义永不触达（Δ审计修正） |
 | D5 | 自连接 w(A,A)=0 + fan-out 推论：**同 dk 内 fid 对 = 0**；CC∩PP 无重复 dk 对（实测 0）→ 无需去重策略 | 皮层动力学-通用层 §5.2 + 实测 |
 | D6 | τ 查表 per-fid：brain_regions.function_profile.timescale（fast 0.01 / medium 0.05 / slow 0.15）；2 个 mirror fid 继承 mirror_of 目标的 timescale；缺失 → 0.05（§4.4 默认） | 皮层动力学-通用层 §4.4 + 实测（67 有值 + 2 mirror） |
 | D7 | 触及排除 dk 的边不入 W（CC 130 + PP 23 跳过）；零行仅 21 个排除 fids（48 参与 fids 全部有边，无孤岛）；归一化分母 ε=0.01 兜底 | 运行时状态模型 §4.2「行=列=0」+ 实测（修正：早前误测「3 孤岛皮层 dk」为脚本 bug，已澄清） |
