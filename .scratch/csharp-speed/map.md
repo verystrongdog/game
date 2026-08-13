@@ -11,11 +11,15 @@
 
 ## Decisions-so-far
 
-- [任务issue 01](design/issues/01-speed-spec.md) → 数据实测第一轮 → claimed（2026-08-13）
+- [任务issue 01](design/issues/01-speed-spec.md) → 数据实测第一轮（9 条：4 察觉节点存在性/静息锚点/🔑a_SD1 一步==300回合逐位相等/首回合 speed 两变体/回落粒度对比/RED 算术）→ claimed（2026-08-13）
+- **Q 裁决（2026-08-13 用户）**：Q1=A（首回合 = 静息值，删 §3.2 残留注）、Q2=A（逐节点回落）、Q3=A（Putamen 代理 = a_SD1_somatic——SD1 = 壳核直接通路的 Gurney 结构同构）。Q3 用户要求详细说明后裁决
+- **设计文档修正写回**（commit 223b840 + a8582fe）：回合战斗流程 §3.2 残留注删除+静息值定义+Phase 3 图行 / 运行时状态模型 §8.1 指针化+§7.3 战斗初始状态=静息不动点澄清 / plan §4.5 回落语义+§十二-6+§十三-1/4 闭合 / term_registry 速度排序 entry 更新
+- **spec v1.0**（commit a8582fe）：[spec.md](design/spec.md) §一~§八 + AC-1~14 + 偏差 B1（首回合交付机制：计算器无特判，状态即静息）/B2（分量归一化 mean）/B3（Putamen 代理）/B4（权重偏移不覆盖）+ 参数速查表
+- **全量审计 v1.0（2026-08-13，进行中）**：workflow 3 专家（数学/契约/AC 可测性）→ 去重 → error+warning 对抗验证
 
 ## Fog
 
-- 任务issue 数据实测 ✓ → Q 裁决 ⏳ → 设计文档写回 ⏳ → spec v1.0 ⏳ → 全量审计 ⏳ → Δ审计（如需）⏳ → sign-off ⏳ → 工作issue 01 实现 + 自审 ⏳ → feature 闭合 ⏳
+- 任务issue 数据实测 ✓ → Q 裁决 ✓ → 设计文档写回 ✓ → spec v1.0 ✓ → 全量审计 ⏳ → Δ审计（如需）⏳ → sign-off ⏳ → 工作issue 01 实现 + 自审 ⏳ → feature 闭合 ⏳
 
 ---
 *创建: 2026-08-13 | 更新: 2026-08-13*
