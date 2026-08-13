@@ -25,6 +25,13 @@
 - **NU1900 警告如实记录为环境问题**（NuGet 网络不可达）——不算门禁失败，也不偷偷修
 - **RegionIds 派生填充放 LoadWsensory 内 `with` 表达式**——避免构造器静默计算，派生逻辑可见于加载路径
 
+## 实现细节
+
+- **WsensoryMatrix**：`Rows: Dictionary<string,int>`（69 行 × 6 模态）+ `RowsAsMatrix: int[][]`（69×6）+ `RegionIds: string[]`（派生填充，`with { RegionIds = Rows.Keys.ToArray() }`）。行序依赖 Dictionary 反序列化保序（.NET 实践行为非语言保证）→ 测试逐行断言 `rowKeys[i] == RegionIds[i]` 防护
+- **SituationPrimitives**：4 类型嵌套——SituationArchetype + RdocProfile（6 域全 nullable，实测各 archetype 仅 3-4 域子集）+ AppraisalProfile + SituationPrimitives。`functional_networks` key 有意不映射（AC-12 测试另读原始 JSON 取注册表）
+- **SignalTypesCatalog**：4 categories × 18 subtypes（6/5/4/3），SignalSubtype 异构字段（neurotransmitter/pathway/mechanism 等）全 nullable——实测 27 archetype 0 解析失败
+- **测试构成**：+14 个新测试（24/24 绿）——计数/字段解析/交叉引用/异常三分支/membership 五类
+
 ## 范围
 
 按 spec v1.2 §2.2 + §三 实现：

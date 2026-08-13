@@ -101,3 +101,5 @@ GitHub issue 的读者是人类——issue 是 **brief 层**（目标/指标/判
 **收尾简要**：issue 置 `resolved` 时，在 `## Comments` 末尾追加一条 dated 条目：目标达成与否 → 指标实际值 → 遗留项。格式参考 `csharp-data-layer/impl/issues/01-data-loaders.md`。
 
 **不进 issue 的内容**：完整思考轨迹（tool 调用日志）——那会让 issue 不可读；保留 distilled 判断链 + 指向 report.md Trace Table / 会话 transcript 的链接。
+
+**资产嵌入规则**：GitHub 镜像只同步 issue 文件本身——spec.md / plan.md / audit/report.md / sign-off.md 等资产在 GitHub 上**打不开**。issue 引用审计发现、关键参数、结转清单时，必须把内容本身嵌入 issue 正文（表格），裸相对链接在 GitHub 不可点击。可附 `（本地: .scratch/...）` 标注供本地查阅。参照 `csharp-engine/design/issues/00-plan-revision.md`（Trace Table 全表 + 结转清单嵌入）。

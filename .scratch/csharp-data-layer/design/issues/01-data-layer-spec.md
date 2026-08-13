@@ -29,6 +29,25 @@
 - **31 个情境原型中 27 个有效**（4 个已废弃）（D4）
 - **"有意不映射"清单**——把 System.Text.Json 的静默忽略变成显式决策
 
+## 审计明细（v1.0 全量审计 → v1.2 补修）
+
+**v1.0 退回修改：6 Error（全部真实，无一误报）**
+
+| # | 缺口 | 影响 |
+|----|------|------|
+| E1 | §2.2 全部代码块缺 `[JsonPropertyName]`（18 字段失配）——根因：`PropertyNameCaseInsensitive` 只忽略大小写**不忽略下划线**，snake_case 字段静默反序列化为默认值，不抛错、数据全丢 | 静默数据全丢；AC-3/AC-5 必挂 |
+| E2 | `Matrix` 声明 `bool[][]` ← JSON 实际 int 0/1（.NET 8 实测反序列化抛 JsonException） | AC-1 必挂 |
+| E3 | signal_types 词表过时（19→18，10 个 subtype 名不存在）——spec 引用 Grilling #26 时代旧词表，数据文件已更新 | AC-5 必挂；实现者按 spec 造数据会污染词表 |
+| E4 | RdocProfile 3 域 vs 数据 6 域（缺 positive_valence/arousal_regulatory/sensorimotor） | 静默丢 3 域数据 |
+| E5 | AC-4 数据悬挂：3 个 region 引用无对应脑区（ReflexEscape/SeptalRegion/Habenula） | AC-4 必失败；根源在设计层数据文件，非 spec |
+| E6 | agency/valence 值域文档错误（"environment"→实际 `circumstance`；"neutral"→实际 `ambiguous`） | 按 spec 写校验会误报 |
+
+**10 Warning（进处置，非阻断）**：W1 RegionIds 填充方案无 AC、W2 SignalSubtype 异构字段静默丢弃、W3 三体边 `type`/`_` 前缀 key 未声明不映射、W4 W_sensory 3 个未建模顶层 key、W5 约束 2 验证太弱（只查行数不查行序）、W6 约束 2/4/5 + 异常分支无 AC、W7 AC-6 不可自动化、W8 遗漏约束需设计决策、W9 §七自检清单与新类型脱节、W10 无下划线字段靠 case-insensitive 碰巧匹配。
+
+**v1.1 Δ审计：三路独立实测**——41 个 `[JsonPropertyName]` 逐字段吻合、69×6 int 矩阵、18 子类词表、RdocProfile 6 域、0 悬挂引用；11 条约束 11/11 通过（C1 69/69 双向双射、C2 逐行逐模态 0 mismatch、C3 201 引用 0 悬挂、C5 588/588 ∈ 词表、C9 1049 条边 0 坏引用、C10 88 引用 0 失配）。发现 2 个 AC 覆盖缺口：E-Δ1 mirror_of 无 AC、E-Δ2 1049 三体边（最大引用面）无 AC——v1.0 核心问题只修了一半，被 Δ审计拦截 → v1.2 补 AC-13/AC-14。
+
+**无审计会怎样**：3 个 AC（1/3/5）按 spec 原样实现必失败，且失败原因是 spec 自身错误；18 处映射失配导致"测试全绿但数据全丢"的假阳性代码。
+
 ## 范围
 
 产出 spec.md 覆盖 C# Data Layer 的全部类型和加载器：
