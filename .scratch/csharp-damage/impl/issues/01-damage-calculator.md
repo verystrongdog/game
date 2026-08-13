@@ -1,6 +1,6 @@
 # 工作issue 01: DamageCalculator 实现 + L2 类型变更
 
-> Status: claimed | Type: implementation | 维度: 管线 | Spec: ../../design/spec.md@v1.1 | Blocked by: sign-off ✅（2026-08-13 批准）
+> Status: claimed | Type: implementation | 维度: 管线 | Spec: ../../design/spec.md@v1.1 | Blocked by: sign-off ✅（2026-08-13 批准） | GitHub: [#63](https://github.com/verystrongdog/game/issues/63)
 
 ## 范围
 
