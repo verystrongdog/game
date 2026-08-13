@@ -94,10 +94,10 @@ GPe 输入方程引用 `W_SEL_GPe`，但设计权重表（§6.3）与 README_gur
 - [x] spec.md v1.0（§一~§七 + 变更日志 + 参数速查表；AC-1~15；偏差 B1-B3）
 - [x] workflow 多专家审计 → report.md（v1.0 全量审计：退回——1❌ E1 + 6⚠️ + 6ℹ️ + 1 refuted；16 CONFIRMED）
 - [x] spec v1.1 Δ审计（2 专家 + 对抗验证：0❌/0⚠️/1ℹ️ I-1 计数不一致 → L1 已修；结论通过）
-- [ ] 人类复核 → sign-off.md（批准）
-- [ ] 工作issue 01 → 实现 + 证据式自审
+- [x] 人类复核 → sign-off.md（批准，commit d1e09dd）
+- [x] 工作issue 01 → 实现 + 证据式自审（CstcGating + 测试 115/115 全绿，commit cce0547）
 - [x] 设计文档修正写回（Q2 决议关联：运行时状态模型 §6.3/§三 + 权重表 + plan §4.4——commit f039f93）
-- [ ] map.md 更新 + 回顾段
+- [x] map.md 更新 + 回顾段（feature 闭合，Status: closed）
 
 ## Comments
 
@@ -105,3 +105,4 @@ GPe 输入方程引用 `W_SEL_GPe`，但设计权重表（§6.3）与 README_gur
 - 2026-08-13：裁决完成（Q1=A / Q2=A / Q3=B）+ 设计文档修正写回（f039f93：运行时状态模型 §6.1/§6.2/§6.3/§三/§十一、plan §4.4、README_gurney_model.md、term_registry、决策树 #33 D9/D10/D13 🔧、GurneyState 值域注）+ GitHub #33 闭合后修正评论。spec v1.0 完成（锚点经第二轮实测复算：gate 时刻语义 B1、m_SD2=0 除零防护 B2、残差上界修正 B3）。:13 行按 B3 同步修正。
 - 2026-08-13：全量审计完成（3 专家 17 原始发现 → 去重 14；对抗验证 16 CONFIRMED + 1 REFUTED）。退回修改：❌ E1（AC-4/AC-10 迭代判据「max\|Δ\|<1e-7（≤100 回合）」不可达——STN↔GPe 互耦收缩率 √0.9≈0.9487/回合，实测收敛 251/253 回合）必须修复。spec 升 v1.1 修复全部 ❌/⚠️/ℹ️（迭代语义统一 300 回合、CiRows 公开访问器、ramp 内联 §4.5、§4.3 ordinal 陷阱措辞、AC-12 包含性断言声明、B4 偏差入表、C1 KeyNotFound 文档化、AC-9 SD2 ≈0 注、AC-10 端点与非单调注、AC-5/6 链参数补全）；本 issue #3 行与 D2 依据同步修正。Δ审计待跑。
 - 2026-08-13：Δ审计通过（2 专家 + 对抗验证：0❌/0⚠️/1ℹ️）。I-1（info，CONFIRMED）：变更日志 v1.1 行计数「1❌+6⚠️+6ℹ️」与 audit/report.md 缺口汇总（1❌+5⚠️+7ℹ️+1 REFUTED）不一致 + bullet 漏任务issue D2/#3 修复——L1 通道修正（spec 变更日志 🔧 行 + map.md 计数）。半径扩张 11 修复点全部通过。转人类 sign-off。
+- 2026-08-13：sign-off 批准（用户逐项处置 15 条全部「已修复」+ 结转 4 项确认，commit d1e09dd）→ 工作issue 01 实现：CstcGating.cs + CstcGatingTests.cs（AC-1~15 共 15 方法），`dotnet build` 零错误 + `dotnet test` 115/115 全绿首跑通过（commit cce0547）。自审通过（15 AC ✅ + §七 9 项 ✅ + 结转 4 项 ✅ + 0 spec 缺陷）→ map.md 回顾段 → **feature 闭合**。
