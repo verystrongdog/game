@@ -42,7 +42,7 @@ Layer 2（脑干广播调制）的两个引擎函数是 csharp-engine plan §十
 | Raphe 双源 | DR 34 条 + MnR 34 条，34 目标 100% 重叠（§5.1「100% 重叠」），同 target 两边的 role+projection 完全相同 |
 | 每系统 role 分布（唯一 dk） | LC active 3（caudalanteriorcingulate/parahippocampal/rostralmiddlefrontal）+ modulating 29；Raphe active 3（medialorbitofrontal/rostralanteriorcingulate/superiorfrontal）+ modulating 31（含 Amygdala/Hippocampus）；VTA active 3（Accumbens-area/lateralorbitofrontal/medialorbitofrontal）+ modulating 8；SNc active 3（Accumbens-area/Caudate/Putamen） |
 | 排除 fid（21）中接收 b_j | 7 个纹状体：AccumbensCore/AccumbensShell/NucleusAccumbens/VentralStriatum/Caudate/StriatumMatrix/Putamen（VTA+SNc DA tone——§7.2 锚点确认） |
-| 全脑 b_j=0 的 fid | 15 个：10 脑干源（LocusCoeruleus×2、DorsalRapheNucleus、MedianRapheNucleus、SNc×2、VTA、PAG、SuperiorColliculus、PontineReticularNucleus）+ CerebellumCortex + Pallidum + SubthalamicNucleus + Thalamus×2。§5.7 列的 PAG/上丘/脑桥网状核/小脑皮层实测均 b_j=0 ✓，但零清单不止这四个（spec 记录完整清单） |
+| 全脑 b_j=0 的 fid | 15 个：10 脑干源（LocusCoeruleus×2、DorsalRapheNucleus、MedianRapheNucleus、SNc×2、VTA、PeriaqueductalGray、SuperiorColliculus、PontineReticularNucleus）+ CerebellumCortex + Pallidum + SubthalamicNucleus + Thalamus + ThalamusPulvinar（🔧 2026-08-13 审计修正：fid 名从缩写改为精确名）。§5.7 列的 PAG/上丘/脑桥网状核/小脑皮层实测均 b_j=0 ✓，但零清单不止这四个（spec 记录完整清单） |
 | b_j @ baseline（A 口径） | max = 1.05 @ medialorbitofrontal 3 fid（5HT act 1.0×0.5 + VTA act 1.0×0.4 + LC mod 0.5×0.3）；非零 54/69；无 clamp 触发 |
 | b_j @ tone=1（A 口径） | max = 2.5（同 3 fid）→ 3 fid 超 2.0 被 clamp [0,2]；§7.2「max=2.0 全脑最高为 Accumbens-area」实测不完整（mOFC 三 fid 亦达 2.0+，clamp 兜底——文档清扫候选） |
 | b_j @ baseline（B 口径，Q1 已否决） | max = 1.55；tone=1 max = 3.5（10 fid 超 clamp） |
@@ -50,7 +50,7 @@ Layer 2（脑干广播调制）的两个引擎函数是 csharp-engine plan §十
 | 解析解样例（δ_scale=0.3） | NE 0.3 +d1 → 0.559399415；DA_VTA 0.4 +d1 → 0.689297802；DA_SNc 0.5 +d1 → 0.714048561；5HT 0.5 +d1 → 0.645974864；NE +10 → clip 1.0；5HT 1.0 −10 → clip 0.0 |
 | back-to-back 双脉冲 | NE +1,+1：0.559399415 → 0.594505308（连续两次 Step ≠ 聚合一次 Step——δ 聚合语义唯一归属 step 9，本 feature 只定义单次 Step 契约） |
 | DA_VTA 无 δ_scale 饱和 | 0.4 +d1 unscaled → 1.3643 → clip 1.0（印证 §5.5 ⚠️ 注；×0.3 后 0.6893） |
-| M1 预览（python 按 csharp-wmatrix spec 算法重建 W：非零元 1389 ✓、b=0 不动点 active [0.49861,0.49951] ✓ 排除=σ(0)=0.3775407 ✓，重建可信） | baseline b_j（A 口径）30 回合静息不动点：**active 48 ∈ [0.3775, 0.7712]，mean 0.5931**；排除节点 = σ(b_j) 精确（b=0→0.3775 / b=0.7→0.5498 / b=0.9→0.5987）。**plan §八「b_j>0 会略高」的预测被实测推翻**——不是略高，max 从 0.4995 → 0.7712。M1 实测值写回文档时以此为准 |
+| M1 预览（python 按 csharp-wmatrix spec 算法重建 W：非零元 1389 ✓、b=0 不动点 active [0.49861,0.49951] ✓ 排除=σ(0)=0.3775407 ✓，重建可信） | baseline b_j（A 口径）30 回合静息不动点：**active 48 ∈ [0.535174, 0.771229]，mean 0.658196**（🔧 2026-08-13 审计修正：原行把全 69 节点口径 [0.3775, 0.7712] mean 0.5931 误标为 active 口径——0.3775 是排除节点 σ(0)，active 口径应为上值）；排除节点 = σ(b_j) 精确（b=0→0.3775 / b=0.7→0.5498 / b=0.9→0.5987）。**plan §八「b_j>0 会略高」的预测被实测推翻**——不是略高，max 从 0.4995 → 0.7712。M1 实测值写回文档时以此为准 |
 
 ## 追问
 
@@ -95,3 +95,4 @@ Layer 2（脑干广播调制）的两个引擎函数是 csharp-engine plan §十
 ## Comments
 
 - 2026-08-13：创建。数据实测第一轮完成（114 边结构 / w 权重两口径 / b_j 分布 / k_t 锚点 / M1 预览）。Q1/Q2 用户裁决完成（Q1=A per-target 唯一；Q2=A Step 加参），进入 spec 写作。
+- 2026-08-13 🔧 审计修正：全量审计（design/audit/report.md，conditional 0❌/5⚠️/1 refuted）发现数据实测表两处错误——M1 预览行 active 口径误标全节点口径、15 零清单 fid 名 PAG/Thalamus×2 不精确。已修正（原值保留在行内 🔧 注）。spec 升版 v1.1（E1-E5+F6）后走 Δ审计。

@@ -1,6 +1,6 @@
 # ToneUpdater + CorticalBias — 实现规格
 
-> Layer 2（脑干广播调制）引擎规格——`ToneUpdater.Step`（4 tone 解析解单步动力学）与 `CorticalBias.Compute`（tone → b_j 69 维注入）的实现规格，附 M1 静息 trace 里程碑。版本: v1.0
+> Layer 2（脑干广播调制）引擎规格——`ToneUpdater.Step`（4 tone 解析解单步动力学）与 `CorticalBias.Compute`（tone → b_j 69 维注入）的实现规格，附 M1 静息 trace 里程碑。版本: v1.1
 
 ## 目录
 
@@ -107,7 +107,7 @@ public static class CorticalBias
 
 | 常量 | 值 | 来源 | 备注 |
 |------|-----|------|------|
-| DeltaSeconds | 1.0f | **csharp-wc-dynamics spec §四**（Δ=1.0 复用漂移风险注——引用其常量来源，不重新定义） | 回合时长默认 1.0 秒（运行时状态模型 §4.3） |
+| DeltaSeconds | 1.0f | **csharp-wc-dynamics spec §四**（Δ=1.0 复用漂移风险注——引用其常量来源，不重新定义） | 回合时长默认 1.0 秒（皮层动力学-通用层 §4.3） |
 | TauNe / TauDaVta / TauDaSnc / TauHt5 | 0.5f / 0.3f / 0.8f / 1.5f | 运行时状态模型 §5.3 | 设计定值无校准需求（任务issue D2，同 wc-dynamics D3 先例） |
 | BaselineNe / BaselineDaVta / BaselineDaSnc / BaselineHt5 | 0.3f / 0.4f / 0.5f / 0.5f | 运行时状态模型 §5.4 | 同上 |
 
@@ -161,16 +161,17 @@ public static class CorticalBias
 |---|---------|----------|
 | AC-9 | 形状与行序 | 输出新 float[69]；行序 == Wsensory.RegionIds（测试用数据推导断言，不裸写序列） |
 | AC-10 | per-target 唯一（Q1 裁决锁定） | BanksSTS（LC mod + Raphe mod）b = 0.3×0.5 + 0.5×0.5 = 0.4——per-edge 求和会得 0.65，断言 0.4 锁定裁决 |
-| AC-11 | role 两档 + 排除节点接收 b_j | baseline tone 下：NAcc 4 fid（AccumbensCore/Shell/NucleusAccumbens/VentralStriatum）b = 0.9（VTA act + SNc act）；Caudate/StriatumMatrix/Putamen b = 0.7（VTA mod + SNc act）；Amygdala b = 0.45（VTA mod + Raphe mod） |
-| AC-12 | 零广播节点 | §5.7 正典四名（PAG/SuperiorColliculus/PontineReticularNucleus/CerebellumCortex）b == 0；全零集合由数据推导断言（15 fid：10 脑干源 + CerebellumCortex + Pallidum + SubthalamicNucleus + Thalamus×2，任务issue 数据实测表） |
-| AC-13 | clamp [0,2] | tone=1.0 全四分量：全部 b ∈ [0,2]，max == 2.0；clamp 命中集合 == {FrontalPoleDMN, MedialOrbitalPrefrontalDMN, MedialOrbitalPrefrontalVMPFC}（pre-clamp 2.5 → 2.0） |
+| AC-11 | role 两档 + 排除节点接收 b_j | baseline tone 下：NAcc 4 fid（AccumbensCore/AccumbensShell/NucleusAccumbens/VentralStriatum）b = 0.9（VTA act + SNc act）；Caudate/StriatumMatrix/Putamen b = 0.7（VTA mod + SNc act）；Amygdala b = 0.45（VTA mod + Raphe mod） |
+| AC-12 | 零广播节点 | §5.7 正典四名（PeriaqueductalGray/SuperiorColliculus/PontineReticularNucleus/CerebellumCortex）b == 0；全零集合由数据推导断言（15 fid：10 脑干源 + CerebellumCortex + Pallidum + SubthalamicNucleus + Thalamus + ThalamusPulvinar，任务issue 数据实测表） |
+| AC-13 | clamp [0,2] | tone=1.0 全四分量：全部 b ∈ [0,2]，max == 2.0；clamp 命中集合 == {FrontalPoleDMN, MedialOrbitalPrefrontalDMN, MedialOrbitalPrefrontalVMPFC}（pre-clamp 2.5 → 2.0）。另有 10 fid pre-clamp 恰为 2.0（Accumbens-area 4 + rostralmiddlefrontal 3 + superiorfrontal 2 + lateralorbitofrontal 1），clamp 数值不变，不属命中集合 |
 | AC-14 | 基线 b_j 锚点 | baseline tone 下 mOFC 3 fid（同 AC-13 三 fid）b = 1.05（5HT act + VTA act + LC mod 累积） |
+| AC-16 | 契约防御（E2 新增） | tone/data 各 null → ArgumentNullException；合成伪边（真实数据 + 追加伪造 brainstem 边，经 csharp-data-layer 已交付 record 类型构造）target 不在 GraphNodes → InvalidDataException 且消息含边描述；合成伪边 Role==Silent → InvalidDataException |
 
 ### M1 静息 trace 里程碑
 
 | # | 验收标准 | 锚点/断言 |
 |---|---------|----------|
-| AC-15 | 30 回合静息 trace（组合 WMatrixBuilder.Build + CorticalBias.Compute(baseline) + WcDynamics.Step；tone=baseline、s=0、a(0)=0.10） | 收敛断言：round 30 与 round 29 max\|Δ\| < 1e-5（python 预览 round 10 即 7e-7）；active（W 行非零，从 W 推导）∈ [0.53, 0.78]（预览 [0.535174, 0.771229]）；排除节点 a == σ(b_j) 三组：b=0 → 0.3775407 / b=0.7 → 0.5498340 / b=0.9 → 0.5986877（1e-5）；**ITestOutputHelper 输出 69 节点实测值表**（供 M1 文档写回） |
+| AC-15 | 30 回合静息 trace（组合 WMatrixBuilder.Build + CorticalBias.Compute(baseline) + WcDynamics.Step；tone=baseline、s=0、a(0)=0.10） | 收敛断言：round 30 与 round 29 max\|Δ\| < 1e-5（python 预览 round 10 即 7e-7）；active（W 行非零，从 W 推导）∈ [0.53, 0.78]（预览 [0.535174, 0.771229]——经本 spec 复核；任务issue 预览行原为全 69 节点口径已修正，见 audit/report.md F3-data）；排除节点 a == σ(b_j) 三组：b=0 → 0.3775407 / b=0.7 → 0.5498340 / b=0.9 → 0.5986877（1e-5）；**ITestOutputHelper 输出 69 节点实测值表**（供 M1 文档写回） |
 
 M1 文档写回义务（工作issue 完成标准之一）：实测值写入 [运行时状态模型](../../../规则/技能树系统/运行时状态模型.md) §7.3（静息态叙述）+ [回合战斗流程](../../../规则/技能树系统/回合战斗流程.md) §3.3（静息基线 0.10 叙述）+ [皮层动力学-通用层](../../../规则/技能树系统/皮层动力学-通用层.md) §4.2/§4.3（σ(0) 笔误 + Euler 叙述）——plan §十三-8 清扫清单 + csharp-wc-dynamics sign-off 结转 #4 一并执行。
 
@@ -180,7 +181,7 @@ M1 文档写回义务（工作issue 完成标准之一）：实测值写入 [运
 2. 数值断言全部实测——AC 锚点全部来自任务issue「数据实测」表（python 实测），无凭记忆数字
 3. 行序契约明确——输出行序 = Wsensory.RegionIds（csharp-wmatrix spec Step 1），b_j 与 WMatrix 行对齐可直接消费
 4. 接口注释先行——两个 XML doc 含职责/输入/输出/异常/未定义行为/来源/偏差（「设计两次」约束）
-5. 边界值覆盖——δ=0 / 正负大 δ / back-to-back / 排除节点接收 b_j / 零广播节点 / clamp 两向 / tone 极值输入
+5. 边界值覆盖——δ=0 / 正负大 δ / back-to-back / 排除节点接收 b_j / 零广播节点 / clamp 两向 / tone 极值输入 / CorticalBias 契约防御（null / 未命中 / Silent）
 6. 确定性——纯函数无静态状态（AC-8 实证）
 7. 偏差声明完整——B1（签名加参）/B2（解析解）/B3（值域 [0,1]）/B4（M1 预测修正）实现注释逐条对应
 8. Δ=1.0 复用漂移注——ToneUpdater 常量注释显式引用 csharp-wc-dynamics spec §四，不重新定义 Δ
@@ -190,9 +191,10 @@ M1 文档写回义务（工作issue 完成标准之一）：实测值写入 [运
 | 版本 | 日期 | 变更 | 触发 | 审计范围 |
 |------|------|------|------|----------|
 | v1.0 | 2026-08-13 | 初稿 | 任务issue 01（数据实测 + Q1/Q2 裁决 + D1-D12） | 全量审计 |
+| v1.1 | 2026-08-13 | E1 §四 4.1 Δ 备注出处修正（运行时状态模型 §4.3 → 皮层动力学-通用层 §4.3）；E2 新增 AC-16（CorticalBias 契约防御）+ §七 第 5 项补契约防御；E3 AC-11 Shell→AccumbensShell；E4 AC-12 PAG→PeriaqueductalGray + Thalamus×2 明确为 Thalamus+ThalamusPulvinar；E5 AC-15 复核注释（任务issue 预览行口径修正）；F6 AC-13 边界 fid 注释（10 个 pre-clamp 恰 2.0）；任务issue 数据实测表 + map.md 同源数字一并修正 | 全量审计 conditional（0❌/5⚠️/1 refuted，[report.md](audit/report.md)） | Δ审计（变更章节 + 半径扩张） |
 
 ---
-*创建: 2026-08-13 | 更新: 2026-08-13 | 版本: v1.0*
+*创建: 2026-08-13 | 更新: 2026-08-13 | 版本: v1.1*
 *关联: [csharp-engine plan](../../csharp-engine/design/plan.md) §4.3/§八/§十二-2/§十二-7, [任务issue 01](issues/01-tone-spec.md), [运行时状态模型](../../../规则/技能树系统/运行时状态模型.md) §5, [csharp-wc-dynamics spec](../../csharp-wc-dynamics/design/spec.md) §四*
 
 ## 参数速查表
