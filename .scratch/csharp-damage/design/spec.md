@@ -56,7 +56,7 @@ public sealed class DamageCalculator
 | CalibrationConfig.cs | PlayerHp / PlayerSan / NpcHp / NpcSan | int → float（50f/80f/15f/60f——demo 模板值不变，供 CreateDefault(float,float) 直传） |
 
 - HealEvent.HealAmount 保持 int（占位字段 demo 未用——未来 feature 决定）。
-- 现有 types 测试（ParticipantStateTests/CombatEventsTests）以 int 字面量断言——xUnit 泛型推断绑定 `Assert.Equal<float>`（int 字面量在调用点隐式转换为 float 实参）继续成立；现有断言值均为 ≤60 的整数，可被 f32 精确表示。边界：无 f 后缀的 double 字面量（如 `Assert.Equal(0.5, e.DamageDealt)`）会绑定 `Assert.Equal<double>` 并逐位失败——工作issue 仅验证现值编译+通过，不改断言值；AC-18 为回执（v1.1 审计 C-F1）。
+- 现有 types 测试（ParticipantStateTests/CombatEventsTests）以 int 字面量断言——xUnit 泛型推断绑定 `Assert.Equal<float>`（int 字面量在调用点隐式转换为 float 实参）继续成立；现有断言值均为 ≤80 的整数，在 f32 精确整数域（≤ 2^24）内。边界：①大整数（>2^24，如 16777217）int→float 转换失真——本 spec 断言值全在精确域内；②无 f 后缀的 double 字面量（如 `Assert.Equal(0.5, e.DamageDealt)`）会绑定 `Assert.Equal<double>` 并逐位失败——工作issue 仅验证现值编译+通过，不改断言值；AC-18 为回执（v1.1 审计 C-F1 + Δ审计残差修正）。
 - types spec（csharp-engine-types）变更日志补 `🔧 修正` 行指向本 spec（跨 feature 变更记录）。
 
 ## 三、接口定义
@@ -120,10 +120,10 @@ Round1(x) = MathF.Round(x, 1, MidpointRounding.AwayFromZero)   // 主伤害量�
 Floor1(x) = MathF.Floor(x × 10f) / 10f                        // HP 成分量化：向下取至 0.1
 ```
 
-- Round1 实现直接调用 MathF.Round——**.NET 8 语义为全 f32 域**：`x ×= power10 → Truncate(x + CopySign(0.49999997f, x)) → x /= power10`（dotnet/runtime v8.0.0 MathF.cs；本地 SDK 8.0.29 实测）。**非 double 委托**（v1.1 审计 F1 推翻 v1.0 表述）——f32 域的 ×10f 舍入使低于半档的 f32 值仍可半进位（如 1.94999993f×10f→19.5f→+0.49999997f→trunc 20→2.0，AC-14 第二行即哨兵）。
+- Round1 实现直接调用 MathF.Round——**.NET 8 语义为全 f32 域**：`x ×= power10 → Truncate(x + CopySign(0.49999997f, x)) → x /= power10`（dotnet/runtime v8.0.0 MathF.cs；本地 .NET 8 runtime 8.0.29（SDK 8.0.423）实测）。**非 double 委托**（v1.1 审计 F1 推翻 v1.0 表述）——f32 域的 ×10f 舍入使低于半档的 f32 值仍可半进位（如 1.94999993f×10f→19.5f→+0.49999997f→trunc 20→2.0，AC-14 第二行即哨兵）。
 - Floor1 的 ×10f 步在 f32 域（利用 f32 舍入修正——如 1.3f×10f 精确舍入到 13.0f），scale-back 用 **`/ 10f` 精确除法**落回 f32(0.1k) 网格点——`× 0.1f` 乘法会引入 1e-7 级离格（本地实测：1.3f→1.3000000715、0.95f→0.9000000358，逐位锚点会挂）。
 - 每步结算产物立即量化 → 状态恒在 0.1 网格的 f32 最近值 → 跨回合无漂移。
-- 全部量化锚点以**真实运行时输出**为准（任务issue 实测表第三轮 #15-#19——本地 .NET SDK 8.0.29 实测；第一/二轮为设计级仿真，仅作过程记录）。
+- 全部量化锚点以**真实运行时输出**为准（任务issue 实测表第三轮 #15-#19——本地 .NET 8 runtime 8.0.29 实测；第一/二轮为设计级仿真，仅作过程记录）。
 - Floor1 仅用于非负输入（HP 成分域）——负值未定义。
 
 ## 四、枚举与常量
@@ -171,16 +171,16 @@ Floor1(x) = MathF.Floor(x × 10f) / 10f                        // HP 成分量�
 | AC-5 | 命中边界 | SeqRng 注入 roll 序列 [0.0, 0.74, 0.75, 0.74999994, 0.999] → [hit, hit, **miss**, hit, miss]（阈值 0.75f 严格小于且 f32 精确；0.74999994f = 次邻 → hit）；**miss 仍返回完整伤害值**：(4, 0, 0, 0, 1.0f, false) + roll 0.75 → damage **4.0f**、hit **false**（结算与判定解耦——v1.1 审计 K-F2） |
 | AC-6 | L0 回避 + 命中率分布 | roll 0.80 → **miss**（无 −10% 时 0.85 阈值将命中——证明修复 #10 无条件生效）；分布：DeterministicRng(固定种子) 直接生成 1000 次 NextFloat 计数 `< 0.75f` 作为期望（独立镜像，不复制引擎代码）→ 同种子下 1000 次 CalcPhysicalDamage 的命中数 == 期望 |
 | AC-7 | 防御 −50% 仅物理 | (4, 0, 0.5, 1.0, 1.0f, **true**) → **5.0f**（4×2.5×0.5）；false → 10.0f；CalcMentalDamage 签名**不含** defenderIsDefending（精神无视防御） |
-| AC-8 | 武器加成 + baseDamage 参数 | (4, 6, 0, 0, 1.0f, false) → **10.0f**（(4+6)×1.0，武器与装备 §1.1 括号内同等放大）；(1, 0, 0, 0, 1.0f, false) → **1.0f**（baseDamage 参数语义——B6） |
+| AC-8 | 武器加成 + baseDamage 参数 | (4, 6, 0, 0, 1.0f, false) → **10.0f**（(4+6)×1.0，武器与装备 §1.1 括号内同等放大）；(1, 0, 0, 0, 1.0f, false) → **1.0f**（baseDamage 参数语义——B6）；**精神消费哨兵**：(3, 0, 0, 1.0f, 1.0f) → san **3.0f**、hp **1.5f**（写死 2f 实现输出 2.0/1.0 必挂——F2 回归防线，Δ审计 INFO 采纳） |
 | AC-9 | RNG 消费契约 | 物理：ThrowingRng → InvalidOperationException（必消费证明）；精神：无 rng 参数，正常返回（零消费） |
 | AC-10 | 精神基线 | (2, 0, 0, 1.0f, 1.0f) → san **2.0f**、hp **1.0f** 逐位 |
 | AC-11 | 精神动机保留（一位小数核心锚） | (2, 0.25, 1, 1.0f, 1.0f) → inner **1.5f**（Round1(2×1.25−1)）、san **1.5f**、hp **0.7f** 逐位（Floor1(0.75)——整数世界 inner floor 1 / round 2 全失真；motivation ≤0.5 失效案例救活） |
 | AC-12 | 忍耐 + 最低 1.0 + gate=0 | (2, −0.31, 2, 1.0f, 1.0f) → inner **1.0f**（Round1(−0.62)=−0.6 → max → 1.0）、san 1.0f、hp 0.5f；(2, 0, 2, 1.0f, 1.0f) → 1.0f/0.5f（忍耐 2 抵消基础 2 但最低 1.0）；(2, 0, 0, 1.0f, **0.0f**) → san **0.0f**、hp **0.0f**（max 在 gate 前——plan §4.6 字面，gate=0 → 0 伤害语义） |
 | AC-13 | 穿透边界（严格小于 + 互斥 + 最低档救活） | inner 1.0、gate 1.0f：ratio **0.30** → san **1.0f**（不触发）；**0.2999f** → **1.3f**；**0.15** → **1.3f**（tier1 非 tier2）；0.149 → **2.0f**；穿透在最低伤害生效：1.0f×1.3 → **1.3f**（整数世界两法皆 1——一位小数救活） |
-| AC-14 | 穿透 + 量化组合 | (2, 0, 0, 0.299, 1.0f) → san **2.6f**、hp **1.3f** 逐位（任务issue 实测 #8/#11——floor1 经 /10f 精确落回 f32(1.3)）；(2, 0.25, 1, 0.299, 1.0f) → san **2.0f**、hp **1.0f** 逐位（inner 1.5×1.3 = f32 精确积 1.94999993f（低于 1.95）→ Round1 **2.0**——.NET 8 全 f32 域：×10f 舍入 19.5f + 0.49999997f → trunc 20 → /10f；本地 SDK 8.0.29 实测 0x40000000，任务issue #17）；(2, 0, 0, 0.149, 0.9f) → san **3.6f**、hp **1.8f**（任务issue #18） |
+| AC-14 | 穿透 + 量化组合 | (2, 0, 0, 0.299, 1.0f) → san **2.6f**、hp **1.3f** 逐位（任务issue 实测 #8/#11——floor1 经 /10f 精确落回 f32(1.3)）；(2, 0.25, 1, 0.299, 1.0f) → san **2.0f**、hp **1.0f** 逐位（inner 1.5×1.3 = f32 精确积 1.94999993f（低于 1.95）→ Round1 **2.0**——.NET 8 全 f32 域：×10f 舍入 19.5f + 0.49999997f → trunc 20 → /10f；本地 runtime 8.0.29 实测 0x40000000，任务issue #17）；(2, 0, 0, 0.149, 0.9f) → san **3.6f**、hp **1.8f**（任务issue #18） |
 | AC-15 | 确定性 + 输入不可变 | 同输入重复调用 → 逐位相等（含命中序列——同种子 DeterministicRng）；输入快照不变（值类型）；无 static 可变状态 |
 | AC-16 | 异常契约 | 构造 cal null → ArgumentNullException；CalcPhysicalDamage rng null → ArgumentNullException（D12） |
-| AC-17 | CalibrationConfig 12 新常量 + 4 模板 | 默认值逐常量断言：4 / 2 / 0.85f / 0.10f / 0.5f / 1.0f / 0.5f / 0.30f / 1.3f / 0.15f / 2.0f / 0.1f（§四 4.1）；PlayerHp 50f / PlayerSan 80f / NpcHp 15f / NpcSan 60f——类型断言机制：编译期绑定 `float hp = cal.PlayerHp;`（若字段为 int 该赋值编译失败）+ 值逐位断言（v1.1 审计 C-F2） |
+| AC-17 | CalibrationConfig 12 新常量 + 4 模板 | 默认值逐常量断言：4 / 2 / 0.85f / 0.10f / 0.5f / 1.0f / 0.5f / 0.30f / 1.3f / 0.15f / 2.0f / 0.1f（§四 4.1）；PlayerHp 50f / PlayerSan 80f / NpcHp 15f / NpcSan 60f——类型断言机制：**重载绑定探针** `static bool IsFloat(float _) => true; static bool IsFloat(int _) => false;` → 断言 `IsFloat(cal.PlayerHp) == true`（int 字段经重载决议精确匹配 int 重载返回 false——v1.1 审计 C-F2 的「float 赋值编译失败」声明经 Δ审计 refute 实测推翻：int→float 隐式转换使赋值探针无法区分；重载探针本地 dotnet 实测区分有效，属性与字段形态均验证）+ 值逐位断言 |
 | AC-18 | L2 类型变更回执 | 现有 types 测试（ParticipantStateTests/CombatEventsTests）在新 float 类型下全绿（int 字面量经泛型推断 `Assert.Equal<float>` 绑定）；新实证：PhysicalDamageEvent.DamageDealt = 5.6f 存读回逐位；CreateDefault(50f, 80f) → Hp **50f** 逐位；types spec（csharp-engine-types）变更日志新增 🔧 修正行指向本 spec 偏差 B5——文件所有权归本工作issue（v1.1 审计 K-F3） |
 
 ## 七、本 spec 自检清单
@@ -226,7 +226,7 @@ Floor1(x) = MathF.Floor(x × 10f) / 10f                        // HP 成分量�
 | 版本 | 日期 | 变更 | 触发 | 审计范围 |
 |------|------|------|------|----------|
 | v1.0 | 2026-08-13 | 初稿（§一~§八 + AC-1~18 + B1-B6）；审计前自修正 2 处：AC-14 第二行锚点 f32 复测（1.5×1.3 链积 1.94999993f→san 1.9f/hp 0.9f，原 2.0/1.0 系仿真 float64 泄漏）、Floor1 scale-back ×0.1f→/10f（×0.1f 乘法离格实测）——**其中锚点自修正方向经 v1.1 审计 F1 证实为误修正，已回退** | 任务issue 01（Q1=A/Q2=A/Q3=D 裁决后；设计文档写回 commit 112616c/bddae18） | 全量审计 |
-| v1.1 | 2026-08-13 | 修复全量审计 ❌1+⚠️8：①Round1 真实 .NET 8 语义（全 f32 域 `x*=power10→Truncate(x+CopySign(0.49999997f,x))→x/=power10`，非 double 委托——AC-14 第二行锚点回 2.0f/1.0f，本地 SDK 8.0.29 实测）；②精神公式消费 baseDamage（原写死 2f 死参数）；③AC-5 增 miss 伤害锚点；④§二 2.2 xUnit 机制+边界声明；⑤AC-17 类型断言机制；⑥AC-18 承接 types spec 🔧 行；⑦实测标签对齐 # 编号 + 第三轮 #15-#19；⑧L0EvadeHitPenalty 来源修正；⑨§五 6 常量消费措辞 + AC-13 0.2999f + 未定义行为补漏 | 全量审计 report.md（退回修改） | Δ审计（变更章节 + 半径扩张） |
+| v1.1 | 2026-08-13 | 修复全量审计 ❌1+⚠️8：①Round1 真实 .NET 8 语义（全 f32 域 `x*=power10→Truncate(x+CopySign(0.49999997f,x))→x/=power10`，非 double 委托——AC-14 第二行锚点回 2.0f/1.0f，本地 runtime 8.0.29 实测）；②精神公式消费 baseDamage（原写死 2f 死参数）；③AC-5 增 miss 伤害锚点；④§二 2.2 xUnit 机制+边界声明；⑤AC-17 类型断言机制；⑥AC-18 承接 types spec 🔧 行；⑦实测标签对齐 # 编号 + 第三轮 #15-#19；⑧L0EvadeHitPenalty 来源修正；⑨§五 6 常量消费措辞 + AC-13 0.2999f + 未定义行为补漏；Δ审计残差清扫：⑩AC-17 重载绑定探针（refute 实测推翻 v1.0 审计 C-F2 赋值声明）、⑪§二 2.2 ≤80+2^24 边界、⑫AC-8 精神 baseDamage≠2 哨兵、⑬SDK→runtime 措辞、⑭map.md 措辞（report.md Δ审计段） | 全量审计 report.md（退回修改） | Δ审计（变更章节 + 半径扩张）——通过 |
 
 ---
 *创建: 2026-08-13 | 更新: 2026-08-13 | 版本: v1.1*
