@@ -1,6 +1,6 @@
 # 工作issue 01: WMatrixBuilder 实现
 
-> Status: resolved | Type: implementation | 维度: 管线 | Spec: ../../design/spec.md@v1.1 | Blocked by: sign-off ✅ (2026-08-13)
+> Status: resolved | Type: implementation | 维度: 管线 | Spec: ../../design/spec.md@v1.1 | Blocked by: sign-off ✅ (2026-08-13) | GitHub: [#51](https://github.com/verystrongdog/game/issues/51)
 
 ## 问题（这件事要解决什么）
 
@@ -87,5 +87,3 @@ spec@v1.1 §六 AC-1 ~ AC-12 逐条对照（见「代码自审」段）。
 ## Comments
 
 （工作issue 关闭，见 Status）
-
-## Comments
