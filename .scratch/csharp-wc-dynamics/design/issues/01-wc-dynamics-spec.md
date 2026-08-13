@@ -1,6 +1,6 @@
 # 任务issue 01: WcDynamics 规格
 
-> Status: claimed | Type: task | 维度: 管线 | GitHub: [#52](https://github.com/verystrongdog/game/issues/52)
+> Status: resolved | Type: task | 维度: 管线 | GitHub: [#52](https://github.com/verystrongdog/game/issues/52)
 
 ## 问题（这件事要解决什么）
 
@@ -70,10 +70,11 @@ WcDynamics.Step 是 WC 引擎 Layer 1 的单步动力学——运行时状态模
 
 - [x] spec.md v1.0→v1.1（§一~§七 + 变更日志，AC 覆盖 plan §十 WcDynamics 行）
 - [x] workflow 多专家审计 → report.md（v1.0 全量 3 专家退回 → v1.1 Δ审计 2 专家 conditional → 残留 L1 清扫）
-- [ ] 人类复核 → sign-off.md
-- [ ] 工作issue 01 → 实现 + 证据式自审
-- [ ] map.md 更新 + 回顾段
+- [x] 人类复核 → sign-off.md（2026-08-13 批准 ✅）
+- [x] 工作issue 01 → 实现 + 证据式自审（2026-08-13 resolved，76/76 绿）
+- [x] map.md 更新 + 回顾段
 
 ## Comments
 
 - 2026-08-13：Q1/Q2 用户裁决完成（Q1 推迟 step 5；Q2 偏差 B + 延后修正），进入 spec 写作。
+- 2026-08-13：feature 闭合——spec v1.1 审计两轮（全量退回 → Δ审计 conditional → L1 清扫）、sign-off 批准、工作issue 01 实现 76/76 全绿。结转 #4（文档叙述修正）并入 plan §十三-8，M1 实测后执行。

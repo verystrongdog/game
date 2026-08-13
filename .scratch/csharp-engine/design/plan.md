@@ -337,7 +337,7 @@ Phase 4 声明→响应→结算 dispatch。响应窗口内容按 §一范围 st
 | 1 | csharp-data-layer | L1 数据层 | ✅ 已交付 |
 | 2 | csharp-engine-types | Types/ 状态类型（§三） | ✅ 已交付（2026-08-13） |
 | 3 | csharp-wmatrix | WMatrixBuilder | ✅ 已交付（2026-08-13） |
-| 4 | csharp-wc-dynamics | WcDynamics | 🔄 进行中（2026-08-13 任务issue 01 claimed）→ **M1 静息 trace 里程碑随 step 5 执行**（2026-08-13 任务issue Q1 裁决：M1 需 tone=baseline 的 b_j，b_j 生产方 CorticalBias 在 step 5；step 4 交付 WcDynamics.Step + 单元测试） |
+| 4 | csharp-wc-dynamics | WcDynamics | ✅ 已交付（2026-08-13）——解析解 + AC-1~12（14 测试），76/76 绿；**M1 静息 trace 里程碑随 step 5 执行**（2026-08-13 任务issue Q1 裁决：M1 需 tone=baseline 的 b_j，b_j 生产方 CorticalBias 在 step 5） |
 | 5 | csharp-tone | ToneUpdater + b_j | 待开始 |
 | 6 | csharp-cstc | CstcGating | 待开始 |
 | 7 | csharp-speed | SpeedScoreCalculator + TurnOrderBuilder（含 2026-08-06 RED 用例） | 待开始 |
