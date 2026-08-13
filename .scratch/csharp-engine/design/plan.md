@@ -333,9 +333,9 @@ Phase 4 声明→响应→结算 dispatch。响应窗口内容按 §一范围 st
 
 | Step | Feature | 内容 | 状态 |
 |------|---------|------|------|
-| 0 | csharp-engine（本计划） | 计划修订 + 再审计 + sign-off | 进行中 |
+| 0 | csharp-engine（本计划） | 计划修订 + 再审计 + sign-off | ✅ 已批准（2026-08-13） |
 | 1 | csharp-data-layer | L1 数据层 | ✅ 已交付 |
-| 2 | csharp-engine-types | Types/ 状态类型（§三） | 待开始 |
+| 2 | csharp-engine-types | Types/ 状态类型（§三） | ✅ 已交付（2026-08-13） |
 | 3 | csharp-wmatrix | WMatrixBuilder | 待开始 |
 | 4 | csharp-wc-dynamics | WcDynamics → **M1 静息 trace 里程碑** | 待开始 |
 | 5 | csharp-tone | ToneUpdater + b_j | 待开始 |
