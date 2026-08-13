@@ -1,3 +1,4 @@
+using YouAreNotTheFish.Core.Engine;
 using YouAreNotTheFish.Core.Types;
 
 namespace YouAreNotTheFish.Core.Tests.Engine;
@@ -121,7 +122,8 @@ public class ToneUpdaterTests
         Assert.True(r5.Ht5 < 1f);
 
         // DA_VTA 0.4 +d1 → pre-clamp 1.364326 > 1 被 clip 到 1.0（无杠杆时单次命中即饱和）
-        float preClamp = Expected(0.4f, 1f, 1f, 0.4f, 0.3f);
+        // 注：此处用无 clamp 的原始公式（Expected 助手含 clamp，会掩盖超界值）
+        float preClamp = 0.4f + 1f + (0.4f - 0.4f - 1f) * MathF.Exp(-1f / 0.3f);
         Assert.True(preClamp > 1f, "pre-clamp 应超界（1.364326）");
         var rDa = ToneUpdater.Step(Baseline(), Pulse(1, 1f), cfg);
         Assert.Equal(1f, rDa.DaVta);
