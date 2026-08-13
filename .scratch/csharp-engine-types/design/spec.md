@@ -18,7 +18,7 @@
 
 | 项 | 内容 |
 |----|------|
-| 覆盖 | `YouAreNotTheFish.Core/Types/` 全部新文件（状态 record ×8 + 声明/上下文 ×2 + 事件 ×5 + 接口 IRng + RNG 实现 ×1（DeterministicRng）+ 常量 ×1（CalibrationConfig）+ 枚举 ×4）；`Data/` 补充 GameData 聚合 + LoadAll |
+| 覆盖 | `YouAreNotTheFish.Core/Types/` 全部新文件（状态 record ×8 + 声明/上下文 ×2 + 事件 ×6（1 抽象基类 CombatEvent + 5 具体子类）+ 接口 IRng + RNG 实现 ×1（DeterministicRng）+ 常量 ×1（CalibrationConfig）+ 枚举 ×4）；`Data/` 补充 GameData 聚合 + LoadAll |
 | 不覆盖 | SpeedWeights/SpeedComponents（plan §4.5 → step 7）；s_pending、CombatState、TurnManager（step 10）；14 事件 kind 枚举与 δ 派生逻辑（step 9，本 spec §五仅列映射约束） |
 | 前置依赖 | csharp-data-layer ✅（24/24 绿）；[csharp-engine plan v1.1](../csharp-engine/design/plan.md) sign-off ✅ 2026-08-13 |
 | 阻塞 | step 3-9 全部引擎模块（类型契约未落地则无法编译） |
@@ -122,7 +122,7 @@ ActionSlot：
 | fid→行序映射 | RowFids | string[69] | plan §三（行序 = canonical 69） |
 
 由 WMatrixBuilder（step 3）构建；本 feature 仅定义契约。
-- **行序契约**：WMatrixBuilder 必须按 canonical 序（= `WsensoryMatrix.RegionIds`）构建 W 行，**不得**按 graph_nodes 迭代序（实测三数据文件 functional_id 序互不相同）；RowFids 承担 fid→行校验职责（step 3 测试断言 RowFids == RegionIds）。
+- **行序契约**：WMatrixBuilder 必须按 canonical 序（= `WsensoryMatrix.RegionIds`）构建 W 行，**不得**按 graph_nodes 迭代序（实测三数据文件 key 序互不相同——graph_nodes 为 51 个 dk_name 空间，小写，且数量本就不足 69）；RowFids 承担 fid→行校验职责（step 3 测试断言 RowFids == RegionIds）。
 
 ### 2.9 LoopSalience
 
@@ -272,7 +272,7 @@ instance record + `static CalibrationConfig Default`（决策 D3——plan §七
 | 客观事件 | 攻击者侧（A） | 承受者侧（B） | 备注 |
 |---------|-------------|-------------|------|
 | PhysicalDamageEvent(Hit=true, 防御未生效) | A1（m=actual/expected） | B1（m=\|ΔHP\|/HP_max） | A3 暴击 demo 无（plan §4.6 无 crit 项） |
-| PhysicalDamageEvent(Hit=true, 防御生效) | A1 | A5（防御成功 5HT+1，m=blocked/incoming） | 承受者侧取 A5 非 B1 为本 spec 解释——§5.5 未定义互斥（B1「被物理攻击击中」与 A5「防御成功」在「防御中仍被命中」场景同时成立，防御=减伤 50% 命中仍落地）；A5 δ=(0,0,0,+1) 与 B1 δ=(+1,0,0,−1) 5HT 方向相反，step 9 实现时须复核 |
+| PhysicalDamageEvent(Hit=true, 防御生效) | A1 | A5（防御成功 5HT+1，m=blocked/incoming） | 承受者侧取 A5 非 B1 为本 spec 解释——§5.5 未定义互斥（B1「被物理攻击击中」与 A5「防御成功」在「防御中仍被命中」场景同时成立，防御=减伤 50% 命中仍落地）；A5 δ=(0,0,0,+1) 与 B1 δ=(+1,0,0,−1) 5HT 方向相反，step 9 实现时须复核。**判别约定**：防御生效判定 = DamageBlocked>0（小伤害取整边界下 blocked 可能为 0，如 incoming=1 减半后 dealt=1——step 9 spec 可重定义，本 spec 仅给建议判别式） |
 | PhysicalDamageEvent(Hit=false) | A2（m≈0 → 跳过 emit） | B2（m=blocked/incoming）；**incoming_damage=0 时 m=0 直接跳过 emit**（本 spec 边界约定——§5.5 的「m<0.01 跳过 emit」对 0/0=NaN 失效） | §5.5 A2 行注 + 本 spec 边界约定 |
 | MentalDamageEvent | A4（m=actual/expected） | B4（m=\|ΔSAN\|/SAN_max） | |
 | StatusChangeEvent(Panic) | — | C1（m=1.0，自身阈值突破） | §5.5 C1 guard |
@@ -297,7 +297,7 @@ instance record + `static CalibrationConfig Default`（决策 D3——plan §七
 | AC-7 | LoadAll 5 文件加载，结果与 5 个单文件方法一致 | 测试逐字段对照 |
 | AC-8 | IsValidChannelUsage 双通道约束（Defend 独占 M1；broca.Kind==Defend 恒非法含 m1=null；(null,null) 合法） | 测试用例表 |
 | AC-9 | CalibrationConfig.Default 逐常量 = plan §七 表 | 测试逐常量断言 |
-| AC-10 | WcState.A 长度 69；行序 = canonical（RegionIds，约束 C1）——本 feature 测试长度 + CreateDefault 等值性；行序对齐验证由 step 3 WMatrixBuilder 测试承担（W.RowFids == WsensoryMatrix.RegionIds） | 测试（复用数据层 fixture 的 RegionIds） |
+| AC-10 | WcState.A 长度 69；行序 = canonical（RegionIds，约束 C1）——本 feature 测试长度 + CreateDefault 等值性；行序对齐验证由 step 3 WMatrixBuilder 测试承担（W.RowFids == WsensoryMatrix.RegionIds） | 测试（复用 GameDataLoader.LoadWsensory 加载真实 W_sensory.json 取 RegionIds） |
 
 ---
 
@@ -321,7 +321,8 @@ instance record + `static CalibrationConfig Default`（决策 D3——plan §七
 | 版本 | 日期 | 变更 | 触发 | 审计范围 |
 |------|------|------|------|----------|
 | v1.0 | 2026-08-13 | 初稿——§三 全部类型 + CombatContext 依赖项 + 事件类型字段设计 | 任务issue 01 | 全量审计 |
-| v1.1 | 2026-08-13 | 吸收 v1.0 审计 1❌+7⚠️+10ℹ️：C1/AC-10 行序恒等式修正（canonical=RegionIds，实测两 JSON 序不同）；GameData 字段表（§2.12）；gates 初值 0→1.0（§6.3+§6.4 推导）；LoopSalience DA 逐字段公式；C5 补 A5 归属解释 + B2 NaN 边界；IsValidChannelUsage 空值真值表；DamageEvent 层级偏差声明；splitmix64 理由修正；来源表述修正 ×4 | v1.0 全量审计（3 专家，2 reject + 1 conditional） | Δ审计（变更章节 + 半径扩张） |
+| v1.1 | 2026-08-13 | 吸收 v1.0 审计 1❌+5⚠️+9ℹ️：C1/AC-10 行序恒等式修正（canonical=RegionIds，实测两 JSON 序不同）；GameData 字段表（§2.12）；gates 初值 0→1.0（§6.3+§6.4 推导）；LoopSalience DA 逐字段公式；C5 补 A5 归属解释 + B2 NaN 边界；IsValidChannelUsage 空值真值表；DamageEvent 层级偏差声明；splitmix64 理由修正；来源表述修正 ×4 | v1.0 全量审计（3 专家，2 reject + 1 conditional） | Δ审计（变更章节 + 半径扩张） |
+| v1.1 | 2026-08-13 🔧 修正（L1 笔误级，免重审）：Δ审计 4 项表述建议——覆盖行事件计数 ×5→×6（含抽象基类）；§2.8 graph_nodes 序措辞（51 个 dk_name 空间）；C5 补防御生效判别约定（DamageBlocked>0，step 9 可重定义）；AC-10 验证方式措辞（无 fixture 类，用 LoadWsensory） | Δ审计 6 info（2 计数 + 4 措辞） | 免重审 |
 
 ---
 

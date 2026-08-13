@@ -79,5 +79,26 @@
 
 ---
 
+## Δ审计（spec v1.1）
+
+> 审计日期: 2026-08-13 | 审计方法: workflow 2 专家（修复充分性 / 半径扩张核查）| 审计范围: v1.1 变更章节 + 半径扩张表（非全量）| 结论: **通过（pass）**
+
+两专家独立核查：15 项发现全部修复到位——❌#1 三处改写逐字核对（实测警示经 python 复核属实：regions[0]=TransverseTemporal vs rows[0]=AccumbensCore，69 集合相同序全不同）；⚠️#2 GameData 5 字段类型名与 Data 层实际 record 声明一致；⚠️#3 gates=1.0 推导链（§7.3 未定义 → §6.3 ramp → §6.4 gate=1−O_GPi）与设计文档吻合；⚠️#4 DA 逐字段值与 §6.3 逐值一致；⚠️#5 A5/B1 声明与 δ pattern 表相符；⚠️#6 B2 NaN 边界与 §5.5「m<0.01 跳过 emit」兼容。半径扩张 8 项消费者侧复查全部通过，未发现修复引入的新 ❌/⚠️。
+
+| Δ# | 发现 | 处置 |
+|----|------|------|
+| Δ-1 | 变更日志计数「1❌+7⚠️+10ℹ️」与缺口汇总实际（1+5+9=15）不符 | 🔧 L1 修正 |
+| Δ-2 | §一 覆盖行「事件 ×5」计数歧义（抽象基类未计） | 🔧 改为 ×6（1 抽象基类 + 5 具体子类） |
+| Δ-3 | §2.8「三数据文件 functional_id 序」措辞（graph_nodes 为 51 个 dk_name 小写） | 🔧 措辞精确化 |
+| Δ-4 | C5 防御生效判别字段未声明 | 🔧 补判别约定 DamageBlocked>0（step 9 可重定义） |
+| Δ-5 | §3.5 不校验通道-动作类型配对（如 broca=PhysicalAttack 可通过） | 保持现状——§2.6 契约已自限「Defend 独占 M1」，demo 3 行动集不会产出跨通道组合；若 step 10 需要则在 step 10 spec 新增规则 |
+| Δ-6 | AC-10「复用数据层 fixture」措辞（实际无 fixture 类） | 🔧 改为复用 GameDataLoader.LoadWsensory 加载真实 JSON 取 RegionIds |
+
+4 项 🔧 修正均为 L1 笔误级，已直接修入 spec 变更日志，免重审。
+
+**最终审计结论：通过**（v1.0 全量审计 退回 → v1.1 修复 → Δ审计 pass → L1 修正）——spec v1.1（含 🔧 修正）可进入 sign-off。
+
+---
+
 *创建: 2026-08-13*
 *关联: [spec v1.1](../spec.md), [任务issue 01](../issues/01-types-spec.md), [csharp-engine plan v1.1](../../../csharp-engine/design/plan.md)*
