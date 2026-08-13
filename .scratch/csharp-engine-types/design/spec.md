@@ -323,6 +323,7 @@ instance record + `static CalibrationConfig Default`（决策 D3——plan §七
 | v1.0 | 2026-08-13 | 初稿——§三 全部类型 + CombatContext 依赖项 + 事件类型字段设计 | 任务issue 01 | 全量审计 |
 | v1.1 | 2026-08-13 | 吸收 v1.0 审计 1❌+5⚠️+9ℹ️：C1/AC-10 行序恒等式修正（canonical=RegionIds，实测两 JSON 序不同）；GameData 字段表（§2.12）；gates 初值 0→1.0（§6.3+§6.4 推导）；LoopSalience DA 逐字段公式；C5 补 A5 归属解释 + B2 NaN 边界；IsValidChannelUsage 空值真值表；DamageEvent 层级偏差声明；splitmix64 理由修正；来源表述修正 ×4 | v1.0 全量审计（3 专家，2 reject + 1 conditional） | Δ审计（变更章节 + 半径扩张） |
 | v1.1 | 2026-08-13 🔧 修正（L1 笔误级，免重审）：Δ审计 4 项表述建议——覆盖行事件计数 ×5→×6（含抽象基类）；§2.8 graph_nodes 序措辞（51 个 dk_name 空间）；C5 补防御生效判别约定（DamageBlocked>0，step 9 可重定义）；AC-10 验证方式措辞（无 fixture 类，用 LoadWsensory） | Δ审计 6 info（2 计数 + 4 措辞） | 免重审 |
+| v1.1 | 2026-08-13 🔧 修正（L2 语义，csharp-damage spec@v1.1 §二 2.2 偏差 B5 承接）：22 字段 int→float（一位小数结算 Q3=D）——ParticipantState 4（Hp/HpMax/San/SanMax + CreateDefault(float,float)）；PhysicalDamageEvent 6（DamageDealt/DamageBlocked/IncomingDamage/TargetHpBefore/TargetHpAfter/TargetHpMax）；MentalDamageEvent 8（SanDamage/HpDamage/TargetSanBefore/TargetSanAfter/TargetSanMax/TargetHpBefore/TargetHpAfter/TargetHpMax）；CalibrationConfig 4 demo 模板（PlayerHp/PlayerSan/NpcHp/NpcSan → 50f/80f/15f/60f）。BaseDamage/WeaponBonus/HealAmount 保持 int。本 spec 字段表为 int 的上述位置一律以 csharp-damage spec 为准 | csharp-damage 全量审计 + Δ审计（类型变更在其规格内审计，含 AC-17/AC-18 承接） | 随 csharp-damage 审计 |
 
 ---
 
