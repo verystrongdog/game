@@ -39,8 +39,30 @@
 | 修复点 | 受影响消费者 | 复查状态 |
 |--------|------------|---------|
 | E1 §四 备注引用 | 无（纯引用修正） | — |
-| E2 新增 AC-16 + §七 补契约防御 | §六 AC 编号序列、工作issue 完成标准引用 AC 编号 | Δ审计复查 |
-| E3 AC-11 Shell→AccumbensShell | 工作issue 测试 fid 解析 | Δ审计复查 |
-| E4 AC-12 PAG→PeriaqueductalGray / Thalamus×2 明确 | 任务issue 数据实测表 15 零清单行（同源数字） | Δ审计复查 |
+| E2 新增 AC-16 + §七 补契约防御 | §六 AC 编号序列、工作issue 完成标准引用 AC 编号 | ✅ Δ审计已复查（0 real） |
+| E3 AC-11 Shell→AccumbensShell | 工作issue 测试 fid 解析 | ✅ Δ审计已复查（0 real） |
+| E4 AC-12 PAG→PeriaqueductalGray / Thalamus×2 明确 | 任务issue 数据实测表 15 零清单行（同源数字） | ✅ Δ审计已复查（0 real） |
 | E5 任务issue M1 预览行口径 + spec AC-15 注释 | map.md Notes 行 9 引用同源数字（active 口径同样误标）→ 一并修复 | 已修复 |
 | F6 AC-13 边界注释 | 无（注释性） | — |
+
+## Δ审计（spec v1.1）
+
+> 审计日期: 2026-08-13 | 方法: workflow 2 专家（数学/数据 + 契约/交叉引用）+ 逐发现对抗验证（4 agents / 0 错误）| 范围: 仅 E1-E5/F6 变更章节 + 半径扩张
+
+### Trace Table
+
+| # | 专家 | 重审范围 | 判定 |
+|----|------|---------|------|
+| 1 | 数学/数据 | E1 亲读皮层动力学-通用层 §4.3 确认「Δ = 回合时长（默认 1.0 秒）」；E5 独立重建 W（1389 非零元）复算 active 48 ∈ [0.535174, 0.771229] mean 0.658196 + 加权一致性 (48×0.658196+14×0.3775407+3×0.5498340+4×0.5986877)/69 ≈ 0.59308 ✓；F6 边界 fid 计数 = 10（Accumbens-area 4 + rostralmiddlefrontal 3 + superiorfrontal 2 + lateralorbitofrontal 1）✓；半径扩张 grep 零残留 | ✅ 通过，0 发现 |
+| 2 | 契约/交叉引用 | E2 AC-16 ↔ §三 3 异常一一对应 + 构造可行性（GameDataLoader.LoadAll 公开、GameData record `with`、TripartiteModel init List 可追加、EdgeRole.Silent 存在）；E3/E4 fid 名与 JSON 一致；变更日志/版本号/footer/map/issue 🔧 注一致；半径扩张 grep 零残留 | ✅ 通过，2 info（均 refuted） |
+
+### 发现（2 info，均经对抗验证 refuted）
+
+| # | 发现 | 推翻理由 |
+|----|------|---------|
+| INFO-1 | AC-16 位于 AC-15 之前（编号非单调） | 结构性放置正确（AC-16 属 CorticalBias 表、AC-15 属 M1 里程碑节，各自节内编号单调）；AC 编号是可追溯性标识非位置索引，唯一性成立；重编号会造成任务issue/报告/sign-off 真实引用漂移；项目无全局单调约定 |
+| INFO-2 | §六 前言「数值锚点全部来自任务issue 数据实测表」可加「性质断言以 §三 契约为准」区分 | 前言明确限定「数值锚点」，AC-16 无数值锚点故声明空真满足；非缺陷，纯可选精确度建议 |
+
+### Δ审计结论
+
+- [x] **通过（0 ❌ / 0 ⚠️ / 2 info 均 refuted）**——E1-E5/F6 修复全部成立，独立复算通过，半径扩张零残留。
