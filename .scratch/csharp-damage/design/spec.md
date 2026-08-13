@@ -153,7 +153,7 @@ Floor1(x) = MathF.Floor(x × 10f) / 10f                        // HP 成分量�
 
 ## 五、交叉引用约束
 
-1. **计算顺序契约（f32 结合序写死）**：§三 3.1/3.2 公式块的逐步计算序即契约——实现与测试镜像必须逐字遵循（物理 `(1f+cf)+cm` 左结合、精神 `2f×(1f+m)` 先乘后减）。AC 锚点（5.6f/1.5f/2.6f/1.95→2.0f）即哨兵。
+1. **计算顺序契约（f32 结合序写死）**：§三 3.1/3.2 公式块的逐步计算序即契约——实现与测试镜像必须逐字遵循（物理 `(1f+cf)+cm` 左结合、精神 `(float)baseDamage×(1f+m)` 先乘后减——v1.1 审计 F2 修正，原写死 2f）。AC 锚点（5.6f/1.5f/2.6f/1.95→2.0f）即哨兵。
 2. **穿透判定序**：先 tier2 后 tier1，互斥取高档，严格小于（ratio < 0.15f / < 0.30f）。0.30f 与 0.15f 端点为「不触发」（plan §十「敌方恰好 30%/15%」）。
 3. **输入语义**：`enemySanRatio` = 受击前 San/SanMax（caller 职责，D4）；`gateBonus` = 本回合同一次结算的 gate_bonus(role)（运行时状态模型 §6.5 映射：attack_physical→gate_somatic、attack_mental→gate_cognitive；perceive/support bypass=1.0）；`forceMod`/`motivationMod` = 生产者产物（§五 5），公式内再 clamp。
 4. **RNG 消费序**：CalcPhysicalDamage 恰好 1 次 NextFloat（无条件——先取 roll 再判，与 roll 值无关）；CalcMentalDamage 0 次（AC-9 ThrowingRng 双面证明）。
