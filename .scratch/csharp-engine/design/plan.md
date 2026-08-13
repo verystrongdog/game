@@ -167,23 +167,24 @@ speed = w1 × 察觉 + w2 × 决断 + w3 × 执行          (w1=w2=w3=1/3 默认
 物理（[核心机制](../../规则/核心机制.md) §4.2 + [基础行动设计](../../规则/技能树系统/操作层/基础行动设计.md) §四）：
 
 ```
-CalcPhysicalDamage(int baseDamage, int weaponBonus, float forceMod, float motivationMod, float gateBonus, IRng rng) → (int damage, bool hit)
-damage = (4 + weapon_bonus) × (1 + clamp(force, 0, 0.5) + clamp(motivation, 0, 1.0)) × gate_bonus(attack_physical)
+CalcPhysicalDamage(int baseDamage, int weaponBonus, float forceMod, float motivationMod, float gateBonus, IRng rng) → (float damage, bool hit)
+damage = round1((4 + weapon_bonus) × (1 + clamp(force, 0, 0.5) + clamp(motivation, 0, 1.0)) × gate_bonus(attack_physical))
 hit = roll < 0.85 − 0.10 (L0 回避自动触发, 回合战斗流程 §6.2)      [demo 无 link 修正项]
 ```
 
 精神（核心机制 §4.3 + 基础行动设计 §四）：
 
 ```
-CalcMentalDamage(int baseDamage, float motivationMod, int endurance, float enemySanRatio, float gateBonus) → (int sanDamage, int hpDamage)
-san_damage = max(1, round(2 × (1 + motivation) − 忍耐被动)) × gate_bonus(attack_mental)   [round 取整方式 [NEW]——文档仅对 HP 部分定义向下取整]
-hp_damage = floor(san_damage / 2)
-低 SAN 穿透: 敌方 SAN < 30%×SAN_max → +30%；< 15% → ×2        (核心机制 §4.3——敌方的 SAN)
+CalcMentalDamage(int baseDamage, float motivationMod, int endurance, float enemySanRatio, float gateBonus) → (float sanDamage, float hpDamage)
+san_damage = round1(max(1.0, round1(2 × (1 + motivation) − 忍耐被动)) × gate_bonus(attack_mental) × 穿透倍率)
+hp_damage = floor1(san_damage × 0.5)
+低 SAN 穿透: 敌方 SAN < 30%×SAN_max → ×1.3；< 15% → ×2        (核心机制 §4.3——敌方的 SAN，受击前比值，互斥取高档)
 永远命中
 ```
 
-- 忍耐被动 = −1（最低受到 1）；忍耐主动 = −2 CD2 占 Broca（demo 未实现，接口预留）。
+- 忍耐被动 = −1（最低受到 1.0）；忍耐主动 = −2 CD2 占 Broca（demo 未实现，接口预留）。
 - 防御状态：物理伤害 ×0.5（−50%，仅物理）；force/motivation 生产者见 §六。
+- **一位小数结算（2026-08-13 csharp-damage Q3=D 裁决，替代原 round/floor 取整）**：round1 = `MathF.Round(x, 1, MidpointRounding.AwayFromZero)`（.NET 委托 double 精度）；floor1 = `MathF.Floor(x × 10f) × 0.1f`（保留「向下取整」语义，粒度 0.1）。每步结算后立即量化 → 状态恒在 0.1 网格 → 跨回合无漂移。关联类型变更：ParticipantState HP/SAN 与 CombatEvents 数值字段 int→float（共 18 字段，见 csharp-damage spec 偏差 B）。
 
 ### 4.7 EventProcessor
 
@@ -263,11 +264,12 @@ Phase 4 声明→响应→结算 dispatch。响应窗口内容按 §一范围 st
 | 接线 | 公式 | 来源 |
 |------|------|------|
 | gate → 结算 | damage × gate_bonus(role)（§6.5 表；perceive/support bypass=1.0） | 运行时状态模型 §6.5 |
-| motivation_mod | `clamp(tone_bias(attack_physical), −1, +1.0)`（cap +100% 对齐核心机制 §4.2；用 NPC AI §3.3 权重表） | [NEW] 生产者 |
+| motivation_mod（物理） | `clamp(tone_bias(attack_physical), −1, +1.0)`（cap +100% 对齐核心机制 §4.2；用 NPC AI §3.3 权重表） | [NEW] 生产者 |
+| motivation_mod（精神） | `clamp(tone_bias(attack_mental), −1, +1.0)`（2026-08-13 csharp-damage Q2=A：语言攻击动机 = DA_VTA 认知动机 + 5HT 去抑制，与 DA_SNc 运动启动无关） | [NEW] 生产者 |
 | force_mod | `clamp(DA_SNc − baseline_SNc, 0, 0.5)`（SNc 运动启动 → 出力，cap +50%） | [NEW] 生产者 |
 | 防御 −50% | IsDefending → 物理伤害 ×0.5；M1 通道被占（修复 #4）；CD 1 在自己窗口起点 tick | 基础行动设计 §四 |
 | L0 回避 −10% 命中 | 物理命中判定路径无条件生效（自动触发，回合战斗流程 §6.2） | 修复 #10 |
-| 精神 HP 成分 | floor(san_damage / 2) | 基础行动设计 §四 |
+| 精神 HP 成分 | floor1(san_damage × 0.5)（向下取至 0.1——2026-08-13 csharp-damage Q3=D） | 基础行动设计 §四 |
 
 ---
 
