@@ -101,7 +101,7 @@ def write_github_ref(path: Path, num: str) -> None:
     text = path.read_text(encoding="utf-8")
     link = f"https://github.com/{REPO}/issues/{num}"
     if re.search(r"GitHub:", text):
-        text = re.sub(r"GitHub:\s*(?:\[#)?\d+(?:\][^|>]*)?", f"GitHub: [#{num}]({link})", text)
+        text = re.sub(r"GitHub:\s*(?:\[#)?\d+(?:\][^|\n>]*)?", f"GitHub: [#{num}]({link})", text)
     else:
         text = re.sub(r"(> Status:.*)", rf"\1 | GitHub: [#{num}]({link})", text)
     path.write_text(text, encoding="utf-8")
