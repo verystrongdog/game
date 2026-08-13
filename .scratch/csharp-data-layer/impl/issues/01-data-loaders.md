@@ -2,6 +2,10 @@
 
 > Status: resolved | Type: implementation | 维度: 管线 | Spec: ../../design/spec.md@v1.2 | Blocked by: sign-off ✅ (2026-08-12) | GitHub: [#43](https://github.com/verystrongdog/game/issues/43)
 
+## 问题（这件事要解决什么）
+
+spec v1.2 已获批，但三个加载器代码尚不存在——运行时拿不到 W_sensory 69×6 矩阵、27 个情境原型、18 子类信号词表。不实现它们，后续引擎 step（W 矩阵构建、情境 salience、NPC 候选集）全部悬空，Data Layer 只是个空壳。
+
 ## 目标
 
 按 spec v1.2 实现 W_sensory / situation_primitives / signal_types 三个加载器及对应 record，让 C# Data Layer 完整收官——运行时代码可加载全部设计数据，且行序、词表、交叉引用逐条有测试兜底。

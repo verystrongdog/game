@@ -2,9 +2,13 @@
 
 > Status: resolved | Type: task | 维度: 管线 | GitHub: [#42](https://github.com/verystrongdog/game/issues/42)
 
+## 问题（这件事要解决什么）
+
+Data Layer 是引擎的地基——所有 JSON 设计数据（脑区注册表 / 三体网络 / W_sensory 矩阵 / 情境原型 / 信号词表）要经它进入运行时，后续每个引擎 step 都站在它上面。但地基当时是裸奔的：已有代码从未被系统核查过，三个新 JSON 尚无 C# 类型。若规格写错（如 snake_case 映射缺失），错误会**静默扩散**到整个引擎——数据全丢而测试全绿。同时这是二层流水线的首航 feature，流水线本身也要借它验证。
+
 ## 目标
 
-为 C# Data Layer 产出完整实现规格 spec.md——覆盖**全部已写 + 待写**的数据类型与 GameDataLoader，供审计与实现引用。二层流水线的首航 feature（同时验证流水线本身）。
+为 C# Data Layer 产出完整实现规格 spec.md——覆盖**全部已写 + 待写**的数据类型与 GameDataLoader，供审计与实现引用。
 
 ## 指标
 

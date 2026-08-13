@@ -77,8 +77,12 @@ GitHub issue 的读者是人类——issue 是 **brief 层**（目标/指标/判
 **任务issue**（design/issues/）：
 
 ```markdown
+## 问题（这件事要解决什么）
+<!-- 先讲问题再讲交付物：本 feature 的使命、为什么是现在、不做会怎样。
+     如 csharp-engine 的使命=端到端验证神经动力学公式，Unity 前先在 C# 暴露数值问题 -->
+
 ## 目标
-<!-- 一段话：本 issue 要达成什么，为什么现在做 -->
+<!-- 一段话：本 issue 要达成什么（交付物），解决 ## 问题 中的哪一环 -->
 
 ## 指标
 <!-- 可衡量的成功标准（数字）：修复数/AC 数/测试数/专家 verdict/门禁 -->
@@ -96,7 +100,7 @@ GitHub issue 的读者是人类——issue 是 **brief 层**（目标/指标/判
 ## Comments
 ```
 
-**工作issue**（impl/issues/）：`目标` + `指标` 必须，`工作方式`/`判断与取舍` 按实际复杂度取舍。
+**工作issue**（impl/issues/）：`问题` + `目标` + `指标` 必须，`工作方式`/`判断与取舍` 按实际复杂度取舍。
 
 **收尾简要**：issue 置 `resolved` 时，在 `## Comments` 末尾追加一条 dated 条目：目标达成与否 → 指标实际值 → 遗留项。格式参考 `csharp-data-layer/impl/issues/01-data-loaders.md`。
 
