@@ -1,6 +1,6 @@
 # 工作issue 01: CstcGating 实现
 
-> Status: resolved | Type: implementation | Spec: ../../design/spec.md@v1.1 | Blocked by: sign-off（2026-08-13 已批准）
+> Status: resolved | Type: implementation | Spec: ../../design/spec.md@v1.1 | Blocked by: sign-off（2026-08-13 已批准） | GitHub: [#57](https://github.com/verystrongdog/game/issues/57)
 
 ## 范围
 

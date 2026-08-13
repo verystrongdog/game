@@ -1,6 +1,6 @@
 # 任务issue 01: CSTC 门控规格（CstcGating）
 
-> Status: claimed | Type: task | 维度: 管线 | GitHub: [#56](https://github.com/verystrongdog/game/issues/56)
+> Status: resolved | Type: task | 维度: 管线 | GitHub: [#56](https://github.com/verystrongdog/game/issues/56)
 
 ## 问题（这件事要解决什么）
 
