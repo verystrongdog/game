@@ -1,6 +1,6 @@
 # 任务issue 01: 伤害结算规格（DamageCalculator）
 
-> Status: claimed | Type: task | 维度: 管线
+> Status: claimed | Type: task | 维度: 管线 | GitHub: [#62](https://github.com/verystrongdog/game/issues/62)
 
 ## 问题（这件事要解决什么）
 
@@ -113,8 +113,9 @@ plan §六 motivation_mod 行字面写 `clamp(tone_bias(attack_physical), −1, 
 
 - [x] 数据实测第一轮 + 第二轮（本 issue，已完成——见上表）
 - [x] Q1/Q2/Q3 用户裁决（Q1=A 双档百分比 / Q2=A attack_mental / Q3=D 一位小数结算）
-- [ ] 设计文档修正写回（D15 清单：基础行动设计 行动2/§四、plan §六、核心机制 §4.2、term_registry）
-- [ ] spec.md v1.0 → 审计 → 修复升版 → Δ审计
+- [x] 设计文档修正写回（D15 清单：基础行动设计 行动2/§四、plan §六、核心机制 §4.2、term_registry）——commit 112616c/bddae18
+- [x] spec.md v1.0（AC-1~18 + B1-B6）——commit fb1aebe；审计前自修正 2 处（AC-14 链锚点 f32 复测 1.9f/0.9f、Floor1 /10f）——commit b780980
+- [ ] 全量审计（workflow 进行中）→ 修复升版 → Δ审计
 - [ ] 人类复核 → sign-off.md
 - [ ] 工作issue 01 → 实现 + 证据式自审（含 D14 类型变更 22 字段）
 - [ ] map.md 更新 + 回顾段（feature 闭合）
@@ -123,3 +124,4 @@ plan §六 motivation_mod 行字面写 `clamp(tone_bias(attack_physical), −1, 
 
 - 2026-08-13：创建。数据实测第一轮完成（tone_bias 值域/穿透阈值/RED 算术/取整可见差异/命中边界 f32）。三个疑问提交用户裁决（Q1 穿透双档、Q2 精神 motivation 生产者、Q3 取整链）。
 - 2026-08-13：裁决完成——Q1=A（双档百分比；基础行动设计 §四 速查表与核心机制 §4.3 本就一致，仅行动2 叙述行离群）、Q2=A（attack_mental；plan §六 行写回拆两行）、Q3=D（**用户反提案：一位小数结算**——放弃整数取整，全程 float + 每步量化到 0.1）。Q3=D 引发 L2 跨 feature 类型变更（22 字段 int→float，D14；18→22 补正：CalibrationConfig 4 demo 模板加入，2026-08-13 spec 写作期发现）+ 设计文档数值语义写回（D15），代价已向用户确认。数据实测第二轮完成（量化仿真 5 条：round1/floor1 对照、最低档穿透救活 1.0×1.3→1.3、存储网格 f32、inner 动机保留）。进入设计文档修正写回 + spec v1.0。
+- 2026-08-13：spec v1.0 完成（fb1aebe）。审计前自修正 2 处（b780980）：① AC-14 第二行锚点——1.5f×1.3f 的 f32 精确积 = 1.9499999284744263（低于 1.95），round1 得 1.9 而非 2.0（此前仿真 float64 泄漏），锚点改为 san 1.9f/hp 0.9f；② Floor1 scale-back 由 ×0.1f 改为 /10f——×0.1f 乘法实测离格（1.3f→1.3000000715、0.95f→0.9000000358，逐位锚点会挂），/10f 精确除法落回 f32(0.1k) 网格点。两处均已同步写回实测表 #11、D13、plan、term_registry。全量审计启动（workflow 3 专家 + 对抗验证）。
