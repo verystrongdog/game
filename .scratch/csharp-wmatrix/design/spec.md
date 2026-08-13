@@ -1,6 +1,6 @@
 # WMatrixBuilder — 实现规格
 
-> W 矩阵（69×69 皮层-皮层连接权重 + τ[69] 时间常数）的构建器规格——WC 引擎 Layer 1 的输入，csharp-engine plan §十一 step 3。版本: v1.0
+> W 矩阵（69×69 皮层-皮层连接权重 + τ[69] 时间常数）的构建器规格——WC 引擎 Layer 1 的输入，csharp-engine plan §十一 step 3。版本: v1.1
 
 ## 目录
 
@@ -30,8 +30,8 @@
 
 | # | 偏差 | 依据 |
 |----|------|------|
-| B1 | [皮层动力学-通用层](../../../规则/技能树系统/皮层动力学-通用层.md) §5.3 备注「皮层-皮层 W 仅包含 ~34 个 dk_name（皮层节点）」与[运行时状态模型](../../../规则/技能树系统/运行时状态模型.md) §4.2 排除清单不一致——**按运行时状态模型 §4.2 执行**：W 活跃节点 = 48 fids（44 皮层 + Amygdala + Hippocampus×2 + Cerebellum-Cortex），排除 = CSTC 6 dk + brainstem（16 dk / 21 fids）。皮层动力学-通用层 §5.1 措辞的文档修正延后至审计后执行（任务issue D1/Q1） |
-| B2 | plan §4.1 第 3 条括注「brainstem dk_name=None 节点（PAG、上丘、脑桥网状核、小脑皮层）」中**「小脑皮层」归类有误**——实测 Cerebellum-Cortex category=subcortical 且不在 CSTC 清单，**不排除**，参与 W（CC 40 条 + PP 51 条，实测）。plan 文档修正延后（任务issue D1） |
+| B1 | [皮层动力学-通用层](../../../规则/技能树系统/皮层动力学-通用层.md) §5.3 备注「皮层-皮层 W 仅包含 ~34 个 dk_name（皮层节点）」与[运行时状态模型](../../../规则/技能树系统/运行时状态模型.md) §4.2 排除清单不一致——**按运行时状态模型 §4.2 执行**：W 活跃节点 = 48 fids（44 皮层 + Amygdala + Hippocampus×2 + Cerebellum-Cortex），排除 = CSTC 6 dk + brainstem（16 dk / 21 fids）。**延后文档修正清单（v1.1 审计补全）**：①皮层动力学-通用层 §5.1（「仅 category=cortical」措辞）、§5.3（「~34 dk_name」+「CC 独有 6 节点」清单含已排除 Pallidum）；②运行时状态模型 §4.1（方程作用域「category=cortical 且不在 CSTC 排除清单中」）、§4.5（「25 个 subcortical/brainstem 节点不参与 WC 皮层动力学」）、参数速查表（「CC 节点数（排除后）~34 dk」——实测 35）。全部延后至审计后执行（任务issue D1/Q1） |
+| B2 | plan §4.1 第 3 条括注「brainstem dk_name=None 节点（PAG、上丘、脑桥网状核、小脑皮层）」中**「小脑皮层」归类有误**——实测 Cerebellum-Cortex category=subcortical 且不在 CSTC 清单，**不排除**，参与 W（幸存口径触边 CC 6 条 + PP 12 条；任务issue 表中「CC 40 + PP 51」为 {Amygdala, Hippocampus, Cerebellum-Cortex} 三 dk 并集口径——v1.1 修正）。plan 文档修正延后（任务issue D1） |
 | B3 | **方向契约**：[皮层动力学-通用层](../../../规则/技能树系统/皮层动力学-通用层.md) §5.1 `W[fid_A][fid_B] = w(dk(fid_A), dk(fid_B))` 是 [源][目标] 序；[运行时状态模型](../../../规则/技能树系统/运行时状态模型.md) §4.1 方程 `h_j = Σ_k W_jk·a_k` 要求 [行=接收者][列=发送者]。两者互为转置——demo 归一化前权重对称时数值无差，但归一化后行和不同会分叉。**本 spec 以运行时方程方向为准**：W[行=接收者][列=发送者]（任务issue D8） |
 | B4 | m_mean 推导（§5.3 的 link_registry 映射）不落地——demo 无 LinkState，全部 m_mean ≡ CalibrationConfig.Default.MDefault = 0.3；focus_multiplier ≡ 1.0（§5.2 取值范围 1.0/2.0 中的基础档）。Build 签名无 focus 参数，接口注释预留（任务issue D2） |
 
@@ -67,7 +67,7 @@ CSTC_DK = { Pallidum, Thalamus-Proper, Putamen, Caudate, Accumbens-area, Subthal
 
 1. S 或 T ∈ EXCLUDED_DK → **跳过**（实测跳过 CC 130 / PP 23 → 幸存 CC 646 + PP 89 = 735）。
 2. S == T → 跳过（自连接 w(A,A)=0，皮层动力学-通用层 §5.2；实测数据 0 条自环，防御性规则）。
-3. 端点解析（任务issue D4）：S/T 先按 dk_name 查 GraphNodes；未命中再按 functional_id 查 fid→dk 字典（视为单 fid）；两者都失败 → 抛 `InvalidDataException`（含边描述）。实测当前数据 100% 按 dk_name 解析；15 个 dk/fid 同名歧义名（如 Amygdala）dk 优先无副作用（其 dk 恰为单 fid）。
+3. 端点解析（任务issue D4）：S/T 先按 dk_name 查 GraphNodes；未命中再按 functional_id 查 fid→dk 字典（视为单 fid）；两者都失败 → 抛 `InvalidDataException`（含边描述）。实测当前数据 100% 按 dk_name 解析；15 个 dk/fid 同名歧义名中，非排除 dk 全为单 fid（仅 Amygdala）——Caudate（2 fids）∈ CSTC 排除集，第 1 条排除检查先行，歧义解析永不触达它（v1.1 修正理由表述）。
 4. 权重 `w = edr × m_mean × focus_multiplier`，其中 `m_mean = CalibrationConfig.Default.MDefault`（0.3f）、`focus_multiplier = 1.0f`（B4）。公式来源：皮层动力学-通用层 §5.2。
 5. **fan-out 广播**：对 S 的每个 fid s、T 的每个 fid t：`W[rowIndex(t)][rowIndex(s)] += w`（行=接收者=target，B3）。同 dk 对内多个 fid 共享同一权重模式（plan §4.1 第 1 条）。
 6. 累加（`+=`）为防御语义：实测 CC∩PP 幸存 dk 对重叠 = 0（无重复边对），当前数据下与赋值等价——测试锁定该不变量（AC-6 附注）。
@@ -83,7 +83,7 @@ sum_j = Σ_k W[j][k]
 W[j][k] = W[j][k] / (sum_j + ε)，ε = 0.01
 ```
 
-- 来源：皮层动力学-通用层 §5.4、运行时状态模型 §4.2。
+- 来源：皮层动力学-通用层 §5.4、运行时状态模型 §4.3。
 - 性质（实测）：48 活跃行 sum = S_j/(S_j+ε) ∈ (0,1)；21 排除行 sum = 0。
 - **归一化后 W 一般不对称**：同一双向对的 W[j][k] 与 W[k][j] 各自除以不同行和（实测 tt↔cac 归一化后 0.02819 vs 0.03621）——不是实现错误（任务issue 数据实测表已精确化此表述）。
 
@@ -95,11 +95,11 @@ W[j][k] = W[j][k] / (sum_j + ε)，ε = 0.01
 2. `ts == null` → 若 `FunctionProfile.MirrorOf` 非空，取镜像目标 region 的 Timescale（一层继承）；仍为 null → 按 medium 处理。
 3. 映射：Fast→0.01f / Medium→0.05f / Slow→0.15f（皮层动力学-通用层 §4.4）。
 
-实测：fast 27 / medium 29 / slow 11 / mirror 2（LocusCoeruleusRight→LocusCoeruleus=slow、SubstantiaNigraParsCompactaRight→SubstantiaNigraParsCompacta=medium）。**69 个 fid 全部有 τ > 0（含 21 排除 fid）**。
+实测：原始字段 fast 27 / medium 29 / slow 11 / mirror 2（LocusCoeruleusRight→LocusCoeruleus=slow、SubstantiaNigraParsCompactaRight→SubstantiaNigraParsCompacta=medium）；**继承后最终 Tau[69] 分布 = fast 27 / medium 30 / slow 12**（v1.1 修正，与 AC-8 一致）。**69 个 fid 全部有 τ > 0（含 21 排除 fid）**。
 
 ## 三、接口定义
 
-新文件 `src/YouAreNotTheFish.Core/Engine/WMatrixBuilder.cs`（Engine/ 目录新建；plan §3.2 L2 Engine 层约定：纯函数、无副作用、RNG 注入——本 builder 无 RNG 依赖）：
+新文件 `src/YouAreNotTheFish.Core/Engine/WMatrixBuilder.cs`（Engine/ 目录已存在，内新建文件；plan §3.2 L2 Engine 层约定：纯函数、无副作用、RNG 注入——本 builder 无 RNG 依赖）：
 
 ```csharp
 namespace YouAreNotTheFish.Core.Engine;
@@ -145,7 +145,7 @@ public static class WMatrixBuilder
 | C2 | GraphNodes.functional_ids 与 RegionIds 双向双射（69 == 69） | 数据不变量 | AC-2 附注（数据层已有测试，本 feature 加 builder 视角断言） |
 | C3 | 排除集 == 16 dk / 21 fids；排除 fid 的行与列全 0 | 规格定义 | AC-3 |
 | C4 | 每条边端点可解析（dk 优先 → fid 兜底 → 抛 InvalidDataException）；当前数据 0 失败 | 完整性 | AC-10 |
-| C5 | fan-out 广播：同一 dk 对内所有 fid 单元格等值；同 dk 内 fid 对恒 0（自连接 0 + 无自环的推论） | 结构性 | AC-6 / AC-11 |
+| C5 | fan-out 广播：同一 dk 对内所有 fid 单元格等值；同 dk 内非对角 fid 对恒 0（自连接 0 + 无自环的推论，共 Σ_dk n(n−1) = 50 个） | 结构性 | AC-6 / AC-11 |
 | C6 | 方向契约：W[行=接收者][列=发送者]，与 h_j = Σ_k W_jk·a_k 一致（B3） | 规格定义 | AC-7 锚点（W[Amygdala][Pericalcarine] ≠ 0 且 W[Pericalcarine][Amygdala] == 0 唯一锁定方向） |
 | C7 | 归一化性质：48 活跃行 sum ∈ (0,1)；21 排除行 sum == 0 | 数值 | AC-5 |
 | C8 | 非零元计数 == 1389（fan-out 后全量） | 数据不变量 | AC-4 |
@@ -161,19 +161,21 @@ public static class WMatrixBuilder
 | AC-4 | 非零元计数 == 1389（C8） | 全量计数 |
 | AC-5 | 48 行 0 < sum < 1；21 行 sum == 0（C7） | 全量行和断言 |
 | AC-6 | fan-out 广播：全部 735 幸存 dk 对，块内单元格等值（全量扫描）；数据层不变量「CC∩PP 幸存 dk 对重叠 = 0」同步锁定 | 全量块等值 + 数据对集断言 |
-| AC-7 | 锚点值（2026-08-13 由数据文件独立计算所得，容差 1e-5；数据文件变更时同步更新——本组锚点兼作数据漂移哨兵）：<br>· W[接收=Amygdala][发送=Pericalcarine] ≈ 0.02277450（唯一非互惠边，方向契约哨兵）<br>· W[接收=Pericalcarine][发送=Amygdala] == 0<br>· W[接收=caudalanteriorcingulate][发送=transversetemporal] ≈ 0.03620595（其 3 fid 行等值）<br>· W[接收=transversetemporal][发送=caudalanteriorcingulate] ≈ 0.02819380（锁定归一化后不对称）<br>· W[接收=Hippocampus][发送=entorhinal] ≈ 0.07386513（PP 边锚点，2 fid 行等值） | 按 fid 名经 RowFids 查索引后断言 |
-| AC-8 | τ 分布：27 个 fid == 0.01、29 == 0.05、11 == 0.15；LocusCoeruleusRight == 0.15、SubstantiaNigraParsCompactaRight == 0.05（mirror 继承） | 计数 + 点名断言 |
+| AC-7 | 锚点值（2026-08-13 由数据文件独立计算所得，**绝对容差 1e-5**；float32 实测偏差 <2e-7，余量 ~100×；数据文件变更时同步更新——本组锚点兼作数据漂移哨兵）：<br>· W[接收=Amygdala][发送=Pericalcarine] ≈ 0.02277450（唯一非互惠边，方向契约哨兵）<br>· W[接收=Pericalcarine][发送=Amygdala] == 0<br>· W[接收 dk=caudalanteriorcingulate][发送 dk=transversetemporal] ≈ 0.03620595（3 fid 行等值）<br>· W[接收 dk=transversetemporal][发送 dk=caudalanteriorcingulate] ≈ 0.02819380（锁定归一化后不对称）<br>· W[接收 dk=Hippocampus][发送 dk=entorhinal] ≈ 0.07386513（PP 边锚点，2 fid 行等值） | 锚点以 **dk 名**标识（Amygdala/Pericalcarine 同时是 fid 名）：测试经 §二 Step 2 的 fid→dk 映射展开 dk→fids，对块内每个单元格断言；fid 索引经 RowFids 查得（v1.1 修正命名粒度） |
+| AC-8 | τ 分布（**继承后最终 Tau[69]**）：27 个 fid == 0.01、30 == 0.05、12 == 0.15；LocusCoeruleusRight == 0.15、SubstantiaNigraParsCompactaRight == 0.05（mirror 继承；v1.1 修正——29/11 只对 67 个非 mirror 原始字段成立） | 计数 + 点名断言 |
 | AC-9 | 确定性：同一 GameData 两次 Build 结果逐元相等 | 双调用逐元对拍 |
 | AC-10 | 端点不可解析 → InvalidDataException（合成 GameData：构造伪 tripartite 边） | 异常断言 |
-| AC-11 | 自连接与同 dk：69 对角线全 0；同 dk 内 fid 对共 82 个单元格全 0（C5 推论，计数由 graph_nodes 推导） | 全量扫描 + 计数断言 |
+| AC-11 | 自连接与同 dk：69 对角线全 0；同 dk 内**非对角** fid 对共 Σ_dk n(n−1) = 50 个单元格全 0（C5 推论，计数由 graph_nodes 全量推导；v1.1 修正——82 口径含对角，与 69 对角断言重复计数） | 全量扫描 + 计数断言 |
 | AC-12 | 21 个排除 fid 的 Tau 均 > 0（排除节点仍 WC 驱动，C9） | 全量断言 |
+
+> 数据漂移哨兵：AC-4/6/7/8/11 均为数据依赖断言（计数/锚点/分布），数据 JSON 变更时同步更新期望值——它们兼作数据回归测试。
 
 ## 七、本 spec 自检清单
 
 工作issue 的「代码自审」段逐项引用本清单：
 
 - [ ] **数学公式逐项对照**：w = edr × m_mean × focus / 行归一化 +ε / τ 映射 与 皮层动力学-通用层 §5.2/§5.4/§4.4、运行时状态模型 §4.1-4.2 逐字一致
-- [ ] **数据断言全部实测**：本 spec 所有计数与锚点（735/1389/82/21/16/27-29-11/5 锚点值）出自 2026-08-13 python 实测 JSON，无凭记忆数字
+- [ ] **数据断言全部实测**：本 spec 所有计数与锚点（735/1389/50/21/16/27-30-12/5 锚点值）出自 2026-08-13 python 实测 JSON，无凭记忆数字
 - [ ] **行序契约唯一 canonical** = RegionIds；无 BrainRegionsData.Regions 序引用
 - [ ] **方向契约明确**（行=接收者，B3）且方向哨兵锚点入 AC-7
 - [ ] **边界值覆盖**：零行 / 唯一非互惠对 / mirror 继承 / 不可解析端点 / 自连接 / 同 dk 对 / 排除节点 τ
@@ -186,7 +188,8 @@ public static class WMatrixBuilder
 
 | 版本 | 日期 | 变更 | 触发 | 审计范围 |
 |------|------|------|------|----------|
-| v1.0 | 2026-08-13 | 初稿：6 步构建算法 + 13 条 AC + 偏差声明 B1-B4（任务issue D1-D8 固化） | 任务issue 01 | 全量审计 |
+| v1.0 | 2026-08-13 | 初稿：6 步构建算法 + 12 条 AC + 偏差声明 B1-B4（任务issue D1-D8 固化） | 任务issue 01 | 全量审计（3 专家退回：AC-11 计数 82 错 / AC-8 分布口径矛盾 / B2 数字误挂） |
+| v1.1 | 2026-08-13 | 审计修正：AC-11 82→50（Σ_dk n(n−1) 非对角口径）、AC-8 改继承后最终分布 27/30/12、B2 支撑数字改 Cerebellum-Cortex 幸存口径（CC 6 + PP 12）、AC-7 锚点改 dk 名标识 + 绝对容差声明、Step 4.3 歧义名理由修正（Caudate 2 fids）、B1 补完整修正清单（5 处）、Step 5 段号 §4.2→§4.3、数据漂移哨兵统一标注、§七/§三 同步 | v1.0 全量审计退回 | Δ审计（变更章节 + 半径扩张） |
 
 ## 参数速查表
 
@@ -204,5 +207,5 @@ public static class WMatrixBuilder
 | 幸存 edr 范围 | — | [0.103, 0.759] | §二 Step 4 |
 
 ---
-*创建: 2026-08-13 | 更新: 2026-08-13 | 版本: v1.0*
+*创建: 2026-08-13 | 更新: 2026-08-13 | 版本: v1.1*
 *关联: [任务issue 01](issues/01-wmatrix-spec.md), [csharp-engine plan](../../csharp-engine/design/plan.md), [皮层动力学-通用层](../../../规则/技能树系统/皮层动力学-通用层.md), [运行时状态模型](../../../规则/技能树系统/运行时状态模型.md), [csharp-engine-types spec](../../csharp-engine-types/design/spec.md)*

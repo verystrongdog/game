@@ -39,7 +39,7 @@ W 矩阵（69×69 皮层-皮层连接权重 + τ[69]）是 WC 引擎的输入—
 | PP/CC 端点可解析性 | CC 40 dk 全部 ∈ graph_nodes；PP 端点全部可解析（100% 按 dk_name）；15 个 dk/fid 同名（歧义名） |
 | 排除集（CSTC 6 + brainstem） | 21 fids（10 皮下 CSTC + 11 脑干）→ W 活跃节点 = 48 fids |
 | 触及排除 dk 的边 | CC 130 / PP 23 → 幸存边 646 + 89 = 735（CC∩PP 重叠 0） |
-| 孤立节点 | **无**——48 个参与 fids 全部有边；PP-only 的皮层 dk = 0（PP 端点全部同时有 CC 边）；CC-only 5 个（cuneus / inferiorparietal / lateralorbitofrontal / superiorparietal / transversetemporal） |
+| 孤立节点 | **无**——48 个参与 fids 全部有边；PP-only 的皮层 dk = 0（PP 端点全部同时有 CC 边）；CC-only 三种口径（审计澄清）：无任何 PP 边 6 个（Caudate/Pallidum/Putamen/inferiorparietal/lateralorbitofrontal/superiorparietal，前 3 为 CSTC 排除 dk）；活跃 dk 中无幸存 PP 边 5 个（cuneus/inferiorparietal/lateralorbitofrontal/superiorparietal/transversetemporal——cuneus 与 transversetemporal 的 PP 边全部触及排除 dk）；活跃且无 PP 边 3 个（inferiorparietal/lateralorbitofrontal/superiorparietal） |
 | 无对向边的幸存对 | 仅 1 条：pericalcarine→Amygdala（amygdalofugal, edr 0.2813）；其余全部双向且双向 edr 相等 → **归一化前权重全对称；归一化后一般不对称**（行和不同，实测 tt↔cac 归一化后 0.02819 vs 0.03621），唯一例外单元格对 pericalcarine→Amygdala |
 | fan-out 后 fid 级非零元 | 1389（= Σ|fids(source)|×|fids(target)| over 735 幸存对） |
 | Amygdala/HC/Cerebellum 参与 | CC 40 条 + PP 51 条——它们在 W 内有真实连接（支撑 D1） |
