@@ -54,4 +54,15 @@ public static class GameDataLoader
         return JsonSerializer.Deserialize<SignalTypesCatalog>(json, Options)
                ?? throw new InvalidOperationException($"Failed to deserialize {jsonPath}");
     }
+
+    /// <summary>
+    /// 一次加载全部 5 个数据文件（spec@v1.1 §三 3.3）——dataDir 为 data/ 目录。
+    /// 文件名固定；异常语义同现有 5 方法（FileNotFoundException/JsonException/InvalidOperationException）。
+    /// </summary>
+    public static GameData LoadAll(string dataDir) => new(
+        LoadBrainRegions(Path.Combine(dataDir, "brain_regions.json")),
+        LoadTripartiteModel(Path.Combine(dataDir, "connectivity", "tripartite_model.json")),
+        LoadWsensory(Path.Combine(dataDir, "connectivity", "W_sensory.json")),
+        LoadSituationPrimitives(Path.Combine(dataDir, "connectivity", "situation_primitives.json")),
+        LoadSignalTypes(Path.Combine(dataDir, "signal_types.json")));
 }
