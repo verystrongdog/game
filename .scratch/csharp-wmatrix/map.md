@@ -1,6 +1,6 @@
 # map: csharp-wmatrix
 
-> csharp-engine step 3（plan §十一）——WMatrixBuilder：69×69 皮层-皮层连接权重 + τ[69]。Status: v1.0 全量审计退回 → spec v1.1 已修正（2026-08-13），Δ审计运行中
+> csharp-engine step 3（plan §十一）——WMatrixBuilder：69×69 皮层-皮层连接权重 + τ[69]。Status: spec v1.1 sign-off 获批（2026-08-13），进入实现阶段
 
 ## Notes
 
@@ -16,9 +16,9 @@
 
 - [任务issue 01](design/issues/01-wmatrix-spec.md) → 8 决策（D1-D8）+ 2 追问 → claimed（2026-08-13）
 - v1.0 全量审计（3 专家）→ 退回修改（3 ❌ / 4 ⚠️ / 6 info）→ [report.md](design/audit/report.md)
-- spec v1.1 修正 → Δ审计（2 专家）运行中
+- spec v1.1 修正 → Δ审计（2 专家）conditional 通过 + L1 修正 → [sign-off.md](design/audit/sign-off.md) 获批（2026-08-13）
 
 ## Fog
 
-- D1 文档修正（5 处清单，见 spec B1）待审计通过后执行（L1 级）
-- Δ审计未出结果、sign-off 未交付
+- D1 文档修正（5 处清单，见 spec B1）待 feature 闭合后执行（L1 级，结转 #3）
+- 实现未开始（工作issue 01 待建）

@@ -75,8 +75,8 @@ W 矩阵（69×69 皮层-皮层连接权重 + τ[69]）是 WC 引擎的输入—
 
 ## 产出
 
-- [ ] spec.md v1.0
-- [ ] spec.md 通过审计
-- [ ] sign-off.md 获批
+- [x] spec.md v1.0 → v1.1（v1.0 全量审计退回 → v1.1 修正 + Δ审计 conditional 通过 + L1 修正）
+- [x] spec.md 通过审计（[report.md](../audit/report.md)：两轮审计闭环）
+- [x] sign-off.md 获批（2026-08-13，[sign-off.md](../audit/sign-off.md)）
 
 ## Comments
