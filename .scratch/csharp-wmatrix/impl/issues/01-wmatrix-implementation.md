@@ -77,6 +77,7 @@ spec@v1.1 §六 AC-1 ~ AC-12 逐条对照（见「代码自审」段）。
 |----|--------|---------|
 | 1 | AC-7 锚点测试按 Step 4.3 解析规则展开（graph_nodes 键优先 → fid→dk 兜底；'Pericalcarine' 是 fid 名而 dk 键为小写 'pericalcarine'） | ✅ 测试侧 `ResolveFids` 镜像 Step 4.3 规则：'Pericalcarine' 大小写敏感经 fid 兜底解析为单 fid（dk 键 'pericalcarine' 不匹配）；'Amygdala'/cac/tt/entorhinal/Hippocampus 经 dk 键展开。**实测首跑即被本规则拦截一次测试侧错误**（'transversetemporal' 是 dk 键、fid 名为 'TransverseTemporal'，直接当 fid 查 RowFids 失败）→ 修正为统一 ResolveFids 展开后 12/12 绿 |
 | 2 | AC-11 计数 50 由 graph_nodes 全量推导（Σ n(n−1)，不硬编码） | ✅ 测试遍历全部 51 个 GraphNodes 的 fid 对逐对断言 0，计数由推导累计，`Assert.Equal(50, count)` 仅锁定期望总数 |
+| 3 | 5 处设计文档修正（B1 清单：皮层动力学 §5.1/§5.3 + 运行时状态模型 §4.1/§4.5/参数速查表）在本 feature 闭合后执行，L1 级 `🔧 修正` 记录 | ✅ 闭合后已执行（2026-08-13）：5 处全部修正（§5.1「仅 cortical」→48 fids 活跃节点、§5.3「~34」→35 dk + Pallidum 移出 6 节点清单、§4.1 方程作用域、§4.5「不参与 WC」谓词修正为 21 排除/4 参与、参数速查表 35 dk_names（48 fids））；两文档 footer 更新日期；spec 变更日志加 v1.1 🔧² 行。修正数字全部经 python 实测（25 非皮层 fid 行全零 ✓、活跃 35 dk ✓） |
 
 ### 发现的问题
 | # | 问题 | 处置 |

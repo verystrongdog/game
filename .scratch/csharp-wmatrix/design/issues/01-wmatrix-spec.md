@@ -1,6 +1,6 @@
 # 任务issue 01: WMatrixBuilder 规格
 
-> Status: claimed | Type: task | 维度: 管线
+> Status: claimed | Type: task | 维度: 管线 | GitHub: [#50](https://github.com/verystrongdog/game/issues/50)
 
 ## 问题（这件事要解决什么）
 

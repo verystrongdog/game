@@ -22,5 +22,5 @@
 
 ## Fog
 
-- D1 文档修正（5 处清单，见 spec B1）待执行（L1 级，sign-off 结转 #3——本 feature 闭合后，`🔧 修正` 记录）——**下一步**
-- step 4 csharp-wc-dynamics（WcDynamics 消费本 feature 的 W/Tau/行序）
+- ~~结转 #3：5 处设计文档修正~~ ✅ 已执行（2026-08-13）：皮层动力学 §5.1/§5.3 + 运行时状态模型 §4.1/§4.5/参数速查表全部修正，footer 日期更新，spec 变更日志 v1.1 🔧² 记录
+- step 4 csharp-wc-dynamics（WcDynamics 消费本 feature 的 W/Tau/行序）——**下一步**
