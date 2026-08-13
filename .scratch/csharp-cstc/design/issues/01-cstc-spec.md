@@ -55,37 +55,37 @@ csharp-engine plan §十一 step 6 = **CstcGating**——Layer 3 CSTC 门控（�
 
 GPe 输入方程引用 `W_SEL_GPe`，但设计权重表（§6.3）与 README_gurney_model.md 权重清单均无此项（缺口自文献源传播）。
 
-- **A（推荐）**：补 `W_SEL_GPe = 0.0` 入权重表，方程保留该项——对齐 ModelDB 83560 原始实现默认（无 SD1→GPe 连接）
-- B：从 GPe 方程删除该项——数学等价（×0），方程更短
+**✅ 裁决（2026-08-13）：A——补 W_SEL_GPe = 0.0 入权重表**，GPe 方程保留该项。对齐 ModelDB 83560 原始默认（无 SD1→GPe 连接）；未来启用 Gurney 2004 'g' 选项（−0.25）有落点。
 
 ### Q2: gate≡1 惰性处置（本 issue 实测 #9 暴露）
 
 现状参数下 CstcGating 恒输出 gate=1.0，门控系统无功能。
 
-- **A（推荐）**：对齐 ModelDB 83560 原始实现——per-population 阈值 e（SD1/SD2=0.2、STN=−0.25、GPe=−0.2、GPi=−0.2）+ 取消 clamp（a 可为负，值域文档化）+ 设计文档修正（§6.3 e 表、§三 91-var 表 L3 值域、plan §4.4 step 5）。实测恢复设计意图：c=0 → gate 0.843 门控抑制，DA+salience 高 → 1.0 全放行
-- B：保持现状（e 全 0.2 + clamp[0,1]）——gate≡1 文档化，plan 测试行与 §6.4 叙事按实际行为修正，CstcGating 退化为恒等
-- C：其他数值方案（如补 GPi tonic 输入基线项 I_GPi [NEW]，或自定义 e 表/权重）
+**✅ 裁决（2026-08-13）：A——对齐 ModelDB 83560 原始实现**：per-population 阈值 e（SD1/SD2=0.2、STN=−0.25、GPe=−0.2、GPi=−0.2）+ 取消 clamp（a 可为负，值域文档化）+ 设计文档修正（§6.3 e 表、§三 91-var 表 L3 值域、plan §4.4 step 5、GurneyState 值域注）。实测恢复设计意图：c=0 → gate 0.843 门控抑制，DA+salience 高 → 1.0 全放行。
 
 ### Q3: c_loop 粒度（a(ci) 聚合口径）
 
 设计 §6.2 的 ci 是 §6.1 表中的 dk 节点，但运行时 WC 状态是 fid 级（69 维）。两种口径实测差 ≤0.0076（实测 #6/#7）。
 
-- **A（推荐）**：dk 节点级 + 节点均值——ci = GraphNode 过滤（CorticalInput ∈ cstc_roles && loop ∈ cstc_loops，plan §4.4 字面）；a(ci) = mean(a_j, j ∈ ci.functional_ids)。跨环路节点（caudalanteriorcingulate/superiorfrontal）以**同一节点均值双贡献两环路**（plan 测试行「跨环路节点双贡献」字面）；各 dk 节点等权
-- B：fid 级直接——ci = FunctionProfile 过滤（单数字段）；a(ci) = a_j。跨环路体现为同 dk 不同 fid 分属两环（归属断言，无单点双贡献）；多 fid 节点（rostralmiddlefrontal 3 fid）权重 ∝ fid 数
+**✅ 裁决（2026-08-13）：B——fid 级直接**：ci = FunctionProfile 过滤（单数字段 cstc_role == cortical_input && cstc_loop == loop）；a(ci) = a_j。跨环路体现为同 dk 不同 fid 分属两环（归属断言，无单点双贡献）；多 fid 节点（rostralmiddlefrontal 3 fid）权重 ∝ fid 数。与 核心机制.md 技能 salience 的 fid 级口径一致。
 
 ## 判断与取舍（草案，Q 裁决后定稿）
 
 | D# | 决策（草案） | 依据 |
 |----|------------|------|
-| D1 | CI 过滤按 **GraphNode 复数聚合字段**（tripartite_model.json）执行，非 function_profile 单数字段 | 实测 #1/#3：plan §4.4 公式只对 GraphNode 可执行，且 §6.1 表逐条一致 |
+| D1 | CI 过滤按 **FunctionProfile 单数字段**（brain_regions.json，fid 级）执行——Q3=B 裁决；plan §4.4「复数数组」表述按此修正 | 实测 #1/#3；Q3=B |
 | D2 | Step 内**同时更新**：u 全部由 t 时刻 O(a(t)) 计算，镜像 WC 骨架；STN↔GPe 耦合跨回合收敛（残差 e^(−25) 级，实测 #13） | 设计 §6.3「同 WC 骨架」；顺序更新在 exp(−25)≈0 下与同时更新等价（差别 ≤1e-11） |
-| D3 | Gurney 常量（权重 9 项 + e 表 + τ=0.04）为 CstcGating **私有常量**，不扩 CalibrationConfig | 设计定值（镜像 csharp-tone D2 先例） |
+| D3 | Gurney 常量（权重 10 项含 W_SEL_GPe=0 + per-population e 表 + τ=0.04）为 CstcGating **私有常量**，不扩 CalibrationConfig | 设计定值（镜像 csharp-tone D2 先例） |
 | D4 | 契约防御：constructor 验证三环路 CI 均非空（InvalidDataException）；Step null/形状防御（镜像 wc-dynamics D5） | 数据契约——实测三环路均 ≥3 节点，防御性不破坏 |
 | D5 | CstcLoop.Global/None 不参与 gating（文档化行为） | 实测 #4：0 成员 |
 | D6 | striatal_gate/pallidal_output/thalamic_relay/modulator 角色不被 Step 消费——只有 CI 成员资格影响 c_loop | 实测 #5；Gurney 5 群体是每环路抽象变量 |
 | D7 | a 行序 = canonical 69（WcState.A，Wsensory.RegionIds 契约）；CI fid→行号解析镜像 WMatrixBuilder Step 1-2 | csharp-wmatrix 行序契约复用 |
 | D8 | DA 混合逐字段显式公式（LoopSalience 已交付文档注明「按字段名配对不得按位置直配」） | csharp-engine-types 已交付类型语义 |
 | D9 | 解析收敛断言：float32 下 a_new == u 逐位（残差 < ulp/2，实测 #13） | plan 测试行「解析收敛到 u」float32 精确化 |
+| D10 | **per-population e 表**（Q2=A）：e_SEL=e_CONT=0.2、e_STN=−0.25、e_GPe=−0.2、e_GPi=−0.2——设计 §6.3 单一 e=0.2 修正 | ModelDB 83560 GPR_engine.m 原始参数（实测 #10）；恢复 tonic 抑制机制 |
+| D11 | **无 clamp**（Q2=A）：a 可为负，值域文档化（实测解析界：SD1 [0,2] / SD2 [0,1] / STN [−1,1] / GPe [−1,0.9] / GPi [−1.3,0.9]）；§三 91-var 表 [0,1] 修正 + GurneyState 值域注修正 | 负阈值机制要求（实测 #12：clamp 与负阈值互斥）；exp(−25)≈0 下 a 即 u，解析界即实际界 |
+| D12 | **W_SEL_GPe = 0.0 入权重表**（Q1=A），GPe 方程保留该项 | ModelDB 83560 默认；plan §十三-3 闭合 |
+| D13 | **跨环路 = dk 归属断言**（Q3=B）：superiorfrontal/caudalanteriorcingulate 的 fids 分属两环——测试断言数据归属，非单点双贡献 | Q3=B；plan 测试行「跨环路节点双贡献」按 fid 级语义实现 |
 
 ## 产出
 

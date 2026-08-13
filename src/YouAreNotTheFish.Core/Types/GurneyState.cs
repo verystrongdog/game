@@ -4,7 +4,7 @@ namespace YouAreNotTheFish.Core.Types;
 /// Gurney 基底节门控模型状态（91 浮点中的 15 个）——运行时状态模型 §6.3。
 /// 三环路各 5 群体，群体索引按 GurneyPopulation 枚举序（0=SD1…4=GPi）。
 /// 环路字段命名显式（Somatic/Cognitive/Limbic），不依赖 CstcLoop 枚举序——约束 C2。
-/// 值域 [0,1]。构造时防御性拷贝（约束 C7）。
+/// 值域 [−1.5, 2.0]（文档化解析界——运行时状态模型 §三；无 clamp：§6.3 负阈值机制要求 a 可为负，2026-08-13 step 6 裁决）。构造时防御性拷贝（约束 C7）。
 /// </summary>
 public sealed record GurneyState
 {

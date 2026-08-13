@@ -132,15 +132,15 @@ tone_t(t+Δ) = clip(baseline_t + δ_t + (tone_t(t) − baseline_t − δ_t) · e
 
 每环路（somatic/cognitive/limbic）独立，§6.3 正典：
 
-1. `c_loop = mean(a[ci])`，ci = function_profile 中 `CstcRole.CorticalInput ∈ cstc_roles && loop ∈ cstc_loops`（§6.2；数据字段为复数数组，枚举用 Data 层已交付的 CstcRole——修复 #8b）。跨环路节点（caudalanteriorcingulate、superiorfrontal）同时贡献两环路（§6.1）。
+1. `c_loop = mean(a[ci])`，ci = function_profile 中 `cstc_role == cortical_input && cstc_loop == loop` 的 fid（§6.2；数据字段为单数——2026-08-13 step 6 Q3 裁决：fid 级口径；枚举用 Data 层已交付的 CstcRole/CstcLoop——修复 #8b）。跨环路节点（caudalanteriorcingulate、superiorfrontal）以同 dk 不同 fid 分属两环实现（§6.1，归属断言）。
 2. DA 混合：limbic 0.8VTA+0.2SNc / cognitive 0.4+0.6 / somatic 0.2+0.8（§6.3）。
 3. 5 群体输入 u（§6.3 表）：
    - SD1: `u = c × W_SEL × (1 + DA_loop)`；SD2: `u = c × W_CONT × (1 − DA_loop)`
    - STN: `u = c × W_STN + O(GPe) × W_GPe_STN`
-   - GPe: `u = O(STN)×W_STN_GPe + O(SD2)×W_CONT_GPe + O(SD1)×W_SEL_GPe`（⚠️ 见 §十三-3）
+   - GPe: `u = O(STN)×W_STN_GPe + O(SD2)×W_CONT_GPe + O(SD1)×W_SEL_GPe`（✅ 2026-08-13 step 6 Q1 裁决：W_SEL_GPe = 0.0 入权重表——§十三-3 闭合）
    - GPi: `u = O(STN)×W_STN_GPi + O(GPe)×W_GPe_GPi + O(SD1)×W_SEL_GPi`
-4. 解析更新（§6.3 正典，无偏差）：`a(t+Δ) = u + (a(t) − u) · exp(−25·Δ)`，τ_gurney = 0.04。
-5. ramp：O(a) 分段线性 e=0.2；SD1/SD2 斜率 m_SD1 = 1+DA_loop、m_SD2 = 1−DA_loop，其余 m=1.0。
+4. 解析更新（§6.3 正典）：`a(t+Δ) = u + (a(t) − u) · exp(−25·Δ)`，τ_gurney = 0.04；**无 clamp**（a 可为负——2026-08-13 step 6 Q2 裁决对齐 ModelDB 83560，值域 [−1.5, 2.0]）。
+5. ramp：O(a) 分段线性，**per-population 阈值** e_SEL=e_CONT=0.2、e_STN=−0.25、e_GPe=−0.2、e_GPi=−0.2（2026-08-13 step 6 Q2 裁决对齐 ModelDB 83560——原统一 0.2 实测 gate 恒 1 惰性）；SD1/SD2 斜率 m_SD1 = 1+DA_loop、m_SD2 = 1−DA_loop，其余 m=1.0。
 6. `gate_loop = 1 − O_GPi`（§6.4）。
 
 边界：DA_loop=1.0 → m_SD2=0 → SD2 恒 0（合法，NO-GO 全抑制）；global 环路（CstcLoop.Global）无 cortical_input 成员 → 不参与 gating（文档化行为）。

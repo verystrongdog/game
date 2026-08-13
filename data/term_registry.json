@@ -1473,7 +1473,7 @@
       "updated": "2026-08-13"
     },
     "c_loop": {
-      "definition": "CSTC 环路 salience——c_loop = mean(a(ci) for ci ∈ loop.cortical_inputs)。3 个标量（somatic/cognitive/limbic），从该环路所有皮层输入节点的 a(t) 取均值。驱动 Gurney 门控模型的皮层输入项 u。caudalanteriorcingulate 和 superiorfrontal 跨两个环路——a(t) 双重贡献（解剖事实非设计缺陷）。",
+      "definition": "CSTC 环路 salience——c_loop = mean(a(ci) for ci ∈ loop.cortical_inputs)。3 个标量（somatic/cognitive/limbic）。fid 级口径（2026-08-13 step 6 裁决）：ci 按 function_profile 中 cstc_role == cortical_input 且 cstc_loop == <loop> 的 functional_id 取，各以自身 a_j 直接入均值（多 fid 的 dk 按其 fid 数加权）。caudalanteriorcingulate 和 superiorfrontal 跨两个环路——同 dk 不同 fid 分属两环（每 fid 只贡献一环，无单点双消费；解剖事实非设计缺陷）。",
       "source": "运行时状态模型.md §6.1-§6.2",
       "old_model": "—（项目独创——从WC节点激活到CSTC门控的桥接变量）",
       "deviation_reason": "—",
@@ -1482,10 +1482,10 @@
         "规则/技能树系统/运行时状态模型.md §6.1-§6.3（环路CI列表+c_loop定义+Gurney输入）"
       ],
       "added": "2026-08-09",
-      "updated": "2026-08-09"
+      "updated": "2026-08-13"
     },
     "gate_bonus": {
-      "definition": "CSTC 门控输出——gate_loop = 1 − O_GPi_loop ∈ [0,1]。GPi tonic 抑制强 → gate 低（动作被钳制），去抑制 → gate 高（动作放行）。技能效果 = skill_base_effect × gate_bonus(role)。8 行为角色→环路映射：attack_physical→somatic, attack_mental→cognitive, defend/approach/flee/disrupt→limbic, perceive/support→bypass(1.0)。",
+      "definition": "CSTC 门控输出——gate_loop = 1 − O_GPi_loop ∈ [0,1]。GPi tonic 抑制强 → gate 低（动作被钳制），去抑制 → gate 高（动作放行）。tonic 抑制由 GPi 负阈值 e_GPi=−0.2 实现（静息 a_GPi=0 → O_GPi=0.2 → gate=0.8；2026-08-13 step 6 裁决对齐 ModelDB 83560）。技能效果 = skill_base_effect × gate_bonus(role)。8 行为角色→环路映射：attack_physical→somatic, attack_mental→cognitive, defend/approach/flee/disrupt→limbic, perceive/support→bypass(1.0)。",
       "source": "运行时状态模型.md §6.4-§6.5; Gurney, Prescott & Redgrave (2001)",
       "old_model": "二元门控（动作可执行/不可执行）——旧 CSTC 门控作为开关",
       "deviation_reason": "gate 是连续值 [0,1]——不是二元开关，是连续放行度。部分抑制 = 效果打折非完全阻止",
@@ -1495,7 +1495,7 @@
         "规则/技能树系统/技能生成机制.md §五（skill_effect=base×gate_bonus）"
       ],
       "added": "2026-08-09",
-      "updated": "2026-08-09"
+      "updated": "2026-08-13"
     },
     "tone_bias": {
       "definition": "脑干 tone 对行为角色的偏置——tone_bias(role) = Σ_t w_t(role) × (tone_t − baseline_t)。8 行为角色 × 4 tone 权重矩阵。tone 处于 baseline 时 tone_bias=0（选择由 WC+CSTC 主导）。权重符号方向来自文献（NE→警觉/防御, DA→趋近/行动, 5HT→抑制/忍耐），具体数值 ±0.2~±0.5 为设计校准层。用于 NPC affordance competition salience 公式。",
@@ -1643,7 +1643,7 @@
       "updated": "2026-08-09"
     },
     "Gurney模型": {
-      "definition": "基底节去抑制选择模型（Gurney, Prescott & Redgrave 2001 Biol Cybern）。每CSTC环路5群体：SD1（GO/D1直接通路）、SD2（NO-GO/D2间接通路）、STN（STOP/超直接通路）、GPe（间接中间站）、GPi（输出门）。动力学一阶衰减 τ=0.04s，Δ=1s→解析解稳态。DA调制D1/D2 ramp斜率：m_SD1=1+DA_loop, m_SD2=1−DA_loop。",
+      "definition": "基底节去抑制选择模型（Gurney, Prescott & Redgrave 2001 Biol Cybern）。每CSTC环路5群体：SD1（GO/D1直接通路）、SD2（NO-GO/D2间接通路）、STN（STOP/超直接通路）、GPe（间接中间站）、GPi（输出门）。动力学一阶衰减 τ=0.04s，Δ=1s→解析解稳态，无 clamp（a 值域 [−1.5, 2.0]，2026-08-13 step 6 裁决）。per-population ramp 阈值 e_SEL/e_CONT=0.2、e_STN=−0.25、e_GPe=−0.2、e_GPi=−0.2（对齐 ModelDB 83560 GPR_engine.m——统一 0.2 实测 gate 恒 1 惰性，2026-08-13 step 6 裁决）。DA调制D1/D2 ramp斜率：m_SD1=1+DA_loop, m_SD2=1−DA_loop。W_SEL_GPe=0.0（SD1 不投 GPe，ModelDB 83560 默认）。",
       "source": "运行时状态模型.md §6.3; Gurney, Prescott & Redgrave (2001) Biol Cybern 84:413-423",
       "old_model": "二元门控——基底节=动作开关（GO/NO-GO 二元）",
       "deviation_reason": "Gurney 是连续竞争模型——5群体连续动力学+分段线性ramp输出+DA连续调制ramp斜率，非二元开关",
@@ -1653,7 +1653,7 @@
         "data/connectivity/README_gurney_model.md"
       ],
       "added": "2026-08-09",
-      "updated": "2026-08-09"
+      "updated": "2026-08-13"
     },
     "CGL": {
       "definition": "因果图晶格（Causal Graph Lattice）——Grilling #37 五框架构建的时空离散结构。基础单元为因果集元素，有限偏序集上定义复标量场 φ(x,t)。几乎所有的有限偏序集具有平凡自同构群（因果集定理——Generic Rigidity）。",
