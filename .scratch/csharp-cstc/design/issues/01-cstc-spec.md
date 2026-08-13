@@ -17,7 +17,7 @@ csharp-engine plan §十一 step 6 = **CstcGating**——Layer 3 CSTC 门控（�
 ## 指标
 
 - spec 中全部数值断言（CI 成员名单、DA 混合锚点、e 表、权重、gate 扫描点、解析收敛）经 python 实测验证
-- 审计 0 阻塞项；AC 全部可测（数值断言 or 性质断言）
+- 审计 0 阻塞项；AC 全部可测（数值断言 or 性质断言）——v1.0 审计发现 1 阻塞（E1 迭代判据）+ AC-1 不可测，v1.1 修复后达标（见 audit/report.md）
 
 ## 工作方式
 
@@ -35,7 +35,7 @@ csharp-engine plan §十一 step 6 = **CstcGating**——Layer 3 CSTC 门控（�
 |---|------|--------|
 | 1 | CI 节点（GraphNode 复数聚合 `cstc_roles`/`cstc_loops`，tripartite_model.json 51 节点） | somatic 3 = paracentral/precentral/superiorfrontal；cognitive 5 = caudalanteriorcingulate/caudalmiddlefrontal/frontalpole/parsopercularis/rostralmiddlefrontal；limbic 8 = Amygdala/Hippocampus/caudalanteriorcingulate/insula/lateralorbitofrontal/medialorbitofrontal/rostralanteriorcingulate/superiorfrontal——**与 §6.1 表逐条一致** |
 | 2 | 跨环路节点 | caudalanteriorcingulate（cognitive+limbic）+ superiorfrontal（limbic+somatic）——与 §6.1 注释一致，恰好这两个 |
-| 3 | 数据字段形状 | function_profile（brain_regions.json，fid 级）= **单数** cstc_loop/cstc_role；GraphNode（tripartite_model.json，节点级）= **复数** cstc_loops/cstc_roles。plan §4.4「数据字段为复数数组」指 GraphNode 聚合字段——CI 过滤按 GraphNode 执行（公式对 function_profile 不可执行，字段不存在） |
+| 3 | 数据字段形状 | function_profile（brain_regions.json，fid 级）= **单数** cstc_loop/cstc_role；GraphNode（tripartite_model.json，节点级）= **复数** cstc_loops/cstc_roles。plan §4.4「数据字段为复数数组」指 GraphNode 聚合字段——CI 过滤按 GraphNode 执行（公式对 function_profile 不可执行，字段不存在）→ **已被 Q3=B 取代（2026-08-13 审计修正）**：过滤按 FunctionProfile 单数字段执行（fid 级）；「字段不存在」应为「复数数组字段不存在于 function_profile」 |
 | 4 | CstcLoop.Global | 0 成员（实测无任何 fid/节点归 global）→ 不参与 gating（plan §4.4 边界项确认） |
 | 5 | striatal_gate 分布 | limbic 4 fid（Accumbens-area）/ somatic 2（Putamen + StriatumMatrix——§6.1 表只列 Putamen，StriatumMatrix 为表外额外成员）/ cognitive 1（Caudate）。Gurney 群体是每环路抽象变量，**Step 不消费 striatal_gate 角色**——此差异无引擎影响 |
 | 6 | 静息 c_loop（M1 实测 a 值，节点均值口径） | somatic 0.665469 / cognitive 0.689439 / limbic 0.685438 |
@@ -74,7 +74,7 @@ GPe 输入方程引用 `W_SEL_GPe`，但设计权重表（§6.3）与 README_gur
 | D# | 决策（草案） | 依据 |
 |----|------------|------|
 | D1 | CI 过滤按 **FunctionProfile 单数字段**（brain_regions.json，fid 级）执行——Q3=B 裁决；plan §4.4「复数数组」表述按此修正 | 实测 #1/#3；Q3=B |
-| D2 | Step 内**同时更新**：u 全部由 t 时刻 O(a(t)) 计算，镜像 WC 骨架；STN↔GPe 耦合跨回合收敛（残差 e^(−25) 级，实测 #13） | 设计 §6.3「同 WC 骨架」；顺序更新在 exp(−25)≈0 下与同时更新等价（差别 ≤1e-11） |
+| D2 | Step 内**同时更新**：u 全部由 t 时刻 O(a(t)) 计算，镜像 WC 骨架；STN↔GPe 耦合跨回合收敛（收缩率 √0.9 ≈ 0.9487/回合，🔧 2026-08-13 审计修正——原「残差 e^(−25) 级」混淆单步瞬态与跨回合收敛） | 设计 §6.3「同 WC 骨架」（运行时状态模型 §7.1 步骤 3 同款）；顺序更新会改变首回合 O 输入（差 ~0.225 量级——e^(−25) 只保证 \|a_new−u\| ≤ 4.9e-11，不保证 O 相等），故强制同时更新（AC-11 锚点锁定） |
 | D3 | Gurney 常量（权重 10 项含 W_SEL_GPe=0 + per-population e 表 + τ=0.04）为 CstcGating **私有常量**，不扩 CalibrationConfig | 设计定值（镜像 csharp-tone D2 先例） |
 | D4 | 契约防御：constructor 验证三环路 CI 均非空（InvalidDataException）；Step null/形状防御（镜像 wc-dynamics D5） | 数据契约——实测三环路均 ≥3 节点，防御性不破坏 |
 | D5 | CstcLoop.Global/None 不参与 gating（文档化行为） | 实测 #4：0 成员 |
@@ -92,7 +92,8 @@ GPe 输入方程引用 `W_SEL_GPe`，但设计权重表（§6.3）与 README_gur
 - [x] 数据实测第一轮（本 issue，已完成——见上表）
 - [x] Q1/Q2/Q3 用户裁决（Q1=A / Q2=A / Q3=B）
 - [x] spec.md v1.0（§一~§七 + 变更日志 + 参数速查表；AC-1~15；偏差 B1-B3）
-- [ ] workflow 多专家审计 → report.md
+- [x] workflow 多专家审计 → report.md（v1.0 全量审计：退回——1❌ E1 + 6⚠️ + 6ℹ️ + 1 refuted；16 CONFIRMED）
+- [ ] spec v1.1 Δ审计（修复后重审变更章节 + 半径扩张）
 - [ ] 人类复核 → sign-off.md（批准）
 - [ ] 工作issue 01 → 实现 + 证据式自审
 - [x] 设计文档修正写回（Q2 决议关联：运行时状态模型 §6.3/§三 + 权重表 + plan §4.4——commit f039f93）
@@ -102,3 +103,4 @@ GPe 输入方程引用 `W_SEL_GPe`，但设计权重表（§6.3）与 README_gur
 
 - 2026-08-13：创建。数据实测第一轮完成（CI 成员/字段形状/gate≡1 惰性/ModelDB 原始实现/收敛性质）。三个阻塞疑问提交用户裁决（Q1 权重缺值、Q2 惰性处置、Q3 粒度）。
 - 2026-08-13：裁决完成（Q1=A / Q2=A / Q3=B）+ 设计文档修正写回（f039f93：运行时状态模型 §6.1/§6.2/§6.3/§三/§十一、plan §4.4、README_gurney_model.md、term_registry、决策树 #33 D9/D10/D13 🔧、GurneyState 值域注）+ GitHub #33 闭合后修正评论。spec v1.0 完成（锚点经第二轮实测复算：gate 时刻语义 B1、m_SD2=0 除零防护 B2、残差上界修正 B3）。:13 行按 B3 同步修正。
+- 2026-08-13：全量审计完成（3 专家 17 原始发现 → 去重 14；对抗验证 16 CONFIRMED + 1 REFUTED）。退回修改：❌ E1（AC-4/AC-10 迭代判据「max\|Δ\|<1e-7（≤100 回合）」不可达——STN↔GPe 互耦收缩率 √0.9≈0.9487/回合，实测收敛 251/253 回合）必须修复。spec 升 v1.1 修复全部 ❌/⚠️/ℹ️（迭代语义统一 300 回合、CiRows 公开访问器、ramp 内联 §4.5、§4.3 ordinal 陷阱措辞、AC-12 包含性断言声明、B4 偏差入表、C1 KeyNotFound 文档化、AC-9 SD2 ≈0 注、AC-10 端点与非单调注、AC-5/6 链参数补全）；本 issue #3 行与 D2 依据同步修正。Δ审计待跑。
