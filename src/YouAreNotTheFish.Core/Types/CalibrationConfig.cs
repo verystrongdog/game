@@ -38,17 +38,55 @@ public sealed record CalibrationConfig
     /// <summary>察觉「未显著激活」阈值 [NEW] 待校准。来源：回合战斗流程 §3.3（值未定义）。</summary>
     public float PerceptionThreshold { get; init; } = 0.15f;
 
-    /// <summary>demo 玩家 HP [NEW]。来源：核心机制 §10.1 玩家基线值默认（±10 为角色类型偏移，此处取基线）。</summary>
-    public int PlayerHp { get; init; } = 50;
+    /// <summary>demo 玩家 HP [NEW]。来源：核心机制 §10.1 玩家基线值默认（±10 为角色类型偏移，此处取基线）。float——一位小数结算（csharp-damage spec §二 2.2 B5）。</summary>
+    public float PlayerHp { get; init; } = 50f;
 
-    /// <summary>demo 玩家 SAN [NEW]。来源：核心机制 §10.1 玩家基线值默认。</summary>
-    public int PlayerSan { get; init; } = 80;
+    /// <summary>demo 玩家 SAN [NEW]。来源：核心机制 §10.1 玩家基线值默认。float（B5）。</summary>
+    public float PlayerSan { get; init; } = 80f;
 
-    /// <summary>demo NPC 杂兵 HP [NEW]。来源：核心机制 §10.1 轻度病人区间取中值（HP 12-18→15）。</summary>
-    public int NpcHp { get; init; } = 15;
+    /// <summary>demo NPC 杂兵 HP [NEW]。来源：核心机制 §10.1 轻度病人区间取中值（HP 12-18→15）。float（B5）。</summary>
+    public float NpcHp { get; init; } = 15f;
 
-    /// <summary>demo NPC 杂兵 SAN [NEW]。来源：核心机制 §10.1 轻度病人区间取中值（SAN 50-70→60）。</summary>
-    public int NpcSan { get; init; } = 60;
+    /// <summary>demo NPC 杂兵 SAN [NEW]。来源：核心机制 §10.1 轻度病人区间取中值（SAN 50-70→60）。float（B5）。</summary>
+    public float NpcSan { get; init; } = 60f;
+
+    // ---- 伤害结算常量（csharp-damage spec@v1.1 §四 4.1，[NEW] 待 issue 关闭后摘除）----
+
+    /// <summary>物理基础伤害 [NEW]。来源：核心机制 §4.2（空手伤害 4 HP）。经 baseDamage 参数传入（B6）。</summary>
+    public int BasePhysicalDamage { get; init; } = 4;
+
+    /// <summary>精神基础伤害 [NEW]。来源：核心机制 §4.3（基础 2 SAN）。经 baseDamage 参数传入（B6）。</summary>
+    public int BaseMentalDamage { get; init; } = 2;
+
+    /// <summary>基础命中率 [NEW]。来源：核心机制 §4.2（基础命中 85%）。</summary>
+    public float BaseHitChance { get; init; } = 0.85f;
+
+    /// <summary>L0 回避命中惩罚 [NEW]。来源：基础行动设计 §二/§三（L0 回避 命中 −10%）；自动触发——回合战斗流程 §6.2。</summary>
+    public float L0EvadeHitPenalty { get; init; } = 0.10f;
+
+    /// <summary>发力上限 [NEW]。来源：基础行动设计 §四（force cap +50%）。</summary>
+    public float ForceCap { get; init; } = 0.5f;
+
+    /// <summary>动机上限 [NEW]。来源：基础行动设计 §四（motivation cap +100%）。</summary>
+    public float MotivationCap { get; init; } = 1.0f;
+
+    /// <summary>防御物理减伤 [NEW]。来源：基础行动设计 §四（防御 −50% 仅物理）。</summary>
+    public float DefendPhysicalReduction { get; init; } = 0.5f;
+
+    /// <summary>穿透一档阈值 [NEW]。来源：核心机制 §4.3（SAN&lt;30% → ×1.3）。严格小于。</summary>
+    public float SanPenetrationTier1Ratio { get; init; } = 0.30f;
+
+    /// <summary>穿透一档倍率 [NEW]。来源：核心机制 §4.3（+30%）。</summary>
+    public float SanPenetrationTier1Multiplier { get; init; } = 1.3f;
+
+    /// <summary>穿透二档阈值 [NEW]。来源：核心机制 §4.3（SAN&lt;15% → ×2）。严格小于。</summary>
+    public float SanPenetrationTier2Ratio { get; init; } = 0.15f;
+
+    /// <summary>穿透二档倍率 [NEW]。来源：核心机制 §4.3。</summary>
+    public float SanPenetrationTier2Multiplier { get; init; } = 2.0f;
+
+    /// <summary>结算量化粒度 [NEW]——文档常量：计算路径不直接消费（Round1 固定 digits=1 / Floor1 分度 10f 与之对应，§五 6）。来源：Q3=D。</summary>
+    public float DamagePrecision { get; init; } = 0.1f;
 
     /// <summary>默认配置（demo 用）。</summary>
     public static CalibrationConfig Default { get; } = new();

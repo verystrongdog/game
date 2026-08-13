@@ -18,17 +18,17 @@ public sealed record ParticipantState
     /// <summary>三环路门控 3 值。</summary>
     public GateState Gates { get; init; } = null!;
 
-    /// <summary>HP——审计修复 #2（原计划 91 浮点无血量）。</summary>
-    public int Hp { get; init; }
+    /// <summary>HP——审计修复 #2（原计划 91 浮点无血量）。float——一位小数结算（csharp-damage spec §二 2.2 B5）。</summary>
+    public float Hp { get; init; }
 
     /// <summary>HP 上限。</summary>
-    public int HpMax { get; init; }
+    public float HpMax { get; init; }
 
     /// <summary>SAN——审计修复 #2。</summary>
-    public int San { get; init; }
+    public float San { get; init; }
 
     /// <summary>SAN 上限。</summary>
-    public int SanMax { get; init; }
+    public float SanMax { get; init; }
 
     /// <summary>防御状态——审计修复 #4；回合战斗流程 §7.1（持续到下回合自己窗口）。</summary>
     public bool IsDefending { get; init; }
@@ -46,7 +46,7 @@ public sealed record ParticipantState
     /// §6.4 gate=1−O_GPi；语义「初始全放行」，首回合 Phase 1 步骤 5 CstcGating.Step 重算覆盖）；
     /// CD=0、IsDefending=false。
     /// </summary>
-    public static ParticipantState CreateDefault(int hpMax, int sanMax)
+    public static ParticipantState CreateDefault(float hpMax, float sanMax)
     {
         var a = new float[RegionCount];
         Array.Fill(a, 0.10f);

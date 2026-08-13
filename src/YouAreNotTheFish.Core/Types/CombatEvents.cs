@@ -50,23 +50,23 @@ public sealed record PhysicalDamageEvent : CombatEvent
     /// <summary>门控加成因子。来源：plan §4.6（gate→结算接线，审计修复 #10）。</summary>
     public float GateBonus { get; init; }
 
-    /// <summary>实际造成伤害。来源：§5.5 A1（actual）。</summary>
-    public int DamageDealt { get; init; }
+    /// <summary>实际造成伤害。来源：§5.5 A1（actual）。float——一位小数结算（csharp-damage spec §二 2.2 B5）。</summary>
+    public float DamageDealt { get; init; }
 
     /// <summary>被防御减免量。来源：§5.5 A5/B2（blocked）。</summary>
-    public int DamageBlocked { get; init; }
+    public float DamageBlocked { get; init; }
 
     /// <summary>减免前总伤害（blocked + dealt）。来源：§5.5 A5/B2（incoming）。</summary>
-    public int IncomingDamage { get; init; }
+    public float IncomingDamage { get; init; }
 
     /// <summary>承受者 HP 变化前/后/上限。来源：§5.5 B1（|ΔHP|/HP_max）。</summary>
-    public int TargetHpBefore { get; init; }
+    public float TargetHpBefore { get; init; }
 
     /// <summary>承受者 HP 变化后。</summary>
-    public int TargetHpAfter { get; init; }
+    public float TargetHpAfter { get; init; }
 
     /// <summary>承受者 HP 上限。</summary>
-    public int TargetHpMax { get; init; }
+    public float TargetHpMax { get; init; }
 
     /// <summary>构造入口。</summary>
     public PhysicalDamageEvent(int round, int actorId, int targetId) : base(round, actorId, targetId) { }
@@ -81,11 +81,11 @@ public sealed record PhysicalDamageEvent : CombatEvent
 /// </summary>
 public sealed record MentalDamageEvent : CombatEvent
 {
-    /// <summary>SAN 伤害。来源：plan §4.6。</summary>
-    public int SanDamage { get; init; }
+    /// <summary>SAN 伤害。来源：plan §4.6。float（B5）。</summary>
+    public float SanDamage { get; init; }
 
-    /// <summary>附带 HP 伤害（SAN=0 时转为 HP，核心机制心理伤害规则）。来源：plan §4.6。</summary>
-    public int HpDamage { get; init; }
+    /// <summary>附带 HP 伤害（SAN=0 时转为 HP，核心机制心理伤害规则）。来源：plan §4.6。float（B5）。</summary>
+    public float HpDamage { get; init; }
 
     /// <summary>动机调制因子。来源：plan §4.6。</summary>
     public float MotivationMod { get; init; }
@@ -94,22 +94,22 @@ public sealed record MentalDamageEvent : CombatEvent
     public float GateBonus { get; init; }
 
     /// <summary>承受者 SAN 变化前。</summary>
-    public int TargetSanBefore { get; init; }
+    public float TargetSanBefore { get; init; }
 
     /// <summary>承受者 SAN 变化后。</summary>
-    public int TargetSanAfter { get; init; }
+    public float TargetSanAfter { get; init; }
 
     /// <summary>承受者 SAN 上限。</summary>
-    public int TargetSanMax { get; init; }
+    public float TargetSanMax { get; init; }
 
     /// <summary>承受者 HP 变化前。</summary>
-    public int TargetHpBefore { get; init; }
+    public float TargetHpBefore { get; init; }
 
     /// <summary>承受者 HP 变化后。</summary>
-    public int TargetHpAfter { get; init; }
+    public float TargetHpAfter { get; init; }
 
     /// <summary>承受者 HP 上限。</summary>
-    public int TargetHpMax { get; init; }
+    public float TargetHpMax { get; init; }
 
     /// <summary>构造入口。</summary>
     public MentalDamageEvent(int round, int actorId, int targetId) : base(round, actorId, targetId) { }
