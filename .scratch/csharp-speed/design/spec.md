@@ -41,12 +41,16 @@
 public sealed class SpeedScoreCalculator
 {
     public SpeedScoreCalculator(GameData data, CalibrationConfig cal);
+    public IReadOnlyList<int> PerceptionRows { get; }   // 4 察觉节点行索引，顺序 = PerceptionFids（AC-1 可测性）
+    public int PrecentralRow { get; }                   // Precentral 行索引（AC-1 可测性）
     public SpeedComponents ComputeComponents(WcState a, LoopSalience salience, GurneyState gurney, bool isDefending);
     public float ComputeScore(SpeedComponents components, SpeedWeights weights);
 }
 ```
 
 **构造**：从 `data.Wsensory.RegionIds` 解析 5 个行索引（4 察觉节点 + Precentral，§五）→ `fidToRow` 字典（镜像 WMatrixBuilder Step 1 / CstcGating 构造）。`cal` 保存引用（不可变 record）。
+
+**公开访问器**：`PerceptionRows`/`PrecentralRow`——构造期解析结果只读公开（AC-1 可测性；镜像 CstcGating.CiRows 公开先例）。不泄露新信息：canonical 行序已由 RegionIds 公开锁定。🔧 修正 2026-08-13（实现新增访问器，L1 补正入接口块，免重审）。
 
 **ComputeComponents**（纯函数，无首回合特判——B1）：
 
@@ -157,6 +161,7 @@ public static class TurnOrderBuilder
 | v1.0 | 2026-08-13 | 初稿（§一~§八 + AC-1~14 + B1-B4） | 任务issue 01（Q1=A/Q2=A/Q3=A 裁决后） | 全量审计 |
 | v1.1 | 2026-08-13 | F1 执行分值域引用改正（→运行时状态模型 §三）+ 可达性论证；F2 AC-14 完整输入组合声明；F3 gurney.Somatic 长度防御；F4 ComputeScore null 防御；F5 AC-1 三面哨兵边界；F6 3 个逐节点回落锚点（0.68274397/0.68290060/0.68319666）；F7 AC-15 FromCalibration；L1 批（AC-2 措辞+用例 0.565、0.843 收敛语境、D9 NextInt 注、§五 2 参数按名配对、值域可达界 0.0167、AC-13 措辞、AC-10 镜像独立实现+m=3）；B2 写回记录 | 全量审计 v1.0 报告（0❌/7⚠️ CONFIRMED/2 REFUTED/15 info——有条件通过） | Δ审计（变更章节 + 半径扩张） |
 | v1.1 (L1 修正) | 2026-08-13 | Δ审计 3 info 清扫：AC-2「0.565f 字面量逐位相等」措辞（十进制 0.565 非 f32 精确）；§三 3.1 可达上界渐近注（1.1667 为上确界，可达界半开）；B3 补「已写回」标注（与 B2 对称） | Δ审计（0❌/0⚠️/3info——等效通过） | 免重审（L1） |
+| v1.1 (🔧 修正) | 2026-08-13 | 实现新增公开访问器 `PerceptionRows`/`PrecentralRow` 补入 §三 3.1 接口块（AC-1 可测性；镜像 CstcGating.CiRows 先例） | 工作issue 01 实现发现（L1） | 免重审（L1） |
 
 ---
 *创建: 2026-08-13 | 更新: 2026-08-13 | 版本: v1.1*

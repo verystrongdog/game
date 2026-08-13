@@ -1,6 +1,6 @@
 # map: csharp-speed
 
-> csharp-engine step 7（plan §十一）——SpeedScoreCalculator + TurnOrderBuilder：三成分速度排序（察觉/决断/执行）+ 掷硬币破平。Status: claimed（2026-08-13）
+> csharp-engine step 7（plan §十一）——SpeedScoreCalculator + TurnOrderBuilder：三成分速度排序（察觉/决断/执行）+ 掷硬币破平。Status: closed（2026-08-13）
 
 ## Notes
 
@@ -18,10 +18,19 @@
 - **全量审计 v1.0 完成（2026-08-13）**：[report.md](design/audit/report.md)——12 agent（3 专家 → 去重 → 9 条 error/warning 对抗验证）：**0 ❌ / 7 ⚠️ CONFIRMED / 2 REFUTED / 15 info，有条件通过**。数学公式与全部锚点经独立复算零错误；7 ⚠️ 全为 spec 层可修（引用指针/防御声明/AC 补强）
 - **spec v1.1（commit 3f35d9c）**：F1-F7 全修 + L1 批 12 条 + AC-15；设计文档写回补全（cb68803 回合战斗流程 求和→均值；5387d98 技能生成机制 + 皮层动力学 §8.1 残留公式指针化）
 - **Δ审计 v1.1（2026-08-13，wf_d3649e6d-c7d）**：2 专家（数学/契约）只重审变更章节 + 半径扩张——**0 ❌ / 0 ⚠️ / 3 info（全部 L1 免重审修正）→ 等效通过**。7 个修复全部经独立复算与实读核实；半径扩张 9 项 ✅
+- **sign-off 批准（2026-08-13，dog）**：[sign-off.md](design/audit/sign-off.md)——22 项逐项处置（修正 spec / 接受 refutation），⚠️ 结转清单 6 项 → 工作issue 01
+- **实现 + 自审闭合（2026-08-13）**：[工作issue 01](impl/issues/01-speed-impl.md) resolved——5 个小步提交（3c97605 类型 / 105408d 计算器 / d0489ce 排序器 / 95f951c 测试 25 项），**140/140 全绿**，AC-1~15 逐条 ✅ + §七 9 项 ✅ + 结转 6 项回填 ✅；实现与 spec 零偏差（仅 1 项 L1 补正：公开访问器入接口块，免重审）
+
+## 回顾
+
+- **实现 0 spec 缺陷**（六航连续第四次）：25 项测试一次成型，无一条因 spec 错误而改写——审计 + Δ审计拦截的 7 ⚠️ 修复质量高。唯一的 spec 改动是实现新增访问器的 L1 补正（变更管理回路 L1 通道第二次兑现）。
+- **f32 结合序陷阱按预防性计划规避**：AC-2 逐位锚点 0.565f 依赖引擎求和序（Pericalcarine→TransverseTemporal→Insula→ACC 左结合），0.16 必须置于末位 ACC——spec 在 Δ审计前已写明此不变式（结转 #5），测试照写即绿。
+- **结转「预防性规则」再次兑现**：结转 #1（行序解析不裸写下标）确保全部锚点经 RowOf 解析；本轮测试零 dk/fid 命名错误（fid 名直查）。
+- **流程建议**：L1 补正「实现新增公开访问器」在引擎层 spec 可能重复出现（可测性访问器模式）——未来 spec 接口块可预写「公开只读访问器（构造期解析结果，AC 可测性）」占位行，减少 L1 补正次数。
 
 ## Fog
 
-- 任务issue 数据实测 ✓ → Q 裁决 ✓ → 设计文档写回 ✓ → spec v1.0 ✓ → 全量审计 ✓（0❌/7⚠️/2refuted/15info）→ spec v1.1 修复 ✓ → Δ审计 ✓（0❌/0⚠️/3info L1 已修）→ sign-off ⏳ → 工作issue 01 实现 + 自审 ⏳ → feature 闭合 ⏳
+- 任务issue 数据实测 ✓ → Q 裁决 ✓ → 设计文档写回 ✓ → spec v1.0 ✓ → 全量审计 ✓（0❌/7⚠️/2refuted/15info）→ spec v1.1 修复 ✓ → Δ审计 ✓（0❌/0⚠️/3info L1 已修）→ sign-off ✓（2026-08-13 批准）→ 工作issue 01 实现 + 自审 ✓（140/140 绿）→ feature 闭合 ✓（2026-08-13）
 
 ---
 *创建: 2026-08-13 | 更新: 2026-08-13*
