@@ -140,6 +140,18 @@ public sealed record StatusChangeEvent : CombatEvent
     /// <summary>true=进入状态，false=脱离。</summary>
     public bool Entered { get; init; }
 
+    // L2 类型变更（csharp-events spec §二 2.1，任务issue Q1=A，2026-08-14）——
+    // C1 guard 需要 SAN 跨越前后值；Kind=Downed 时 3 字段语义未定义（可不填，默认 0f）。
+
+    /// <summary>状态变化前 SAN 值（跨越判定的 old）。来源：运行时状态模型 §5.5 C1 guard：old ≥ 30%。</summary>
+    public float SanBefore { get; init; }
+
+    /// <summary>状态变化后 SAN 值（new）。来源：§5.5 C1 guard：new &lt; 30%。</summary>
+    public float SanAfter { get; init; }
+
+    /// <summary>状态变化时的 SAN 上限（比率分母）。来源：§5.5 C1：SAN &lt; 30% × SAN_max。</summary>
+    public float SanMax { get; init; }
+
     /// <summary>构造入口。</summary>
     public StatusChangeEvent(int round, int actorId, int targetId) : base(round, actorId, targetId) { }
 }

@@ -88,6 +88,9 @@ public sealed record CalibrationConfig
     /// <summary>结算量化粒度 [NEW]——文档常量：计算路径不直接消费（Round1 固定 digits=1 / Floor1 分度 10f 与之对应，§五 6）。来源：Q3=D。</summary>
     public float DamagePrecision { get; init; } = 0.1f;
 
+    /// <summary>忍耐·被动 SAN 减免 [NEW]。来源：基础行动设计 §四「忍耐·被动 SAN减免 -1（被动永久）」；A4 expected 公式（csharp-events spec §二 2.2，任务issue Q3=A）。</summary>
+    public int EndurancePassivePenalty { get; init; } = 1;
+
     /// <summary>默认配置（demo 用）。</summary>
     public static CalibrationConfig Default { get; } = new();
 }
