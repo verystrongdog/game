@@ -20,3 +20,4 @@
 - 2026-08-13：建立教学工作区。第一课定位「从 Python 到 C#：你的第一个程序」，教材用了 `src/YouAreNotTheFish.Core` 真实代码（ToneState / IRng / ToneUpdater / Program）。
 - 2026-08-13：学员确认方向 = 面向 Unity 的 C#；Unity 已装；.NET SDK 确认已装（10.0.301，Windows）。等第一课任务反馈后写 learning-record 0001 并规划第 2 课。
 - 2026-08-13（教学点）：`dotnet new console` 默认模板是「顶层语句」（无显式 Main），引擎代码是显式 `public static class Program` 写法——第 2 课需点破两者关系（编译器自动生成 Main）。
+- 2026-08-13：第一课任务完成（输出逐字一致）→ 写 learning-record 0001；发布第 2 课「控制流与方法」。下一步：等学员交第 2 课任务输出 + 回收 ToneState 回顾题。
