@@ -91,6 +91,9 @@ public sealed record CalibrationConfig
     /// <summary>忍耐·被动 SAN 减免 [NEW]。来源：基础行动设计 §四「忍耐·被动 SAN减免 -1（被动永久）」；A4 expected 公式（csharp-events spec §二 2.2，任务issue Q3=A）。</summary>
     public int EndurancePassivePenalty { get; init; } = 1;
 
+    /// <summary>回合上限 [NEW] 待校准。来源：csharp-flow spec §5.5 结束条件（demo 防死循环，待校准）。</summary>
+    public int MaxRounds { get; init; } = 50;
+
     /// <summary>默认配置（demo 用）。</summary>
     public static CalibrationConfig Default { get; } = new();
 }
