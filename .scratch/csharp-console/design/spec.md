@@ -1,6 +1,6 @@
 # csharp-console — 实现规格
 
-> 控制台 harness（plan §九）——加载真实脑数据 → 2 参与者 1v1（玩家 vs NPC 杂兵）→ 五阶段战斗 → 每回合完整输出 + 静息 trace 模式 + 种子 RNG。玩家行动经键盘 IActionProvider 注入（step 10 接口的玩家实现）。版本: v1.1
+> 控制台 harness（plan §九）——加载真实脑数据 → 2 参与者 1v1（玩家 vs NPC 杂兵）→ 五阶段战斗 → 每回合完整输出 + 静息 trace 模式 + 种子 RNG。玩家行动经键盘 IActionProvider 注入（step 10 接口的玩家实现）。版本: v1.2
 
 ## 一、范围与依赖
 
@@ -61,13 +61,13 @@ public sealed class PlayerActionProvider(TextReader input, TextWriter output) : 
 ```csharp
 public static class RoundRenderer
 {
-    public static string RenderRound(int round, CombatState state, TurnResult result, GameData data, CalibrationConfig cal);
+    public static string RenderRound(int round, CombatState state, TurnResult result, TurnManager tm, GameData data, CalibrationConfig cal);
     public static string RenderSetup(CombatState state, GameData data);
     public static string RenderResting(WcState resting, GameData data);
 }
 ```
 
-- 职责：§九 每回合输出清单（人类可读 + 结构化可断言）。纯函数（无 I/O）——测试直接断言字符串。**签名 v1.1 修正（审计 C11/console-08）：+CalibrationConfig cal——结算 m 重算（events §5.3 公式消费 ExpectedDamage/BaseMentalDamage 等）与结束原因上限数需要**。
+- 职责：§九 每回合输出清单（人类可读 + 结构化可断言）。纯函数（无 I/O）——测试直接断言字符串。**签名 v1.1 修正（审计 C11/console-08）：+CalibrationConfig cal——结算 m 重算（events §5.3 公式消费 ExpectedDamage/BaseMentalDamage 等）与结束原因上限数需要。v1.2 修正（审计 C-01）：+TurnManager tm——段 3 [顺序] 与段 6 [行动] 消费 tm.LastRoundOrder/LastRoundActions（决策 D1）**。
 - **名字来源（审计 C10 声明）**：ParticipantState 无名字字段——console 硬编码 `p0=玩家`、`p1=杂兵`（索引语义，§2.3 模板序）。渲染 `{名字}` = 该映射。
 - RenderRound 输出段（§九 清单逐项，v1.1 补 a(t)/因子段——审计 C3/C4/console-07/console-08）：
   1. `===== 回合 N =====`
@@ -76,9 +76,12 @@ public static class RoundRenderer
   4. `[状态] p{i}: HP {hp}/{max} SAN {san}/{max} tone(NE {t:F3} VTA {t:F3} SNc {t:F3} 5HT {t:F3}) gates(S {g:F3} C {g:F3} L {g:F3})` + `[CD] Defend={cd}`（IsDefending 时标注 `[防御中]`）
   5. **`[a(t)] p{i}: sensory {s:F3} / Precentral {p:F3} / Broca {b:F3}`（v1.1 补段——§九「每参与者 a(t) 摘要（sensory/Precentral/Broca 节点）」；sensory = mean(a[Pericalcarine], a[TransverseTemporal], a[Insula], a[AnteriorCingulateCortex]) 察觉四节点、Precentral = a[Precentral]、Broca = a[ParsOpercularis]——fid 解析同 NpcSalience 方式）**
   6. `[行动] p{i} {名字}: {动作描述}`（`tm.LastRoundActions`——决策 D1；物理/精神/防御/等待）
-  7. `[结算] {事件清单}`：每事件一行（**v1.1 修正——审计 C7/console-09：示例与 {m:F4} 格式统一**）——`A1 m=0.6250 (dealt 2.5 / expected 4.0)`、`B1 m=0.1667 (|ΔHP| 2.5 / 15.0)`、`C1 恐慌跨越 (SAN 18.5→17.9)`、`D1/D2 倒下广播 (p{actor})`
-  8. **`[因子] p{i}→p{j}: base {b} × force {f:F3} × motivation {m:F3} × gate {g:F3}`（v1.1 补段——§九「damage 公式逐因子展开（base × force × motivation × gate）」；字段来自事件（BaseDamage/ForceMod/MotivationMod/GateBonus——flow §5.1 已填））**
-  9. `[结束] {原因}`：`TeamDefeated（一方全灭——Hp≤0 ∨ San≤0）` / `MaxRounds（回合上限 {cal.MaxRounds} 达成）`（IsOver 为 true 时；上限数取 cal——审计 C11）
+  7. `[结算] {事件清单}`：每事件一行（**v1.1 修正——审计 C7/console-09：示例与 {m:F4} 格式统一；v1.2 修正——审计 D8/Δ-C07：A1 示例补「命中」后缀与 §5.2 模板一致**）——`A1 m=0.6250 (dealt 2.5 / expected 4.0 命中)`、`B1 m=0.1667 (|ΔHP| 2.5 / 15.0)`、`C1 恐慌跨越 (SAN 18.5→17.9)`、`D1/D2 倒下广播 (p{actor})`
+  8. **`[因子] p{i}→p{j}: {因子描述}`（v1.1 补段——§九「damage 公式逐因子展开（base × force × motivation × gate）」；v1.2 修正——审计 D2/Δ-C04/C-02：按事件类型区分形态）**：
+     - PhysicalDamageEvent（A1/A2/A5/B1/B2）→ `base {BaseDamage} × force {ForceMod:F3} × motivation {MotivationMod:F3} × gate {GateBonus:F3}`（字段来自事件——flow §5.1 已填）
+     - MentalDamageEvent（A4/B4）→ `base {cal.BaseMentalDamage} × motivation {MotivationMod:F3} × gate {GateBonus:F3}`（**精神公式无 force 因子——MentalDamageEvent 无 BaseDamage/ForceMod 字段，base 回退 cal 常量**）
+     - StatusChangeEvent（C1/D1/D2）/ 其他 → 无 [因子] 行（非伤害事件）
+  9. `[结束] {原因}`：`TeamDefeated（一方全灭——Hp≤0 ∨ San≤0）` / `MaxRounds（回合上限 {cal.MaxRounds} 达成）`（IsOver 为 true 时；上限数取 cal——审计 C11）。**v1.2 裁决（审计 D7/Δ-C03/C-05）：[结束] 唯一输出源 = RenderRound 段 9；§3.3 主循环退出后不重复输出**
 - RenderSetup：`== 战斗开始 ==` + 参与者列表（名字/HP/SAN/队伍）——**循环前输出（v1.1 时序修正——审计 C7/console-11）**。
 - RenderResting：`== 静息不动点 ==` + 48 active 节点 min/max（**F3 渲染串断言——审计 C5：M1 实测 max=0.771229，浮点区间比较取 [0.535, 0.772]**）+ 排除节点三组值（对齐 csharp-tone AC-15 输出形态）。
 
@@ -91,16 +94,18 @@ public static class Program
 }
 ```
 
-- 流程（v1.1 修正——审计 C2/C7/C8/console-09/console-11）：
+- 流程（v1.1 修正——审计 C2/C7/C8/console-09/console-11；v1.2 修正——审计 Δ-C01/D6/Δ-C06/C-01/D7）：
   1. `CliArgs.Parse(args)`（异常 → stderr 用法 + 退出 1）
   2. 战斗模式：
      - `data = GameDataLoader.LoadAll(dataDir)`；`cal = CalibrationConfig.Default`
      - **ctx 构造（审计 C8 补定义）**：`ctx = new CombatContext(new DeterministicRng(cli.Seed), data, cal)`——`--seed` → IRng 接线点（AC-11 确定性依赖）
      - `state = CombatState.Create([玩家, 杂兵], [1,2], data, cal)`（玩家 = CreateDefault(cal.PlayerHp, cal.PlayerSan)、杂兵 = CreateDefault(cal.NpcHp, cal.NpcSan)）
-     - **组合 provider（审计 C2 补定义）**：`IActionProvider provider = p == 0 ? playerProvider : npcProvider`（p=0 玩家键盘、p=1 NPC 走 `NpcActionProvider`——已交付，flow spec §3.1）；`playerProvider = new PlayerActionProvider(Console.In, Console.Out)`
+     - **组合 provider（v1.2 修正——审计 Δ-C01：p 自由变量伪码不可执行）**：定义 `CompositeActionProvider(IActionProvider player, IActionProvider npc) : IActionProvider`（console 层新类——`GetAction(p, state, ctx)` 内按 participantIndex 分派：p==0 → player、否则 → npc）；`playerProvider = new PlayerActionProvider(Console.In, Console.Out)`、`npcProvider = new NpcActionProvider()`（flow §3.1 已交付——**构造签名补定义：无参**）；`provider = new CompositeActionProvider(playerProvider, npcProvider)`
      - `tm = new TurnManager(data, cal, provider)`
-     - **循环前输出 RenderSetup**（审计 C7 时序修正）；`while !tm.IsOver(state): result = tm.StepRound(state, ctx); 输出 RenderRound(round, state, result, data, cal)`（**cal 传入——审计 C11/console-08：m 重算与上限数需要**）；循环后输出 `[结束]` 原因（§5.3 判定，`{MaxRounds}` 取 cal.MaxRounds）
-  3. 静息 trace 模式（`--trace-resting`）：单参与者（玩家模板）零事件 N 回合 → RenderResting 输出。实现：`CombatState.Create([玩家], [1], data, cal)` + `TurnManager(data, cal, WaitProvider)`（恒空声明——审计 console-13 补定义）循环 StepRound N 次 → `RenderResting(state.Participants[0].Wc, data)`。
+     - **循环前输出 RenderSetup**（审计 C7 时序修正）；`while !tm.IsOver(state): result = tm.StepRound(state, ctx); 输出 RenderRound(round, state, result, tm, data, cal)`（**+tm 传入——v1.2 审计 C-01：段 3/6 消费 LastRoundOrder/LastRoundActions**）；**循环后不输出 [结束]（v1.2 裁决——审计 D7/Δ-C03/C-05：RenderRound 段 9 为唯一输出源，防重复行）**
+  3. 静息 trace 模式（`--trace-resting`）：单参与者（玩家模板）零事件 N 回合 → RenderResting 输出。实现（v1.2 修正——审计 D6/Δ-C06/C-04：补 ctx 与 WaitProvider 定义）：
+     - `WaitProvider`（console 层新类，恒空声明）：`sealed class WaitProvider : IActionProvider { GetAction(...) => new CombatAction(); }`
+     - `state = CombatState.Create([玩家], [1], data, cal)`；`tm = new TurnManager(data, cal, new WaitProvider())`；`ctx = new CombatContext(new DeterministicRng(cli.Seed), data, cal)`（与战斗模式同接线）；循环 `tm.StepRound(state, ctx)` N 次 → `RenderResting(state.Participants[0].Wc, data)`。
 - dataDir 定位：`AppContext.BaseDirectory` 向上回溯找 `data/`（镜像测试项目 DataDirCandidates——console 与测试共用数据源约定）。
 - 退出码：0（正常结束）；1（CliUsageException 参数错误/数据目录缺失——错误信息到 stderr）。
 
@@ -119,22 +124,22 @@ public static class Program
 
 ### 5.1 速度分量重算（RenderRound 段 2）
 
-- 调用 `SpeedScoreCalculator.ComputeComponents(a, salience, gurney, isDefending)` + `ComputeScore`（与 TurnManager Phase 3 同参）——渲染时 state 已是回合末，a/salience 是下一回合 Phase 1 前状态；**分量值 = 回合末快照重算**（数值与 Phase 3 时点不同——demo 语义：展示当前状态的速度分量，标注「回合末重算」）。
+- 调用 `SpeedScoreCalculator.ComputeComponents(a, salience, gurney, isDefending)` + `ComputeScore`（与 TurnManager Phase 3 同参）——渲染时 state 已是回合末；**salience 来源（v1.2 修正——审计 Δ-C05）：`state.Salience[p]`（flow §2.2 CombatState 已交付访问器——ApplyGurney 的 salience 参数存储槽）**；**分量值 = 回合末快照重算**（数值与 Phase 3 时点可能不同——isDefending 已在窗口开始清除（Q3），demo 语义：展示当前状态的速度分量，标注「回合末」）。
 - 输出格式：`察觉 {x:F3} / 决断 {y:F3} / 执行 {z:F3} → 总分 {s:F3}`。
 
-### 5.2 结算详情（RenderRound 段 6）
+### 5.2 结算详情（RenderRound 段 7）
 
-- 每事件一行，格式（§九「damage 公式逐因子展开 + 事件清单」）：
-  - `A1 m={m:F4} (dealt {dealt}/{expected} 命中)` / `A2 m=0 (miss)`
+- 每事件一行，格式（§九「damage 公式逐因子展开 + 事件清单」；**v1.2 修正——审计 Δ-C10：A2 m 与 AC-13 F4 格式统一**）：
+  - `A1 m={m:F4} (dealt {dealt}/{expected} 命中)` / `A2 m=0.0000 (miss)`
   - `B1 m={m:F4} (|ΔHP| {delta}/{max})`、`B2 m={m:F4} (回避)`、`A5 m={m:F4} (防御成功)`
   - `A4 m={m:F4} (SAN {san}/{expected})`、`B4 m={m:F4} (|ΔSAN| {delta}/{max})`
   - `C1 恐慌跨越 (SAN {before}→{after})`、`D1/D2 倒下广播 (p{actor})`
   - `Heal/LinkGrowth no-op`（demo 无——格式预留）
 - m 值：**渲染时重算**（事件字段套 m 公式——与 events spec §5.3 同式；确定性组件可复算）。
 
-### 5.3 结束原因（RenderRound 段 7）
+### 5.3 结束原因（RenderRound 段 9——v1.2 修正段号，审计 D3/Δ-C02/C-06）
 
-- `tm.IsOver(state)` 为 true 时输出。原因判定（console 自判，§5.5 双口径 + 回合上限）：`一方全灭（Hp≤0 ∨ San≤0）` / `回合上限 {MaxRounds} 达成`。输出后主循环退出。
+- `tm.IsOver(state)` 为 true 时输出（**唯一输出源——v1.2 裁决，审计 D7/Δ-C03/C-05：主循环退出后不重复**）。原因判定（console 自判，§5.5 双口径 + 回合上限）：`TeamDefeated（一方全灭——Hp≤0 ∨ San≤0）` / `MaxRounds（回合上限 {cal.MaxRounds} 达成）`。输出后主循环退出。
 
 ## 六、验收标准
 
@@ -152,7 +157,7 @@ public static class Program
 | AC-10 | 静息 trace 模式 | `--trace-resting 30` → 输出 `== 静息不动点 ==` + active 节点 min/max **渲染串（F3）∈ [0.535, 0.772]（v1.1 修正——审计 C5：M1 实测 max=0.771229 > 0.771，浮点区间取 0.772）** |
 | AC-11 | 确定性 | **脚本化输入前提（v1.1 补——审计 console-04）：两次运行喂同一脚本化输入流（PlayerActionProvider 的 TextReader 注入同一输入序列）** + `--seed 42` → 输出逐字符相同（重定向 stdout 比较） |
 | AC-12 | 异常 | 数据目录缺失 → 非零退出 + 错误信息；CliUsageException → 退出 1 + stderr 用法 |
-| AC-13 | 渲染格式（v1.1 新增——审计 C3/C4/C7） | 完整回合输出含：`[速度]` 三分量行 ×2、`[a(t)]` 行 ×2（sensory/Precentral/Broca）、`[状态]` 行 ×2、`[行动]` 行 ×2（等待参与者含「等待」）、`[结算]` 事件行（m 为 F4 格式——`m=0.6250` 形态，审计 C7 格式统一）、`[因子]` 行（base × force × motivation × gate）、结束含 `[结束]` 原因 |
+| AC-13 | 渲染格式（v1.1 新增——审计 C3/C4/C7；v1.2 补 [顺序] 行——审计 C-07） | 完整回合输出含：`[速度]` 三分量行 ×2、`[顺序]` 行（`p{0} → p{1}` 形态——审计 C-07 补锚点）、`[a(t)]` 行 ×2（sensory/Precentral/Broca）、`[状态]` 行 ×2、`[行动]` 行 ×2（等待参与者含「等待」）、`[结算]` 事件行（m 为 F4 格式——`m=0.6250` 形态，审计 C7 格式统一；**A2 miss 行同 F4——`m=0.0000 (miss)`，v1.2 修正审计 Δ-C10**）、`[因子]` 行（物理四因子 / 精神三因子无 force——v1.2 修正审计 D2/Δ-C04）、结束含 `[结束]` 原因（**仅最终回合一次——v1.2 裁决审计 D7**） |
 
 ## 七、本 spec 自检清单
 
@@ -185,7 +190,8 @@ public static class Program
 |------|------|------|------|----------|
 | v1.0 | 2026-08-14 | 初稿 | 任务issue 01 | 全量审计 |
 | v1.1 | 2026-08-14 | 全量审计（3 专家 + 对抗验证，44 发现 → 31 CONFIRMED）修复：C1/console-03（AC-9「60」→ 50——MaxRounds 正典）；C2（组合 provider——NPC 行动接线 NpcActionProvider）；C3/console-07（补 [a(t)] 段——sensory/Precentral/Broca）；C4/console-08（补 [因子] 段——base×force×motivation×gate）；C5（静息区间 [0.535, 0.772]——M1 实测 0.771229）；C7/console-09（结算示例与 F4 格式统一）；C7/console-11（RenderSetup 循环前输出）；C8/console-09（ctx 构造定义——DeterministicRng 接线）；C9/console-13/C13（--trace-resting 非法值 <1）；C10（名字硬编码声明）；C11/console-08（RenderRound +cal 参数）；C14（SpeedScoreCalculator 实例化说明）；console-04（AC-11 脚本化输入前提）；console-06（速度重算表述统一）；console-10（EOF/null 输入处理）；console-15（重复参数后者覆盖）；AC-13 新增渲染格式验收；偏差 B6-B8 新增 | 全量审计（3❌ + 10⚠️ + 3ℹ️ 去重） | Δ审计 |
+| v1.2 | 2026-08-14 | Δ审计（3 专家 + 对抗验证，43 发现 → 21 CONFIRMED）修复：C-01（RenderRound +TurnManager tm——段 3/6 消费 LastRoundOrder/LastRoundActions，3 重断裂）；D2/Δ-C04/C-02（[因子] 段按事件类型区分——精神无 force 因子 base 回退 cal，3 专家同命中）；D3/Δ-C02/C-06（§5.2/§5.3 段号引用同步——结算段 7、结束段 9）；Δ-C01/C-03（CompositeActionProvider 类型定义——p 自由变量伪码不可执行；NpcActionProvider 无参构造声明）；D6/Δ-C06/C-04（WaitProvider 类定义 + 静息 trace 分支补 ctx）；D7/Δ-C03/C-05（[结束] 唯一输出源裁决——RenderRound 段 9，主循环退出后不重复，3 专家同命中）；D8/Δ-C07（A1 示例补「命中」后缀）；Δ-C05（salience 来源 = state.Salience[p]——flow 已交付）；Δ-C10（A2 m=0.0000 F4 格式）；C-07（AC-13 补 [顺序] 行锚点） | Δ审计（2❌ + 7⚠️ 去重） | 终审确认 |
 
 ---
-*创建: 2026-08-14 | 更新: 2026-08-14 | 版本: v1.1*
+*创建: 2026-08-14 | 更新: 2026-08-14 | 版本: v1.2*
 *关联: [任务issue 01](issues/01-console-spec.md), [plan §九](../../../csharp-engine/design/plan.md), [csharp-flow spec](../../../csharp-flow/design/spec.md)*
