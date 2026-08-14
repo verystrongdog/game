@@ -1,6 +1,6 @@
 # csharp-smoke — 实现规格
 
-> Smoke 集成测试（plan step 12 收尾）——端到端完整战斗验证：数据 → 引擎 → 流程 → 结束，证明神经动力学引擎产出合理战斗结果。纯测试 feature（无新引擎代码）。版本: v1.1
+> Smoke 集成测试（plan step 12 收尾）——端到端完整战斗验证：数据 → 引擎 → 流程 → 结束，证明神经动力学引擎产出合理战斗结果。纯测试 feature（无新引擎代码）。版本: v1.2
 
 ## 一、范围与依赖
 
@@ -22,7 +22,7 @@ public class SmokeTests
 }
 ```
 
-- **参与者构成（v1.1 补——审计 SMOKE-4：原未定义）**：2 参与者 NPC vs NPC（双方自动——`new TurnActionProvider()`）；**双方 HP 80 / SAN 80**（v1.1 修正：demo 杂兵模板 15 HP 下物理速攻 3-5 回合灭队，长战斗断言不可达——双方用玩家级模板保证 ≥10 回合窗口；[NEW] smoke 专用模板，非 CalibrationConfig 常量）；teams = [1, 2]。**seed 实测固定程序（v1.1 补——审计 F4/SMOKE-4）**：AC-2/5/6 为经验性断言——测试写作期跑 seed sweep（0-200），选定使全部经验断言成立的种子，写死进测试（flow 惯例「测试不凭记忆写锚点」）。
+- **参与者构成（v1.1 补——审计 SMOKE-4：原未定义；v1.2 终审修正：TurnActionProvider 笔误 → NpcActionProvider）**：2 参与者 NPC vs NPC（双方自动——`new NpcActionProvider()`，flow §3.1 已交付）；**双方 HP 80 / SAN 80**（v1.1 修正：demo 杂兵模板 15 HP 下物理速攻 3-5 回合灭队，长战斗断言不可达——双方用玩家级模板保证 ≥10 回合窗口；[NEW] smoke 专用模板，非 CalibrationConfig 常量）；teams = [1, 2]。**seed 实测固定程序（v1.1 补——审计 F4/SMOKE-4）**：AC-2/5/6 为经验性断言——测试写作期跑 seed sweep（0-200），选定使全部经验断言成立的种子，写死进测试（flow 惯例「测试不凭记忆写锚点」）。
 - 数据：GameDataLoader.LoadAll（DataDirCandidates 镜像约定）。
 - 无 static 可变状态；同种子确定性。
 
@@ -36,7 +36,7 @@ public class SmokeTests
 | 事件流 | 全程存在 PhysicalDamageEvent（伤害链生效——v1.1 修正：**「每回合非空」不成立——双方同回合都 defend 产零事件回合（flow §3.3 Defend 无事件），NpcSalience Softmax 三候选概率恒正（SMOKE-2/F3）**；seed 实测固定后断言「除双防御回合外 Events 非空」） |
 | HP/SAN 变化 | 战斗期间存在 HP 扣减（DamageDealt > 0 的事件）——伤害链真正生效 |
 | tone 动态 | **v1.1 修正（审计 F1：NPC vs NPC 每回合双方都是 δ 接收者——攻击者 A1/A2 + 承受者 B1/B2 恒发，「无事件接收者回合」不存在）**：① 事件接收者 tone 偏离 baseline（|Δ| > 0.01）；② 纯衰减观测——脚本化 provider 注入等待回合（(null,null) 合法，flow §2.3）→ 该回合后 tone 向 baseline 靠近（Phase 1 衰减，flow §3.5 步骤 1） |
-| gate 动态 | 每回合 gates ∈ [0, 1]（CstcGating 输出域）；**存在回合 gate < 0.99（v1.1 修正——审计 F7：首两回合热身瞬态（0.635→1.0）平凡满足「回合间变化」，改为事件驱动的抑制偏离静息收敛值 1.0；seed 实测固定）** |
+| gate 动态 | 每回合 gates ∈ [0, 1]（CstcGating 输出域）；**存在回合 gate < 0.99 且非热身回合（v1.1 修正——审计 F7：首两回合热身瞬态（0.635→1.0）平凡满足；v1.2 终审修正：断言显式排除前两回合——否则初态即静息 + gurney 零起步，第 1 回合 gate1=0.635 平凡满足；事件驱动抑制偏离静息收敛 1.0；seed 实测固定）** |
 | 速度序变化 | 战斗（双方 HP 80 模板下 ≥10 回合）中 LastRoundOrder 至少一次与首回合不同（a(t) 动态驱动排序变化——**v1.1 修正：模板升级保证长战斗可达，审计 F4**） |
 | 静息→战斗 | 战斗初态 a(t) = 静息不动点（active ∈ [0.535, 0.772]——M1 实测）；首回合 Phase 1 后稳定（文档化——审计 F8：baseline 输入下结构性平凡成立，保留为初态哨兵） |
 
@@ -59,7 +59,7 @@ public class SmokeTests
 | AC-2 | 事件流 | 全程存在 PhysicalDamageEvent；**除双防御回合外 Events 非空（v1.1 修正——SMOKE-2/F3；seed 实测固定）** |
 | AC-3 | HP/SAN 网格不变式 | **v1.1 修正（审计 F2/SMOKE-3：引擎无 clamp——过杀负值可达，如 5.5−6.1=−0.6）**：全程 Hp/San 为 0.1 网格值（Round1 量化不变式）；上界 ≤ HpMax/SanMax（0.1 网格容差）；**过杀负值合法（显式声明——Downed 判定用 ≤0，终态保留负值）** |
 | AC-4 | tone 动态 | ① 存在事件接收者 tone 偏离 baseline（|Δ| > 0.01）；② **脚本化等待回合后 tone 向 baseline 靠近（|Δ| 严格缩小——审计 F1：NPC vs NPC 无「无事件接收者回合」，纯衰减需注入等待回合观测）** |
-| AC-5 | gate 动态 | 每回合全参与者 gates ∈ [0, 1]；**存在回合 gate < 0.99（事件驱动抑制偏离静息收敛 1.0——审计 F7：热身瞬态 0.635→1.0 平凡满足「回合间变化」，已弃；seed 实测固定）** |
+| AC-5 | gate 动态 | 每回合全参与者 gates ∈ [0, 1]；**存在非热身回合（round > 2）gate < 0.99（事件驱动抑制偏离静息收敛 1.0——审计 F7 + v1.2 终审：前两回合为热身瞬态（0.635→1.0）须显式排除；seed 实测固定）** |
 | AC-6 | 速度序变化 | 战斗（双方 HP 80 模板——v1.1 修正保证 ≥10 回合窗口，审计 F4）中 LastRoundOrder 至少一次 ≠ 首回合序（seed 实测固定） |
 | AC-7 | 静息→战斗 | 初态 active ∈ [0.535, 0.772]（初态哨兵——审计 F8 文档化）；首回合 a 稳定 |
 | AC-8 | 确定性 | 同种子两次完整战斗深度逐位同（Round/事件数/终态 Hp/San/tone/Wc.A） |
@@ -94,7 +94,8 @@ public class SmokeTests
 |------|------|------|------|----------|
 | v1.0 | 2026-08-14 | 初稿 | 任务issue 01 | 全量审计 |
 | v1.1 | 2026-08-14 | 审计（2 专家 + 对抗验证，20 发现 → 14 CONFIRMED）修复：F1（tone 回落不可观测——NPC vs NPC 每回合双方都是 δ 接收者；改脚本化等待回合观测纯衰减）；F2/SMOKE-3（HP ∈ [0, HpMax] 与无 clamp 矛盾——过杀负值合法，改网格不变式 + 上界）；F3/SMOKE-2（「每回合非空」不成立——双防御零事件回合正概率；改存在伤害事件 + 豁免）；F4（≥10 回合无保证——双方 HP 80 smoke 专用模板）；F5（NaN 检查覆盖所有战斗）；F6（验证点 7+1 明示 + plan §八 映射）；F7（gate 动态改事件驱动抑制 <0.99——热身瞬态平凡满足）；F8（AC-7 文档化为初态哨兵）；SMOKE-4（参与者构成 + seed 实测固定程序）；偏差 B4-B6 新增 | 审计（3❌ + 4⚠️ + 2ℹ️ 去重） | 终审确认 |
+| v1.2 | 2026-08-14 | 终审残差清扫（2⚠️）：gate 断言显式排除热身回合（前两回合——初态静息 + gurney 零起步下第 1 回合 gate1=0.635 平凡满足 <0.99）；`new TurnActionProvider()` 笔误 → `NpcActionProvider`（flow §3.1 已交付） | 终审发现（2⚠️） | sign-off |
 
 ---
-*创建: 2026-08-14 | 更新: 2026-08-14 | 版本: v1.1*
+*创建: 2026-08-14 | 更新: 2026-08-14 | 版本: v1.2*
 *关联: [任务issue 01](issues/01-smoke-spec.md), [plan §八/§十](../../../csharp-engine/design/plan.md)*
