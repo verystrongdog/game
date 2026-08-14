@@ -1,6 +1,6 @@
 # EventProcessor — 实现规格
 
-> 战斗事件 → δ（tone 脉冲）+ s（皮层感官输入）派生器。消费 CombatEvents，按 运行时状态模型 §5.5 δ pattern 表 + magnitude 表与 §4.5 s = W_sensory × α 派生每参与者 δ 发射（Σ 聚合后调用 ToneUpdater.Step）与 s 增量（float[69]，Phase 1 注入）。版本: v1.2
+> 战斗事件 → δ（tone 脉冲）+ s（皮层感官输入）派生器。消费 CombatEvents，按 运行时状态模型 §5.5 δ pattern 表 + magnitude 表与 §4.5 s = W_sensory × α 派生每参与者 δ 发射（Σ 聚合后调用 ToneUpdater.Step）与 s 增量（float[69]，Phase 1 注入）。版本: v1.2.2
 
 ## 一、范围与依赖
 
@@ -53,7 +53,7 @@ public sealed record EventProcessingResult(
 - `states`：**结算后、δ 注入前**的参与者状态（HP/SAN 已含本轮结算；Tone 为待注入态）。事件字段装客观结果（types spec 决策 D4），EventProcessor 信任事件字段，不重算 HP/SAN 变化。
 - `teams`：int[]，`teams[p] == teams[q]` ⇔ p、q 同队（D1/D2 分流用）。
 - **PhysicalDamageEvent 契约**：`IncomingDamage == DamageDealt + DamageBlocked`；`Hit=true` → dealt ≥ 0、blocked ≥ 0；`Hit=false` → dealt=0 ∧ blocked == incoming > 0（全额回避——damage calc AC-5「miss 仍返回完整伤害」正是为此：producer 把该值填入 incoming/blocked）。
-- **MentalDamageEvent 契约（字段语义，非算术恒等式）**：`TargetSanBefore/TargetSanAfter = 结算前后 SAN 状态实际值（0.1 网格，producer 量化后填写）`；`|TargetSanAfter − TargetSanBefore|` 与 `SanDamage` 在 0.1 网格上一致（±1ulp 内）。**EventProcessor 只消费差值对（TargetSanAfter − TargetSanBefore）与 TargetSanMax 分母（B4 公式），不消费 SanDamage，不验算三字段间的逐位恒等式**——f32 减法在 0.1 网格上不封闭（实测 0.1f − 0.3f = −0.20000002 ≠ −0.2f；审计 W1 穷举 14616 组离格反例），逐位恒等式对合法 producer 输入不保真。
+- **MentalDamageEvent 契约（字段语义，非算术恒等式）**：`TargetSanBefore/TargetSanAfter = 结算前后 SAN 状态实际值（0.1 网格，producer 量化后填写）`；`|TargetSanAfter − TargetSanBefore|` 与 `SanDamage` 在 0.1 网格上一致（**f32 减法不封闭，偏差绝对上界 ≤ 4e-6（终审独立复算：量级 ≥32 处 1 ulp ≈ 3.815e-6，如 (0.1f, 32.2f) 对；601×601 全网格 (32.2f, 32.1f) 对 307 ulp ≈ 2.287e-6 为**相对最大**（按结果量级折算）非绝对最大，约 6% 合法对超过 3e-6——故取 4e-6 绝对上界）；对 B4 m = |Δ|/SanMax 与 0.01 阈值无行为影响（m 偏差 ≤ 8e-8，SanMax ≥ 30 时）**）。**EventProcessor 只消费差值对（TargetSanAfter − TargetSanBefore）与 TargetSanMax 分母（B4 公式），不消费 SanDamage，不验算三字段间的逐位恒等式**——f32 减法在 0.1 网格上不封闭（实测 0.1f − 0.3f = −0.20000002 ≠ −0.2f；审计 W1 穷举 14616 组离格反例），逐位恒等式对合法 producer 输入不保真。
 - **StatusChangeEvent 契约**：Panic 的 SanBefore/SanAfter 为跨越前后实际值；被动 SAN_max 变化（ΔSAN=0）→ SanBefore==SanAfter。
 - **契约违反 → 未定义行为**（NaN/∞ 传播可能——§五 5.3 emit 判据对 NaN 有天然防御、∞ 有显式防御，仅防御 m 通道；States 中毒不在本 feature 防务范围）。
 - `Round` 字段不参与派生（标注用）。
@@ -169,6 +169,7 @@ public sealed class EventProcessor
 
 - B2 在 producer 契约（§二 2.4：¬Hit → blocked==incoming>0）下恒 m=1.0。
 - 契约违反 incoming=0 → 0/0=NaN → emit 判据天然 skip；incoming=0 ∧ blocked>0 → +∞ → 显式 ∞ 防御 skip（偏差 B4）。
+- **通道限定（复查审计 info）**：本节的 skip 表述均指 **δ 通道**。A5 属 A 类——s 通道按 §5.3.7 独立判定（m_α=1.0 恒发，与 δ 的 skip 无关）；B2 属 B 类（m_α=m）→ 双通道同 skip。勿按本节字面对 A5 得出「双通道 skip」（AC-8 修正段同语义）。
 
 #### 5.3.4 B1：`MathF.Abs(TargetHpAfter - TargetHpBefore) / TargetHpMax`
 
@@ -237,7 +238,7 @@ public sealed class EventProcessor
 | AC-12 | 确定性 + 输入不可变 | 同输入（含事件序）连续 5 次输出逐位一致；states/events/teams 元素不被修改（输入引用元素 Tone 断言不变）；输出 States 与输入不同引用 |
 | AC-13 | L2 类型变更回执 | StatusChangeEvent 3 新 float 字段存读回逐位（5.6f）；CalibrationConfig.EndurancePassivePenalty == 1（int）；现有 types 测试零改动在全量 test run 中通过（csharp-damage AC-18 模式）；types spec 变更日志 🔧 行（结转 #1） |
 | AC-14 | 空事件列表 | States 副本逐字段等于输入（Tone 逐位）；SensoryAccum 每元素 float[69] 全零 |
-| AC-15 | 击杀窗口（W-e 锚点，v1.2 新增） | 批次 = PhysicalDamageEvent（dealt=15, Hp 15→0, HpMax=15, Hit=true, blocked=0）+ StatusChangeEvent(Downed, Entered=true) 同批（p0 为 ActorId/TargetId）：p0（被击杀者）收 B1 → m=15/15=1.0 → δ=(1,0,0,−1) → tone (0.5593994, 0.4, 0.5, 0.35402513)（探针实测，同 C1 pattern 同值）+ s 20 行、s[Postcentral]=2.0（soma+pain 双模态 × m_α=1.0）；p0 不另收 D 广播（p≠ActorId 排除）；存活观察者 p1 按 teams 分流收 D1/D2（同 AC-7）——**实现若对 B1/B2/B4/C1 误加 HP>0 存活守卫则本 AC 必红** |
+| AC-15 | 击杀窗口（W-e 锚点，v1.2 新增，v1.2.1 修正） | **参与者（v1.2.1 声明，复查审计 F1）**：3 人 teams=[1,1,2]；p0 = 被击杀者（伤害事件 TargetId + Downed 事件 ActorId）、**p1 = 伤害事件攻击者（ActorId=1——p1 收 A1，m=15/4=3.75 → VTA/SNc clip，不在本 AC 断言范围）**、p2 = 旁观者。批次 = PhysicalDamageEvent（dealt=15, Hp 15→0, HpMax=15, Hit=true, blocked=0）+ StatusChangeEvent(Downed, Entered=true) 同批：**p0 只收 B1** → m=15/15=1.0 → δ=(1,0,0,−1) → tone (0.5593994, 0.4, 0.5, 0.35402513)（探针实测，probe-v1.2.md Q1，同 C1 pattern 同值）+ s 20 行、s[Postcentral]=2.0（probe-v1.2.md Q2/Q4，soma+pain 双模态 × m_α=1.0）；p0 不另收 D 广播（p≠ActorId 排除）；p1 收 A1+D1、p2 收 D2（分流逻辑 §5.5.2，tone 值不在本 AC 断言——攻击者双视角超出范围）——**实现若对 B1/B2/B4/C1 误加 HP>0 存活守卫则本 AC 必红** |
 
 ## 七、本 spec 自检清单
 
@@ -268,7 +269,9 @@ public sealed class EventProcessor
 | v1.0 | 2026-08-13 | 初稿 | 任务issue 01 | 全量审计 |
 | v1.1 | 2026-08-14 | 审计 v1.0 修复：E1（AC-5 mot=0.5）、E2（AC-7 teams=[1,1,2]）、E3（AC-9 B1×2 Σ 锚点）3❌；W-a（A1 消费 ExpectedDamage，B3 撤销）、W-b（A4 消费 BaseMentalDamage）、W-c（A5 m_α=1.0）、W-d（2.4 字段语义契约）、W-e（承受者 HP=0 不豁免声明）、W-f（AC-9 s 断言 + AC-10 B2 行）、W-g（A6 顺延声明）、W-h（多倒下者锚点 + 判定语义）、W-i（AC-11 拆两行）、W-j（B6→B5 +∞ 路径）、W-k（AC-8 NaN/∞ 限定事件类）11⚠️；I-1（§四 C1 漂移注）、I-2（B2 理由改写）、I-3（0.008333334）、I-5（表头改「默认值」）、I-6（5 事件子类）5ℹ️；I-4 处置 = 数据层保证声明 + NRE 入未定义行为（v1.2 修正记录：非「异常表补行」）。偏差重编号 B4-B6→B3-B5。全部锚点本地探针实测 | 审计 v1.0（3❌ + 11⚠️ + 7ℹ️） | Δ审计 |
 | v1.2 | 2026-08-14 | Δ审计（3 专家 + 对抗验证，11 发现 → 10 CONFIRMED）修复：AC-8 A5 +∞ 移出 B/C/D 归 A 类（W-k × W-c 交互副作用——δ skip、s 照发）；AC-7 批次构成限定 + 双 D1 改 4 人 teams=[1,1,1,2]（3 人下不可构造）；新增 AC-15 击杀窗口锚点（W-e 补全——B1 m=1.0 → (0.5593994, 0.4, 0.5, 0.35402513)、s[Postcentral]=2.0 探针实测）；§5.2 豁免枚举补 A5；§2.4 消费字段措辞精确化（差值对 + SanMax 分母）；变更日志 v1.1 行失实修正 | Δ审计发现（1❌ + 2⚠️ + 1ℹ️） | 复查审计 |
+| v1.2.1 | 2026-08-14 | 复查审计（2 专家，6 发现去重 4）修复：AC-15 参与者声明补全（F1——伤害事件 ActorId=p1 显式化，p0 只收 B1；原「p0 为 ActorId/TargetId」字面读为 A1 也作用于 p0 → δSum 污染）；§2.4 ±1ulp 界修正（F2——全网格穷举最大 307 ulp，改偏差绝对量 ≤3e-6）；§5.3.3 通道限定声明（info——skip 表述仅指 δ 通道，A5 s 恒发）；AC-15 探针出处补 probe-v1.2.md（F3） | 复查审计发现（1❌ + 1⚠️ + 2ℹ️） | 终审确认 |
+| v1.2.2 | 2026-08-14 | 终审（1 专家独立复算）残差清扫：§2.4 偏差上界 3e-6 → **4e-6**（原值被独立复算推翻——307 ulp ≈ 2.287e-6 为相对最大非绝对最大；量级 ≥32 处 1 ulp ≈ 3.815e-6，约 6% 合法对超 3e-6；m 偏差 ≤ 1e-7 → 8e-8）；AC-15 补探针文件显式引用（probe-v1.2.md Q1/Q2/Q4） | 终审发现（1⚠️ + 1ℹ️） | sign-off |
 
 ---
-*创建: 2026-08-13 | 更新: 2026-08-14 | 版本: v1.2*
+*创建: 2026-08-13 | 更新: 2026-08-14 | 版本: v1.2.2*
 *关联: [任务issue 01](issues/01-events-spec.md), [plan §4.7](../../csharp-engine/design/plan.md), [运行时状态模型 §5.5](../../../规则/技能树系统/运行时状态模型.md), [types spec §二 2.11](../../csharp-engine-types/design/spec.md)*
