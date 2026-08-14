@@ -137,16 +137,23 @@ public sealed class TurnManager
             }
             events.AddRange(batch);
 
-            if (state.Participants[p].Hp <= 0f) // 6. HP=0 → 移除队列（跳过剩余窗口）+ D 广播实时
+            // 6. HP=0 → 移除队列（跳过剩余窗口）+ D 广播实时。
+            // 修复（实现自审）：检查对象为**结算后被击杀的任一参与者**（非仅行动者 p——
+            // 被他人击杀的目标 HP≤0 也须生产 Downed；原检查 state.Participants[p] 只覆盖行动者自己）
+            foreach (var dp in Enumerable.Range(0, state.Participants.Count))
             {
-                var downed = new StatusChangeEvent(round, p, p) { Kind = StatusKind.Downed, Entered = true };
-                var dResult = _eventProcessor.ProcessEvents([downed], state.Participants, state.Teams);
-                for (var p2 = 0; p2 < state.Participants.Count; p2++)
+                if (state.Participants[dp].Hp <= 0f
+                    && !events.OfType<StatusChangeEvent>().Any(e => e.Kind == StatusKind.Downed && e.ActorId == dp))
                 {
-                    state.ApplyTone(p2, dResult.States[p2].Tone);
-                    state.AccumulateS(p2, dResult.SensoryAccum[p2]);
+                    var downed = new StatusChangeEvent(round, dp, dp) { Kind = StatusKind.Downed, Entered = true };
+                    var dResult = _eventProcessor.ProcessEvents([downed], state.Participants, state.Teams);
+                    for (var p2 = 0; p2 < state.Participants.Count; p2++)
+                    {
+                        state.ApplyTone(p2, dResult.States[p2].Tone);
+                        state.AccumulateS(p2, dResult.SensoryAccum[p2]);
+                    }
+                    events.Add(downed);
                 }
-                events.Add(downed);
             }
         }
 

@@ -62,27 +62,28 @@ public sealed class ActionResolver
             throw new ArgumentException("Broca 通道仅允许 MentalAttack（回合战斗流程 §2.1）", nameof(action));
 
         var events = new List<CombatEvent>();
-        // 链式基准：局部 hp/san 游标（初值 = state 当前值；每通道结算后更新）
-        var cursor = state.Participants[actorIndex];
+        // 链式基准（审计 E8）：per-target hp/san 游标（初值 = state 当前值；
+        // 每事件结算后更新目标游标——同目标后事件 Before = 前事件 After；不同目标互不影响）
+        var cursors = state.Participants.Select(p => (Hp: p.Hp, San: p.San)).ToArray();
 
         _ = _responseResolver.Resolve(action, state, ctx); // 响应窗口（demo Noop——调整事件留链路 feature）
 
         if (action.Order == ChannelOrder.M1First)
         {
-            ResolveSlot(action.M1, ref cursor, actorIndex, state, ctx, events);
-            ResolveSlot(action.Broca, ref cursor, actorIndex, state, ctx, events);
+            ResolveSlot(action.M1, cursors, actorIndex, state, ctx, events);
+            ResolveSlot(action.Broca, cursors, actorIndex, state, ctx, events);
         }
         else
         {
-            ResolveSlot(action.Broca, ref cursor, actorIndex, state, ctx, events);
-            ResolveSlot(action.M1, ref cursor, actorIndex, state, ctx, events);
+            ResolveSlot(action.Broca, cursors, actorIndex, state, ctx, events);
+            ResolveSlot(action.M1, cursors, actorIndex, state, ctx, events);
         }
 
         return events;
     }
 
     /// <summary>单槽结算（null = 无动作）。</summary>
-    private void ResolveSlot(ActionSlot? slot, ref ParticipantState cursor,
+    private void ResolveSlot(ActionSlot? slot, (float Hp, float San)[] cursors,
         int actorIndex, CombatState state, CombatContext ctx, List<CombatEvent> events)
     {
         if (slot is null)
@@ -91,10 +92,10 @@ public sealed class ActionResolver
         switch (slot.Kind)
         {
             case ActionKind.PhysicalAttack:
-                events.Add(ResolvePhysical(slot, ref cursor, actorIndex, state, ctx));
+                events.Add(ResolvePhysical(slot, cursors, actorIndex, state, ctx));
                 break;
             case ActionKind.MentalAttack:
-                events.Add(ResolveMental(slot, ref cursor, actorIndex, state, ctx));
+                events.Add(ResolveMental(slot, cursors, actorIndex, state, ctx));
                 break;
             case ActionKind.Defend:
                 break; // 防御标记——TurnManager 读取 action 应用 IsDefending/CD（§5.2）
@@ -102,10 +103,11 @@ public sealed class ActionResolver
     }
 
     /// <summary>物理结算（§5.1；miss 契约遵守 events §2.4）。</summary>
-    private PhysicalDamageEvent ResolvePhysical(ActionSlot slot, ref ParticipantState cursor,
+    private PhysicalDamageEvent ResolvePhysical(ActionSlot slot, (float Hp, float San)[] cursors,
         int actorIndex, CombatState state, CombatContext ctx)
     {
         var target = Target(state, slot.TargetId);
+        var cursor = cursors[slot.TargetId];
 
         // 接线（plan §六 + §5.1）
         var toneBias = ToneBias(state.Participants[actorIndex].Tone, 0f, 0.3f, 0.5f, -0.3f); // attack_physical
@@ -142,16 +144,17 @@ public sealed class ActionResolver
             TargetHpMax = target.HpMax,
         };
 
-        cursor = cursor with { Hp = hpAfter };
+        cursors[slot.TargetId] = (hpAfter, cursor.San); // 链式游标更新（目标）
         return ev;
     }
 
     /// <summary>精神结算（§5.1；永远命中）。</summary>
-    private MentalDamageEvent ResolveMental(ActionSlot slot, ref ParticipantState cursor,
+    private MentalDamageEvent ResolveMental(ActionSlot slot, (float Hp, float San)[] cursors,
         int actorIndex, CombatState state, CombatContext ctx)
     {
         var target = Target(state, slot.TargetId);
         var self = state.Participants[actorIndex];
+        var cursor = cursors[slot.TargetId];
 
         var toneBias = ToneBias(self.Tone, 0f, 0.4f, 0f, -0.3f); // attack_mental
         var motivationMod = Math.Clamp(toneBias, -1f, 1f);
@@ -178,7 +181,7 @@ public sealed class ActionResolver
             TargetHpMax = target.HpMax,
         };
 
-        cursor = cursor with { San = sanAfter, Hp = hpAfter };
+        cursors[slot.TargetId] = (hpAfter, sanAfter); // 链式游标更新（目标）
         return ev;
     }
 

@@ -18,10 +18,14 @@ public static class NpcSalience
     private const float BaselineDaSnc = 0.5f;
     private const float BaselineHt5 = 0.5f;
 
-    // 行动→节点 fid（canonical 69 RegionIds 解析，构造期每次解析——无 static 缓存）
+    // 行动→节点 fid（canonical 69 RegionIds 解析，构造期每次解析——无 static 缓存）。
+    // plan §4.8 节点为 dk_name——functional_id 映射（2026-08-14 数据落地）：
+    // rostralmiddlefrontal → RostralMiddleFrontalDLPFC（dlPFC，dk 多对一取主）；
+    // caudalanteriorcingulate → AnteriorCingulateCortex（cACC 拆分两 fid 取首）；
+    // parsopercularis → ParsOpercularis。
     private static readonly string[] PhysicalNodes = ["Precentral"];
     private static readonly string[] MentalNodes =
-        ["Rostralmiddlefrontal", "Parsopercularis", "Caudalanteriorcingulate"];
+        ["RostralMiddleFrontalDLPFC", "ParsOpercularis", "AnteriorCingulateCortex"];
     private static readonly string[] DefendNodes = ["Insula", "Amygdala"];
 
     /// <summary>
