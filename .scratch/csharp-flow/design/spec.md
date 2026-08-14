@@ -140,7 +140,9 @@ StepRound(state, ctx):
   for p in 0..Count-1:
       tone[p] = ToneUpdater.Step(tone[p], 零向量, cal)            # 步骤 1：纯衰减一步（审计 E9/W2 修复——
       state.ApplyTone(p, tone[p])                                  #   events §5.5.3「衰减是 step 10 Phase 1 的职责」；
-                                                                   #   事件接收者 Phase 4 已注入，此处统一衰减步进）
+                                                                   #   事件接收者 Phase 4 已注入，此处统一衰减步进；
+                                                                   #   v1.2 终审注：events spec 锚点为 Phase 4 注入瞬间值，
+                                                                   #   回合末 tone 值 = 注入 + Phase 1 衰减两步合成——测试锚点本地探针实测）
       b = CorticalBias.Compute(tone[p], data)                     # 步骤 2
       a' = WcDynamics.Step(a[p], b, SPending[p], W)               # 步骤 3（s=上回合累计）
       state.SPending[p] 清零                                      # 注入后清零
@@ -281,7 +283,7 @@ enemySanRatio = target.San / target.SanMax
 - 回合上限：round ≥ MaxRounds（50 [NEW]，CalibrationConfig）→ MaxRounds
 - 否则 → 继续。
 
-**IsOver API（审计 W4/I4 拍板）**：`TurnManager.IsOver(CombatState state) → bool` **实例方法**（用 `_cal.MaxRounds`）——Phase 5 结束判定 + 调用方轮询统一入口。TurnResult **不扩展**（B6——避免跨 feature 类型变更；结束原因由调用方按 state 自判或 IsOver 布尔）。伪码 CheckEnd 返回值由 IsOver 消费。
+**IsOver API（审计 W4/I4 拍板）**：`TurnManager.IsOver(CombatState state) → bool` **实例方法**（用 `_cal.MaxRounds`）——Phase 5 结束判定 + 调用方轮询统一入口。TurnResult **不扩展**（B6——避免跨 feature 类型变更；结束原因由调用方按 state 自判或 IsOver 布尔）。**v1.2 终审清理（原「伪码 CheckEnd 返回值由 IsOver 消费」为 Δ-09 已清理伪码的残留措辞——原 CheckEnd 角色由 IsOver 承接，调用方轮询）**。
 
 ## 六、验收标准
 
@@ -327,7 +329,7 @@ enemySanRatio = target.San / target.SanMax
 | B7 | CombatState 初始化内部跑 30 回合静息 trace | 对齐运行时状态模型 §7.3「遭遇进入战斗时 WC=静息不动点」；M1 实测方法复用 |
 | B8 | 结束条件双口径（Hp≤0 ∨ San≤0 同队全员）（审计 W1 修复） | 核心机制 §5「SAN=0 先进入随机行为阶段」——demo 精神攻击可达 SAN=0，即时结束而非拖到回合上限 |
 | B9 | tone baseline 常量 (0.3,0.4,0.5,0.5)（审计 W6 声明） | tone_bias/force_mod 基准；NPC AI §4.1 7 参数化性格偏移留 Affordance Competition 全量 |
-| B10 | Panic 逐事件基准检测（审计 W3 裁决） | C1「每次跨越」正典字面；双通道两次扣减各自判定（同批 Σδ 叠加一次 Step） |
+| B10 | Panic 逐事件基准检测（审计 W3 裁决，v1.2 终审表述修正） | C1「每次跨越」正典字面；**多攻击者/多窗口各自判定**（各批内 Σδ 叠加一次 Step——单窗口至多一次 SAN 扣减：仅 Broca=MentalAttack 扣 SAN，W9/B11 配对校验下 M1 无 SAN 动作） |
 | B11 | 通道-动作配对完整校验（审计 W9/W4 修复） | 回合战斗流程 §2.1 通道归属（M1∈{Physical,Defend}、Broca∈{Mental}）；IsValidChannelUsage 只锁 Broca=Defend，本校验补全 |
 | B12 | salience 节点取值（审计 W5 修复 + v1.2 修正——Δ审计 F2/Δ-03） | **仅 Putamen 需代理**（→a_SD1_somatic，plan §十三-4 同款；Putamen 无 WC a）；Insula/Amygdala 均 W-active 节点直读 a(t)（Amygdala 是 48 活跃节点之一——运行时状态模型 §4.1；原 c_loop_limbic 代理会 limbic CI 双重计数，已废弃） |
 
@@ -337,7 +339,7 @@ enemySanRatio = target.San / target.SanMax
 |------|------|------|------|----------|
 | v1.0 | 2026-08-14 | 初稿 | 任务issue 01 | 全量审计 |
 | v1.1 | 2026-08-14 | 全量审计（3 专家 + 对抗验证，53 发现 → 45 CONFIRMED）修复：E1（teams 进 CombatState——Teams 属性 + Create 参数）；E2（miss 字段契约——dealt=0 ∧ blocked=incoming）；E3（Resolve 签名 +actorIndex）；E4（NpcSalience +selfIndex）；E5（Panic 生产入伪码——逐事件基准 + 同批 ProcessEvents）；E6（Round 递增显式化）；E7（Phase 3/4 HP≤0 过滤）；E8（链式基准——resolver 局部游标）；E9（Phase 1 纯衰减步——events §5.5.3 落地）；W1（SAN=0 结束口径）；W3（ApplyEvents 补 API）；W4（IsOver 实例方法拍板）；W5（行动→通道映射 + subcortical 代理）；W6（baseline 常量声明）；W7（常量消费——BasePhysicalDamage/BaseMentalDamage/EndurancePassivePenalty）；W9（通道-动作配对校验）；F5/W6（MaxRounds L2 类型变更声明 + AC-14 回执）；AC-2/AC-11/AC-12 锚点表述修正；偏差 B8-B12 新增 | 全量审计（2❌×多专家 + 9⚠️ + 3ℹ️ 去重） | Δ审计 |
-| v1.2 | 2026-08-14 | Δ审计（3 专家 + 对抗验证，30 发现 → 20 CONFIRMED）修复：F1/Δ-01（round 双口径——§3.3 改取 state.Round，去 +1 残留）；F3/Δ-02（Panic 快照收集后合并——IReadOnlyList 无 Add / foreach 中 Add 抛异常）；F2/Δ-03（Amygdala 直读——48 W-active 节点，c_loop_limbic 代理双重计数废弃，B12 修正）；F4/Δ-08（T_SAN 判定序——SAN==0 最先）；F5（双步衰减语义注明——事件 Step 含衰减 + Phase 1 纯衰减 = 跨回合连续时间步进；events 锚点为注入瞬间值，flow 层回合末锚点经探针实测补——实现期探针）；F9/Δ-07（miss 契约正常域限定）；Δ-04（History internal AddTurnResult）；Δ-05（AC-2 衰减锚点拆两行——baseline 恒等 + 非 baseline 严格靠近）；Δ-06（target 定义——Participants[slot.TargetId]）；Δ-07 并入 F9；F7（IsOver null 契约）；Δ-09（伪码 CheckEnd 残留清理）；Δ-10（AC-7 两窗口构造） | Δ审计（2❌ + 6⚠️ + 3ℹ️ 去重） | 终审确认 |
+| v1.2 | 2026-08-14 | Δ审计（3 专家 + 对抗验证，30 发现 → 20 CONFIRMED）修复：F1/Δ-01（round 双口径——§3.3 改取 state.Round，去 +1 残留）；F3/Δ-02（Panic 快照收集后合并——IReadOnlyList 无 Add / foreach 中 Add 抛异常）；F2/Δ-03（Amygdala 直读——48 W-active 节点，c_loop_limbic 代理双重计数废弃，B12 修正）；F4/Δ-08（T_SAN 判定序——SAN==0 最先）；F5（双步衰减语义注明——事件 Step 含衰减 + Phase 1 纯衰减 = 跨回合连续时间步进；events 锚点为注入瞬间值，回合末锚点探针实测）；F9/Δ-07（miss 契约正常域限定，并入 F9 处置）；Δ-04（History internal AddTurnResult）；Δ-05（AC-2 衰减锚点拆两行——baseline 恒等 + 非 baseline 严格靠近）；Δ-06（target 定义——Participants[slot.TargetId]）；F7（IsOver null 契约）；Δ-09（伪码 CheckEnd 残留清理）；Δ-10（AC-7 两窗口构造 + B10 同步） | Δ审计（2❌ + 6⚠️ + 3ℹ️ 去重） | 终审确认 |
 
 ---
 *创建: 2026-08-14 | 更新: 2026-08-14 | 版本: v1.2*
