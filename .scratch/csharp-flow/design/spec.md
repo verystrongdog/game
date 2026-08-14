@@ -1,6 +1,6 @@
 # csharp-flow — 实现规格
 
-> L3 实体（CombatState）+ L4 流程（TurnManager 五阶段管线 + ActionResolver 行动分发 + NpcSalience demo 行动选择）编排层。消费全部 L2 引擎组件（WcDynamics/ToneUpdater/CstcGating/SpeedScoreCalculator/DamageCalculator/EventProcessor），把回合战斗流程 §四 五阶段管线落地为可运行引擎。版本: v1.1
+> L3 实体（CombatState）+ L4 流程（TurnManager 五阶段管线 + ActionResolver 行动分发 + NpcSalience demo 行动选择）编排层。消费全部 L2 引擎组件（WcDynamics/ToneUpdater/CstcGating/SpeedScoreCalculator/DamageCalculator/EventProcessor），把回合战斗流程 §四 五阶段管线落地为可运行引擎。版本: v1.2
 
 ## 一、范围与依赖
 
@@ -33,6 +33,8 @@ public sealed class CombatState
     public IReadOnlyList<int> Teams { get; }       // teams[p] == teams[q] ⇔ p、q 同队（审计 E1 修复：D1/D2 分流与结束条件的数据源）
     public int Round { get; internal set; }        // internal set——TurnManager 每回合递增（审计 E6 修复）
     public IReadOnlyList<TurnResult> History { get; }
+    // 追加方法（内部——Δ审计 Δ-04 修复：IReadOnlyList 无 Add，伪码 state.History.Add 需显式 API）
+    internal void AddTurnResult(TurnResult result);
     public IReadOnlyList<float[]> SPending { get; } // per-participant float[69]：s 累计槽（Phase 4 累加、Phase 1 注入后清零；IReadOnlyList 集合只读——审计 I3 修复）
 }
 ```
@@ -82,15 +84,15 @@ public static class NpcSalience
 
 | 行动 | 通道（审计 W5 补声明） | salience 节点 | role / gate |
 |------|----------------------|---------------|-------------|
-| physical_attack | M1 | Precentral（WC a）+ **Putamen 代理 = a_SD1_somatic**（plan §十三-4 同款代理） | attack_physical / somatic |
+| physical_attack | M1 | Precentral（WC a）+ **Putamen 代理 = a_SD1_somatic**（plan §十三-4 同款代理——Putamen 无 WC a） | attack_physical / somatic |
 | mental_attack | Broca | rostralmiddlefrontal + parsopercularis + caudalanteriorcingulate（均 WC 节点） | attack_mental / cognitive |
-| defend | M1 | Insula（WC a）+ **Amygdala 代理 = c_loop_limbic**（limbic 环路输入均值） | defend / limbic |
+| defend | M1 | **Insula + Amygdala（均 WC 节点直读 a(t)——v1.2 修正（Δ审计 F2/Δ-03）：Amygdala 是 48 W-active 节点之一（运行时状态模型 §4.1），有真实 a(t)；原 c_loop_limbic 代理会造成 limbic CI 双重计数** | defend / limbic |
 
 - Salience 公式（NPC AI §3.2/§3.3）：`Salience(skill) = mean(节点值) × gate_bonus(role) × (1 + tone_bias(role))`
   - `gate_bonus(role)`：attack_physical → gates.Somatic；attack_mental → gates.Cognitive；defend → gates.Limbic（perceive/support bypass=1.0——demo 无此二行动）
   - `tone_bias(role) = Σ_t w_t(role) × (tone_t − baseline_t)`（NPC AI §3.3 权重表，§四；baseline=(0.3,0.4,0.5,0.5) 常量——**demo 简化**，NPC AI §4.1 7 参数化性格偏移留全量）
 - **目标选择**（[NEW] demo 简化）：第一个异队参与者（`Teams[p] ≠ Teams[selfIndex]`）——1v1 场景下即对方。多目标 argmax 竞争留 Affordance Competition 全量。
-- **选择**（plan §4.8）：demo 固定 Softmax（杂兵模板）——`P(skill) = exp(Salience/T) / Σ exp(...)`，`T = T_base + T_SAN`；T_SAN 分段（NPC AI §3.4 正典）：`SAN% ≥ 60% → +0`（最确定） / `30-59% → +0.10`（中等噪声） / `< 30% → +0.30`（恐慌高噪声） / `= 0 → T=∞ 均匀随机`（思维断裂——直接均匀抽，不经 Softmax，防 exp(0/∞) 数值问题）。抽样消费 ctx.Rng。
+- **选择**（plan §4.8）：demo 固定 Softmax（杂兵模板）——`P(skill) = exp(Salience/T) / Σ exp(...)`，`T = T_base + T_SAN`；T_SAN 分段（NPC AI §3.4 正典，**判定序显式化——v1.2 修正（Δ审计 F4/Δ-08）：`SAN == 0` 必须先于 `<30%` 判定，否则 =0 落入 +0.30 档**）：`if SAN == 0 → T=∞ 均匀随机`（思维断裂——直接均匀抽，不经 Softmax，防 exp(0/∞) 数值问题）/ `else if SAN < 30% → +0.30`（恐慌高噪声） / `else if SAN < 60% → +0.10`（中等噪声） / `else → +0`（最确定）。抽样消费 ctx.Rng。
 - 空声明（等待）不产出：三候选必有 winner（Softmax 全正概率）——demo 无等待语义（Q：NpcSalience 不产生 (null,null)——玩家可）。
 
 ### 3.3 ActionResolver（Flow/）
@@ -103,7 +105,7 @@ public sealed class ActionResolver
 }
 ```
 
-- 职责：Phase 4 声明→响应→结算 dispatch（plan §5.3）。**纯函数**：只读 state，产事件列表，不修改实体状态（框架 D1——状态应用由 TurnManager 完成）。事件字段装客观结果（types D4）。**签名修复（审计 E2）：actorIndex 显式传入（CombatEvent 构造器强制 ActorId/Round；round 取 state.Round + 1）**。
+- 职责：Phase 4 声明→响应→结算 dispatch（plan §5.3）。**纯函数**：只读 state，产事件列表，不修改实体状态（框架 D1——状态应用由 TurnManager 完成）。事件字段装客观结果（types D4）。**签名（审计 E2）：actorIndex 显式传入（CombatEvent 构造器强制 ActorId/Round；round 取 state.Round——StepRound 顶部已递增（E6），v1.2 修正：原「+1」为 Phase 末递增时代的残留，Δ审计 F1 双口径矛盾）**。
 - **链式基准（审计 E8/W3 修复）**：内部维护局部 hp/san 游标（初值 = state 当前值）；每通道结算后游标更新（`hp = Round1(hp − dealt)`），**后事件的 Before/After 字段基于前事件后的游标**——双通道同目标（M1 物理 + Broca 精神）链式正确，终态 = 两伤害叠加。resolver 仍为纯函数（局部状态不落实体）。
 - **通道-动作配对校验（审计 W9/W4 修复）**：回合战斗流程 §2.1 定义通道归属——M1 ∈ {PhysicalAttack, Defend}、Broca ∈ {MentalAttack}。违规（M1=MentalAttack、Broca=PhysicalAttack/Defend）→ ArgumentException（比静默未定义好；IsValidChannelUsage 只锁 Broca=Defend，本校验为完整配对锁）。
 - 内部流程（每通道按 Order 序）：
@@ -125,7 +127,7 @@ public sealed class TurnManager
 ```
 
 - 职责：五阶段回合管线编排（plan §5.2 + 回合战斗流程 §四 + 运行时状态模型 §7.1），每步调 L2 组件 + state.Apply。产 TurnResult（Round + 全部事件 + 快照）。IsOver：§5.5 结束判定（实例方法，用 `_cal.MaxRounds`）。
-- 异常契约：构造 null → ArgumentNullException；StepRound 参数 null → ArgumentNullException。
+- 异常契约：构造 null → ArgumentNullException；StepRound 参数 null → ArgumentNullException；**IsOver(state) 参数 null → ArgumentNullException（v1.2 修正——Δ审计 F7：新拍板 API 的 null 契约补全）**。
 - 确定性：同种子同输入（含 provider 行动序列）→ 逐位同 TurnResult。
 
 ### 3.5 处理流程（伪码，实现逐字遵循）
@@ -164,23 +166,28 @@ StepRound(state, ctx):
       state.ApplyEvents(evs)                                      #     HP/SAN = 事件字段（搬运）
       if action 含 M1=Defend: state.ApplyDefense(p, true, 1)      #     防御标记（§5.2）
       # Q4=A + 审计 E5/F3/W1 修复：Panic 跨越检测——逐伤害事件判定（每事件用其 TargetSanBefore/After），
-      # 跨越（old ≥ 0.30f×SanMax ∧ new < 0.30f×SanMax）→ 生产 StatusChangeEvent(Panic) 并**追加到 evs 同批**
-      for ev in evs: if ev is MentalDamageEvent me && 跨越(me.TargetSanBefore, me.TargetSanAfter, me.TargetSanMax):
-          evs.Add(StatusChangeEvent(round, me.TargetId, me.TargetId) { Kind=Panic, Entered=true,
-              SanBefore=me.TargetSanBefore, SanAfter=me.TargetSanAfter, SanMax=me.TargetSanMax })
-      result = eventProcessor.ProcessEvents(evs, state.Participants, state.Teams)   # 5. δ/s 派生（teams 来自 state——审计 E1 修复）
+      # 跨越（old ≥ 0.30f×SanMax ∧ new < 0.30f×SanMax）→ 生产 StatusChangeEvent(Panic) 并入同批。
+      # v1.2 修正（Δ审计 F3/Δ-02）：**快照收集后合并**——遍历不可变快照（evs 副本），Panic 收集到独立列表，
+      # 合并为 evsAll = evs + panics（不修改原集合——IReadOnlyList 无 Add / foreach 中 Add 抛异常）
+      panics = []
+      for ev in evs.ToArray():                                    # 快照遍历
+          if ev is MentalDamageEvent me && 跨越(me.TargetSanBefore, me.TargetSanAfter, me.TargetSanMax):
+              panics.Add(StatusChangeEvent(round, me.TargetId, me.TargetId) { Kind=Panic, Entered=true,
+                  SanBefore=me.TargetSanBefore, SanAfter=me.TargetSanAfter, SanMax=me.TargetSanMax })
+      evsAll = evs.Concat(panics).ToArray()                       # 同批一次 ProcessEvents（B4+C1 Σδ 一次 Step）
+      result = eventProcessor.ProcessEvents(evsAll, state.Participants, state.Teams)   # 5. δ/s 派生（teams 来自 state——审计 E1 修复）
       for p2: state.ApplyTone(p2, result.States[p2].Tone)
       for p2: state.AccumulateS(p2, result.SensoryAccum[p2])
-      events.AddRange(evs)
+      events.AddRange(evsAll)
       if state.Participants[p].Hp <= 0f:                           # 6. HP=0 → 移除队列（跳过剩余窗口）
           downedEv = StatusChangeEvent(round, p, p) { Kind=Downed, Entered=true }
           dResult = eventProcessor.ProcessEvents([downedEv], state.Participants, state.Teams)  # D 广播实时
           ApplyTone/AccumulateS 同上
           events.Add(downedEv)
 
-  # Phase 5: 回合收束
-  state.History.Add(new TurnResult(round, events, state.Participants))
-  return turnResult（含 events——IsOver 由调用方轮询）
+  # Phase 5: 回合收束（IsOver 由调用方轮询——v1.2 清理 CheckEnd 残留措辞，Δ-09）
+  state.AddTurnResult(new TurnResult(round, events, state.Participants))
+  return 上述 TurnResult
 ```
 
 ## 四、枚举与常量
@@ -198,6 +205,8 @@ StepRound(state, ctx):
 ## 五、交叉引用约束（管线规则）
 
 ### 5.1 事件生产（ActionResolver 内，csharp-events spec §一 承接）
+
+**target 定义（v1.2 修正——Δ审计 Δ-06：ActionSlot.TargetId 语义由 Flow 层定义）**：`target = state.Participants[slot.TargetId]`（越界 → ArgumentOutOfRangeException）；双通道各自独立目标（M1 打 A、Broca 骂 B——回合战斗流程 §2.2）。
 
 **物理攻击**（baseDamage 消费 `cal.BasePhysicalDamage`=4、weaponBonus=0——审计 W7 修复：不写死字面量）：
 
@@ -217,7 +226,10 @@ force_mod = clamp(DA_SNc − baseline_SNc, 0, 0.5)              （plan §六，
     Hit = false；DamageDealt = 0f；DamageBlocked = damage（完整伤害——damage calc AC-5「miss 仍返回完整伤害」）
     IncomingDamage = DamageBlocked（= dealt + blocked = 0 + damage，契约恒等）
     TargetHp* 同上（HP 不变——miss 无伤害，After == Before）
-    （承受者 B2 m=blocked/incoming=1.0 恒发——events AC-3 锚点路径可达）
+    （承受者 B2 m=blocked/incoming=1.0 恒发——events AC-3 锚点路径可达；
+    **v1.2 表述修正（Δ审计 F9/Δ-07）：正常域（gate>0）下 blocked==incoming>0 恒成立；
+    gate=0 边角 damage=0 → blocked=incoming=0，字面「>0」不成立——events §5.3.3 0/0→NaN 天然 skip 防御覆盖，
+    行为安全；「契约恒等」限定正常域**）
 ```
 
 **精神攻击**（baseDamage 消费 `cal.BaseMentalDamage`=2、endurance 消费 `cal.EndurancePassivePenalty`=1——审计 W7 修复）：
@@ -276,16 +288,16 @@ enemySanRatio = target.San / target.SanMax
 | AC | 验收标准 | 锚点/断言 |
 |----|---------|-----------|
 | AC-1 | CombatState 创建 + 静息初始化 | Create 后：WC = 静息不动点（30 回合 trace 与 M1 实测一致：active 48 节点 ∈ [0.535174, 0.771229]，排除节点 σ(b_j)；对齐 csharp-tone AC-15 方法）；tone = baseline（= 输入值）；SPending 全零；Round=0；History 空；Teams 与输入一致；teams.Count≠initial.Count → ArgumentException |
-| AC-2 | Phase 1 情境更新全链 | 零事件回合 StepRound 后：a 更新（WcDynamics 输出）、gurney/gates/salience 更新（CstcGating 输出）、**tone 纯衰减一步（无事件参与者 tone 向 baseline 靠近——审计 E9 锚点）**、SPending 保持全零（零事件无累计——审计 W8 表述修正） |
+| AC-2 | Phase 1 情境更新全链 | 零事件回合 StepRound 后：a 更新（WcDynamics 输出）、gurney/gates/salience 更新（CstcGating 输出）、SPending 保持全零（零事件无累计——审计 W8 表述修正）。**tone 衰减锚点（v1.2 修正——Δ审计 Δ-05：首回合 tone=baseline → Step(δ=0)=baseline，「靠近」不可观测）**：① baseline 输入 → tone 逐位不变（衰减恒等）；② 注入回合后（tone ≠ baseline，如 A1 后 VTA≈0.689）→ 下一零事件回合 → `|tone' − baseline| < |tone − baseline|`（严格不等） |
 | AC-3 | Phase 3 速度重算 | 同 RNG 种子 → order 确定性；首回合（静息状态）三分量 = 静息值（SpeedScoreCalculator 首回合无特判——静息输入自然给出）；防御中执行分含 M1SustainPenalty；Hp≤0 参与者不参与排序 |
 | AC-4 | 物理攻击完整链 | 注入固定行动（IActionProvider）：攻击者 → PhysicalDamageEvent 字段全填（契约 IncomingDamage == Dealt + Blocked 逐位）；HP = TargetHpAfter（搬运）；攻击者 tone VTA 上升（A1 δ）；承受者 tone NE↑5HT↓（B1）；s[Postcentral] > 0；**miss → dealt=0 ∧ blocked==incoming>0（审计 E2 锚点）+ 承受者 B2 5HT↑（m=1.0）** |
 | AC-5 | 精神攻击完整链 | 注入 mental_attack：MentalDamageEvent 字段全填；SAN = TargetSanAfter；HP 含 HpDamage 成分；A4/B4 tone 模式；**跨越 30% → Panic 事件同批 + C1 一次 Step（Σδ 叠加）** |
 | AC-6 | 防御生命周期 | 声明 Defend → IsDefending=true + DefendCd=1；目标防御中物理伤害减半（DamageDealt 精确值）；下回合自己窗口开始 → IsDefending=false + DefendCd=0；防御中 Broca 精神攻击可用（M1=Defend + Broca=MentalAttack 合法）；防御 + 精神攻击同目标 → 链式终态（HP/SAN 双扣） |
-| AC-7 | Panic 跨越事件生产（Q4=A） | SAN 扣减跨越 30%（old≥18 ∧ new<18，SanMax=60）→ StatusChangeEvent(Panic) 生产 + C1 事件（tone 变化）；未跨越（new=18 严格 / 治疗 / ΔSAN=0）→ 不生产；**逐事件基准：双通道两次扣减各自判定（审计 W3 裁决）** |
+| AC-7 | Panic 跨越事件生产（Q4=A） | SAN 扣减跨越 30%（old≥18 ∧ new<18，SanMax=60）→ StatusChangeEvent(Panic) 生产 + C1 事件（tone 变化）；未跨越（new=18 严格 / ΔSAN=0）→ 不生产；**逐事件基准（审计 W3 裁决，v1.2 表述修正——Δ审计 Δ-10：W9 配对校验下单窗口至多一次 SAN 扣减（仅 Broca=MentalAttack），「两次扣减」由两窗口/两攻击者构造；治疗分支 demo 不可达（3 基础行动无治疗）** |
 | AC-8 | Downed 生产 + 队列移除 | HP=0 结算 → StatusChangeEvent(Downed) 生产 + D 广播实时生效（存活观察者 tone 变化）；**窗口前检查：被他人击杀的参与者轮到窗口时跳过（不 Tick/GetAction/Resolve——审计 E7/F4 锚点）** |
 | AC-9 | 结束条件 | 一方全灭（Hp≤0 ∨ San≤0 同队全员——审计 W1 双口径）→ IsOver=true；回合上限 50 → IsOver=true；IsOver 为 TurnManager 实例方法（存在性断言） |
 | AC-10 | TurnResult 打包 | Round 正确（state.Round 递增）；Events 全量（含 Phase 4 全部 + Panic + Downed）；ParticipantSnapshots = 回合末状态；History 追加 |
-| AC-11 | NpcSalience | 3 候选 salience 计算（节点均值 × gate × (1+tone_bias)；Putamen/Amygdala 环路代理）；tone_bias 按权重表（attack_physical (0,+0.3,+0.5,−0.3)）；Softmax 归一（ΣP=1）；T_SAN 分段（≥60%/30-59%/<30% 对应 0/+0.10/+0.30——审计 I1 措辞统一）；SAN=0 均匀随机（同种子确定性）；目标 = 第一个异队参与者（selfIndex + Teams） |
+| AC-11 | NpcSalience | 3 候选 salience 计算（节点均值 × gate × (1+tone_bias)；Putamen 代理 a_SD1_somatic；Insula/Amygdala 直读）；tone_bias 按权重表（attack_physical (0,+0.3,+0.5,−0.3)）；Softmax 归一（ΣP=1）；**T_SAN 判定序（v1.2 修正——Δ审计 F4/Δ-08）：SAN==0 最先 → 均匀随机（不经 Softmax，同种子确定性）；<30% → +0.30；<60% → +0.10；≥60% → +0**；目标 = 第一个异队参与者（selfIndex + Teams） |
 | AC-12 | 确定性 | 同种子 + **相同初始 state（每次重新 Create）** + 相同 provider 序列 → 连续 5 次完整战斗逐位同（审计 W2 表述修正：StepRound 推进 state，非"同输入重复调用"）；SPending 经只读访问器不可替换集合（审计 I3） |
 | AC-13 | 异常契约 | 构造/参数 null → ArgumentNullException；通道-动作配对违规（M1=Mental、Broca=Physical/Defend）→ ArgumentException（审计 W9 扩展）；actorIndex ∉ [0, Count) → ArgumentOutOfRangeException |
 | AC-14 | MaxRounds L2 类型变更回执（审计 F5/W6） | CalibrationConfig.MaxRounds == 50（int）；现有 types 测试零改动在全量 test run 通过；types spec 变更日志 🔧 行（结转 #1） |
@@ -317,7 +329,7 @@ enemySanRatio = target.San / target.SanMax
 | B9 | tone baseline 常量 (0.3,0.4,0.5,0.5)（审计 W6 声明） | tone_bias/force_mod 基准；NPC AI §4.1 7 参数化性格偏移留 Affordance Competition 全量 |
 | B10 | Panic 逐事件基准检测（审计 W3 裁决） | C1「每次跨越」正典字面；双通道两次扣减各自判定（同批 Σδ 叠加一次 Step） |
 | B11 | 通道-动作配对完整校验（审计 W9/W4 修复） | 回合战斗流程 §2.1 通道归属（M1∈{Physical,Defend}、Broca∈{Mental}）；IsValidChannelUsage 只锁 Broca=Defend，本校验补全 |
-| B12 | salience 节点 subcortical 代理（审计 W5 修复） | Putamen→a_SD1_somatic、Amygdala→c_loop_limbic（plan §十三-4 同款代理）；salience 只取有 WC a 的值 |
+| B12 | salience 节点取值（审计 W5 修复 + v1.2 修正——Δ审计 F2/Δ-03） | **仅 Putamen 需代理**（→a_SD1_somatic，plan §十三-4 同款；Putamen 无 WC a）；Insula/Amygdala 均 W-active 节点直读 a(t)（Amygdala 是 48 活跃节点之一——运行时状态模型 §4.1；原 c_loop_limbic 代理会 limbic CI 双重计数，已废弃） |
 
 ## 变更日志
 
@@ -325,7 +337,8 @@ enemySanRatio = target.San / target.SanMax
 |------|------|------|------|----------|
 | v1.0 | 2026-08-14 | 初稿 | 任务issue 01 | 全量审计 |
 | v1.1 | 2026-08-14 | 全量审计（3 专家 + 对抗验证，53 发现 → 45 CONFIRMED）修复：E1（teams 进 CombatState——Teams 属性 + Create 参数）；E2（miss 字段契约——dealt=0 ∧ blocked=incoming）；E3（Resolve 签名 +actorIndex）；E4（NpcSalience +selfIndex）；E5（Panic 生产入伪码——逐事件基准 + 同批 ProcessEvents）；E6（Round 递增显式化）；E7（Phase 3/4 HP≤0 过滤）；E8（链式基准——resolver 局部游标）；E9（Phase 1 纯衰减步——events §5.5.3 落地）；W1（SAN=0 结束口径）；W3（ApplyEvents 补 API）；W4（IsOver 实例方法拍板）；W5（行动→通道映射 + subcortical 代理）；W6（baseline 常量声明）；W7（常量消费——BasePhysicalDamage/BaseMentalDamage/EndurancePassivePenalty）；W9（通道-动作配对校验）；F5/W6（MaxRounds L2 类型变更声明 + AC-14 回执）；AC-2/AC-11/AC-12 锚点表述修正；偏差 B8-B12 新增 | 全量审计（2❌×多专家 + 9⚠️ + 3ℹ️ 去重） | Δ审计 |
+| v1.2 | 2026-08-14 | Δ审计（3 专家 + 对抗验证，30 发现 → 20 CONFIRMED）修复：F1/Δ-01（round 双口径——§3.3 改取 state.Round，去 +1 残留）；F3/Δ-02（Panic 快照收集后合并——IReadOnlyList 无 Add / foreach 中 Add 抛异常）；F2/Δ-03（Amygdala 直读——48 W-active 节点，c_loop_limbic 代理双重计数废弃，B12 修正）；F4/Δ-08（T_SAN 判定序——SAN==0 最先）；F5（双步衰减语义注明——事件 Step 含衰减 + Phase 1 纯衰减 = 跨回合连续时间步进；events 锚点为注入瞬间值，flow 层回合末锚点经探针实测补——实现期探针）；F9/Δ-07（miss 契约正常域限定）；Δ-04（History internal AddTurnResult）；Δ-05（AC-2 衰减锚点拆两行——baseline 恒等 + 非 baseline 严格靠近）；Δ-06（target 定义——Participants[slot.TargetId]）；Δ-07 并入 F9；F7（IsOver null 契约）；Δ-09（伪码 CheckEnd 残留清理）；Δ-10（AC-7 两窗口构造） | Δ审计（2❌ + 6⚠️ + 3ℹ️ 去重） | 终审确认 |
 
 ---
-*创建: 2026-08-14 | 更新: 2026-08-14 | 版本: v1.1*
+*创建: 2026-08-14 | 更新: 2026-08-14 | 版本: v1.2*
 *关联: [任务issue 01](issues/01-flow-spec.md), [plan §五](../../../csharp-engine/design/plan.md), [回合战斗流程](../../../../规则/回合战斗流程.md), [NPC AI 行为模型](../../../../规则/技能树系统/NPC%20AI%20行为模型.md), [运行时状态模型](../../../../规则/技能树系统/运行时状态模型.md)*
