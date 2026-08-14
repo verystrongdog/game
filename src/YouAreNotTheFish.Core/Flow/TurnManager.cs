@@ -20,6 +20,17 @@ public sealed class TurnManager
     private readonly SpeedScoreCalculator _speedScore;
     private readonly CstcGating _cstcGating;
     private readonly WMatrix _wMatrix;
+    private (int Participant, CombatAction Action)[] _lastActions = [];
+    private int[] _lastOrder = [];
+
+    /// <summary>
+    /// 上一回合行动声明（决策 D1——console 渲染消费；StepRound 末尾写入，下回合覆盖）。
+    /// Flow 层属性，非 L2 类型变更（types 交付物不动）。
+    /// </summary>
+    public IReadOnlyList<(int Participant, CombatAction Action)> LastRoundActions => _lastActions;
+
+    /// <summary>上一回合行动顺序（决策 D1——console 渲染消费；StepRound 末尾写入，下回合覆盖）。</summary>
+    public IReadOnlyList<int> LastRoundOrder => _lastOrder;
 
     /// <summary>
     /// 构造。
@@ -94,6 +105,7 @@ public sealed class TurnManager
 
         // ---- Phase 4: 按序执行 ----
         var events = new List<CombatEvent>();
+        var actions = new List<(int Participant, CombatAction Action)>();
         foreach (var p in order)
         {
             if (state.Participants[p].Hp <= 0f)
@@ -101,6 +113,7 @@ public sealed class TurnManager
 
             state.TickWindow(p); // 0. 窗口开始：CD tick + IsDefending=false（Q3）
             var action = _actionProvider.GetAction(p, state, ctx); // 1. 行动选择
+            actions.Add((p, action)); // 决策 D1：行动声明记录（console 渲染消费）
 
             var evs = _resolver.Resolve(p, action, state, ctx); // 2-4. 声明→响应(stub)→结算（链式基准）
             state.ApplyEvents(evs); // HP/SAN = 事件字段（搬运）
@@ -158,6 +171,8 @@ public sealed class TurnManager
         }
 
         // ---- Phase 5: 回合收束 ----
+        _lastOrder = order; // 决策 D1：行动序记录（console 渲染消费）
+        _lastActions = actions.ToArray();
         var turnResult = new TurnResult(round, events, state.Participants);
         state.AddTurnResult(turnResult);
         return turnResult;

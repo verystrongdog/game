@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\YouAreNotTheFish.Core\YouAreNotTheFish.Core.csproj" />
+    <ProjectReference Include="..\YouAreNotTheFish.Console\YouAreNotTheFish.Console.csproj" />
   </ItemGroup>
 
 </Project>
