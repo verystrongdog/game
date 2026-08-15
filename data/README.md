@@ -1,6 +1,6 @@
 # 数据层
 
-> 结构化数据文件（JSON），供 Python 模拟脚本直接读取。md 文档负责设计推导和"为什么"，JSON 负责"是什么"。
+> 结构化数据文件（JSON），供 C# 引擎（`src/YouAreNotTheFish.Core`）与 Python 工具直接读取。md 文档负责设计推导和"为什么"，JSON 负责"是什么"。🔧 2026-08-14 Grilling #24 C-2：重写索引——旧版只列已废弃的态度/情绪/行为/卡牌文件，未提及引擎实际消费的 5 个数据文件。
 
 ---
 
@@ -17,107 +17,106 @@
 ## 一、架构原则
 
 ```
-md 文档（设计层）          JSON 文件（数据层）          Python 脚本（验证层）
+md 文档（设计层）          JSON 文件（数据层）          C# 引擎 / Python 工具（消费层）
 ─────────────────         ─────────────────           ─────────────────
-为什么是这个参数           参数的具体数值               import json 直接读
-文献出处和推导过程          字段含义和取值范围           数值模拟验证
-讨论和废弃原因             纯数据结构，无语义歧义        蒙特卡洛/CTRNN
+为什么是这个参数           参数的具体数值               GameDataLoader.LoadAll → record
+文献出处和推导过程          字段含义和取值范围           数值模拟验证 / 数据驱动管线
+讨论和废弃原因             纯数据结构，无语义歧义        Unity ScriptableObject 映射
 ```
 
 - **md 是 source of truth for design rationale**
 - **JSON 是 source of truth for parameter values**
-- 两者冲突时，以 md 为准（JSON 是导出格式，md 是原始设计文档）
+- **引擎消费路径**：`GameDataLoader.LoadAll(dataDir)` → `GameData`（5 record 聚合）→ 引擎模块（详见 [引擎数据关系规格](../规则/技能树系统/引擎数据关系规格.md)）
 - JSON 可被 Git diff（比 SQL dump 友好）
-- 未来 Unity 实装时，JSON → ScriptableObject 有成熟工具链
+- 未来 Unity 实装时，JSON → ScriptableObject 有成熟工具链（见引擎数据关系规格 §六）
 
 ---
 
 ## 二、文件索引
 
-| 文件 | 内容 | 规模 | 来源 |
+### 引擎消费（5 文件，正典）
+
+| 文件 | 内容 | 规模 | 来源 | 消费方 |
+|------|------|------|------|--------|
+| `brain_regions.json` | 50 解剖实体 + 19 细分 = **69 functional_id**（44 皮层 + 14 皮下 + 11 脑干；67 剖面 + 2 mirror_of），每区 16 字段含 function_profile | 69 regions | `规则/技能树系统/脑功能层级模型.md` | 全部引擎层（行序锚/τ/CSTC CI/坐标） |
+| `connectivity/tripartite_model.json` | 三体神经模型：51 图节点 + 4 种边（皮层-皮层 776 / 脑干广播 114 / CSTC 环路 47 / 特权通路 112） | 51 / 1049 边 | 脑功能层级模型 §二十（Grilling #26） | WMatrixBuilder / CorticalBias / CstcGating |
+| `connectivity/W_sensory.json` | 感官模态→解剖节点映射矩阵（6 模态 × 69 节点，二值） | 69×6 | `规则/技能树系统/运行时状态模型.md` §4.5（Grilling #34） | EventProcessor（s 打包）+ canonical 行序锚 |
+| `connectivity/situation_primitives.json` | 27 情境原型（RDoC 剖面 + 评估剖面 + 关键脑区） | 27 archetypes | `规则/核心机制.md` §六 | 正式情境系统（demo 未消费） |
+| `signal_types.json` | 信号类型受控词表（4 大类 × 18 子类） | 18 subtypes | 脑功能层级模型 §二十.8 | function_label / function_profile membership 校验 |
+
+### 支持文件
+
+| 文件 | 内容 | 规模 | 说明 |
 |------|------|------|------|
-| `emotions.json` | 15 情绪锚点 PAD 坐标 + 行为推力 + 激活驱动 | 15 条 | `情绪系统/PAD-情绪参考表.md` |
-| `drives.json` | 7 行为驱动完整参数（激活函数/θ/β/γ/φ/τ/病情扭曲） | 7 条 + 配置 | `行为系统/行为系统.md`, `态度系统/态度系统.md` |
-| `attitudes.json` | 90 种态度（情绪×驱动）的生成算法 + 行为输出 + 状态矩阵 | 90 条 | `态度系统/态度模型可视化.html` |
-| `emotion_cards.json` | 15 张情绪卡完整数据（打出效果/手牌压力/残留/获得条件/联动） | 15 条 | `卡牌系统/情绪卡模板.md`, `data/emotions.json` |
-| `cognition_cards.json` | 25 张认知卡完整数据（C⁵ 参数/CPM/效果类型/情绪扭曲/门控） | 25 条 | `卡牌系统/认知卡模板.md`, `data/drives.json` |
-| `behavior_cards.json` | 21 张行为卡完整数据（驱动归属/valence/AP/效果/悬停文案/联动） | 21 条 | `卡牌系统/行为卡模板.md`, `data/drives.json` |
+| `connectivity/region_name_map.json` | 69 functional_id 三层 ID 映射（fid → dk_name → zh_name） | 69 条目 | 🔧 2026-08-14 对齐 69（删 2 聚合体 + 补 STN） |
+| `connectivity/kroell14_networks.json` | Kroell 14 网络集合 | 14 | 技能生成/上下文判定 |
+| `connectivity/link_modulation_ceiling_v2.json` | 链路调制天花板 | — | 参考（旧链路体系） |
+| `term_registry.json` | 术语注册表（Grilling §3.0 基线数据源） | 134 条 | 设计期参考，非运行时数据 |
+
+### 参考数据（⚠️ 已废弃系统，保留为参数参考）
+
+| 文件 | 内容 | 说明 |
+|------|------|------|
+| `emotions.json` / `drives.json` / `attitudes.json` | 旧态度引擎 PAD/驱动/态度 | ⚠️ 态度引擎已废弃（2026-07-26），保留为参考 |
+| `emotion_cards.json` / `cognition_cards.json` / `behavior_cards.json` | 旧卡牌系统 | ⚠️ 卡牌体系已废弃（2026-07-11），保留为参数参考 |
 
 ---
 
 ## 三、数据关系图
 
 ```
-emotions.json (15)
-    │
-    ├── PAD (V, A, D) ──→ drives.json (7) 激活函数 g_i(PAD)
-    │                            │
-    │                            ├── θ_play, β, γ, φ, τ
-    │                            ├── drive_pole (RST)
-    │                            │
-    │                            ▼
-    └── B_raw ──────────→ attitudes.json (90)
-                             │
-                             ├── state: natural | forced | situational
-                             ├── behavior_output: (valence, intensity, autonomy)
-                             └── summary_matrix: 15×7 状态矩阵
+数据文件 ──GameDataLoader.LoadAll──→ GameData（5 record 聚合）
+  │
+  ├─ brain_regions.json (69 fid) ──→ τ 查表 / CSTC CI 解析 / game_xyz
+  ├─ tripartite_model.json (51节点+1049边) ──→ W 矩阵（皮层-皮层×特权通路） / b_j（脑干广播）
+  ├─ W_sensory.json (69×6) ──→ s(t) 打包（W_sensory × α）
+  ├─ situation_primitives.json (27) ──→ （正式情境选择，demo 未消费）
+  └─ signal_types.json (4×18) ──→ 词表校验
+
+三层因果链（运行时状态模型 §一）：
+  tone（脑干 4 标量）→ b_j → a(t)（WC 69 节点）→ c_loop → gate（CSTC 3 环路）→ 战斗结算
 ```
 
-**核心计算链：**
-```
-情绪 PAD → sigmoid → g_i (驱动激活) → 与 θ_play 比较 → 行为卡可用性/成本
-         ↘
-          B_raw = (V, |A|, D) → 与 drive_pole 混合 → 态度行为输出 B(t)
-```
+完整数据流见 [引擎数据关系规格](../规则/技能树系统/引擎数据关系规格.md) §二。
 
 ---
 
 ## 四、使用方式
 
-### Python 模拟脚本
+### C# 引擎（正典路径）
+
+```csharp
+var data = GameDataLoader.LoadAll("data");   // 5 文件一次加载 → GameData
+var w = WMatrixBuilder.Build(data);          // W[69,69] + τ[69]
+var b = CorticalBias.Compute(tone, data);    // 脑干调制 69 维
+```
+
+### Python 工具
 
 ```python
 import json
 
-# 加载数据
-with open('data/emotions.json') as f:
-    emotions = json.load(f)
+with open('data/brain_regions.json') as f:
+    regions = json.load(f)['regions']
+print(len(regions))  # 69
 
-with open('data/drives.json') as f:
-    drives = json.load(f)
-
-with open('data/attitudes.json') as f:
-    attitudes = json.load(f)
-
-# 查某情绪 PAD
-fear = [e for e in emotions['emotions'] if e['id'] == 'fear'][0]
-print(fear['pad'])  # {'V': -0.854, 'A': 0.680, 'D': -0.414}
-
-# 查驱动激活公式
-reflex = [d for d in drives['drives'] if d['id'] == 'reflex'][0]
-print(reflex['activation']['sigmoid'])  # σ(2.0·max(0,A-0.3) + 1.5·max(0,0.5-D) - 0.5)
-
-# 遍历所有态度
-for a in attitudes['attitudes']:
-    if a['state'] == 'forced':  # 筛选硬解锁态度
-        print(f"{a['id']}: {a['behavior_output']}")
+with open('data/connectivity/tripartite_model.json') as f:
+    tri = json.load(f)
+print(len(tri['graph_nodes']))  # 51
 ```
-
-### 现有模拟脚本复用
-
-旧模拟脚本（sim_battle.py/sim_cog_evo.py 等）已废弃进垃圾桶（2026-08-03 #20）。新工具（tools/build_*/validate_*）从 `data/` 目录加载数据。
 
 ---
 
 ## 五、维护规则
 
 1. **JSON 是 md 的导出格式**：修改参数时，先改 md 文档中的推导和依据，再同步更新 JSON
-2. **JSON 字段只增不删**：加字段可以，删字段需要确认没有脚本依赖
+2. **JSON 字段只增不删**：加字段可以，删字段需要确认没有脚本/引擎依赖
 3. **所有数值参数标注来源**：JSON 中 `_source` 字段指明来源 md 文档
 4. **格式规范**：UTF-8 编码，2 空格缩进，`_` 前缀表示元数据字段
 5. **日期标注**：`_updated` 字段记录最后修改日期
+6. **计数一致性**：functional_id 主键数（69）必须与 `brain_regions.json` / `region_name_map.json` / `W_sensory.json` rows 三方一致——修改任一文件须同步其余（Grilling #24 D-1 确立）
 
 ---
 
-*创建: 2026-07-09*
-*关联: [00-项目总览](../项目总览.md), [01-核心机制](../规则/核心机制.md), [态度系统](../态度系统/态度系统.md), [情绪系统](../情绪系统/PAD-情绪参考表.md), [行为系统](../行为系统/行为系统.md)*
+*创建: 2026-07-09 | 更新: 2026-08-14（Grilling #24 C-2：索引重写为引擎 5 文件 + 废弃参考分区；D-1：region_name_map 对齐说明）*
+*关联: [项目总览](../项目总览.md), [核心机制](../规则/核心机制.md), [引擎数据关系规格](../规则/技能树系统/引擎数据关系规格.md), [脑功能层级模型](../规则/技能树系统/脑功能层级模型.md), [运行时状态模型](../规则/技能树系统/运行时状态模型.md)*

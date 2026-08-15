@@ -1,5 +1,5 @@
 {
-  "_description": "70 functional_id 三层 ID 映射表 (D25) — functional_id 唯一主键 (50 解剖实体 + 镜像变体) / dk_name 解剖映射(一对多) / zh_name 显示层",
+  "_description": "69 functional_id 三层 ID 映射表 (D25) — functional_id 唯一主键 (50 解剖实体 + 镜像变体) / dk_name 解剖映射(一对多) / zh_name 显示层。🔧 2026-08-14 Grilling #24 D-1 裁决：70→69——删除 #26 D6 已废弃聚合体 AmygdalaHippocampus/BasalGangliaIndirectPathway，补入 SubthalamicNucleus，与 brain_regions.json 对齐",
   "_rules": [
     "functional_id: 英文唯一主键 (D15 完整词拼接 + D25 消歧后缀)",
     "dk_name: DK 图谱解剖映射，多 functional_id 可共享一个 dk_name",
@@ -422,14 +422,6 @@
       "level": 1,
       "is_design_node": false
     },
-    "AmygdalaHippocampus": {
-      "zh_name": "杏仁核-海马",
-      "functional_id": "AmygdalaHippocampus",
-      "dk_name": "Amygdala",
-      "category": "subcortical",
-      "level": 1,
-      "is_design_node": false
-    },
     "HippocampusCA1": {
       "zh_name": "海马体 CA1",
       "functional_id": "HippocampusCA1",
@@ -473,14 +465,6 @@
     "Putamen": {
       "zh_name": "壳核",
       "functional_id": "Putamen",
-      "dk_name": "Putamen",
-      "category": "subcortical",
-      "level": 1,
-      "is_design_node": false
-    },
-    "BasalGangliaIndirectPathway": {
-      "zh_name": "基底节间接通路",
-      "functional_id": "BasalGangliaIndirectPathway",
       "dk_name": "Putamen",
       "category": "subcortical",
       "level": 1,
@@ -567,6 +551,14 @@
       "level": 0,
       "is_design_node": false,
       "hemisphere": "R"
+    },
+    "SubthalamicNucleus": {
+      "zh_name": "STN",
+      "functional_id": "SubthalamicNucleus",
+      "dk_name": null,
+      "category": "brainstem",
+      "level": 0,
+      "is_design_node": false
     }
   }
 }

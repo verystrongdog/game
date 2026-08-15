@@ -1,10 +1,16 @@
 #!/usr/bin/env python3
-"""构建 region_name_map.json — 70 条目三层 ID 映射表 (D25/D13/D15)
+"""构建 region_name_map.json — 三层 ID 映射表 (D25/D13/D15)
 
-功能: 为 50 解剖实体生成 functional_id（英文唯一主键）+ dk_name（解剖映射）+ zh_name（显示）
+⚠️ 已废弃（2026-08-14 Grilling #24 确认）：本工具已损坏无法运行（KeyError: 'A1'）——
+NAMING 表以 zh_name 为 key，但 #25 脑区数据反转后 brain_regions.json 的 regions 字典 key 已改为
+functional_id（zh_name 降为内部字段）；且读 bfb_region 字段（当前数据为 dk_name）。
+region_name_map.json 已于 2026-08-14 手工对齐到 69 条目（Grilling #24 D-1）。
+如未来需重建，应改为以 functional_id 为 key 重写。保留为历史参考。
+
+功能: 为解剖实体生成 functional_id（英文唯一主键）+ dk_name（解剖映射）+ zh_name（显示）
 输入: data/brain_regions.json
 输出: data/connectivity/region_name_map.json
-校验: functional_id 全局唯一、70 条目全覆盖、is_design_node 标记（2026-08-07 Grilling #25 后已全部移除）
+校验: functional_id 全局唯一、条目全覆盖、is_design_node 标记（2026-08-07 Grilling #25 后已全部移除）
 """
 import json
 import sys
@@ -61,42 +67,32 @@ NAMING = {
     '颞中回': 'MiddleTemporal',
     '颞极': 'TemporalPole',
     # ── 皮层下 (DK 名) ──
-    'BNST': 'BedNucleusStriaTerminalis',
     'NAcc壳': 'AccumbensShell',
     'NAcc核': 'AccumbensCore',
-    '下丘脑': 'Hypothalamus',
     '丘脑': 'Thalamus',
     '丘脑枕': 'ThalamusPulvinar',
     '伏隔核/NAcc': 'NucleusAccumbens',
     '小脑皮层': 'CerebellumCortex',
     '尾状核': 'Caudate',
     '杏仁核': 'Amygdala',
-    '杏仁核-海马': 'AmygdalaHippocampus',
     '海马体 CA1': 'HippocampusCA1',
     '海马体 CA3': 'HippocampusCA3',
     '纹状体基质': 'StriatumMatrix',
-    '缰核': 'Habenula',
     '腹侧纹状体': 'VentralStriatum',
     '苍白球': 'Pallidum',
-    '隔区': 'SeptalRegion',
     '壳核': 'Putamen',
-    '基底节间接通路': 'BasalGangliaIndirectPathway',
     # ── 脑干核团 (文献标准名完整词) ──
     'PAG': 'PeriaqueductalGray',
     'VTA': 'VentralTegmentalArea',
-    'VTA-NAcc': 'VentralTegmentalAreaNAccPathway',
     '上丘': 'SuperiorColliculus',
     '中缝正中核': 'MedianRapheNucleus',
     '中缝背核': 'DorsalRapheNucleus',
-    '反射环路·PAG→杏仁核': 'ReflexPAGAmygdala',
-    '反射环路·冻结反应': 'ReflexFreeze',
-    '反射环路·快速闪避': 'ReflexEscape',
-    '杏仁核-PAG': 'AmygdalaPAGPathway',
     '脑桥网状核': 'PontineReticularNucleus',
     '蓝斑': 'LocusCoeruleus',
     '蓝斑_R': 'LocusCoeruleusRight',
     '黑质致密部': 'SubstantiaNigraParsCompacta',
     '黑质致密部_R': 'SubstantiaNigraParsCompactaRight',
+    'STN': 'SubthalamicNucleus',
     # ── 白质通路 (Catani 图谱名或功能语义) ──
     'mPFC-杏仁核': 'MPFCAmygdalaPathway',
     'vmPFC-TPJ': 'VMPFCTPJPathway',
