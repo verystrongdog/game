@@ -84,7 +84,8 @@ public sealed record MentalDamageEvent : CombatEvent
     /// <summary>SAN 伤害。来源：plan §4.6。float（B5）。</summary>
     public float SanDamage { get; init; }
 
-    /// <summary>附带 HP 伤害（SAN=0 时转为 HP，核心机制心理伤害规则）。来源：plan §4.6。float（B5）。</summary>
+    /// <summary>附带 HP 伤害（HP 成分 = SAN 伤害×0.5 向下取至 0.1——基础行动设计 §四 / 核心机制 §4.3）。
+    /// 🔧 2026-08-14 Grilling #24 T-1 修正：原注释「SAN=0 时转为 HP，核心机制心理伤害规则」引用正典不存在的规则，已更正。</summary>
     public float HpDamage { get; init; }
 
     /// <summary>动机调制因子。来源：plan §4.6。</summary>

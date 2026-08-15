@@ -70,7 +70,7 @@ L5 Presentation      Unity（本阶段无）
 | ParticipantState | Types/ | 上述 91 floats + HP/HP_max/SAN/SAN_max + IsDefending + 忍耐主动CD + 防御CD | 修复 #2/#4 |
 | CombatAction | Types/ | `(M1Action?, BrocaAction?, order)` 声明结构；通道动作 = enum + payload | 修复 #3, 回合战斗流程 §2 |
 | CombatContext | Types/ | IRng + GameData + CalibrationConfig——只读上下文，**无**可变回合计数（归 CombatState） | 框架 memory |
-| WMatrix | Types/ | `float[69,69]` + τ[69] + fid→index 行序映射 | 运行时状态模型 §4.2 |
+| WMatrix | Types/ | `float[69,69]` + τ[69] + fid→index 行序映射 | 运行时状态模型 §4.3/§4.4（🔧 2026-08-14 Grilling #24 T-5：原引 §4.2 为有效节点分界，矩阵内容属 §4.3 W_norm/§4.4 τ） |
 | SpeedWeights | Types/ | w1/w2/w3 | 回合战斗流程 §3.1 |
 | LoopSalience | Types/ | c_loop[3] + DA_loop[3]（环路 salience 与 DA 混合值） | 运行时状态模型 §6.2/§6.3 |
 | TurnResult | Types/ | 回合结果：参与者快照 + DamageEvent/HealEvent/StatusChangeEvent/LinkGrowthEvent 事件列表（引擎输出） | 框架 memory 核心类型 §3.5 |
@@ -147,7 +147,7 @@ tone_t(t+Δ) = clip(baseline_t + δ_t + (tone_t(t) − baseline_t − δ_t) · e
 
 ### 4.5 SpeedScoreCalculator（方案B）
 
-暂停点已定方案B（2026-08-06 D4/D5）：`SpeedScoreCalculator`（纯数值）+ `TurnOrderBuilder`（排序 + coin-flip 破平）两个类；SpeedComponents.cs 为空占位文件（0 字节），SpeedComponents/SpeedWeights 两个 record 均在 Step 7 从零实现。
+暂停点已定方案B（2026-08-06 D4/D5）：`SpeedScoreCalculator`（纯数值）+ `TurnOrderBuilder`（排序 + coin-flip 破平）两个类；SpeedComponents.cs 原为空占位文件（0 字节），SpeedComponents/SpeedWeights 两个 record 已在 Step 7 从零实现（🔧 2026-08-14 Grilling #24 T-4：表述由"空占位"更新为"已实装"）。
 
 ```
 speed = w1 × 察觉 + w2 × 决断 + w3 × 执行          (w1=w2=w3=1/3 默认，回合战斗流程 §3.1)
@@ -343,11 +343,11 @@ Phase 4 声明→响应→结算 dispatch。响应窗口内容按 §一范围 st
 | 5 | csharp-tone | ToneUpdater + b_j | ✅ 已交付（2026-08-13）——解析解 + AC-1~16（24 测试），100/100 绿；M1 里程碑完成（§八）+ Euler 文档清扫（§十三-8） |
 | 6 | csharp-cstc | CstcGating | ✅ 已交付（2026-08-13）——115/115 绿；E1 迭代判据实测修正、迭代语义统一声明 |
 | 7 | csharp-speed | SpeedScoreCalculator + TurnOrderBuilder（含 2026-08-06 RED 用例） | ✅ 已交付（2026-08-13）——AC-1~15（25 测试），140/140 绿；静息三分量直算（B1 无特判） |
-| 8 | csharp-damage | DamageCalculator | 待开始 |
-| 9 | csharp-events | EventProcessor | 待开始 |
-| 10 | csharp-flow | CombatState + TurnManager + ActionResolver | 待开始 |
-| 11 | csharp-console | Console harness | 待开始 |
-| 12 | csharp-smoke | Smoke 集成测试 | 待开始 |
+| 8 | csharp-damage | DamageCalculator | ✅ 已交付（2026-08-14 盘点确认——178/178 绿；spec v1.1 + B7 E-1 裁决） |
+| 9 | csharp-events | EventProcessor | ✅ 已交付（2026-08-14 盘点确认——228/228 绿；spec v1.2.2） |
+| 10 | csharp-flow | CombatState + TurnManager + ActionResolver | ✅ 已交付（2026-08-14 盘点确认——261/261 绿；spec v1.2） |
+| 11 | csharp-console | Console harness | ✅ 已交付（2026-08-14 盘点确认——284/284 绿；spec v1.2） |
+| 12 | csharp-smoke | Smoke 集成测试 | ✅ 已交付（2026-08-14 盘点确认——294/294 绿；spec v1.2.1） |
 
 每 step 一个 feature：任务issue → spec → 审计 → sign-off → 工作issue → 自审（二层流水线）。Step 2 的 spec 同时建立引擎层 spec 模板（§七自检清单：数学公式逐项 vs 设计文档对照、边界值、确定性）。
 
@@ -423,6 +423,7 @@ Phase 4 声明→响应→结算 dispatch。响应窗口内容按 §一范围 st
 |------|------|------|------|
 | v1.0 | 2026-08-13 | 审计修订版——吸收 10 关键修复 + 13 重要改进 + 6 放行条件 | 2026-08-12 workflow 审计（有条件放行） |
 | v1.1 | 2026-08-13 | 再审计修正（3 专家 conditional）：§十二-4 虚构文档矛盾改为原计划修正、新增 §十二-8 分量归一化偏差、§十二-5 段号修正、补事件类型/LoopSalience/s_pending/方法签名、字段名对齐数据（cstc_roles 复数+CstcRole 枚举）、round [NEW]、σ 引用修正、范围表补 archetype、§十补 WMatrixBuilder/L0 用例、§十一补设计两次约束、§十三补 Euler 文档修订项 | 2026-08-13 workflow 再审计（审计条件 2） |
+| v1.2 | 2026-08-14 | step 表同步（Grilling #24 C-1 裁决）：step 8-12 由「待开始」更新为「✅ 已交付」——`git log` 证实 26 提交、2026-08-12~14 全部完成（csharp-smoke 闭合 294/294）。§十三 已闭合项（1/3/4/8）随各 spec 记录，本表不再重复标注。**E-1 裁决（Grilling #24）**：§4.6 物理 motivation 下界 0→−1（见 csharp-damage spec B7） | 2026-08-14 grilling 盘点（引擎数据层偏差清单 C-1） |
 
 ---
 *创建: 2026-08-13 | 更新: 2026-08-13*

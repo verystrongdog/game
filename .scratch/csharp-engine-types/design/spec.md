@@ -61,7 +61,7 @@
 | 同上（cognitive） | Cognitive | float[5] | §6.3 |
 | 同上（limbic） | Limbic | float[5] | §6.3 |
 
-- 群体索引 = `GurneyPopulation` 枚举序：0=SD1, 1=SD2, 2=STN, 3=GPe, 4=GPi。值域 [0,1]。
+- 群体索引 = `GurneyPopulation` 枚举序：0=SD1, 1=SD2, 2=STN, 3=GPe, 4=GPi。值域 [−1.5, 2.0]（🔧 2026-08-14 Grilling #24 T-2：原表体 [0,1] 已按 2026-08-13 step 6 裁决修正——§三 解析界、无 clamp）。
 - 环路顺序（Somatic/Cognitive/Limbic）与 `CstcLoop` 枚举的 Somatic/Limbic/Cognitive 序**不同**——本 spec 以显式命名字段消歧，不依赖枚举序（约束 C2）。
 
 ### 2.4 GateState
@@ -77,8 +77,8 @@
 | 文档符号 | 字段 | 类型 | 来源 |
 |---------|------|------|------|
 | 91 浮点（69+4+15+3） | Wc / Tone / Gurney / Gates | WcState / ToneState / GurneyState / GateState | §三 表尾"总计 91" |
-| HP / HP_max | Hp / HpMax | int | 审计修复 #2（原计划 91 浮点无血量） |
-| SAN / SAN_max | San / SanMax | int | 修复 #2 |
+| HP / HP_max | Hp / HpMax | float | 审计修复 #2；🔧 2026-08-14 Grilling #24 T-3：表体 int → float（一位小数结算 Q3=D，csharp-damage spec §2.2 B5 承接——原表体未同步） |
+| SAN / SAN_max | San / SanMax | float | 修复 #2；同上 float |
 | 防御状态 | IsDefending | bool | 修复 #4；回合战斗流程 §7.1（持续到下回合自己窗口） |
 | 忍耐主动 CD | EnduranceActiveCd | int | 基础行动设计 §四（−2 CD2 占 Broca）；回合战斗流程 §9.1（自己窗口起点递减） |
 | 防御 CD | DefendCd | int | 回合战斗流程 §9.1（CD=1：暴露一轮后才能再防） |

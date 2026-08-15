@@ -73,7 +73,7 @@ CalcPhysicalDamage(baseDamage, weaponBonus, forceMod, motivationMod, gateBonus, 
 ```
 s1 = (float)(baseDamage + weaponBonus)                    // int 加法精确，后转 float
 cf = clamp(forceMod, 0, ForceCap)                          // 负值归零——沮丧不降伤害（plan §4.6 字面）
-cm = clamp(motivationMod, 0, MotivationCap)
+cm = clamp(motivationMod, −1, MotivationCap)               // 🔧 E-1 裁决 2026-08-14：下界 0→−1（与精神/flow producer 口径统一；沮丧降伤害）
 s2 = (1f + cf) + cm                                        // 左结合
 s3 = s1 × s2
 s4 = s3 × gateBonus
@@ -167,7 +167,7 @@ Floor1(x) = MathF.Floor(x × 10f) / 10f                        // HP 成分量�
 | AC-1 | 物理基线 | (4, 0, 0, 0, 1.0f, false) + roll<0.75 → damage **4.0f** 逐位、hit true |
 | AC-2 | 物理全乘区（一位小数核心锚） | (4, 0, 0.5, 1.0, 1.0f, false) → **10.0f** 逐位（任务issue 实测 #5）；(4, 0, 0.25, 0.5, 0.8f, false) → **5.6f 逐位**（任务issue 实测 #6——整数世界 floor 5 / round 6 全失真，一位小数保留） |
 | AC-3 | 量化函数直接锚 | Round1: 1.95f→**2.0f** / 1.5f→**1.5f** / 2.6f→**2.6f** / 1.3f→**1.3f** / 0.75f→**0.8f**；Floor1: 1.95f→**1.9f** / 0.75f→**0.7f** / 3.36f→**3.3f**（全部逐位；Round1 半进位、Floor1 向下） |
-| AC-4 | 物理 clamp | (4, 0, 0.7, 0, 1.0f, false) → **6.0f**（force cap 0.5）；(4, 0, 0, 1.5, 1.0f, false) → **8.0f**（motivation cap 1.0）；(4, 0, −0.3, −0.5, 1.0f, false) → **4.0f**（负值归零） |
+| AC-4 | 物理 clamp | (4, 0, 0.7, 0, 1.0f, false) → **6.0f**（force cap 0.5）；(4, 0, 0, 1.5, 1.0f, false) → **8.0f**（motivation cap 1.0）；(4, 0, −0.3, −0.5, 1.0f, false) → **2.0f**（🔧 E-1 裁决 2026-08-14：motivation 下界 −1——沮丧降伤害；(1+0)+(−0.5)=0.5 → 4×0.5=2.0。原锚点 4.0f「负值归零」作废） |
 | AC-5 | 命中边界 | SeqRng 注入 roll 序列 [0.0, 0.74, 0.75, 0.74999994, 0.999] → [hit, hit, **miss**, hit, miss]（阈值 0.75f 严格小于且 f32 精确；0.74999994f = 次邻 → hit）；**miss 仍返回完整伤害值**：(4, 0, 0, 0, 1.0f, false) + roll 0.75 → damage **4.0f**、hit **false**（结算与判定解耦——v1.1 审计 K-F2） |
 | AC-6 | L0 回避 + 命中率分布 | roll 0.80 → **miss**（无 −10% 时 0.85 阈值将命中——证明修复 #10 无条件生效）；分布：DeterministicRng(固定种子) 直接生成 1000 次 NextFloat 计数 `< 0.75f` 作为期望（独立镜像，不复制引擎代码）→ 同种子下 1000 次 CalcPhysicalDamage 的命中数 == 期望 |
 | AC-7 | 防御 −50% 仅物理 | (4, 0, 0.5, 1.0, 1.0f, **true**) → **5.0f**（4×2.5×0.5）；false → 10.0f；CalcMentalDamage 签名**不含** defenderIsDefending（精神无视防御） |
@@ -205,6 +205,7 @@ Floor1(x) = MathF.Floor(x × 10f) / 10f                        // HP 成分量�
 | B4 | 一位小数结算 | 基础行动设计 §四 原「向下取整」+ 整数 HP/SAN 语义 | Round1/Floor1 量化到 0.1（Q3=D）——文档已写回 2026-08-13 | 乘区因子全小数（motivation/force/gate/穿透）——整数取整使 1.5→1 或 2（±33%）、最低档穿透 1.0×1.3→1 失效；0.1 粒度保留全部细粒度效果（实测 #10-#14） |
 | B5 | L2 跨 feature 类型变更 22 字段 | csharp-engine-types 已交付（Hp/San/事件数值字段 int） | §二 2.2 清单 int→float（Q3=D） | 一位小数要求状态与事件承载小数；types 零消费者（grep 验证）；AC-18 回执 + types spec 变更日志 🔧 修正行 |
 | B6 | baseDamage 参数化 | plan §4.6 公式写死「(4 + weapon_bonus)」 | 公式用 baseDamage 参数（demo 传 BasePhysicalDamage=4，D8） | plan 签名含 baseDamage 参数（公式块与签名不一致）；参数化支撑校准 sweep 与未来成长 |
+| B7 | **motivation 下界 −1**（🔧 E-1 裁决 2026-08-14，Grilling #24） | plan §4.6 字面「负值归零」[0,1] | `clamp(motivationMod, −1, MotivationCap)` | 正典仅定义上界 +100%；下界无裁决。tone_bias(attack_physical) 实测下限 −0.52。统一为 [−1,1]：与精神攻击（不 clamp）及 flow 层 producer（csharp-flow spec §5.1 clamp(tone_bias,−1,1)）口径一致——沮丧（低动机）时物理出力下降。AC-4 第三锚点 4.0f→2.0f |
 
 ## 参数速查表
 

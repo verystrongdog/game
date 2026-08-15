@@ -49,7 +49,9 @@ public sealed class DamageCalculator
         // B4：一位小数结算——每步结算产物在最后一步统一量化（中间步保持全精度，Round1 仅作用于 s5）
         float s1 = (float)(baseDamage + weaponBonus);                    // int 加法精确，后转 float
         float cf = Math.Clamp(forceMod, 0f, _cal.ForceCap);              // 负值归零——沮丧不降伤害（plan §4.6 字面）
-        float cm = Math.Clamp(motivationMod, 0f, _cal.MotivationCap);
+        // 🔧 2026-08-14 Grilling #24 E-1 裁决：motivation 下界由 0 改为 −1——与精神攻击（不 clamp）及
+        // flow 层 producer（csharp-flow spec §5.1 clamp(tone_bias,−1,1)）口径统一；沮丧（低动机）时物理出力下降。
+        float cm = Math.Clamp(motivationMod, -1f, _cal.MotivationCap);
         float s2 = (1f + cf) + cm;                                       // 左结合（§五 1）
         float s3 = s1 * s2;
         float s4 = s3 * gateBonus;

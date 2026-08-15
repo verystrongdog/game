@@ -65,12 +65,12 @@ public class DamageCalculatorTests
         Assert.Equal(expected, DamageCalculator.Floor1(input));
     }
 
-    // ---- AC-4 clamp：超上限截断、负值归零 ----
+    // ---- AC-4 clamp：超上限截断、负 motivation 保留（E-1 裁决 2026-08-14） ----
 
     [Theory]
     [InlineData(0.7f, 0f, 6.0f)]    // force 超 cap 0.5 → 截断
     [InlineData(0f, 1.5f, 8.0f)]    // motivation 超 cap 1.0 → 截断
-    [InlineData(-0.3f, -0.5f, 4.0f)] // 负值归零——沮丧不降伤害
+    [InlineData(-0.3f, -0.5f, 2.0f)] // motivation 下界 −1（E-1 裁决）：沮丧降伤害——(1+0)+(−0.5)=0.5 → 4×0.5=2.0
     public void Physical_ClampsForceAndMotivation(float force, float motivation, float expected)
     {
         var (damage, _) = New().CalcPhysicalDamage(4, 0, force, motivation, 1.0f, false, new SeqRng(0.0f));

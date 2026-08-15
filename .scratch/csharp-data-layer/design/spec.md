@@ -53,7 +53,7 @@
 
 **有意不映射的 JSON key**（System.Text.Json 静默忽略，与 §七自检第 1 条的关系见下）：
 - tripartite 4 种边的 `type` key（值为 corticocortical / brainstem_broadcast / cstc / privileged_pathway——反序列化时已按所在数组确定类型，无需二次标注）
-- brain_regions.json 根 `_description` / `_coordinate_system`；tripartite_model.json 根 7 个 `_` 前缀元数据 key
+- brain_regions.json 根 `_description` / `_coordinate_system`；tripartite_model.json 根 4 个 `_` 前缀元数据 key（_description/_design_doc/_generated_by/_created——🔧 2026-08-14 Grilling #24 D-5：原"7 个"实测 4）
 
 #### GameDataLoader（已实现）
 
@@ -229,6 +229,24 @@ JsonSerializerOptions: `PropertyNameCaseInsensitive = true`, `ReadCommentHandlin
 
 **Loader 后处理**: `LoadWsensory` 反序列化后填充 `RegionIds = Rows.Keys.ToArray()`。
 
+### GameData 聚合 + LoadAll（🔧 2026-08-14 Grilling #24 D-2 收录——审计后新增，spec v1.2 未含）
+
+```csharp
+// Data/GameData.cs（命名空间 YouAreNotTheFish.Core.Data）
+public sealed record GameData(
+    BrainRegionsData BrainRegions,     // brain_regions.json
+    TripartiteModel Tripartite,        // connectivity/tripartite_model.json
+    WsensoryMatrix Wsensory,           // connectivity/W_sensory.json（RegionIds = canonical 69）
+    SituationPrimitives SituationPrimitives,  // connectivity/situation_primitives.json
+    SignalTypesCatalog SignalTypes);   // signal_types.json
+
+// GameDataLoader 新增
+public static GameData LoadAll(string dataDir)
+```
+
+- `LoadAll` 一次加载 5 文件（文件名固定；路径 dataDir + 各相对路径），异常语义同现有 5 方法（FileNotFoundException/JsonException/InvalidOperationException）。
+- 消费者：plan §三 CombatContext 行、§4.3 `WMatrixBuilder.Build(GameData)`、`CorticalBias.Compute(ToneState, GameData)`（csharp-engine-types spec §2.12 亦引用——跨 spec 声明，以本段为准）。
+
 ## 四、枚举与常量
 
 本次不新增 enum——已有的 13 个 enum 覆盖全部字段。`AppraisalProfile.Agency` / `.Valence` 保持 string，值域在注释中声明（见 §2.2）。
@@ -288,6 +306,7 @@ JsonSerializerOptions: `PropertyNameCaseInsensitive = true`, `ReadCommentHandlin
 | v1.0 | 2026-08-12 | 初稿——覆盖全部 Data Layer | 任务issue 01 | 全量审计 |
 | v1.1 | 2026-08-12 | 修复审计 E1-E6 + W 级：§2.2 补 [JsonPropertyName]×41；Matrix→int[][]; RdocProfile 6 域可空；SignalSubtype 异构字段全量可空；signal_types 词表更新为实测 18 子类；agency/valence 值域修正；AC-4/AC-12 数据修复（悬挂引用+注册表对齐）；AC-6 改为一次性审计产物；AC-8~12 新增；约束表扩至 11 条 | 审计退回（report.md 2026-08-12） | Δ审计（§2.2 + §五 + §六 + §七） |
 | v1.2 | 2026-08-12 | Δ审计"有条件通过"补修：AC-13（mirror_of membership）/AC-14（1049 三体边 membership）新增；auto_activated_links 豁免在 AC 层注明；文本修正（词表最大消费方备注移位、约束8 来源列、异常行为时态、约束9 交集语义） | Δ审计结论（report.md v1.1 段） | 免重审（数据侧三路实测闭环） |
+| v1.3 | 2026-08-14 | Grilling #24 文档同步：D-2 收录 GameData + LoadAll（§三 新增段）；D-5 tripartite 根 `_` key 7→4；SituationPrimitives.cs 注释历史口径修正 | Grilling #24 盘点（引擎数据层偏差清单 D-2/D-5） | 免重审（纯文档同步） |
 
 ---
 *创建: 2026-08-12 | 更新: 2026-08-12 | 版本: v1.2*
