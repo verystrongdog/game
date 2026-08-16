@@ -59,7 +59,7 @@ description: 任务 md 四维质检。检测 AI 生成的决策总结/任务规�
 
 | 检查项 | 判定 |
 |--------|------|
-| T1 deprecated 术语出现 | 任务 md 中（非 `⚠️ 已废弃` 标注段）出现 `status: deprecated` 术语（`态度` `7驱动` `5模块` `CPM` `预烘焙` `认知槽` `β` `g_0` `η` `κ` `lunar` 等）→ ❌ 违规 |
+| T1 deprecated 术语出现 | **强制**：运行 `python3 -c "import json;print([k for k,v in json.load(open('data/term_registry.json'))['terms'].items() if v.get('status')=='deprecated'])"` 读取**完整 deprecated 清单**（非穷尽示例：`态度` `7驱动` `5模块` `CPM` `预烘焙` `认知槽` `89脑区` `AP` `L0-L6` `七层功能层级` `β` `g_0` `η` `η_crit` `κ` `ρ_off` `c(SAN)` `lunar`）。任务 md 中（非 `⚠️ 已废弃` 标注段）出现任一 → ❌ 违规。**禁止仅凭本表记忆判断，注册表为准** |
 | T2 术语定义误用 | 出现与注册表定义冲突的用法，如「态度卡」「SAN 是血条」「意志力=SAN」「颜色表示情绪」→ ❌ 违规 |
 | T3 新符号 | 出现注册表没有的新参数符号且未标注 `[NEW]` → ⚠️ 提示 |
 | T4 术语翻译/混用 | 同一概念中英混写（如同时用「SAN」和「理智值」指同一物）→ ⚠️ 提示 |
