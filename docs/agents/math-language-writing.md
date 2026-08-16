@@ -89,7 +89,7 @@
 
 - 写 md 前先查 `data/term_registry.json`：术语名、参数符号、默认值、`numerical_locations`。
 - 使用的每个核心术语/参数符号，都应能在注册表中查到，或明确标注 `[NEW]` 待后续 grilling 入库。
-- **禁用废弃术语**（`status: deprecated`，如 `态度`、`7驱动`、`5模块`、`CPM`、`预烘焙`、`g_0/η/κ/lunar` 等月光场 v2 参数）——除非在标注 `⚠️ 已废弃` 的段落中作历史说明。见 `term_registry.json` 的 deprecated 列表。
+- **禁用废弃术语**（`status: deprecated`）——除非在标注 `⚠️ 已废弃` 的段落中作历史说明。**完整清单以注册表为准**，运行时查询：`python3 tools/list_deprecated_terms.py`（勿用记忆或硬编码清单）。
 - 引用链接统一 `[显示名](相对路径)`，标注段落 `§N`，遵循「引用即读取铁律」。
 
 ---
