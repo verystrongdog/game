@@ -162,5 +162,5 @@ description: 任务 md 四维质检。检测 AI 生成的决策总结/任务规�
 
 ---
 
-*基于: [数学语言书写规范](../../docs/agents/math-language-writing.md), [term_registry.json](../../data/term_registry.json) | 创建: 2026-08-16*
-*关联: [review-plan skill](SKILL.md 同级 review-plan), [CLAUDE.md](../../CLAUDE.md)*
+*基于: [数学语言书写规范](../../../docs/agents/math-language-writing.md), [term_registry.json](../../../data/term_registry.json) | 创建: 2026-08-16*
+*关联: [review-plan skill](../review-plan/SKILL.md), [CLAUDE.md](../../../CLAUDE.md)*
