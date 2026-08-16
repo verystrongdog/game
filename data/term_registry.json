@@ -2,8 +2,8 @@
   "_description": "术语注册表 — Grilling §3.0 定义基线声明的唯一数据源。术语定义/旧模型/偏离原因集中管理，避免 AI 在生成时被术语的旧现实世界模型劫持。",
   "_maintenance": "入库触发: 新核心术语 | 定义被修改 | Step 4 清扫发现未注册高频术语。numerical_locations 更新: 注册时填充 + grilling 新增引用时追加 + 定义变更时遍历复查。 | #38 月光场 v2 废弃 + CGL+AGC 新术语入库 (2026-08-11)",
   "_created": "2026-08-03",
-  "_updated": "2026-08-14",
-  "_batch": "v1 — 首批23条 + 第二批30条 = 53条。v1.1 (2026-08-05): +7条(grilling #22 月光场数值校准: g_0/η/c(SAN)/κ/η_crit/ρ_off/lunar) → 60条 + v1.2 (2026-08-07): +14条 (Grilling #26 三体神经模型) + v1.3 (2026-08-09): +19条 (#32/#34遗漏补录——a(t)/tone/δ_event/s(t)/b_j/c_loop/gate_bonus/tone_bias/O_GPi/可供性竞争/T/W_sensory/α_pattern/w_perception/w_execution/scale_mental/θ_mem/Wilson-Cowan/Gurney模型) + v1.4 (2026-08-12): +4条 (Grilling #40 延伸讨论: 主观意识/现象壳/结构核/涌现（哲学义）) + v1.5 (2026-08-12 Grilling #41): +2条（意识包裹/不可证实性），更新3条（主观意识/观察者效应/基底独立原则） + v1.6 (2026-08-13): 更新3条（a(t)/tone/b_j——Euler→解析解清扫，csharp-engine M1 实测） + v1.7 (2026-08-13): +1条（round1/floor1 一位小数结算量化函数对），更新4条（HP/SAN/精神攻击/低SAN穿透——csharp-damage Q3=D 写回） + v1.8 (2026-08-14): 更新1条（motivation_mod——Grilling #24 E-1 裁决：下界 −1） + v1.9 (2026-08-16 Grilling #69): +5条(m_field/s_env/嗅觉/热觉/α_env)，更新2条(s(t)/W_sensory 6→8模态)",
+  "_updated": "2026-08-16",
+  "_batch": "grilling-70-engine-roadmap",
   "_pending_candidates": "见 data/term_registry_candidates.md — 约20条P3级+单文档术语，后续grilling中逐批入库 Grilling #26-27: CSTC/EDR/CTC/三体神经模型/function_profile/cstc_loop/cstc_role/signal_type/gameplay_domain/STN/脑干广播/皮层-皮层连接/功能剖面/基底节门控 (14条已入库).",
   "terms": {
     "态度": {
@@ -264,7 +264,8 @@
         "规则/技能树系统/运行时状态模型.md §6（CSTC gate映射）"
       ],
       "added": "2026-08-03",
-      "updated": "2026-08-09"
+      "updated": "2026-08-16",
+      "note": "🔧 2026-08-16（Grilling #70 F-1）：数据源 link_contexts.json（364 条）基于已废弃旧 pairwise 364 链路，60 候选池实测数据已失效——待 P1a 在三体连接上重建（link_contexts_tripartite.json + 8 行为角色分类器）。"
     },
     "技能": {
       "definition": "三体模型连接的功能组合封装——由主导网络（Kroell 14网络）× 主导角色（8行为角色）定义。从60候选池涌现（14网络×8角色过滤）。技能≠连接。快捷槽6个装技能。技能效果 = skill_base_effect × gate_bonus(role)（运行时状态模型 §八）。旧定义（链路上下文+链路组封装——基于旧pairwise 364链路）已于2026-08-07 Grilling #26废弃。",
@@ -1950,6 +1951,33 @@
       "status": "active",
       "numerical_locations": [
         ".scratch/grilling-69-external-stimulus/task-plan.md §2.2/§九"
+      ],
+      "added": "2026-08-16",
+      "updated": "2026-08-16"
+    },
+    "Δ_skill": {
+      "definition": "技能执行时对核心皮层节点的激活直接注入量——技能混合注入机制（Grilling #70 D3）：执行时 a_j ← clip(a_j + Δ_skill, 0, 1)，随后由 W·a 网络自然传播。保证技能 base effect 可控可验证（质量门禁：技能必须能计算效果数值）。非 a(t) 派生的技能效果部分（如物理技能固定值）由注入覆盖。",
+      "source": "Grilling #70 D3 (2026-08-16)；运行时状态模型 §4.5 延迟项闭合",
+      "old_model": "纯 WC 网络传播（技能不直接驱动节点，仅读取 a(t)）——效果不可控、难平衡",
+      "deviation_reason": "项目独创——技能执行对 WC 动力学节点的主动驱动接口，替代『技能只读不写』的被动模型",
+      "status": "active",
+      "numerical_locations": [
+        "CalibrationConfig（待 #35 校准）",
+        "P1c 技能执行引擎"
+      ],
+      "added": "2026-08-16",
+      "updated": "2026-08-16",
+      "note": "[NEW] 值待 #35 战斗输出权重校准"
+    },
+    "LinkState": {
+      "definition": "三体连接的髓鞘化状态——每边一个 m ∈ [0,1]，存储于 combat_state.link_states[edge_id].m（edge = tripartite_model.json 的连接，非旧 pairwise 链路）。构建层慢变量：战斗中不变，战后由 Δm 公式（核心机制 §2.3）与可塑性巩固更新。消费方：W 矩阵 m_mean（皮层动力学 §5.3）、技能涌现条件（组内 ≥2 条 m≥0.5 且 ≥1 聚焦）、消耗品链路调制。demo 阶段缺失（m ≡ m_default = 0.3）。",
+      "source": "Grilling #70 D2/D8 (2026-08-16)；皮层动力学-通用层 §5.3",
+      "old_model": "旧 pairwise 364 链路的 m 值（link_registry，已废弃）",
+      "deviation_reason": "底层连接模型从 pairwise 364 变更为三体模型（CSTC+CC+brainstem），m 载体随之迁移到三体边",
+      "status": "active",
+      "numerical_locations": [
+        "P1b LinkState+m 成长进引擎",
+        "WMatrixBuilder.m_mean"
       ],
       "added": "2026-08-16",
       "updated": "2026-08-16"
