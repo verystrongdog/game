@@ -3,7 +3,7 @@
   "_maintenance": "入库触发: 新核心术语 | 定义被修改 | Step 4 清扫发现未注册高频术语。numerical_locations 更新: 注册时填充 + grilling 新增引用时追加 + 定义变更时遍历复查。 | #38 月光场 v2 废弃 + CGL+AGC 新术语入库 (2026-08-11)",
   "_created": "2026-08-03",
   "_updated": "2026-08-14",
-  "_batch": "v1 — 首批23条 + 第二批30条 = 53条。v1.1 (2026-08-05): +7条(grilling #22 月光场数值校准: g_0/η/c(SAN)/κ/η_crit/ρ_off/lunar) → 60条 + v1.2 (2026-08-07): +14条 (Grilling #26 三体神经模型) + v1.3 (2026-08-09): +19条 (#32/#34遗漏补录——a(t)/tone/δ_event/s(t)/b_j/c_loop/gate_bonus/tone_bias/O_GPi/可供性竞争/T/W_sensory/α_pattern/w_perception/w_execution/scale_mental/θ_mem/Wilson-Cowan/Gurney模型) + v1.4 (2026-08-12): +4条 (Grilling #40 延伸讨论: 主观意识/现象壳/结构核/涌现（哲学义）) + v1.5 (2026-08-12 Grilling #41): +2条（意识包裹/不可证实性），更新3条（主观意识/观察者效应/基底独立原则） + v1.6 (2026-08-13): 更新3条（a(t)/tone/b_j——Euler→解析解清扫，csharp-engine M1 实测） + v1.7 (2026-08-13): +1条（round1/floor1 一位小数结算量化函数对），更新4条（HP/SAN/精神攻击/低SAN穿透——csharp-damage Q3=D 写回） + v1.8 (2026-08-14): 更新1条（motivation_mod——Grilling #24 E-1 裁决：下界 −1）",
+  "_batch": "v1 — 首批23条 + 第二批30条 = 53条。v1.1 (2026-08-05): +7条(grilling #22 月光场数值校准: g_0/η/c(SAN)/κ/η_crit/ρ_off/lunar) → 60条 + v1.2 (2026-08-07): +14条 (Grilling #26 三体神经模型) + v1.3 (2026-08-09): +19条 (#32/#34遗漏补录——a(t)/tone/δ_event/s(t)/b_j/c_loop/gate_bonus/tone_bias/O_GPi/可供性竞争/T/W_sensory/α_pattern/w_perception/w_execution/scale_mental/θ_mem/Wilson-Cowan/Gurney模型) + v1.4 (2026-08-12): +4条 (Grilling #40 延伸讨论: 主观意识/现象壳/结构核/涌现（哲学义）) + v1.5 (2026-08-12 Grilling #41): +2条（意识包裹/不可证实性），更新3条（主观意识/观察者效应/基底独立原则） + v1.6 (2026-08-13): 更新3条（a(t)/tone/b_j——Euler→解析解清扫，csharp-engine M1 实测） + v1.7 (2026-08-13): +1条（round1/floor1 一位小数结算量化函数对），更新4条（HP/SAN/精神攻击/低SAN穿透——csharp-damage Q3=D 写回） + v1.8 (2026-08-14): 更新1条（motivation_mod——Grilling #24 E-1 裁决：下界 −1） + v1.9 (2026-08-16 Grilling #69): +5条(m_field/s_env/嗅觉/热觉/α_env)，更新2条(s(t)/W_sensory 6→8模态)",
   "_pending_candidates": "见 data/term_registry_candidates.md — 约20条P3级+单文档术语，后续grilling中逐批入库 Grilling #26-27: CSTC/EDR/CTC/三体神经模型/function_profile/cstc_loop/cstc_role/signal_type/gameplay_domain/STN/脑干广播/皮层-皮层连接/功能剖面/基底节门控 (14条已入库).",
   "terms": {
     "态度": {
@@ -1465,17 +1465,18 @@
       "updated": "2026-08-09"
     },
     "s(t)": {
-      "definition": "外部感官输入向量——69 维，通过 W_sensory（69×6 解剖映射矩阵）从 α（6 模态强度向量）展开。α=pattern_α × m_α，pattern_α ∈ {0,1}⁶。打包到下一回合 Phase 1 注入 WC（皮层慢加工 200ms+）。15 种事件 α pattern（A1-A7, B1-B4, C1, D1-D2）。A6（技能使用）α=0——技能走 WC 内部通路。",
+      "definition": "外部感官输入向量——69 维，通过 W_sensory（69×8 解剖映射矩阵）从 α（8 模态强度向量）展开。α=pattern_α × m_α，pattern_α ∈ {0,1}⁸。s_j = s_事件_j + s_env_j。事件脉冲 s_事件：打包到下一回合 Phase 1 注入 WC（皮层慢加工 200ms+），一次性后归零。环境基调 s_env：环境内恒定，空间切换时刷新。⚠️ 模态数由 6 扩展至 8（嗅觉/热觉），Grilling #69，2026-08-16。",
       "source": "运行时状态模型.md §4.5; Grilling #34; data/connectivity/W_sensory.json",
       "old_model": "离散的事件标签——无模态分解、无解剖映射、无连续强度",
-      "deviation_reason": "s(t) 是多模态连续向量——6 模态（视觉/听觉/躯体/痛觉/社会/语言）× 69 节点解剖映射，支持模态分离（防御成功有体感无痛）和双模态节点叠加",
+      "deviation_reason": "s(t) 是多模态连续向量——8 模态（视觉/听觉/躯体/痛觉/社会/语言/嗅觉/热觉）× 69 节点解剖映射。支持模态分离（防御成功有体感无痛）和双模态节点叠加。扩展自原 6 模态（Grilling #69）。",
       "status": "active",
       "numerical_locations": [
         "规则/技能树系统/运行时状态模型.md §4.5（W_sensory + α pattern表 + 注入时序）",
-        "data/connectivity/W_sensory.json（69×6 二值映射矩阵）"
+        "data/connectivity/W_sensory.json（69×8 二值映射矩阵）",
+        ".scratch/grilling-69-external-stimulus/task-plan.md（环境基调+月光场扩展）"
       ],
       "added": "2026-08-09",
-      "updated": "2026-08-09"
+      "updated": "2026-08-16"
     },
     "b_j": {
       "definition": "脑干 tone 对皮层节点 j 的加法调制——b_j = NE×w_NE(j) + DA_VTA×w_VTA(j) + DA_SNc×w_SNc(j) + 5HT×w_5HT(j)。投射权重 w 两档：active=1.0（15/114）、modulating=0.5（99/114）。注入 WC 输入 h_j = W·a + b + s。clip [0,2.0] 防止过度驱动（tone=1 时 mOFC 3 fid pre-clamp 2.5 超界由 clip 兜底——2026-08-13 C# 实测）。",
@@ -1564,17 +1565,18 @@
       "updated": "2026-08-09"
     },
     "W_sensory": {
-      "definition": "感官模态→解剖节点的映射矩阵——W_sensory ∈ {0,1}^{69×6}。69 个 functional_id 行 × 6 感官模态列（视觉/听觉/躯体感觉/痛觉/社会认知/语言认知）。二值矩阵：节点 j 是否接收模态 m 的初级输入。25 个 subcortical/brainstem 行全零（不参与 WC 皮层动力学）。12 个双模态节点在全强度双模态事件中 s_j 可达 2.0。",
+      "definition": "感官模态→解剖节点的映射矩阵——W_sensory ∈ {0,1}^(69×8)。69 个 functional_id 行 × 8 感官模态列（视觉/听觉/躯体感觉/痛觉/社会认知/语言认知/嗅觉/热觉）。二值矩阵：节点 j 是否接收模态 m 的初级输入。25 个 subcortical/brainstem 行全零。12+ 双模态节点在全强度双模态事件中 s_j 可达 2.0。⚠️ 由 69×6 扩展至 69×8（新增嗅觉/热觉），Grilling #69，2026-08-16。",
       "source": "Grilling #34 (2026-08-09); data/connectivity/W_sensory.json",
       "old_model": "—（项目独创——将事件感官维度映射到解剖节点的设计矩阵）",
       "deviation_reason": "—",
       "status": "active",
       "numerical_locations": [
         "规则/技能树系统/运行时状态模型.md §4.5（W_sensory定义+双模态节点+非皮层排除）",
-        "data/connectivity/W_sensory.json（69×6 矩阵）"
+        "data/connectivity/W_sensory.json（69×8 矩阵）",
+        ".scratch/grilling-69-external-stimulus/task-plan.md §四"
       ],
       "added": "2026-08-09",
-      "updated": "2026-08-09"
+      "updated": "2026-08-16"
     },
     "α_pattern": {
       "definition": "感官模态强度模式——α = pattern_α × m_α。pattern_α ∈ {0,1}⁶ 为 6 模态的二值开关。15 种事件类型各有固定 pattern（如物理攻击命中=视觉+躯体，精神攻击=社会+语言）。A 类 m_α=1.0（自身行动感官完整），B/C/D 类 m_α=m（同δ magnitude）。A6（技能使用）α=0。α 恒≤1.0（A类固定1.0，B/C/D类m公式均≤1.0）。",
@@ -1887,6 +1889,70 @@
         "#41",
         "D15"
       ]
+    },
+    "m_field": {
+      "definition": "月光场通道——独立的第三输入通道，区别于感官输入 s 和脑干调制 b。承载观察者效应/幻觉具象化/空间扭曲。非感官模态，不进 W_sensory。是 CGL+AGC 相干场（时空结构数学框架）在神经系统中的输入落点。空间切换+月相/昼夜推进时刷新。⚠️ 非废弃月光场 v2 公式(η/g_0)——新参数集待 Grilling #38/#35。",
+      "source": "Grilling #69 D6; 规则/时空结构数学框架.md; 规则/技能树系统/运行时状态模型.md（扩展）",
+      "old_model": "无——月光此前仅作外部全局调制（难度缩放 η_player×η_environment），无神经器官落点",
+      "deviation_reason": "月光是神经可接收刺激（观察者效应是 game mechanic 非比喻），需独立神经通道承载，而非仅外部开关",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/运行时状态模型.md §4.5（扩展任务）",
+        ".scratch/grilling-69-external-stimulus/task-plan.md §2.2"
+      ],
+      "added": "2026-08-16",
+      "updated": "2026-08-16"
+    },
+    "s_env": {
+      "definition": "环境基调——持续场形态的 s(t) 分量。当前空间/场景的真实物理存在（房间气味/温度/光线/内容物），经 W_sensory × α_env 展开。环境内恒定，空间切换节点刷新。与月光场 m_field 相对：s_env = 局部真实物理存在（非月光产物），m_field = 世界级月光场（调制 s_env）。",
+      "source": "Grilling #69 D2/D3; 空间/空间与关卡设计.md（房间温度/气味线索）",
+      "old_model": "无——非战斗刺激此前无定义，s(t) 仅含战斗事件脉冲",
+      "deviation_reason": "非战斗环境是持续在场（房间恒有气味/温度），不是事件脉冲，需持续场形态",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/运行时状态模型.md §4.5（扩展任务）",
+        ".scratch/grilling-69-external-stimulus/task-plan.md §2.2/§4"
+      ],
+      "added": "2026-08-16",
+      "updated": "2026-08-16"
+    },
+    "嗅觉": {
+      "definition": "新增感官模态 olfactory——气味线索的输入通道。解剖锚点：梨状皮层/OFC。独立于视觉/听觉通路。原 6 模态不含嗅觉，Grilling #69 新增（W_sensory 第 7 列）。",
+      "source": "Grilling #69 D5; 实体/消耗品系统.md §三（感觉域↑↑）",
+      "old_model": "无——原 6 模态仅视觉/听觉/躯体/痛觉/社会/语言，无嗅觉",
+      "deviation_reason": "气味线索是独立感觉通路（梨状皮层/MON），与视觉/听觉完全独立",
+      "status": "active",
+      "numerical_locations": [
+        "data/connectivity/W_sensory.json（新增列）",
+        ".scratch/grilling-69-external-stimulus/task-plan.md §4.2"
+      ],
+      "added": "2026-08-16",
+      "updated": "2026-08-16"
+    },
+    "热觉": {
+      "definition": "新增感官模态 thermoreception——温度异常输入通道。解剖锚点：躯体感觉皮层温度区。独立于触觉（躯体感觉）。原模态痛觉/躯体覆盖触觉本体但无温度，Grilling #69 新增（W_sensory 第 8 列）。门缝温度异常是刻意探索线索（空间与关卡设计 L221）。",
+      "source": "Grilling #69 D5; 空间/空间与关卡设计.md:221（门缝温度异常线索）",
+      "old_model": "无——原 6 模态无温度通道",
+      "deviation_reason": "温度异常是独立探索线索，需独立于触觉，支持『房间热但无触碰』的持续环境感知",
+      "status": "active",
+      "numerical_locations": [
+        "data/connectivity/W_sensory.json（新增列）",
+        ".scratch/grilling-69-external-stimulus/task-plan.md §4.2"
+      ],
+      "added": "2026-08-16",
+      "updated": "2026-08-16"
+    },
+    "α_env": {
+      "definition": "环境基调模态强度向量——α_env ∈ [0,1]⁸。s_env = W_sensory × α_env。环境切换节点刷新为本环境的稳定值，本环境内恒定。与事件 α 同用 W_sensory，区别在 α 来源（环境持续 vs 事件一次性）。",
+      "source": "Grilling #69 D3/数学语言书写规范",
+      "old_model": "无",
+      "deviation_reason": "环境基调需独立强度向量承载『此房间暗/臭/热』的持续分量，区别于事件 α",
+      "status": "active",
+      "numerical_locations": [
+        ".scratch/grilling-69-external-stimulus/task-plan.md §2.2/§九"
+      ],
+      "added": "2026-08-16",
+      "updated": "2026-08-16"
     }
   },
   "_metadata": {

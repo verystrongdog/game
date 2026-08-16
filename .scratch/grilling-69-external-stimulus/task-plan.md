@@ -174,6 +174,7 @@ WC 皮层动力学总输入在 [运行时状态模型 §4.1](./../../规则/技�
 | T4 | `WsensoryMatrix.cs` 校验列数自适应（确认无需改动 / 或补列数断言） | 代码 | `src/YouAreNotTheFish.Core/Data/WsensoryMatrix.cs` | T1 |
 | T5 | 在 `运行时状态模型.md` 写 §4.5 扩展（s_env 环境基调 + m_field 月光场通道 + 四来源域） | 文档 | `规则/技能树系统/运行时状态模型.md` | 全部 |
 | T6 | 在 `皮层动力学-通用层.md` §六 同步 s(t) 外部输入定义（三通道） | 文档 | `规则/技能树系统/皮层动力学-通用层.md` | T5 |
+| T6b | 同步 `data/README.md` 与 `引擎数据关系规格.md` 的 W_sensory 尺寸描述（69×6 → 69×8） | 文档 | `data/README.md`, `规则/技能树系统/引擎数据关系规格.md` | T1 |
 | T7 | 注册表更新：m_field/s_env/嗅觉/热觉 入库，标注 [NEW] 与 issue #69 | 数据 | `data/term_registry.json` | 全部 |
 | T8 | 决策树追加 Grilling #69 条目 | 文档 | `docs/决策树.md` | 全部 |
 | T9 | 更新六维状态（规则维度 + s(t)/模态扩展） | 文档 | `docs/设计框架-六维状态.md` | 全部 |
@@ -192,6 +193,8 @@ WC 皮层动力学总输入在 [运行时状态模型 §4.1](./../../规则/技�
 | `src/YouAreNotTheFish.Core/Data/WsensoryMatrix.cs` | 校验（应按需零改动） | 代码 |
 | `规则/技能树系统/运行时状态模型.md` | 改写 §4.5 | 文档 |
 | `规则/技能树系统/皮层动力学-通用层.md` | 改写 §六 | 文档 |
+| `data/README.md` | 更新 W_sensory 尺寸描述（69×6 → 69×8）| 文档 |
+| `规则/技能树系统/引擎数据关系规格.md` | 同步 W_sensory 尺寸描述（含 6 模态残留）| 文档 |
 | `data/term_registry.json` | 追加 m_field/s_env/嗅觉/热觉 | 数据 |
 | `docs/决策树.md` | 追加 #69 | 文档 |
 | `docs/设计框架-六维状态.md` | 更新规则维度 | 文档 |
