@@ -208,6 +208,17 @@
 - 卡牌设计/卡牌内容 → 已废弃。旧卡牌参数在 `data/` 下作为参考
 - 认知/情绪/行为独立系统 → 已废弃，查看 `docs/维度/规则.md` 了解当前正典
 
+### 任务 md 质检触发规则（2026-08-16 新增）
+
+**IF** 用户说「检查这份任务 md」「检测 task-plan」「这个 md 有纰漏吗」「质检任务 md」，或提交 `.scratch/` 下的决策总结/任务规划 md（`task-plan.md`、`grilling-NN-task-plan.md`、`summary`/`plan` 类文档）要求把关 **THEN** 按 [.claude/skills/task-checker/SKILL.md](.claude/skills/task-checker/SKILL.md) 执行四维质检：
+
+1. ①格式规范（对照本文件 §md 文件格式规范：文件头摘要/文末关联/目录/单 H1/中文编号/废弃标记/参数速查表）
+2. ②术语与正典一致性（对照 `data/term_registry.json`：deprecated 术语、定义误用、与决策树冲突）
+3. ③交叉引用完整性（复用 `tools/validate_*.py` 核验活跃目标；检查垃圾桶隔离）
+4. ④数学语言充分性（对照 [docs/agents/math-language-writing.md](docs/agents/math-language-writing.md)：模糊量词/无符号数值/阈值模糊/枚举未受控等，给出公式化改写建议）
+
+**AI 写任务 md 时**（grilling/issue 讨论结束后的决策总结）默认按 [数学语言书写规范](docs/agents/math-language-writing.md) 书写：凡能用公式/表格/受控词表表达的数值、分支、阈值、枚举，一律用数学语言，降低自然语言歧义。产出任务 md 后建议自检一遍再交付。
+
 ### 当用户要求修改/扩展设计时
 1. **IF** 提出的方向在 `docs/决策树.md` 中被否决 → **THEN** 立即警告用户该方向已被废弃，并说明废弃原因
 2. **IF** 涉及数值参数 → **THEN** 搜索现有文档确认参数是否已有定义，不要凭空创造
