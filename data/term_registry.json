@@ -2,7 +2,7 @@
  "_description": "术语注册表 — Grilling §3.0 定义基线声明的唯一数据源。术语定义/旧模型/偏离原因集中管理，避免 AI 在生成时被术语的旧现实世界模型劫持。",
  "_maintenance": "入库触发: 新核心术语 | 定义被修改 | Step 4 清扫发现未注册高频术语。numerical_locations 更新: 注册时填充 + grilling 新增引用时追加 + 定义变更时遍历复查。 | #38 月光场 v2 废弃 + CGL+AGC 新术语入库 (2026-08-11)",
  "_created": "2026-08-03",
- "_updated": "2026-08-16 (Grilling #85: 数学语言/模糊量词 入库)",
+ "_updated": "2026-08-16 (Grilling #86: 结构性主线/叙事性主线/对话树/剧情系统三元组/NPC生态/切片/双轨存储 入库)",
  "_batch": "grilling-70-engine-roadmap",
  "_pending_candidates": "见 data/term_registry_candidates.md — 约20条P3级+单文档术语，后续grilling中逐批入库 Grilling #26-27: CSTC/EDR/CTC/三体神经模型/function_profile/cstc_loop/cstc_role/signal_type/gameplay_domain/STN/脑干广播/皮层-皮层连接/功能剖面/基底节门控 (14条已入库).",
  "terms": {
@@ -2004,6 +2004,92 @@
    "numerical_locations": [
     "docs/agents/math-language-writing.md §7.3",
     "CLAUDE.md §对话数学语言规范"
+   ],
+   "added": "2026-08-16",
+   "updated": "2026-08-16"
+  },
+  "结构性主线": {
+   "definition": "主线两股中的结构性股（2026-08-16 grilling #86 命名修正，原'脊柱线'）：门控承诺 → 钥匙链推进 → Boss 面对。由环境障碍自动驱动（楼梯间锁门 → 自动写入承诺 → 找钥匙），玩家不被告知'这是主线'——钥匙链本身是最强方向信号。",
+   "source": "事件/剧情系统设计.md §2.2（grilling #86）",
+   "old_model": "脊柱线（决策树 :635 / 任务目标系统 §6.1 旧命名）",
+   "deviation_reason": "用户不记得命名过'脊柱线'；'脊柱'隐喻与神经术语易混淆。2026-08-16 grilling #86 改名",
+   "status": "active",
+   "numerical_locations": [
+    "事件/剧情系统设计.md §2.2",
+    "事件/任务目标系统.md §6.1"
+   ],
+   "added": "2026-08-16",
+   "updated": "2026-08-16"
+  },
+  "叙事性主线": {
+   "definition": "主线两股中的叙事性股（2026-08-16 grilling #86 命名修正，原'理解线'）：线索拼合 → 自问浮现/消解 → 世界观理解加深。由信息积累自动驱动（环境碎片/NPC闲聊 → 线索层 → 纯背景线索拼合 → 自问），自问消解 = '回家'驱动力的具体化。",
+   "source": "事件/剧情系统设计.md §2.3（grilling #86）",
+   "old_model": "理解线（决策树 :635 / 任务目标系统 §6.1 旧命名）",
+   "deviation_reason": "同'结构性主线'——用户不记得命名过，2026-08-16 grilling #86 改名",
+   "status": "active",
+   "numerical_locations": [
+    "事件/剧情系统设计.md §2.3",
+    "事件/任务目标系统.md §6.1"
+   ],
+   "added": "2026-08-16",
+   "updated": "2026-08-16"
+  },
+  "对话树": {
+   "definition": "剧情代码本体（2026-08-16 grilling #86）：模式 2 对话分支树统一载体——NPC/环境/内心三类节点完全同构。DAG + 有界回跳；节点 = {id, type, speaker, tags, entry_conditions, text, perceptions, options[], passive_checks[]}；运行时由 StoryEngine 解释器驱动（数据 + 解释器模式，与 EventProcessor + CombatEvent 同构）。",
+   "source": "事件/剧情系统设计.md §三（grilling #86）",
+   "old_model": "—（本项目首次定义）",
+   "deviation_reason": "—",
+   "status": "active",
+   "numerical_locations": [
+    "事件/剧情系统设计.md §3.1-3.13"
+   ],
+   "added": "2026-08-16",
+   "updated": "2026-08-16"
+  },
+  "剧情系统三元组": {
+   "definition": "剧情系统的形式化本体：D = ⟨Node, Cond, Eff, Pres, M⟩——对话节点集 + 条件谓词集（c: S×T→{true,false}）+ 副作用集（e: S→S'，仅改 Q/R/F/W 正交约束）+ 呈现函数（Pres(S,obs,node)→文本）+ 已触发集（防重放）。",
+   "source": "事件/剧情系统设计.md §3.1（grilling #86）",
+   "old_model": "—（本项目首次定义）",
+   "deviation_reason": "—",
+   "status": "active",
+   "numerical_locations": [
+    "事件/剧情系统设计.md §3.1-3.2"
+   ],
+   "added": "2026-08-16",
+   "updated": "2026-08-16"
+  },
+  "NPC生态": {
+   "definition": "医院中可对话 NPC 及其社会关系的整体结构——谁住哪间/谁与谁相邻冲突依赖/谁在哪个时段出现在哪里/谁受月光影响深浅。是'人物之间的连接网络'，不是单个 NPC 集合。类比脑区 50 实体的连接结构（tripartite_model.json）——关系结构比节点本身更重要。",
+   "source": "事件/剧情系统设计.md §4.5-4.6（grilling #86）",
+   "old_model": "—（本项目首次定义）",
+   "deviation_reason": "—",
+   "status": "active",
+   "numerical_locations": [
+    "事件/剧情系统设计.md §4.5"
+   ],
+   "added": "2026-08-16",
+   "updated": "2026-08-16"
+  },
+  "切片": {
+   "definition": "NPC 生态的局部单元——按空间（楼层/区域）或关系（病房/护士站圈子）切出的一块，块内 NPC 彼此有直接社会关系，块间关系稀疏。可独立生产的最小生态单元。起点切片 = 住院楼 1F 生态（玩家醒来楼层）。",
+   "source": "事件/剧情系统设计.md §4.6（grilling #86）",
+   "old_model": "—（本项目首次定义）",
+   "deviation_reason": "—",
+   "status": "active",
+   "numerical_locations": [
+    "事件/剧情系统设计.md §4.6"
+   ],
+   "added": "2026-08-16",
+   "updated": "2026-08-16"
+  },
+  "双轨存储": {
+   "definition": "角色背景素材库的存储模式（2026-08-16 grilling #86）：轨道一 <角色>.md（用户纯文本原文，AI 不改写——原始叙事资产）；轨道二 <角色>.gen.json（AI 派生结构化视图：lifespan/relations/traits_origin/story_hooks，schema 可拓展）。双向链接；剧情消费只引用轨道二，人类阅读轨道一。",
+   "source": "事件/剧情系统设计.md §4.3（grilling #86）",
+   "old_model": "—（本项目首次定义）",
+   "deviation_reason": "—",
+   "status": "active",
+   "numerical_locations": [
+    "事件/剧情系统设计.md §4.3"
    ],
    "added": "2026-08-16",
    "updated": "2026-08-16"
