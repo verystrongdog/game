@@ -1,4 +1,4 @@
-# CLAUDE.md — 面具 (The Mask)
+# CLAUDE.md — 子非鱼 (You Are Not the Fish)
 
 ## 项目本质
 
