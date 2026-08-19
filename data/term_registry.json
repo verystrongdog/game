@@ -1,8 +1,8 @@
 {
  "_description": "术语注册表 — Grilling §3.0 定义基线声明的唯一数据源。术语定义/旧模型/偏离原因集中管理，避免 AI 在生成时被术语的旧现实世界模型劫持。",
- "_maintenance": "入库触发: 新核心术语 | 定义被修改 | Step 4 清扫发现未注册高频术语。numerical_locations 更新: 注册时填充 + grilling 新增引用时追加 + 定义变更时遍历复查。 | #38 月光场 v2 废弃 + CGL+AGC 新术语入库 (2026-08-11)",
+ "_maintenance": "入库触发: 新核心术语 | 定义被修改 | Step 4 清扫发现未注册高频术语。numerical_locations 更新: 注册时填充 + grilling 新增引用时追加 + 定义变更时遍历复查。 | #87 创伤记忆/疾病三分类入库 + 苦痛记忆废弃 (2026-08-19)",
  "_created": "2026-08-03",
- "_updated": "2026-08-16 (Grilling #86: 结构性主线/叙事性主线/对话树/剧情系统三元组/NPC生态/切片/双轨存储 入库)",
+ "_updated": "2026-08-19",
  "_batch": "grilling-70-engine-roadmap",
  "_pending_candidates": "见 data/term_registry_candidates.md — 约20条P3级+单文档术语，后续grilling中逐批入库 Grilling #26-27: CSTC/EDR/CTC/三体神经模型/function_profile/cstc_loop/cstc_role/signal_type/gameplay_domain/STN/脑干广播/皮层-皮层连接/功能剖面/基底节门控 (14条已入库).",
  "terms": {
@@ -2093,6 +2093,66 @@
    ],
    "added": "2026-08-16",
    "updated": "2026-08-16"
+  },
+  "创伤记忆": {
+   "definition": "经历型精神疾病的通用疾病前载体（非病理化前体）：病因 = 心智不成熟 × 重复挫折（来源 ∈ {外界, 自身}）→ 创伤记忆。特征：难以遗忘（积累驱动变量 = 记忆保持：勾起 × 遗忘，时间不进入判定）。非器质且非发育类疾病的共性中间态。病理化表现示例：PTSD 闪回/创伤记忆侵入（疾病目录已有用法，属病理化语境）。",
+   "source": ".scratch/grilling-87-npc-life-generation/grilling-87.md（#87 讨论 2026-08-19，用户术语更正：苦痛记忆→创伤记忆）",
+   "old_model": "苦痛记忆（#87 讨论初稿命名，2026-08-19 用户更正废弃）",
+   "deviation_reason": "用户（2026-08-19）：非器质性精神疾病普遍经历创伤并留下创伤记忆，程度不同——创伤记忆是通用前体，不专属 PTSD；PTSD 的侵入/重播/闪回降级为一种病理化表现。",
+   "status": "active",
+   "numerical_locations": [
+    "实体/疾病目录/创伤后应激障碍.md（病理化语境：创伤记忆侵入/重播，:36/:58/:59）",
+    "实体/疾病目录/解离性身份障碍.md（病理化语境：:56）",
+    "实体/角色与面具.md :85（病理化语境）"
+   ],
+   "added": "2026-08-19",
+   "updated": "2026-08-19"
+  },
+  "经历型": {
+   "definition": "疾病三分类之一（2026-08-19 #87 决策）：源于创伤经历的一类——病因（心智不成熟×重复挫折）→ 创伤记忆（前体）→ 病理化（#88 转化接口）。创伤记忆共性的适用范围 = 经历型。当前目录 18 种（19 − ASD）。",
+   "source": ".scratch/grilling-87-npc-life-generation/grilling-87.md（#87 讨论 2026-08-19）",
+   "old_model": "—（本项目首次定义；传统'功能性'的替代）",
+   "deviation_reason": "传统器质性/功能性二分已废弃（DSM-5/ICD-11），项目改用三层互斥分类：器质性/发育性/经历型。",
+   "status": "active",
+   "numerical_locations": [
+    "实体/疾病目录/（18 种，不含 ASD）"
+   ],
+   "added": "2026-08-19",
+   "updated": "2026-08-19"
+  },
+  "发育性": {
+   "definition": "疾病三分类之一（2026-08-19 #87 决策）：先天连接结构异常的疾病类——非器质（无组织损伤）、非创伤（不源于经历）。当前目录 1 种：自闭症谱系障碍（ASD，'连接方式不同'而非'变弱'，结构异常）。",
+   "source": "实体/疾病目录/自闭症谱系障碍.md :12（'不是变弱而是连接方式不同'）+ .scratch/grilling-87-npc-life-generation/grilling-87.md（#87 讨论 2026-08-19）",
+   "old_model": "—（本项目首次定义）",
+   "deviation_reason": "ASD 不经历创伤，故排除在创伤记忆共性之外；与器质性区分：无组织损伤，是连接结构差异。",
+   "status": "active",
+   "numerical_locations": [
+    "实体/疾病目录/自闭症谱系障碍.md"
+   ],
+   "added": "2026-08-19",
+   "updated": "2026-08-19"
+  },
+  "器质性": {
+   "definition": "疾病三分类之一（2026-08-19 #87 决策）：脑组织/生理病变导致的精神症状类（脑外伤/代谢/物质等）。当前目录 0 种——#87 决策：搁置留位（参考素材仅 1 例脑外伤失忆患者，样本不足），预留后期补充位。",
+   "source": ".scratch/grilling-87-npc-life-generation/grilling-87.md（#87 讨论 2026-08-19）+ 参考/文献/临床文献-精神武器设计数据源.md（'急性器质性状态'语境）",
+   "old_model": "传统'器质性精神障碍'（Fish 精神病理学），DSM-5 改为'继发于已知生理状态'",
+   "deviation_reason": "项目目录暂缺器质类，用户决策搁置留位；分类保留以备后期补充。",
+   "status": "active",
+   "numerical_locations": [
+    "实体/疾病目录/（0 种，留位）"
+   ],
+   "added": "2026-08-19",
+   "updated": "2026-08-19"
+  },
+  "苦痛记忆": {
+   "definition": "⚠️ 已废弃（2026-08-19，#87 术语更正）。原为'病因-疾病'中间载体命名，用户更正为'创伤记忆'。定义全部并入创伤记忆条目。",
+   "source": ".scratch/grilling-87-npc-life-generation/grilling-87.md",
+   "old_model": "日常语义：痛苦的记忆",
+   "deviation_reason": "用户（2026-08-19）：创伤记忆是通用前体（所有非器质性精神疾病共性），苦痛记忆命名废弃。",
+   "status": "deprecated",
+   "numerical_locations": [],
+   "added": "2026-08-19",
+   "updated": "2026-08-19"
   }
  },
  "_metadata": {
