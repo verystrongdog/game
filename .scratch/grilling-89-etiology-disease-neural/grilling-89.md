@@ -6,6 +6,7 @@ Status: open
 前置: #88 苦痛记忆生成语义（累计/勾起/遗忘 定义）
 阻塞: 无（与 #88 并行；#88 的生成功能产出苦痛记忆，不依赖本 issue 的转化规则）
 创建: 2026-08-19
+GitHub: [#88](https://github.com/verystrongdog/game/issues/88)（⚠️ GitHub 自动编号偏移：本地 #89 = GitHub #88）
 
 ## 话题
 

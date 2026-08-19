@@ -6,6 +6,7 @@ Status: open
 前置: #87 素材库内容生产（社会演化矩阵 / 病案书素材池）✅
 阻塞: 无（#87 素材生产挂起中，本 issue 并行设计生成功能）
 创建: 2026-08-18
+GitHub: [#87](https://github.com/verystrongdog/game/issues/87)（⚠️ GitHub 自动编号偏移：本地 #88 = GitHub #87）
 
 ## 话题
 
