@@ -38,6 +38,8 @@ GitHub: [#90](https://github.com/verystrongdog/game/issues/90)
 
 ## Comments
 
+- **#90-D8 schema type 字段定案（2026-08-20）**：`type ∈ {behavioral, narrative, generic}`——**trauma 不作为 type**（危险分析后修正）：创伤 = **烈度属性**（I_mem 高 + 表征形态），不是载荷类型；一条记录可为 generic/behavioral + 高烈度 = 创伤记忆。判定规则（结构可核验，无模糊词）：behavioral ⟺ 四件套结构完整（链路偏好∧行动模式∧SAN习惯∧上次结果）；narrative ⟺ Conway 三层完整（人生阶段∧一般事件∧事件细节）；generic ⟺ `payload = ∅`（显式空载荷，非排除法补集——防 type 语义漂移）。判定主体 = 写入管线（内容层），生成端只提供输入数据不标注类型（防消费方越权）。已消除危险：① type 与剂量-反应累积冲突（trauma 移出，累积后 I_mem 增长无需改 type）② 判定主体错层（写入管线判定）③ generic 补集漂移（正面定义 payload=∅）④ 事件快照不可核验 + ⑤ A_trauma 越界（均移交 #88 定义，不引入跨 issue 参数）。
+
 - **#90-D7 生命周期完整表述 + 衰减统一确认（2026-08-20）**：**八状态生命周期**（NEW → CONSOLIDATING → STABLE ⇄ RECONSOLIDATING → WEAKENED / FORGOTTEN / COMPARTMENTALIZED / RESET），完整语义表 + 三条铁律（遗忘不作用于 m、提取=写操作、同一状态机覆盖全部类型）见 `数学建模-记忆过程.md` §九。**敌人跨战斗记忆并入统一幂律衰减**（方案 ①）：`P_acc(t) = P_acc(0)·t^(−b)` 一套机制，Boss 差异 = b 参数化（A 院长 b 小=精确、B 传销 b 大=弱）；「完整/50%/遗忘」档位表述降级为幂律曲线的叙事化采样点；「击败后清零」= RESET 状态转移（§9.2）；敌人四件套 = behavioral payload 走同一 MemoryRecord。已否决：方案 ② 档位+幂律共存（两套衰减逻辑）。与 #90-D3 `access.可提取性` 字段天然合一。
 
 - **#90-D6 检索接口 s 构成确认（2026-08-20）**：`s_j = w₁·(P·T_j)/N + w₂·(c_R·c_E,j)`，w₁+w₂=1（方案 ②，内容 + 情境加权）。**触发源分离**：外部知觉线索（视觉/听觉/人物在场）走内容项 `(P·T_j)`；内部情绪/生理状态走情境项 `(c_R·c_E)`——#87-D7 双触发源在两项上天然分离。情境向量 `c_t` 构成确认 = §二 四分量（时间 + 地点 + 情绪 + 在场人物，[NEW]）。w₁/w₂ 待校准 [NEW]。检索消费方分家确认：内容层 P_trigger 供 NPC 创伤触发/情境触发，引擎层 P_success（θ_mem）供记忆类技能（P1c D5 预留接口），无需额外对接层。文献依据：TCM（Howard & Kahana 2002，数学综述 §九）+ Minerva（Hintzman 1988，§二）。
