@@ -1,7 +1,7 @@
 # [Grilling] 记忆内容层物理储存设计
 
 Type: grilling
-Status: open
+Status: closed
 维度: 规则 + 管线
 前置: #87 创伤记忆语义（f/g/h 已闭合 D6-D9）✅
 阻塞: #88 转化规则（创伤记忆→病理链路 m 偏移，量化合成依赖本 issue 的储存 schema）

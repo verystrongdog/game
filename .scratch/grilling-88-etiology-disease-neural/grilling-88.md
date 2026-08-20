@@ -3,7 +3,7 @@
 Type: grilling
 Status: open
 维度: 规则 + 实体
-前置: #87 创伤记忆生成语义（累计/勾起/遗忘 定义）
+前置: #87 创伤记忆生成语义（累计/勾起/遗忘 定义）✅ + #90 记忆内容层 schema ✅（2026-08-20 已闭合——量化合成可读 MemoryRecord schema）
 阻塞: 无（与 #87 并行；#87 的生成功能产出创伤记忆，不依赖本 issue 的转化规则）
 创建: 2026-08-19
 GitHub: [#88](https://github.com/verystrongdog/game/issues/88)
