@@ -38,8 +38,8 @@ md 文档（设计层）          JSON 文件（数据层）          C# 引擎 
 
 | 文件 | 内容 | 规模 | 来源 | 消费方 |
 |------|------|------|------|--------|
-| `brain_regions.json` | 50 解剖实体 + 19 细分 = **69 functional_id**（44 皮层 + 14 皮下 + 11 脑干；67 剖面 + 2 mirror_of），每区 16 字段含 function_profile | 69 regions | `规则/技能树系统/脑功能层级模型.md` | 全部引擎层（行序锚/τ/CSTC CI/坐标） |
-| `connectivity/tripartite_model.json` | 三体神经模型：51 图节点 + 4 种边（皮层-皮层 776 / 脑干广播 114 / CSTC 环路 47 / 特权通路 112） | 51 / 1049 边 | 脑功能层级模型 §二十（Grilling #26） | WMatrixBuilder / CorticalBias / CstcGating |
+| `brain_regions.json` | 50 解剖实体 + 19 细分 = **69 functional_id**（44 皮层 + 14 皮下 + 11 脑干；67 剖面 + 2 mirror_of 展开），每区 16 字段含 function_profile；带 dk_name 条目含 lateralization（Grilling #92） | 69 regions | `规则/技能树系统/脑功能层级模型.md` | 全部引擎层（行序锚/τ/CSTC CI/坐标） |
+| `connectivity/tripartite_model.json` | 三体神经模型：51 图节点 + 4 种边（皮层-皮层 776 / 脑干广播 114 / CSTC 环路 47 / 特权通路 112）；graph_nodes 含 lateralization 字段（Grilling #92） | 51 / 1049 边 | 脑功能层级模型 §二十（Grilling #26） | WMatrixBuilder / CorticalBias / CstcGating |
 | `connectivity/W_sensory.json` | 感官模态→解剖节点映射矩阵（6 模态 × 69 节点，二值） | 69×6 | `规则/技能树系统/运行时状态模型.md` §4.5（Grilling #34） | EventProcessor（s 打包）+ canonical 行序锚 |
 | `connectivity/situation_primitives.json` | 27 情境原型（RDoC 剖面 + 评估剖面 + 关键脑区） | 27 archetypes | `规则/核心机制.md` §六 | 正式情境系统（demo 未消费） |
 | `signal_types.json` | 信号类型受控词表（4 大类 × 18 子类） | 18 subtypes | 脑功能层级模型 §二十.8 | function_label / function_profile membership 校验 |

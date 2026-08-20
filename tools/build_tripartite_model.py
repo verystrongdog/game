@@ -170,6 +170,22 @@ def build_graph_nodes(regions):
         rep_category = max(set(categories), key=categories.count) if categories else "unknown"
         rep_mni = mni_coords[0] if mni_coords else None
 
+        # 偏侧系数（Grilling #92）：同 dk_name 多 functional_id 同值；镜像变体（mirror_of）不写此字段
+        lateralization = None
+        is_mirror = any(
+            isinstance(regions.get(fid, {}).get("function_profile"), dict)
+            and "mirror_of" in regions[fid]["function_profile"]
+            for fid in fids
+        )
+        if not is_mirror:
+            for fid in fids:
+                lat = regions[fid].get("lateralization")
+                if lat is not None:
+                    lateralization = lat
+                    break
+            if lateralization is None:
+                lateralization = 0.0
+
         nodes[dk] = {
             "dk_name": dk,
             "functional_ids": fids,
@@ -193,6 +209,9 @@ def build_graph_nodes(regions):
                 pf.get("neurotransmitter_dominant", "") for pf in profiles if pf.get("neurotransmitter_dominant")
             )),
         }
+
+        if lateralization is not None:
+            nodes[dk]["lateralization"] = lateralization
 
     return nodes, fids_by_dk, regions
 

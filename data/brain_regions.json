@@ -45,7 +45,8 @@
         "cstc_role": "none",
         "hierarchy_direction": "feedforward",
         "gameplay_domain": "sensory_perception"
-      }
+      },
+      "lateralization": 0.0
     },
     "AnteriorCingulateCortex": {
       "zh_name": "ACC",
@@ -92,7 +93,8 @@
         "cstc_role": "cortical_input",
         "hierarchy_direction": "both",
         "gameplay_domain": "cognitive_control"
-      }
+      },
+      "lateralization": 0.0
     },
     "RostralAnteriorCingulateCortex": {
       "zh_name": "ACC吻侧",
@@ -139,7 +141,8 @@
         "cstc_role": "cortical_input",
         "hierarchy_direction": "feedback",
         "gameplay_domain": "threat_defense"
-      }
+      },
+      "lateralization": 0.0
     },
     "AnteriorCingulateCortexDorsal": {
       "zh_name": "ACC背侧",
@@ -186,7 +189,8 @@
         "cstc_role": "cortical_input",
         "hierarchy_direction": "both",
         "gameplay_domain": "cognitive_control"
-      }
+      },
+      "lateralization": 0.0
     },
     "ParsOpercularis": {
       "zh_name": "Broca区",
@@ -233,7 +237,8 @@
         "cstc_role": "cortical_input",
         "hierarchy_direction": "feedforward",
         "gameplay_domain": "social_cognition"
-      }
+      },
+      "lateralization": 0.0
     },
     "MedialOrbitalPrefrontalDMN": {
       "zh_name": "DMN+OFC",
@@ -280,7 +285,8 @@
         "cstc_role": "cortical_input",
         "hierarchy_direction": "both",
         "gameplay_domain": "reward_learning"
-      }
+      },
+      "lateralization": 0.0
     },
     "Precentral": {
       "zh_name": "M1",
@@ -322,7 +328,8 @@
         "cstc_role": "cortical_input",
         "hierarchy_direction": "feedforward",
         "gameplay_domain": "motor_execution"
-      }
+      },
+      "lateralization": 0.0
     },
     "AccumbensShell": {
       "zh_name": "NAcc壳",
@@ -369,7 +376,8 @@
         "cstc_role": "striatal_gate",
         "hierarchy_direction": "both",
         "gameplay_domain": "reward_learning"
-      }
+      },
+      "lateralization": 0.0
     },
     "AccumbensCore": {
       "zh_name": "NAcc核",
@@ -416,7 +424,8 @@
         "cstc_role": "striatal_gate",
         "hierarchy_direction": "both",
         "gameplay_domain": "reward_learning"
-      }
+      },
+      "lateralization": 0.0
     },
     "LateralOrbitofrontal": {
       "zh_name": "OFC",
@@ -463,7 +472,8 @@
         "cstc_role": "cortical_input",
         "hierarchy_direction": "both",
         "gameplay_domain": "reward_learning"
-      }
+      },
+      "lateralization": 0.0
     },
     "PeriaqueductalGray": {
       "zh_name": "PAG",
@@ -546,7 +556,8 @@
         "cstc_role": "none",
         "hierarchy_direction": "feedforward",
         "gameplay_domain": "sensory_perception"
-      }
+      },
+      "lateralization": 0.0
     },
     "SupramarginalTPJ": {
       "zh_name": "TPJ",
@@ -592,7 +603,8 @@
         "cstc_role": "none",
         "hierarchy_direction": "both",
         "gameplay_domain": "social_cognition"
-      }
+      },
+      "lateralization": 0.0
     },
     "VentralTegmentalArea": {
       "zh_name": "VTA",
@@ -680,7 +692,8 @@
         "cstc_role": "none",
         "hierarchy_direction": "both",
         "gameplay_domain": "social_cognition"
-      }
+      },
+      "lateralization": 0.0
     },
     "RostralMiddleFrontalDLPFC": {
       "zh_name": "dlPFC",
@@ -729,7 +742,8 @@
         "cstc_role": "cortical_input",
         "hierarchy_direction": "both",
         "gameplay_domain": "cognitive_control"
-      }
+      },
+      "lateralization": 0.0
     },
     "SuperiorFrontalMPFC": {
       "zh_name": "mPFC",
@@ -777,7 +791,8 @@
         "cstc_role": "cortical_input",
         "hierarchy_direction": "both",
         "gameplay_domain": "social_cognition"
-      }
+      },
+      "lateralization": 0.0
     },
     "MedialOrbitalPrefrontalVMPFC": {
       "zh_name": "vmPFC",
@@ -826,7 +841,8 @@
         "cstc_role": "cortical_input",
         "hierarchy_direction": "feedback",
         "gameplay_domain": "threat_defense"
-      }
+      },
+      "lateralization": 0.0
     },
     "SuperiorColliculus": {
       "zh_name": "上丘",
@@ -911,7 +927,8 @@
         "cstc_role": "thalamic_relay",
         "hierarchy_direction": "both",
         "gameplay_domain": "thalamic_relay"
-      }
+      },
+      "lateralization": 0.0
     },
     "ThalamusPulvinar": {
       "zh_name": "丘脑枕",
@@ -956,7 +973,8 @@
         "cstc_role": "none",
         "hierarchy_direction": "both",
         "gameplay_domain": "thalamic_relay"
-      }
+      },
+      "lateralization": 0.0
     },
     "MedianRapheNucleus": {
       "zh_name": "中缝正中核",
@@ -1085,7 +1103,8 @@
         "cstc_role": "striatal_gate",
         "hierarchy_direction": "both",
         "gameplay_domain": "reward_learning"
-      }
+      },
+      "lateralization": 0.0
     },
     "Entorhinal": {
       "zh_name": "内嗅皮层",
@@ -1133,7 +1152,8 @@
         "cstc_role": "none",
         "hierarchy_direction": "both",
         "gameplay_domain": "memory_consolidation"
-      }
+      },
+      "lateralization": 0.0
     },
     "Insula": {
       "zh_name": "前脑岛",
@@ -1180,7 +1200,8 @@
         "cstc_role": "cortical_input",
         "hierarchy_direction": "both",
         "gameplay_domain": "interoception"
-      }
+      },
+      "lateralization": 0.0
     },
     "FrontalPole": {
       "zh_name": "前额叶极",
@@ -1226,7 +1247,8 @@
         "cstc_role": "cortical_input",
         "hierarchy_direction": "both",
         "gameplay_domain": "cognitive_control"
-      }
+      },
+      "lateralization": 0.0
     },
     "FrontalPoleDMN": {
       "zh_name": "前额叶极·DMN",
@@ -1273,7 +1295,8 @@
         "cstc_role": "cortical_input",
         "hierarchy_direction": "both",
         "gameplay_domain": "social_cognition"
-      }
+      },
+      "lateralization": 0.0
     },
     "FrontalPoleFPN": {
       "zh_name": "前额叶极·FPN",
@@ -1319,7 +1342,8 @@
         "cstc_role": "cortical_input",
         "hierarchy_direction": "both",
         "gameplay_domain": "cognitive_control"
-      }
+      },
+      "lateralization": 0.0
     },
     "FrontalPoleSN": {
       "zh_name": "前额叶极·SN",
@@ -1366,7 +1390,8 @@
         "cstc_role": "cortical_input",
         "hierarchy_direction": "both",
         "gameplay_domain": "cognitive_control"
-      }
+      },
+      "lateralization": 0.0
     },
     "PosteriorCingulate": {
       "zh_name": "后扣带",
@@ -1413,7 +1438,8 @@
         "cstc_role": "none",
         "hierarchy_direction": "both",
         "gameplay_domain": "memory_consolidation"
-      }
+      },
+      "lateralization": 0.0
     },
     "Putamen": {
       "zh_name": "壳核",
@@ -1456,7 +1482,8 @@
         "cstc_role": "striatal_gate",
         "hierarchy_direction": "both",
         "gameplay_domain": "motor_execution"
-      }
+      },
+      "lateralization": 0.0
     },
     "LateralOccipital": {
       "zh_name": "外侧枕叶",
@@ -1496,7 +1523,8 @@
         "cstc_role": "none",
         "hierarchy_direction": "feedforward",
         "gameplay_domain": "sensory_perception"
-      }
+      },
+      "lateralization": 0.0
     },
     "CerebellumCortex": {
       "zh_name": "小脑皮层",
@@ -1538,7 +1566,8 @@
         "cstc_role": "none",
         "hierarchy_direction": "both",
         "gameplay_domain": "motor_execution"
-      }
+      },
+      "lateralization": 0.0
     },
     "Caudate": {
       "zh_name": "尾状核",
@@ -1581,7 +1610,8 @@
         "cstc_role": "striatal_gate",
         "hierarchy_direction": "both",
         "gameplay_domain": "cognitive_control"
-      }
+      },
+      "lateralization": 0.0
     },
     "IsthmusCingulate": {
       "zh_name": "峡部扣带",
@@ -1624,7 +1654,8 @@
         "cstc_role": "none",
         "hierarchy_direction": "both",
         "gameplay_domain": "memory_consolidation"
-      }
+      },
+      "lateralization": 0.0
     },
     "Paracentral": {
       "zh_name": "旁中央小叶",
@@ -1666,7 +1697,8 @@
         "cstc_role": "cortical_input",
         "hierarchy_direction": "feedforward",
         "gameplay_domain": "motor_execution"
-      }
+      },
+      "lateralization": 0.0
     },
     "Amygdala": {
       "zh_name": "杏仁核",
@@ -1713,7 +1745,8 @@
         "cstc_role": "cortical_input",
         "hierarchy_direction": "both",
         "gameplay_domain": "threat_defense"
-      }
+      },
+      "lateralization": 0.0
     },
     "Pericalcarine": {
       "zh_name": "枕叶 V1",
@@ -1757,7 +1790,8 @@
         "cstc_role": "none",
         "hierarchy_direction": "feedforward",
         "gameplay_domain": "sensory_perception"
-      }
+      },
+      "lateralization": 0.0
     },
     "LateralOccipitalOccipitoParietal": {
       "zh_name": "枕顶联合",
@@ -1802,7 +1836,8 @@
         "cstc_role": "none",
         "hierarchy_direction": "feedforward",
         "gameplay_domain": "sensory_perception"
-      }
+      },
+      "lateralization": 0.0
     },
     "Precuneus": {
       "zh_name": "楔前叶",
@@ -1849,7 +1884,8 @@
         "cstc_role": "none",
         "hierarchy_direction": "both",
         "gameplay_domain": "memory_consolidation"
-      }
+      },
+      "lateralization": 0.0
     },
     "Cuneus": {
       "zh_name": "楔叶",
@@ -1890,7 +1926,8 @@
         "cstc_role": "none",
         "hierarchy_direction": "feedforward",
         "gameplay_domain": "sensory_perception"
-      }
+      },
+      "lateralization": 0.0
     },
     "HippocampusCA1": {
       "zh_name": "海马体 CA1",
@@ -1937,7 +1974,8 @@
         "cstc_role": "cortical_input",
         "hierarchy_direction": "both",
         "gameplay_domain": "memory_consolidation"
-      }
+      },
+      "lateralization": 0.0
     },
     "HippocampusCA3": {
       "zh_name": "海马体 CA3",
@@ -1983,7 +2021,8 @@
         "cstc_role": "cortical_input",
         "hierarchy_direction": "both",
         "gameplay_domain": "memory_consolidation"
-      }
+      },
+      "lateralization": 0.0
     },
     "Parahippocampal": {
       "zh_name": "海马旁回",
@@ -2026,7 +2065,8 @@
         "cstc_role": "none",
         "hierarchy_direction": "both",
         "gameplay_domain": "memory_consolidation"
-      }
+      },
+      "lateralization": 0.0
     },
     "StriatumMatrix": {
       "zh_name": "纹状体基质",
@@ -2073,7 +2113,8 @@
         "cstc_role": "striatal_gate",
         "hierarchy_direction": "both",
         "gameplay_domain": "habit_learning"
-      }
+      },
+      "lateralization": 0.0
     },
     "Fusiform": {
       "zh_name": "纺锤体回",
@@ -2114,7 +2155,8 @@
         "cstc_role": "none",
         "hierarchy_direction": "feedforward",
         "gameplay_domain": "sensory_perception"
-      }
+      },
+      "lateralization": 0.0
     },
     "Supramarginal": {
       "zh_name": "缘上回",
@@ -2157,7 +2199,8 @@
         "cstc_role": "none",
         "hierarchy_direction": "both",
         "gameplay_domain": "social_cognition"
-      }
+      },
+      "lateralization": 0.0
     },
     "PontineReticularNucleus": {
       "zh_name": "脑桥网状核",
@@ -2245,7 +2288,8 @@
         "cstc_role": "striatal_gate",
         "hierarchy_direction": "both",
         "gameplay_domain": "reward_learning"
-      }
+      },
+      "lateralization": 0.0
     },
     "Lingual": {
       "zh_name": "舌回",
@@ -2285,7 +2329,8 @@
         "cstc_role": "none",
         "hierarchy_direction": "feedforward",
         "gameplay_domain": "sensory_perception"
-      }
+      },
+      "lateralization": 0.0
     },
     "Pallidum": {
       "zh_name": "苍白球",
@@ -2327,7 +2372,8 @@
         "cstc_role": "pallidal_output",
         "hierarchy_direction": "both",
         "gameplay_domain": "action_gating"
-      }
+      },
+      "lateralization": 0.0
     },
     "LocusCoeruleus": {
       "zh_name": "蓝斑",
@@ -2395,6 +2441,21 @@
       "notes": "蓝斑右侧对应. 与左侧共同构成双侧LC",
       "hemisphere": "R",
       "function_profile": {
+        "primary_function": "Norepinephrine-mediated global arousal and attention; diffuse NE broadcast to entire neocortex",
+        "input_types": [
+          "excitation/cognitive_goal",
+          "excitation/emotional_salience"
+        ],
+        "output_types": [
+          "modulation/arousal_NE"
+        ],
+        "timescale": "slow",
+        "neurotransmitter_dominant": "norepinephrine",
+        "oscillatory_band": "theta",
+        "cstc_loop": "none",
+        "cstc_role": "modulator",
+        "hierarchy_direction": "feedforward",
+        "gameplay_domain": "arousal_modulation",
         "mirror_of": "LocusCoeruleus"
       }
     },
@@ -2443,7 +2504,8 @@
         "cstc_role": "none",
         "hierarchy_direction": "both",
         "gameplay_domain": "social_cognition"
-      }
+      },
+      "lateralization": 0.0
     },
     "SuperiorParietal": {
       "zh_name": "顶内沟",
@@ -2488,7 +2550,8 @@
         "cstc_role": "none",
         "hierarchy_direction": "both",
         "gameplay_domain": "sensory_perception"
-      }
+      },
+      "lateralization": 0.0
     },
     "InferiorParietal": {
       "zh_name": "顶叶",
@@ -2534,7 +2597,8 @@
         "cstc_role": "none",
         "hierarchy_direction": "both",
         "gameplay_domain": "sensory_perception"
-      }
+      },
+      "lateralization": 0.0
     },
     "SuperiorFrontal": {
       "zh_name": "额上回",
@@ -2577,7 +2641,8 @@
         "cstc_role": "cortical_input",
         "hierarchy_direction": "feedforward",
         "gameplay_domain": "motor_execution"
-      }
+      },
+      "lateralization": 0.0
     },
     "CaudalMiddleFrontal": {
       "zh_name": "额中回尾部",
@@ -2620,7 +2685,8 @@
         "cstc_role": "cortical_input",
         "hierarchy_direction": "feedforward",
         "gameplay_domain": "motor_execution"
-      }
+      },
+      "lateralization": 0.0
     },
     "FrontalPoleExtreme": {
       "zh_name": "额极",
@@ -2666,7 +2732,8 @@
         "cstc_role": "cortical_input",
         "hierarchy_direction": "both",
         "gameplay_domain": "cognitive_control"
-      }
+      },
+      "lateralization": 0.0
     },
     "SuperiorTemporal": {
       "zh_name": "颞上回",
@@ -2707,7 +2774,8 @@
         "cstc_role": "none",
         "hierarchy_direction": "both",
         "gameplay_domain": "sensory_perception"
-      }
+      },
+      "lateralization": 0.0
     },
     "SuperiorTemporalSulcus": {
       "zh_name": "颞上沟",
@@ -2752,7 +2820,8 @@
         "cstc_role": "none",
         "hierarchy_direction": "both",
         "gameplay_domain": "social_cognition"
-      }
+      },
+      "lateralization": 0.0
     },
     "BanksSTS": {
       "zh_name": "颞上沟岸",
@@ -2793,7 +2862,8 @@
         "cstc_role": "none",
         "hierarchy_direction": "both",
         "gameplay_domain": "social_cognition"
-      }
+      },
+      "lateralization": 0.0
     },
     "InferiorTemporal": {
       "zh_name": "颞下回",
@@ -2837,7 +2907,8 @@
         "cstc_role": "none",
         "hierarchy_direction": "feedforward",
         "gameplay_domain": "sensory_perception"
-      }
+      },
+      "lateralization": 0.0
     },
     "MiddleTemporal": {
       "zh_name": "颞中回",
@@ -2879,7 +2950,8 @@
         "cstc_role": "none",
         "hierarchy_direction": "both",
         "gameplay_domain": "sensory_perception"
-      }
+      },
+      "lateralization": 0.0
     },
     "TemporalPole": {
       "zh_name": "颞极",
@@ -2926,7 +2998,8 @@
         "cstc_role": "none",
         "hierarchy_direction": "both",
         "gameplay_domain": "social_cognition"
-      }
+      },
+      "lateralization": 0.0
     },
     "SubstantiaNigraParsCompacta": {
       "zh_name": "黑质致密部",
@@ -2995,6 +3068,22 @@
       "notes": "黑质右侧",
       "hemisphere": "R",
       "function_profile": {
+        "primary_function": "Nigrostriatal dopamine for action initiation, vigor, and habit reinforcement; D1/D2 modulation",
+        "input_types": [
+          "excitation/motor_command",
+          "gating/nogo_indirect"
+        ],
+        "output_types": [
+          "modulation/motor_DA",
+          "plasticity/ltd_depression"
+        ],
+        "timescale": "medium",
+        "neurotransmitter_dominant": "dopamine",
+        "oscillatory_band": "beta",
+        "cstc_loop": "none",
+        "cstc_role": "modulator",
+        "hierarchy_direction": "feedforward",
+        "gameplay_domain": "motor_execution",
         "mirror_of": "SubstantiaNigraParsCompacta"
       }
     },
