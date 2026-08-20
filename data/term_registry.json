@@ -2168,13 +2168,91 @@
    ],
    "added": "2026-08-19",
    "updated": "2026-08-19"
+  },
+  "记忆内容层": {
+   "definition": "记忆记录的存储层——「一条记忆」的数据结构（MemoryRecord schema）/存储位置/写入管线/检索接口/生命周期的总称。区别于记忆功能层（脑区定位：CA1 回忆/CA3 辨别等，脑功能层级模型 §四-五）与权重层 m（三体边髓鞘化因子）——内容层 = 可寻址离散记录对象，黑箱语义（不调用海马内部结构）。",
+   "source": "规则/技能树系统/记忆内容层.md（grilling #90，2026-08-20）",
+   "old_model": "—（项目此前只有记忆功能层 + 权重层，无内容层——issue #90 现状核查结论）",
+   "deviation_reason": "—",
+   "status": "active",
+   "numerical_locations": [
+    "规则/技能树系统/记忆内容层.md §二（schema）",
+    "规则/技能树系统/记忆内容层.md §三（六阶段状态机）"
+   ],
+   "added": "2026-08-20",
+   "updated": "2026-08-20"
+  },
+  "可提取性": {
+   "definition": "记忆记录访问层的衰减量 P_acc ∈ [0,1]——遗忘作用于它而非 m（#87-D8 访问层遗忘）；幂律衰减 P_acc(t) = P_acc(0)·(t/t_ref)^(−b)（Murre & Dros 2015：1 天剩 ≈0.34）；主动遗忘 = PFC 抑制降低可提取性（记录保留、访问变难）。",
+   "source": "规则/技能树系统/记忆内容层.md §3.6（grilling #90 D3/D7）",
+   "old_model": "—（传统 RPG 记忆=数据删除；本项目遗忘 = 可提取性衰减非存储删除，Wixted 2004 / Anderson & Hanslmayr 2014）",
+   "deviation_reason": "遗忘默认 = 可提取性衰减 + 干扰，非存储删除（#87-D8 正典；文献综合 Wixted 2004 / Anderson & Hanslmayr 2014）",
+   "status": "active",
+   "numerical_locations": [
+    "规则/技能树系统/记忆内容层.md §3.6（幂律公式）",
+    "规则/技能树系统/记忆内容层.md §2.1（access.P_acc 字段）"
+   ],
+   "added": "2026-08-20",
+   "updated": "2026-08-20"
+  },
+  "勾起": {
+   "definition": "创伤记忆/记忆被线索触发的机制（#87-D7 g）：触发概率 P_trigger,j = σ(κ·s_j³ − θ_g)（n=3 固定，Minerva 2 激活结构特征；κ 缩放/θ_g 勾起阈值 [NEW] 待 #35）；s = 线索-编码情境相似度（内容+情境加权）。触发源 ∈ {外部知觉线索, 内部情绪/生理状态}（双触发源分离：外部→内容项、内部→情境项）。",
+   "source": "规则/技能树系统/记忆内容层.md §3.4/§5（grilling #90 D1/D6；#87-D7 机制定形）",
+   "old_model": "—（#87-D7 仅定义 P=f(s) 结构，函数形式 [NEW] 建模假设；#90-D1 定形为 σ(κ·s³−θ_g)）",
+   "deviation_reason": "—",
+   "status": "active",
+   "numerical_locations": [
+    "规则/技能树系统/记忆内容层.md §3.4（勾起公式）",
+    "参考/文献/记忆数学模型-文献综述.md §二（Minerva 立方激活）"
+   ],
+   "added": "2026-08-20",
+   "updated": "2026-08-20"
+  },
+  "再巩固窗口": {
+   "definition": "提取后记忆回到不稳定状态的改写窗口：T_re ≤ 6h × τ_scale（Nader 2000 动物侧；Schiller 2010 人类侧有复现争议，默认取动物侧）。窗口内干预可改写强度（ΔI ← ΔI + ΔI_int，创伤大幅/普通轻微——#90-D2 烈度分级）；窗口外干预无效；未稳定化 → 记忆减弱 WEAKENED。提取 = 写操作。",
+   "source": "规则/技能树系统/记忆内容层.md §3.5/§四（grilling #90 D2/D7）",
+   "old_model": "—（只读记忆观；文献：Nader & Hardt 2009 单一标准）",
+   "deviation_reason": "提取 = 写操作——每次提取开 ≤6h 改写窗口（#90-D2 应用于全部记忆类型 + 烈度分级）",
+   "status": "active",
+   "numerical_locations": [
+    "规则/技能树系统/记忆内容层.md §3.5（T_re 窗口）",
+    "参考/文献/创伤记忆机制-文献综述.md h1/h2（Nader 2000 / Schiller 2010）"
+   ],
+   "added": "2026-08-20",
+   "updated": "2026-08-20"
+  },
+  "区隔化": {
+   "definition": "DID 记忆分隔机制（解离性身份障碍.md 行为覆盖表）：海马旁回区隔化——身份切换后前 3 回合激活的链路被遗忘（不可在同一情境下复用）。内容层实现：access.区隔标记（#90-D7 状态⑦ COMPARTMENTALIZED）+ entities 关系索引（DID 记忆共享矩阵，决策树 :1294）。",
+   "source": "实体/疾病目录/解离性身份障碍.md（行为覆盖表）；规则/技能树系统/记忆内容层.md §四（grilling #90 D7/D8）",
+   "old_model": "—（区隔化在 DID 文件有用法但未入库）",
+   "deviation_reason": "—",
+   "status": "active",
+   "numerical_locations": [
+    "实体/疾病目录/解离性身份障碍.md（行为覆盖表：记忆域区隔化）",
+    "规则/技能树系统/记忆内容层.md §2.1（access.区隔标记）"
+   ],
+   "added": "2026-08-20",
+   "updated": "2026-08-20"
+  },
+  "情境向量": {
+   "definition": "时序背景向量 c_t（TCM，Howard & Kahana 2002 映射）：时间 + 地点 + 情绪 + 在场人物的组合向量 [NEW]——构成检索相似度的情境项 (c_R·c_E,j)（#90-D6，权重 w₂）；时间/地点/情绪自动成为检索维度（同天/同地点/同情绪事件互相勾起）。",
+   "source": "规则/技能树系统/记忆内容层.md §3.4/§5.2（grilling #90 D6）",
+   "old_model": "—（项目此前检索仅 θ_mem MTL 激活均值，无内容层情境维度）",
+   "deviation_reason": "—",
+   "status": "active",
+   "numerical_locations": [
+    "规则/技能树系统/记忆内容层.md §5.2（触发源分离）",
+    "参考/文献/记忆数学模型-文献综述.md §九（TCM 公式）"
+   ],
+   "added": "2026-08-20",
+   "updated": "2026-08-20"
   }
  },
  "_metadata": {
-  "last_updated": "2026-08-12",
-  "last_batch": "Grilling #40 延伸讨论 — 主观意识/现象壳/结构核/涌现（哲学义）4 术语入库",
-  "total_terms": 134,
-  "active_terms": 116,
-  "deprecated_terms": 18
+  "last_updated": "2026-08-20",
+  "last_batch": "Grilling #90 记忆内容层 — 记忆内容层/可提取性/勾起/再巩固窗口/区隔化/情境向量 6 术语入库",
+  "total_terms": 165,
+  "active_terms": 146,
+  "deprecated_terms": 19
  }
 }
