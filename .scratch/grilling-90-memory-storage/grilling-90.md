@@ -38,6 +38,8 @@ GitHub: [#90](https://github.com/verystrongdog/game/issues/90)
 
 ## Comments
 
+- **#90-D7 生命周期完整表述 + 衰减统一确认（2026-08-20）**：**八状态生命周期**（NEW → CONSOLIDATING → STABLE ⇄ RECONSOLIDATING → WEAKENED / FORGOTTEN / COMPARTMENTALIZED / RESET），完整语义表 + 三条铁律（遗忘不作用于 m、提取=写操作、同一状态机覆盖全部类型）见 `数学建模-记忆过程.md` §九。**敌人跨战斗记忆并入统一幂律衰减**（方案 ①）：`P_acc(t) = P_acc(0)·t^(−b)` 一套机制，Boss 差异 = b 参数化（A 院长 b 小=精确、B 传销 b 大=弱）；「完整/50%/遗忘」档位表述降级为幂律曲线的叙事化采样点；「击败后清零」= RESET 状态转移（§9.2）；敌人四件套 = behavioral payload 走同一 MemoryRecord。已否决：方案 ② 档位+幂律共存（两套衰减逻辑）。与 #90-D3 `access.可提取性` 字段天然合一。
+
 - **#90-D6 检索接口 s 构成确认（2026-08-20）**：`s_j = w₁·(P·T_j)/N + w₂·(c_R·c_E,j)`，w₁+w₂=1（方案 ②，内容 + 情境加权）。**触发源分离**：外部知觉线索（视觉/听觉/人物在场）走内容项 `(P·T_j)`；内部情绪/生理状态走情境项 `(c_R·c_E)`——#87-D7 双触发源在两项上天然分离。情境向量 `c_t` 构成确认 = §二 四分量（时间 + 地点 + 情绪 + 在场人物，[NEW]）。w₁/w₂ 待校准 [NEW]。检索消费方分家确认：内容层 P_trigger 供 NPC 创伤触发/情境触发，引擎层 P_success（θ_mem）供记忆类技能（P1c D5 预留接口），无需额外对接层。文献依据：TCM（Howard & Kahana 2002，数学综述 §九）+ Minerva（Hintzman 1988，§二）。
 
 - **#90-D5 写入管线确认（2026-08-20）**：**四来源**——① 事件记录（source=event，战斗事件实时 E 编码）② 生成功能产出（source=generated，#87 NPC 人生起草预生成）③ 剧情脚本（source=script，#86 对话树/叙事节点）④ 系统观察（source=observation，NPC 旁观 D1/D2）。**可塑性巩固不是记忆创建来源**（m 层机制，三层分离实现：创建=事件自动写入、玩家选择=巩固窗口只调 TryConsolidate（#73 D4）不触碰 MemoryRecord、记录强化=内容层机制（再巩固改写/测试效应/睡眠回放）——事件强度（m 档位）与烈度 A（ΔI）共享事件输入但公式独立）。**双通道写入**：预生成（②③）直写构建层记忆库；战斗事件（①④）经战斗层 id 快照，战斗结束/休息时批量并入构建层。`source` 字段枚举 = {event, generated, script, observation}。
