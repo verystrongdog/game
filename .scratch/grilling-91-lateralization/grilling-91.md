@@ -1,7 +1,7 @@
 # [Grilling] 三体模型左右偏侧化缺失 — 健康脑偏侧不可表达
 
 Type: grilling
-Status: open
+Status: closed (2026-08-20 — Grilling #92 定案，10 项决策，见 docs/决策树.md [Grilling] 三体模型左右偏侧化缺失)
 维度: 规则 + 管线
 前置: #26 三体神经模型 ✅ + #88 重映射前置讨论（本 issue 从 #88 拆出）✅
 阻塞: #88 重映射端点规格（pathology_edges.json 的 L_/R_ 落点）
