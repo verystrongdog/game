@@ -316,7 +316,7 @@
    "hooks": "3.1 节 5HT tone 推导锚"
   },
   {
-   "edge_id": "an_e01",
+   "edge_id": "anorexia-nervosa_e01",
    "disease_id": "anorexia-nervosa",
    "source": "VentralTegmentalArea",
    "target": "Accumbens-area",
@@ -333,7 +333,7 @@
    "hooks": "行为覆盖②（食物/奖赏趋近不可用）"
   },
   {
-   "edge_id": "an_e02",
+   "edge_id": "anorexia-nervosa_e02",
    "disease_id": "anorexia-nervosa",
    "source": "VentralTegmentalArea",
    "target": "superiorfrontal",
@@ -350,7 +350,7 @@
    "hooks": "3.1 节 DA_VTA 推导锚"
   },
   {
-   "edge_id": "an_e03",
+   "edge_id": "anorexia-nervosa_e03",
    "disease_id": "anorexia-nervosa",
    "source": "rostralanteriorcingulate",
    "target": "insula",
@@ -367,7 +367,7 @@
    "hooks": "行为覆盖① + 非线性跳变②（饥饿=控制成功）"
   },
   {
-   "edge_id": "an_e04",
+   "edge_id": "anorexia-nervosa_e04",
    "disease_id": "anorexia-nervosa",
    "source": "LocusCoeruleus",
    "target": "insula",
@@ -384,7 +384,7 @@
    "hooks": "行为覆盖①（内感受过度警觉侧）"
   },
   {
-   "edge_id": "an_e05",
+   "edge_id": "anorexia-nervosa_e05",
    "disease_id": "anorexia-nervosa",
    "source": "rostralmiddlefrontal",
    "target": "Caudate",
@@ -401,7 +401,7 @@
    "hooks": "行为覆盖③ + 非线性跳变①（过度控制）"
   },
   {
-   "edge_id": "an_e06",
+   "edge_id": "anorexia-nervosa_e06",
    "disease_id": "anorexia-nervosa",
    "source": "caudalanteriorcingulate",
    "target": "rostralanteriorcingulate",
@@ -418,7 +418,7 @@
    "hooks": "行为覆盖③（作用域成员）"
   },
   {
-   "edge_id": "an_e07",
+   "edge_id": "anorexia-nervosa_e07",
    "disease_id": "anorexia-nervosa",
    "source": "precuneus",
    "target": "superiorfrontal",
@@ -435,7 +435,7 @@
    "hooks": "行为覆盖①（身体意象偏差侧翼）"
   },
   {
-   "edge_id": "an_e08",
+   "edge_id": "anorexia-nervosa_e08",
    "disease_id": "anorexia-nervosa",
    "source": "Pallidum",
    "target": "Thalamus-Proper",
@@ -452,7 +452,7 @@
    "hooks": "3.1 节认知僵硬锚"
   },
   {
-   "edge_id": "an_e10",
+   "edge_id": "anorexia-nervosa_e10",
    "disease_id": "anorexia-nervosa",
    "source": "LocusCoeruleus",
    "target": "pericalcarine",
@@ -469,7 +469,7 @@
    "hooks": "行为覆盖①（视觉侧翼）"
   },
   {
-   "edge_id": "an_e09",
+   "edge_id": "anorexia-nervosa_e09",
    "disease_id": "anorexia-nervosa",
    "source": "SubstantiaNigraParsCompacta",
    "target": "Caudate",
@@ -486,7 +486,7 @@
    "hooks": "3.1 节 DA_SNc 推导锚"
   },
   {
-   "edge_id": "an_e11",
+   "edge_id": "anorexia-nervosa_e11",
    "disease_id": "anorexia-nervosa",
    "source": "DorsalRapheNucleus",
    "target": "caudalanteriorcingulate",
@@ -996,7 +996,7 @@
    "hooks": "行为覆盖②（防御运动准备不足）"
   },
   {
-   "edge_id": "bed_e01",
+   "edge_id": "binge-eating-disorder_e01",
    "disease_id": "binge-eating-disorder",
    "source": "VentralTegmentalArea",
    "target": "Accumbens-area",
@@ -1013,7 +1013,7 @@
    "hooks": "行为覆盖①（暴食期）+ 3.1 节 DA_VTA 推导锚"
   },
   {
-   "edge_id": "bed_e02",
+   "edge_id": "binge-eating-disorder_e02",
    "disease_id": "binge-eating-disorder",
    "source": "medialorbitofrontal",
    "target": "Accumbens-area",
@@ -1030,7 +1030,7 @@
    "hooks": "行为覆盖①（食物线索评估）+ 3.1 节 bias_limbic 推导锚"
   },
   {
-   "edge_id": "bed_e08",
+   "edge_id": "binge-eating-disorder_e08",
    "disease_id": "binge-eating-disorder",
    "source": "SubstantiaNigraParsCompacta",
    "target": "Putamen",
@@ -1047,7 +1047,7 @@
    "hooks": "3.1 节 DA_SNc 推导锚"
   },
   {
-   "edge_id": "bed_e05",
+   "edge_id": "binge-eating-disorder_e05",
    "disease_id": "binge-eating-disorder",
    "source": "insula",
    "target": "Accumbens-area",
@@ -1064,7 +1064,7 @@
    "hooks": "非线性跳变①（暴食发作不可中断）+ 3.1 节 bias_limbic 推导锚"
   },
   {
-   "edge_id": "bed_e06",
+   "edge_id": "binge-eating-disorder_e06",
    "disease_id": "binge-eating-disorder",
    "source": "LocusCoeruleus",
    "target": "insula",
@@ -1081,7 +1081,7 @@
    "hooks": "行为覆盖①（渴求期侧翼）"
   },
   {
-   "edge_id": "bed_e09",
+   "edge_id": "binge-eating-disorder_e09",
    "disease_id": "binge-eating-disorder",
    "source": "Amygdala",
    "target": "Accumbens-area",
@@ -1098,7 +1098,7 @@
    "hooks": "行为覆盖①（情绪性暴食触发）"
   },
   {
-   "edge_id": "bed_e03",
+   "edge_id": "binge-eating-disorder_e03",
    "disease_id": "binge-eating-disorder",
    "source": "rostralmiddlefrontal",
    "target": "Caudate",
@@ -1115,7 +1115,7 @@
    "hooks": "行为覆盖③（L5 压制完全失效）+ 3.1 节 bias_cognitive 推导锚"
   },
   {
-   "edge_id": "bed_e04",
+   "edge_id": "binge-eating-disorder_e04",
    "disease_id": "binge-eating-disorder",
    "source": "caudalanteriorcingulate",
    "target": "Caudate",
@@ -1132,7 +1132,7 @@
    "hooks": "行为覆盖③（作用域成员）"
   },
   {
-   "edge_id": "bed_e07",
+   "edge_id": "binge-eating-disorder_e07",
    "disease_id": "binge-eating-disorder",
    "source": "Putamen",
    "target": "Thalamus-Proper",
@@ -1149,7 +1149,7 @@
    "hooks": "非线性跳变②（暴食习惯锁定）"
   },
   {
-   "edge_id": "bed_e11",
+   "edge_id": "binge-eating-disorder_e11",
    "disease_id": "binge-eating-disorder",
    "source": "precentral",
    "target": "Putamen",
@@ -1166,7 +1166,7 @@
    "hooks": "3.1 节 bias_somatic 推导锚"
   },
   {
-   "edge_id": "bed_e10",
+   "edge_id": "binge-eating-disorder_e10",
    "disease_id": "binge-eating-disorder",
    "source": "DorsalRapheNucleus",
    "target": "caudalanteriorcingulate",
@@ -1183,7 +1183,7 @@
    "hooks": "3.1 节 5HT tone 推导锚"
   },
   {
-   "edge_id": "bipolari_e01",
+   "edge_id": "bipolar-I_e01",
    "disease_id": "bipolar-I",
    "source": "VentralTegmentalArea",
    "target": "Accumbens-area",
@@ -1207,7 +1207,7 @@
    "hooks": "行为覆盖①（躁狂/抑郁姿态切换）；非线性跳变①（\\"
   },
   {
-   "edge_id": "bipolari_e02",
+   "edge_id": "bipolar-I_e02",
    "disease_id": "bipolar-I",
    "source": "SubstantiaNigraParsCompacta",
    "target": "Putamen",
@@ -1231,7 +1231,7 @@
    "hooks": "行为覆盖①；非线性跳变①（作用域成员）；3.1 DA_SNc 推导锚"
   },
   {
-   "edge_id": "bipolari_e03",
+   "edge_id": "bipolar-I_e03",
    "disease_id": "bipolar-I",
    "source": "VentralTegmentalArea",
    "target": "superiorfrontal",
@@ -1255,7 +1255,7 @@
    "hooks": "行为覆盖①（目标驱动）；3.1 DA_VTA 推导锚（次）"
   },
   {
-   "edge_id": "bipolari_e16",
+   "edge_id": "bipolar-I_e16",
    "disease_id": "bipolar-I",
    "source": "medialorbitofrontal",
    "target": "Accumbens-area",
@@ -1279,7 +1279,7 @@
    "hooks": "行为覆盖①（冲动趋近/快感缺失）；3.1 bias_limbic 推导锚（相位）"
   },
   {
-   "edge_id": "bipolari_e15",
+   "edge_id": "bipolar-I_e15",
    "disease_id": "bipolar-I",
    "source": "superiorfrontal",
    "target": "Putamen",
@@ -1303,7 +1303,7 @@
    "hooks": "行为覆盖①（物理攻击姿态）；3.1 bias_somatic 推导锚（相位）"
   },
   {
-   "edge_id": "bipolari_e05",
+   "edge_id": "bipolar-I_e05",
    "disease_id": "bipolar-I",
    "source": "LocusCoeruleus",
    "target": "Amygdala",
@@ -1320,7 +1320,7 @@
    "hooks": "3.1 NE 推导锚（主）；非线性跳变②（睡眠恢复 SAN −50%）"
   },
   {
-   "edge_id": "bipolari_e06",
+   "edge_id": "bipolar-I_e06",
    "disease_id": "bipolar-I",
    "source": "LocusCoeruleus",
    "target": "caudalanteriorcingulate",
@@ -1337,7 +1337,7 @@
    "hooks": "3.1 NE 推导锚（次）；行为覆盖③（相位翻转触发器：唤醒域 m_max>0.3）"
   },
   {
-   "edge_id": "bipolari_e07",
+   "edge_id": "bipolar-I_e07",
    "disease_id": "bipolar-I",
    "source": "DorsalRapheNucleus",
    "target": "Amygdala",
@@ -1361,7 +1361,7 @@
    "hooks": "3.1 5HT 推导锚（双向）；躁狂相去抑制/抑郁相过度抑制"
   },
   {
-   "edge_id": "bipolari_e04",
+   "edge_id": "bipolar-I_e04",
    "disease_id": "bipolar-I",
    "source": "caudalanteriorcingulate",
    "target": "Caudate",
@@ -1385,7 +1385,7 @@
    "hooks": "3.1 bias_cognitive 推导锚（相位）；躁狂思维奔逸/抑郁迟滞（认知环路行为层）"
   },
   {
-   "edge_id": "bipolari_e08",
+   "edge_id": "bipolar-I_e08",
    "disease_id": "bipolar-I",
    "source": "caudalanteriorcingulate",
    "target": "frontalpole",
@@ -1402,7 +1402,7 @@
    "hooks": "行为覆盖③（L5 压制失效结构基础，与 e09 协同）；非线性跳变③"
   },
   {
-   "edge_id": "bipolari_e09",
+   "edge_id": "bipolar-I_e09",
    "disease_id": "bipolar-I",
    "source": "medialorbitofrontal",
    "target": "rostralmiddlefrontal",
@@ -1419,7 +1419,7 @@
    "hooks": "整合域边界崩溃行为（思维奔逸↔反刍）"
   },
   {
-   "edge_id": "bipolari_e12",
+   "edge_id": "bipolar-I_e12",
    "disease_id": "bipolar-I",
    "source": "Thalamus-Proper",
    "target": "rostralmiddlefrontal",
@@ -1436,7 +1436,7 @@
    "hooks": "认知环路丘脑腿中继减弱（思维/决策效率↓）"
   },
   {
-   "edge_id": "bipolari_e10",
+   "edge_id": "bipolar-I_e10",
    "disease_id": "bipolar-I",
    "source": "caudalanteriorcingulate",
    "target": "parahippocampal",
@@ -1453,7 +1453,7 @@
    "hooks": "记忆域轻度（无闪回——与 PTSD e06 +0.6 跨层短路区分：双相无创伤闪回机制）"
   },
   {
-   "edge_id": "bipolari_e11",
+   "edge_id": "bipolar-I_e11",
    "disease_id": "bipolar-I",
    "source": "medialorbitofrontal",
    "target": "Hippocampus",
@@ -1470,7 +1470,7 @@
    "hooks": "记忆整合受损；**锂盐治疗锚**（海马保护 = 治疗缓解结构基础）"
   },
   {
-   "edge_id": "bipolari_e13",
+   "edge_id": "bipolar-I_e13",
    "disease_id": "bipolar-I",
    "source": "rostralanteriorcingulate",
    "target": "insula",
@@ -1487,7 +1487,7 @@
    "hooks": "躁狂期体感增强（内感受行为层）；BD-II 内感受相位触发器（共享机制）"
   },
   {
-   "edge_id": "bipolari_e14",
+   "edge_id": "bipolar-I_e14",
    "disease_id": "bipolar-I",
    "source": "precuneus",
    "target": "medialorbitofrontal",
@@ -1504,7 +1504,7 @@
    "hooks": "自我参照处理异常：躁狂夸大→内省缺失（行为层）"
   },
   {
-   "edge_id": "bipolarii_e01",
+   "edge_id": "bipolar-II_e01",
    "disease_id": "bipolar-II",
    "source": "VentralTegmentalArea",
    "target": "Accumbens-area",
@@ -1528,7 +1528,7 @@
    "hooks": "行为覆盖①（轻躁狂/抑郁姿态）；3.1 DA_VTA 推导锚（主）；轻躁狂锁定作用域"
   },
   {
-   "edge_id": "bipolarii_e02",
+   "edge_id": "bipolar-II_e02",
    "disease_id": "bipolar-II",
    "source": "SubstantiaNigraParsCompacta",
    "target": "Putamen",
@@ -1552,7 +1552,7 @@
    "hooks": "行为覆盖①；3.1 DA_SNc 推导锚"
   },
   {
-   "edge_id": "bipolarii_e03",
+   "edge_id": "bipolar-II_e03",
    "disease_id": "bipolar-II",
    "source": "VentralTegmentalArea",
    "target": "superiorfrontal",
@@ -1576,7 +1576,7 @@
    "hooks": "行为覆盖①（目标驱动）；3.1 DA_VTA 推导锚（次）"
   },
   {
-   "edge_id": "bipolarii_e06",
+   "edge_id": "bipolar-II_e06",
    "disease_id": "bipolar-II",
    "source": "medialorbitofrontal",
    "target": "Accumbens-area",
@@ -1600,7 +1600,7 @@
    "hooks": "行为覆盖①（冲动趋近/快感缺失）；3.1 bias_limbic 推导锚（相位）；BD-II 唯一偏侧边"
   },
   {
-   "edge_id": "bipolarii_e15",
+   "edge_id": "bipolar-II_e15",
    "disease_id": "bipolar-II",
    "source": "superiorfrontal",
    "target": "Putamen",
@@ -1624,7 +1624,7 @@
    "hooks": "行为覆盖①（物理攻击姿态）；3.1 bias_somatic 推导锚（抑郁极）"
   },
   {
-   "edge_id": "bipolarii_e07",
+   "edge_id": "bipolar-II_e07",
    "disease_id": "bipolar-II",
    "source": "medialorbitofrontal",
    "target": "superiorfrontal",
@@ -1641,7 +1641,7 @@
    "hooks": "行为覆盖②（轻躁狂自我膨胀 ↔ 抑郁反刍 SAN −1）；自我社会域↑"
   },
   {
-   "edge_id": "bipolarii_e10",
+   "edge_id": "bipolar-II_e10",
    "disease_id": "bipolar-II",
    "source": "precuneus",
    "target": "medialorbitofrontal",
@@ -1658,7 +1658,7 @@
    "hooks": "自我参照处理异常（轻躁狂夸大→内省缺失）"
   },
   {
-   "edge_id": "bipolarii_e05",
+   "edge_id": "bipolar-II_e05",
    "disease_id": "bipolar-II",
    "source": "LocusCoeruleus",
    "target": "Amygdala",
@@ -1675,7 +1675,7 @@
    "hooks": "3.1 NE 推导锚；轻躁狂相睡眠衰减（§五.1，相位行为）"
   },
   {
-   "edge_id": "bipolarii_e13",
+   "edge_id": "bipolar-II_e13",
    "disease_id": "bipolar-II",
    "source": "rostralanteriorcingulate",
    "target": "insula",
@@ -1692,7 +1692,7 @@
    "hooks": "行为覆盖③（**相位翻转触发器：内感受域 m_max > 0.2**）"
   },
   {
-   "edge_id": "bipolarii_e14",
+   "edge_id": "bipolar-II_e14",
    "disease_id": "bipolar-II",
    "source": "DorsalRapheNucleus",
    "target": "Amygdala",
@@ -1716,7 +1716,7 @@
    "hooks": "3.1 5HT 推导锚（双向）；轻躁狂相去抑制/抑郁相过度抑制"
   },
   {
-   "edge_id": "bipolarii_e04",
+   "edge_id": "bipolar-II_e04",
    "disease_id": "bipolar-II",
    "source": "caudalanteriorcingulate",
    "target": "Caudate",
@@ -1740,7 +1740,7 @@
    "hooks": "3.1 bias_cognitive 旁证（BD-II 不翻 cognitive bias，见 §三）；抑郁相思维迟滞（行为层）"
   },
   {
-   "edge_id": "bipolarii_e08",
+   "edge_id": "bipolar-II_e08",
    "disease_id": "bipolar-II",
    "source": "caudalanteriorcingulate",
    "target": "frontalpole",
@@ -1757,7 +1757,7 @@
    "hooks": "行为覆盖③（L5 压制减弱，轻度）"
   },
   {
-   "edge_id": "bipolarii_e09",
+   "edge_id": "bipolar-II_e09",
    "disease_id": "bipolar-II",
    "source": "medialorbitofrontal",
    "target": "rostralmiddlefrontal",
@@ -1774,7 +1774,7 @@
    "hooks": "整合域边界崩溃（轻度）"
   },
   {
-   "edge_id": "bipolarii_e11",
+   "edge_id": "bipolar-II_e11",
    "disease_id": "bipolar-II",
    "source": "medialorbitofrontal",
    "target": "Hippocampus",
@@ -2012,7 +2012,7 @@
    "hooks": "行为覆盖②（反刍侧翼）"
   },
   {
-   "edge_id": "bn_e01",
+   "edge_id": "bulimia-nervosa_e01",
    "disease_id": "bulimia-nervosa",
    "source": "VentralTegmentalArea",
    "target": "Accumbens-area",
@@ -2029,7 +2029,7 @@
    "hooks": "行为覆盖①②（暴食期/清除后）"
   },
   {
-   "edge_id": "bn_e02",
+   "edge_id": "bulimia-nervosa_e02",
    "disease_id": "bulimia-nervosa",
    "source": "SubstantiaNigraParsCompacta",
    "target": "Putamen",
@@ -2046,7 +2046,7 @@
    "hooks": "3.1 节 DA_SNc 推导锚"
   },
   {
-   "edge_id": "bn_e09",
+   "edge_id": "bulimia-nervosa_e09",
    "disease_id": "bulimia-nervosa",
    "source": "insula",
    "target": "Accumbens-area",
@@ -2063,7 +2063,7 @@
    "hooks": "行为覆盖①（暴食发作核心）+ 3.1 节 bias_limbic 推导锚"
   },
   {
-   "edge_id": "bn_e04",
+   "edge_id": "bulimia-nervosa_e04",
    "disease_id": "bulimia-nervosa",
    "source": "LocusCoeruleus",
    "target": "insula",
@@ -2080,7 +2080,7 @@
    "hooks": "行为覆盖①（食物线索内感受警觉）"
   },
   {
-   "edge_id": "bn_e05",
+   "edge_id": "bulimia-nervosa_e05",
    "disease_id": "bulimia-nervosa",
    "source": "rostralanteriorcingulate",
    "target": "insula",
@@ -2097,7 +2097,7 @@
    "hooks": "行为覆盖②（清除后内感受忽略）"
   },
   {
-   "edge_id": "bn_e06",
+   "edge_id": "bulimia-nervosa_e06",
    "disease_id": "bulimia-nervosa",
    "source": "rostralmiddlefrontal",
    "target": "Caudate",
@@ -2114,7 +2114,7 @@
    "hooks": "行为覆盖③（L5 压制完全失效）"
   },
   {
-   "edge_id": "bn_e07",
+   "edge_id": "bulimia-nervosa_e07",
    "disease_id": "bulimia-nervosa",
    "source": "caudalanteriorcingulate",
    "target": "Caudate",
@@ -2131,7 +2131,7 @@
    "hooks": "行为覆盖③（作用域成员）"
   },
   {
-   "edge_id": "bn_e03",
+   "edge_id": "bulimia-nervosa_e03",
    "disease_id": "bulimia-nervosa",
    "source": "Putamen",
    "target": "Thalamus-Proper",
@@ -2148,7 +2148,7 @@
    "hooks": "非线性跳变①（清除习惯锁定）"
   },
   {
-   "edge_id": "bn_e08",
+   "edge_id": "bulimia-nervosa_e08",
    "disease_id": "bulimia-nervosa",
    "source": "precentral",
    "target": "Putamen",
@@ -2165,7 +2165,7 @@
    "hooks": "3.1 节 bias_somatic 推导锚 + 非线性跳变①"
   },
   {
-   "edge_id": "bn_e10",
+   "edge_id": "bulimia-nervosa_e10",
    "disease_id": "bulimia-nervosa",
    "source": "DorsalRapheNucleus",
    "target": "insula",
@@ -4069,7 +4069,7 @@
    "hooks": "3.1 节 5HT tone 推导锚"
   },
   {
-   "edge_id": "pro_e01",
+   "edge_id": "procrastination_e01",
    "disease_id": "procrastination",
    "source": "caudalmiddlefrontal",
    "target": "rostralmiddlefrontal",
@@ -4086,7 +4086,7 @@
    "hooks": "行为覆盖①（认知控制域成员）"
   },
   {
-   "edge_id": "pro_e02",
+   "edge_id": "procrastination_e02",
    "disease_id": "procrastination",
    "source": "rostralmiddlefrontal",
    "target": "precuneus",
@@ -4103,7 +4103,7 @@
    "hooks": "行为覆盖①（认知控制域成员）"
   },
   {
-   "edge_id": "pro_e03",
+   "edge_id": "procrastination_e03",
    "disease_id": "procrastination",
    "source": "superiorfrontal",
    "target": "rostralmiddlefrontal",
@@ -4120,7 +4120,7 @@
    "hooks": "行为覆盖①（认知控制域成员）"
   },
   {
-   "edge_id": "pro_e04",
+   "edge_id": "procrastination_e04",
    "disease_id": "procrastination",
    "source": "rostralmiddlefrontal",
    "target": "Caudate",
@@ -4137,7 +4137,7 @@
    "hooks": "3.1 节 bias_cognitive 推导锚"
   },
   {
-   "edge_id": "pro_e05",
+   "edge_id": "procrastination_e05",
    "disease_id": "procrastination",
    "source": "VentralTegmentalArea",
    "target": "Accumbens-area",
@@ -4154,7 +4154,7 @@
    "hooks": "行为覆盖②（远期目标激活−50% 成员）"
   },
   {
-   "edge_id": "pro_e06",
+   "edge_id": "procrastination_e06",
    "disease_id": "procrastination",
    "source": "rostralmiddlefrontal",
    "target": "Accumbens-area",
@@ -4171,7 +4171,7 @@
    "hooks": "行为覆盖②（远期目标激活−50% 成员）"
   },
   {
-   "edge_id": "pro_e07",
+   "edge_id": "procrastination_e07",
    "disease_id": "procrastination",
    "source": "superiorfrontal",
    "target": "Accumbens-area",
@@ -4188,7 +4188,7 @@
    "hooks": "3.1 节 bias_limbic 推导锚；行为覆盖②侧翼"
   },
   {
-   "edge_id": "pro_e08",
+   "edge_id": "procrastination_e08",
    "disease_id": "procrastination",
    "source": "rostralanteriorcingulate",
    "target": "insula",
@@ -4205,7 +4205,7 @@
    "hooks": "行为覆盖③（内感受域成员）"
   },
   {
-   "edge_id": "pro_e09",
+   "edge_id": "procrastination_e09",
    "disease_id": "procrastination",
    "source": "insula",
    "target": "Accumbens-area",
@@ -4222,7 +4222,7 @@
    "hooks": "行为覆盖③（内感受域成员）"
   },
   {
-   "edge_id": "pro_e10",
+   "edge_id": "procrastination_e10",
    "disease_id": "procrastination",
    "source": "Putamen",
    "target": "Pallidum",
@@ -4239,7 +4239,7 @@
    "hooks": "3.1 节 bias_somatic 推导锚"
   },
   {
-   "edge_id": "pro_e11",
+   "edge_id": "procrastination_e11",
    "disease_id": "procrastination",
    "source": "precuneus",
    "target": "superiorfrontal",
@@ -5157,7 +5157,7 @@
    "hooks": "3.1 节 bias_cognitive 推导锚 + 非线性跳变③（反刍）"
   },
   {
-   "edge_id": "ssd_e01",
+   "edge_id": "somatic-symptom_e01",
    "disease_id": "somatic-symptom",
    "source": "insula",
    "target": "caudalanteriorcingulate",
@@ -5174,7 +5174,7 @@
    "hooks": "行为覆盖①（症状波动）+ 非线性跳变①"
   },
   {
-   "edge_id": "ssd_e02",
+   "edge_id": "somatic-symptom_e02",
    "disease_id": "somatic-symptom",
    "source": "insula",
    "target": "rostralanteriorcingulate",
@@ -5191,7 +5191,7 @@
    "hooks": "行为覆盖①（症状情绪化）"
   },
   {
-   "edge_id": "ssd_e03",
+   "edge_id": "somatic-symptom_e03",
    "disease_id": "somatic-symptom",
    "source": "Thalamus-Proper",
    "target": "insula",
@@ -5208,7 +5208,7 @@
    "hooks": "行为覆盖①（内脏感觉增益）"
   },
   {
-   "edge_id": "ssd_e04",
+   "edge_id": "somatic-symptom_e04",
    "disease_id": "somatic-symptom",
    "source": "LocusCoeruleus",
    "target": "insula",
@@ -5225,7 +5225,7 @@
    "hooks": "3.1 节 NE tone 推导锚"
   },
   {
-   "edge_id": "ssd_e05",
+   "edge_id": "somatic-symptom_e05",
    "disease_id": "somatic-symptom",
    "source": "LocusCoeruleus",
    "target": "caudalanteriorcingulate",
@@ -5242,7 +5242,7 @@
    "hooks": "3.1 节 NE tone 推导锚"
   },
   {
-   "edge_id": "ssd_e06",
+   "edge_id": "somatic-symptom_e06",
    "disease_id": "somatic-symptom",
    "source": "DorsalRapheNucleus",
    "target": "insula",
@@ -5259,7 +5259,7 @@
    "hooks": "3.1 节 5HT tone 推导锚"
   },
   {
-   "edge_id": "ssd_e07",
+   "edge_id": "somatic-symptom_e07",
    "disease_id": "somatic-symptom",
    "source": "insula",
    "target": "Amygdala",
@@ -5276,7 +5276,7 @@
    "hooks": "行为覆盖②（焦虑放大）"
   },
   {
-   "edge_id": "ssd_e08",
+   "edge_id": "somatic-symptom_e08",
    "disease_id": "somatic-symptom",
    "source": "Amygdala",
    "target": "insula",
@@ -5293,7 +5293,7 @@
    "hooks": "行为覆盖②（焦虑放大）+ 非线性跳变②（创伤触发躯体化）"
   },
   {
-   "edge_id": "ssd_e09",
+   "edge_id": "somatic-symptom_e09",
    "disease_id": "somatic-symptom",
    "source": "entorhinal",
    "target": "insula",
@@ -5310,7 +5310,7 @@
    "hooks": "行为覆盖②（症状记忆勾起）"
   },
   {
-   "edge_id": "ssd_e10",
+   "edge_id": "somatic-symptom_e10",
    "disease_id": "somatic-symptom",
    "source": "medialorbitofrontal",
    "target": "Amygdala",
@@ -5327,7 +5327,7 @@
    "hooks": "非线性跳变③（压制失效→症状锁定）"
   },
   {
-   "edge_id": "ssd_e11",
+   "edge_id": "somatic-symptom_e11",
    "disease_id": "somatic-symptom",
    "source": "rostralanteriorcingulate",
    "target": "Accumbens-area",
@@ -5344,7 +5344,7 @@
    "hooks": "3.1 节 bias_limbic 推导锚"
   },
   {
-   "edge_id": "ssd_e12",
+   "edge_id": "somatic-symptom_e12",
    "disease_id": "somatic-symptom",
    "source": "Thalamus-Proper",
    "target": "postcentral",
@@ -5361,7 +5361,7 @@
    "hooks": "行为覆盖①（体感增益）"
   },
   {
-   "edge_id": "ssd_e13",
+   "edge_id": "somatic-symptom_e13",
    "disease_id": "somatic-symptom",
    "source": "Thalamus-Proper",
    "target": "precentral",
@@ -5531,7 +5531,7 @@
    "hooks": "3.1 节 bias_limbic 推导锚 + 行为覆盖①（回避·主动 强制激活）"
   },
   {
-   "edge_id": "sud_e01",
+   "edge_id": "substance-use-disorder_e01",
    "disease_id": "substance-use-disorder",
    "source": "VentralTegmentalArea",
    "target": "Accumbens-area",
@@ -5548,7 +5548,7 @@
    "hooks": "行为覆盖①②（中毒/戒断双相跳变）"
   },
   {
-   "edge_id": "sud_e02",
+   "edge_id": "substance-use-disorder_e02",
    "disease_id": "substance-use-disorder",
    "source": "SubstantiaNigraParsCompacta",
    "target": "Putamen",
@@ -5565,7 +5565,7 @@
    "hooks": "行为覆盖①（戒断期作用域）"
   },
   {
-   "edge_id": "sud_e03",
+   "edge_id": "substance-use-disorder_e03",
    "disease_id": "substance-use-disorder",
    "source": "SubstantiaNigraParsCompacta",
    "target": "Caudate",
@@ -5582,7 +5582,7 @@
    "hooks": "行为覆盖①（戒断期作用域）"
   },
   {
-   "edge_id": "sud_e05",
+   "edge_id": "substance-use-disorder_e05",
    "disease_id": "substance-use-disorder",
    "source": "medialorbitofrontal",
    "target": "Accumbens-area",
@@ -5599,7 +5599,7 @@
    "hooks": "3.1 节 bias_limbic 推导锚"
   },
   {
-   "edge_id": "sud_e04",
+   "edge_id": "substance-use-disorder_e04",
    "disease_id": "substance-use-disorder",
    "source": "Putamen",
    "target": "Thalamus-Proper",
@@ -5616,7 +5616,7 @@
    "hooks": "非线性跳变①（习惯锁定）"
   },
   {
-   "edge_id": "sud_e13",
+   "edge_id": "substance-use-disorder_e13",
    "disease_id": "substance-use-disorder",
    "source": "precentral",
    "target": "Putamen",
@@ -5633,7 +5633,7 @@
    "hooks": "3.1 节 bias_somatic 推导锚；非线性跳变①（M1 强制熟练）"
   },
   {
-   "edge_id": "sud_e06",
+   "edge_id": "substance-use-disorder_e06",
    "disease_id": "substance-use-disorder",
    "source": "rostralmiddlefrontal",
    "target": "Caudate",
@@ -5650,7 +5650,7 @@
    "hooks": "行为覆盖③ + 非线性跳变②（dlPFC 压制失效）"
   },
   {
-   "edge_id": "sud_e07",
+   "edge_id": "substance-use-disorder_e07",
    "disease_id": "substance-use-disorder",
    "source": "caudalanteriorcingulate",
    "target": "Caudate",
@@ -5667,7 +5667,7 @@
    "hooks": "行为覆盖③（认知压制−50% 作用域）"
   },
   {
-   "edge_id": "sud_e08",
+   "edge_id": "substance-use-disorder_e08",
    "disease_id": "substance-use-disorder",
    "source": "LocusCoeruleus",
    "target": "rostralmiddlefrontal",
@@ -5684,7 +5684,7 @@
    "hooks": "行为覆盖③ + 非线性跳变②（结构基础）"
   },
   {
-   "edge_id": "sud_e09",
+   "edge_id": "substance-use-disorder_e09",
    "disease_id": "substance-use-disorder",
    "source": "rostralanteriorcingulate",
    "target": "insula",
@@ -5701,7 +5701,7 @@
    "hooks": "行为覆盖④（内感受错误归因）"
   },
   {
-   "edge_id": "sud_e10",
+   "edge_id": "substance-use-disorder_e10",
    "disease_id": "substance-use-disorder",
    "source": "caudalanteriorcingulate",
    "target": "parahippocampal",
@@ -5718,7 +5718,7 @@
    "hooks": "行为覆盖①（物质线索侧翼）"
   },
   {
-   "edge_id": "sud_e11",
+   "edge_id": "substance-use-disorder_e11",
    "disease_id": "substance-use-disorder",
    "source": "Amygdala",
    "target": "Accumbens-area",
@@ -5735,7 +5735,7 @@
    "hooks": "非线性跳变③（戒断期渴求）"
   },
   {
-   "edge_id": "sud_e12",
+   "edge_id": "substance-use-disorder_e12",
    "disease_id": "substance-use-disorder",
    "source": "DorsalRapheNucleus",
    "target": "caudalanteriorcingulate",
