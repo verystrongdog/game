@@ -2364,6 +2364,344 @@
    ],
    "added": "2026-08-20",
    "updated": "2026-08-20"
+  },
+  "偏执型精神分裂症": {
+   "definition": "疾病目录正式诊断名（Grilling #88 Q0.4 D 方案）：DSM-5 命名，疾病ID `paranoid-schizophrenia`（pathology_edges.json edge_id 前缀），父类 奖赏系统障碍。机制层 = pathology_edges.json 病理边 + 7 参数映射（NPC AI 敌我同构），表现层 = PANSS 五因子症状域。",
+   "source": "实体/疾病目录/（26 病重映射，Grilling #88）",
+   "old_model": "—（此前 19 病诊断名未单独入库；旧 link_NNN 链路表已废弃）",
+   "deviation_reason": "Q0.4 定案：诊断名 = 称呼层（玩家可见），与机制层（解剖域病理边）解耦；DSM-5 命名保持玩家熟悉度，ICD-11 退出。",
+   "status": "active",
+   "numerical_locations": [
+    "实体/疾病目录/偏执型精神分裂症.md（frontmatter 疾病ID + 病理边引用）",
+    "data/connectivity/pathology_edges.json（edge_id 前缀）"
+   ],
+   "added": "2026-08-21",
+   "updated": "2026-08-21"
+  },
+  "分裂型人格障碍": {
+   "definition": "疾病目录正式诊断名（Grilling #88 Q0.4 D 方案）：DSM-5 命名，疾病ID `schizotypal-personality`（pathology_edges.json edge_id 前缀），父类 人格障碍。机制层 = pathology_edges.json 病理边 + 7 参数映射（NPC AI 敌我同构），表现层 = PANSS 五因子症状域。",
+   "source": "实体/疾病目录/（26 病重映射，Grilling #88）",
+   "old_model": "—（此前 19 病诊断名未单独入库；旧 link_NNN 链路表已废弃）",
+   "deviation_reason": "Q0.4 定案：诊断名 = 称呼层（玩家可见），与机制层（解剖域病理边）解耦；DSM-5 命名保持玩家熟悉度，ICD-11 退出。",
+   "status": "active",
+   "numerical_locations": [
+    "实体/疾病目录/分裂型人格障碍.md（frontmatter 疾病ID + 病理边引用）",
+    "data/connectivity/pathology_edges.json（edge_id 前缀）"
+   ],
+   "added": "2026-08-21",
+   "updated": "2026-08-21"
+  },
+  "分裂情感性障碍": {
+   "definition": "疾病目录正式诊断名（Grilling #88 Q0.4 D 方案）：DSM-5 命名，疾病ID `schizoaffective`（pathology_edges.json edge_id 前缀），父类 奖赏系统障碍。机制层 = pathology_edges.json 病理边 + 7 参数映射（NPC AI 敌我同构），表现层 = PANSS 五因子症状域。",
+   "source": "实体/疾病目录/（26 病重映射，Grilling #88）",
+   "old_model": "—（此前 19 病诊断名未单独入库；旧 link_NNN 链路表已废弃）",
+   "deviation_reason": "Q0.4 定案：诊断名 = 称呼层（玩家可见），与机制层（解剖域病理边）解耦；DSM-5 命名保持玩家熟悉度，ICD-11 退出。",
+   "status": "active",
+   "numerical_locations": [
+    "实体/疾病目录/分裂情感性障碍.md（frontmatter 疾病ID + 病理边引用）",
+    "data/connectivity/pathology_edges.json（edge_id 前缀）"
+   ],
+   "added": "2026-08-21",
+   "updated": "2026-08-21"
+  },
+  "创伤后应激障碍 (PTSD)": {
+   "definition": "疾病目录正式诊断名（Grilling #88 Q0.4 D 方案）：DSM-5 命名，疾病ID `ptsd`（pathology_edges.json edge_id 前缀），父类 焦虑唤醒障碍。机制层 = pathology_edges.json 病理边 + 7 参数映射（NPC AI 敌我同构），表现层 = PANSS 五因子症状域。",
+   "source": "实体/疾病目录/（26 病重映射，Grilling #88）",
+   "old_model": "—（此前 19 病诊断名未单独入库；旧 link_NNN 链路表已废弃）",
+   "deviation_reason": "Q0.4 定案：诊断名 = 称呼层（玩家可见），与机制层（解剖域病理边）解耦；DSM-5 命名保持玩家熟悉度，ICD-11 退出。",
+   "status": "active",
+   "numerical_locations": [
+    "实体/疾病目录/创伤后应激障碍 (PTSD).md（frontmatter 疾病ID + 病理边引用）",
+    "data/connectivity/pathology_edges.json（edge_id 前缀）"
+   ],
+   "added": "2026-08-21",
+   "updated": "2026-08-21"
+  },
+  "双相障碍 II 型 (BD-II)": {
+   "definition": "疾病目录正式诊断名（Grilling #88 Q0.4 D 方案）：DSM-5 命名，疾病ID `bipolar-II`（pathology_edges.json edge_id 前缀），父类 奖赏系统障碍。机制层 = pathology_edges.json 病理边 + 7 参数映射（NPC AI 敌我同构），表现层 = PANSS 五因子症状域。",
+   "source": "实体/疾病目录/（26 病重映射，Grilling #88）",
+   "old_model": "—（此前 19 病诊断名未单独入库；旧 link_NNN 链路表已废弃）",
+   "deviation_reason": "Q0.4 定案：诊断名 = 称呼层（玩家可见），与机制层（解剖域病理边）解耦；DSM-5 命名保持玩家熟悉度，ICD-11 退出。",
+   "status": "active",
+   "numerical_locations": [
+    "实体/疾病目录/双相障碍 II 型 (BD-II).md（frontmatter 疾病ID + 病理边引用）",
+    "data/connectivity/pathology_edges.json（edge_id 前缀）"
+   ],
+   "added": "2026-08-21",
+   "updated": "2026-08-21"
+  },
+  "双相障碍 I 型 (BD-I)": {
+   "definition": "疾病目录正式诊断名（Grilling #88 Q0.4 D 方案）：DSM-5 命名，疾病ID `bipolar-I`（pathology_edges.json edge_id 前缀），父类 奖赏系统障碍。机制层 = pathology_edges.json 病理边 + 7 参数映射（NPC AI 敌我同构），表现层 = PANSS 五因子症状域。",
+   "source": "实体/疾病目录/（26 病重映射，Grilling #88）",
+   "old_model": "—（此前 19 病诊断名未单独入库；旧 link_NNN 链路表已废弃）",
+   "deviation_reason": "Q0.4 定案：诊断名 = 称呼层（玩家可见），与机制层（解剖域病理边）解耦；DSM-5 命名保持玩家熟悉度，ICD-11 退出。",
+   "status": "active",
+   "numerical_locations": [
+    "实体/疾病目录/双相障碍 I 型 (BD-I).md（frontmatter 疾病ID + 病理边引用）",
+    "data/connectivity/pathology_edges.json（edge_id 前缀）"
+   ],
+   "added": "2026-08-21",
+   "updated": "2026-08-21"
+  },
+  "反社会型人格障碍 (ASPD)": {
+   "definition": "疾病目录正式诊断名（Grilling #88 Q0.4 D 方案）：DSM-5 命名，疾病ID `aspd`（pathology_edges.json edge_id 前缀），父类 人格障碍。机制层 = pathology_edges.json 病理边 + 7 参数映射（NPC AI 敌我同构），表现层 = PANSS 五因子症状域。",
+   "source": "实体/疾病目录/（26 病重映射，Grilling #88）",
+   "old_model": "—（此前 19 病诊断名未单独入库；旧 link_NNN 链路表已废弃）",
+   "deviation_reason": "Q0.4 定案：诊断名 = 称呼层（玩家可见），与机制层（解剖域病理边）解耦；DSM-5 命名保持玩家熟悉度，ICD-11 退出。",
+   "status": "active",
+   "numerical_locations": [
+    "实体/疾病目录/反社会型人格障碍 (ASPD).md（frontmatter 疾病ID + 病理边引用）",
+    "data/connectivity/pathology_edges.json（edge_id 前缀）"
+   ],
+   "added": "2026-08-21",
+   "updated": "2026-08-21"
+  },
+  "广泛性焦虑障碍 (GAD)": {
+   "definition": "疾病目录正式诊断名（Grilling #88 Q0.4 D 方案）：DSM-5 命名，疾病ID `gad`（pathology_edges.json edge_id 前缀），父类 焦虑唤醒障碍。机制层 = pathology_edges.json 病理边 + 7 参数映射（NPC AI 敌我同构），表现层 = PANSS 五因子症状域。",
+   "source": "实体/疾病目录/（26 病重映射，Grilling #88）",
+   "old_model": "—（此前 19 病诊断名未单独入库；旧 link_NNN 链路表已废弃）",
+   "deviation_reason": "Q0.4 定案：诊断名 = 称呼层（玩家可见），与机制层（解剖域病理边）解耦；DSM-5 命名保持玩家熟悉度，ICD-11 退出。",
+   "status": "active",
+   "numerical_locations": [
+    "实体/疾病目录/广泛性焦虑障碍 (GAD).md（frontmatter 疾病ID + 病理边引用）",
+    "data/connectivity/pathology_edges.json（edge_id 前缀）"
+   ],
+   "added": "2026-08-21",
+   "updated": "2026-08-21"
+  },
+  "强迫症 (OCD)": {
+   "definition": "疾病目录正式诊断名（Grilling #88 Q0.4 D 方案）：DSM-5 命名，疾病ID `ocd`（pathology_edges.json edge_id 前缀），父类 认知控制障碍。机制层 = pathology_edges.json 病理边 + 7 参数映射（NPC AI 敌我同构），表现层 = PANSS 五因子症状域。",
+   "source": "实体/疾病目录/（26 病重映射，Grilling #88）",
+   "old_model": "—（此前 19 病诊断名未单独入库；旧 link_NNN 链路表已废弃）",
+   "deviation_reason": "Q0.4 定案：诊断名 = 称呼层（玩家可见），与机制层（解剖域病理边）解耦；DSM-5 命名保持玩家熟悉度，ICD-11 退出。",
+   "status": "active",
+   "numerical_locations": [
+    "实体/疾病目录/强迫症 (OCD).md（frontmatter 疾病ID + 病理边引用）",
+    "data/connectivity/pathology_edges.json（edge_id 前缀）"
+   ],
+   "added": "2026-08-21",
+   "updated": "2026-08-21"
+  },
+  "惊恐障碍（Panic Disorder）": {
+   "definition": "疾病目录正式诊断名（Grilling #88 Q0.4 D 方案）：DSM-5 命名，疾病ID `panic-disorder`（pathology_edges.json edge_id 前缀），父类 焦虑唤醒障碍。机制层 = pathology_edges.json 病理边 + 7 参数映射（NPC AI 敌我同构），表现层 = PANSS 五因子症状域。",
+   "source": "实体/疾病目录/（26 病重映射，Grilling #88）",
+   "old_model": "—（此前 19 病诊断名未单独入库；旧 link_NNN 链路表已废弃）",
+   "deviation_reason": "Q0.4 定案：诊断名 = 称呼层（玩家可见），与机制层（解剖域病理边）解耦；DSM-5 命名保持玩家熟悉度，ICD-11 退出。",
+   "status": "active",
+   "numerical_locations": [
+    "实体/疾病目录/惊恐障碍（Panic Disorder）.md（frontmatter 疾病ID + 病理边引用）",
+    "data/connectivity/pathology_edges.json（edge_id 前缀）"
+   ],
+   "added": "2026-08-21",
+   "updated": "2026-08-21"
+  },
+  "拖延症（跨诊断特征）": {
+   "definition": "疾病目录正式诊断名（Grilling #88 Q0.4 D 方案）：DSM-5 命名，疾病ID `procrastination`（pathology_edges.json edge_id 前缀），父类 认知控制障碍。机制层 = pathology_edges.json 病理边 + 7 参数映射（NPC AI 敌我同构），表现层 = PANSS 五因子症状域。",
+   "source": "实体/疾病目录/（26 病重映射，Grilling #88）",
+   "old_model": "—（此前 19 病诊断名未单独入库；旧 link_NNN 链路表已废弃）",
+   "deviation_reason": "Q0.4 定案：诊断名 = 称呼层（玩家可见），与机制层（解剖域病理边）解耦；DSM-5 命名保持玩家熟悉度，ICD-11 退出。",
+   "status": "active",
+   "numerical_locations": [
+    "实体/疾病目录/拖延症（跨诊断特征）.md（frontmatter 疾病ID + 病理边引用）",
+    "data/connectivity/pathology_edges.json（edge_id 前缀）"
+   ],
+   "added": "2026-08-21",
+   "updated": "2026-08-21"
+  },
+  "持续性心境障碍（环性心境）": {
+   "definition": "疾病目录正式诊断名（Grilling #88 Q0.4 D 方案）：DSM-5 命名，疾病ID `cyclothymia`（pathology_edges.json edge_id 前缀），父类 奖赏系统障碍。机制层 = pathology_edges.json 病理边 + 7 参数映射（NPC AI 敌我同构），表现层 = PANSS 五因子症状域。",
+   "source": "实体/疾病目录/（26 病重映射，Grilling #88）",
+   "old_model": "—（此前 19 病诊断名未单独入库；旧 link_NNN 链路表已废弃）",
+   "deviation_reason": "Q0.4 定案：诊断名 = 称呼层（玩家可见），与机制层（解剖域病理边）解耦；DSM-5 命名保持玩家熟悉度，ICD-11 退出。",
+   "status": "active",
+   "numerical_locations": [
+    "实体/疾病目录/持续性心境障碍（环性心境）.md（frontmatter 疾病ID + 病理边引用）",
+    "data/connectivity/pathology_edges.json（edge_id 前缀）"
+   ],
+   "added": "2026-08-21",
+   "updated": "2026-08-21"
+  },
+  "持续性抑郁障碍 (PDD)": {
+   "definition": "疾病目录正式诊断名（Grilling #88 Q0.4 D 方案）：DSM-5 命名，疾病ID `persistent-depressive`（pathology_edges.json edge_id 前缀），父类 奖赏系统障碍。机制层 = pathology_edges.json 病理边 + 7 参数映射（NPC AI 敌我同构），表现层 = PANSS 五因子症状域。",
+   "source": "实体/疾病目录/（26 病重映射，Grilling #88）",
+   "old_model": "—（此前 19 病诊断名未单独入库；旧 link_NNN 链路表已废弃）",
+   "deviation_reason": "Q0.4 定案：诊断名 = 称呼层（玩家可见），与机制层（解剖域病理边）解耦；DSM-5 命名保持玩家熟悉度，ICD-11 退出。",
+   "status": "active",
+   "numerical_locations": [
+    "实体/疾病目录/持续性抑郁障碍 (PDD).md（frontmatter 疾病ID + 病理边引用）",
+    "data/connectivity/pathology_edges.json（edge_id 前缀）"
+   ],
+   "added": "2026-08-21",
+   "updated": "2026-08-21"
+  },
+  "暴食障碍 (BED)": {
+   "definition": "疾病目录正式诊断名（Grilling #88 Q0.4 D 方案）：DSM-5 命名，疾病ID `binge-eating-disorder`（pathology_edges.json edge_id 前缀），父类 进食障碍。机制层 = pathology_edges.json 病理边 + 7 参数映射（NPC AI 敌我同构），表现层 = PANSS 五因子症状域。",
+   "source": "实体/疾病目录/（26 病重映射，Grilling #88）",
+   "old_model": "—（此前 19 病诊断名未单独入库；旧 link_NNN 链路表已废弃）",
+   "deviation_reason": "Q0.4 定案：诊断名 = 称呼层（玩家可见），与机制层（解剖域病理边）解耦；DSM-5 命名保持玩家熟悉度，ICD-11 退出。",
+   "status": "active",
+   "numerical_locations": [
+    "实体/疾病目录/暴食障碍 (BED).md（frontmatter 疾病ID + 病理边引用）",
+    "data/connectivity/pathology_edges.json（edge_id 前缀）"
+   ],
+   "added": "2026-08-21",
+   "updated": "2026-08-21"
+  },
+  "未分化型精神分裂症": {
+   "definition": "疾病目录正式诊断名（Grilling #88 Q0.4 D 方案）：DSM-5 命名，疾病ID `undifferentiated-schizophrenia`（pathology_edges.json edge_id 前缀），父类 奖赏系统障碍。机制层 = pathology_edges.json 病理边 + 7 参数映射（NPC AI 敌我同构），表现层 = PANSS 五因子症状域。",
+   "source": "实体/疾病目录/（26 病重映射，Grilling #88）",
+   "old_model": "—（此前 19 病诊断名未单独入库；旧 link_NNN 链路表已废弃）",
+   "deviation_reason": "Q0.4 定案：诊断名 = 称呼层（玩家可见），与机制层（解剖域病理边）解耦；DSM-5 命名保持玩家熟悉度，ICD-11 退出。",
+   "status": "active",
+   "numerical_locations": [
+    "实体/疾病目录/未分化型精神分裂症.md（frontmatter 疾病ID + 病理边引用）",
+    "data/connectivity/pathology_edges.json（edge_id 前缀）"
+   ],
+   "added": "2026-08-21",
+   "updated": "2026-08-21"
+  },
+  "注意缺陷多动障碍 (ADHD)": {
+   "definition": "疾病目录正式诊断名（Grilling #88 Q0.4 D 方案）：DSM-5 命名，疾病ID `adhd`（pathology_edges.json edge_id 前缀），父类 认知控制障碍。机制层 = pathology_edges.json 病理边 + 7 参数映射（NPC AI 敌我同构），表现层 = PANSS 五因子症状域。",
+   "source": "实体/疾病目录/（26 病重映射，Grilling #88）",
+   "old_model": "—（此前 19 病诊断名未单独入库；旧 link_NNN 链路表已废弃）",
+   "deviation_reason": "Q0.4 定案：诊断名 = 称呼层（玩家可见），与机制层（解剖域病理边）解耦；DSM-5 命名保持玩家熟悉度，ICD-11 退出。",
+   "status": "active",
+   "numerical_locations": [
+    "实体/疾病目录/注意缺陷多动障碍 (ADHD).md（frontmatter 疾病ID + 病理边引用）",
+    "data/connectivity/pathology_edges.json（edge_id 前缀）"
+   ],
+   "added": "2026-08-21",
+   "updated": "2026-08-21"
+  },
+  "物质使用障碍": {
+   "definition": "疾病目录正式诊断名（Grilling #88 Q0.4 D 方案）：DSM-5 命名，疾病ID `substance-use-disorder`（pathology_edges.json edge_id 前缀），父类 奖赏系统障碍。机制层 = pathology_edges.json 病理边 + 7 参数映射（NPC AI 敌我同构），表现层 = PANSS 五因子症状域。",
+   "source": "实体/疾病目录/（26 病重映射，Grilling #88）",
+   "old_model": "—（此前 19 病诊断名未单独入库；旧 link_NNN 链路表已废弃）",
+   "deviation_reason": "Q0.4 定案：诊断名 = 称呼层（玩家可见），与机制层（解剖域病理边）解耦；DSM-5 命名保持玩家熟悉度，ICD-11 退出。",
+   "status": "active",
+   "numerical_locations": [
+    "实体/疾病目录/物质使用障碍.md（frontmatter 疾病ID + 病理边引用）",
+    "data/connectivity/pathology_edges.json（edge_id 前缀）"
+   ],
+   "added": "2026-08-21",
+   "updated": "2026-08-21"
+  },
+  "特定恐惧症": {
+   "definition": "疾病目录正式诊断名（Grilling #88 Q0.4 D 方案）：DSM-5 命名，疾病ID `specific-phobia`（pathology_edges.json edge_id 前缀），父类 焦虑唤醒障碍。机制层 = pathology_edges.json 病理边 + 7 参数映射（NPC AI 敌我同构），表现层 = PANSS 五因子症状域。",
+   "source": "实体/疾病目录/（26 病重映射，Grilling #88）",
+   "old_model": "—（此前 19 病诊断名未单独入库；旧 link_NNN 链路表已废弃）",
+   "deviation_reason": "Q0.4 定案：诊断名 = 称呼层（玩家可见），与机制层（解剖域病理边）解耦；DSM-5 命名保持玩家熟悉度，ICD-11 退出。",
+   "status": "active",
+   "numerical_locations": [
+    "实体/疾病目录/特定恐惧症.md（frontmatter 疾病ID + 病理边引用）",
+    "data/connectivity/pathology_edges.json（edge_id 前缀）"
+   ],
+   "added": "2026-08-21",
+   "updated": "2026-08-21"
+  },
+  "社交焦虑障碍 (SAD)": {
+   "definition": "疾病目录正式诊断名（Grilling #88 Q0.4 D 方案）：DSM-5 命名，疾病ID `social-anxiety`（pathology_edges.json edge_id 前缀），父类 焦虑唤醒障碍。机制层 = pathology_edges.json 病理边 + 7 参数映射（NPC AI 敌我同构），表现层 = PANSS 五因子症状域。",
+   "source": "实体/疾病目录/（26 病重映射，Grilling #88）",
+   "old_model": "—（此前 19 病诊断名未单独入库；旧 link_NNN 链路表已废弃）",
+   "deviation_reason": "Q0.4 定案：诊断名 = 称呼层（玩家可见），与机制层（解剖域病理边）解耦；DSM-5 命名保持玩家熟悉度，ICD-11 退出。",
+   "status": "active",
+   "numerical_locations": [
+    "实体/疾病目录/社交焦虑障碍 (SAD).md（frontmatter 疾病ID + 病理边引用）",
+    "data/connectivity/pathology_edges.json（edge_id 前缀）"
+   ],
+   "added": "2026-08-21",
+   "updated": "2026-08-21"
+  },
+  "神经性厌食症 (AN)": {
+   "definition": "疾病目录正式诊断名（Grilling #88 Q0.4 D 方案）：DSM-5 命名，疾病ID `anorexia-nervosa`（pathology_edges.json edge_id 前缀），父类 进食障碍。机制层 = pathology_edges.json 病理边 + 7 参数映射（NPC AI 敌我同构），表现层 = PANSS 五因子症状域。",
+   "source": "实体/疾病目录/（26 病重映射，Grilling #88）",
+   "old_model": "—（此前 19 病诊断名未单独入库；旧 link_NNN 链路表已废弃）",
+   "deviation_reason": "Q0.4 定案：诊断名 = 称呼层（玩家可见），与机制层（解剖域病理边）解耦；DSM-5 命名保持玩家熟悉度，ICD-11 退出。",
+   "status": "active",
+   "numerical_locations": [
+    "实体/疾病目录/神经性厌食症 (AN).md（frontmatter 疾病ID + 病理边引用）",
+    "data/connectivity/pathology_edges.json（edge_id 前缀）"
+   ],
+   "added": "2026-08-21",
+   "updated": "2026-08-21"
+  },
+  "神经性贪食症 (BN)": {
+   "definition": "疾病目录正式诊断名（Grilling #88 Q0.4 D 方案）：DSM-5 命名，疾病ID `bulimia-nervosa`（pathology_edges.json edge_id 前缀），父类 进食障碍。机制层 = pathology_edges.json 病理边 + 7 参数映射（NPC AI 敌我同构），表现层 = PANSS 五因子症状域。",
+   "source": "实体/疾病目录/（26 病重映射，Grilling #88）",
+   "old_model": "—（此前 19 病诊断名未单独入库；旧 link_NNN 链路表已废弃）",
+   "deviation_reason": "Q0.4 定案：诊断名 = 称呼层（玩家可见），与机制层（解剖域病理边）解耦；DSM-5 命名保持玩家熟悉度，ICD-11 退出。",
+   "status": "active",
+   "numerical_locations": [
+    "实体/疾病目录/神经性贪食症 (BN).md（frontmatter 疾病ID + 病理边引用）",
+    "data/connectivity/pathology_edges.json（edge_id 前缀）"
+   ],
+   "added": "2026-08-21",
+   "updated": "2026-08-21"
+  },
+  "自闭症谱系障碍 (ASD)": {
+   "definition": "疾病目录正式诊断名（Grilling #88 Q0.4 D 方案）：DSM-5 命名，疾病ID `asd`（pathology_edges.json edge_id 前缀），父类 社会认知障碍。机制层 = pathology_edges.json 病理边 + 7 参数映射（NPC AI 敌我同构），表现层 = PANSS 五因子症状域。",
+   "source": "实体/疾病目录/（26 病重映射，Grilling #88）",
+   "old_model": "—（此前 19 病诊断名未单独入库；旧 link_NNN 链路表已废弃）",
+   "deviation_reason": "Q0.4 定案：诊断名 = 称呼层（玩家可见），与机制层（解剖域病理边）解耦；DSM-5 命名保持玩家熟悉度，ICD-11 退出。",
+   "status": "active",
+   "numerical_locations": [
+    "实体/疾病目录/自闭症谱系障碍 (ASD).md（frontmatter 疾病ID + 病理边引用）",
+    "data/connectivity/pathology_edges.json（edge_id 前缀）"
+   ],
+   "added": "2026-08-21",
+   "updated": "2026-08-21"
+  },
+  "解离性身份障碍 (DID)": {
+   "definition": "疾病目录正式诊断名（Grilling #88 Q0.4 D 方案）：DSM-5 命名，疾病ID `did`（pathology_edges.json edge_id 前缀），父类 解离性障碍。机制层 = pathology_edges.json 病理边 + 7 参数映射（NPC AI 敌我同构），表现层 = PANSS 五因子症状域。",
+   "source": "实体/疾病目录/（26 病重映射，Grilling #88）",
+   "old_model": "—（此前 19 病诊断名未单独入库；旧 link_NNN 链路表已废弃）",
+   "deviation_reason": "Q0.4 定案：诊断名 = 称呼层（玩家可见），与机制层（解剖域病理边）解耦；DSM-5 命名保持玩家熟悉度，ICD-11 退出。",
+   "status": "active",
+   "numerical_locations": [
+    "实体/疾病目录/解离性身份障碍 (DID).md（frontmatter 疾病ID + 病理边引用）",
+    "data/connectivity/pathology_edges.json（edge_id 前缀）"
+   ],
+   "added": "2026-08-21",
+   "updated": "2026-08-21"
+  },
+  "躯体症状障碍（SSD）": {
+   "definition": "疾病目录正式诊断名（Grilling #88 Q0.4 D 方案）：DSM-5 命名，疾病ID `somatic-symptom`（pathology_edges.json edge_id 前缀），父类 躯体症状障碍。机制层 = pathology_edges.json 病理边 + 7 参数映射（NPC AI 敌我同构），表现层 = PANSS 五因子症状域。",
+   "source": "实体/疾病目录/（26 病重映射，Grilling #88）",
+   "old_model": "—（此前 19 病诊断名未单独入库；旧 link_NNN 链路表已废弃）",
+   "deviation_reason": "Q0.4 定案：诊断名 = 称呼层（玩家可见），与机制层（解剖域病理边）解耦；DSM-5 命名保持玩家熟悉度，ICD-11 退出。",
+   "status": "active",
+   "numerical_locations": [
+    "实体/疾病目录/躯体症状障碍（SSD）.md（frontmatter 疾病ID + 病理边引用）",
+    "data/connectivity/pathology_edges.json（edge_id 前缀）"
+   ],
+   "added": "2026-08-21",
+   "updated": "2026-08-21"
+  },
+  "边缘型人格障碍（BPD）": {
+   "definition": "疾病目录正式诊断名（Grilling #88 Q0.4 D 方案）：DSM-5 命名，疾病ID `borderline-personality`（pathology_edges.json edge_id 前缀），父类 人格障碍。机制层 = pathology_edges.json 病理边 + 7 参数映射（NPC AI 敌我同构），表现层 = PANSS 五因子症状域。",
+   "source": "实体/疾病目录/（26 病重映射，Grilling #88）",
+   "old_model": "—（此前 19 病诊断名未单独入库；旧 link_NNN 链路表已废弃）",
+   "deviation_reason": "Q0.4 定案：诊断名 = 称呼层（玩家可见），与机制层（解剖域病理边）解耦；DSM-5 命名保持玩家熟悉度，ICD-11 退出。",
+   "status": "active",
+   "numerical_locations": [
+    "实体/疾病目录/边缘型人格障碍（BPD）.md（frontmatter 疾病ID + 病理边引用）",
+    "data/connectivity/pathology_edges.json（edge_id 前缀）"
+   ],
+   "added": "2026-08-21",
+   "updated": "2026-08-21"
+  },
+  "重度抑郁症 (MDD)": {
+   "definition": "疾病目录正式诊断名（Grilling #88 Q0.4 D 方案）：DSM-5 命名，疾病ID `mdd`（pathology_edges.json edge_id 前缀），父类 奖赏系统障碍。机制层 = pathology_edges.json 病理边 + 7 参数映射（NPC AI 敌我同构），表现层 = PANSS 五因子症状域。",
+   "source": "实体/疾病目录/（26 病重映射，Grilling #88）",
+   "old_model": "—（此前 19 病诊断名未单独入库；旧 link_NNN 链路表已废弃）",
+   "deviation_reason": "Q0.4 定案：诊断名 = 称呼层（玩家可见），与机制层（解剖域病理边）解耦；DSM-5 命名保持玩家熟悉度，ICD-11 退出。",
+   "status": "active",
+   "numerical_locations": [
+    "实体/疾病目录/重度抑郁症 (MDD).md（frontmatter 疾病ID + 病理边引用）",
+    "data/connectivity/pathology_edges.json（edge_id 前缀）"
+   ],
+   "added": "2026-08-21",
+   "updated": "2026-08-21"
   }
  },
  "_metadata": {
