@@ -3,6 +3,7 @@
 疾病ID: bipolar-I
 CGI-S范围: 3-7
 文献: "ENIGMA BD (Hibar 2016) hippocampus-, thalamus-(<SZ) | Guo et al. (2026) ALFF+ bilateral IFG/ACC-mPFC/striatum/caudate, ALFF- precuneus | lithium protects hippocampal volume | reward hypersensitivity model"
+创伤易感事件类型: [丧失/哀悼]   # 转化接口 §3.2.1 反向索引（只读镜像）
 创建: 2026-08-01
 ---
 

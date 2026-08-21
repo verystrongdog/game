@@ -3,6 +3,7 @@
 疾病ID: bipolar-II
 CGI-S范围: 3-6
 文献: "ENIGMA BD (Hibar 2016) BD-II smaller effects than BD-I | Haznedar et al. (2005) spectrum model | cyclothymic temperament L>R prefrontal asymmetry"
+创伤易感事件类型: [丧失/哀悼]   # 转化接口 §3.2.1 反向索引（只读镜像）
 创建: 2026-08-01
 ---
 
