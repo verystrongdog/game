@@ -531,17 +531,69 @@
    "updated": "2026-08-09"
   },
   "病理链路": {
-   "definition": "违反正常大脑连接规则的连接（三体模型中）——可被面具组件激活(+)或抑制(−)。4类: 跨层短路（PTSD闪回L1劫持L5）/过度耦合（OCD dlPFC→纹状体闭环）/解耦沉默（抑郁症VTA→NAcc）/结构异常（ASD）。激活时同时施加代价（额外聚焦容量占用/SAN泄漏）。3D视图不同颜色。须有文献依据。旧定义（违反正常规则的单条链路——基于旧pairwise 364链路）的'链路'指向已于2026-08-07 Grilling #26废弃。",
+   "definition": "违反正常大脑连接规则的连接（三体模型中）——可被面具组件激活(+)或抑制(−)。4类: 跨层短路/过度耦合/解耦沉默/结构异常（判定规则见角色与面具.md §8.8 三体判定表，2026-08-21 #88 重映射定案——旧'破四规则'判定已替换）。激活时同时施加代价（额外聚焦容量占用/SAN泄漏）。3D视图不同颜色。须有文献依据。旧定义（违反正常规则的单条链路——基于旧pairwise 364链路）的'链路'指向已于2026-08-07 Grilling #26废弃。",
    "source": "实体/角色与面具.md; 规则/核心机制.md",
    "old_model": "DSM/ICD疾病分类中互斥的离散诊断——一种疾病对应固定症状清单",
-   "deviation_reason": "连续谱模型（RDoC/p-factor/HiTOP）——疾病是正常参数的偏离，非独立实体。连接操作实体从旧链路ID变更为三体模型连接。",
+   "deviation_reason": "连续谱模型（RDoC/p-factor/HiTOP）——疾病是正常参数的偏离，非独立实体。连接操作实体从旧链路ID变更为三体模型连接；四类病理类型判定规则随 #88 重映射从旧364链路'四规则'重定义为三体模型机械可核验规则。",
    "status": "active",
    "numerical_locations": [
-    "实体/角色与面具.md（14角色/面具/共享症状）",
+    "实体/角色与面具.md（§8.8 三体判定规则表）",
     "规则/核心机制.md（激活代价）"
    ],
    "added": "2026-08-03",
-   "updated": "2026-08-09"
+   "updated": "2026-08-21"
+  },
+  "跨层短路": {
+   "definition": "四类病理链路之一（Grilling #88 重映射定案，2026-08-21）：边 m 正偏移 + 满足其一——(a) 边类型 ∈ {privileged_pathway, brainstem} 且端点含 L0 或 L5（特权/广播直达反射或叙事）；(b) 皮层-皮层边端点含 L5 functional_id 且对端为 L1-L2 记忆/情绪节点。语义：信号绕过 L2-L4 中间调制。示例：PTSD 闪回（L1 杏仁核劫持 L5 自我叙事 / L0 PAG 防御）。旧判定（破'层级相邻'规则，基于旧364链路系统）已废弃。",
+   "source": "实体/角色与面具.md §8.8; .scratch/grilling-88-etiology-disease-neural/ptsd-pilot.md §6.3",
+   "old_model": "旧364链路系统的'破层级相邻规则'（决策树 :132）",
+   "deviation_reason": "三体模型无 pairwise 层级相邻规则；重定义为三体边类型+层级端点的机械可核验判定（#88 重映射）。",
+   "status": "active",
+   "numerical_locations": [
+    "实体/角色与面具.md §8.8（判定规则表）",
+    "data/connectivity/pathology_edges.json（待 #88 生成，跨层短路边）"
+   ],
+   "added": "2026-08-21",
+   "updated": "2026-08-21"
+  },
+  "过度耦合": {
+   "definition": "四类病理链路之一（Grilling #88 重映射定案，2026-08-21）：合法边（皮层-皮层双向互惠 / privileged / brainstem 广播）m 正偏移，闭环无法终止（不衰减）。示例：OCD dlPFC→纹状体闭环无法终止、PTSD 杏仁核→PAG 过度耦合。旧判定（破'双向不对称'规则，基于旧364链路系统）已废弃。",
+   "source": "实体/角色与面具.md §8.8; .scratch/grilling-88-etiology-disease-neural/ptsd-pilot.md §6.3",
+   "old_model": "旧364链路系统的'破双向不对称规则'（决策树 :133）",
+   "deviation_reason": "三体模型无 pairwise 双向不对称规则；重定义为合法边 m 正偏移且闭环不衰减的机械可核验判定（#88 重映射）。",
+   "status": "active",
+   "numerical_locations": [
+    "实体/角色与面具.md §8.8（判定规则表）",
+    "data/connectivity/pathology_edges.json（待 #88 生成，过度耦合边）"
+   ],
+   "added": "2026-08-21",
+   "updated": "2026-08-21"
+  },
+  "解耦沉默": {
+   "definition": "四类病理链路之一（Grilling #88 重映射定案，2026-08-21）：合法边 m 负偏移（信号发不出）。示例：抑郁症 VTA→NAcc 奖赏通路信号发不出、PTSD vmPFC→杏仁核 抑制失效（−0.2/−0.4/−0.6）。旧判定（破'协同激活'规则，基于旧364链路系统）已废弃。",
+   "source": "实体/角色与面具.md §8.8; .scratch/grilling-88-etiology-disease-neural/ptsd-pilot.md §6.3",
+   "old_model": "旧364链路系统的'破协同激活规则'（决策树 :134）",
+   "deviation_reason": "三体模型无 pairwise 协同激活规则；重定义为合法边 m 负偏移的机械可核验判定（#88 重映射）。",
+   "status": "active",
+   "numerical_locations": [
+    "实体/角色与面具.md §8.8（判定规则表）",
+    "data/connectivity/pathology_edges.json（待 #88 生成，解耦沉默边）"
+   ],
+   "added": "2026-08-21",
+   "updated": "2026-08-21"
+  },
+  "结构异常": {
+   "definition": "四类病理链路之一（Grilling #88 重映射定案，2026-08-21）：(a) 边类型 = `病理新增`（端点组合不在三体模型 1049 边集合）；(b) brainstem 广播边**选择性** m 负偏移（投射腿结构受损，非全局 tone 变化）。示例：ASD 正常人不存在的连接路径、PTSD LC→dlPFC 腿受损。旧判定（破'结构存在'规则，基于旧364链路系统）已废弃。",
+   "source": "实体/角色与面具.md §8.8; .scratch/grilling-88-etiology-disease-neural/ptsd-pilot.md §6.3",
+   "old_model": "旧364链路系统的'破结构存在规则'（决策树 :135）",
+   "deviation_reason": "三体模型无 pairwise 结构存在规则；重定义为病理新增边/选择性广播腿受损的机械可核验判定（#88 重映射）。",
+   "status": "active",
+   "numerical_locations": [
+    "实体/角色与面具.md §8.8（判定规则表）",
+    "data/connectivity/pathology_edges.json（待 #88 生成，结构异常边）"
+   ],
+   "added": "2026-08-21",
+   "updated": "2026-08-21"
   },
   "拮抗天花板": {
    "definition": "拮抗连接对（三体模型中功能相反的连接对）m总和≤1.4。药物调制+组件调制叠加受此限制。同连接冲突时取绝对值最大者（不叠加不抵消）。旧定义（拮抗链路对——基于旧pairwise 364链路）的'链路'指向已于2026-08-07 Grilling #26废弃。",
