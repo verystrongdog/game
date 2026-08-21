@@ -1,0 +1,5929 @@
+{
+ "_description": "病理边注册表草案 — 26 病 → 三体模型病理边（Grilling #88 重映射产物，2026-08-21）",
+ "_schema_version": "1.0",
+ "_status": "草案待审（#88 定稿）",
+ "_stats": {
+  "diseases": 26,
+  "edges": 348,
+  "laterality_nonzero": 35,
+  "new_edges": 142
+ },
+ "edges": [
+  {
+   "edge_id": "adhd_e01",
+   "disease_id": "adhd",
+   "source": "rostralmiddlefrontal",
+   "target": "precuneus",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "旧 link_008_L（ACC→dlPFC 解耦）；DMN 干扰假说（dlPFC 无法压制 DMN）",
+   "hooks": "非线性跳变① + 行为覆盖③（DMN 入侵成员）"
+  },
+  {
+   "edge_id": "adhd_e02",
+   "disease_id": "adhd",
+   "source": "caudalmiddlefrontal",
+   "target": "rostralmiddlefrontal",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_021_L（PMd→dlPFC 工作记忆环路解耦）",
+   "hooks": "非线性跳变①（工作记忆容量成员）"
+  },
+  {
+   "edge_id": "adhd_e03",
+   "disease_id": "adhd",
+   "source": "medialorbitofrontal",
+   "target": "rostralmiddlefrontal",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.1
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_082_L（vmPFC→dlPFC，DMN-FPN 反相关不足）",
+   "hooks": "行为覆盖③（DMN 入侵成员）"
+  },
+  {
+   "edge_id": "adhd_e04",
+   "disease_id": "adhd",
+   "source": "caudalanteriorcingulate",
+   "target": "Caudate",
+   "edge_type": "cstc",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.1
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "dlPFC/ACC 解耦的 CSTC 表达（ACC 冲突监测→尾状核策略 gate 发育不足）；Norman 2016 成熟延迟",
+   "hooks": "3.1 节 bias_cognitive 推导锚"
+  },
+  {
+   "edge_id": "adhd_e05",
+   "disease_id": "adhd",
+   "source": "rostralmiddlefrontal",
+   "target": "Caudate",
+   "edge_type": "cstc",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.1
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "dlPFC→纹状体认知 gate 发育不足 → 工作记忆容量↓（Norman 2016）",
+   "hooks": "非线性跳变①（激活点−2 结构基础）"
+  },
+  {
+   "edge_id": "adhd_e06",
+   "disease_id": "adhd",
+   "source": "LocusCoeruleus",
+   "target": "rostralmiddlefrontal",
+   "edge_type": "brainstem",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.1
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_328（蓝斑→dlPFC NE，Hansen fc=0.75）——NE 过低期（认知资源不足）",
+   "hooks": "行为覆盖②（NE 低值期成员）"
+  },
+  {
+   "edge_id": "adhd_e07",
+   "disease_id": "adhd",
+   "source": "LocusCoeruleus",
+   "target": "pericalcarine",
+   "edge_type": "brainstem",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_331（蓝斑→V1 NE，Hansen fc=0.6）——NE 过高期（感觉信噪比↑→注意力分散）",
+   "hooks": "行为覆盖①（NE 高值期成员）"
+  },
+  {
+   "edge_id": "adhd_e08",
+   "disease_id": "adhd",
+   "source": "LocusCoeruleus",
+   "target": "Amygdala",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_332 波动拆分（蓝斑→杏仁核 NE，Hansen fc=0.7）冲动腿",
+   "hooks": "行为覆盖①（情绪冲动期成员）"
+  },
+  {
+   "edge_id": "adhd_e09",
+   "disease_id": "adhd",
+   "source": "SubstantiaNigraParsCompacta",
+   "target": "Putamen",
+   "edge_type": "brainstem",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.1
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_344（黑质→壳核 DA 解耦，行动门控资源↓）",
+   "hooks": "3.1 节 DA_SNc 推导锚"
+  },
+  {
+   "edge_id": "adhd_e10",
+   "disease_id": "adhd",
+   "source": "SubthalamicNucleus",
+   "target": "Pallidum",
+   "edge_type": "cstc",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.1
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "反应抑制缺陷（SSRT 延长）——STOP 超直接腿发育不足 → 冲动无法被急停",
+   "hooks": "行为覆盖①（冲动打断侧翼）"
+  },
+  {
+   "edge_id": "adhd_e11",
+   "disease_id": "adhd",
+   "source": "rostralanteriorcingulate",
+   "target": "insula",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.1
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_155_L（ACC吻侧→前脑岛）+ **ENIGMA 岛叶表面积↓**",
+   "hooks": "行为覆盖③（内感受整合↓）"
+  },
+  {
+   "edge_id": "adhd_e12",
+   "disease_id": "adhd",
+   "source": "fusiform",
+   "target": "inferiortemporal",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.1
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_030_L（纺锤体回→颞下回，模式识别↓→细节遗漏）",
+   "hooks": "行为覆盖①（感觉分散侧翼）"
+  },
+  {
+   "edge_id": "adhd_e13",
+   "disease_id": "adhd",
+   "source": "entorhinal",
+   "target": "Hippocampus",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.1
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "ENIGMA 内嗅皮层表面积↓（d=−0.07~−0.24）→ 记忆编码输入腿↓",
+   "hooks": "行为覆盖③（记忆整合侧翼）"
+  },
+  {
+   "edge_id": "adhd_e14",
+   "disease_id": "adhd",
+   "source": "middletemporal",
+   "target": "insula",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.1
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "ENIGMA 颞中回表面积↓（d=−0.07~−0.24）→ 突显整合腿↓",
+   "hooks": "行为覆盖①（突显整合侧翼）"
+  },
+  {
+   "edge_id": "adhd_e15",
+   "disease_id": "adhd",
+   "source": "VentralTegmentalArea",
+   "target": "Accumbens-area",
+   "edge_type": "brainstem",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "腹侧纹状体对即时奖赏过度敏感（文献数据源 §七 ADHD 奖赏）",
+   "hooks": "3.1 节 DA_VTA 推导锚"
+  },
+  {
+   "edge_id": "adhd_e16",
+   "disease_id": "adhd",
+   "source": "rostralmiddlefrontal",
+   "target": "Accumbens-area",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.1
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "dlPFC 对延迟奖赏调控不足（文献数据源 §七 ADHD 奖赏）",
+   "hooks": "行为覆盖③（冲动决策侧翼）"
+  },
+  {
+   "edge_id": "adhd_e17",
+   "disease_id": "adhd",
+   "source": "posteriorcingulate",
+   "target": "precuneus",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "DMN 核心过度活跃 → 白日梦内容生成（DMN 干扰假说；DMN 内部 rs-FC 增强）",
+   "hooks": "行为覆盖③（白日梦替代行动的内容源）"
+  },
+  {
+   "edge_id": "adhd_e18",
+   "disease_id": "adhd",
+   "source": "DorsalRapheNucleus",
+   "target": "rostralanteriorcingulate",
+   "edge_type": "brainstem",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.1
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "5-HT 对 ACC 冲动控制调制不足（Soubrié 1986；ADHD 冲动维度）[设计层：标签→tone 反向锚定]",
+   "hooks": "3.1 节 5HT tone 推导锚"
+  },
+  {
+   "edge_id": "an_e01",
+   "disease_id": "anorexia-nervosa",
+   "source": "VentralTegmentalArea",
+   "target": "Accumbens-area",
+   "edge_type": "brainstem",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.3,
+    -0.5
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_336（VTA→NAcc，fc=0.9）；Bronleigh 2022 AN 奖赏−",
+   "hooks": "行为覆盖②（食物/奖赏趋近不可用）"
+  },
+  {
+   "edge_id": "an_e02",
+   "disease_id": "anorexia-nervosa",
+   "source": "VentralTegmentalArea",
+   "target": "superiorfrontal",
+   "edge_type": "brainstem",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_338（VTA→mPFC，fc=0.6，Hansen2024）；食物奖赏价值被认知抑制",
+   "hooks": "3.1 节 DA_VTA 推导锚"
+  },
+  {
+   "edge_id": "an_e03",
+   "disease_id": "anorexia-nervosa",
+   "source": "rostralanteriorcingulate",
+   "target": "insula",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.4
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_155_L + **并吞 link_160**（rACC→前脑岛，ENIGMA 6.29/3.66）；Panarello 2025 岛叶 trait",
+   "hooks": "行为覆盖① + 非线性跳变②（饥饿=控制成功）"
+  },
+  {
+   "edge_id": "an_e04",
+   "disease_id": "anorexia-nervosa",
+   "source": "LocusCoeruleus",
+   "target": "insula",
+   "edge_type": "brainstem",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_326（LC→前脑岛 NE，fc=0.85，Hansen2024 PINK 最强 hub）；身体信号被过度警觉放大",
+   "hooks": "行为覆盖①（内感受过度警觉侧）"
+  },
+  {
+   "edge_id": "an_e05",
+   "disease_id": "anorexia-nervosa",
+   "source": "rostralmiddlefrontal",
+   "target": "Caudate",
+   "edge_type": "cstc",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.2,
+    0.3,
+    0.5
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_008_L（ACC→dlPFC 过度耦合）**语义转移**（直连不在三体图）；Bronleigh 2022 AN 认知+",
+   "hooks": "行为覆盖③ + 非线性跳变①（过度控制）"
+  },
+  {
+   "edge_id": "an_e06",
+   "disease_id": "anorexia-nervosa",
+   "source": "caudalanteriorcingulate",
+   "target": "rostralanteriorcingulate",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_007_L（ACC→ACC吻侧，ENIGMA 8.84）；认知-情绪监控过度（AN-OCD 强迫特征）",
+   "hooks": "行为覆盖③（作用域成员）"
+  },
+  {
+   "edge_id": "an_e07",
+   "disease_id": "anorexia-nervosa",
+   "source": "precuneus",
+   "target": "superiorfrontal",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_147_L（楔前叶→mPFC，ENIGMA 9.97）；Datta 2025 组分1 楔前叶身体意象自我参照",
+   "hooks": "行为覆盖①（身体意象偏差侧翼）"
+  },
+  {
+   "edge_id": "an_e08",
+   "disease_id": "anorexia-nervosa",
+   "source": "Pallidum",
+   "target": "Thalamus-Proper",
+   "edge_type": "cstc",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "Datta 2025 组分3 苍白球（奖赏/转换）——set-shift 僵硬",
+   "hooks": "3.1 节认知僵硬锚"
+  },
+  {
+   "edge_id": "an_e10",
+   "disease_id": "anorexia-nervosa",
+   "source": "LocusCoeruleus",
+   "target": "pericalcarine",
+   "edge_type": "brainstem",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_331（LC→V1 NE，fc=0.6，Hansen2024）；身体意象视觉监控警觉",
+   "hooks": "行为覆盖①（视觉侧翼）"
+  },
+  {
+   "edge_id": "an_e09",
+   "disease_id": "anorexia-nervosa",
+   "source": "SubstantiaNigraParsCompacta",
+   "target": "Caudate",
+   "edge_type": "brainstem",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_343（SNc→尾状核，fc=0.9，Paxinos2004）；AN-OCD 强迫特征 → 策略锁定",
+   "hooks": "3.1 节 DA_SNc 推导锚"
+  },
+  {
+   "edge_id": "an_e11",
+   "disease_id": "anorexia-nervosa",
+   "source": "DorsalRapheNucleus",
+   "target": "caudalanteriorcingulate",
+   "edge_type": "brainstem",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "Kaye 2005（AN 5-HT 功能↑/受体结合↑）；Crockett 2009（5HT 增强惩罚诱导行为抑制）",
+   "hooks": "3.1 节 5HT tone 推导锚"
+  },
+  {
+   "edge_id": "asd_e01",
+   "disease_id": "asd",
+   "source": "superiorfrontal",
+   "target": "supramarginal",
+   "edge_type": "corticocortical",
+   "pathology_type": "结构异常",
+   "m_offset": [
+    -0.2,
+    -0.3,
+    -0.4
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_086_L 语义转移（mOFC→颞极 ToM → mPFC→TPJ 换位思考主链）；RDoC ToM MPFC/TPJ",
+   "hooks": "行为覆盖①（L4 读意图不可用）+ 非线性跳变②（社会线索完全过滤）"
+  },
+  {
+   "edge_id": "asd_e02",
+   "disease_id": "asd",
+   "source": "inferiorparietal",
+   "target": "supramarginal",
+   "edge_type": "corticocortical",
+   "pathology_type": "结构异常",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_049_L（IP→TPJ，ENIGMA 10.34）；RDoC ToM TPJ",
+   "hooks": "行为覆盖①（读意图）"
+  },
+  {
+   "edge_id": "asd_e03",
+   "disease_id": "asd",
+   "source": "superiorfrontal",
+   "target": "superiortemporal",
+   "edge_type": "corticocortical",
+   "pathology_type": "结构异常",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "RDoC ToM MPFC/STS；社交脑 mPFC↔STS 连接异常",
+   "hooks": "行为覆盖①（社会线索处理）"
+  },
+  {
+   "edge_id": "asd_e04",
+   "disease_id": "asd",
+   "source": "superiortemporal",
+   "target": "bankssts",
+   "edge_type": "corticocortical",
+   "pathology_type": "结构异常",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "RDoC ToM STS；生物运动/目光加工异常（社交脑）",
+   "hooks": "行为覆盖①（目光/生物运动线索）"
+  },
+  {
+   "edge_id": "asd_e05",
+   "disease_id": "asd",
+   "source": "caudalanteriorcingulate",
+   "target": "superiorfrontal",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "结构异常",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_009_L（ACC→mPFC，ENIGMA 10.27）；社交脑 社会显著加工",
+   "hooks": "行为覆盖②（社会显著过滤）"
+  },
+  {
+   "edge_id": "asd_e06",
+   "disease_id": "asd",
+   "source": "parsopercularis",
+   "target": "superiortemporal",
+   "edge_type": "corticocortical",
+   "pathology_type": "结构异常",
+   "m_offset": [
+    -0.2,
+    -0.3,
+    -0.4
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_116_L（Broca↔Wernicke 共情，ENIGMA 7.97）；语言社会功能异常",
+   "hooks": "行为覆盖①（语言社会）"
+  },
+  {
+   "edge_id": "asd_e07",
+   "disease_id": "asd",
+   "source": "temporalpole",
+   "target": "superiortemporal",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "结构异常",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "RDoC ToM 颞极；社交脑 颞极↔STG 语义社会连接",
+   "hooks": "行为覆盖①（语义/语言社会）"
+  },
+  {
+   "edge_id": "asd_e08",
+   "disease_id": "asd",
+   "source": "fusiform",
+   "target": "middletemporal",
+   "edge_type": "corticocortical",
+   "pathology_type": "结构异常",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_032_L（梭状回→颞中回，ENIGMA 7.28）；面孔/生物运动识别异常",
+   "hooks": "行为覆盖①（面孔识别）"
+  },
+  {
+   "edge_id": "asd_e09",
+   "disease_id": "asd",
+   "source": "fusiform",
+   "target": "Amygdala",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "结构异常",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "面孔情绪识别缺损（社交脑）；ENIGMA ASD 结构独立模式",
+   "hooks": "行为覆盖①（面孔情绪）"
+  },
+  {
+   "edge_id": "asd_e10",
+   "disease_id": "asd",
+   "source": "precuneus",
+   "target": "superiorfrontal",
+   "edge_type": "corticocortical",
+   "pathology_type": "结构异常",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "旧 link_131_L 语义转移（PCC→mPFC 自传体记忆 → 楔前叶→mPFC 自我参照）；RDoC ToM 楔前叶",
+   "hooks": "行为覆盖②（自我参照）"
+  },
+  {
+   "edge_id": "asd_e11",
+   "disease_id": "asd",
+   "source": "medialorbitofrontal",
+   "target": "rostralmiddlefrontal",
+   "edge_type": "corticocortical",
+   "pathology_type": "结构异常",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_082_L（mOFC→dlPFC 自传体记忆，ENIGMA 7.79）",
+   "hooks": "行为覆盖②"
+  },
+  {
+   "edge_id": "asd_e12",
+   "disease_id": "asd",
+   "source": "caudalmiddlefrontal",
+   "target": "rostralmiddlefrontal",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_021_L（额中回尾部↔dlPFC，ENIGMA 10.45）；僵化/刻板/特殊兴趣（与 OCD 共享过度耦合特征但限于 routine）",
+   "hooks": "行为覆盖③（僵化）"
+  },
+  {
+   "edge_id": "asd_e13",
+   "disease_id": "asd",
+   "source": "Thalamus-Proper",
+   "target": "cuneus",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_318 语义转移（上丘→丘脑枕→皮层 感觉中继过度 → 丘脑枕→视觉联合皮层 relay 过度）",
+   "hooks": "行为覆盖④（感官过载）+ 非线性跳变①（感官过载锁定）"
+  },
+  {
+   "edge_id": "asd_e14",
+   "disease_id": "asd",
+   "source": "LocusCoeruleus",
+   "target": "pericalcarine",
+   "edge_type": "brainstem",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_331（LC→V1 感觉信噪比异常，Hansen PINK fc=0.6）；RDoC 唤醒域",
+   "hooks": "行为覆盖④（感官过载）"
+  },
+  {
+   "edge_id": "asd_e15",
+   "disease_id": "asd",
+   "source": "VentralTegmentalArea",
+   "target": "Accumbens-area",
+   "edge_type": "brainstem",
+   "pathology_type": "结构异常",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "RDoC affiliative：VTA-NAcc-VP-杏仁核；社交奖赏/动机连接差异（社交动机↓）",
+   "hooks": "行为覆盖⑤（社交动机低）"
+  },
+  {
+   "edge_id": "aspd_e01",
+   "disease_id": "aspd",
+   "source": "Amygdala",
+   "target": "PeriaqueductalGray",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": 0.2,
+   "is_new": true,
+   "literature": "Dugré 2020 急性威胁杏仁核低激活；CU traits→右侧杏仁核活动↓",
+   "hooks": "行为覆盖②（低恐惧）+ §五.2 跳变"
+  },
+  {
+   "edge_id": "aspd_e02",
+   "disease_id": "aspd",
+   "source": "PeriaqueductalGray",
+   "target": "Amygdala",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.3
+   ],
+   "laterality_delta": 0.2,
+   "is_new": false,
+   "literature": "旧 link_312（ASPD 侧语义，方向修正见 §四）；PAG→杏仁核 防御表达静默",
+   "hooks": "行为覆盖②（作用域成员）"
+  },
+  {
+   "edge_id": "aspd_e03",
+   "disease_id": "aspd",
+   "source": "Amygdala",
+   "target": "insula",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": 0.2,
+   "is_new": true,
+   "literature": "Dugré 2020 急性威胁前岛叶低激活；Aoki 2013 前岛叶灰质异常",
+   "hooks": "行为覆盖②（威胁内感受不发）"
+  },
+  {
+   "edge_id": "aspd_e04",
+   "disease_id": "aspd",
+   "source": "caudalanteriorcingulate",
+   "target": "Amygdala",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "Dugré 2020 急性威胁 dACC 低激活",
+   "hooks": "行为覆盖②（威胁评估信号发不出）"
+  },
+  {
+   "edge_id": "aspd_e05",
+   "disease_id": "aspd",
+   "source": "medialorbitofrontal",
+   "target": "Amygdala",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.2,
+    -0.4,
+    -0.6
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "Dugré & Potvin 2021 杏仁核-vmPFC 连接↓ 与反社会严重度负相关（核心）",
+   "hooks": "行为覆盖① + §五.2 跳变载体（共情核心）"
+  },
+  {
+   "edge_id": "aspd_e06",
+   "disease_id": "aspd",
+   "source": "precuneus",
+   "target": "medialorbitofrontal",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "Dugré 2020 社会认知楔前叶异常；Dugré & Potvin 2021 楔前叶连接 disrupted；旧 link_086_L 语义转移（见 §四）",
+   "hooks": "行为覆盖①（自我-他人参照断开）"
+  },
+  {
+   "edge_id": "aspd_e07",
+   "disease_id": "aspd",
+   "source": "superiorfrontal",
+   "target": "Amygdala",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "Dugré & Potvin 2021 dmPFC 连接 disrupted；Rogers & De Brito 2016 dmPFC 灰质异常",
+   "hooks": "行为覆盖①（道德/共情评估静默）"
+  },
+  {
+   "edge_id": "aspd_e08",
+   "disease_id": "aspd",
+   "source": "caudalanteriorcingulate",
+   "target": "superiorfrontal",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.2,
+    -0.3,
+    -0.5
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_009_L（dACC→dmPFC 社会评价链路，量级沿用）",
+   "hooks": "§五.2 跳变载体（社会奖惩无效）"
+  },
+  {
+   "edge_id": "aspd_e09",
+   "disease_id": "aspd",
+   "source": "inferiorparietal",
+   "target": "supramarginal",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_049_L（TPJ 换位思考）；Dugré 2020 社会认知网络异常",
+   "hooks": "行为覆盖①（读意图不可用侧翼）"
+  },
+  {
+   "edge_id": "aspd_e10",
+   "disease_id": "aspd",
+   "source": "rostralanteriorcingulate",
+   "target": "insula",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_155_L（rACC-前岛叶 共情内感受链路）",
+   "hooks": "行为覆盖①（共感不可用）"
+  },
+  {
+   "edge_id": "aspd_e11",
+   "disease_id": "aspd",
+   "source": "rostralmiddlefrontal",
+   "target": "Caudate",
+   "edge_type": "cstc",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.4
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_008_L 语义转移（ACC→dlPFC 无三体边，见 §四）；Dugré 2020 dlPFC 低激活",
+   "hooks": "行为覆盖③（冲动控制）"
+  },
+  {
+   "edge_id": "aspd_e12",
+   "disease_id": "aspd",
+   "source": "DorsalRapheNucleus",
+   "target": "Amygdala",
+   "edge_type": "brainstem",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "5-HT 冲动攻击假说（Coccaro et al.；Soubrié 1986）——低 5-HT → 去抑制",
+   "hooks": "3.1 节 5HT tone 推导锚"
+  },
+  {
+   "edge_id": "aspd_e13",
+   "disease_id": "aspd",
+   "source": "Putamen",
+   "target": "Amygdala",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "Dugré 2020 社会认知壳核异常（共情躯体模拟回路断开）",
+   "hooks": "行为覆盖①（共情侧翼）"
+  },
+  {
+   "edge_id": "aspd_e14",
+   "disease_id": "aspd",
+   "source": "paracentral",
+   "target": "Putamen",
+   "edge_type": "cstc",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "Dugré 2020 急性威胁 SMA 低激活（SMA→paracentral 设计师映射，见 §二 引言）",
+   "hooks": "行为覆盖②（防御运动准备不足）"
+  },
+  {
+   "edge_id": "bed_e01",
+   "disease_id": "binge-eating-disorder",
+   "source": "VentralTegmentalArea",
+   "target": "Accumbens-area",
+   "edge_type": "brainstem",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.3,
+    0.4
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "Schag 2013（食物奖赏线索→纹状体过度反应）；Schulte 2016（与 SUD 共享奖赏回路）",
+   "hooks": "行为覆盖①（暴食期）+ 3.1 节 DA_VTA 推导锚"
+  },
+  {
+   "edge_id": "bed_e02",
+   "disease_id": "binge-eating-disorder",
+   "source": "medialorbitofrontal",
+   "target": "Accumbens-area",
+   "edge_type": "cstc",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.2,
+    0.3,
+    0.4
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "Schag 2013（奖赏价值评估超敏：OFC-腹侧纹状体）；Kessler 2016",
+   "hooks": "行为覆盖①（食物线索评估）+ 3.1 节 bias_limbic 推导锚"
+  },
+  {
+   "edge_id": "bed_e08",
+   "disease_id": "binge-eating-disorder",
+   "source": "SubstantiaNigraParsCompacta",
+   "target": "Putamen",
+   "edge_type": "brainstem",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "Kessler 2016（背侧纹状体奖赏/习惯）",
+   "hooks": "3.1 节 DA_SNc 推导锚"
+  },
+  {
+   "edge_id": "bed_e05",
+   "disease_id": "binge-eating-disorder",
+   "source": "insula",
+   "target": "Accumbens-area",
+   "edge_type": "cstc",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "Kessler 2016（岛叶食物线索反应→趋近）；Schulte 2016",
+   "hooks": "非线性跳变①（暴食发作不可中断）+ 3.1 节 bias_limbic 推导锚"
+  },
+  {
+   "edge_id": "bed_e06",
+   "disease_id": "binge-eating-disorder",
+   "source": "LocusCoeruleus",
+   "target": "insula",
+   "edge_type": "brainstem",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "Kessler 2016（渴求时内感受警觉）",
+   "hooks": "行为覆盖①（渴求期侧翼）"
+  },
+  {
+   "edge_id": "bed_e09",
+   "disease_id": "binge-eating-disorder",
+   "source": "Amygdala",
+   "target": "Accumbens-area",
+   "edge_type": "cstc",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "Kessler 2016（情绪失调：负性情绪→进食趋近）；Schulte 2016（负强化）",
+   "hooks": "行为覆盖①（情绪性暴食触发）"
+  },
+  {
+   "edge_id": "bed_e03",
+   "disease_id": "binge-eating-disorder",
+   "source": "rostralmiddlefrontal",
+   "target": "Caudate",
+   "edge_type": "cstc",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "Balodis 2013（fronto-striatal 招募↓→持续暴食）；Schag 2013（冲动控制↓）",
+   "hooks": "行为覆盖③（L5 压制完全失效）+ 3.1 节 bias_cognitive 推导锚"
+  },
+  {
+   "edge_id": "bed_e04",
+   "disease_id": "binge-eating-disorder",
+   "source": "caudalanteriorcingulate",
+   "target": "Caudate",
+   "edge_type": "cstc",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "Kessler 2016（ACC 监控↓）；Schag 2013",
+   "hooks": "行为覆盖③（作用域成员）"
+  },
+  {
+   "edge_id": "bed_e07",
+   "disease_id": "binge-eating-disorder",
+   "source": "Putamen",
+   "target": "Thalamus-Proper",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "Kessler 2016（背侧纹状体习惯化）；Schulte 2016（成瘾式习惯）",
+   "hooks": "非线性跳变②（暴食习惯锁定）"
+  },
+  {
+   "edge_id": "bed_e11",
+   "disease_id": "binge-eating-disorder",
+   "source": "precentral",
+   "target": "Putamen",
+   "edge_type": "cstc",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "Kessler 2016（进食动作执行习惯化）；Schag 2013（冲动→动作执行）",
+   "hooks": "3.1 节 bias_somatic 推导锚"
+  },
+  {
+   "edge_id": "bed_e10",
+   "disease_id": "binge-eating-disorder",
+   "source": "DorsalRapheNucleus",
+   "target": "caudalanteriorcingulate",
+   "edge_type": "brainstem",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "Schag 2013（冲动性）；Soubrié 1986（低 5HT=去抑制）",
+   "hooks": "3.1 节 5HT tone 推导锚"
+  },
+  {
+   "edge_id": "bipolari_e01",
+   "disease_id": "bipolar-I",
+   "source": "VentralTegmentalArea",
+   "target": "Accumbens-area",
+   "edge_type": "brainstem",
+   "pathology_type": "双向振荡",
+   "m_offset": [
+    0.3,
+    -0.3,
+    0.5
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_336（VTA→NAcc，Schultz 1997）；NPC AI §5.2 躁狂（VTA→NAcc↑）；奖赏超敏模型；MDD 快感缺失 VTA→NAcc 解耦（文献 §七）",
+   "hooks": "行为覆盖①（躁狂/抑郁姿态切换）；非线性跳变①（\\"
+  },
+  {
+   "edge_id": "bipolari_e02",
+   "disease_id": "bipolar-I",
+   "source": "SubstantiaNigraParsCompacta",
+   "target": "Putamen",
+   "edge_type": "brainstem",
+   "pathology_type": "双向振荡",
+   "m_offset": [
+    0.1,
+    -0.1,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_344（SNc→壳核，Paxinos 2004）；壳核 ALFF↑ Guo 2026（纹状体）",
+   "hooks": "行为覆盖①；非线性跳变①（作用域成员）；3.1 DA_SNc 推导锚"
+  },
+  {
+   "edge_id": "bipolari_e03",
+   "disease_id": "bipolar-I",
+   "source": "VentralTegmentalArea",
+   "target": "superiorfrontal",
+   "edge_type": "brainstem",
+   "pathology_type": "双向振荡",
+   "m_offset": [
+    0.1,
+    -0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_338（VTA→mPFC，Hansen 2024）；奖赏超敏→目标驱动过度（躁狂）",
+   "hooks": "行为覆盖①（目标驱动）；3.1 DA_VTA 推导锚（次）"
+  },
+  {
+   "edge_id": "bipolari_e16",
+   "disease_id": "bipolar-I",
+   "source": "medialorbitofrontal",
+   "target": "Accumbens-area",
+   "edge_type": "cstc",
+   "pathology_type": "双向振荡",
+   "m_offset": [
+    0.2,
+    -0.2,
+    0.4
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "奖赏超敏模型（Robinson & Berridge 1993）；Damme 2022（mOFC/NAcc 体积↑，BSD 谱系）；CSTC limbic 奖赏门控",
+   "hooks": "行为覆盖①（冲动趋近/快感缺失）；3.1 bias_limbic 推导锚（相位）"
+  },
+  {
+   "edge_id": "bipolari_e15",
+   "disease_id": "bipolar-I",
+   "source": "superiorfrontal",
+   "target": "Putamen",
+   "edge_type": "cstc",
+   "pathology_type": "双向振荡",
+   "m_offset": [
+    0.2,
+    -0.1,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "壳核 ALFF↑ Guo 2026（纹状体）；躁狂期精神运动性兴奋/抑郁期精神运动迟滞（临床）；NPC AI §5.2 躁狂（dlPFC 抑制↓）",
+   "hooks": "行为覆盖①（物理攻击姿态）；3.1 bias_somatic 推导锚（相位）"
+  },
+  {
+   "edge_id": "bipolari_e05",
+   "disease_id": "bipolar-I",
+   "source": "LocusCoeruleus",
+   "target": "Amygdala",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.2,
+    0.4
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_332（蓝斑→杏仁核 NE，Hansen 2024）；蓝斑振荡——躁狂期↑（睡眠需求↓）/抑郁期也可↑（激越性抑郁，旧思路链）",
+   "hooks": "3.1 NE 推导锚（主）；非线性跳变②（睡眠恢复 SAN −50%）"
+  },
+  {
+   "edge_id": "bipolari_e06",
+   "disease_id": "bipolar-I",
+   "source": "LocusCoeruleus",
+   "target": "caudalanteriorcingulate",
+   "edge_type": "brainstem",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_327（蓝斑→ACC，Hansen 2024 Fig5）；NE→警觉/冲动",
+   "hooks": "3.1 NE 推导锚（次）；行为覆盖③（相位翻转触发器：唤醒域 m_max>0.3）"
+  },
+  {
+   "edge_id": "bipolari_e07",
+   "disease_id": "bipolar-I",
+   "source": "DorsalRapheNucleus",
+   "target": "Amygdala",
+   "edge_type": "brainstem",
+   "pathology_type": "双向振荡",
+   "m_offset": [
+    -0.1,
+    0.1,
+    -0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "NPC AI §4.2 敏化-奖励/抑制不足（5HT −0.2）↔ 过度抑制（5HT +0.2）；5HT 行为抑制假说（Soubrié 1986）；锂盐 5-HT 机制",
+   "hooks": "3.1 5HT 推导锚（双向）；躁狂相去抑制/抑郁相过度抑制"
+  },
+  {
+   "edge_id": "bipolari_e04",
+   "disease_id": "bipolar-I",
+   "source": "caudalanteriorcingulate",
+   "target": "Caudate",
+   "edge_type": "cstc",
+   "pathology_type": "双向振荡",
+   "m_offset": [
+    0.2,
+    -0.1,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "Guo 2026 BD 特异性 ALFF↑ 尾状核 + ACC/mPFC（双侧 IFG/ACC-mPFC/纹状体/尾状核）",
+   "hooks": "3.1 bias_cognitive 推导锚（相位）；躁狂思维奔逸/抑郁迟滞（认知环路行为层）"
+  },
+  {
+   "edge_id": "bipolari_e08",
+   "disease_id": "bipolar-I",
+   "source": "caudalanteriorcingulate",
+   "target": "frontalpole",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_008_L（ACC→dlPFC，ENIGMA 5.23 L）；认知控制域↓（冲动控制↓躁狂/决策↓抑郁）",
+   "hooks": "行为覆盖③（L5 压制失效结构基础，与 e09 协同）；非线性跳变③"
+  },
+  {
+   "edge_id": "bipolari_e09",
+   "disease_id": "bipolar-I",
+   "source": "medialorbitofrontal",
+   "target": "rostralmiddlefrontal",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_082_L（vmPFC→dlPFC，ENIGMA 7.79 L，DMN-FPN）；DMN-FPN 反相关减弱（躁狂/抑郁方向相反，静息态残余）",
+   "hooks": "整合域边界崩溃行为（思维奔逸↔反刍）"
+  },
+  {
+   "edge_id": "bipolari_e12",
+   "disease_id": "bipolar-I",
+   "source": "Thalamus-Proper",
+   "target": "rostralmiddlefrontal",
+   "edge_type": "cstc",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "ENIGMA BD 丘脑↓（显著，效应量<精分，Hibar 2016）",
+   "hooks": "认知环路丘脑腿中继减弱（思维/决策效率↓）"
+  },
+  {
+   "edge_id": "bipolari_e10",
+   "disease_id": "bipolar-I",
+   "source": "caudalanteriorcingulate",
+   "target": "parahippocampal",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_003_L（ACC→海马旁，ENIGMA 4.89 L）；记忆域轻度异常（海马体积↓相关）",
+   "hooks": "记忆域轻度（无闪回——与 PTSD e06 +0.6 跨层短路区分：双相无创伤闪回机制）"
+  },
+  {
+   "edge_id": "bipolari_e11",
+   "disease_id": "bipolar-I",
+   "source": "medialorbitofrontal",
+   "target": "Hippocampus",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "ENIGMA BD 海马↓（d=−0.203，Hibar 2016）；锂盐保护海马体积（frontmatter）",
+   "hooks": "记忆整合受损；**锂盐治疗锚**（海马保护 = 治疗缓解结构基础）"
+  },
+  {
+   "edge_id": "bipolari_e13",
+   "disease_id": "bipolar-I",
+   "source": "rostralanteriorcingulate",
+   "target": "insula",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_155_L（rACC→岛叶，ENIGMA 6.29 L，Empathy 网络）；内感受域异常（躁狂期体感增强）；Guo 2026 岛叶共享 ALFF↑",
+   "hooks": "躁狂期体感增强（内感受行为层）；BD-II 内感受相位触发器（共享机制）"
+  },
+  {
+   "edge_id": "bipolari_e14",
+   "disease_id": "bipolar-I",
+   "source": "precuneus",
+   "target": "medialorbitofrontal",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "Guo 2026 BD 特异性 **ALFF↓ 楔前叶**；DMN 自我参照外送减弱",
+   "hooks": "自我参照处理异常：躁狂夸大→内省缺失（行为层）"
+  },
+  {
+   "edge_id": "bipolarii_e01",
+   "disease_id": "bipolar-II",
+   "source": "VentralTegmentalArea",
+   "target": "Accumbens-area",
+   "edge_type": "brainstem",
+   "pathology_type": "双向振荡",
+   "m_offset": [
+    0.1,
+    -0.2,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_336（VTA→NAcc，Schultz 1997）；NPC AI §5.2 躁狂（VTA→NAcc↑）；奖赏超敏模型；MDD 快感缺失 VTA→NAcc 解耦",
+   "hooks": "行为覆盖①（轻躁狂/抑郁姿态）；3.1 DA_VTA 推导锚（主）；轻躁狂锁定作用域"
+  },
+  {
+   "edge_id": "bipolarii_e02",
+   "disease_id": "bipolar-II",
+   "source": "SubstantiaNigraParsCompacta",
+   "target": "Putamen",
+   "edge_type": "brainstem",
+   "pathology_type": "双向振荡",
+   "m_offset": [
+    0.0,
+    -0.1,
+    0.1
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_344（SNc→壳核，Paxinos 2004）；壳核 ALFF↑ Guo 2026（幅值<BD-I）",
+   "hooks": "行为覆盖①；3.1 DA_SNc 推导锚"
+  },
+  {
+   "edge_id": "bipolarii_e03",
+   "disease_id": "bipolar-II",
+   "source": "VentralTegmentalArea",
+   "target": "superiorfrontal",
+   "edge_type": "brainstem",
+   "pathology_type": "双向振荡",
+   "m_offset": [
+    0.1,
+    -0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "奖赏超敏模型（BSD 谱系共享，环性心境条目）；VTA→mPFC 目标驱动（对照 BD-I e03，幅值减半）",
+   "hooks": "行为覆盖①（目标驱动）；3.1 DA_VTA 推导锚（次）"
+  },
+  {
+   "edge_id": "bipolarii_e06",
+   "disease_id": "bipolar-II",
+   "source": "medialorbitofrontal",
+   "target": "Accumbens-area",
+   "edge_type": "cstc",
+   "pathology_type": "双向振荡",
+   "m_offset": [
+    0.1,
+    -0.2,
+    0.2
+   ],
+   "laterality_delta": -0.2,
+   "is_new": true,
+   "literature": "奖赏超敏模型（Robinson & Berridge 1993）；Damme 2022（mOFC/NAcc）；**Haznedar 2005 左侧前额叶趋近不对称↑（BD-II 共享）**",
+   "hooks": "行为覆盖①（冲动趋近/快感缺失）；3.1 bias_limbic 推导锚（相位）；BD-II 唯一偏侧边"
+  },
+  {
+   "edge_id": "bipolarii_e15",
+   "disease_id": "bipolar-II",
+   "source": "superiorfrontal",
+   "target": "Putamen",
+   "edge_type": "cstc",
+   "pathology_type": "双向振荡",
+   "m_offset": [
+    0.0,
+    -0.1,
+    0.1
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "壳核 ALFF↑ Guo 2026；抑郁期精神运动迟滞（运动输出↓，NPC AI §5.2 抑郁(反刍)）；轻躁狂活动轻度增多",
+   "hooks": "行为覆盖①（物理攻击姿态）；3.1 bias_somatic 推导锚（抑郁极）"
+  },
+  {
+   "edge_id": "bipolarii_e07",
+   "disease_id": "bipolar-II",
+   "source": "medialorbitofrontal",
+   "target": "superiorfrontal",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.2,
+    null
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_131_L（PCC→mPFC，ENIGMA 9.76 L，Autobiographical Memory 网络）；Hamilton 2015 反刍 DMN 过度连接",
+   "hooks": "行为覆盖②（轻躁狂自我膨胀 ↔ 抑郁反刍 SAN −1）；自我社会域↑"
+  },
+  {
+   "edge_id": "bipolarii_e10",
+   "disease_id": "bipolar-II",
+   "source": "precuneus",
+   "target": "medialorbitofrontal",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    null
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "Guo 2026 BD 特异性 ALFF↓ 楔前叶（幅值<BD-I）；DMN 自我参照外送减弱",
+   "hooks": "自我参照处理异常（轻躁狂夸大→内省缺失）"
+  },
+  {
+   "edge_id": "bipolarii_e05",
+   "disease_id": "bipolar-II",
+   "source": "LocusCoeruleus",
+   "target": "Amygdala",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    null
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_332（蓝斑→杏仁核 NE，Hansen 2024）；蓝斑振荡（幅值<BD-I：轻躁狂非精神病性）",
+   "hooks": "3.1 NE 推导锚；轻躁狂相睡眠衰减（§五.1，相位行为）"
+  },
+  {
+   "edge_id": "bipolarii_e13",
+   "disease_id": "bipolar-II",
+   "source": "rostralanteriorcingulate",
+   "target": "insula",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.2,
+    null
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_155_L（rACC→岛叶，ENIGMA 6.29 L）；内感受域异常（轻躁狂体感增强/抑郁躯体关注）",
+   "hooks": "行为覆盖③（**相位翻转触发器：内感受域 m_max > 0.2**）"
+  },
+  {
+   "edge_id": "bipolarii_e14",
+   "disease_id": "bipolar-II",
+   "source": "DorsalRapheNucleus",
+   "target": "Amygdala",
+   "edge_type": "brainstem",
+   "pathology_type": "双向振荡",
+   "m_offset": [
+    -0.1,
+    0.1,
+    -0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "NPC AI §4.2 敏化-奖励（5HT −0.2）↔ 过度抑制（5HT +0.2）；5HT 行为抑制假说（Soubrié 1986）",
+   "hooks": "3.1 5HT 推导锚（双向）；轻躁狂相去抑制/抑郁相过度抑制"
+  },
+  {
+   "edge_id": "bipolarii_e04",
+   "disease_id": "bipolar-II",
+   "source": "caudalanteriorcingulate",
+   "target": "Caudate",
+   "edge_type": "cstc",
+   "pathology_type": "双向振荡",
+   "m_offset": [
+    0.0,
+    -0.1,
+    0.1
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "Guo 2026 BD 特异性 ALFF↑ 尾状核/ACC-mPFC（幅值<BD-I）",
+   "hooks": "3.1 bias_cognitive 旁证（BD-II 不翻 cognitive bias，见 §三）；抑郁相思维迟滞（行为层）"
+  },
+  {
+   "edge_id": "bipolarii_e08",
+   "disease_id": "bipolar-II",
+   "source": "caudalanteriorcingulate",
+   "target": "frontalpole",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    null
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_008_L（ACC→dlPFC，ENIGMA 5.23 L）；认知控制域↓轻度（效应量<BD-I）",
+   "hooks": "行为覆盖③（L5 压制减弱，轻度）"
+  },
+  {
+   "edge_id": "bipolarii_e09",
+   "disease_id": "bipolar-II",
+   "source": "medialorbitofrontal",
+   "target": "rostralmiddlefrontal",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    null
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_082_L（vmPFC→dlPFC，ENIGMA 7.79 L，DMN-FPN）；DMN-FPN 反相关减弱（极轻度，仅重度抑郁期显现，旧思路链）",
+   "hooks": "整合域边界崩溃（轻度）"
+  },
+  {
+   "edge_id": "bipolarii_e11",
+   "disease_id": "bipolar-II",
+   "source": "medialorbitofrontal",
+   "target": "Hippocampus",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    null
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "ENIGMA BD-II 海马 d=−0.134（< BD-I −0.203，Hibar 2016）",
+   "hooks": "记忆整合受损（轻度）；锂盐治疗锚（共享 BD-I）"
+  },
+  {
+   "edge_id": "borderline-personality_e01",
+   "disease_id": "borderline-personality",
+   "source": "parsopercularis",
+   "target": "Amygdala",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.2,
+    -0.4,
+    -0.6
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "Schulze 2016 vlPFC 低激活（\"too little control\"）；RDoC 认知控制（vlPFC 认知重评）",
+   "hooks": "§五.1 行为覆盖① + §五.2 跳变（核心）"
+  },
+  {
+   "edge_id": "borderline-personality_e02",
+   "disease_id": "borderline-personality",
+   "source": "medialorbitofrontal",
+   "target": "Amygdala",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "RDoC 负性效价（vmPFC 情绪调节）；van Zutphen 2015",
+   "hooks": "§五.1 行为覆盖①（vmPFC 调节腿）"
+  },
+  {
+   "edge_id": "borderline-personality_e03",
+   "disease_id": "borderline-personality",
+   "source": "Amygdala",
+   "target": "PeriaqueductalGray",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.2,
+    0.3,
+    0.5
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "RDoC 急性威胁 dPAG；Schulze 2016 杏仁核过度激活（\"too much drive\"）",
+   "hooks": "§五.1 行为覆盖① + §五.2 跳变①（情绪风暴核心）"
+  },
+  {
+   "edge_id": "borderline-personality_e04",
+   "disease_id": "borderline-personality",
+   "source": "Amygdala",
+   "target": "insula",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "Schulze 2016 岛叶过度激活；BPD 内感受超敏",
+   "hooks": "行为覆盖①（内感受风暴躯体化）"
+  },
+  {
+   "edge_id": "borderline-personality_e07",
+   "disease_id": "borderline-personality",
+   "source": "LocusCoeruleus",
+   "target": "Amygdala",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "反应性高唤醒（人际应激触发情绪风暴；BPD 应激下 NE 反应↑）",
+   "hooks": "3.1 节 NE tone 推导锚"
+  },
+  {
+   "edge_id": "borderline-personality_e08",
+   "disease_id": "borderline-personality",
+   "source": "DorsalRapheNucleus",
+   "target": "medialorbitofrontal",
+   "edge_type": "brainstem",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "5-HT 冲动性攻击假说（Coccaro；Siever & Weinstein 2009）——5-HT 对前额叶调节支撑不足",
+   "hooks": "3.1 节 5HT tone 推导锚"
+  },
+  {
+   "edge_id": "borderline-personality_e05",
+   "disease_id": "borderline-personality",
+   "source": "Amygdala",
+   "target": "Hippocampus",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "Schulze 2016 海马/旁海马激活↑；人际创伤史→情绪记忆高反应",
+   "hooks": "行为覆盖①（情绪情境匹配×2 记忆端）"
+  },
+  {
+   "edge_id": "borderline-personality_e06",
+   "disease_id": "borderline-personality",
+   "source": "Amygdala",
+   "target": "Accumbens-area",
+   "edge_type": "cstc",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "情绪→行动 gate 劫持 → 冲动行为（BPD 冲动性核心机制）",
+   "hooks": "3.1 节 bias_limbic 推导锚 + §五 跳变②（冲动爆发）"
+  },
+  {
+   "edge_id": "borderline-personality_e11",
+   "disease_id": "borderline-personality",
+   "source": "rostralanteriorcingulate",
+   "target": "Hippocampus",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "情绪记忆检索增强（创伤重体验/情绪波动载体）",
+   "hooks": "§五 跳变①（情绪波动作用域成员）"
+  },
+  {
+   "edge_id": "borderline-personality_e12",
+   "disease_id": "borderline-personality",
+   "source": "Amygdala",
+   "target": "Putamen",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "情绪→躯体行动通道（情绪性冲动攻击/自伤）",
+   "hooks": "行为覆盖②（冲动）"
+  },
+  {
+   "edge_id": "borderline-personality_e09",
+   "disease_id": "borderline-personality",
+   "source": "precuneus",
+   "target": "medialorbitofrontal",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "内侧前额叶自我参照异常（身份紊乱/空虚感——自我概念随情绪状态漂移）",
+   "hooks": "§五 跳变②（身份紊乱）"
+  },
+  {
+   "edge_id": "borderline-personality_e10",
+   "disease_id": "borderline-personality",
+   "source": "superiortemporal",
+   "target": "Amygdala",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "人际创伤史→社会信号过度解读（拒绝敏感/敌意归因偏向）",
+   "hooks": "行为覆盖③（拒绝敏感）"
+  },
+  {
+   "edge_id": "borderline-personality_e13",
+   "disease_id": "borderline-personality",
+   "source": "posteriorcingulate",
+   "target": "Hippocampus",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "被弃记忆反刍（DMN-海马 记忆反刍——空虚感/被抛弃恐惧）",
+   "hooks": "行为覆盖②（反刍侧翼）"
+  },
+  {
+   "edge_id": "bn_e01",
+   "disease_id": "bulimia-nervosa",
+   "source": "VentralTegmentalArea",
+   "target": "Accumbens-area",
+   "edge_type": "brainstem",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.3,
+    0.4
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_336（VTA→NAcc，fc=0.9）**量级修正**（旧 0/+0.3/−0.1 非单调，相位入行为覆盖）；Bronleigh 2022 BN 奖赏+",
+   "hooks": "行为覆盖①②（暴食期/清除后）"
+  },
+  {
+   "edge_id": "bn_e02",
+   "disease_id": "bulimia-nervosa",
+   "source": "SubstantiaNigraParsCompacta",
+   "target": "Putamen",
+   "edge_type": "brainstem",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_344（SNc→壳核，fc=0.85）**量级修正**（旧 0/+0.2/0）；Bronleigh 2022 豆状核奖赏区↑",
+   "hooks": "3.1 节 DA_SNc 推导锚"
+  },
+  {
+   "edge_id": "bn_e09",
+   "disease_id": "bulimia-nervosa",
+   "source": "insula",
+   "target": "Accumbens-area",
+   "edge_type": "cstc",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "Bronleigh 2022（内感受岛叶↑ + 奖赏↑ 联合）；食物线索→趋近 = 暴食发作触发回路",
+   "hooks": "行为覆盖①（暴食发作核心）+ 3.1 节 bias_limbic 推导锚"
+  },
+  {
+   "edge_id": "bn_e04",
+   "disease_id": "bulimia-nervosa",
+   "source": "LocusCoeruleus",
+   "target": "insula",
+   "edge_type": "brainstem",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_326（LC→前脑岛 NE，fc=0.85，Hansen2024 PINK 最强 hub）；Bronleigh 2022 内感受区↑",
+   "hooks": "行为覆盖①（食物线索内感受警觉）"
+  },
+  {
+   "edge_id": "bn_e05",
+   "disease_id": "bulimia-nervosa",
+   "source": "rostralanteriorcingulate",
+   "target": "insula",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_155_L（ACC吻侧→前脑岛）；饱腹感信号不可靠 + 清除后身体信号被忽略",
+   "hooks": "行为覆盖②（清除后内感受忽略）"
+  },
+  {
+   "edge_id": "bn_e06",
+   "disease_id": "bulimia-nervosa",
+   "source": "rostralmiddlefrontal",
+   "target": "Caudate",
+   "edge_type": "cstc",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_008_L（ACC→dlPFC 结构异常 0/0/0）**语义转移 + 量级修正**（任务要求 BN 认知↓ 显式化）；Bronleigh 2022 前额叶↓",
+   "hooks": "行为覆盖③（L5 压制完全失效）"
+  },
+  {
+   "edge_id": "bn_e07",
+   "disease_id": "bulimia-nervosa",
+   "source": "caudalanteriorcingulate",
+   "target": "Caudate",
+   "edge_type": "cstc",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "Mattavelli 2024（食物 No-go ACC 低激活）；Bronleigh 2022 ACC↓",
+   "hooks": "行为覆盖③（作用域成员）"
+  },
+  {
+   "edge_id": "bn_e03",
+   "disease_id": "bulimia-nervosa",
+   "source": "Putamen",
+   "target": "Thalamus-Proper",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.3,
+    0.4
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_363（壳核→丘脑，CSTC 直接通路，Alexander1986；Haber2010）；清除行为自动化（呕吐/过度运动）",
+   "hooks": "非线性跳变①（清除习惯锁定）"
+  },
+  {
+   "edge_id": "bn_e08",
+   "disease_id": "bulimia-nervosa",
+   "source": "precentral",
+   "target": "Putamen",
+   "edge_type": "cstc",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "Mattavelli 2024（食物 No-go 中央前回+背侧纹状体激活↓=抑制机制失效 → GO 通路无法关闭）；清除动作执行",
+   "hooks": "3.1 节 bias_somatic 推导锚 + 非线性跳变①"
+  },
+  {
+   "edge_id": "bn_e10",
+   "disease_id": "bulimia-nervosa",
+   "source": "DorsalRapheNucleus",
+   "target": "insula",
+   "edge_type": "brainstem",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "Kaye 2005（BN 5-HT 功能↓）；Soubrié 1986（低 5HT=去抑制）→ 暴食冲动",
+   "hooks": "3.1 节 5HT tone 推导锚"
+  },
+  {
+   "edge_id": "cyclothymia_e01",
+   "disease_id": "cyclothymia",
+   "source": "VentralTegmentalArea",
+   "target": "Accumbens-area",
+   "edge_type": "brainstem",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    null
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_336（VTA→NAcc，Schultz 1997 fc=0.9）降档（< MDD 的 −0.1/−0.3/−0.5）；奖赏域抑郁相",
+   "hooks": "行为覆盖①（奖赏域振荡作用域）"
+  },
+  {
+   "edge_id": "cyclothymia_e07",
+   "disease_id": "cyclothymia",
+   "source": "medialorbitofrontal",
+   "target": "Accumbens-area",
+   "edge_type": "cstc",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    null
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "Damme 2022 mOFC/NAcc 体积↑（d≈1.01, male）；奖励超敏模型 BSD 谱系共享（文献数据源 §七）",
+   "hooks": "行为覆盖①（奖赏域振荡作用域）；3.1 节 bias_limbic / DA_VTA 推导锚"
+  },
+  {
+   "edge_id": "cyclothymia_e02",
+   "disease_id": "cyclothymia",
+   "source": "SubstantiaNigraParsCompacta",
+   "target": "Putamen",
+   "edge_type": "brainstem",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    null
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_344（SNc→Putamen，Paxinos 2004 fc=0.85）降档；运动启动轻度不稳",
+   "hooks": "行为覆盖②（动作随机化作用域）"
+  },
+  {
+   "edge_id": "cyclothymia_e05",
+   "disease_id": "cyclothymia",
+   "source": "Putamen",
+   "target": "Thalamus-Proper",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    null
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_363（壳核→丘脑，Alexander 1986 CSTC PMID:3085570）；Haznedar 2005 壳核+丘脑体积↓（环性区别于 BD I/II）",
+   "hooks": "行为覆盖②（动作选择随机化 5%）；bias 推导辅助"
+  },
+  {
+   "edge_id": "cyclothymia_e06",
+   "disease_id": "cyclothymia",
+   "source": "posteriorcingulate",
+   "target": "precuneus",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    null
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_131_L（PCC→mPFC，ENIGMA 9.76）语义转移 + 降档（PCC→mPFC 无直连 → DMN 核心边）；反刍倾向（标签）",
+   "hooks": "3.1 节 bias_cognitive 推导锚（反刍侧）"
+  },
+  {
+   "edge_id": "cyclothymia_e04",
+   "disease_id": "cyclothymia",
+   "source": "rostralanteriorcingulate",
+   "target": "insula",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    null
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_155_L（rACC→insula，ENIGMA 6.29）降档；情绪-内感受轻度耦合（Guo 共享 ALFF↑ 轻症表达）",
+   "hooks": "行为覆盖①（作用域成员）"
+  },
+  {
+   "edge_id": "cyclothymia_e03",
+   "disease_id": "cyclothymia",
+   "source": "LocusCoeruleus",
+   "target": "Amygdala",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    null
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_332（蓝斑→杏仁核 NE，Hansen 2024 fc=0.7）；唤醒域轻度↑（蓝斑不稳定，< GAD/BD，文献数据源 §七）",
+   "hooks": "3.1 节 NE tone 推导锚（振荡承载）"
+  },
+  {
+   "edge_id": "cyclothymia_e08",
+   "disease_id": "cyclothymia",
+   "source": "rostralmiddlefrontal",
+   "target": "Caudate",
+   "edge_type": "cstc",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    null
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "Haznedar 2005 前额叶灰质↓（BA12+BA32）；文献数据源 §七 认知控制域 dlPFC↓ 轻度（< BD-I）",
+   "hooks": "3.1 节 bias_cognitive 推导锚（机制侧）"
+  },
+  {
+   "edge_id": "cyclothymia_e09",
+   "disease_id": "cyclothymia",
+   "source": "precentral",
+   "target": "postcentral",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    null
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "SMN 内在活动↑ 与 cyclothymic temperament 正相关（文献数据源 §七环性心境）",
+   "hooks": "组件掉落池边缘权重（气质 trait，非核心机制）"
+  },
+  {
+   "edge_id": "did_e01",
+   "disease_id": "did",
+   "source": "medialorbitofrontal",
+   "target": "rostralmiddlefrontal",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.3,
+    -0.5
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_082_L（mOFC→DLPFC 自传体记忆）；Lotfinia 2020 额叶 GMV↓",
+   "hooks": "行为覆盖①（整合域 m_max）"
+  },
+  {
+   "edge_id": "did_e02",
+   "disease_id": "did",
+   "source": "medialorbitofrontal",
+   "target": "inferiorparietal",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.2,
+    -0.4
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "旧 link_134 语义转移（PCC→mOFC 自传体记忆 → DMN mPFC↔AG 叙事整合）；Reinders 2019 额颞 GMV↓",
+   "hooks": "行为覆盖① + 非线性跳变①（整合域完全解耦）"
+  },
+  {
+   "edge_id": "did_e03",
+   "disease_id": "did",
+   "source": "posteriorcingulate",
+   "target": "precuneus",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.2,
+    -0.4
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "DMN 核心断开（后扣带内省中心失联）；Lotfinia 2020 扣带回 GMV↓",
+   "hooks": "行为覆盖③（后扣带内省不可用）"
+  },
+  {
+   "edge_id": "did_e04",
+   "disease_id": "did",
+   "source": "caudalanteriorcingulate",
+   "target": "parahippocampal",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.2,
+    -0.4
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_003_L（ACC→海马旁回，ENIGMA 4.89）；Lotfinia 2020 白质完整性↓",
+   "hooks": "行为覆盖②（记忆区隔化）"
+  },
+  {
+   "edge_id": "did_e05",
+   "disease_id": "did",
+   "source": "parahippocampal",
+   "target": "Hippocampus",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.2,
+    -0.4
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "记忆区隔化的写入闸门断开（区隔化内容层载体 → #90 COMPARTMENTALIZED 对接）；Lotfinia 2020 杏仁核-海马白质↓",
+   "hooks": "行为覆盖② + #90 内容层挂接"
+  },
+  {
+   "edge_id": "did_e06",
+   "disease_id": "did",
+   "source": "Hippocampus",
+   "target": "Amygdala",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_354（HC→Amygdala，Zhou 2015）；Lotfinia 2020 杏仁核-海马连接白质异常；EP 海马旁过度激活（Reinders 2019）",
+   "hooks": "非线性跳变②（创伤记忆侵入特定人格状态）"
+  },
+  {
+   "edge_id": "did_e07",
+   "disease_id": "did",
+   "source": "Amygdala",
+   "target": "parahippocampal",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "创伤情绪→情景记忆绑定（EP 状态创伤记忆侵入特定身份）；Reinders 2019 EP 海马旁↑",
+   "hooks": "行为覆盖②（情境匹配×记忆端）"
+  },
+  {
+   "edge_id": "did_e08",
+   "disease_id": "did",
+   "source": "superiorfrontal",
+   "target": "caudalanteriorcingulate",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "旧 link_008_L 语义转移（ACC→dlPFC 情绪调节 结构异常 → dmPFC 过度监控）+ **dmPFC 静息态过度激活**（2022 综述 13 研究）",
+   "hooks": "非线性跳变③（过度监控：L5 压制效力结构性失效）"
+  },
+  {
+   "edge_id": "did_e09",
+   "disease_id": "did",
+   "source": "caudalanteriorcingulate",
+   "target": "superiorfrontal",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.2,
+    -0.4
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_009_L（ACC→mPFC 情绪面孔加工，ENIGMA 10.27）；Reinders 2019 ANP 对情绪面孔全脑活动↓",
+   "hooks": "行为覆盖②（身份切换时情绪加工断开）"
+  },
+  {
+   "edge_id": "did_e10",
+   "disease_id": "did",
+   "source": "caudalanteriorcingulate",
+   "target": "temporalpole",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "旧 link_086_L 语义转移（mOFC→颞极 ToM 自我参照 → ACC↔颞极）；Lotfinia 2020 颞叶 GMV↓（颞极识人功能不稳定）",
+   "hooks": "行为覆盖③（\"我是谁\"无法回答）"
+  },
+  {
+   "edge_id": "did_e11",
+   "disease_id": "did",
+   "source": "rostralmiddlefrontal",
+   "target": "Caudate",
+   "edge_type": "cstc",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "Reinders 2019 身份状态切换→尾状核功能网络改变；CSTC cognitive 门控被身份切换信号劫持",
+   "hooks": "3.1 节 bias_cognitive 推导锚"
+  },
+  {
+   "edge_id": "did_e12",
+   "disease_id": "did",
+   "source": "Amygdala",
+   "target": "Accumbens-area",
+   "edge_type": "cstc",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "NPC AI §4.2 敏化-威胁（bias_limbic 锚）；EP 状态威胁→趋避门控劫持",
+   "hooks": "3.1 节 bias_limbic 推导锚"
+  },
+  {
+   "edge_id": "did_e13",
+   "disease_id": "did",
+   "source": "LocusCoeruleus",
+   "target": "Amygdala",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "NPC AI §4.2 敏化-威胁 NE 通道；DID EP 状态高唤醒/威胁监控",
+   "hooks": "3.1 节 NE tone 推导锚"
+  },
+  {
+   "edge_id": "did_e14",
+   "disease_id": "did",
+   "source": "DorsalRapheNucleus",
+   "target": "Amygdala",
+   "edge_type": "brainstem",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "NPC AI §4.2 敏化-威胁 + 反刍（5HT 聚焦异常→全局↓）；DID 冲动/情绪去抑制",
+   "hooks": "3.1 节 5HT tone 推导锚"
+  },
+  {
+   "edge_id": "gad_e01",
+   "disease_id": "gad",
+   "source": "PeriaqueductalGray",
+   "target": "Amygdala",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    null
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_312（PAG→杏仁核，LeDoux 2000 / Paxinos 2004）；RDoC 急性威胁 dPAG；[广泛性焦虑障碍.md](../../实体/疾病目录/广泛性焦虑障碍.md) 防御域↑（日常刺激被解读为威胁）",
+   "hooks": "行为覆盖①（泛化威胁解读）"
+  },
+  {
+   "edge_id": "gad_e02",
+   "disease_id": "gad",
+   "source": "LocusCoeruleus",
+   "target": "Amygdala",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.3,
+    null
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_332（蓝斑→杏仁核 NE，Hansen 2024 fc=0.7）；RDoC 唤醒域；[GAD 思路链](../../实体/疾病目录/广泛性焦虑障碍.md) 蓝斑 NE 持续激活",
+   "hooks": "非线性跳变①（持续警觉锁定）"
+  },
+  {
+   "edge_id": "gad_e03",
+   "disease_id": "gad",
+   "source": "LocusCoeruleus",
+   "target": "insula",
+   "edge_type": "brainstem",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    null
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_326（蓝斑→前脑岛 NE，Hansen PINK fc=0.85）",
+   "hooks": "行为覆盖①（内感受过度警觉）"
+  },
+  {
+   "edge_id": "gad_e05",
+   "disease_id": "gad",
+   "source": "rostralanteriorcingulate",
+   "target": "insula",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    null
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_155_L（rACC→前脑岛，ENIGMA 6.29 L）",
+   "hooks": "行为覆盖②（假阳性威胁检测）"
+  },
+  {
+   "edge_id": "gad_e06",
+   "disease_id": "gad",
+   "source": "Amygdala",
+   "target": "insula",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    null
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "Guo 2026 岛叶 ALFF↑（共享模式）；[GAD 思路链](../../实体/疾病目录/广泛性焦虑障碍.md) 心跳/呼吸/肌肉紧张被过度解读为危险信号",
+   "hooks": "行为覆盖②（内感受→威胁闭环）"
+  },
+  {
+   "edge_id": "gad_e04",
+   "disease_id": "gad",
+   "source": "DorsalRapheNucleus",
+   "target": "Amygdala",
+   "edge_type": "brainstem",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.2,
+    null
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_320（中缝背核→杏仁核 5-HT，Hansen PINK fc=0.7）",
+   "hooks": "3.1 节 5HT tone 推导锚"
+  },
+  {
+   "edge_id": "gad_e07",
+   "disease_id": "gad",
+   "source": "posteriorcingulate",
+   "target": "precuneus",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    null
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_131_L 语义转移（PCC→mPFC 自传体记忆，ENIGMA 9.76 L——无直连，见 §四）；Pierce & Black 2023 DMN 内连接↑",
+   "hooks": "行为覆盖③（担忧持续）"
+  },
+  {
+   "edge_id": "gad_e08",
+   "disease_id": "gad",
+   "source": "isthmuscingulate",
+   "target": "precuneus",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    null
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "Pierce & Black 2023（DMN 内连接↑与焦虑严重度正相关）",
+   "hooks": "行为覆盖③"
+  },
+  {
+   "edge_id": "gad_e09",
+   "disease_id": "gad",
+   "source": "precuneus",
+   "target": "superiorfrontal",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    null
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "Pierce & Black 2023；DMN mPFC 腿（自传体/担忧）",
+   "hooks": "行为覆盖③ + 非线性跳变②（担忧反刍）"
+  },
+  {
+   "edge_id": "gad_e10",
+   "disease_id": "gad",
+   "source": "posteriorcingulate",
+   "target": "isthmuscingulate",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    null
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "Pierce & Black 2023（DMN 核心 hub 强连接）",
+   "hooks": "行为覆盖③"
+  },
+  {
+   "edge_id": "gad_e11",
+   "disease_id": "gad",
+   "source": "medialorbitofrontal",
+   "target": "Amygdala",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    null
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_008_L 语义转移（ACC→dlPFC 情绪调节，ENIGMA 5.23 L——无直连，见 §四）；2023 MKDA meta 前额叶对杏仁核调控减弱；[GAD 思路链](../../实体/疾病目录/广泛性焦虑障碍.md) 认知控制↓（< PTSD 严重度）",
+   "hooks": "行为覆盖④（L5 压制 −30%）"
+  },
+  {
+   "edge_id": "gad_e12",
+   "disease_id": "gad",
+   "source": "Amygdala",
+   "target": "Accumbens-area",
+   "edge_type": "cstc",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    null
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "Guo 2026 共享纹状体 ALFF↑（§2.1）；CSTC limbic 门控被持续威胁信号偏置",
+   "hooks": "3.1 节 bias_limbic 推导锚"
+  },
+  {
+   "edge_id": "mdd_e01",
+   "disease_id": "mdd",
+   "source": "VentralTegmentalArea",
+   "target": "Accumbens-area",
+   "edge_type": "brainstem",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.3,
+    -0.5
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_336（VTA→NAcc 中脑边缘 DA，Schultz 1997 fc=0.9）；文献数据源 §七 MDD「VTA→NAcc 解耦」；RDoC 正性效价",
+   "hooks": "行为覆盖①（趋近·主动 不可用）+ 非线性跳变①（作用域核心）"
+  },
+  {
+   "edge_id": "mdd_e02",
+   "disease_id": "mdd",
+   "source": "VentralTegmentalArea",
+   "target": "superiorfrontal",
+   "edge_type": "brainstem",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_338（VTA→mPFC DA，Hansen 2024 fc=0.6）；VTA→mPFC 奖赏价值整合通路解耦（思路链）",
+   "hooks": "非线性跳变①（作用域成员）"
+  },
+  {
+   "edge_id": "mdd_e03",
+   "disease_id": "mdd",
+   "source": "medialorbitofrontal",
+   "target": "Accumbens-area",
+   "edge_type": "cstc",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "RDoC 正性效价（奖赏评估/预期）：OFC→腹侧纹状体；MDD 奖赏评估减弱（文献数据源 §四.1）",
+   "hooks": "3.1 节 bias_limbic 推导锚（负向）"
+  },
+  {
+   "edge_id": "mdd_e04",
+   "disease_id": "mdd",
+   "source": "SubstantiaNigraParsCompacta",
+   "target": "Putamen",
+   "edge_type": "brainstem",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_344（黑质→壳核 DA，Paxinos 2004 fc=0.85）；精神运动迟滞（DSM-5 精神运动性激越/迟滞）",
+   "hooks": "非线性跳变①（作用域成员，物理攻击 −20% 运动端）"
+  },
+  {
+   "edge_id": "mdd_e05",
+   "disease_id": "mdd",
+   "source": "posteriorcingulate",
+   "target": "precuneus",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.3,
+    0.4
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_131_L（PCC→mPFC，ENIGMA 9.76）**语义转移**（PCC→mPFC 无直连 → DMN 核心过度耦合）；Hamilton 2015 DMN over-connectivity；Guo 2026 MDD ALFF↑ ACC/mPFC 共享模式",
+   "hooks": "行为覆盖② + 非线性跳变②（反刍占用）"
+  },
+  {
+   "edge_id": "mdd_e06",
+   "disease_id": "mdd",
+   "source": "precuneus",
+   "target": "medialorbitofrontal",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "link_131_L 语义的第二腿（DMN→MPFC 自我参照）；Hamilton 2015（DMN 过度连接→反刍）；Guo 2026 顶下小叶 ALFF↑（IPL 属 DMN，并入反刍边群）",
+   "hooks": "行为覆盖② + 非线性跳变②（作用域成员）"
+  },
+  {
+   "edge_id": "mdd_e07",
+   "disease_id": "mdd",
+   "source": "medialorbitofrontal",
+   "target": "rostralmiddlefrontal",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_082_L（mOFC→dlPFC，ENIGMA 7.79）；Ma 2019 DMN-FPN 反相关减弱 trait marker",
+   "hooks": "非线性跳变③（SN 切换延迟）"
+  },
+  {
+   "edge_id": "mdd_e08",
+   "disease_id": "mdd",
+   "source": "rostralmiddlefrontal",
+   "target": "Caudate",
+   "edge_type": "cstc",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_008_L（ACC→dlPFC，ENIGMA 5.23 情绪调节网络）**语义转移**（ACC→dlPFC 无直连 → dlPFC 认知门控解耦）；文献数据源 §七 MDD 认知控制域 dlPFC↓",
+   "hooks": "3.1 节 bias_cognitive 推导锚（反刍门控）"
+  },
+  {
+   "edge_id": "mdd_e09",
+   "disease_id": "mdd",
+   "source": "Pallidum",
+   "target": "Thalamus-Proper",
+   "edge_type": "cstc",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "文献数据源 §七 MDD 行动门控域（苍白球↓）；ENIGMA MDD 苍白球↓（右,自杀史亚组）",
+   "hooks": "行为覆盖①（物理攻击 −20% 的结构基础）；3.1 节 bias_somatic 推导锚"
+  },
+  {
+   "edge_id": "mdd_e10",
+   "disease_id": "mdd",
+   "source": "rostralanteriorcingulate",
+   "target": "insula",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_155_L（rACC→insula，ENIGMA 6.29 共情网络）；Guo 2026 岛叶/ACC ALFF↑",
+   "hooks": "行为覆盖②（内感受耦合）"
+  },
+  {
+   "edge_id": "mdd_e11",
+   "disease_id": "mdd",
+   "source": "LocusCoeruleus",
+   "target": "insula",
+   "edge_type": "brainstem",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_326（蓝斑→前脑岛 NE，Hansen PINK 最强 hub fc=0.85）；Guo 2026 共享岛叶 ALFF↑",
+   "hooks": "3.1 节 NE tone 推导锚（内感受超敏）"
+  },
+  {
+   "edge_id": "mdd_e12",
+   "disease_id": "mdd",
+   "source": "LocusCoeruleus",
+   "target": "caudalanteriorcingulate",
+   "edge_type": "brainstem",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_327（蓝斑→ACC NE，Hansen 2024 Fig5 fc=0.85）；Guo 2026 ACC/mPFC ALFF↑",
+   "hooks": "3.1 节 NE tone 推导锚（作用域成员）"
+  },
+  {
+   "edge_id": "mdd_e13",
+   "disease_id": "mdd",
+   "source": "caudalanteriorcingulate",
+   "target": "insula",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "Guo 2026 MDD 特异性 ACC/mPFC + 岛叶 ALFF↑（§2.3）；情绪-内感受耦合（躯体化症状支持）",
+   "hooks": "行为覆盖②（作用域成员）"
+  },
+  {
+   "edge_id": "mdd_e14",
+   "disease_id": "mdd",
+   "source": "DorsalRapheNucleus",
+   "target": "Hippocampus",
+   "edge_type": "brainstem",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_319（中缝背核→海马 5-HT，Hansen PINK fc=0.75）；ENIGMA MDD 海马↓（复发型）——5-HT 传递聚焦于记忆回路",
+   "hooks": "3.1 节 5HT tone 推导锚；负性记忆提取支持"
+  },
+  {
+   "edge_id": "mdd_e15",
+   "disease_id": "mdd",
+   "source": "caudalanteriorcingulate",
+   "target": "parahippocampal",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_003_L（ACC→海马旁回，ENIGMA 4.89）；Guo 2026 共享 ACC ALFF↑",
+   "hooks": "行为覆盖②（作用域成员，负性记忆提取）"
+  },
+  {
+   "edge_id": "ocd_e01",
+   "disease_id": "ocd",
+   "source": "caudalanteriorcingulate",
+   "target": "Caudate",
+   "edge_type": "cstc",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.2,
+    0.4,
+    0.6
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "CSTC 模型（ACC 冲突监测→尾状核策略 gate 无法关闭）；Guo 2026 ALFF↑ ACC-mPFC；link_008_L 语义拆分承载",
+   "hooks": "非线性跳变②（CSTC 闭环锁定作用域成员）"
+  },
+  {
+   "edge_id": "ocd_e02",
+   "disease_id": "ocd",
+   "source": "caudalanteriorcingulate",
+   "target": "rostralanteriorcingulate",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.2,
+    0.4,
+    0.6
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_007_L（ACC→ACC吻侧闭环，ENIGMA fc=8.84）",
+   "hooks": "行为覆盖① + 非线性跳变②（闭环再入源）"
+  },
+  {
+   "edge_id": "ocd_e03",
+   "disease_id": "ocd",
+   "source": "caudalmiddlefrontal",
+   "target": "rostralmiddlefrontal",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_021_L（PMd→dlPFC 工作记忆环路）",
+   "hooks": "非线性跳变②（作用域成员）"
+  },
+  {
+   "edge_id": "ocd_e04",
+   "disease_id": "ocd",
+   "source": "rostralmiddlefrontal",
+   "target": "Caudate",
+   "edge_type": "cstc",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.3,
+    0.5
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "文献数据源 §七 OCD 对应功能域「认知控制域 dlPFC→纹状体过度耦合」；link_008_L 语义拆分承载",
+   "hooks": "3.1 节 bias_cognitive 推导锚"
+  },
+  {
+   "edge_id": "ocd_e14",
+   "disease_id": "ocd",
+   "source": "caudalanteriorcingulate",
+   "target": "superiorfrontal",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_009_L（ACC→mPFC，ENIGMA fc=10.27）；Guo 2026 ALFF↑ ACC-mPFC",
+   "hooks": "行为覆盖①（冲突监测侧翼）"
+  },
+  {
+   "edge_id": "ocd_e05",
+   "disease_id": "ocd",
+   "source": "SubstantiaNigraParsCompacta",
+   "target": "Putamen",
+   "edge_type": "brainstem",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.3,
+    0.4
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_344（黑质→壳核 DA，Hansen fc=0.85, Paxinos 2004）",
+   "hooks": "非线性跳变③（行动门控失效成员）"
+  },
+  {
+   "edge_id": "ocd_e06",
+   "disease_id": "ocd",
+   "source": "SubstantiaNigraParsCompacta",
+   "target": "Caudate",
+   "edge_type": "brainstem",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_343（黑质→尾状核 DA，Hansen fc=0.9, Paxinos 2004）",
+   "hooks": "3.1 节 DA_SNc 推导锚"
+  },
+  {
+   "edge_id": "ocd_e07",
+   "disease_id": "ocd",
+   "source": "superiorfrontal",
+   "target": "Putamen",
+   "edge_type": "cstc",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.3,
+    0.5
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "文献数据源 §七 OCD「行动门控域 壳核↑」→ somatic GO 腿翻译（SMA 参与强迫行为重复执行）",
+   "hooks": "3.1 节 bias_somatic 推导锚"
+  },
+  {
+   "edge_id": "ocd_e08",
+   "disease_id": "ocd",
+   "source": "Putamen",
+   "target": "Pallidum",
+   "edge_type": "cstc",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_363（壳核↔丘脑解耦）语义转移 → NO-GO 腿解耦 = 动作无法被终止；文献数据源「↓壳核-OFC/IFG/岛叶」",
+   "hooks": "非线性跳变③（行动门控失效成员）"
+  },
+  {
+   "edge_id": "ocd_e16",
+   "disease_id": "ocd",
+   "source": "SubthalamicNucleus",
+   "target": "Pallidum",
+   "edge_type": "cstc",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.3,
+    0.5
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "文献数据源「↑底丘脑核(STN)-壳核」→ STN 唯一出边语义转移（STOP 过度活跃 → 行动切换受阻/僵化）",
+   "hooks": "行为覆盖①（行动切换成本×2 结构基础）"
+  },
+  {
+   "edge_id": "ocd_e09",
+   "disease_id": "ocd",
+   "source": "rostralanteriorcingulate",
+   "target": "insula",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_155_L（ACC吻侧→前脑岛 冲突不适，ENIGMA fc=6.29）",
+   "hooks": "行为覆盖②（内感受域 m_max 成员）"
+  },
+  {
+   "edge_id": "ocd_e10",
+   "disease_id": "ocd",
+   "source": "LocusCoeruleus",
+   "target": "caudalanteriorcingulate",
+   "edge_type": "brainstem",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_327（蓝斑→ACC NE，Hansen fc=0.85）",
+   "hooks": "3.1 节 NE tone 推导锚；行为覆盖②"
+  },
+  {
+   "edge_id": "ocd_e17",
+   "disease_id": "ocd",
+   "source": "DorsalRapheNucleus",
+   "target": "caudalanteriorcingulate",
+   "edge_type": "brainstem",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "5-HT 投射至冲突监测环路不足 → 抑制不足（SSRI 一线治疗 OCD；Soubrié 1986 低 5HT 去抑制）[设计层：标签→tone 反向锚定]",
+   "hooks": "3.1 节 5HT tone 推导锚"
+  },
+  {
+   "edge_id": "ocd_e11",
+   "disease_id": "ocd",
+   "source": "fusiform",
+   "target": "inferiortemporal",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_030_L（纺锤体回→颞下回，ENIGMA fc=10.61）；对细节/对称/污染过度分类",
+   "hooks": "行为覆盖③（模式识别假阳性）"
+  },
+  {
+   "edge_id": "ocd_e12",
+   "disease_id": "ocd",
+   "source": "lateralorbitofrontal",
+   "target": "Accumbens-area",
+   "edge_type": "cstc",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.3,
+    0.4
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "文献数据源 §七 OCD「↑OFC-腹侧纹状体/NAcc」；CSTC 腹侧动机环路",
+   "hooks": "3.1 节 bias_limbic 推导锚"
+  },
+  {
+   "edge_id": "ocd_e13",
+   "disease_id": "ocd",
+   "source": "Hippocampus",
+   "target": "Accumbens-area",
+   "edge_type": "cstc",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "Guo 2026 ALFF↑ 海马（§2.3）→ 侵入性记忆反复进入情绪-行动门控",
+   "hooks": "行为覆盖②（情境匹配侧翼）"
+  },
+  {
+   "edge_id": "ocd_e15",
+   "disease_id": "ocd",
+   "source": "precuneus",
+   "target": "superiorfrontal",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "文献数据源 §七 OCD「↓DMN背内侧(PCC-dmPFC)」",
+   "hooks": "行为覆盖①（僵化侧翼）"
+  },
+  {
+   "edge_id": "panic-disorder_e01",
+   "disease_id": "panic-disorder",
+   "source": "Amygdala",
+   "target": "PeriaqueductalGray",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "跨层短路",
+   "m_offset": [
+    0.2,
+    0.4,
+    0.6
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "Klein 1993 窒息误报警（dPAG）；Brandão dPAG 刺激诱发惊恐样反应；RDoC 急性威胁 dPAG",
+   "hooks": "非线性跳变①（惊恐发作触发/锁定）"
+  },
+  {
+   "edge_id": "panic-disorder_e02",
+   "disease_id": "panic-disorder",
+   "source": "PeriaqueductalGray",
+   "target": "Amygdala",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.2,
+    0.4,
+    0.5
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "发作时 PAG→杏仁核 反馈放大（恐惧-防御循环）；RDoC dPAG",
+   "hooks": "非线性跳变①（作用域成员）"
+  },
+  {
+   "edge_id": "panic-disorder_e03",
+   "disease_id": "panic-disorder",
+   "source": "LocusCoeruleus",
+   "target": "Amygdala",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.3,
+    0.5
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "RDoC 唤醒域；发作时 NE 风暴（心悸/出汗/震颤）；GAD 试点 e02 量级对标",
+   "hooks": "非线性跳变①（NE 瞬时冲击，NPC AI §3.5 反射级）"
+  },
+  {
+   "edge_id": "panic-disorder_e04",
+   "disease_id": "panic-disorder",
+   "source": "LocusCoeruleus",
+   "target": "insula",
+   "edge_type": "brainstem",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.4
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "发作躯体症状（心悸/气促/胸闷）NE 驱动；Hansen PINK fc=0.85",
+   "hooks": "非线性跳变①（躯体症状端）"
+  },
+  {
+   "edge_id": "panic-disorder_e05",
+   "disease_id": "panic-disorder",
+   "source": "Amygdala",
+   "target": "insula",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.3,
+    0.5
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "Klein 1993 窒息误报警（岛叶内感受端）；威胁→躯体反应",
+   "hooks": "行为覆盖①（内感受误报累积）"
+  },
+  {
+   "edge_id": "panic-disorder_e06",
+   "disease_id": "panic-disorder",
+   "source": "insula",
+   "target": "Amygdala",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.3,
+    0.5
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "**内感受→威胁解读反馈环**（心悸→\"我要死了\"→更恐慌）；惊恐障碍 fMRI 共识岛叶超敏",
+   "hooks": "行为覆盖① + 非线性跳变①（误报计数触发）"
+  },
+  {
+   "edge_id": "panic-disorder_e07",
+   "disease_id": "panic-disorder",
+   "source": "Thalamus-Proper",
+   "target": "insula",
+   "edge_type": "cstc",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "躯体感觉（心跳/呼吸）经丘脑中继→岛叶内感受放大",
+   "hooks": "行为覆盖①（误报信号源）"
+  },
+  {
+   "edge_id": "panic-disorder_e08",
+   "disease_id": "panic-disorder",
+   "source": "SuperiorColliculus",
+   "target": "Amygdala",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "突发刺激→杏仁核快速通路（Paxinos 2004；同 SP 试点 e02）；发作诱因感知端",
+   "hooks": "行为覆盖①（突发触发检查）"
+  },
+  {
+   "edge_id": "panic-disorder_e10",
+   "disease_id": "panic-disorder",
+   "source": "DorsalRapheNucleus",
+   "target": "Amygdala",
+   "edge_type": "brainstem",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "惊恐障碍一线治疗 = SSRI（5-HT 核心靶点）；RDoC 急性威胁 5-HT",
+   "hooks": "3.1 节 5HT tone 推导锚"
+  },
+  {
+   "edge_id": "panic-disorder_e11",
+   "disease_id": "panic-disorder",
+   "source": "medialorbitofrontal",
+   "target": "Amygdala",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "发作间期预期焦虑（vmPFC 调控不足——\"担心再次发作\"）；惊恐 fMRI 共识",
+   "hooks": "行为覆盖②（预期焦虑）+ 非线性跳变①（发作时压制失效）"
+  },
+  {
+   "edge_id": "panic-disorder_e09",
+   "disease_id": "panic-disorder",
+   "source": "Amygdala",
+   "target": "Accumbens-area",
+   "edge_type": "cstc",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "Guo 2026 共享纹状体 ALFF↑；发作→逃避行动门控",
+   "hooks": "3.1 节 bias_limbic 推导锚"
+  },
+  {
+   "edge_id": "panic-disorder_e12",
+   "disease_id": "panic-disorder",
+   "source": "precentral",
+   "target": "Putamen",
+   "edge_type": "cstc",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "Brandão dPAG 诱发逃跑/僵直→运动输出；发作时躯体行动门控超驱动",
+   "hooks": "3.1 节 bias_somatic 推导锚"
+  },
+  {
+   "edge_id": "paranoid-schizophrenia_e01",
+   "disease_id": "paranoid-schizophrenia",
+   "source": "parsopercularis",
+   "target": "superiortemporal",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.2,
+    -0.4
+   ],
+   "laterality_delta": -0.05,
+   "is_new": false,
+   "literature": "旧 link_116_L（Broca↔Wernicke，旧「结构异常」→ §6.3 机械重分类）；Kong 2018 Broca/STG 左偏基线；Guo 2026 IFG ALFF↑",
+   "hooks": "行为覆盖②（语言社会域 m_max 上限成员）"
+  },
+  {
+   "edge_id": "paranoid-schizophrenia_e02",
+   "disease_id": "paranoid-schizophrenia",
+   "source": "superiortemporal",
+   "target": "middletemporal",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.2,
+    0.4,
+    0.6
+   ],
+   "laterality_delta": -0.1,
+   "is_new": true,
+   "literature": "Schijven 2023（MTG 左薄 d=−0.074，幻听关联 Plaze 2018）；Kong 2018（STG/颞平面左偏最强）——**幻听核心边**",
+   "hooks": "行为覆盖②（语言社会域 m_max > 0.5 → Broca 紊乱）+ 跳变①"
+  },
+  {
+   "edge_id": "paranoid-schizophrenia_e03",
+   "disease_id": "paranoid-schizophrenia",
+   "source": "Thalamus-Proper",
+   "target": "transversetemporal",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.2,
+    0.4,
+    0.6
+   ],
+   "laterality_delta": -0.05,
+   "is_new": false,
+   "literature": "link_318 **语义转移**（SC→Thalamus 无直连，见 §四）；P50 听觉门控失败（SZ 最可复现感觉门控发现）；Gutman 2022 丘脑偏侧夸大",
+   "hooks": "行为覆盖① + 跳变①（感觉域 m_max = 0.6 重档）"
+  },
+  {
+   "edge_id": "paranoid-schizophrenia_e21",
+   "disease_id": "paranoid-schizophrenia",
+   "source": "precentral",
+   "target": "postcentral",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "Guo 2026（SZ 特异性 ALFF↓ 中央前后回）→ M1↔S1 感觉运动整合↓",
+   "hooks": "阴性侧翼（动作迟缓）"
+  },
+  {
+   "edge_id": "paranoid-schizophrenia_e04",
+   "disease_id": "paranoid-schizophrenia",
+   "source": "caudalanteriorcingulate",
+   "target": "rostralanteriorcingulate",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.2,
+    0.4,
+    0.6
+   ],
+   "laterality_delta": -0.05,
+   "is_new": false,
+   "literature": "旧 link_007_L（ACC↔rACC 闭环锁定）；Schijven 2023 **rACC 偏侧反转**（d=−0.083）；Guo 2026 ACC-mPFC ALFF↑（SZ 效应最强）",
+   "hooks": "跳变③（认知控制域 m_max = 0.6 → dlPFC 压制失效）+ bias_cognitive 锚"
+  },
+  {
+   "edge_id": "paranoid-schizophrenia_e05",
+   "disease_id": "paranoid-schizophrenia",
+   "source": "medialorbitofrontal",
+   "target": "rostralmiddlefrontal",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.4
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_082_L（旧「边界崩溃」→ §6.3 机械重分类）；Fan&Tan 2022 DMN-FPN 反相关消失 trait marker",
+   "hooks": "跳变②（整合域 \\"
+  },
+  {
+   "edge_id": "paranoid-schizophrenia_e06",
+   "disease_id": "paranoid-schizophrenia",
+   "source": "VentralTegmentalArea",
+   "target": "rostralmiddlefrontal",
+   "edge_type": "brainstem",
+   "pathology_type": "结构异常",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "中脑皮层 DA 腿选择性受损（Davis 1991 mesocortical hypodopaminergia；旧文件「已知链路缺口」VTA→vmPFC 同类投影）；§6.3 结构异常 subtype (b)",
+   "hooks": "DA_VTA tone 推导锚（负项）"
+  },
+  {
+   "edge_id": "paranoid-schizophrenia_e07",
+   "disease_id": "paranoid-schizophrenia",
+   "source": "VentralTegmentalArea",
+   "target": "Accumbens-area",
+   "edge_type": "brainstem",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.2,
+    -0.4,
+    -0.6
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_336（VTA→NAcc 中脑边缘 DA，Schultz 1997）；ENIGMA NAcc↓；RDoC 腹侧纹状体预测误差消失",
+   "hooks": "DA_VTA tone 推导锚（主项）"
+  },
+  {
+   "edge_id": "paranoid-schizophrenia_e08",
+   "disease_id": "paranoid-schizophrenia",
+   "source": "SubstantiaNigraParsCompacta",
+   "target": "Putamen",
+   "edge_type": "brainstem",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.2,
+    -0.4
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_344（SNc→壳核 黑质纹状体 DA，Paxinos 2004）",
+   "hooks": "DA_SNc tone 推导锚"
+  },
+  {
+   "edge_id": "paranoid-schizophrenia_e09",
+   "disease_id": "paranoid-schizophrenia",
+   "source": "caudalanteriorcingulate",
+   "target": "parahippocampal",
+   "edge_type": "corticocortical",
+   "pathology_type": "跨层短路",
+   "m_offset": [
+    0.0,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_003_L（ACC→海马旁回，ENIGMA 4.89 L）；Guo 2026 ACC-mPFC ALFF↑（旧「过度耦合」→ §6.3 规则 b 机械重分类）",
+   "hooks": "妄想记忆绑定（叙事层）"
+  },
+  {
+   "edge_id": "paranoid-schizophrenia_e10",
+   "disease_id": "paranoid-schizophrenia",
+   "source": "Amygdala",
+   "target": "Hippocampus",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.05,
+   "is_new": true,
+   "literature": "Guo 2026 共享杏仁核 ALFF↑；Gutman 2022 海马/杏仁核偏侧夸大（右偏方向，Okada 2016 基线）→ 被害妄想记忆条件化",
+   "hooks": "行为覆盖侧翼（威胁记忆）"
+  },
+  {
+   "edge_id": "paranoid-schizophrenia_e11",
+   "disease_id": "paranoid-schizophrenia",
+   "source": "DorsalRapheNucleus",
+   "target": "Hippocampus",
+   "edge_type": "brainstem",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.05,
+   "is_new": false,
+   "literature": "旧 link_319（中缝背核→海马 5-HT，Hansen PINK fc=0.75，旧「结构异常」→ 正 m 广播边机械重分类）；Gutman 2022 海马偏侧夸大",
+   "hooks": "5HT tone 推导锚（聚焦腿）"
+  },
+  {
+   "edge_id": "paranoid-schizophrenia_e12",
+   "disease_id": "paranoid-schizophrenia",
+   "source": "PeriaqueductalGray",
+   "target": "Amygdala",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.0,
+    0.3
+   ],
+   "laterality_delta": 0.05,
+   "is_new": false,
+   "literature": "旧 link_312（PAG→杏仁核中央核，LeDoux 2000 / Paxinos 2004）；Gutman 2022 杏仁核偏侧夸大",
+   "hooks": "威胁超敏侧翼（重档才激活）"
+  },
+  {
+   "edge_id": "paranoid-schizophrenia_e13",
+   "disease_id": "paranoid-schizophrenia",
+   "source": "rostralanteriorcingulate",
+   "target": "insula",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.2,
+    0.3,
+    0.5
+   ],
+   "laterality_delta": -0.05,
+   "is_new": false,
+   "literature": "旧 link_155_L + link_160（rACC↔前脑岛，**L/R 合并**）；Guo 2026 岛叶 ALFF↑（跨六病共享，**精分效应最强**，旧思路链）；Schijven 2023 rACC 反转",
+   "hooks": "行为覆盖侧翼（内感受警觉）+ bias_limbic 锚"
+  },
+  {
+   "edge_id": "paranoid-schizophrenia_e14",
+   "disease_id": "paranoid-schizophrenia",
+   "source": "LocusCoeruleus",
+   "target": "caudalanteriorcingulate",
+   "edge_type": "brainstem",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_327（蓝斑→ACC NE，Hansen 2024 Fig5）",
+   "hooks": "NE tone 推导锚 + 行为覆盖①"
+  },
+  {
+   "edge_id": "paranoid-schizophrenia_e15",
+   "disease_id": "paranoid-schizophrenia",
+   "source": "LocusCoeruleus",
+   "target": "insula",
+   "edge_type": "brainstem",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_326（蓝斑→前脑岛 NE，Hansen PINK 最强 hub fc=0.85）",
+   "hooks": "NE tone 推导锚（次项）"
+  },
+  {
+   "edge_id": "paranoid-schizophrenia_e16",
+   "disease_id": "paranoid-schizophrenia",
+   "source": "medialorbitofrontal",
+   "target": "superiortemporal",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.4
+   ],
+   "laterality_delta": -0.05,
+   "is_new": false,
+   "literature": "旧 link_084_L（vmPFC↔Wernicke，ToM 网络）；Guo 2026 共享 IFG/ACC-mPFC ALFF↑",
+   "hooks": "行为覆盖②（语言社会域成员）+ 跳变①作用域"
+  },
+  {
+   "edge_id": "paranoid-schizophrenia_e17",
+   "disease_id": "paranoid-schizophrenia",
+   "source": "inferiorparietal",
+   "target": "superiorfrontal",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_047_L（角回→mPFC，Reward 网络）；反刍自我参照整合↓",
+   "hooks": "反刍标签支撑"
+  },
+  {
+   "edge_id": "paranoid-schizophrenia_e18",
+   "disease_id": "paranoid-schizophrenia",
+   "source": "caudalanteriorcingulate",
+   "target": "Caudate",
+   "edge_type": "cstc",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "Guo 2026（SZ 特异性 ALFF↑ 纹状体 + ACC-mPFC）→ 认知环路 gate 被 ACC 锁定信号劫持",
+   "hooks": "bias_cognitive 推导锚"
+  },
+  {
+   "edge_id": "paranoid-schizophrenia_e19",
+   "disease_id": "paranoid-schizophrenia",
+   "source": "Amygdala",
+   "target": "Accumbens-area",
+   "edge_type": "cstc",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "Guo 2026 共享纹状体 ALFF↑ + 杏仁核 ALFF↑ → 边缘环路 gate 被威胁信号劫持",
+   "hooks": "bias_limbic 推导锚"
+  },
+  {
+   "edge_id": "paranoid-schizophrenia_e20",
+   "disease_id": "paranoid-schizophrenia",
+   "source": "Pallidum",
+   "target": "Thalamus-Proper",
+   "edge_type": "cstc",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": -0.05,
+   "is_new": true,
+   "literature": "ENIGMA SZ 苍白球↑；Okada 2016 **苍白球左偏（SZ 特异）**；Schijven 2023 苍白球年龄×诊断交互 d=0.081",
+   "hooks": "结构修饰（节点 m 直调层，不升格 CSTC bias，见 §三.1 注）"
+  },
+  {
+   "edge_id": "persistent-depressive_e01",
+   "disease_id": "persistent-depressive",
+   "source": "VentralTegmentalArea",
+   "target": "Accumbens-area",
+   "edge_type": "brainstem",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "RDoC 正性效价（VTA→腹侧纹状体）；文献数据源 §七 MDD「VTA→NAcc 解耦」（PDD 为谱系慢性型）；慢性快感缺失（DSM-5）",
+   "hooks": "行为覆盖①（趋近·主动 效力 −50%）；3.1 节 DA_VTA 推导锚"
+  },
+  {
+   "edge_id": "persistent-depressive_e02",
+   "disease_id": "persistent-depressive",
+   "source": "medialorbitofrontal",
+   "target": "Accumbens-area",
+   "edge_type": "cstc",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "RDoC 正性效价（奖赏评估/预期：OFC→腹侧纹状体）；MDD 谱系奖赏评估减弱",
+   "hooks": "3.1 节 bias_limbic 推导锚（负向）"
+  },
+  {
+   "edge_id": "persistent-depressive_e03",
+   "disease_id": "persistent-depressive",
+   "source": "SubstantiaNigraParsCompacta",
+   "target": "Putamen",
+   "edge_type": "brainstem",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "DSM-5 低能量/疲劳；ENIGMA MDD 运动启动相关亚皮层↓（谱系共享）",
+   "hooks": "行为覆盖①（低能量侧翼）"
+  },
+  {
+   "edge_id": "persistent-depressive_e04",
+   "disease_id": "persistent-depressive",
+   "source": "posteriorcingulate",
+   "target": "precuneus",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "**Wang et al. 2013（PMID:23389382）恶劣心境 DMN 过度连接**；Hamilton 2015 反刍 DMN",
+   "hooks": "行为覆盖②（慢性反刍消耗）；3.1 节 bias_cognitive 推导锚"
+  },
+  {
+   "edge_id": "persistent-depressive_e05",
+   "disease_id": "persistent-depressive",
+   "source": "precuneus",
+   "target": "medialorbitofrontal",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "Wang 2013 DMN 过度连接（自我参照腿）；DSM-5 低自尊/无望感（自我参照负性加工）",
+   "hooks": "行为覆盖②（作用域成员）"
+  },
+  {
+   "edge_id": "persistent-depressive_e06",
+   "disease_id": "persistent-depressive",
+   "source": "posteriorcingulate",
+   "target": "Hippocampus",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "ENIGMA MDD 海马↓（慢性病程）；负性自传记忆过度提取（DSM-5 无望感锚）",
+   "hooks": "行为覆盖②（作用域成员）"
+  },
+  {
+   "edge_id": "persistent-depressive_e07",
+   "disease_id": "persistent-depressive",
+   "source": "rostralmiddlefrontal",
+   "target": "Caudate",
+   "edge_type": "cstc",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "DSM-5 注意力集中困难；MDD 谱系认知控制域 dlPFC↓（文献数据源 §七）",
+   "hooks": "3.1 节 bias_cognitive 推导锚（机制侧）"
+  },
+  {
+   "edge_id": "persistent-depressive_e08",
+   "disease_id": "persistent-depressive",
+   "source": "medialorbitofrontal",
+   "target": "rostralmiddlefrontal",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "DMN-FPN 反相关减弱（Ma 2019，MDD 谱系 trait marker）；慢性执行功能下降",
+   "hooks": "行为覆盖③（L5 控制效力 −30%）"
+  },
+  {
+   "edge_id": "persistent-depressive_e09",
+   "disease_id": "persistent-depressive",
+   "source": "LocusCoeruleus",
+   "target": "insula",
+   "edge_type": "brainstem",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "DSM-5 低能量/疲劳（NE 驱动减弱）；与 PTSD（LC→insula 超敏）方向相反——抑郁谱系内感受钝化",
+   "hooks": "3.1 节 NE tone 推导锚（负向腿）"
+  },
+  {
+   "edge_id": "persistent-depressive_e10",
+   "disease_id": "persistent-depressive",
+   "source": "rostralanteriorcingulate",
+   "target": "insula",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "Guo 2026 共享岛叶/ACC ALFF↑；情绪-内感受耦合（躯体不适主诉）",
+   "hooks": "行为覆盖②（作用域成员）"
+  },
+  {
+   "edge_id": "persistent-depressive_e11",
+   "disease_id": "persistent-depressive",
+   "source": "DorsalRapheNucleus",
+   "target": "Hippocampus",
+   "edge_type": "brainstem",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "Wang 2013 抗抑郁药（5-HT 机制）使恶劣心境 DMN 正常化 → 5-HT 系统参与；ENIGMA 海马慢性受累",
+   "hooks": "3.1 节 5HT tone 推导锚"
+  },
+  {
+   "edge_id": "pro_e01",
+   "disease_id": "procrastination",
+   "source": "caudalmiddlefrontal",
+   "target": "rostralmiddlefrontal",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_021_L（PMd→dlPFC 工作记忆环路解耦）",
+   "hooks": "行为覆盖①（认知控制域成员）"
+  },
+  {
+   "edge_id": "pro_e02",
+   "disease_id": "procrastination",
+   "source": "rostralmiddlefrontal",
+   "target": "precuneus",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "旧 link_008_L（ACC→dlPFC 解耦）语义转移；Amalia 2024 认知控制网络-DMN 连接 disrupted",
+   "hooks": "行为覆盖①（认知控制域成员）"
+  },
+  {
+   "edge_id": "pro_e03",
+   "disease_id": "procrastination",
+   "source": "superiorfrontal",
+   "target": "rostralmiddlefrontal",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.1
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "Amalia 2024 dmPFC↔dlPFC（DMN-CCN）连接 disrupted",
+   "hooks": "行为覆盖①（认知控制域成员）"
+  },
+  {
+   "edge_id": "pro_e04",
+   "disease_id": "procrastination",
+   "source": "rostralmiddlefrontal",
+   "target": "Caudate",
+   "edge_type": "cstc",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.1
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "dlPFC GMV↓（Amalia 2024）→ 认知 gate 启动困难；link_008_L 语义拆分承载",
+   "hooks": "3.1 节 bias_cognitive 推导锚"
+  },
+  {
+   "edge_id": "pro_e05",
+   "disease_id": "procrastination",
+   "source": "VentralTegmentalArea",
+   "target": "Accumbens-area",
+   "edge_type": "brainstem",
+   "pathology_type": "结构异常",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.1
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_336（VTA→NAcc DA，Hansen fc=0.9, Schultz 1997）——远期目标 DA 响应↓（§6.3 结构异常 b 类：广播腿选择性负偏移）",
+   "hooks": "行为覆盖②（远期目标激活−50% 成员）"
+  },
+  {
+   "edge_id": "pro_e06",
+   "disease_id": "procrastination",
+   "source": "rostralmiddlefrontal",
+   "target": "Accumbens-area",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.1
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "dlPFC 对远期奖赏调控不足（延迟折扣率异常，文献数据源 §七 拖延症 奖赏域）",
+   "hooks": "行为覆盖②（远期目标激活−50% 成员）"
+  },
+  {
+   "edge_id": "pro_e07",
+   "disease_id": "procrastination",
+   "source": "superiorfrontal",
+   "target": "Accumbens-area",
+   "edge_type": "cstc",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.1
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "Le Bouc & Pessiglione 2022——dmPFC 努力折扣信号异常 → 奖赏-努力联合估值环路过度耦合（「以后做就不费力」估值偏差）",
+   "hooks": "3.1 节 bias_limbic 推导锚；行为覆盖②侧翼"
+  },
+  {
+   "edge_id": "pro_e08",
+   "disease_id": "procrastination",
+   "source": "rostralanteriorcingulate",
+   "target": "insula",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.1
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_155_L（ACC吻侧→前脑岛，任务相关不适→回避行为↑）",
+   "hooks": "行为覆盖③（内感受域成员）"
+  },
+  {
+   "edge_id": "pro_e09",
+   "disease_id": "procrastination",
+   "source": "insula",
+   "target": "Accumbens-area",
+   "edge_type": "cstc",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.1
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "文献数据源 §七 拖延症「内感受域 岛叶努力感知异常」——岛叶将「开始工作」解读为不适信号 → 驱动回避",
+   "hooks": "行为覆盖③（内感受域成员）"
+  },
+  {
+   "edge_id": "pro_e10",
+   "disease_id": "procrastination",
+   "source": "Putamen",
+   "target": "Pallidum",
+   "edge_type": "cstc",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.1
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_363（壳核↔丘脑解耦）语义转移 → 行动启动腿解耦 = 开始行动难",
+   "hooks": "3.1 节 bias_somatic 推导锚"
+  },
+  {
+   "edge_id": "pro_e11",
+   "disease_id": "procrastination",
+   "source": "precuneus",
+   "target": "superiorfrontal",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.1
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "旧 link_131_L（PCC→mPFC 反刍/自我谴责，ENIGMA fc=9.76）语义转移；Amalia 2024 DMN 过度活跃",
+   "hooks": "行为覆盖③（自我谴责循环侧翼）"
+  },
+  {
+   "edge_id": "ptsd_e01",
+   "disease_id": "ptsd",
+   "source": "Amygdala",
+   "target": "PeriaqueductalGray",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "跨层短路",
+   "m_offset": [
+    0.2,
+    0.4,
+    0.6
+   ],
+   "laterality_delta": -0.3,
+   "is_new": true,
+   "literature": "NPC AI §5.2（杏仁核→PAG↑）；RDoC 急性威胁 dPAG；Shin & Liberzon 2010",
+   "hooks": "非线性跳变①（m>0.5 跨层短路锁定）"
+  },
+  {
+   "edge_id": "ptsd_e02",
+   "disease_id": "ptsd",
+   "source": "PeriaqueductalGray",
+   "target": "Amygdala",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.2,
+    0.3,
+    0.5
+   ],
+   "laterality_delta": -0.3,
+   "is_new": false,
+   "literature": "旧 link_312（PAG→杏仁核中央核，LeDoux 2000 / Paxinos 2004）；RDoC dPAG",
+   "hooks": "非线性跳变①（作用域成员）"
+  },
+  {
+   "edge_id": "ptsd_e09",
+   "disease_id": "ptsd",
+   "source": "SuperiorColliculus",
+   "target": "Amygdala",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.3,
+    0.5
+   ],
+   "laterality_delta": -0.2,
+   "is_new": false,
+   "literature": "旧 link_317（上丘→杏仁核经丘脑枕快速通路，Paxinos 2004）",
+   "hooks": "行为覆盖①（威胁超敏侧翼）"
+  },
+  {
+   "edge_id": "ptsd_e13",
+   "disease_id": "ptsd",
+   "source": "Amygdala",
+   "target": "Accumbens-area",
+   "edge_type": "cstc",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": -0.2,
+   "is_new": true,
+   "literature": "Guo 2026 共享纹状体 ALFF↑（§2.1）；CSTC limbic 门控被威胁信号劫持",
+   "hooks": "3.1 节 bias_limbic 推导锚"
+  },
+  {
+   "edge_id": "ptsd_e04",
+   "disease_id": "ptsd",
+   "source": "LocusCoeruleus",
+   "target": "Amygdala",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.2,
+    0.4
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_332（蓝斑→杏仁核 NE，Hansen 2024）；RDoC 唤醒域",
+   "hooks": "3.1 节 NE tone 推导锚"
+  },
+  {
+   "edge_id": "ptsd_e05",
+   "disease_id": "ptsd",
+   "source": "LocusCoeruleus",
+   "target": "insula",
+   "edge_type": "brainstem",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_326（蓝斑→前脑岛 NE，Hansen PINK 最强 hub fc=0.85）+ **吞并 link_315 语义**（见 §四）",
+   "hooks": "行为覆盖①（内感受过度警觉）"
+  },
+  {
+   "edge_id": "ptsd_e10",
+   "disease_id": "ptsd",
+   "source": "LocusCoeruleus",
+   "target": "rostralmiddlefrontal",
+   "edge_type": "brainstem",
+   "pathology_type": "结构异常",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_328（蓝斑→dlPFC NE，Hansen 2024）；慢性应激→前额叶萎缩（思路链）",
+   "hooks": "行为覆盖③ + 非线性跳变③（dlPFC 压制失效）"
+  },
+  {
+   "edge_id": "ptsd_e06",
+   "disease_id": "ptsd",
+   "source": "caudalanteriorcingulate",
+   "target": "parahippocampal",
+   "edge_type": "corticocortical",
+   "pathology_type": "跨层短路",
+   "m_offset": [
+    0.2,
+    0.4,
+    0.6
+   ],
+   "laterality_delta": -0.3,
+   "is_new": false,
+   "literature": "旧 link_003_L（ACC→海马旁回，ENIGMA 4.89 L）；Guo 2026 左偏",
+   "hooks": "行为覆盖② + 非线性跳变②（闪回）"
+  },
+  {
+   "edge_id": "ptsd_e07",
+   "disease_id": "ptsd",
+   "source": "Amygdala",
+   "target": "parahippocampal",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": -0.3,
+   "is_new": true,
+   "literature": "Guo 2026（左杏仁核+海马 ALFF↑）；情景记忆被恐惧条件化劫持（思路链）",
+   "hooks": "行为覆盖①（情境匹配×2 记忆端）"
+  },
+  {
+   "edge_id": "ptsd_e08",
+   "disease_id": "ptsd",
+   "source": "DorsalRapheNucleus",
+   "target": "Hippocampus",
+   "edge_type": "brainstem",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": -0.2,
+   "is_new": false,
+   "literature": "旧 link_319（中缝背核→海马 5-HT，Hansen PINK fc=0.75）；左海马 ALFF↑ Guo 2026",
+   "hooks": "3.1 节 5HT tone 推导锚；创伤记忆固化"
+  },
+  {
+   "edge_id": "ptsd_e03",
+   "disease_id": "ptsd",
+   "source": "medialorbitofrontal",
+   "target": "Amygdala",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.2,
+    -0.4,
+    -0.6
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "NPC AI §5.2（vmPFC→杏仁核抑制↓）；Koch 2016（PMID:26918313）；Shin & Liberzon 2010",
+   "hooks": "行为覆盖③（L5 压制效力−50% 的结构基础）"
+  },
+  {
+   "edge_id": "ptsd_e11",
+   "disease_id": "ptsd",
+   "source": "DorsalRapheNucleus",
+   "target": "Amygdala",
+   "edge_type": "brainstem",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_320（中缝背核→杏仁核 5-HT，Hansen PINK fc=0.7）",
+   "hooks": "3.1 节 5HT tone 推导锚"
+  },
+  {
+   "edge_id": "ptsd_e12",
+   "disease_id": "ptsd",
+   "source": "Amygdala",
+   "target": "lateralorbitofrontal",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "文献数据源 §七 PTSD（↓BLA-OFC 恐惧加工）",
+   "hooks": "恐惧加工缺陷（回避行为支持）"
+  },
+  {
+   "edge_id": "schizoaffective_e01",
+   "disease_id": "schizoaffective",
+   "source": "VentralTegmentalArea",
+   "target": "Accumbens-area",
+   "edge_type": "brainstem",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.3,
+    -0.5
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_336（VTA→NAcc 精分奖赏解耦，×0.8 幅度、重档更深）",
+   "hooks": "DA_VTA tone 推导锚（负项）"
+  },
+  {
+   "edge_id": "schizoaffective_e02",
+   "disease_id": "schizoaffective",
+   "source": "SubstantiaNigraParsCompacta",
+   "target": "Putamen",
+   "edge_type": "brainstem",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_344（SNc→壳核）",
+   "hooks": "DA_SNc tone 推导锚"
+  },
+  {
+   "edge_id": "schizoaffective_e10",
+   "disease_id": "schizoaffective",
+   "source": "Amygdala",
+   "target": "Accumbens-area",
+   "edge_type": "cstc",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "**敏化-奖励**（Robinson & Berridge 1993）：BD 奖赏线索过度敏化（×0.5 振荡）；Guo 2026 共享纹状体 ALFF↑",
+   "hooks": "bias_limbic 推导锚 + 心境翻转挂接"
+  },
+  {
+   "edge_id": "schizoaffective_e11",
+   "disease_id": "schizoaffective",
+   "source": "VentralTegmentalArea",
+   "target": "Amygdala",
+   "edge_type": "brainstem",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "BD 奖赏-情绪 DA 通路敏化（RDoC 正性效价奖赏学习：VTA→杏仁核）；与 e01 构成 **VTA 出边群混合**（见 §三.1）",
+   "hooks": "DA_VTA tone 推导锚（正项）"
+  },
+  {
+   "edge_id": "schizoaffective_e03",
+   "disease_id": "schizoaffective",
+   "source": "caudalanteriorcingulate",
+   "target": "rostralanteriorcingulate",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.3,
+    0.4
+   ],
+   "laterality_delta": -0.05,
+   "is_new": false,
+   "literature": "旧 link_007_L（ACC↔rACC 锁定，精分认知异常 ×0.8）；Schijven 2023 rACC 反转",
+   "hooks": "认知锁定（兴奋/敌意因子挂接）"
+  },
+  {
+   "edge_id": "schizoaffective_e06",
+   "disease_id": "schizoaffective",
+   "source": "medialorbitofrontal",
+   "target": "rostralmiddlefrontal",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.4
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_082_L（DMN-FPN 反相关消失 ≈ 精分）；ENIGMA Schizotypy 2021（mOFC 模式与 SZ 正相关 r=.285）",
+   "hooks": "跳变②（整合域 \\"
+  },
+  {
+   "edge_id": "schizoaffective_e07",
+   "disease_id": "schizoaffective",
+   "source": "LocusCoeruleus",
+   "target": "Amygdala",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.2,
+    0.4
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_332（蓝斑→杏仁核 NE，Hansen 2024）；BD 唤醒域振荡（×0.5）；重档 0.4 > 0.3 触发心境翻转",
+   "hooks": "**行为覆盖①（心境相位翻转）** + NE tone 推导锚"
+  },
+  {
+   "edge_id": "schizoaffective_e14",
+   "disease_id": "schizoaffective",
+   "source": "VentralTegmentalArea",
+   "target": "rostralmiddlefrontal",
+   "edge_type": "brainstem",
+   "pathology_type": "结构异常",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "中脑皮层 DA 腿受损（精分共享模式 ×0.8，Davis 1991）；§6.3 subtype (b)",
+   "hooks": "认知缺陷侧翼"
+  },
+  {
+   "edge_id": "schizoaffective_e05",
+   "disease_id": "schizoaffective",
+   "source": "Thalamus-Proper",
+   "target": "transversetemporal",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": -0.05,
+   "is_new": false,
+   "literature": "link_318 **语义转移**（SC→Thalamus 无直连）；P50 门控失败（×0.5）；Gutman 2022 丘脑偏侧夸大",
+   "hooks": "感觉侧翼"
+  },
+  {
+   "edge_id": "schizoaffective_e09",
+   "disease_id": "schizoaffective",
+   "source": "superiortemporal",
+   "target": "middletemporal",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": -0.05,
+   "is_new": true,
+   "literature": "幻觉残留（精分模式 ×0.8，幅度最小档）；Schijven 2023 MTG 左薄",
+   "hooks": "语言域成员（幅度收窄）"
+  },
+  {
+   "edge_id": "schizoaffective_e15",
+   "disease_id": "schizoaffective",
+   "source": "precentral",
+   "target": "postcentral",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "Guo 2026 ALFF↓ 中央前后回（×0.5）",
+   "hooks": "阴性侧翼"
+  },
+  {
+   "edge_id": "schizoaffective_e08",
+   "disease_id": "schizoaffective",
+   "source": "caudalanteriorcingulate",
+   "target": "parahippocampal",
+   "edge_type": "corticocortical",
+   "pathology_type": "跨层短路",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_003_L（ACC→海马旁回）；§6.3 规则 b 机械重分类",
+   "hooks": "记忆绑定"
+  },
+  {
+   "edge_id": "schizoaffective_e13",
+   "disease_id": "schizoaffective",
+   "source": "DorsalRapheNucleus",
+   "target": "Hippocampus",
+   "edge_type": "brainstem",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.05,
+   "is_new": true,
+   "literature": "5-HT 传递聚焦记忆/情绪回路（精分共享 link_319 语义）；Gutman 2022 海马偏侧夸大（右偏）",
+   "hooks": "5HT tone 推导锚"
+  },
+  {
+   "edge_id": "schizoaffective_e04",
+   "disease_id": "schizoaffective",
+   "source": "rostralanteriorcingulate",
+   "target": "insula",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": -0.05,
+   "is_new": false,
+   "literature": "旧 link_155_L（rACC↔前脑岛，精分共享）；Guo 2026 岛叶 ALFF↑；Schijven 2023 rACC 反转",
+   "hooks": "内感受侧翼"
+  },
+  {
+   "edge_id": "schizoaffective_e12",
+   "disease_id": "schizoaffective",
+   "source": "Pallidum",
+   "target": "Thalamus-Proper",
+   "edge_type": "cstc",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": -0.05,
+   "is_new": true,
+   "literature": "ENIGMA SZ 苍白球↑（×0.8）；Okada 2016 苍白球左偏",
+   "hooks": "结构修饰（节点 m 直调层）"
+  },
+  {
+   "edge_id": "schizotypal-personality_e01",
+   "disease_id": "schizotypal-personality",
+   "source": "VentralTegmentalArea",
+   "target": "Caudate",
+   "edge_type": "brainstem",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "Howes & Kapur 2009 纹状体 DA↑→异常突显（核心）",
+   "hooks": "§五.1 行为覆盖① + 3.1 节 DA_VTA 推导锚"
+  },
+  {
+   "edge_id": "schizotypal-personality_e02",
+   "disease_id": "schizotypal-personality",
+   "source": "VentralTegmentalArea",
+   "target": "Accumbens-area",
+   "edge_type": "brainstem",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "分裂型腹侧纹状体功能障碍；Howes & Kapur 2009",
+   "hooks": "3.1 节 bias_limbic 推导锚 + 行为覆盖①"
+  },
+  {
+   "edge_id": "schizotypal-personality_e03",
+   "disease_id": "schizotypal-personality",
+   "source": "VentralTegmentalArea",
+   "target": "Amygdala",
+   "edge_type": "brainstem",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "DA 突显→情绪（猜疑/敌意归因的情绪燃料）",
+   "hooks": "行为覆盖①（猜疑侧翼）"
+  },
+  {
+   "edge_id": "schizotypal-personality_e04",
+   "disease_id": "schizotypal-personality",
+   "source": "rostralmiddlefrontal",
+   "target": "Caudate",
+   "edge_type": "cstc",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "SZ 谱系 dlPFC 认知控制↓（亚临床）——逻辑松脱/推理侧认知扭曲",
+   "hooks": "行为覆盖①（推理侧）"
+  },
+  {
+   "edge_id": "schizotypal-personality_e05",
+   "disease_id": "schizotypal-personality",
+   "source": "caudalanteriorcingulate",
+   "target": "Hippocampus",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "SZ 谱系源监控缺陷（内部/外部归因失败）",
+   "hooks": "§五.2 跳变②（思维造物主题锚）"
+  },
+  {
+   "edge_id": "schizotypal-personality_e12",
+   "disease_id": "schizotypal-personality",
+   "source": "Thalamus-Proper",
+   "target": "superiortemporal",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "知觉扭曲/幻觉样体验（丘脑感觉门控过度——无关感觉侵入意识）",
+   "hooks": "§五.2 跳变③（拜月教异象解读锚）"
+  },
+  {
+   "edge_id": "schizotypal-personality_e06",
+   "disease_id": "schizotypal-personality",
+   "source": "superiortemporal",
+   "target": "superiorfrontal",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "Modinos 精神病易感 ToM：STS-dmPFC 心智化网络异常（核心）",
+   "hooks": "行为覆盖②（社交疏离核心）"
+  },
+  {
+   "edge_id": "schizotypal-personality_e07",
+   "disease_id": "schizotypal-personality",
+   "source": "superiortemporal",
+   "target": "bankssts",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "STS 社会信号解码↓（社交线索读取不足）",
+   "hooks": "行为覆盖②"
+  },
+  {
+   "edge_id": "schizotypal-personality_e08",
+   "disease_id": "schizotypal-personality",
+   "source": "temporalpole",
+   "target": "superiortemporal",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "社会语义知识接入↓（社交疏离）",
+   "hooks": "行为覆盖②"
+  },
+  {
+   "edge_id": "schizotypal-personality_e09",
+   "disease_id": "schizotypal-personality",
+   "source": "inferiorparietal",
+   "target": "superiortemporal",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "Modinos/TPJ 心智化↓（换位思考不足）",
+   "hooks": "行为覆盖②"
+  },
+  {
+   "edge_id": "schizotypal-personality_e10",
+   "disease_id": "schizotypal-personality",
+   "source": "precuneus",
+   "target": "superiorfrontal",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "过度关联（magical thinking）——自我-世界边界模糊，无关事件被自我关联",
+   "hooks": "§五.2 跳变①（古怪信念固化核心）"
+  },
+  {
+   "edge_id": "schizotypal-personality_e11",
+   "disease_id": "schizotypal-personality",
+   "source": "superiortemporal",
+   "target": "precuneus",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "社会-自我整合不足（社交疏离的自我侧）",
+   "hooks": "行为覆盖②"
+  },
+  {
+   "edge_id": "social-anxiety_e01",
+   "disease_id": "social-anxiety",
+   "source": "fusiform",
+   "target": "Amygdala",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "Etkin & Wager 2007（SAD 杏仁核超激活）；面孔加工→威胁评估过度（FFA 超敏）",
+   "hooks": "非线性跳变①（社交恐慌触发端）"
+  },
+  {
+   "edge_id": "social-anxiety_e02",
+   "disease_id": "social-anxiety",
+   "source": "temporalpole",
+   "target": "Amygdala",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "社交情绪语义（颞极）→威胁评估（Clark & Wells 认知模型）；RDoC 社会过程",
+   "hooks": "行为覆盖①（社交情境触发）"
+  },
+  {
+   "edge_id": "social-anxiety_e03",
+   "disease_id": "social-anxiety",
+   "source": "Amygdala",
+   "target": "insula",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "Etkin & Wager 2007（SAD 岛叶超激活 > PTSD）；威胁→躯体反应（脸红/心跳）",
+   "hooks": "行为覆盖②（社交内感受）"
+  },
+  {
+   "edge_id": "social-anxiety_e04",
+   "disease_id": "social-anxiety",
+   "source": "insula",
+   "target": "Amygdala",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "内感受→威胁解读反馈环（心跳加速→\"被发现出丑\"）；Guo 2026 岛叶 ALFF↑",
+   "hooks": "行为覆盖② + 非线性跳变①（误报累积端）"
+  },
+  {
+   "edge_id": "social-anxiety_e05",
+   "disease_id": "social-anxiety",
+   "source": "superiortemporal",
+   "target": "supramarginal",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "RDoC 心理理论（MPFC/TPJ/STS）；社交线索过度解读（\"他在看我/评判我\"）",
+   "hooks": "行为覆盖①（社交情境触发）"
+  },
+  {
+   "edge_id": "social-anxiety_e06",
+   "disease_id": "social-anxiety",
+   "source": "supramarginal",
+   "target": "superiorfrontal",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "被评价感——他人视角→自我参照（TPJ→mPFC）；Clark & Wells 自我聚焦",
+   "hooks": "非线性跳变②（社交恐慌）"
+  },
+  {
+   "edge_id": "social-anxiety_e07",
+   "disease_id": "social-anxiety",
+   "source": "superiortemporal",
+   "target": "superiorfrontal",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "社会情境→自我评价（STS→mPFC 心智化过度）；RDoC 心理理论",
+   "hooks": "非线性跳变③（事后反刍锁定）"
+  },
+  {
+   "edge_id": "social-anxiety_e08",
+   "disease_id": "social-anxiety",
+   "source": "medialorbitofrontal",
+   "target": "Amygdala",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "社交焦虑共识：vmPFC 对杏仁核调控不足；RDoC 急性威胁（vmPFC 抑制端）",
+   "hooks": "行为覆盖③（L5 压制 −30%）"
+  },
+  {
+   "edge_id": "social-anxiety_e09",
+   "disease_id": "social-anxiety",
+   "source": "LocusCoeruleus",
+   "target": "Amygdala",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "RDoC 唤醒域；社交情境 NE 唤醒（紧张/出汗）",
+   "hooks": "行为覆盖①（社交情境触发）"
+  },
+  {
+   "edge_id": "social-anxiety_e10",
+   "disease_id": "social-anxiety",
+   "source": "LocusCoeruleus",
+   "target": "insula",
+   "edge_type": "brainstem",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "社交内感受唤醒（脸红/心悸躯体化）",
+   "hooks": "行为覆盖②"
+  },
+  {
+   "edge_id": "social-anxiety_e11",
+   "disease_id": "social-anxiety",
+   "source": "DorsalRapheNucleus",
+   "target": "Amygdala",
+   "edge_type": "brainstem",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "SAD 一线治疗 = SSRI（5-HT 系统核心靶点）；RDoC 社会过程 5-HT",
+   "hooks": "3.1 节 5HT tone 推导锚"
+  },
+  {
+   "edge_id": "social-anxiety_e12",
+   "disease_id": "social-anxiety",
+   "source": "Amygdala",
+   "target": "Accumbens-area",
+   "edge_type": "cstc",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "Guo 2026 共享纹状体 ALFF↑；社交威胁→回避行动门控",
+   "hooks": "3.1 节 bias_limbic 推导锚 + 行为覆盖④"
+  },
+  {
+   "edge_id": "social-anxiety_e13",
+   "disease_id": "social-anxiety",
+   "source": "caudalanteriorcingulate",
+   "target": "Caudate",
+   "edge_type": "cstc",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "社会疼痛/被排斥→dACC 激活（Eisenberger 社会疼痛研究）；社交焦虑认知循环过度激活",
+   "hooks": "3.1 节 bias_cognitive 推导锚 + 非线性跳变③（反刍）"
+  },
+  {
+   "edge_id": "ssd_e01",
+   "disease_id": "somatic-symptom",
+   "source": "insula",
+   "target": "caudalanteriorcingulate",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "Boeckle 2016（ACC+前岛叶高激活）；RDoC 内感受域；Guo 2026 岛叶+ACC ALFF↑",
+   "hooks": "行为覆盖①（症状波动）+ 非线性跳变①"
+  },
+  {
+   "edge_id": "ssd_e02",
+   "disease_id": "somatic-symptom",
+   "source": "insula",
+   "target": "rostralanteriorcingulate",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "Boeckle 2016（ACC 高激活）；RDoC 内感受域情绪分量",
+   "hooks": "行为覆盖①（症状情绪化）"
+  },
+  {
+   "edge_id": "ssd_e03",
+   "disease_id": "somatic-symptom",
+   "source": "Thalamus-Proper",
+   "target": "insula",
+   "edge_type": "cstc",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "内脏/躯体感觉丘脑中继放大（伤害性信号→前脑岛）；Boeckle 2016 感觉运动高激活",
+   "hooks": "行为覆盖①（内脏感觉增益）"
+  },
+  {
+   "edge_id": "ssd_e04",
+   "disease_id": "somatic-symptom",
+   "source": "LocusCoeruleus",
+   "target": "insula",
+   "edge_type": "brainstem",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "RDoC 唤醒域：LC→前脑岛 NE 内感受警觉（旧 link_326 语义，Hansen PINK 最强 hub fc=0.85）",
+   "hooks": "3.1 节 NE tone 推导锚"
+  },
+  {
+   "edge_id": "ssd_e05",
+   "disease_id": "somatic-symptom",
+   "source": "LocusCoeruleus",
+   "target": "caudalanteriorcingulate",
+   "edge_type": "brainstem",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "RDoC 唤醒域：LC→ACC 持续警觉（躯体症状监控）；Guo 2026 ACC ALFF↑",
+   "hooks": "3.1 节 NE tone 推导锚"
+  },
+  {
+   "edge_id": "ssd_e06",
+   "disease_id": "somatic-symptom",
+   "source": "DorsalRapheNucleus",
+   "target": "insula",
+   "edge_type": "brainstem",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "5-HT 内感受调制异常（焦虑共病 5HT 通路）；RDoC 唤醒/情绪调制",
+   "hooks": "3.1 节 5HT tone 推导锚"
+  },
+  {
+   "edge_id": "ssd_e07",
+   "disease_id": "somatic-symptom",
+   "source": "insula",
+   "target": "Amygdala",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "内感受过敏→威胁评估放大（焦虑放大环）；Boeckle 2016 杏仁核高激活",
+   "hooks": "行为覆盖②（焦虑放大）"
+  },
+  {
+   "edge_id": "ssd_e08",
+   "disease_id": "somatic-symptom",
+   "source": "Amygdala",
+   "target": "insula",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "**#88 转化接口**：创伤威胁信号→内感受皮层表达（心理创伤→躯体症状的直接通路）；Boeckle 2016 边缘高激活",
+   "hooks": "行为覆盖②（焦虑放大）+ 非线性跳变②（创伤触发躯体化）"
+  },
+  {
+   "edge_id": "ssd_e09",
+   "disease_id": "somatic-symptom",
+   "source": "entorhinal",
+   "target": "insula",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "**内脏学习绑定**：创伤情景记忆（内嗅）→ 内感受（前脑岛）内脏反应记忆；Boeckle 2016 情景-内感受共激活",
+   "hooks": "行为覆盖②（症状记忆勾起）"
+  },
+  {
+   "edge_id": "ssd_e10",
+   "disease_id": "somatic-symptom",
+   "source": "medialorbitofrontal",
+   "target": "Amygdala",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "Boeckle 2016 前额叶低激活：vmPFC 对杏仁核抑制不足 → 焦虑/躯体化无法自上而下压制",
+   "hooks": "非线性跳变③（压制失效→症状锁定）"
+  },
+  {
+   "edge_id": "ssd_e11",
+   "disease_id": "somatic-symptom",
+   "source": "rostralanteriorcingulate",
+   "target": "Accumbens-area",
+   "edge_type": "cstc",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "症状→趋避/寻求行为 gate（回避-求医行为）；RDoC 正性效价×内感受交叉",
+   "hooks": "3.1 节 bias_limbic 推导锚"
+  },
+  {
+   "edge_id": "ssd_e12",
+   "disease_id": "somatic-symptom",
+   "source": "Thalamus-Proper",
+   "target": "postcentral",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "体感中继放大（疼痛/不适感增强）；Boeckle 2016 感觉运动区高激活",
+   "hooks": "行为覆盖①（体感增益）"
+  },
+  {
+   "edge_id": "ssd_e13",
+   "disease_id": "somatic-symptom",
+   "source": "Thalamus-Proper",
+   "target": "precentral",
+   "edge_type": "cstc",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "内感受→运动门控（躯体化行为表达）；somatic 环路被内感受信号偏置",
+   "hooks": "3.1 节 bias_somatic 推导锚"
+  },
+  {
+   "edge_id": "specific-phobia_e01",
+   "disease_id": "specific-phobia",
+   "source": "PeriaqueductalGray",
+   "target": "Amygdala",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.2,
+    0.4,
+    null
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_312（PAG→杏仁核，LeDoux 2000 / Paxinos 2004）；RDoC 急性威胁 dPAG；Etkin & Wager 2007 杏仁核超激活",
+   "hooks": "行为覆盖①（刺激触发 +0.2 叠加）"
+  },
+  {
+   "edge_id": "specific-phobia_e02",
+   "disease_id": "specific-phobia",
+   "source": "SuperiorColliculus",
+   "target": "Amygdala",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    null
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_317（上丘→杏仁核经丘脑枕快速通路，Paxinos 2004）——刺激快速检测→恐惧",
+   "hooks": "行为覆盖①（刺激出现瞬时触发）"
+  },
+  {
+   "edge_id": "specific-phobia_e03",
+   "disease_id": "specific-phobia",
+   "source": "LocusCoeruleus",
+   "target": "Amygdala",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.2,
+    null
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_332（蓝斑→杏仁核 NE，Hansen 2024 fc=0.7）；[特定恐惧症.md](../../实体/疾病目录/特定恐惧症.md) 唤醒域（刺激触发）",
+   "hooks": "行为覆盖①（恐惧刺激→NE 唤醒）"
+  },
+  {
+   "edge_id": "specific-phobia_e04",
+   "disease_id": "specific-phobia",
+   "source": "LocusCoeruleus",
+   "target": "insula",
+   "edge_type": "brainstem",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    null
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_326（蓝斑→前脑岛 NE，Hansen PINK fc=0.85）",
+   "hooks": "行为覆盖①（躯体恐惧反应）"
+  },
+  {
+   "edge_id": "specific-phobia_e05",
+   "disease_id": "specific-phobia",
+   "source": "caudalanteriorcingulate",
+   "target": "parahippocampal",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    null
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_003_L（ACC→海马旁回，ENIGMA 4.89 L）；[特定恐惧症.md](../../实体/疾病目录/特定恐惧症.md) 记忆域恐惧条件化↑",
+   "hooks": "行为覆盖①（情境匹配——刺激识别端）"
+  },
+  {
+   "edge_id": "specific-phobia_e06",
+   "disease_id": "specific-phobia",
+   "source": "Amygdala",
+   "target": "insula",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    null
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "Etkin & Wager 2007（SP 岛叶过度激活 > PTSD）；Guo 2026 岛叶 ALFF↑",
+   "hooks": "行为覆盖②（躯体恐惧反应内感受）"
+  },
+  {
+   "edge_id": "specific-phobia_e07",
+   "disease_id": "specific-phobia",
+   "source": "Amygdala",
+   "target": "parahippocampal",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    null
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "RDoC 恐惧条件化（杏仁核-海马旁 情景记忆被恐惧条件化劫持）；Etkin & Wager 2007",
+   "hooks": "行为覆盖①（刺激-情境关联）"
+  },
+  {
+   "edge_id": "specific-phobia_e08",
+   "disease_id": "specific-phobia",
+   "source": "DorsalRapheNucleus",
+   "target": "Amygdala",
+   "edge_type": "brainstem",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    null
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "RDoC 急性威胁（5-HT 调制恐惧回路）",
+   "hooks": "3.1 节 5HT tone 推导锚"
+  },
+  {
+   "edge_id": "specific-phobia_e09",
+   "disease_id": "specific-phobia",
+   "source": "Amygdala",
+   "target": "Accumbens-area",
+   "edge_type": "cstc",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    null
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "Guo 2026 共享纹状体 ALFF↑；CSTC limbic 门控被恐惧信号偏置（回避行动）",
+   "hooks": "3.1 节 bias_limbic 推导锚 + 行为覆盖①（回避·主动 强制激活）"
+  },
+  {
+   "edge_id": "sud_e01",
+   "disease_id": "substance-use-disorder",
+   "source": "VentralTegmentalArea",
+   "target": "Accumbens-area",
+   "edge_type": "brainstem",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.3,
+    -0.5
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_336（VTA→NAcc，fc=0.9，Schultz1997）；ENIGMA NAcc↓（Navarri 2022）；Robinson & Berridge 1993",
+   "hooks": "行为覆盖①②（中毒/戒断双相跳变）"
+  },
+  {
+   "edge_id": "sud_e02",
+   "disease_id": "substance-use-disorder",
+   "source": "SubstantiaNigraParsCompacta",
+   "target": "Putamen",
+   "edge_type": "brainstem",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_344（SNc→壳核，fc=0.85，Paxinos2004）",
+   "hooks": "行为覆盖①（戒断期作用域）"
+  },
+  {
+   "edge_id": "sud_e03",
+   "disease_id": "substance-use-disorder",
+   "source": "SubstantiaNigraParsCompacta",
+   "target": "Caudate",
+   "edge_type": "brainstem",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_343（SNc→尾状核，fc=0.9，Paxinos2004）",
+   "hooks": "行为覆盖①（戒断期作用域）"
+  },
+  {
+   "edge_id": "sud_e05",
+   "disease_id": "substance-use-disorder",
+   "source": "medialorbitofrontal",
+   "target": "Accumbens-area",
+   "edge_type": "cstc",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.2,
+    0.3,
+    0.4
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "Dugré 2023（vmPFC-腹侧纹状体 超连接）；Klugah-Brown 2023 纹状体-前额叶",
+   "hooks": "3.1 节 bias_limbic 推导锚"
+  },
+  {
+   "edge_id": "sud_e04",
+   "disease_id": "substance-use-disorder",
+   "source": "Putamen",
+   "target": "Thalamus-Proper",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.3,
+    0.4
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_363（壳核→丘脑，CSTC 直接通路，Alexander1986；Haber2010）；Everitt & Robbins 2005 习惯化",
+   "hooks": "非线性跳变①（习惯锁定）"
+  },
+  {
+   "edge_id": "sud_e13",
+   "disease_id": "substance-use-disorder",
+   "source": "precentral",
+   "target": "Putamen",
+   "edge_type": "cstc",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "Everitt & Robbins 2005（动作自动化）；Klugah-Brown 2023 背侧纹状体习惯回路",
+   "hooks": "3.1 节 bias_somatic 推导锚；非线性跳变①（M1 强制熟练）"
+  },
+  {
+   "edge_id": "sud_e06",
+   "disease_id": "substance-use-disorder",
+   "source": "rostralmiddlefrontal",
+   "target": "Caudate",
+   "edge_type": "cstc",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.3,
+    -0.5
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_008_L（ACC→dlPFC 解耦）**语义转移**（直连不在三体图，cognitive 环路承载）；Dugré 2023 dlPFC-ACC 低连接",
+   "hooks": "行为覆盖③ + 非线性跳变②（dlPFC 压制失效）"
+  },
+  {
+   "edge_id": "sud_e07",
+   "disease_id": "substance-use-disorder",
+   "source": "caudalanteriorcingulate",
+   "target": "Caudate",
+   "edge_type": "cstc",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "Dugré 2023（dlPFC-ACC 低连接，ACC 侧语义）；ENIGMA AUD 皮质厚度↓ ACC（Navarri 2022）",
+   "hooks": "行为覆盖③（认知压制−50% 作用域）"
+  },
+  {
+   "edge_id": "sud_e08",
+   "disease_id": "substance-use-disorder",
+   "source": "LocusCoeruleus",
+   "target": "rostralmiddlefrontal",
+   "edge_type": "brainstem",
+   "pathology_type": "结构异常",
+   "m_offset": [
+    0.0,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_328（LC→dlPFC NE，fc=0.75，Hansen2024）；ENIGMA AUD 额上回/额叶皮质变薄（Navarri 2022）",
+   "hooks": "行为覆盖③ + 非线性跳变②（结构基础）"
+  },
+  {
+   "edge_id": "sud_e09",
+   "disease_id": "substance-use-disorder",
+   "source": "rostralanteriorcingulate",
+   "target": "insula",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_155_L（ACC吻侧→前脑岛）；Dugré 2023 dlPFC-岛叶低连接（内感受侧语义）",
+   "hooks": "行为覆盖④（内感受错误归因）"
+  },
+  {
+   "edge_id": "sud_e10",
+   "disease_id": "substance-use-disorder",
+   "source": "caudalanteriorcingulate",
+   "target": "parahippocampal",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_003_L（ACC→海马旁回，ENIGMA 4.89）；物质相关情境记忆线索化",
+   "hooks": "行为覆盖①（物质线索侧翼）"
+  },
+  {
+   "edge_id": "sud_e11",
+   "disease_id": "substance-use-disorder",
+   "source": "Amygdala",
+   "target": "Accumbens-area",
+   "edge_type": "cstc",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "ENIGMA AUD/CUD 杏仁核↓（Navarri 2022，结构）；Koob & Le Moal 戒断期负性情绪→渴求（\"dark side\" 杏仁核-纹状体回路）",
+   "hooks": "非线性跳变③（戒断期渴求）"
+  },
+  {
+   "edge_id": "sud_e12",
+   "disease_id": "substance-use-disorder",
+   "source": "DorsalRapheNucleus",
+   "target": "caudalanteriorcingulate",
+   "edge_type": "brainstem",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "Soubrié (1986) 低 5HT=去抑制；SUD 冲动性-5-HT 功能低下文献群",
+   "hooks": "3.1 节 5HT tone 推导锚"
+  },
+  {
+   "edge_id": "undifferentiated-schizophrenia_e01",
+   "disease_id": "undifferentiated-schizophrenia",
+   "source": "VentralTegmentalArea",
+   "target": "Accumbens-area",
+   "edge_type": "brainstem",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.3,
+    -0.4
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_336（VTA→NAcc，Schultz 1997）；ENIGMA NAcc↓（×0.7-0.8）",
+   "hooks": "DA_VTA tone 推导锚"
+  },
+  {
+   "edge_id": "undifferentiated-schizophrenia_e02",
+   "disease_id": "undifferentiated-schizophrenia",
+   "source": "SubstantiaNigraParsCompacta",
+   "target": "Putamen",
+   "edge_type": "brainstem",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_344（SNc→壳核，Paxinos 2004）",
+   "hooks": "DA_SNc tone 推导锚"
+  },
+  {
+   "edge_id": "undifferentiated-schizophrenia_e03",
+   "disease_id": "undifferentiated-schizophrenia",
+   "source": "caudalanteriorcingulate",
+   "target": "rostralanteriorcingulate",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": -0.05,
+   "is_new": false,
+   "literature": "旧 link_007_L（ACC↔rACC 锁定，幅度降）；Schijven 2023 rACC 反转",
+   "hooks": "认知锁定（弱于偏执型）"
+  },
+  {
+   "edge_id": "undifferentiated-schizophrenia_e07",
+   "disease_id": "undifferentiated-schizophrenia",
+   "source": "medialorbitofrontal",
+   "target": "rostralmiddlefrontal",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_082_L（DMN-FPN 反相关减弱，非消失——未分化效应量小）；Fan&Tan 2022",
+   "hooks": "跳变②（整合域 \\"
+  },
+  {
+   "edge_id": "undifferentiated-schizophrenia_e11",
+   "disease_id": "undifferentiated-schizophrenia",
+   "source": "VentralTegmentalArea",
+   "target": "rostralmiddlefrontal",
+   "edge_type": "brainstem",
+   "pathology_type": "结构异常",
+   "m_offset": [
+    -0.1,
+    -0.3,
+    -0.4
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "中脑皮层 DA 腿选择性受损（Davis 1991）；**阴性/认知症状核心载体（幅度 > 偏执型）**；§6.3 subtype (b)",
+   "hooks": "DA_VTA tone 推导锚（负项）+ 行为覆盖（SAN<30 联动）"
+  },
+  {
+   "edge_id": "undifferentiated-schizophrenia_e06",
+   "disease_id": "undifferentiated-schizophrenia",
+   "source": "parsopercularis",
+   "target": "superiortemporal",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": -0.05,
+   "is_new": false,
+   "literature": "旧 link_116_L（Broca↔Wernicke，旧「结构异常」→ 解耦沉默重分类）；**语言社会域 m_max < −0.2 → Broca 紊乱**（重档 −0.3 达标）",
+   "hooks": "行为覆盖①（语言贫乏/紊乱）+ PANSS 阴性"
+  },
+  {
+   "edge_id": "undifferentiated-schizophrenia_e10",
+   "disease_id": "undifferentiated-schizophrenia",
+   "source": "medialorbitofrontal",
+   "target": "superiortemporal",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    -0.1,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": -0.05,
+   "is_new": true,
+   "literature": "社交钝化：ToM 网络解耦（Green 2015 社会脑低激活；偏执型同对为过度耦合 → **亚型区分**）；Bagcioglu 2014 CC1↓ 跨半球语言整合",
+   "hooks": "bias_cognitive 推导锚（负项）"
+  },
+  {
+   "edge_id": "undifferentiated-schizophrenia_e09",
+   "disease_id": "undifferentiated-schizophrenia",
+   "source": "superiortemporal",
+   "target": "middletemporal",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": -0.05,
+   "is_new": true,
+   "literature": "阳性残留：听觉语言环路点燃（PANSS 阳性 ≅ 偏执型，但效应量 ×0.7）；Schijven 2023 MTG 左薄",
+   "hooks": "语言域成员（幅度收窄）"
+  },
+  {
+   "edge_id": "undifferentiated-schizophrenia_e05",
+   "disease_id": "undifferentiated-schizophrenia",
+   "source": "Thalamus-Proper",
+   "target": "transversetemporal",
+   "edge_type": "privileged_pathway",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.3,
+    0.5
+   ],
+   "laterality_delta": -0.05,
+   "is_new": false,
+   "literature": "link_318 **语义转移**（SC→Thalamus 无直连）；P50 门控失败；Gutman 2022 丘脑偏侧夸大",
+   "hooks": "跳变①（感觉域 m_max = 0.5 重档 > 0.4 → 感官过载）"
+  },
+  {
+   "edge_id": "undifferentiated-schizophrenia_e16",
+   "disease_id": "undifferentiated-schizophrenia",
+   "source": "precentral",
+   "target": "postcentral",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.2,
+    -0.3
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "Guo 2026 ALFF↓ 中央前后回（**阴性主导更强**）；动作迟缓",
+   "hooks": "阴性侧翼（PANSS 阴性）"
+  },
+  {
+   "edge_id": "undifferentiated-schizophrenia_e08",
+   "disease_id": "undifferentiated-schizophrenia",
+   "source": "caudalanteriorcingulate",
+   "target": "parahippocampal",
+   "edge_type": "corticocortical",
+   "pathology_type": "跨层短路",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": false,
+   "literature": "旧 link_003_L（ACC→海马旁回，ENIGMA 4.89 L）；§6.3 规则 b 机械重分类",
+   "hooks": "记忆绑定（弱于偏执型）"
+  },
+  {
+   "edge_id": "undifferentiated-schizophrenia_e12",
+   "disease_id": "undifferentiated-schizophrenia",
+   "source": "Amygdala",
+   "target": "Hippocampus",
+   "edge_type": "corticocortical",
+   "pathology_type": "解耦沉默",
+   "m_offset": [
+    0.0,
+    -0.1,
+    -0.2
+   ],
+   "laterality_delta": 0.05,
+   "is_new": true,
+   "literature": "**BSNIP NP-SZ 海马+杏仁核 < P-SZ** → 结构缩小 → 记忆-情绪耦合减弱（与偏执型 e10 过度耦合形成亚型区分）；Gutman 2022 海马/杏仁核偏侧夸大（右偏）",
+   "hooks": "防御域侧翼（威胁反应钝化）"
+  },
+  {
+   "edge_id": "undifferentiated-schizophrenia_e13",
+   "disease_id": "undifferentiated-schizophrenia",
+   "source": "Pallidum",
+   "target": "Thalamus-Proper",
+   "edge_type": "cstc",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": -0.05,
+   "is_new": true,
+   "literature": "ENIGMA SZ 苍白球↑（×0.7）；Okada 2016 苍白球左偏",
+   "hooks": "结构修饰（节点 m 直调层）"
+  },
+  {
+   "edge_id": "undifferentiated-schizophrenia_e04",
+   "disease_id": "undifferentiated-schizophrenia",
+   "source": "rostralanteriorcingulate",
+   "target": "insula",
+   "edge_type": "corticocortical",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "laterality_delta": -0.05,
+   "is_new": false,
+   "literature": "旧 link_155_L（rACC↔前脑岛）；Guo 2026 岛叶 ALFF↑（共享）；Schijven 2023 rACC 反转",
+   "hooks": "内感受侧翼"
+  },
+  {
+   "edge_id": "undifferentiated-schizophrenia_e14",
+   "disease_id": "undifferentiated-schizophrenia",
+   "source": "LocusCoeruleus",
+   "target": "caudalanteriorcingulate",
+   "edge_type": "brainstem",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "Guo 2026 共享 ACC/mPFC ALFF↑（×0.5 幅度）；敏化-威胁标签支撑",
+   "hooks": "NE tone 推导锚（小幅度）"
+  },
+  {
+   "edge_id": "undifferentiated-schizophrenia_e15",
+   "disease_id": "undifferentiated-schizophrenia",
+   "source": "Amygdala",
+   "target": "Accumbens-area",
+   "edge_type": "cstc",
+   "pathology_type": "过度耦合",
+   "m_offset": [
+    0.0,
+    0.1,
+    0.2
+   ],
+   "laterality_delta": 0.0,
+   "is_new": true,
+   "literature": "Guo 2026 共享纹状体 ALFF↑（×0.5）；敏化-威胁门控劫持",
+   "hooks": "bias_limbic 推导锚"
+  }
+ ]
+}
