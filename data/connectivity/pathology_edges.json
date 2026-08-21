@@ -1,6 +1,6 @@
 {
  "_description": "病理边注册表草案 — 26 病 → 三体模型病理边（Grilling #88 重映射产物，2026-08-21）",
- "_schema_version": "1.0",
+ "_schema_version": "1.1",
  "_status": "草案待审（#88 定稿）",
  "_stats": {
   "diseases": 26,
@@ -1189,11 +1189,18 @@
    "target": "Accumbens-area",
    "edge_type": "brainstem",
    "pathology_type": "双向振荡",
-   "m_offset": [
-    0.3,
-    -0.3,
-    0.5
-   ],
+   "m_offset": {
+    "mania": [
+     0.3,
+     0.5,
+     0.6
+    ],
+    "depression": [
+     -0.3,
+     -0.5,
+     -0.5
+    ]
+   },
    "laterality_delta": 0.0,
    "is_new": false,
    "literature": "旧 link_336（VTA→NAcc，Schultz 1997）；NPC AI §5.2 躁狂（VTA→NAcc↑）；奖赏超敏模型；MDD 快感缺失 VTA→NAcc 解耦（文献 §七）",
@@ -1206,11 +1213,18 @@
    "target": "Putamen",
    "edge_type": "brainstem",
    "pathology_type": "双向振荡",
-   "m_offset": [
-    0.1,
-    -0.1,
-    0.3
-   ],
+   "m_offset": {
+    "mania": [
+     0.1,
+     0.3,
+     0.3
+    ],
+    "depression": [
+     -0.1,
+     -0.3,
+     -0.3
+    ]
+   },
    "laterality_delta": 0.0,
    "is_new": false,
    "literature": "旧 link_344（SNc→壳核，Paxinos 2004）；壳核 ALFF↑ Guo 2026（纹状体）",
@@ -1223,11 +1237,18 @@
    "target": "superiorfrontal",
    "edge_type": "brainstem",
    "pathology_type": "双向振荡",
-   "m_offset": [
-    0.1,
-    -0.1,
-    0.2
-   ],
+   "m_offset": {
+    "mania": [
+     0.1,
+     0.2,
+     0.3
+    ],
+    "depression": [
+     -0.1,
+     -0.2,
+     -0.3
+    ]
+   },
    "laterality_delta": 0.0,
    "is_new": false,
    "literature": "旧 link_338（VTA→mPFC，Hansen 2024）；奖赏超敏→目标驱动过度（躁狂）",
@@ -1240,11 +1261,18 @@
    "target": "Accumbens-area",
    "edge_type": "cstc",
    "pathology_type": "双向振荡",
-   "m_offset": [
-    0.2,
-    -0.2,
-    0.4
-   ],
+   "m_offset": {
+    "mania": [
+     0.2,
+     0.4,
+     0.5
+    ],
+    "depression": [
+     -0.2,
+     -0.3,
+     -0.4
+    ]
+   },
    "laterality_delta": 0.0,
    "is_new": true,
    "literature": "奖赏超敏模型（Robinson & Berridge 1993）；Damme 2022（mOFC/NAcc 体积↑，BSD 谱系）；CSTC limbic 奖赏门控",
@@ -1257,11 +1285,18 @@
    "target": "Putamen",
    "edge_type": "cstc",
    "pathology_type": "双向振荡",
-   "m_offset": [
-    0.2,
-    -0.1,
-    0.3
-   ],
+   "m_offset": {
+    "mania": [
+     0.2,
+     0.3,
+     0.4
+    ],
+    "depression": [
+     -0.1,
+     -0.2,
+     -0.3
+    ]
+   },
    "laterality_delta": 0.0,
    "is_new": true,
    "literature": "壳核 ALFF↑ Guo 2026（纹状体）；躁狂期精神运动性兴奋/抑郁期精神运动迟滞（临床）；NPC AI §5.2 躁狂（dlPFC 抑制↓）",
@@ -1308,11 +1343,18 @@
    "target": "Amygdala",
    "edge_type": "brainstem",
    "pathology_type": "双向振荡",
-   "m_offset": [
-    -0.1,
-    0.1,
-    -0.2
-   ],
+   "m_offset": {
+    "mania": [
+     -0.1,
+     -0.2,
+     -0.3
+    ],
+    "depression": [
+     0.1,
+     0.2,
+     0.3
+    ]
+   },
    "laterality_delta": 0.0,
    "is_new": true,
    "literature": "NPC AI §4.2 敏化-奖励/抑制不足（5HT −0.2）↔ 过度抑制（5HT +0.2）；5HT 行为抑制假说（Soubrié 1986）；锂盐 5-HT 机制",
@@ -1325,11 +1367,18 @@
    "target": "Caudate",
    "edge_type": "cstc",
    "pathology_type": "双向振荡",
-   "m_offset": [
-    0.2,
-    -0.1,
-    0.3
-   ],
+   "m_offset": {
+    "mania": [
+     0.2,
+     0.3,
+     0.4
+    ],
+    "depression": [
+     -0.1,
+     -0.2,
+     -0.3
+    ]
+   },
    "laterality_delta": 0.0,
    "is_new": true,
    "literature": "Guo 2026 BD 特异性 ALFF↑ 尾状核 + ACC/mPFC（双侧 IFG/ACC-mPFC/纹状体/尾状核）",
@@ -1461,11 +1510,18 @@
    "target": "Accumbens-area",
    "edge_type": "brainstem",
    "pathology_type": "双向振荡",
-   "m_offset": [
-    0.1,
-    -0.2,
-    0.2
-   ],
+   "m_offset": {
+    "mania": [
+     0.1,
+     0.2,
+     null
+    ],
+    "depression": [
+     -0.2,
+     -0.3,
+     null
+    ]
+   },
    "laterality_delta": 0.0,
    "is_new": false,
    "literature": "旧 link_336（VTA→NAcc，Schultz 1997）；NPC AI §5.2 躁狂（VTA→NAcc↑）；奖赏超敏模型；MDD 快感缺失 VTA→NAcc 解耦",
@@ -1478,11 +1534,18 @@
    "target": "Putamen",
    "edge_type": "brainstem",
    "pathology_type": "双向振荡",
-   "m_offset": [
-    0.0,
-    -0.1,
-    0.1
-   ],
+   "m_offset": {
+    "mania": [
+     0.0,
+     0.1,
+     null
+    ],
+    "depression": [
+     -0.1,
+     -0.2,
+     null
+    ]
+   },
    "laterality_delta": 0.0,
    "is_new": false,
    "literature": "旧 link_344（SNc→壳核，Paxinos 2004）；壳核 ALFF↑ Guo 2026（幅值<BD-I）",
@@ -1495,11 +1558,18 @@
    "target": "superiorfrontal",
    "edge_type": "brainstem",
    "pathology_type": "双向振荡",
-   "m_offset": [
-    0.1,
-    -0.1,
-    0.2
-   ],
+   "m_offset": {
+    "mania": [
+     0.1,
+     0.2,
+     null
+    ],
+    "depression": [
+     -0.1,
+     -0.2,
+     null
+    ]
+   },
    "laterality_delta": 0.0,
    "is_new": true,
    "literature": "奖赏超敏模型（BSD 谱系共享，环性心境条目）；VTA→mPFC 目标驱动（对照 BD-I e03，幅值减半）",
@@ -1512,11 +1582,18 @@
    "target": "Accumbens-area",
    "edge_type": "cstc",
    "pathology_type": "双向振荡",
-   "m_offset": [
-    0.1,
-    -0.2,
-    0.2
-   ],
+   "m_offset": {
+    "mania": [
+     0.1,
+     0.2,
+     null
+    ],
+    "depression": [
+     -0.2,
+     -0.3,
+     null
+    ]
+   },
    "laterality_delta": -0.2,
    "is_new": true,
    "literature": "奖赏超敏模型（Robinson & Berridge 1993）；Damme 2022（mOFC/NAcc）；**Haznedar 2005 左侧前额叶趋近不对称↑（BD-II 共享）**",
@@ -1529,11 +1606,18 @@
    "target": "Putamen",
    "edge_type": "cstc",
    "pathology_type": "双向振荡",
-   "m_offset": [
-    0.0,
-    -0.1,
-    0.1
-   ],
+   "m_offset": {
+    "mania": [
+     0.0,
+     0.1,
+     null
+    ],
+    "depression": [
+     -0.1,
+     -0.2,
+     null
+    ]
+   },
    "laterality_delta": 0.0,
    "is_new": true,
    "literature": "壳核 ALFF↑ Guo 2026；抑郁期精神运动迟滞（运动输出↓，NPC AI §5.2 抑郁(反刍)）；轻躁狂活动轻度增多",
@@ -1614,11 +1698,18 @@
    "target": "Amygdala",
    "edge_type": "brainstem",
    "pathology_type": "双向振荡",
-   "m_offset": [
-    -0.1,
-    0.1,
-    -0.2
-   ],
+   "m_offset": {
+    "mania": [
+     -0.1,
+     -0.2,
+     null
+    ],
+    "depression": [
+     0.1,
+     0.2,
+     null
+    ]
+   },
    "laterality_delta": 0.0,
    "is_new": true,
    "literature": "NPC AI §4.2 敏化-奖励（5HT −0.2）↔ 过度抑制（5HT +0.2）；5HT 行为抑制假说（Soubrié 1986）",
@@ -1631,11 +1722,18 @@
    "target": "Caudate",
    "edge_type": "cstc",
    "pathology_type": "双向振荡",
-   "m_offset": [
-    0.0,
-    -0.1,
-    0.1
-   ],
+   "m_offset": {
+    "mania": [
+     0.0,
+     0.1,
+     null
+    ],
+    "depression": [
+     -0.1,
+     -0.2,
+     null
+    ]
+   },
    "laterality_delta": 0.0,
    "is_new": true,
    "literature": "Guo 2026 BD 特异性 ALFF↑ 尾状核/ACC-mPFC（幅值<BD-I）",
@@ -5925,5 +6023,6 @@
    "literature": "Guo 2026 共享纹状体 ALFF↑（×0.5）；敏化-威胁门控劫持",
    "hooks": "bias_limbic 推导锚"
   }
- ]
+ ],
+ "_schema_note": "v1.1 (2026-08-21 #88 遗留项1 定案): m_offset 支持相位键——{mania, depression} 仅限 bipolar-I/II（双向振荡状态机）；其余病为 [轻,中,重] 三值数组（含 None 占位表示无此档）。双向振荡 = 状态机机制非第5病理类型，底层仍按四类判定。"
 }

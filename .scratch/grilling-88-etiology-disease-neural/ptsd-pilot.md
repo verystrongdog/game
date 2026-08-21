@@ -166,9 +166,15 @@ NPC AI §4.2「敏化-威胁」+「抑制不足」双标签（多标签叠加取
 
 > 本节即**26 病复制模板**。其余 25 病按此字段规范产出，格式与本节完全一致。
 
-### 6.1 病理边字段规范（pathology_edges.json 行 schema，✅ 已定稿 2026-08-21 #88 待定项2）
+### 6.1 病理边字段规范（pathology_edges.json 行 schema，✅ 已定稿 2026-08-21 #88 待定项2 + 遗留项1）
 
-> **定稿决策（#88 待定项2）**：① 文件位置 `data/connectivity/pathology_edges.json`（与 tripartite_model.json 同层）；② **平铺数组**结构（`edges: [...]`，不按病分组），检索/校验经 `edge_id` 前缀；③ `edge_id = <disease_id>_e<NN>` 作**全局主键**（唯一性由 frontmatter 疾病ID 保证）；④ 顶层 `_schema_version: "1.0"`。
+> **定稿决策（#88 待定项2 + 遗留项1）**：① 文件位置 `data/connectivity/pathology_edges.json`（与 tripartite_model.json 同层）；② **平铺数组**结构（`edges: [...]`，不按病分组），检索/校验经 `edge_id` 前缀；③ `edge_id = <disease_id>_e<NN>` 作**全局主键**（唯一性由 frontmatter 疾病ID 保证）；④ 顶层 `_schema_version: "1.1"`（v1.1 新增相位键）。
+>
+> **m_offset 双形态（v1.1，2026-08-21 遗留项1 定案）**：
+> - **普通病**：`[轻, 中, 重]` 三值数组（`null` 占位 = 无此档，B′ 档位过滤）
+> - **双向振荡（仅 bipolar-I/bipolar-II）**：`{"mania": [三档], "depression": [三档]}` 相位键——躁狂极/抑郁极各自三档；结算按当前心境相位 S ∈ {躁狂相, 抑郁相} 取对应极。**相位键出现 ⇔ disease_id ∈ {bipolar-I, bipolar-II}**（校验器强制约束）
+> - **双向振荡 = 状态机机制，非第 5 病理类型**：底层病理类型仍按 §6.3 四类判定（躁狂极取过度耦合语义、抑郁极取解耦沉默语义），相位键表达"随相位在两类间切换"
+> - **轻量时变（环性等）**：无相位键，用 hooks 挂接"边 m 时变 ±0.05"或行为循环状态机（L1/L2 层级，不进 m_offset）
 
 ```json
 {
