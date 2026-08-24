@@ -9,7 +9,7 @@
 - 能独立读懂 `src/YouAreNotTheFish.Core` 里的任意一个文件（record、interface、static 类、测试），说出它在引擎里的职责
 - 能给引擎补一个 xUnit 测试并跑绿（如给 ToneUpdater 加边界用例）
 - 能用 C# 把一段 Python 模拟逻辑翻译成等价类（如 SAN 结算）
-- 在 Unity 里做出「面具」的一个可玩机制原型（如 SAN 消耗 + 观察者效应演示）
+- 在 Unity 里做出「面具」的一个可玩机制原型（如 SAN 消耗 + 意识外显效应演示）
 
 ## Constraints
 

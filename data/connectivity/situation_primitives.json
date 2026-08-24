@@ -264,7 +264,7 @@
             "L3",
             "L4"
           ],
-          "game_notes": "识别扭曲后的医院环境——观察者效应导致感知失真"
+          "game_notes": "识别扭曲后的医院环境——意识外显效应导致感知失真"
         },
         "declarative_memory": {
           "display_name": "陈述性记忆",
@@ -500,7 +500,7 @@
             "L0",
             "L1"
           ],
-          "game_notes": "月相系统——满月时观察者效应最强，NPC行为最不可预测"
+          "game_notes": "月相系统——满月时意识外显效应最强，NPC行为最不可预测"
         },
         "sleep_wakefulness": {
           "display_name": "睡眠-觉醒",
@@ -575,7 +575,7 @@
             "L4",
             "L5"
           ],
-          "game_notes": "观察者效应核心——月光模糊自我-他者边界，行动归属感被扭曲"
+          "game_notes": "意识外显效应核心——月光模糊自我-他者边界，行动归属感被扭曲"
         },
         "habits": {
           "display_name": "习惯",
@@ -1399,7 +1399,7 @@
         "Social Processes → perception_of_others",
         "Appraisal → coping_potential, certainty"
       ],
-      "game_role": "最灵活但最贵——高AP消耗，长冷却。命名是核心机制(观察者效应)。占 Broca 通道"
+      "game_role": "最灵活但最贵——高AP消耗，长冷却。命名是核心机制(意识外显效应)。占 Broca 通道"
     },
     "L6": {
       "_deprecated": "⚠️ L6 层级已删除（2026-08-07 Grilling #25）。旧 L6 功能（DMN/FPN/SN 自我叙事、跨网络协调）已并入 L5 + L2 网络涌现属性。此条目保留为数据兼容占位。",
@@ -2348,7 +2348,7 @@
         "vmPFC→后扣带(意义重构)",
         "NAcc→隔区(奖赏缺失信号)"
       ],
-      "typical_game_scenario": "一路陪伴的NPC在战斗中牺牲。隔区(社会依恋)和ACC吻侧(社会排斥/痛苦)激活。海马体回放共同经历的记忆。月光中，失去之人的幻影可能出现——是真的灵魂还是观察者效应?玩家可通过L5叙事技能将丧失整合入自我叙事。"
+      "typical_game_scenario": "一路陪伴的NPC在战斗中牺牲。隔区(社会依恋)和ACC吻侧(社会排斥/痛苦)激活。海马体回放共同经历的记忆。月光中，失去之人的幻影可能出现——是真的灵魂还是意识外显效应?玩家可通过L5叙事技能将丧失整合入自我叙事。"
     },
     {
       "name": "sensory_deprivation",
