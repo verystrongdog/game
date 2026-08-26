@@ -1,7 +1,7 @@
 """
 sim_consciousness_v7_components.py — v7 分量分解 + 完整 CS′_local(C)（模拟实现批次 脚本 1/3）
 =============================================================================================
-研讨论文产物（纯学术，不入游戏正典）。Grilling #94（issue #94）D1-D5 定案落地。
+研讨论文产物（纯学术，不入游戏正典）。Grilling #94（issue #94）D1-D6 定案落地。
 
 验证 v7 定义（来源：参考/意识结构侧-下一阶段路线-v7.md）：
   §四 Reach R1（正概率、μ₀ 锚定、无界时域、含瞬态）
@@ -93,24 +93,22 @@ def make_f8_step():
 
 
 def make_f8p_step():
-    """F8′ 表征+因果使用+内部穿透（Grilling #94 D5）。
+    """F8′ 表征+因果使用+内部穿透（Grilling #94 D5 + D6 修正）。
 
     state = (y1,y2,m1,m2,z1,z2)，n=6；M={2,3}，A={0,1}，I={4,5}。
-    相对 F8 的唯一机制差：新增 z1′=m1、z2′=m2（强度 0.9）→ M→I；
-    z 不得反向影响 M/A（新增机制只能是 M→I，禁止 M→I→A）；F8 原有动力学零改动。
+    D6（闭合后修正，2026-08-27）：A 通道由 XOR 型改为**直接依赖型**
+    （ny1=m1 if 0.6——边际 do 检验可见），否则 RB_A 对 XOR 型 M→A 失效
+    （P(A|do(M=m)) 在另一输入均匀化后不随 m 变，实测 0.5 vs 0.5）。
+    新增 z1′=m1、z2′=m2（强度 0.9）→ M→I；z 不得反向影响 M/A
+    （新增机制只能是 M→I，禁止 M→I→A）。判定器零改动（脚本 2 不修改判定器）。
     """
     def step(state, rng):
         y1, y2, m1, m2, z1, z2 = state
         nm1 = y1 if rng.bernoulli(0.9) else rng.bernoulli(0.5)
         nm2 = y2 if rng.bernoulli(0.9) else rng.bernoulli(0.5)
-        if rng.bernoulli(0.6):
-            ny1 = y1 ^ m1
-        else:
-            ny1 = (y1 ^ y2) if rng.bernoulli(0.5) else rng.bernoulli(0.5)
-        if rng.bernoulli(0.6):
-            ny2 = y2 ^ m2
-        else:
-            ny2 = y1 if rng.bernoulli(0.5) else rng.bernoulli(0.5)
+        # D6：M→A 直接依赖（边际 do 可见）；F8 保留 XOR 作自然负例
+        ny1 = m1 if rng.bernoulli(0.6) else (y1 ^ y2) if rng.bernoulli(0.5) else rng.bernoulli(0.5)
+        ny2 = m2 if rng.bernoulli(0.6) else y1 if rng.bernoulli(0.5) else rng.bernoulli(0.5)
         nz1 = m1 if rng.bernoulli(0.9) else rng.bernoulli(0.5)   # M→I（D5）
         nz2 = m2 if rng.bernoulli(0.9) else rng.bernoulli(0.5)   # M→I（D5）
         return (ny1, ny2, nm1, nm2, nz1, nz2)
@@ -755,7 +753,7 @@ def evaluate(system):
 
 def main():
     print("=" * 78)
-    print("脚本 1/3：v7 分量分解 + 完整 CS′_local(C)（Grilling #94 D1-D5）")
+    print("脚本 1/3：v7 分量分解 + 完整 CS′_local(C)（Grilling #94 D1-D6）")
     print("CS′_local(C) = Int_local>0 ∧ Diff≥3bit ∧ SB_local ∧ SM_local(RB_I∧RB_A)")
     print("CS′(S) = ⋁ CS′_local(C)；Replication Invariance 用完整判据断言")
     print("=" * 78)
