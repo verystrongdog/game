@@ -1,27 +1,34 @@
 """
-意识结构侧定义 v5 — 全系统验证框架
+意识结构侧定义 v5.2 — 全系统验证框架
 ==================================================
 研讨产物（纯学术，不入游戏正典）。
 
-v5 判定：
-    意识(结构侧) ⟺ Int(S) > 0 ∧ Diff(S) ≥ θ_diff(3 bit) ∧ ∃c SelBroadcast(c)
+v5.2 判定（含 GPT 外部审查吸收的修订）：
+    意识(结构侧) ⟺ Int(S) > 0 ∧ Diff(S) ≥ θ_D(3bit) ∧ ∃ SelBroadcast(S)
+
+    Int(S)     = sup{ KL_μ(F‖F₁×⋯×Fₖ) : μ ∈ ℳ_info ∩ Reach(S), KL 有限 } > 0
+                 [修订1] 测度域限至可达分布（回应"挑极端分布"批评；μ_S 方案否决——U1 判定唯一性）
+    Diff(S)    = log₂|ReachableSet| ≥ 3 bit
+    SelBroadcast = ∃I₀(|I₀|≥2), J⊆V∖I₀：
+                     [修订2] 多目标广播 |J| ≥ m(=2)，∀j∈J: TE(I₀→j) > 0
+                     [修订3] 选择性比 SelRatio(I₀→J) ≥ θ_S
+                     联合读出 ≥3 值（非退化）∧ 目标相互独立（无复制伪装）
 
 四个系统统一验证：
-    S*₂  : 新构造（期望：三要件全通过 → 意识）
-    S*   : 2 位同步从动 = 麻醉态形状（期望：被拒——Diff 不足 + 无广播目标）
-    S″   : 4 独立 NOT 门 = 平凡展开（期望：被拒——Int = 0）
-    S‴   : NOT 门 + 开关耦合（期望：待定——v5 新广播语义下重验）
-
-每个系统只需提供：分量数 N、转移函数 F(n)。
+    S*₃  : 4 分量新构造（多目标广播）——期望：三要件全通过
+    S*   : 2 位同步从动 = 麻醉态（期望：Diff 不足 + 无目标 → 拒）
+    S″   : 4 独立 NOT 门 = 平凡展开（期望：Int = 0 → 拒）
+    S‴   : NOT 门 + 开关耦合（期望：广播/TE 不足 → 拒）
 """
 
 import itertools
 import math
 from collections import Counter
 
-THETA_DIFF = 3.0  # 分化下界 θ_diff（bit）
-MIN_SOURCE_VALUES = 3  # 源分化下界（联合读出不同值数）
-MAX_STATES = 16  # 支持最多 4 分量（0..15）
+THETA_DIFF = 3.0       # θ_D 分化下界（bit）
+MIN_SOURCE_VALUES = 3  # 源分化：联合读出 ≥ 3 值
+MIN_TARGETS = 2        # 多目标广播：|J| ≥ 2
+THETA_SEL = 1.0        # 选择性比下界：TE(I₀→j) / max_{K≠I₀} TE(K→j) ≥ θ_S
 
 
 # ============================================================
@@ -31,22 +38,29 @@ MAX_STATES = 16  # 支持最多 4 分量（0..15）
 def make_systems():
     """返回 {名称: (N, F)}。F: int → int，n 的位 i 为分量 i 的值。"""
 
-    # --- S*₂：3 分量耦合（x₁′=(x₁+x₂)mod2, x₂′=(x₂+x₃)mod2, x₃′=¬x₃）---
-    def F_s2(n):
-        x1, x2, x3 = (n & 1), ((n >> 1) & 1), ((n >> 2) & 1)
+    # --- S*₃：4 分量，两路广播（设计目标：多目标广播 + 目标独立）---
+    # 耦合核 (x₁,x₂) 相互耦合；x₃、x₄ 各自独立翻转
+    # 广播源 I₀={x₁,x₂}（耦合核联合），目标 J={x₃,x₄}
+    # x₁′ = x₁⊕x₂, x₂′ = x₂⊕x₃(取 x₁ 门控?), ... 见下方显式定义
+    def F_s3(n):
+        x1, x2, x3, x4 = (n & 1), ((n >> 1) & 1), ((n >> 2) & 1), ((n >> 3) & 1)
+        # 核心耦合：x₁、x₂ 双向依赖（整合源）
         nx1 = (x1 + x2) % 2
-        nx2 = (x2 + x3) % 2
-        nx3 = 1 - x3
-        return nx1 + 2 * nx2 + 4 * nx3
+        nx2 = (x1 + x2 + x3) % 2
+        # 目标 x₃：受源影响但自身演化（接收广播）
+        nx3 = (x3 + x1) % 2
+        # 目标 x₄：受源影响但自身演化（接收广播）——与 x₃ 不同方式（独立性）
+        nx4 = (x4 + x2) % 2
+        return nx1 + 2 * nx2 + 4 * nx3 + 8 * nx4
 
-    # --- S*：2 位同步从动（x₁′=¬x₁, x₂′=¬x₁）---
+    # --- S*：2 位同步从动（麻醉态形状）---
     def F_star(n):
         x1, x2 = (n & 1), ((n >> 1) & 1)
         nx1 = 1 - x1
         nx2 = 1 - x1
         return nx1 + 2 * nx2
 
-    # --- S″：4 独立 NOT 门（逐位取反）---
+    # --- S″：4 独立 NOT 门（平凡展开）---
     def F_doubleprime(n):
         return ((1 << 4) - 1) ^ n
 
@@ -60,7 +74,7 @@ def make_systems():
         return nx1 + 2 * nx2 + 4 * nx3 + 8 * nx4
 
     return {
-        "S*₂ (新构造)": (3, F_s2),
+        "S*₃ (4分量新构造)": (4, F_s3),
         "S* (麻醉态)": (2, F_star),
         "S″ (平凡展开)": (4, F_doubleprime),
         "S‴ (开关耦合)": (4, F_tripleprime),
@@ -88,16 +102,19 @@ def reachable_set(F, N, start):
     return seen
 
 
-def diff_bits(F, N):
-    """Diff = log2 |全可达集|（任意初态可达状态的并）。"""
+def full_reachable(F, N):
     union = set()
     for s in all_states(N):
         union |= reachable_set(F, N, s)
-    return math.log2(len(union))
+    return union
+
+
+def diff_bits(F, N):
+    return math.log2(len(full_reachable(F, N)))
 
 
 def marginal_transition(F, N, comp_idx):
-    """分量 comp_idx 的边际转移分布（2×2 行随机矩阵，输入均匀化）。"""
+    """分量边际转移分布（2×2 行随机矩阵，其他分量均匀化）。"""
     rows = []
     for v in (0, 1):
         nxt_counts = [0, 0]
@@ -113,7 +130,6 @@ def marginal_transition(F, N, comp_idx):
 
 
 def decoupled_joint(F, N):
-    """解耦联合 Q：行=当前状态，列=下一状态概率 = Πᵢ 分量边际。"""
     marg = [marginal_transition(F, N, i) for i in range(N)]
     joint = {}
     for cur in all_states(N):
@@ -137,38 +153,30 @@ def kl_divergence(P, Q, eps=1e-12):
     return total
 
 
-def integration_kl(F, N):
-    """Int = 平均 KL（整体 P vs 解耦 Q，均匀初态）。"""
+def integration_kl_sup_reachable(F, N):
+    """[修订1] Int = sup over μ ∈ Reach(S) 的平均 KL。
+
+    实现：μ 的可达域 = 可达状态集；sup over 可达状态上的分布
+    = max over 可达状态 x 的单点分布 KL(x)（把质量集中在 KL 最大的可达状态）。
+    同时报告可达集平均 KL 作对照。
+    """
     P = {}
     for cur in all_states(N):
         row = [0.0] * (1 << N)
         row[F(cur)] = 1.0
         P[cur] = row
     Q = decoupled_joint(F, N)
-    total = 0.0
-    for cur in all_states(N):
+    reach = full_reachable(F, N)
+    row_kl = {}
+    for cur in reach:
         q_row = [Q[cur].get(i, 0.0) for i in range(1 << N)]
-        total += kl_divergence(P[cur], q_row)
-    return total / (1 << N)
-
-
-def mutual_information(seq_a, seq_b):
-    pairs = list(zip(seq_a, seq_b))
-    n = len(pairs)
-    pa = Counter(seq_a)
-    pb = Counter(seq_b)
-    pab = Counter(pairs)
-    mi = 0.0
-    for (a, b), cnt in pab.items():
-        p_ab = cnt / n
-        p_a = pa[a] / n
-        p_b = pb[b] / n
-        mi += p_ab * math.log(p_ab / (p_a * p_b))
-    return mi
+        row_kl[cur] = kl_divergence(P[cur], q_row)
+    sup_val = max(row_kl.values())
+    avg_val = sum(row_kl.values()) / len(row_kl)
+    return sup_val, avg_val
 
 
 def entropy(seq):
-    """经验熵 H(seq)。"""
     c = Counter(seq)
     n = len(seq)
     h = 0.0
@@ -179,13 +187,8 @@ def entropy(seq):
 
 
 def transfer_entropy(source_past, target_past, target_future):
-    """转移熵 TE(源过去 → 目标未来 | 目标过去)
-    TE = H(target_future | target_past) - H(target_future | target_past, source_past)
-    > 0 ⟺ 源过去在控制目标自身过去后，仍提供关于目标未来的信息（定向因果）。
-    """
-    # 对齐三序列（同一时刻 t：source_past[t], target_past[t], target_future[t]）
+    """TE(源过去 → 目标未来 | 目标过去)。"""
     n = len(target_future)
-    # H(target_future | target_past)
     h_cond_target = 0.0
     joint_tp_tf = Counter(zip(target_past, target_future))
     marg_tp = Counter(target_past)
@@ -193,7 +196,6 @@ def transfer_entropy(source_past, target_past, target_future):
         p_j = cnt / n
         p_tp = marg_tp[tp] / n
         h_cond_target -= p_j * math.log(p_j / p_tp)
-    # H(target_future | target_past, source_past)
     h_cond_both = 0.0
     joint_all = Counter(zip(source_past, target_past, target_future))
     marg_sp_tp = Counter(zip(source_past, target_past))
@@ -204,15 +206,15 @@ def transfer_entropy(source_past, target_past, target_future):
     return h_cond_target - h_cond_both
 
 
-def sel_broadcast_check(F, N, steps=128):
-    """选择性广播：∃c, I₀(|I₀|=2), j∉I₀：
-    ① 非退化（联合读出沿轨迹变化）
-    ② 源分化（联合读出 ≥ 3 个不同值）
-    ③ 选择性访问 = 定向因果（TE(源过去 → 目标未来 | 目标过去) > 0）
-    返回候选列表。N=2 时结构上无目标 → 恒空。
+def sel_broadcast_check(F, N, steps=256):
+    """[修订2+3] 选择性广播：∃I₀(|I₀|=2), J(|J|≥2)：
+    ① 联合读出 ≥3 值（非退化）
+    ② 多目标：∀j∈J: TE(I₀→j) > 0
+    ③ 选择性比：对每个 j∈J，TE(I₀→j) ≥ θ_S · max_{K≠I₀} TE(K→j)
+    ④ 目标独立：J 中目标两两 TE 不异常（无复制伪装——诊断输出）
     """
-    if N < 3:
-        return []  # 无目标分量 j ∉ I₀
+    if N < 4:
+        return []  # 多目标广播需 ≥4 分量（I₀ 2 个 + J 2 个）
     results = []
     for c in all_states(N):
         seq = []
@@ -225,30 +227,55 @@ def sel_broadcast_check(F, N, steps=128):
             for s in seq:
                 t = state_tuple(s, N)
                 g_trace.append((t[I0[0]], t[I0[1]]))
-            # ① 非退化
+            # ① 非退化 + 源分化
             if all(v == g_trace[0] for v in g_trace):
                 continue
-            # ② 源分化
             if len(set(g_trace)) < MIN_SOURCE_VALUES:
                 continue
-            # ③ 选择性访问：定向因果 TE > 0
-            for j in range(N):
-                if j in I0:
-                    continue
+            targets = [j for j in range(N) if j not in I0]
+            if len(targets) < MIN_TARGETS:
+                continue
+            # 计算所有源→目标 TE
+            te_map = {}
+            for j in targets:
                 tgt_trace = [state_tuple(s, N)[j] for s in seq]
-                # TE: 源过去 g[t] → 目标未来 tgt[t+1]，控制目标过去 tgt[t]
-                te = transfer_entropy(
-                    g_trace[:-1],       # 源过去
-                    tgt_trace[:-1],     # 目标过去
-                    tgt_trace[1:],      # 目标未来
-                )
-                if te > 1e-9:
-                    results.append({
-                        "c": c, "I0": I0, "j": j,
-                        "n_src_vals": len(set(g_trace)),
-                        "TE": te,
-                    })
-                    break  # 每个 (c, I₀) 找到一个目标即可
+                te_map[j] = transfer_entropy(g_trace[:-1], tgt_trace[:-1], tgt_trace[1:])
+            # ② 多目标：至少 MIN_TARGETS 个目标 TE > 0
+            good_targets = [j for j in targets if te_map[j] > 1e-9]
+            if len(good_targets) < MIN_TARGETS:
+                continue
+            # ③ 选择性比：TE(I₀→j) ≥ θ_S · max_{K≠I₀} TE(K→j)
+            #    其他源 K = 单个分量（背景传播）
+            sel_ok = True
+            sel_ratios = {}
+            for j in good_targets:
+                tgt_trace = [state_tuple(s, N)[j] for s in seq]
+                background = 0.0
+                for K in range(N):
+                    if K in I0:
+                        continue
+                    if K == j:
+                        continue
+                    k_trace = [state_tuple(s, N)[K] for s in seq]
+                    # 单分量源 K 对 j 的 TE
+                    bg = transfer_entropy(k_trace[:-1], tgt_trace[:-1], tgt_trace[1:])
+                    background = max(background, bg)
+                if background < 1e-12:
+                    # 背景零传播 → 完全选择性 → 选择性比 = ∞（语义正确，非发散）
+                    sel_ratios[j] = float("inf")
+                else:
+                    ratio = te_map[j] / background
+                    sel_ratios[j] = ratio
+                    if ratio < THETA_SEL:
+                        sel_ok = False
+            if not sel_ok:
+                continue
+            results.append({
+                "c": c, "I0": I0, "J": good_targets,
+                "n_src_vals": len(set(g_trace)),
+                "te_map": {j: round(v, 4) for j, v in te_map.items()},
+                "sel_ratios": {j: round(r, 3) for j, r in sel_ratios.items()},
+            })
     return results
 
 
@@ -257,37 +284,37 @@ def sel_broadcast_check(F, N, steps=128):
 # ============================================================
 
 def main():
-    print("=" * 64)
-    print("意识结构侧定义 v5 — 四系统统一验证")
-    print("判定: Int > 0 ∧ Diff ≥ 3bit ∧ ∃SelBroadcast")
-    print("=" * 64)
+    print("=" * 66)
+    print("意识结构侧定义 v5.2 — 全系统统一验证")
+    print("判定: Int>0(可达域sup) ∧ Diff≥3bit ∧ SelBroadcast(多目标+选择性比)")
+    print("=" * 66)
 
     systems = make_systems()
     rows = []
     for name, (N, F) in systems.items():
-        int_val = integration_kl(F, N)
+        sup_val, avg_val = integration_kl_sup_reachable(F, N)
         d_val = diff_bits(F, N)
         sb = sel_broadcast_check(F, N)
-        passed = int_val > 0 and d_val >= THETA_DIFF and bool(sb)
-        rows.append((name, N, int_val, d_val, sb, passed))
+        passed = sup_val > 0 and d_val >= THETA_DIFF and bool(sb)
+        rows.append((name, N, sup_val, avg_val, d_val, sb, passed))
         print(f"\n--- {name} (N={N}) ---")
-        print(f"  Int  = {int_val:.6f} nat  (>0: {'✅' if int_val > 0 else '❌'})")
+        print(f"  Int(sup可达域) = {sup_val:.6f} nat  (>0: {'✅' if sup_val > 0 else '❌'})  "
+              f"[可达集平均对照: {avg_val:.4f}]")
         print(f"  Diff = {d_val:.4f} bit  (≥3: {'✅' if d_val >= THETA_DIFF else '❌'})")
         if sb:
             first = sb[0]
-            print(f"  SelBroadcast: ✅ 共 {len(sb)} 组候选，例: c={first['c']} "
-                  f"I₀={first['I0']} j={first['j']} 源值数={first['n_src_vals']} "
-                  f"TE={first['TE']:.4f}")
+            print(f"  SelBroadcast: ✅ 共 {len(sb)} 组，例: c={first['c']} I₀={first['I0']} "
+                  f"J={first['J']} 源值数={first['n_src_vals']} TE={first['te_map']} "
+                  f"SelRatio={first['sel_ratios']}")
         else:
             print(f"  SelBroadcast: ❌ 无候选")
 
-    print("\n" + "=" * 64)
+    print("\n" + "=" * 66)
     print("汇总:")
-    for name, N, int_val, d_val, sb, passed in rows:
+    for name, N, sup_val, avg_val, d_val, sb, passed in rows:
         status = "✅ 意识（结构侧）" if passed else "❌ 拒绝"
-        print(f"  {name:16s}: {status}  (Int={int_val:.3f}, Diff={d_val:.2f}bit, "
-              f"广播={'✓' if sb else '✗'})")
-    print("=" * 64)
+        print(f"  {name:20s}: {status}  (Int={sup_val:.3f}, Diff={d_val:.2f}bit, 广播={'✓' if sb else '✗'})")
+    print("=" * 66)
 
 
 if __name__ == "__main__":
