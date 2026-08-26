@@ -1,13 +1,21 @@
 """
-意识结构侧定义 v5.2 — 全系统验证框架
+意识候选结构定义 v5.3 — 全系统验证框架
 ==================================================
 研讨产物（纯学术，不入游戏正典）。
 
-v5.2 判定（含 GPT 外部审查吸收的修订）：
-    意识(结构侧) ⟺ Int(S) > 0 ∧ Diff(S) ≥ θ_D(3bit) ∧ ∃ SelBroadcast(S)
+定位声明（v5.3 修订，接受外部攻击后收束）：
+    本定义判定的是「意识候选结构」（宽泛类），不是「意识」。
+    C_candidate(S) 是意识结构的充分条件（必要条件未知）。
+    收窄由桥接公设承担（体验侧，F4，数学外）。
 
-    Int(S)     = sup{ KL_μ(F‖F₁×⋯×Fₖ) : μ ∈ ℳ_info ∩ Reach(S), KL 有限 } > 0
-                 [修订1] 测度域限至可达分布（回应"挑极端分布"批评；μ_S 方案否决——U1 判定唯一性）
+v5.3 判定：
+    C_candidate(S) ⟺ Int(S) > 0 ∧ Diff(S) ≥ θ_D(3bit) ∧ ∃ SelBroadcast(S)
+    覆盖度声明：I₀∪J 与系统其余部分的关系为声明项（诊断输出），
+                不进入判定——接受"局部模块即可判定候选"的宽泛性。
+
+    Int(S)     = sup{ KL_μ(F‖F₁×⋯×Fₖ) : supp(μ) ⊆ Reach(S), μ ∈ ℳ_info, KL 有限 } > 0
+                 [修订1] 类型修正：μ 是测度，supp(μ) ⊆ Reach(S)（非 μ ∈ Reach(S)）
+                 μ_S 方案否决——U1 判定唯一性（运行条件成新自由度）
     Diff(S)    = log₂|ReachableSet| ≥ 3 bit
     SelBroadcast = ∃I₀(|I₀|≥2), J⊆V∖I₀：
                      [修订2] 多目标广播 |J| ≥ m(=2)，∀j∈J: TE(I₀→j) > 0
@@ -285,8 +293,9 @@ def sel_broadcast_check(F, N, steps=256):
 
 def main():
     print("=" * 66)
-    print("意识结构侧定义 v5.2 — 全系统统一验证")
-    print("判定: Int>0(可达域sup) ∧ Diff≥3bit ∧ SelBroadcast(多目标+选择性比)")
+    print("意识候选结构定义 v5.3 — 全系统统一验证")
+    print("判定: Int>0(supp⊆Reach,sup) ∧ Diff≥3bit ∧ SelBroadcast(多目标+选择性比)")
+    print("定位: C_candidate（候选结构充分条件）——收窄由桥接公设承担")
     print("=" * 66)
 
     systems = make_systems()
@@ -312,7 +321,7 @@ def main():
     print("\n" + "=" * 66)
     print("汇总:")
     for name, N, sup_val, avg_val, d_val, sb, passed in rows:
-        status = "✅ 意识（结构侧）" if passed else "❌ 拒绝"
+        status = "✅ 候选" if passed else "❌ 拒绝"
         print(f"  {name:20s}: {status}  (Int={sup_val:.3f}, Diff={d_val:.2f}bit, 广播={'✓' if sb else '✗'})")
     print("=" * 66)
 
