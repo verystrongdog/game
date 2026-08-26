@@ -1,6 +1,8 @@
 # 意识结构侧 — Layer 0-2 研讨定稿（v6.0）
 
 > 纯学术研讨产物——**不进游戏设计正典**。结论：结构侧可定义到「复杂自适应自我建模信息处理结构」（四要件合取），但无法推出第一人称主体性——那是 Layer 3 的桥接问题（F4，公设层）。哥德尔定理在本研讨中**不构成**"主体性不可数学化"的证明。
+>
+> **下一阶段（检验框架）见 [意识结构侧-下一阶段路线-v7.md](意识结构侧-下一阶段路线-v7.md)**（Grilling #93：分量级判定/Replication Invariance/跨系统 benchmark/SM 重建/L4 收束/L5 边界）。本文件仍是 Layer 0-2 定义基准。
 
 ## 目录
 
@@ -88,13 +90,13 @@ C_struct ≢ C_phenomenal            —— 未证明相等
 
 | # | 问题 | 等级 |
 |---|---|---|
-| 1 | **Diff 复制膨胀**：S⊕S 使 Diff 2.70→5.33（CS′ 0→1）——纯粹复制无互连模块"获得"通过 | ❌ 已知缺陷 |
-| 2 | **F1/F9 边界反例**：四要件仍覆盖复杂自适应控制系统（计数控制器、状态估计+反馈）| ⚠️ 已知边界 |
-| 3 | SM 判据过宽（F1 的"输出反馈"与"自我表征"未区分）| ⚠️ 开放 |
-| 4 | θ_I/θ_D/θ_S/θ_M 无独立校准依据（操作阈值）| ⚠️ 开放 |
-| 5 | TE ≠ 因果（共同原因条件化已做，干预验证未做）| ⚠️ 开放 |
-| 6 | Layer 3 桥接 H: CS' → Phenomenal 完全未知 | ❌ 未解 |
-| 7 | 哥德尔与主体性的关系：不构成定理（D8 类比仍成立）| ✅ 已澄清 |
+| 1 | **Diff 复制膨胀**：S⊕S 使 Diff 2.70→5.33（CS′ 0→1）——纯粹复制无互连模块"获得"通过 | ✅ 已解决（→ 见 v7 §二/§五：分量级 OR 判定 + Diff(C) 轨迹熵）|
+| 2 | **F1/F9 边界反例**：四要件仍覆盖复杂自适应控制系统（计数控制器、状态估计+反馈）| 🔄 已重构待实测（→ 见 v7 §六：R-B 内部因果穿透判别三角）|
+| 3 | SM 判据过宽（F1 的"输出反馈"与"自我表征"未区分）| 🔄 已重构待实测（→ 见 v7 §六）|
+| 4 | θ_I/θ_D/θ_S/θ_M 无独立校准依据（操作阈值）| ⚠️ 开放（阈值进统计层，→ 见 v7 §五/§七）|
+| 5 | TE ≠ 因果（共同原因条件化已做，干预验证未做）| ✅ 已重构（→ 见 v7 §三 D 条款 + §七 H1：降为观测估计器，estimator-validity 可测试）|
+| 6 | Layer 3 桥接 H: CS' → Phenomenal 完全未知 | ✅ 已定位（→ 见 v7 §八：L4 收束声明）|
+| 7 | 哥德尔与主体性的关系：不构成定理（D8 类比仍成立）| ✅ 已澄清（→ 见 v7 §九：L5 边界声明）|
 
 ## 诚实结论
 
@@ -118,5 +120,5 @@ C_struct ≢ C_phenomenal            —— 未证明相等
 10. **收束** → Layer 0-2 定稿 + Layer 3 桥接声明
 
 ---
-*创建: 2026-08-26 | 更新: 2026-08-26 (Layer 2 收尾)*
-*关联: [sim_consciousness_int_test.py](../sim_consciousness_int_test.py), [sim_consciousness_diff_test.py](../sim_consciousness_diff_test.py), [sim_consciousness_broadcast_test.py](../sim_consciousness_broadcast_test.py), [sim_consciousness_sm_test.py](../sim_consciousness_sm_test.py), [sim_consciousness_cs_attack.py](../sim_consciousness_cs_attack.py), [sim_consciousness_cs4_test.py](../sim_consciousness_cs4_test.py)*
+*创建: 2026-08-26 | 更新: 2026-08-27 (开放问题对照 → 见 v7)*
+*关联: [意识结构侧-下一阶段路线-v7.md](意识结构侧-下一阶段路线-v7.md), [sim_consciousness_int_test.py](../sim_consciousness_int_test.py), [sim_consciousness_diff_test.py](../sim_consciousness_diff_test.py), [sim_consciousness_broadcast_test.py](../sim_consciousness_broadcast_test.py), [sim_consciousness_sm_test.py](../sim_consciousness_sm_test.py), [sim_consciousness_cs_attack.py](../sim_consciousness_cs_attack.py), [sim_consciousness_cs4_test.py](../sim_consciousness_cs4_test.py)*
