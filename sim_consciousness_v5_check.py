@@ -1,61 +1,85 @@
 """
-意识结构侧定义 v5 — 非平凡性构造 S*₂ 验证
+意识结构侧定义 v5 — 全系统验证框架
 ==================================================
 研讨产物（纯学术，不入游戏正典）。
 
 v5 判定：
     意识(结构侧) ⟺ Int(S) > 0 ∧ Diff(S) ≥ θ_diff(3 bit) ∧ ∃c SelBroadcast(c)
 
-待验证构造 S*₂：X = {0,1}³，3 分量，转移：
-    x₁′ = (x₁ + x₂) mod 2
-    x₂′ = (x₂ + x₃) mod 2
-    x₃′ = ¬x₃
+四个系统统一验证：
+    S*₂  : 新构造（期望：三要件全通过 → 意识）
+    S*   : 2 位同步从动 = 麻醉态形状（期望：被拒——Diff 不足 + 无广播目标）
+    S″   : 4 独立 NOT 门 = 平凡展开（期望：被拒——Int = 0）
+    S‴   : NOT 门 + 开关耦合（期望：待定——v5 新广播语义下重验）
 
-验证项：
-    [1] Int > 0          —— 整体动力学 vs 解耦动力学 F₁×F₂×F₃ 的 KL 偏差（逐行）
-    [2] Diff ≥ 3 bit     —— 可达状态集基数 ≥ 8（log2 |reachable| ≥ 3）
-    [3] SelBroadcast     —— ∃c,g,i₀：
-                              ① 非退化（读出沿轨迹变化）
-                              ② 源分化（源分量读出 ≥ 3 个不同值）
-                              ③ 选择性访问（存在目标 j≠i₀ 读出与源一致，且非全分量）
-                              ④ 非平凡（i₀ 存在，g 非常数）
+每个系统只需提供：分量数 N、转移函数 F(n)。
 """
 
 import itertools
 import math
+from collections import Counter
+
+THETA_DIFF = 3.0  # 分化下界 θ_diff（bit）
+MIN_SOURCE_VALUES = 3  # 源分化下界（联合读出不同值数）
+MAX_STATES = 16  # 支持最多 4 分量（0..15）
+
 
 # ============================================================
 # §1 系统定义
 # ============================================================
 
-N_COMP = 3  # 分量数
+def make_systems():
+    """返回 {名称: (N, F)}。F: int → int，n 的位 i 为分量 i 的值。"""
 
+    # --- S*₂：3 分量耦合（x₁′=(x₁+x₂)mod2, x₂′=(x₂+x₃)mod2, x₃′=¬x₃）---
+    def F_s2(n):
+        x1, x2, x3 = (n & 1), ((n >> 1) & 1), ((n >> 2) & 1)
+        nx1 = (x1 + x2) % 2
+        nx2 = (x2 + x3) % 2
+        nx3 = 1 - x3
+        return nx1 + 2 * nx2 + 4 * nx3
 
-def state_tuple(n):
-    """整数 n (0..7) → 分量元组 (x1, x2, x3)。位 0 = x1。"""
-    return tuple((n >> i) & 1 for i in range(N_COMP))
+    # --- S*：2 位同步从动（x₁′=¬x₁, x₂′=¬x₁）---
+    def F_star(n):
+        x1, x2 = (n & 1), ((n >> 1) & 1)
+        nx1 = 1 - x1
+        nx2 = 1 - x1
+        return nx1 + 2 * nx2
 
+    # --- S″：4 独立 NOT 门（逐位取反）---
+    def F_doubleprime(n):
+        return ((1 << 4) - 1) ^ n
 
-def state_index(t):
-    """分量元组 → 整数。"""
-    return sum(t[i] << i for i in range(N_COMP))
+    # --- S‴：x₁′=¬x₁, x₂′=¬x₂, x₃′=¬x₃ 若 x₁=0 否则 x₃, x₄′=¬x₄ ---
+    def F_tripleprime(n):
+        x1, x2, x3, x4 = (n & 1), ((n >> 1) & 1), ((n >> 2) & 1), ((n >> 3) & 1)
+        nx1 = 1 - x1
+        nx2 = 1 - x2
+        nx3 = (1 - x3) if x1 == 0 else x3
+        nx4 = 1 - x4
+        return nx1 + 2 * nx2 + 4 * nx3 + 8 * nx4
 
-
-def F(n):
-    """S*₂ 转移函数。返回下一状态整数。"""
-    x1, x2, x3 = state_tuple(n)
-    nx1 = (x1 + x2) % 2
-    nx2 = (x2 + x3) % 2
-    nx3 = 1 - x3
-    return state_index((nx1, nx2, nx3))
+    return {
+        "S*₂ (新构造)": (3, F_s2),
+        "S* (麻醉态)": (2, F_star),
+        "S″ (平凡展开)": (4, F_doubleprime),
+        "S‴ (开关耦合)": (4, F_tripleprime),
+    }
 
 
 # ============================================================
-# §2 可达状态与分化 Diff
+# §2 通用组件
 # ============================================================
 
-def reachable_set(start=0):
-    """从初态 start 出发，沿 F 遍历全部可达状态。"""
+def state_tuple(n, N):
+    return tuple((n >> i) & 1 for i in range(N))
+
+
+def all_states(N):
+    return list(range(1 << N))
+
+
+def reachable_set(F, N, start):
     seen = set()
     cur = start
     while cur not in seen:
@@ -64,63 +88,41 @@ def reachable_set(start=0):
     return seen
 
 
-def all_reachable():
-    """全状态空间上的可达集（任意初态可达状态的并）。"""
+def diff_bits(F, N):
+    """Diff = log2 |全可达集|（任意初态可达状态的并）。"""
     union = set()
-    for s in range(8):
-        union |= reachable_set(s)
-    return union
+    for s in all_states(N):
+        union |= reachable_set(F, N, s)
+    return math.log2(len(union))
 
 
-def diff_bits(reachable):
-    """Diff(S) = log2 |可达集|（bit）。"""
-    return math.log2(len(reachable))
-
-
-# ============================================================
-# §3 整合 Int（KL 散度：整体 vs 解耦）
-# ============================================================
-
-def marginal_transition(comp_idx):
-    """分量 comp_idx 的边际转移分布（行随机矩阵 2×2，行=当前值，列=下一值）。
-
-    计算方式：固定当前分量值，对所有其他分量均匀化，统计下一分量值的分布。
-    均匀化 = 在输入上取均匀先验（本系统无外部输入，A 空）。
-    """
-    # 对每个当前分量值 v ∈ {0,1}，收集所有 (其他分量状态) 下的转移结果
+def marginal_transition(F, N, comp_idx):
+    """分量 comp_idx 的边际转移分布（2×2 行随机矩阵，输入均匀化）。"""
     rows = []
     for v in (0, 1):
         nxt_counts = [0, 0]
-        total = 0
-        for others in itertools.product((0, 1), repeat=N_COMP - 1):
-            # 组装完整状态
+        for others in itertools.product((0, 1), repeat=N - 1):
             comps = list(others)
             comps.insert(comp_idx, v)
-            n = state_index(tuple(comps))
-            nxt = state_tuple(F(n))[comp_idx]
+            n = sum(comps[i] << i for i in range(N))
+            nxt = state_tuple(F(n), N)[comp_idx]
             nxt_counts[nxt] += 1
-            total += 1
+        total = sum(nxt_counts)
         rows.append([c / total for c in nxt_counts])
     return rows
 
 
-def decoupled_joint(row_src, row_tgt):
-    """解耦联合分布 P(x→·) = F₁(x₁→·) ⊗ F₂(x₂→·) ⊗ F₃(x₃→·)。
-
-    返回 8×8 矩阵，行 = 当前状态，列 = 下一状态（概率）。
-    注意：这里仅对 (x₁, x₂) 两个分量做解耦验证（x₃ 独立翻转本就是解耦的）。
-    更一般地：解耦联合 = 各分量边际转移的乘积。
-    """
-    marg = [marginal_transition(i) for i in range(N_COMP)]
+def decoupled_joint(F, N):
+    """解耦联合 Q：行=当前状态，列=下一状态概率 = Πᵢ 分量边际。"""
+    marg = [marginal_transition(F, N, i) for i in range(N)]
     joint = {}
-    for cur in range(8):
-        c = state_tuple(cur)
-        # P(next | cur) = Πᵢ marg[i][c[i]][next[i]]
+    for cur in all_states(N):
+        c = state_tuple(cur, N)
         row = {}
-        for nxt in range(8):
-            t = state_tuple(nxt)
+        for nxt in all_states(N):
+            t = state_tuple(nxt, N)
             p = 1.0
-            for i in range(N_COMP):
+            for i in range(N):
                 p *= marg[i][c[i]][t[i]]
             row[nxt] = p
         joint[cur] = row
@@ -128,7 +130,6 @@ def decoupled_joint(row_src, row_tgt):
 
 
 def kl_divergence(P, Q, eps=1e-12):
-    """KL(P‖Q)，行概率向量。仅对 P>0 处求和。"""
     total = 0.0
     for p, q in zip(P, Q):
         if p > 0:
@@ -136,84 +137,24 @@ def kl_divergence(P, Q, eps=1e-12):
     return total
 
 
-def integration_kl():
-    """Int = 平均 KL（整体动力学 P 与解耦联合 Q 的逐行 KL，按均匀初态平均）。"""
+def integration_kl(F, N):
+    """Int = 平均 KL（整体 P vs 解耦 Q，均匀初态）。"""
     P = {}
-    for cur in range(8):
-        nxt = F(cur)
-        row = [0.0] * 8
-        row[nxt] = 1.0
+    for cur in all_states(N):
+        row = [0.0] * (1 << N)
+        row[F(cur)] = 1.0
         P[cur] = row
-    Q = decoupled_joint(None, None)
+    Q = decoupled_joint(F, N)
     total = 0.0
-    for cur in range(8):
-        total += kl_divergence(P[cur], Q[cur])
-    return total / 8.0
-
-
-# ============================================================
-# §4 选择性广播 SelBroadcast
-# ============================================================
-
-def trajectory(start, steps=16):
-    """从 start 出发的轨迹（状态序列）。"""
-    seq = []
-    cur = start
-    for _ in range(steps):
-        seq.append(cur)
-        cur = F(cur)
-    return seq
-
-
-def comp_trace(seq, comp_idx):
-    """分量 comp_idx 的读出轨迹（值序列）。"""
-    return [state_tuple(s)[comp_idx] for s in seq]
-
-
-def sel_broadcast_check(steps=32, min_source_values=3):
-    """逐状态 c、逐源集合 I₀（|I₀|=2 联合读出）、逐目标 j∉I₀ 检查 ①②③④。
-
-    v5.1 修订（修复"二值分量无 ≥3 值"矛盾）：
-      - 源 = 多分量联合读出 g(x) = (xᵢ : i ∈ I₀)，|I₀| ≥ 2（特征绑定）
-      - ② 源分化：g 沿轨迹 ≥ 3 个不同联合值
-      - ③ 选择性访问：目标 j ∉ I₀ 与 g 的互信息 > 0（内容被目标"使用"，不必复制）
-    """
-    results = []
-    for c in range(8):
-        seq = trajectory(c, steps)
-        for I0 in itertools.combinations(range(N_COMP), 2):
-            # 联合读出 g(x) = (x_i, x_i')
-            g_trace = []
-            for s in seq:
-                t = state_tuple(s)
-                g_trace.append((t[I0[0]], t[I0[1]]))
-            # ② 源分化：≥ 3 个不同联合值
-            n_src_vals = len(set(g_trace))
-            if n_src_vals < min_source_values:
-                continue
-            # ① 非退化：g 沿轨迹变化
-            if all(v == g_trace[0] for v in g_trace):
-                continue
-            # ③ 选择性访问：存在目标 j ∉ I₀ 与 g 互信息 > 0
-            for j in range(N_COMP):
-                if j in I0:
-                    continue
-                tgt_trace = [state_tuple(s)[j] for s in seq]
-                if mutual_information(g_trace, tgt_trace) > 1e-9:
-                    results.append({
-                        "c": c, "I0": I0, "j": j,
-                        "n_src_vals": n_src_vals,
-                        "g_trace": g_trace[:8],
-                        "tgt_trace": tgt_trace[:8],
-                    })
-    return results
+    for cur in all_states(N):
+        q_row = [Q[cur].get(i, 0.0) for i in range(1 << N)]
+        total += kl_divergence(P[cur], q_row)
+    return total / (1 << N)
 
 
 def mutual_information(seq_a, seq_b):
-    """互信息 I(A;B)，序列经验分布。"""
     pairs = list(zip(seq_a, seq_b))
     n = len(pairs)
-    from collections import Counter
     pa = Counter(seq_a)
     pb = Counter(seq_b)
     pab = Counter(pairs)
@@ -226,131 +167,127 @@ def mutual_information(seq_a, seq_b):
     return mi
 
 
-# ============================================================
-# §5 对照验证：S*（2 位同步从动 = 麻醉态形状）
-#    X = {0,1}², F: 00→11, 01→11, 10→00, 11→00
-#    预期：Int > 0（整合强）但 Diff 低 + 无选择性广播 → v5 拒绝
-# ============================================================
-
-def F_star(n):
-    """S* 转移：00→11, 01→11, 10→00, 11→00（n = x1 + 2*x2）。"""
-    x1 = n & 1
-    x2 = (n >> 1) & 1
-    nx1 = 1 - x1
-    nx2 = 1 - x1  # x2 完全由 x1 决定（从动）
-    return nx1 + 2 * nx2
+def entropy(seq):
+    """经验熵 H(seq)。"""
+    c = Counter(seq)
+    n = len(seq)
+    h = 0.0
+    for cnt in c.values():
+        p = cnt / n
+        h -= p * math.log(p)
+    return h
 
 
-def integration_kl_star():
-    """S* 的 Int：整体 vs 解耦 KL。"""
-    # 整体 P：确定性
-    P = {}
-    for cur in range(4):
-        nxt = F_star(cur)
-        row = [0.0] * 4
-        row[nxt] = 1.0
-        P[cur] = row
-    # 解耦 Q：x1 自翻转（确定性），x2 边际均匀化
-    Q = {}
-    for cur in range(4):
-        x1 = cur & 1
-        x2 = (cur >> 1) & 1
-        row = [0.0] * 4
-        for nx2 in (0, 1):
-            nxt = (1 - x1) + 2 * nx2
-            row[nxt] = 0.5
-        Q[cur] = row
-    total = 0.0
-    for cur in range(4):
-        total += kl_divergence(P[cur], Q[cur])
-    return total / 4.0
-
-
-def diff_bits_star():
-    """S* 的 Diff：可达集大小。"""
-    ra = set()
-    for s in range(4):
-        seen = set()
-        cur = s
-        while cur not in seen:
-            seen.add(cur)
-            cur = F_star(cur)
-        ra |= seen
-    return math.log2(len(ra))
-
-
-def sel_broadcast_check_star(steps=32, min_source_values=3):
-    """S* 的选择性广播检查（2 分量）。
-
-    结构事实：S* 只有 2 个分量——源集合 I₀ 只能是全分量 {0,1}，
-    因此不存在目标 j ∉ I₀——选择性访问 ③ 在结构上不可能满足。
-    返回恒为空列表（S* 永远无广播候选）。
+def transfer_entropy(source_past, target_past, target_future):
+    """转移熵 TE(源过去 → 目标未来 | 目标过去)
+    TE = H(target_future | target_past) - H(target_future | target_past, source_past)
+    > 0 ⟺ 源过去在控制目标自身过去后，仍提供关于目标未来的信息（定向因果）。
     """
-    return []
+    # 对齐三序列（同一时刻 t：source_past[t], target_past[t], target_future[t]）
+    n = len(target_future)
+    # H(target_future | target_past)
+    h_cond_target = 0.0
+    joint_tp_tf = Counter(zip(target_past, target_future))
+    marg_tp = Counter(target_past)
+    for (tp, tf), cnt in joint_tp_tf.items():
+        p_j = cnt / n
+        p_tp = marg_tp[tp] / n
+        h_cond_target -= p_j * math.log(p_j / p_tp)
+    # H(target_future | target_past, source_past)
+    h_cond_both = 0.0
+    joint_all = Counter(zip(source_past, target_past, target_future))
+    marg_sp_tp = Counter(zip(source_past, target_past))
+    for (sp, tp, tf), cnt in joint_all.items():
+        p_j = cnt / n
+        p_m = marg_sp_tp[(sp, tp)] / n
+        h_cond_both -= p_j * math.log(p_j / p_m)
+    return h_cond_target - h_cond_both
+
+
+def sel_broadcast_check(F, N, steps=128):
+    """选择性广播：∃c, I₀(|I₀|=2), j∉I₀：
+    ① 非退化（联合读出沿轨迹变化）
+    ② 源分化（联合读出 ≥ 3 个不同值）
+    ③ 选择性访问 = 定向因果（TE(源过去 → 目标未来 | 目标过去) > 0）
+    返回候选列表。N=2 时结构上无目标 → 恒空。
+    """
+    if N < 3:
+        return []  # 无目标分量 j ∉ I₀
+    results = []
+    for c in all_states(N):
+        seq = []
+        cur = c
+        for _ in range(steps):
+            seq.append(cur)
+            cur = F(cur)
+        for I0 in itertools.combinations(range(N), 2):
+            g_trace = []
+            for s in seq:
+                t = state_tuple(s, N)
+                g_trace.append((t[I0[0]], t[I0[1]]))
+            # ① 非退化
+            if all(v == g_trace[0] for v in g_trace):
+                continue
+            # ② 源分化
+            if len(set(g_trace)) < MIN_SOURCE_VALUES:
+                continue
+            # ③ 选择性访问：定向因果 TE > 0
+            for j in range(N):
+                if j in I0:
+                    continue
+                tgt_trace = [state_tuple(s, N)[j] for s in seq]
+                # TE: 源过去 g[t] → 目标未来 tgt[t+1]，控制目标过去 tgt[t]
+                te = transfer_entropy(
+                    g_trace[:-1],       # 源过去
+                    tgt_trace[:-1],     # 目标过去
+                    tgt_trace[1:],      # 目标未来
+                )
+                if te > 1e-9:
+                    results.append({
+                        "c": c, "I0": I0, "j": j,
+                        "n_src_vals": len(set(g_trace)),
+                        "TE": te,
+                    })
+                    break  # 每个 (c, I₀) 找到一个目标即可
+    return results
 
 
 # ============================================================
-# §6 主流程
+# §3 主流程
 # ============================================================
 
 def main():
-    print("=" * 60)
-    print("意识结构侧定义 v5 — S*₂ 三要件验证")
-    print("=" * 60)
+    print("=" * 64)
+    print("意识结构侧定义 v5 — 四系统统一验证")
+    print("判定: Int > 0 ∧ Diff ≥ 3bit ∧ ∃SelBroadcast")
+    print("=" * 64)
 
-    # --- 验证 [1]: Int > 0 ---
-    int_val = integration_kl()
-    print(f"\n[1] 整合 Int = {int_val:.6f} nat  (> 0 ? {int_val > 0})")
+    systems = make_systems()
+    rows = []
+    for name, (N, F) in systems.items():
+        int_val = integration_kl(F, N)
+        d_val = diff_bits(F, N)
+        sb = sel_broadcast_check(F, N)
+        passed = int_val > 0 and d_val >= THETA_DIFF and bool(sb)
+        rows.append((name, N, int_val, d_val, sb, passed))
+        print(f"\n--- {name} (N={N}) ---")
+        print(f"  Int  = {int_val:.6f} nat  (>0: {'✅' if int_val > 0 else '❌'})")
+        print(f"  Diff = {d_val:.4f} bit  (≥3: {'✅' if d_val >= THETA_DIFF else '❌'})")
+        if sb:
+            first = sb[0]
+            print(f"  SelBroadcast: ✅ 共 {len(sb)} 组候选，例: c={first['c']} "
+                  f"I₀={first['I0']} j={first['j']} 源值数={first['n_src_vals']} "
+                  f"TE={first['TE']:.4f}")
+        else:
+            print(f"  SelBroadcast: ❌ 无候选")
 
-    # --- 验证 [2]: Diff ≥ 3 bit ---
-    ra = all_reachable()
-    d = diff_bits(ra)
-    print(f"\n[2] 分化 Diff = {d:.4f} bit  (≥ 3 ? {d >= 3})")
-    print(f"    可达状态集 = {sorted(ra)} ({len(ra)} 状态)")
-
-    # 逐初态可达集（观察是否状态相关）
-    print("    逐初态可达集:")
-    for s in range(8):
-        rs = reachable_set(s)
-        print(f"      初态 {s} (状态{state_tuple(s)}): {sorted(rs)} ({len(rs)} 状态)")
-
-    # --- 验证 [3]: SelBroadcast ---
-    print("\n[3] 选择性广播（联合读出 ≥ 3 值 + 互信息访问）:")
-    sb = sel_broadcast_check()
-    if sb:
-        for info in sb[:8]:
-            print(f"    ✅ c={info['c']}({state_tuple(info['c'])}) 源集合 I₀={info['I0']} "
-                  f"目标 j={info['j']}: 源值数={info['n_src_vals']}, "
-                  f"g轨迹前8={info['g_trace']}, 目标轨迹前8={info['tgt_trace']}")
-        if len(sb) > 8:
-            print(f"    … 共 {len(sb)} 组 (c, I₀, j) 满足")
-    else:
-        print("    ❌ 未找到满足 ①②③④ 的 (c, I₀, j)")
-
-    # 补充：若 3 值太严，报告 2 值下的情况（诊断用）
-    sb2 = sel_broadcast_check(min_source_values=2)
-    if not sb and sb2:
-        print("\n    [诊断] 放宽到 ≥2 值时有候选:")
-        for info in sb2[:5]:
-            print(f"      c={info['c']}({state_tuple(info['c'])}) 源 I₀={info['I0']}: 源值数={info['n_src_vals']}")
-
-    # --- 对照验证：S*（麻醉态形状，2 位同步从动）应被 v5 拒绝 ---
-    print("\n[4] 对照验证：S*（2 位同步从动 = 麻醉态形状）应被 v5 拒绝:")
-    sb_star = sel_broadcast_check_star()
-    d_star = diff_bits_star()
-    int_star = integration_kl_star()
-    rejected = not (int_star > 0 and d_star >= 3 and bool(sb_star))
-    print(f"    Int(S*) = {int_star:.6f} nat (>0? {int_star > 0})")
-    print(f"    Diff(S*) = {d_star:.4f} bit (≥3? {d_star >= 3})")
-    print(f"    SelBroadcast(S*): {'找到候选（不该）' if sb_star else '无候选 ✅'}")
-    print(f"    → v5 拒绝 S*: {'✅ 是（麻醉态形状被拒）' if rejected else '❌ 否（S* 漏网）'}")
-
-    # --- 总结 ---
-    passed = int_val > 0 and d >= 3 and bool(sb) and rejected
-    print("\n" + "=" * 60)
-    verdict = "✅ S*₂ 满足三要件且 S* 被拒（v5 定义成立）" if passed else "❌ v5 验证未完全通过（需调整）"
-    print("v5 判定结果:", verdict)
-    print("=" * 60)
+    print("\n" + "=" * 64)
+    print("汇总:")
+    for name, N, int_val, d_val, sb, passed in rows:
+        status = "✅ 意识（结构侧）" if passed else "❌ 拒绝"
+        print(f"  {name:16s}: {status}  (Int={int_val:.3f}, Diff={d_val:.2f}bit, "
+              f"广播={'✓' if sb else '✗'})")
+    print("=" * 64)
 
 
 if __name__ == "__main__":
