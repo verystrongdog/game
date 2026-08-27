@@ -1297,7 +1297,7 @@ def summary_pass(args, stageA_cells):
                 if None in (a_ll, a_lh, a_hl, a_hh):
                     continue
                 delta = (a_hh - a_hl) - (a_lh - a_ll)
-                interactions.setdefault((name, est), {})[f"{f1}×{f2}"] = {
+                interactions.setdefault(name, {}).setdefault(est, {})[f"{f1}×{f2}"] = {
                     "delta_A_pair": round(delta, 6),
                     "cells": {"LL": a_ll, "LH": a_lh, "HL": a_hl, "HH": a_hh},
                 }
