@@ -3,7 +3,7 @@
  "_maintenance": "入库触发: 新核心术语 | 定义被修改 | Step 4 清扫发现未注册高频术语。numerical_locations 更新: 注册时填充 + grilling 新增引用时追加 + 定义变更时遍历复查。 | #87 创伤记忆/疾病三分类入库 + 苦痛记忆废弃 (2026-08-19)",
  "_created": "2026-08-03",
  "_updated": "2026-08-27",
- "_batch": "grilling-95-estimator-validity",
+ "_batch": "grilling-97-cte-variant",
  "_pending_candidates": "见 data/term_registry_candidates.md — 约20条P3级+单文档术语，后续grilling中逐批入库 Grilling #26-27: CSTC/EDR/CTC/三体神经模型/function_profile/cstc_loop/cstc_role/signal_type/gameplay_domain/STN/脑干广播/皮层-皮层连接/功能剖面/基底节门控 (14条已入库).",
  "terms": {
   "态度": {
@@ -2970,13 +2970,66 @@
    ],
    "added": "2026-08-27",
    "updated": "2026-08-27"
+  },
+  "TE": {
+   "definition": "转移熵（Transfer Entropy，Schreiber 2000）——观测估计器家族成员。项目内（#95 Q9）：cs4 transfer_entropy(source_past, target_past, target_future)（plug-in 熵、lag-1、双变量）+ THETA_TE=0.01 硬阈值，边判定 TE(X_i→X_j)≥0.01。定位 = naive observational estimator baseline，不赋予因果语义（v6 开放问题 #5「TE≠因果」）。",
+   "source": ".scratch/grilling-95-estimator-validity/grilling-95.md Q9; sim_consciousness_cs4_test.py :26",
+   "old_model": "「TE=因果」（v6 开放问题 #5——已否决：TE 是观测估计器，结构因果由 E_S^(1) 定义承担）",
+   "deviation_reason": "学术轨短标识符（≤4 ASCII）。项目内 TE 只是结构恢复对照估计器，其与 E_S^(1)/𝒞_exact 的一致/不一致均为实测结果",
+   "status": "active",
+   "numerical_locations": [
+    ".scratch/grilling-95-estimator-validity/grilling-95.md Q9",
+    "sim_consciousness_cs4_test.py",
+    "sim_consciousness_v7_estimator_validity.py（脚本 4，待实现）"
+   ],
+   "added": "2026-08-27",
+   "updated": "2026-08-27"
+  },
+  "cTE": {
+   "definition": "条件转移熵（Conditional Transfer Entropy）变体（Grilling #97 Q1-Q6）：全条件形式 cTE(X_i→X_j) = I(X_{i,t-1}; X_{j,t} | X_{∖{i},t-1})——Z = 除 X_i 外的全部变量 lag-1 过去（含 X_j 自身过去），条件集由结构决定（V∖{X_i}），对齐 E_S^(1) 全状态条件语义（P_F(X′_j|y)）。判定 = 保持时间结构的置换检验 + α=0.01 逐边族 FWER（#95 Q6/Q14 复用），无硬阈值；边状态三值化（present/absent/not_testable）；方向诊断 = 有向边级 P/R/F1。",
+   "source": ".scratch/grilling-97-cte-variant/grilling-97.md Q1/Q2/Q6; .scratch/grilling-95-estimator-validity/grilling-95.md Q9",
+   "old_model": "「条件集任意选择」（#95 Q9 原判：条件化哪些变量=未冻结自由度——Grilling #97 冻结为全条件）",
+   "deviation_reason": "学术轨短标识符（≤4 ASCII）。cTE 是 plug-in/TE 之外的第三对照估计器，科学问题=条件化是否改善结构恢复",
+   "status": "active",
+   "numerical_locations": [
+    ".scratch/grilling-97-cte-variant/grilling-97.md Q1-Q6",
+    "sim_consciousness_v7_estimator_validity.py（脚本 4，待实现）"
+   ],
+   "added": "2026-08-27",
+   "updated": "2026-08-27"
+  },
+  "plug-in": {
+   "definition": "插件估计器（plug-in estimator）——经验频率估计 P̂ 后套用原 E_S^(1) 判定逻辑（#95 Q3 主估计器），非第二套结构定义；置信区间/置换检验属有限样本统计判定机制，不改变 E_S^(1) 语义。",
+   "source": ".scratch/grilling-95-estimator-validity/grilling-95.md Q3/Q6",
+   "old_model": "「估计量统计一致性收敛到参数真值」（estimator-validity 条目已否决：对象是恢复结构 𝒞 而非估计参数，成立域是实验结论非定理）",
+   "deviation_reason": "学术轨术语。项目内 plug-in 与 TE/cTE 并列的观测估计器，恢复结构 𝒞 而非估计参数",
+   "status": "active",
+   "numerical_locations": [
+    ".scratch/grilling-95-estimator-validity/grilling-95.md Q3/Q6",
+    "sim_consciousness_v7_estimator_validity.py（脚本 4，待实现）"
+   ],
+   "added": "2026-08-27",
+   "updated": "2026-08-27"
+  },
+  "E_S^(1)": {
+   "definition": "一阶结构依赖边集合（v7 §四 S1）：当前边定义只认单坐标翻转——(i,j) ∈ E_S^(1) ⟺ ∃y,y′∈Reach: y₋ᵢ=y′₋ᵢ ∧ yᵢ≠y′ᵢ ∧ P_F(X′_j|y)≠P_F(X′_j|y′)。有向边（i=翻转坐标、j=被影响坐标）。纯高阶交互（如 j′=i₁⊕i₂）不在本版，高阶依赖 E^(k)/超图留作 anomaly-triggered 扩展（v7 §八）。",
+   "source": "参考/意识结构侧-下一阶段路线-v7.md §三/§四 S1; 参考/意识结构侧-下一阶段路线-v7.md §参数速查表",
+   "old_model": "「任意阶依赖都算边」（v7 否决：S1 限定一阶单坐标翻转，高阶交互标注为明确边界）",
+   "deviation_reason": "学术轨短标识符（参数速查表列头）。与「因果分量」条目配套：边集合是有向的，分量=无向化弱连通分量",
+   "status": "active",
+   "numerical_locations": [
+    "参考/意识结构侧-下一阶段路线-v7.md §三/§四",
+    ".scratch/grilling-97-cte-variant/grilling-97.md Q6（方向诊断 truth 侧）"
+   ],
+   "added": "2026-08-27",
+   "updated": "2026-08-27"
   }
  },
  "_metadata": {
   "last_updated": "2026-08-27",
-  "last_batch": "Grilling #95 意识结构侧 estimator-validity 完整实验 — estimator-validity/Ĉ_obs/A_pair/synthetic observation 轨/not_testable/scaled observation 轨 6 术语入库",
-  "total_terms": 220,
-  "active_terms": 200,
+  "last_batch": "Grilling #97 意识结构侧推迟清单分拣 + cTE 变体设计 — TE/cTE/plug-in/E_S^(1) 4 术语入库",
+  "total_terms": 224,
+  "active_terms": 204,
   "deprecated_terms": 20
  }
 }
