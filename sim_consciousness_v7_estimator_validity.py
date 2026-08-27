@@ -1267,12 +1267,16 @@ def summary_pass(args, stageA_cells):
         ap = cell["aggregation"]["A_pair"]["mean"]
         a_pair_map[(name, est, cell_key(grid))] = ap
         cells_by_sys_est.setdefault((name, est), []).append((grid, cell))
-    # ① stageA_curves：六条单因素曲线（per system × estimator）
+    # ① stageA_curves：六条单因素曲线（per system × estimator；#95 Q15）
+    # 只收 Stage A 单因素格（varying_factor 唯一且非基线），阶段 B 双因素格不入曲线
+    stageA_keys = {cell_key(g) for g in stageA_cells}
     curves = {}
     for (name, est), items in cells_by_sys_est.items():
         for f in GRADIENT_ORDER:
             pts = []
             for grid, cell in items:
+                if cell_key(grid) not in stageA_keys:
+                    continue
                 if varying_factor(grid) == f:
                     pts.append({"level": grid[f], "A_pair": cell["aggregation"]["A_pair"]})
             pts.sort(key=lambda x: x["level"])
