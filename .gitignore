@@ -37,3 +37,6 @@ blender_assets/
 
 # Large reference data — re-downloadable from public sources
 data/connectivity/abagen/
+
+# 模拟实验结果（生成物，不进版本控制）
+data/sim_results/
