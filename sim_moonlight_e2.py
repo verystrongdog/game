@@ -86,8 +86,8 @@ GAP_REL = 0.1               # 相对 gap 约束：gap(λ) ≥ 0.1·E_c(λ)（P3 
 
 # --- 慢调制扫描（Q2）---
 TAU_RATIOS = (10, 10 ** 2, 10 ** 3, 10 ** 4)   # T_moon/τ_char
-LEVEL_DEEP = 3              # 深绝热区起始下标（10³, 10⁴）
-LEVEL_P1_MIN = 2            # 过渡区 {10²} 起 P1 必须过（含 10³,10⁴）
+LEVEL_DEEP = 2              # 深绝热区起始下标（10³, 10⁴；门禁 P1∧P3∧P4，P2a 仅最深档）
+LEVEL_P1_MIN = 1            # 过渡区下标（10²；门禁 P1）；快档 {10} 为诊断（不入 PASS）
 
 # --- 跟踪判据（Q3）---
 DELTA_R = 0.05              # P2a 深绝热回退界（继承 E1 δ_r）
@@ -647,15 +647,16 @@ def main():
     for ci, case in enumerate(cases):
         for li, tr in enumerate(TAU_RATIOS):
             T_moon = tr * TAU_CHAR
-            need_perturb = li >= LEVEL_DEEP
+            need_perturb = li >= LEVEL_DEEP          # P3 于深绝热区 {10³,10⁴}
             dt_use = DT0
             rec = run_case_level(case, T_moon, tr, need_perturb, dt=dt_use)
-            # P4 分辨率门禁（最深档）：ε_num(dt) ≤ 0.1×max|r−1|(dt)。
-            # 深绝热档物理偏差 O(ε_adiab) 趋近 dt₀ 数值地板 → 预注册细化序列
-            # dt₀ → dt₀/2 → dt₀/4（E1 修正同款唯一合法细化，no-tuning 允许）。
-            if li == len(TAU_RATIOS) - 1:
+            # P4 数值分离（深绝热区全过；细化仅最深档）：
+            # ε_num(dt) ≤ 0.1×max|r−1|(dt)。深绝热档物理偏差 O(ε_adiab) 趋近
+            # dt₀ 数值地板 → 预注册细化序列 dt₀ → dt₀/2 → dt₀/4（E1 修正同款
+            # 唯一合法细化，no-tuning 允许）。
+            if li >= LEVEL_DEEP:
                 p4 = eps_num_dt0 <= P4_FACTOR * rec["max_dev"]
-                if not p4:
+                if not p4 and li == len(TAU_RATIOS) - 1:
                     for dt_ref in (DT0 / 2.0, DT0 / 4.0):
                         rec = run_case_level(case, T_moon, tr, need_perturb, dt=dt_ref)
                         p4 = eps_num_at(dt_ref, bench) <= P4_FACTOR * rec["max_dev"]
@@ -669,13 +670,16 @@ def main():
             rec["p2a"] = p2a
             rec["p4"] = p4
             rec["dt_use"] = dt_use
-            if li >= LEVEL_DEEP:          # 深绝热区 {10³,10⁴}
-                gate_pass = bool(p1 and p2a and rec["p3"] and p4)
+            if li >= LEVEL_DEEP:          # 深绝热区 {10³,10⁴}：P1∧P3[∧P2a]∧P4
+                if li == len(TAU_RATIOS) - 1:
+                    gate_pass = bool(p1 and p2a and rec["p3"] and p4)
+                else:
+                    gate_pass = bool(p1 and rec["p3"] and p4)
                 verdict = "PASS" if gate_pass else "FAIL"
-            elif li >= LEVEL_P1_MIN:      # 过渡区 {10²}
+            elif li >= LEVEL_P1_MIN:      # 过渡区 {10²}：P1
                 gate_pass = bool(p1)
                 verdict = "PASS" if gate_pass else "FAIL"
-            else:                         # 快档 {10}：诊断
+            else:                         # 快档 {10}：诊断（不入 PASS）
                 verdict = "DIAG"
             rec["verdict"] = verdict
             rows.append(rec)
@@ -693,10 +697,12 @@ def main():
             sys.stdout.flush()
 
     # ── 验收合成（Q7）──
+    deep_levels = TAU_RATIOS[LEVEL_DEEP:]
+    trans_level = TAU_RATIOS[LEVEL_P1_MIN]
     deep_ok = all(r["verdict"] == "PASS" for r in rows
-                  if r["tau_ratio"] >= 10 ** LEVEL_DEEP)
+                  if r["tau_ratio"] in deep_levels)
     trans_ok = all(r["verdict"] == "PASS" for r in rows
-                   if r["tau_ratio"] == 10 ** LEVEL_P1_MIN)
+                   if r["tau_ratio"] == trans_level)
     p4_deep = all(r["p4"] for r in rows if r["tau_ratio"] == TAU_RATIOS[-1])
 
     # ── q̂ 占位连通性诊断（Q4）：参考案例最深档 ──
@@ -713,20 +719,21 @@ def main():
         print("  节点 %d: q̂ ∈ [%.4f, %.4f], mean=%.4f" %
               (row["node"], row["qhat_min"], row["qhat_max"], row["qhat_mean"]))
     sys.stdout.flush()
-    # 破坏点定位：P1 首次失败的档位（从慢到快），ε_adiab* = 前一档对应值
+    # 破坏点定位：P1 首次失败的档位（从慢到快），ε_adiab* = 前一档对应值；
+    # 扫描域内无失败 → 下界未解析（跟随在全部档位成立）
     levels_sorted = sorted(TAU_RATIOS)
     eps_adiab_star = None
     for tr in levels_sorted:
-        if tr >= 10 ** LEVEL_P1_MIN:
-            fail = any(not r["p1"] for r in rows if r["tau_ratio"] == tr)
-            if fail:
-                idx = levels_sorted.index(tr)
-                if idx > 0:
-                    T_moon_prev = levels_sorted[idx - 1] * TAU_CHAR
-                    eps_adiab_star = TAU_CHAR / (T_moon_prev / (2.0 * np.pi))
-                break
+        fail = any(not r["p1"] for r in rows if r["tau_ratio"] == tr)
+        if fail:
+            idx = levels_sorted.index(tr)
+            if idx > 0:
+                T_moon_prev = levels_sorted[idx - 1] * TAU_CHAR
+                eps_adiab_star = TAU_CHAR / (T_moon_prev / (2.0 * np.pi))
+            break
     if eps_adiab_star is None:
-        eps_adiab_star = TAU_CHAR / ((TAU_RATIOS[-1] * TAU_CHAR) / (2.0 * np.pi))
+        # 扫描下界（快档 ε_adiab = 2π/10）作为「未达破坏」的上界报告
+        eps_adiab_star_edge = TAU_CHAR / (levels_sorted[0] * TAU_CHAR / (2.0 * np.pi))
 
     final_ok = deep_ok and trans_ok and p4_deep
     if not p4_bench_ok:
@@ -741,7 +748,11 @@ def main():
     print("  深绝热区 {10³,10⁴}: %s" % ("全过" if deep_ok else "未全过"))
     print("  过渡区 {10²}:      %s" % ("全过" if trans_ok else "未全过"))
     print("  P4 数值分离:       %s" % ("成立" if p4_deep else "不成立"))
-    print("  ε_adiab*（成立区间下界）: %.2e" % eps_adiab_star)
+    if eps_adiab_star is None:
+        print("  ε_adiab*（成立区间下界）: ≤ %.2e（扫描域内未达破坏——跟随在"
+              "T_moon/τ_char ≥ 10 全部档位成立，下界未解析）" % eps_adiab_star_edge)
+    else:
+        print("  ε_adiab*（成立区间下界）: %.2e" % eps_adiab_star)
     print("  → E2 结论: %s" % verdict)
     print("  注：PASS = 线性族+ΔE_th 方向族在深绝热区绝热跟随成立；ε_adiab* 为接口层"
           "「1 游戏日」映射硬约束（E2 只产约束不决定换算）。失败分类与后续处置见 #102")
@@ -762,7 +773,9 @@ def main():
         "results": rows,
         "composition": {"deep_ok": deep_ok, "trans_ok": trans_ok,
                         "p4_deep": p4_deep,
-                        "eps_adiab_star": eps_adiab_star},
+                        "eps_adiab_star": eps_adiab_star,
+                        "eps_adiab_star_edge": (
+                            eps_adiab_star_edge if eps_adiab_star is None else None)},
         "final_verdict": verdict,
     }
     print("\nJSON:")
