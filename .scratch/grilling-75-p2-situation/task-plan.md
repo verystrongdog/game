@@ -77,7 +77,8 @@
 ```
 
 - 环境类型初版 = 空间与关卡设计的地图元素（病房/走廊/活动室/楼梯间/户外等），具体表值 = 设计层 [NEW] 可调
-- 初始值由空间 grilling/内容填充补充；P2 提供 schema + demo 2-3 个环境
+- 初始值由空间 grilling/内容填充补充；P2 提供 schema + demo 3 环境（**病房/走廊/护士站**，Grilling #104 Q6 锁定——**示例集非固定上限**，扩展 = 加键，零 schema 变更、零迁移，运行时按环境 id 查表天然支持任意数量）
+- **可扩展声明（#104 Q6）**：demo 3 环境不是上限/硬编码锁定，完整环境表值归空间内容填充（#75 推迟清单原样）
 
 ### 3.3 W_sensory 扩列 69×8
 
@@ -100,24 +101,39 @@ SituationSelector.Select(environment, sanState, rng) → (archetypeId, strength)
 **神经落点（直接节点注入）**：
 
 ```
-key_brain_regions（规范名）→ functional_id 集（normalize_region_names 工具扩展）
+key_brain_regions（fid 直用，无翻译）→ functional_id 集
 选中原型 → s_env_j += 强度 for j ∈ 原型 fid 集（直接节点驱动，非 W_sensory 展开）
 ```
 
-- `key_brain_regions` 混合 fid/dk 名（如 SupramarginalTPJ=fid、Amygdala=dk）→ 规范名映射表（复用 region_name_map + normalize 经验，100% 命中目标）
+- **fid 一致性校验器（Grilling #104 Q6 修正，替代原「规范名映射表」）**：实测 `situation_primitives.json` 27 原型 key_brain_regions 共 201 条、去重 37 名，**37/37 已全部是 functional_id**（名称 ∈ `region_name_map.regions` 键且 `name == functional_id`），翻译需求 = 0 → **不建立 dk→fid 翻译映射表**（避免制造不存在的转换层 + 误导混用两套命名）
+- T4 任务性质变更：从「构建映射工具 + 27 原型 fid 集验证」→「**建立/运行 27 原型 fid 一致性校验器**」（断言名称存在且 == functional_id；27 原型全量、100% 命中为验收门槛；未来新增原型自动防回归；映射失败 → **校验失败，不静默降级**）
 
 ## 五、三通道输入落点
 
 ```
 s_total[69] = s_事件（EventProcessor 现有路径，读 alpha_patterns.json）
             + s_env（环境基调: W_sensory × α_env + 情境原型节点注入）
-            + m_field（月光场: 占位全 0，CalibrationConfig.MFieldStrength = 0 [NEW]，#38 后填节点落点）
+            + m_field（月光场: 结构实现 + PLACEHOLDER 分级 + 门禁，Grilling #104 Q1）
 
 h_j = Σ W·a + b_j + s_total_j        （文档层公式；引擎 WcDynamics.Step 签名不变）
 ```
 
 - s 累加归 CombatState.SPending（现有机制）；s_env 在空间切换时刷新为稳定值（#69 D7 时序）
 - `CurrentEnvironment`（字符串/枚举）传入 CombatState（demo 由 Console 指定；战斗外空间切换由上层驱动）
+
+### m_field 通道（Grilling #104 Q1/Q4 锁定，替代原「占位全 0」）
+
+> ⚠️ **已更新（2026-09-02 #101/#103 + Grilling #104）**：原「m_field 占位全 0，MFieldStrength=0 [NEW]，#38 后填节点落点」已废弃——#101 闭合 R 落点结构、#103 定 moonState(D) 契约与 calibration_status 分级。
+
+```
+m_field_vec⁽ⁱ⁾(t) = q̂_{x_i(t)}(t) · g(SAN_i, state_i) · R_i
+R_i = Σ_s α_s · v_s^norm   （12 落点 = L1∪L2∩W活跃；主辅两档 r=m/a 参数化；非负/稀疏）
+```
+
+1. **数据层**：`moonlight_landing.json`（新建）——12 落点 fid + 主辅两档结构 + r/α_s **显式 PLACEHOLDER**（文件存在 ≠ 已校准）；四项校验（supp 互斥/归一化/supp⊆W_active/非负）——#101 Q2/Q8
+2. **引擎层**：`moonState(D)` 契约骨架——λ(D)=(1−cos(2πD/29.5))/2 解析函数 + calibration_status/version 消费（#103 Q4-Q6）；m_field 合成 = q̂×g×R → s_total 加法注入
+3. **门禁层**：calibration_status=PLACEHOLDER 时正式情境基线/SAN×月光消费 **fail-fast**（#103 Q6）；demo 走**显式标记的原型测试路径**（允许观察 m_field 注入是否工作）
+4. **边界**：正式 q̂/E_c/E_th 数值生产 → #35；#103 artifact 6 项硬校验（validate_calibration.py）→ #71；**R 落点校验（P2）≠ artifact 硬校验（#71）**
 
 ## 六、情境只读状态接口
 
@@ -136,10 +152,10 @@ public sealed record SituationState(string ArchetypeId, float Strength, string E
 |---|------|------|------|------|
 | T1 | W_sensory.json 扩列 69×8（嗅觉/热觉，原 6 列不变） | 数据 | `W_sensory.json` | D1 |
 | T2 | alpha_patterns.json（14 事件迁移 8 模态）+ EventProcessor 去硬编码（读 JSON） | 数据+代码 | `alpha_patterns.json` + `EventProcessor.cs` | T1 |
-| T3 | env_tones.json（空间→8 模态 α_env，demo 2-3 环境） | 数据 | `env_tones.json` | D1 |
-| T4 | key_brain_regions 规范名映射（→ fid 集，扩展 normalize_region_names 或新工具） | 代码 | 映射工具 + 27 原型 fid 集验证 | T3 |
+| T3 | env_tones.json（空间→8 模态 α_env，demo 3 环境：病房/走廊/护士站） | 数据 | `env_tones.json` | D1 |
+| T4 | **fid 一致性校验器**（27 原型 key_brain_regions 断言：名称 ∈ region_name_map.regions 且 name == functional_id；100% 命中为门槛；不建映射表） | 代码 | 校验脚本 + 27 原型 fid 集验证报告 | T3 |
 | T5 | SituationSelector（env_map + SAN 调制 + 刷新时机 + 节点注入）+ `CurrentEnvironment` 传入 | 代码 | `Engine/SituationSelector.cs` + `CombatState.Situation` | T4 |
-| T6 | 三通道累加（s_total）+ m_field 占位（MFieldStrength=0）+ 只读 SituationState | 代码 | `CombatState.SPending` 扩展 + `CalibrationConfig` | T2/T5 |
+| T6 | 三通道累加（s_total）+ m_field 通道（moonlight_landing.json + moonState(D) 契约骨架 + 门禁）+ 只读 SituationState | 代码 | `CombatState.SPending` 扩展 + `CalibrationConfig` + `moonState(D)` | T2/T5 |
 | T7 | Console demo 接线（指定环境 → 情境显示 + s 注入效果）+ 测试 + 文档同步 | 代码+测试+文档 | 测试绿 + 决策树/六维状态/memory | T5/T6 |
 
 ## 八、文件清单
@@ -153,7 +169,9 @@ public sealed record SituationState(string ArchetypeId, float Strength, string E
 | `src/YouAreNotTheFish.Core/Engine/SituationSelector.cs` | 新建 | 代码 |
 | `src/YouAreNotTheFish.Core/Entity/CombatState.cs` | 改写（Situation + s_total） | 代码 |
 | `src/YouAreNotTheFish.Core/Types/CalibrationConfig.cs` | 改写（+SituationPanicShift/MFieldStrength [NEW]） | 代码 |
-| `tools/`（规范名映射扩展） | 改写 | 代码 |
+| `data/connectivity/moonlight_landing.json` | **新建（#101 R 落点数据，r/α_s PLACEHOLDER）** | 数据 |
+| `src/YouAreNotTheFish.Core/Engine/MoonState.cs`（或等价） | **新建（moonState(D) 契约骨架）** | 代码 |
+| `tools/`（fid 一致性校验器） | 改写/新建 | 代码 |
 | `src/YouAreNotTheFish.Core.Tests/` | 新增 | 测试 |
 | `src/YouAreNotTheFish.Console/` | 改写 | 代码 |
 | `docs/决策树.md` / `docs/设计框架-六维状态.md` / memory | 追加 | 文档 |
@@ -174,7 +192,8 @@ public sealed record SituationState(string ArchetypeId, float Strength, string E
 |------|------|
 | α pattern 迁移比对 | 迁移前后 6 位逐位比对（脚本） |
 | W_sensory 形状 | 69×8 断言（validate 工具扩展） |
-| key_brain_regions 映射 | 27 原型 fid 集 100% 命中报告 |
+| **fid 一致性校验（#104 Q6）** | 27 原型 key_brain_regions：名称 ∈ region_name_map.regions 且 name == functional_id（100% 命中，失败不静默降级） |
+| **R 落点校验（#104 Q1/Q4，#101 Q2）** | supp 互斥/语义内归一化/supp⊆W_active/非负（moonlight_landing.json）——归 P2；#103 artifact 6 项硬校验归 #71，**不混淆** |
 | 引擎测试绿 | `dotnet test src/YouAreNotTheFish.Core.Tests` |
 | 交叉引用 | `python3 tools/validate_cross_refs.py` |
 
@@ -182,23 +201,26 @@ public sealed record SituationState(string ArchetypeId, float Strength, string E
 
 - [ ] W_sensory 69×8（原 6 列逐位不变）；alpha_patterns.json 14 事件（前 6 位与现有一致）
 - [ ] EventProcessor 无硬编码 α pattern，全部读 JSON
-- [ ] env_tones.json schema + demo 环境；SituationSelector 空间映射 + SAN 调制 + 刷新生效
-- [ ] key_brain_regions → fid 集 100% 命中（27 原型）
-- [ ] s_total = s_事件 + s_env + m_field（m_field 占位 0）；SituationState 只读接口可用
-- [ ] Console demo 指定环境 → 情境显示 + s 注入后 a(t) 变化可见
-- [ ] 测试绿；决策树 #75 / 六维状态 / memory 落位
+- [ ] env_tones.json schema + demo 3 环境（病房/走廊/护士站，可扩展）；SituationSelector 空间映射 + SAN 调制 + 刷新生效
+- [ ] **fid 一致性校验器**：27 原型全量通过（名称 ∈ region_name_map.regions 且 name == functional_id）；无 dk→fid 映射表
+- [ ] moonlight_landing.json：12 落点 + 主辅两档 + 四项校验通过；r/α_s 显式 PLACEHOLDER
+- [ ] moonState(D) 契约骨架：λ(D) 解析 + calibration_status/version 消费 + PLACEHOLDER 门禁 fail-fast
+- [ ] s_total = s_事件 + s_env + m_field（m_field 结构注入 + 门禁）；SituationState 只读接口可用
+- [ ] Console demo 指定环境 → 情境显示 + s 注入后 a(t) 变化可见（显式 PLACEHOLDER 标记）
+- [ ] 测试绿；决策树 #104 / 六维状态 / memory 落位
 
 ## 十一、推迟清单
 
 | 推迟项 | 原因 | 后续动作 |
 |--------|------|---------|
-| m_field 参数集与节点落点 | #38 月光场重建开放中 | #38 闭合后填（MFieldStrength 解占位） |
-| env_tones 全环境表值 | 空间内容未全设计 | 空间 grilling/内容填充 |
+| ~~m_field 参数集与节点落点~~ | ~~#38 开放中~~ | ✅ **已解除（2026-09-02 #101 闭合 + Grilling #104 Q1/Q4）**——P2 实现结构 + PLACEHOLDER；正式数值归 #35 |
+| env_tones 全环境表值 | 空间内容未全设计 | 空间 grilling/内容填充（demo 3 环境为示例集，扩展 = 加键） |
 | 情境原型 SAN 偏移分组表（诡异/负面分组） | 需 27 原型逐条标注 | 本批提供分组规则，标注随内容填充 |
 | 情境强度系数校准 | 无正典值 | #35 数值校准 |
 | 白天无月光渗透过渡态 | 空间遭遇规则延迟项 | 独立话题 |
+| #103 calibration artifact 6 项硬校验（validate_calibration.py） | #103 推迟清单 | #71 数值平衡工具或独立（**非 P2 范围**，Q4 边界写死） |
 
 ---
 
-*创建: 2026-08-16 | 更新: 2026-08-16*
-*关联: [Grilling #69 task-plan](./../grilling-69-external-stimulus/task-plan.md), [Grilling #70 路线图 task-plan](./../grilling-70-engine-roadmap/task-plan.md), [运行时状态模型](./../../规则/技能树系统/运行时状态模型.md), [situation_primitives.json](./../../data/connectivity/situation_primitives.json), [核心机制](./../../规则/核心机制.md), [数学语言书写规范](./../../docs/agents/math-language-writing.md)*
+*创建: 2026-08-16 | 更新: 2026-09-02 (Grilling #104：m_field 段落对齐 #101/#103——结构实现+PLACEHOLDER+门禁；T4 改 fid 一致性校验器；env_tones demo 3 环境集锁定；推迟清单 m_field 项解除)*
+*关联: [Grilling #69 task-plan](./../grilling-69-external-stimulus/task-plan.md), [Grilling #70 路线图 task-plan](./../grilling-70-engine-roadmap/task-plan.md), [Grilling #104 实施 issue](https://github.com/verystrongdog/game/issues/105), [运行时状态模型](./../../规则/技能树系统/运行时状态模型.md), [situation_primitives.json](./../../data/connectivity/situation_primitives.json), [核心机制](./../../规则/核心机制.md), [数学语言书写规范](./../../docs/agents/math-language-writing.md)*
