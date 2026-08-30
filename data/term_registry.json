@@ -1,6 +1,6 @@
 {
  "_description": "术语注册表 — Grilling §3.0 定义基线声明的唯一数据源。术语定义/旧模型/偏离原因集中管理，避免 AI 在生成时被术语的旧现实世界模型劫持。",
- "_maintenance": "入库触发: 新核心术语 | 定义被修改 | Step 4 清扫发现未注册高频术语。numerical_locations 更新: 注册时填充 + grilling 新增引用时追加 + 定义变更时遍历复查。 | #87 创伤记忆/疾病三分类入库 + 苦痛记忆废弃 (2026-08-19)",
+ "_maintenance": "入库触发: 新核心术语 | 定义被修改 | Step 4 清扫发现未注册高频术语。numerical_locations 更新: 注册时填充 + grilling 新增引用时追加 + 定义变更时遍历复查。 | #87 创伤记忆/疾病三分类入库 + 苦痛记忆废弃 (2026-08-19) | #108 P2 情境系统实施前审查入库：G/t_neg/s_neg/p_panic/m_delta/环境 id (2026-09-02)",
  "_created": "2026-08-03",
  "_updated": "2026-09-02",
  "_batch": "grilling-38-moonlight-field",
@@ -3623,6 +3623,78 @@
    "numerical_locations": [
     "规则/时空结构数学框架.md §11.5",
     "docs/决策树.md #101 条目"
+   ],
+   "added": "2026-09-02",
+   "updated": "2026-09-02"
+  },
+  "G（诡异/负面组）": {
+   "definition": "恐慌偏移候选组 G = {情境原型 : rdoc_profile.negative_valence ≥ t_neg ∧ appraisal_profile.valence = negative}，由 27 原型在 SituationSelector 构造期计算（Grilling #108 Q6，当前 17 成员）。G 与 situation.primary 不互斥（primary ∈ G 合法）；恐慌重选时以 p_panic 概率从 G 均匀随机选一个。",
+   "source": "Grilling #108 Q6 / #75 D2",
+   "old_model": "无——『诡异/负面』此前无分组定义",
+   "deviation_reason": "用现有字段规则（negative_valence ≥ t_neg ∧ valence=negative）构造近似组，避免 27 条人工标注提前进入实施阶段；t_neg=0.2 为规则参数，内容填充可精化",
+   "status": "active",
+   "numerical_locations": [
+    ".scratch/grilling-75-p2-situation/task-plan.md §四（Q6）"
+   ],
+   "added": "2026-09-02",
+   "updated": "2026-09-02"
+  },
+  "t_neg": {
+   "definition": "诡异/负面组 G 的分组阈值参数——rdoc_profile.negative_valence ≥ t_neg 为 G 成员条件之一。初值 0.2 [NEW]，是规则参数非硬编码成员名单；内容填充期可调阈值或加排除规则精化，不改 SituationSelector 架构。",
+   "source": "Grilling #108 Q6",
+   "old_model": "无",
+   "deviation_reason": "字段规则参数的阈值——数值归内容填充，形式是契约",
+   "status": "active",
+   "numerical_locations": [
+    ".scratch/grilling-75-p2-situation/task-plan.md §四（Q6）"
+   ],
+   "added": "2026-09-02",
+   "updated": "2026-09-02"
+  },
+  "s_neg": {
+   "definition": "恐慌强度档——存在性恐慌为真时的情境注入强度值，∈ [1,1.5]，具体数值归 #35 校准轨。强度函数 = 双档阶梯：恐慌假 strength=1.0 / 恐慌真 strength=s_neg。只作用于情境原型 fid 节点注入，与 α_env 正交（不缩放环境基调）。",
+   "source": "Grilling #108 Q7 / #75 推迟清单（情境强度系数 → #35）",
+   "old_model": "无——原『原型注入强度=1.0 基础，SAN 越低越强』未定形式",
+   "deviation_reason": "锁函数形式（双档阶梯）不锁数值——数值归 #35，避免把校准生产提前塞进 #108/#105",
+   "status": "active",
+   "numerical_locations": [
+    ".scratch/grilling-75-p2-situation/task-plan.md §四（Q7）"
+   ],
+   "added": "2026-09-02",
+   "updated": "2026-09-02"
+  },
+  "p_panic": {
+   "definition": "恐慌偏移概率 = 0.5——存在性恐慌条件为真且发生情境重选时，P(选择 G 中均匀随机一个) = p_panic，P(选择 situation.primary) = 1 − p_panic；恐慌条件为假时确定性选择 primary。行为契约（不做频率统计验证）；组内选择用注入 RNG，同 seed 同选择。",
+   "source": "Grilling #108 Q6 / #75 D2（p_panic=0.5 [NEW]）",
+   "old_model": "无——『低 SAN 概率偏移』未定义触发/运作语义",
+   "deviation_reason": "p_panic 是概率语义契约而非频率参数——验收用契约断言（恐慌真→∈{G∪primary}；同 seed 同选择），不用统计检验证明 50%",
+   "status": "active",
+   "numerical_locations": [
+    ".scratch/grilling-75-p2-situation/task-plan.md §四（Q6）"
+   ],
+   "added": "2026-09-02",
+   "updated": "2026-09-02"
+  },
+  "m_delta": {
+   "definition": "alpha_patterns.json 中 m_alpha 的二态哨兵值之一——字符串 \"m_delta\" 表示『用该事件/派生分支现有算法计算的 m』（B/C/D 类事件），区别于有限数字 [0,1]（常量，A 类 = 1.0）。旧写法 \"m\" 已废弃（Grilling #108 Q1，统一 #69 权威 schema）。",
+   "source": "Grilling #108 Q1 / #69 task-plan §4.4",
+   "old_model": "无——旧 task-plan 曾写 \"m\" 哨兵",
+   "deviation_reason": "数据契约哨兵值——引擎解析二态（数字常量 vs \"m_delta\"），非 \"m_delta\" 字符串 → 加载期 fail-fast",
+   "status": "active",
+   "numerical_locations": [
+    ".scratch/grilling-75-p2-situation/task-plan.md §3.1（Q1）"
+   ],
+   "added": "2026-09-02",
+   "updated": "2026-09-02"
+  },
+  "环境 id": {
+   "definition": "env_tones.json 的环境键——英文 slug id（ward/corridor/nurse_station）+ 中文 display_name。数据键承担稳定机器接口（env_map keying / CombatState.CurrentEnvironment / Console --env），显示名承担人类可读语义。运行时缺失环境 id → fail-fast（禁止回退零向量）。",
+   "source": "Grilling #108 Q3",
+   "old_model": "无——旧 task-plan 示例用中文键（\"病房\"）",
+   "deviation_reason": "与 situation_primitives name/display_name 惯例一致；中文键有异体字/空格风险；扩展 = 加键零 schema 变更（#104 Q6）",
+   "status": "active",
+   "numerical_locations": [
+    ".scratch/grilling-75-p2-situation/task-plan.md §3.2（Q3/Q5）"
    ],
    "added": "2026-09-02",
    "updated": "2026-09-02"
