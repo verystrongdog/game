@@ -420,7 +420,8 @@ public class WMatrixBuilderTests
             new SituationPrimitives(),
             new SignalTypesCatalog(),
             new AlphaPatterns(),
-            new EnvTones());
+            new EnvTones(),
+            new MoonlightLanding());
 
         Assert.Throws<InvalidDataException>(() => WMatrixBuilder.Build(data));
     }

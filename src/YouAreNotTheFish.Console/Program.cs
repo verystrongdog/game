@@ -64,7 +64,8 @@ public static class Program
     {
         var ctx = new CombatContext(new DeterministicRng(seed), data, cal);
         var player = ParticipantState.CreateDefault(cal.PlayerHp, cal.PlayerSan);
-        var state = CombatState.Create([player], [1], data, cal);
+        // environment=null：纯静息 trace（s=0，无情境注入——csharp-tone AC-15 静息验证方法语义）
+        var state = CombatState.Create([player], [1], data, cal, environment: null);
         var tm = new TurnManager(data, cal, new WaitProvider());
 
         for (var i = 0; i < rounds; i++)

@@ -281,7 +281,7 @@ public class CstcGatingTests
 
         var modified = new GameData(
             new BrainRegionsData { Regions = regions },
-            data.Tripartite, data.Wsensory, data.SituationPrimitives, data.SignalTypes, data.AlphaPatterns, data.EnvTones);
+            data.Tripartite, data.Wsensory, data.SituationPrimitives, data.SignalTypes, data.AlphaPatterns, data.EnvTones, data.MoonlightLanding);
 
         var ex = Assert.Throws<InvalidDataException>(() => new CstcGating(modified));
         Assert.Contains("Limbic", ex.Message); // 含环路名（D4）
@@ -306,7 +306,7 @@ public class CstcGatingTests
 
         var modified = new GameData(
             new BrainRegionsData { Regions = regions },
-            data.Tripartite, data.Wsensory, data.SituationPrimitives, data.SignalTypes, data.AlphaPatterns, data.EnvTones);
+            data.Tripartite, data.Wsensory, data.SituationPrimitives, data.SignalTypes, data.AlphaPatterns, data.EnvTones, data.MoonlightLanding);
 
         var gating = new CstcGating(modified); // 构造成功——Global/None 不校验（C3）
         Assert.Equal(new HashSet<CstcLoop> { CstcLoop.Somatic, CstcLoop.Cognitive, CstcLoop.Limbic },
