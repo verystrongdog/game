@@ -48,7 +48,7 @@ public sealed class TurnManager
         _cal = cal;
         _actionProvider = actionProvider;
         _resolver = new ActionResolver(data, cal);
-        _eventProcessor = new EventProcessor(data.Wsensory, cal);
+        _eventProcessor = new EventProcessor(data.Wsensory, data.AlphaPatterns, cal);
         _speedScore = new SpeedScoreCalculator(data, cal);
         _cstcGating = new CstcGating(data);
         _wMatrix = WMatrixBuilder.Build(data);

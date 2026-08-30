@@ -30,6 +30,9 @@ public class EventProcessorTests
     private static WsensoryMatrix Wsensory() =>
         GameDataLoader.LoadWsensory(Path.Combine(FindDataDir(), "connectivity", "W_sensory.json"));
 
+    private static AlphaPatterns AlphaPatterns() =>
+        GameDataLoader.LoadAlphaPatterns(Path.Combine(FindDataDir(), "connectivity", "alpha_patterns.json"));
+
     private static CalibrationConfig Cal() => CalibrationConfig.Default;
 
     private static ParticipantState Participant(float hp, float san) => ParticipantState.CreateDefault(hp, san);
@@ -68,14 +71,15 @@ public class EventProcessorTests
     public void Ctor_NullArgs_ThrowArgumentNull()
     {
         var ws = Wsensory();
-        Assert.Throws<ArgumentNullException>(() => new EventProcessor(null!, Cal()));
-        Assert.Throws<ArgumentNullException>(() => new EventProcessor(ws, null!));
+        Assert.Throws<ArgumentNullException>(() => new EventProcessor(null!, AlphaPatterns(), Cal()));
+        Assert.Throws<ArgumentNullException>(() => new EventProcessor(ws, AlphaPatterns(), null!));
+        Assert.Throws<ArgumentNullException>(() => new EventProcessor(ws, AlphaPatterns(), null!));
     }
 
     [Fact]
     public void ProcessEvents_NullArgs_ThrowArgumentNull()
     {
-        var ep = new EventProcessor(Wsensory(), Cal());
+        var ep = new EventProcessor(Wsensory(), AlphaPatterns(), Cal());
         var states = new[] { Participant(50f, 80f) };
         Assert.Throws<ArgumentNullException>(() => ep.ProcessEvents(null!, states, new[] { 1 }));
         Assert.Throws<ArgumentNullException>(() => ep.ProcessEvents([], null!, new[] { 1 }));
@@ -85,7 +89,7 @@ public class EventProcessorTests
     [Fact]
     public void ProcessEvents_TeamsMismatch_Throws()
     {
-        var ep = new EventProcessor(Wsensory(), Cal());
+        var ep = new EventProcessor(Wsensory(), AlphaPatterns(), Cal());
         var states = new[] { Participant(50f, 80f), Participant(50f, 80f) };
         Assert.Throws<ArgumentException>(() => ep.ProcessEvents([], states, new[] { 1 }));
     }
@@ -97,7 +101,7 @@ public class EventProcessorTests
     [InlineData(0, 5)]
     public void ProcessEvents_OutOfRangeId_Throws(int actorId, int targetId)
     {
-        var ep = new EventProcessor(Wsensory(), Cal());
+        var ep = new EventProcessor(Wsensory(), AlphaPatterns(), Cal());
         var states = new[] { Participant(50f, 80f) };
         var ev = new PhysicalDamageEvent(1, actorId, targetId) { DamageDealt = 4f };
         Assert.Throws<ArgumentException>(() => ep.ProcessEvents([ev], states, new[] { 1 }));
@@ -108,7 +112,7 @@ public class EventProcessorTests
     [Fact]
     public void PhysicalHit_NoDefense_A1AndB1()
     {
-        var ep = new EventProcessor(Wsensory(), Cal());
+        var ep = new EventProcessor(Wsensory(), AlphaPatterns(), Cal());
         var attacker = Participant(50f, 80f);
         var target = Participant(15f, 60f);
         var ev = new PhysicalDamageEvent(1, 0, 1)
@@ -133,7 +137,7 @@ public class EventProcessorTests
     [Fact]
     public void DefendedHit_TargetReceivesOnlyA5()
     {
-        var ep = new EventProcessor(Wsensory(), Cal());
+        var ep = new EventProcessor(Wsensory(), AlphaPatterns(), Cal());
         var target = Participant(15f, 60f);
         var ev = new PhysicalDamageEvent(1, 0, 1)
         {
@@ -153,7 +157,7 @@ public class EventProcessorTests
     [Fact]
     public void Miss_ReceiverGetsB2_NotB1()
     {
-        var ep = new EventProcessor(Wsensory(), Cal());
+        var ep = new EventProcessor(Wsensory(), AlphaPatterns(), Cal());
         var ev = new PhysicalDamageEvent(1, 0, 1)
         {
             Hit = false, DamageDealt = 0f, DamageBlocked = 4f, IncomingDamage = 4f,
@@ -170,7 +174,7 @@ public class EventProcessorTests
     [Fact]
     public void Miss_AttackerToneUnchanged_ButSStillSent()
     {
-        var ep = new EventProcessor(Wsensory(), Cal());
+        var ep = new EventProcessor(Wsensory(), AlphaPatterns(), Cal());
         var attacker = Participant(50f, 80f);
         var ev = new PhysicalDamageEvent(1, 0, 1)
         {
@@ -188,7 +192,7 @@ public class EventProcessorTests
     [Fact]
     public void MentalAttack_A4_ExpectedFormula()
     {
-        var ep = new EventProcessor(Wsensory(), Cal());
+        var ep = new EventProcessor(Wsensory(), AlphaPatterns(), Cal());
         var ev = new MentalDamageEvent(1, 0, 1)
         {
             SanDamage = 1.0f, MotivationMod = 0f,
@@ -206,7 +210,7 @@ public class EventProcessorTests
     public void MentalAttack_PenetrationM13_E1Fixed()
     {
         // E1 修正：mot=0.5 → expected=2×1.5−1=2.0 → m=2.6/2.0=1.3（mot=0 时 expected=1.0 → m=2.6，非 1.3）
-        var ep = new EventProcessor(Wsensory(), Cal());
+        var ep = new EventProcessor(Wsensory(), AlphaPatterns(), Cal());
         var ev = new MentalDamageEvent(1, 0, 1)
         {
             SanDamage = 2.6f, MotivationMod = 0.5f,
@@ -223,7 +227,7 @@ public class EventProcessorTests
     [InlineData(-0.5f, "m=+∞")] // expected=2×0.5−1=0 → m=2.6/0=+∞ → IsInfinity skip（probe Q8）
     public void MentalAttack_NegativeMotivation_DeltaSkipped_SStillSent(float motivation, string what)
     {
-        var ep = new EventProcessor(Wsensory(), Cal());
+        var ep = new EventProcessor(Wsensory(), AlphaPatterns(), Cal());
         var ev = new MentalDamageEvent(1, 0, 1)
         {
             SanDamage = 2.6f, MotivationMod = motivation,
@@ -242,7 +246,7 @@ public class EventProcessorTests
     [Fact]
     public void MentalB4_SanDrop_ToneAnchor()
     {
-        var ep = new EventProcessor(Wsensory(), Cal());
+        var ep = new EventProcessor(Wsensory(), AlphaPatterns(), Cal());
         var ev = new MentalDamageEvent(1, 0, 1)
         {
             SanDamage = 2.0f, MotivationMod = 0f,
@@ -269,7 +273,7 @@ public class EventProcessorTests
     [Fact]
     public void Panic_Crosses30_SendsC1()
     {
-        var ep = new EventProcessor(Wsensory(), Cal());
+        var ep = new EventProcessor(Wsensory(), AlphaPatterns(), Cal());
         var ev = new StatusChangeEvent(1, 0, 0)
         {
             Kind = StatusKind.Panic, Entered = true,
@@ -289,7 +293,7 @@ public class EventProcessorTests
     [InlineData(17f, 17.9f, "SanBefore<SanAfter（治疗）")]
     public void Panic_GuardFails_NoC1(float before, float after, string what)
     {
-        var ep = new EventProcessor(Wsensory(), Cal());
+        var ep = new EventProcessor(Wsensory(), AlphaPatterns(), Cal());
         var ev = new StatusChangeEvent(1, 0, 0)
         {
             Kind = StatusKind.Panic, Entered = true,
@@ -304,7 +308,7 @@ public class EventProcessorTests
     public void Panic_OldInclusive18_Sends()
     {
         // old 含端：18 ≥ 0.30×60=18（含端发）
-        var ep = new EventProcessor(Wsensory(), Cal());
+        var ep = new EventProcessor(Wsensory(), AlphaPatterns(), Cal());
         var ev = new StatusChangeEvent(1, 0, 0)
         {
             Kind = StatusKind.Panic, Entered = true,
@@ -318,7 +322,7 @@ public class EventProcessorTests
     [Fact]
     public void Panic_EnteredFalse_NoC1()
     {
-        var ep = new EventProcessor(Wsensory(), Cal());
+        var ep = new EventProcessor(Wsensory(), AlphaPatterns(), Cal());
         var ev = new StatusChangeEvent(1, 0, 0)
         {
             Kind = StatusKind.Panic, Entered = false,
@@ -334,7 +338,7 @@ public class EventProcessorTests
     public void Downed_Broadcasts_D1ToTeammate_D2ToEnemy()
     {
         // E2 修正：teams=[1,1,2]——p1 与 p0 同队收 D1、p2 异队收 D2
-        var ep = new EventProcessor(Wsensory(), Cal());
+        var ep = new EventProcessor(Wsensory(), AlphaPatterns(), Cal());
         var states = new[] { Participant(50f, 80f), Participant(15f, 60f), Participant(15f, 60f) };
         var downed = Participant(15f, 60f) with { Hp = 0f };
         states[0] = downed;
@@ -353,7 +357,7 @@ public class EventProcessorTests
     [Fact]
     public void Downed_DeadObserver_Excluded()
     {
-        var ep = new EventProcessor(Wsensory(), Cal());
+        var ep = new EventProcessor(Wsensory(), AlphaPatterns(), Cal());
         var states = new[]
         {
             Participant(50f, 80f) with { Hp = 0f }, // p0 倒者
@@ -372,7 +376,7 @@ public class EventProcessorTests
     [Fact]
     public void Downed_EnteredFalse_NoBroadcast()
     {
-        var ep = new EventProcessor(Wsensory(), Cal());
+        var ep = new EventProcessor(Wsensory(), AlphaPatterns(), Cal());
         var states = new[] { Participant(50f, 80f) with { Hp = 0f }, Participant(15f, 60f) };
         var ev = new StatusChangeEvent(1, 0, 0) { Kind = StatusKind.Downed, Entered = false };
         var result = ep.ProcessEvents([ev], states, new[] { 1, 1 });
@@ -383,7 +387,7 @@ public class EventProcessorTests
     public void MultiDowned_ObserverAccumulatesD2x2()
     {
         // W-h：p0、p1 同批倒下 → p2（异队）收 D2×2 → Σδ=(0,2,0,2)（probe P6）
-        var ep = new EventProcessor(Wsensory(), Cal());
+        var ep = new EventProcessor(Wsensory(), AlphaPatterns(), Cal());
         var states = new[]
         {
             Participant(50f, 80f) with { Hp = 0f },
@@ -405,7 +409,7 @@ public class EventProcessorTests
     public void MultiDowned_TeammateObserverGetsD1x2()
     {
         // v1.2 修正：双 D1 需 4 人 teams=[1,1,1,2]——p0、p1 倒下 → p2（同队存活）收 D1×2（probe P7）
-        var ep = new EventProcessor(Wsensory(), Cal());
+        var ep = new EventProcessor(Wsensory(), AlphaPatterns(), Cal());
         var states = new[]
         {
             Participant(50f, 80f) with { Hp = 0f },
@@ -432,7 +436,7 @@ public class EventProcessorTests
     public void SmallM_BelowThreshold_ToneUnchanged_SZero()
     {
         // B4 |ΔSAN|=0.5/60 → m=0.008333334（I-3 最短往返）< 0.01 → 双通道 skip
-        var ep = new EventProcessor(Wsensory(), Cal());
+        var ep = new EventProcessor(Wsensory(), AlphaPatterns(), Cal());
         var ev = new MentalDamageEvent(1, 0, 1)
         {
             SanDamage = 0.5f, MotivationMod = 0f,
@@ -449,7 +453,7 @@ public class EventProcessorTests
     [InlineData(0.05f, false, "m=0.005 < 0.01 → 不发")]
     public void B1_ThresholdBoundary(float hpDelta, bool sends, string what)
     {
-        var ep = new EventProcessor(Wsensory(), Cal());
+        var ep = new EventProcessor(Wsensory(), AlphaPatterns(), Cal());
         var ev = new PhysicalDamageEvent(1, 0, 1)
         {
             Hit = true, DamageDealt = hpDelta, DamageBlocked = 0f, IncomingDamage = hpDelta,
@@ -467,7 +471,7 @@ public class EventProcessorTests
     public void NaN_Infinity_ByEventClass()
     {
         // W-k：B/C/D 类（B2 incoming=0 → NaN）双通道全 skip；A 类（A1 dealt=NaN、A5 +∞）δ skip 但 s 照发
-        var ep = new EventProcessor(Wsensory(), Cal());
+        var ep = new EventProcessor(Wsensory(), AlphaPatterns(), Cal());
         var ws = Wsensory();
         var postcentral = RegionIndex(ws, "Postcentral");
 
@@ -505,7 +509,7 @@ public class EventProcessorTests
     public void Summation_B1PlusB4_SingleStep()
     {
         // B1(m=0.33333334)+B4(m=0.033333335) 同承受者（probe P11 复核）
-        var ep = new EventProcessor(Wsensory(), Cal());
+        var ep = new EventProcessor(Wsensory(), AlphaPatterns(), Cal());
         var target = Participant(15f, 60f);
         var events = new CombatEvent[]
         {
@@ -530,7 +534,7 @@ public class EventProcessorTests
     public void Summation_A1PlusA4_SingleStep()
     {
         // A1(m=1.0)+A4(m=1.0) 同攻击者 → Σδ=(0,2,1,0)（审计 numpy 复现）
-        var ep = new EventProcessor(Wsensory(), Cal());
+        var ep = new EventProcessor(Wsensory(), AlphaPatterns(), Cal());
         var attacker = Participant(50f, 80f);
         var events = new CombatEvent[]
         {
@@ -554,7 +558,7 @@ public class EventProcessorTests
     public void Summation_C1PlusB1_SingleStep_WithSAssertion()
     {
         // C1+B1 同承受者（probe P12 复核）+ s 断言（W-f：s[Postcentral]=1.6666667，probe P5）
-        var ep = new EventProcessor(Wsensory(), Cal());
+        var ep = new EventProcessor(Wsensory(), AlphaPatterns(), Cal());
         var target = Participant(15f, 60f);
         var events = new CombatEvent[]
         {
@@ -581,7 +585,7 @@ public class EventProcessorTests
     public void Summation_B1x2_SigmaThenSingleStep_E3Fixed()
     {
         // E3 修正：B1×2 → Σδ=(0.66666669,0,0,−0.66666669) → 一次 Step（probe P1，非逐事件两次 Step）
-        var ep = new EventProcessor(Wsensory(), Cal());
+        var ep = new EventProcessor(Wsensory(), AlphaPatterns(), Cal());
         var target = Participant(15f, 60f);
         var ev = new PhysicalDamageEvent(1, 0, 1)
         {
@@ -599,7 +603,7 @@ public class EventProcessorTests
     [Fact]
     public void Sensory_A1_15Rows_Postcentral1()
     {
-        var ep = new EventProcessor(Wsensory(), Cal());
+        var ep = new EventProcessor(Wsensory(), AlphaPatterns(), Cal());
         var ws = Wsensory();
         var ev = new PhysicalDamageEvent(1, 0, 1)
         {
@@ -618,7 +622,7 @@ public class EventProcessorTests
     public void Sensory_B2_SameAsA1Pattern()
     {
         // W-f 补行：B2 m_α=m=1.0（契约恒等）→ 与 A1 同 α pattern
-        var ep = new EventProcessor(Wsensory(), Cal());
+        var ep = new EventProcessor(Wsensory(), AlphaPatterns(), Cal());
         var ws = Wsensory();
         var ev = new PhysicalDamageEvent(1, 0, 1)
         {
@@ -634,7 +638,7 @@ public class EventProcessorTests
     [Fact]
     public void Sensory_D1_26Rows_DualModal2()
     {
-        var ep = new EventProcessor(Wsensory(), Cal());
+        var ep = new EventProcessor(Wsensory(), AlphaPatterns(), Cal());
         var ws = Wsensory();
         var states = new[] { Participant(50f, 80f) with { Hp = 0f }, Participant(15f, 60f) };
         var ev = new StatusChangeEvent(1, 0, 0) { Kind = StatusKind.Downed, Entered = true };
@@ -649,7 +653,7 @@ public class EventProcessorTests
     [Fact]
     public void Sensory_B1_20Rows_And_Max()
     {
-        var ep = new EventProcessor(Wsensory(), Cal());
+        var ep = new EventProcessor(Wsensory(), AlphaPatterns(), Cal());
         var ws = Wsensory();
         var ev = new PhysicalDamageEvent(1, 0, 1)
         {
@@ -668,7 +672,7 @@ public class EventProcessorTests
     public void Sensory_A5_MAlpha1_FourRows()
     {
         // W-c 修正：A5 m_α=1.0（A 类恒发）——非旧口径 0.5
-        var ep = new EventProcessor(Wsensory(), Cal());
+        var ep = new EventProcessor(Wsensory(), AlphaPatterns(), Cal());
         var ws = Wsensory();
         var ev = new PhysicalDamageEvent(1, 0, 1)
         {
@@ -691,7 +695,7 @@ public class EventProcessorTests
         var acc = RegionIndex(ws, "AccumbensCore");
         Assert.All(ws.Matrix[acc], v => Assert.Equal(0, v));
 
-        var ep = new EventProcessor(ws, Cal());
+        var ep = new EventProcessor(ws, AlphaPatterns(), Cal());
         var ev = new PhysicalDamageEvent(1, 0, 1)
         {
             Hit = true, DamageDealt = 4f, DamageBlocked = 0f, IncomingDamage = 4f,
@@ -705,7 +709,7 @@ public class EventProcessorTests
     [Fact]
     public void HealAndLinkGrowth_PureBatch_AllZero()
     {
-        var ep = new EventProcessor(Wsensory(), Cal());
+        var ep = new EventProcessor(Wsensory(), AlphaPatterns(), Cal());
         var states = new[] { Participant(50f, 80f), Participant(15f, 60f) };
         var events = new CombatEvent[]
         {
@@ -722,7 +726,7 @@ public class EventProcessorTests
     public void Heal_MixedBatch_NoInterference()
     {
         // W-i：Heal 混入 A1 批次 → A1 照发、Heal 贡献零
-        var ep = new EventProcessor(Wsensory(), Cal());
+        var ep = new EventProcessor(Wsensory(), AlphaPatterns(), Cal());
         var events = new CombatEvent[]
         {
             new HealEvent(1, 0, 1) { HealAmount = 10 },
@@ -742,7 +746,7 @@ public class EventProcessorTests
     [Fact]
     public void Determinism_SameInput_BitwiseIdentical()
     {
-        var ep = new EventProcessor(Wsensory(), Cal());
+        var ep = new EventProcessor(Wsensory(), AlphaPatterns(), Cal());
         var ev = new PhysicalDamageEvent(1, 0, 1)
         {
             Hit = true, DamageDealt = 4f, DamageBlocked = 0f, IncomingDamage = 4f,
@@ -762,7 +766,7 @@ public class EventProcessorTests
     [Fact]
     public void Inputs_NotMutated_OutputsNewReferences()
     {
-        var ep = new EventProcessor(Wsensory(), Cal());
+        var ep = new EventProcessor(Wsensory(), AlphaPatterns(), Cal());
         var tone = Baseline();
         var states = new[] { Participant(50f, 80f), Participant(15f, 60f) };
         states[0] = states[0] with { Tone = tone };
@@ -810,7 +814,7 @@ public class EventProcessorTests
     [Fact]
     public void EmptyEvents_StatesCopy_SensoryZero()
     {
-        var ep = new EventProcessor(Wsensory(), Cal());
+        var ep = new EventProcessor(Wsensory(), AlphaPatterns(), Cal());
         var states = new[] { Participant(50f, 80f), Participant(15f, 60f) };
         var result = ep.ProcessEvents([], states, new[] { 1, 2 });
 
@@ -825,7 +829,7 @@ public class EventProcessorTests
     {
         // W-e 锚点（v1.2）：p1=攻击者（ActorId=1，收 A1 m=3.75 不在断言范围）、p0=被击杀者
         // （伤害 TargetId + Downed ActorId）——p0 只收 B1（m=15/15=1.0）（probe Q1-Q4）
-        var ep = new EventProcessor(Wsensory(), Cal());
+        var ep = new EventProcessor(Wsensory(), AlphaPatterns(), Cal());
         var ws = Wsensory();
         var states = new[]
         {

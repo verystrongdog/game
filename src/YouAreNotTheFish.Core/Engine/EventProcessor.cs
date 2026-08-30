@@ -4,7 +4,7 @@ using YouAreNotTheFish.Core.Types;
 namespace YouAreNotTheFish.Core.Engine;
 
 /// <summary>
-/// 战斗事件 → δ（tone 脉冲）+ s（皮层感官输入）派生器——csharp-events spec@v1.2.2。
+/// 战斗事件 → δ（tone 脉冲）+ s（皮层感官输入）派生器——csharp-events spec@v1.2.2 + #105 T2 数据驱动。
 /// 消费 CombatEvents，按 运行时状态模型 §5.5 δ pattern 表 + magnitude 表与 §4.5 s = W_sensory × α
 /// 派生每参与者 δ 发射（Σ 聚合后恰好一次 ToneUpdater.Step）与 s 增量（float[69]，Phase 1 注入）。
 ///
@@ -14,23 +14,29 @@ namespace YouAreNotTheFish.Core.Engine;
 /// ∞ 显式防御（B4）；A4 expected ≤ 0 落 skip（B5）。
 /// 计算序契约（spec §五）：Σ 事件序 → 一次 Step（参与者升序）；s 模态升序 k、节点升序 j、跨事件累加。
 /// 确定性：无 static 可变状态、无内部缓存；同输入（含事件序）→ 逐位同输出。
+/// #108 Q1 数据驱动：α pattern 全部读 alpha_patterns.json（row_id → pattern[8] + m_alpha 二态）；
+/// 行 id ↔ 派生分支绑定留代码（本类 Emit 调用点持有 A1/A2/A4/A5/B1/B2/B4/C1/D1/D2）。
 /// </summary>
 public sealed class EventProcessor
 {
     private readonly WsensoryMatrix _wsensory;
+    private readonly AlphaPatterns _alphaPatterns;
     private readonly CalibrationConfig _cal;
 
     /// <summary>
     /// 构造。
     /// </summary>
     /// <param name="wsensory">W_sensory 矩阵（RegionIds = canonical 69，wmatrix 约束 C1 承接——数据层保证，不做形状校验）。</param>
+    /// <param name="alphaPatterns">α pattern 表（alpha_patterns.json，Q1 契约——消费行缺失由加载器 fail-fast）。</param>
     /// <param name="cal">校准常量（ExpectedDamage/BaseMentalDamage/EndurancePassivePenalty 消费方）。</param>
-    /// <exception cref="ArgumentNullException">wsensory 或 cal 为 null。</exception>
-    public EventProcessor(WsensoryMatrix wsensory, CalibrationConfig cal)
+    /// <exception cref="ArgumentNullException">任一参数为 null。</exception>
+    public EventProcessor(WsensoryMatrix wsensory, AlphaPatterns alphaPatterns, CalibrationConfig cal)
     {
         ArgumentNullException.ThrowIfNull(wsensory);
+        ArgumentNullException.ThrowIfNull(alphaPatterns);
         ArgumentNullException.ThrowIfNull(cal);
         _wsensory = wsensory;
+        _alphaPatterns = alphaPatterns;
         _cal = cal;
     }
 
@@ -120,12 +126,12 @@ public sealed class EventProcessor
         if (ph.Hit)
         {
             var m = ph.DamageDealt / _cal.ExpectedDamage; // A1：§5.3.1，分母消费常量（W-a）
-            Emit(deltaSum, sensoryAcc, ph.ActorId, m, new[] { 0, 1, 1, 0 }, new[] { 1, 0, 1, 0, 0, 0 }, 1.0f);
+            Emit(deltaSum, sensoryAcc, ph.ActorId, m, new[] { 0, 1, 1, 0 }, "A1");
         }
         else
         {
             // A2：m 恒 0（偏差 B2——miss 无实际伤害；防御 producer 误填 dealt）
-            Emit(deltaSum, sensoryAcc, ph.ActorId, 0f, new[] { 0, -1, 0, 0 }, new[] { 1, 0, 1, 0, 0, 0 }, 1.0f);
+            Emit(deltaSum, sensoryAcc, ph.ActorId, 0f, new[] { 0, -1, 0, 0 }, "A2");
         }
 
         // 承受者视角（三路分区）
@@ -133,19 +139,19 @@ public sealed class EventProcessor
         {
             // A5：δ m=blocked/incoming（§5.3.3）；s m_α=1.0（A 类恒发，W-c）
             var m = ph.DamageBlocked / ph.IncomingDamage;
-            Emit(deltaSum, sensoryAcc, ph.TargetId, m, new[] { 0, 0, 0, 1 }, new[] { 0, 0, 1, 0, 0, 0 }, 1.0f);
+            Emit(deltaSum, sensoryAcc, ph.TargetId, m, new[] { 0, 0, 0, 1 }, "A5");
         }
         else if (ph.Hit)
         {
             // B1：§5.3.4，|ΔHP|/HP_max（After − Before 序写死）
             var m = MathF.Abs(ph.TargetHpAfter - ph.TargetHpBefore) / ph.TargetHpMax;
-            Emit(deltaSum, sensoryAcc, ph.TargetId, m, new[] { 1, 0, 0, -1 }, new[] { 1, 0, 1, 1, 0, 0 }, m);
+            Emit(deltaSum, sensoryAcc, ph.TargetId, m, new[] { 1, 0, 0, -1 }, "B1");
         }
         else
         {
             // B2：§5.3.3，blocked/incoming（契约下恒 1.0）
             var m = ph.DamageBlocked / ph.IncomingDamage;
-            Emit(deltaSum, sensoryAcc, ph.TargetId, m, new[] { 0, 0, 0, 1 }, new[] { 1, 0, 1, 0, 0, 0 }, m);
+            Emit(deltaSum, sensoryAcc, ph.TargetId, m, new[] { 0, 0, 0, 1 }, "B2");
         }
     }
 
@@ -157,11 +163,11 @@ public sealed class EventProcessor
         // A4：§5.3.2，expected = BaseMentalDamage×(1+mot) − EndurancePassivePenalty（先乘后减，f32 序）
         var expected = (float)_cal.BaseMentalDamage * (1f + me.MotivationMod) - _cal.EndurancePassivePenalty;
         var mA4 = me.SanDamage / expected;
-        Emit(deltaSum, sensoryAcc, me.ActorId, mA4, new[] { 0, 1, 0, 0 }, new[] { 0, 0, 0, 0, 1, 1 }, 1.0f);
+        Emit(deltaSum, sensoryAcc, me.ActorId, mA4, new[] { 0, 1, 0, 0 }, "A4");
 
         // B4：§5.3.5，|ΔSAN|/SAN_max（只消费差值对 + 分母，不消费 SanDamage——W-d 字段语义契约）
         var mB4 = MathF.Abs(me.TargetSanAfter - me.TargetSanBefore) / me.TargetSanMax;
-        Emit(deltaSum, sensoryAcc, me.TargetId, mB4, new[] { 1, 0, 0, -1 }, new[] { 0, 0, 0, 1, 1, 1 }, mB4);
+        Emit(deltaSum, sensoryAcc, me.TargetId, mB4, new[] { 1, 0, 0, -1 }, "B4");
     }
 
     /// <summary>
@@ -180,7 +186,7 @@ public sealed class EventProcessor
                 && st.SanBefore >= 0.30f * st.SanMax
                 && st.SanAfter < 0.30f * st.SanMax)
             {
-                Emit(deltaSum, sensoryAcc, st.ActorId, 1.0f, new[] { 1, 0, 0, -1 }, new[] { 0, 0, 0, 1, 0, 0 }, 1.0f);
+                Emit(deltaSum, sensoryAcc, st.ActorId, 1.0f, new[] { 1, 0, 0, -1 }, "C1");
             }
         }
         else if (st.Kind == StatusKind.Downed)
@@ -192,7 +198,8 @@ public sealed class EventProcessor
                 if (p == st.ActorId || states[p].Hp <= 0f)
                     continue;
                 var pattern = teams[p] == teams[st.ActorId] ? new[] { 1, -1, 0, -1 } : new[] { 0, 1, 0, 1 };
-                Emit(deltaSum, sensoryAcc, p, 1.0f, pattern, new[] { 1, 1, 0, 0, 1, 0 }, 1.0f);
+                var rowId = teams[p] == teams[st.ActorId] ? "D1" : "D2";
+                Emit(deltaSum, sensoryAcc, p, 1.0f, pattern, rowId);
             }
         }
     }
@@ -201,10 +208,17 @@ public sealed class EventProcessor
     /// 单视角派生：δ 与 s 按各自 emit 判据独立累加。
     /// δ：m ≥ 0.01f 且有限（NaN 天然落 skip——NaN>=0.01f 为 False；∞ 显式防御，偏差 B4）。
     /// s：m_α ≥ 0.01f 且有限（A 类 m_α=1.0 恒发，独立于 δ 通道——§5.3.7）。
+    /// #108 Q1 数据驱动：α pattern 与 m_alpha 查 alpha_patterns.json（rowId 绑定留代码）；
+    /// m_alpha 二态——有限数字 = 常量（A 类 1.0），"m_delta" = 用本分支现有算法算的 m。
     /// </summary>
     private void Emit(float[][] deltaSum, float[][] sensoryAcc, int p,
-        float m, int[] deltaPattern, int[] alphaPattern, float mAlpha)
+        float m, int[] deltaPattern, string rowId)
     {
+        var entry = _alphaPatterns.Events[rowId];
+        var alphaPattern = entry.Pattern;
+        // m_alpha 二态解析（Q1）：数字常量 vs "m_delta"→m
+        var mAlpha = entry.MAlpha.IsDelta ? m : (float)(entry.MAlpha.Constant ?? 0.0);
+
         // δ 通道
         if (m >= 0.01f && !float.IsInfinity(m))
         {
@@ -227,7 +241,7 @@ public sealed class EventProcessor
             {
                 var row = matrix[j];
                 float s = 0f;
-                for (var k = 0; k < 6; k++)
+                for (var k = 0; k < alphaPattern.Length; k++)
                 {
                     if (row[k] != 0 && alphaPattern[k] != 0)
                         s += mAlpha; // pattern=1 → m_α（W∈{0,1}，乘为精确；α=1×m_α）
