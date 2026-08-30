@@ -5,7 +5,8 @@ namespace YouAreNotTheFish.Core.Data;
 /// <summary>
 /// 单个脑区的功能剖面（brain_regions.json 中每个 region 的 function_profile 字段）。
 /// 69 个脑区各有一份；其中 2 个（LocusCoeruleusRight, SubstantiaNigraParsCompactaRight）
-/// 通过 MirrorOf 引用左半球的剖面，此时其余字段为 null。
+/// 通过 MirrorOf 指向左半球主变体——Grilling #92 D6：镜像复制主变体完整剖面 + mirror_of 溯源
+/// （偏侧化架构 §五/§9.2 T8）。
 /// </summary>
 public record FunctionProfile
 {

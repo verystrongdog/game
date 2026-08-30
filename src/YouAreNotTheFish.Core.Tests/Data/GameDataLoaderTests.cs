@@ -62,24 +62,25 @@ public class GameDataLoaderTests
         Assert.Equal(BrainRegionCategory.Brainstem, pag.Category);
         Assert.Equal(CstcLoop.None, pag.FunctionProfile.CstcLoop);
 
-        // Spot-check mirror entries — all function_profile fields should be null except MirrorOf
+        // Spot-check mirror entries — Grilling #92 D6：镜像复制主变体完整 function_profile + mirror_of 溯源
+        //（偏侧化架构 §9.2 T8：展开剖面 = 主变体逐字段相等）
         var lcRight = data.Regions["LocusCoeruleusRight"];
         Assert.NotNull(lcRight);
         Assert.Equal(BrainRegionCategory.Brainstem, lcRight.Category);
         Assert.Equal("LocusCoeruleus", lcRight.FunctionProfile.MirrorOf);
         Assert.Contains(lcRight.FunctionProfile.MirrorOf, data.Regions.Keys); // AC-13 部分断言
-        Assert.Null(lcRight.FunctionProfile.Timescale);
-        Assert.Null(lcRight.FunctionProfile.CstcLoop);
-        Assert.Null(lcRight.FunctionProfile.CstcRole);
+        AssertProfilesEqualExceptMirror(
+            data.Regions["LocusCoeruleus"].FunctionProfile, lcRight.FunctionProfile);
 
         var sncRight = data.Regions["SubstantiaNigraParsCompactaRight"];
         Assert.NotNull(sncRight);
         Assert.Equal("SubstantiaNigraParsCompacta", sncRight.FunctionProfile.MirrorOf);
-        Assert.Null(sncRight.FunctionProfile.Timescale);
+        AssertProfilesEqualExceptMirror(
+            data.Regions["SubstantiaNigraParsCompacta"].FunctionProfile, sncRight.FunctionProfile);
     }
 
     [Fact]
-    public void LoadBrainRegions_AllEnumsParseWithoutNulls_ExceptMirrorEntries()
+    public void LoadBrainRegions_AllEnumsParseWithoutNulls_IncludingMirrors()
     {
         var path = FindBrainRegionsJson();
         var data = GameDataLoader.LoadBrainRegions(path);
@@ -87,18 +88,13 @@ public class GameDataLoaderTests
         foreach (var (fid, region) in data.Regions)
         {
             var fp = region.FunctionProfile;
-            var isMirror = fp.MirrorOf != null;
 
-            if (isMirror)
+            if (fp.MirrorOf is { } master)
             {
-                // Mirror entries: all enum fields should be null, only MirrorOf is set
-                Assert.Null(fp.Timescale);
-                Assert.Null(fp.NeurotransmitterDominant);
-                Assert.Null(fp.OscillatoryBand);
-                Assert.Null(fp.CstcLoop);
-                Assert.Null(fp.CstcRole);
-                Assert.Null(fp.HierarchyDirection);
-                Assert.Null(fp.GameplayDomain);
+                // 镜像条目（Grilling #92 D6）：枚举字段非 null——展开剖面 = 主变体逐字段相等（T8），
+                // mirror_of 仅作溯源注释字段
+                Assert.Contains(master, data.Regions.Keys);
+                AssertProfilesEqualExceptMirror(data.Regions[master].FunctionProfile, fp);
             }
             else
             {
@@ -119,6 +115,21 @@ public class GameDataLoaderTests
                     $"{fid}: GameplayDomain is null for non-mirror entry");
             }
         }
+    }
+
+    /// <summary>断言两个功能剖面逐字段相等（除 mirror_of 溯源字段外）——#92 D6 镜像展开契约（T8）。</summary>
+    private static void AssertProfilesEqualExceptMirror(FunctionProfile expected, FunctionProfile actual)
+    {
+        Assert.Equal(expected.PrimaryFunction, actual.PrimaryFunction);
+        Assert.Equal(expected.InputTypes, actual.InputTypes); // xUnit 数组断言 = 序列比较
+        Assert.Equal(expected.OutputTypes, actual.OutputTypes);
+        Assert.Equal(expected.Timescale, actual.Timescale);
+        Assert.Equal(expected.NeurotransmitterDominant, actual.NeurotransmitterDominant);
+        Assert.Equal(expected.OscillatoryBand, actual.OscillatoryBand);
+        Assert.Equal(expected.CstcLoop, actual.CstcLoop);
+        Assert.Equal(expected.CstcRole, actual.CstcRole);
+        Assert.Equal(expected.HierarchyDirection, actual.HierarchyDirection);
+        Assert.Equal(expected.GameplayDomain, actual.GameplayDomain);
     }
 
     [Fact]
