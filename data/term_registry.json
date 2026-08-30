@@ -1053,17 +1053,17 @@
    "updated": "2026-08-05"
   },
   "R": {
-   "definition": "组件稀有度——不常见（Rare）/中度破损。R=20%杂兵/50%精英掉落权重。",
-   "source": "实体/角色与面具.md §8.5; 事件/奖励掉落系统.md",
-   "old_model": "—（与游戏稀有度体系Rare一致，无偏离）",
-   "deviation_reason": "—",
+   "definition": "神经节点落点向量 R ∈ ℝ^69（接口记号 R_i ≡ R ∀ i）——月光场 m_field_vec = q̂·g·R 的神经落点因子。结构（Grilling #101，2026-09-02）：R = Σ_s α_s·v_s^norm——语义叠加；互斥分区 supp(v_s)∩supp(v_s')=∅；语义内归一化 Σv_s^norm=1；独立缩放 α_s。当前 12 落点 = L1∪L2 ∩ W活跃节点；主辅两档参数化 v_s^norm(j) = r/(4r+8)[主] 或 1/(4r+8)[辅]；R[j] ≥ 0（非负=输入层性质）；当前硬稀疏 supp(R)=S_core，长期不变量 supp(R) ⊆ W_active；扩展性不变量：新增语义只能增加未占用 W-active fid 分量，不改变旧语义分量 ⇒ 不触发旧语义重新校准。r/α_s 正式数值归 #35（占位 PLACEHOLDER 对齐 #103）。",
+   "source": "Grilling #101（2026-09-02）; 规则/时空结构数学框架.md §11.5; 决策树 #38 Q5",
+   "old_model": "无——#38 只定接口存在，R 未填=0，functional_id 留独立 grilling",
+   "deviation_reason": "月光是神经可接收刺激（意识外显效应是 game mechanic），需独立神经通道承载；R 定义月光场对哪些神经节点注入、以什么结构注入",
    "status": "active",
    "numerical_locations": [
-    "实体/角色与面具.md §8.5",
-    "事件/奖励掉落系统.md"
+    "规则/时空结构数学框架.md §11.5",
+    "规则/技能树系统/运行时状态模型.md §4.5"
    ],
-   "added": "2026-08-05",
-   "updated": "2026-08-05"
+   "added": "2026-09-02",
+   "updated": "2026-09-02"
   },
   "SR": {
    "definition": "组件稀有度——极稀有（Super Rare）/重度破损。SR=0%杂兵/10%精英/40%Boss掉落权重。",
@@ -1988,7 +1988,7 @@
    "updated": "2026-09-02"
   },
   "s_env": {
-   "definition": "环境基调——持续场形态的 s(t) 分量。当前空间/场景的真实物理存在（房间气味/温度/光线/内容物），经 W_sensory × α_env 展开。环境内恒定，空间切换节点刷新。与月光场 m_field 相对：s_env = 局部真实物理存在（非月光产物），m_field = 世界级月光场（调制 s_env）。",
+   "definition": "环境基调——持续场形态的 s(t) 分量。当前空间/场景的内容呈现（房间气味/温度/光线/内容物），经 W_sensory × α_env 展开。环境内恒定，空间切换节点刷新。与月光场 m_field 相对：s_env = 空间内容呈现（来源 = 共享基质经观察者取版本，医院观察向量主导，非月光产生），m_field = 世界级月光场（调制呈现强度，非内容来源）。",
    "source": "Grilling #69 D2/D3; 空间/空间与关卡设计.md（房间温度/气味线索）",
    "old_model": "无——非战斗刺激此前无定义，s(t) 仅含战斗事件脉冲",
    "deviation_reason": "非战斗环境是持续在场（房间恒有气味/温度），不是事件脉冲，需持续场形态",
@@ -1998,7 +1998,7 @@
     ".scratch/grilling-69-external-stimulus/task-plan.md §2.2/§4"
    ],
    "added": "2026-08-16",
-   "updated": "2026-08-16"
+   "updated": "2026-09-02"
   },
   "嗅觉": {
    "definition": "新增感官模态 olfactory——气味线索的输入通道。解剖锚点：梨状皮层/OFC。独立于视觉/听觉通路。原 6 模态不含嗅觉，Grilling #69 新增（W_sensory 第 7 列）。",
@@ -3613,6 +3613,19 @@
     "#103",
     "moonlight"
    ]
+  },
+  "神经落点": {
+   "definition": "月光场通道注入的 functional_id 集合及其权重结构（R 的非零分量支撑集与分配）。#101（2026-09-02）锁定：落点 = S_core 12 节点（L1∪L2 ∩ W活跃）；落点 ⊆ W活跃节点为硬约束；主辅两档（L1 主 4 / L2 辅 8）；非负 + 当前硬稀疏；扩展性不变量防新语义重校准。",
+   "source": "Grilling #101（2026-09-02）; 规则/时空结构数学框架.md §11.5",
+   "old_model": "无——#69 D6 只确立 m_field 通道存在，节点级落点延迟",
+   "deviation_reason": "m_field 通道存在 ≠ 节点落点已定义；落点决定月光场实际影响哪些神经功能",
+   "status": "active",
+   "numerical_locations": [
+    "规则/时空结构数学框架.md §11.5",
+    "docs/决策树.md #101 条目"
+   ],
+   "added": "2026-09-02",
+   "updated": "2026-09-02"
   }
  },
  "_metadata": {
