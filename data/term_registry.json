@@ -3501,13 +3501,125 @@
     "#102",
     "moonlight"
    ]
+  },
+  "游戏日": {
+   "definition": "规则层时间变量：1 游戏日 = 3 时段（上午/下午/夜晚），休息推进 1 时段；夜晚第 3 次休息完成瞬间 → D+1 上午 + 游戏日推进。游戏日是月相 λ 推进的原子步长；时段仅属事件/呈现层，不作为场动力学时间粒度。",
+   "source": "规则/时空结构数学框架.md §11.6 接口层协议块 Q1; Grilling #103; 事件/游戏循环.md §2.1/§4.3",
+   "old_model": "无——#103 确立的接口层时间变量术语",
+   "deviation_reason": "把事件层「每天三段」设计正式规则化为规则层时间变量，并明确其与时段/模拟时间的分层边界",
+   "status": "active",
+   "numerical_locations": [
+    "规则/时空结构数学框架.md §11.6 接口层协议块"
+   ],
+   "added": "2026-08-30",
+   "updated": "2026-08-30",
+   "tags": [
+    "#103",
+    "moonlight"
+   ]
+  },
+  "模拟时间": {
+   "definition": "理论分析中的时间坐标/时间标度，以 τ_char 为归一化基准（如 T_moon=29.5 模拟日、ε_adiab=τ_char/T_mod）。**不是游戏运行时的独立时间变量**——运行时以游戏日序号 D 直接计算 λ(D)；游戏日与模拟时间不建立需要运行时消费的绝对数值映射。",
+   "source": "规则/时空结构数学框架.md §11.6 接口层协议块 Q2; Grilling #103",
+   "old_model": "游戏运行时钟（已否决——模拟时间仅作绝热性验证尺度，不进入运行时）",
+   "deviation_reason": "用户落盘要求明确：模拟时间定义为理论分析时间标度，不是游戏运行时钟；否决 1 游戏日 = 1/10/α·τ_char 运行时映射",
+   "status": "active",
+   "numerical_locations": [
+    "规则/时空结构数学框架.md §11.6 接口层协议块 Q2"
+   ],
+   "added": "2026-08-30",
+   "updated": "2026-08-30",
+   "tags": [
+    "#103",
+    "moonlight"
+   ]
+  },
+  "时段": {
+   "definition": "事件/呈现层时间粒度：上午/下午/夜晚（1 游戏日 = 3 时段），休息推进 1 时段。仅用于 NPC 调度、可访问性、风险表现与月光表观（弱/中/强 = 观察/呈现层表观），不进入场动力学、不推进 λ。",
+   "source": "规则/时空结构数学框架.md §11.6 接口层协议块 Q1/Q3; Grilling #103; 事件/游戏循环.md §2.1; 剧情系统设计.md §3.8",
+   "old_model": "无（此前仅事件层隐式使用，未正式入库）",
+   "deviation_reason": "明确时段与游戏日（规则层）的分层：时段不是动力学时间步，时段月光基线不是场参数时段函数",
+   "status": "active",
+   "numerical_locations": [
+    "事件/游戏循环.md §2.1"
+   ],
+   "added": "2026-08-30",
+   "updated": "2026-08-30",
+   "tags": [
+    "#103",
+    "moonlight"
+   ]
+  },
+  "λ(D) 月相离散采样": {
+   "definition": "运行时月相函数：λ(D) = (1−cos(2πD/29.5))/2，D ∈ ℕ₀ = 自开局起已完成的游戏日边界数，D=0 ↔ 新月（开局锚定）。解析确定性函数按 D 直接计算（非逐日累加 ⇒ 无累积相位漂移）；连续函数周期 29.5 游戏日，运行时仅在整数 D 上离散采样；满月连续峰值 D=14.75。",
+   "source": "规则/时空结构数学框架.md §11.6 接口层协议块 Q4; Grilling #103; 决策树 #102 Q1（波形本体）",
+   "old_model": "连续时间波形 λ(t)（E2 验证用）；「场状态微变」自然语言（游戏循环旧表述）",
+   "deviation_reason": "把 E2 连续波形离散化为 D 索引采样，并锚定 D=0↔新月消除开局相位自由参数",
+   "status": "active",
+   "numerical_locations": [
+    "规则/时空结构数学框架.md §11.6 接口层协议块 Q4"
+   ],
+   "added": "2026-08-30",
+   "updated": "2026-08-30",
+   "tags": [
+    "#103",
+    "moonlight"
+   ]
+  },
+  "moonState(D)": {
+   "definition": "运行时只读查询接口（纯函数、无副作用）：moonState(D) → { phase: λ(D), shell: {E_c(λ), E_th(λ)}, qhat_baseline ∈ ℝ^N, calibration_status ∈ {PLACEHOLDER, CALIBRATED}, calibration_version }。返回月相基线壳态（E≈E_c、无事件扰动）；E3/E4 扰动量不进本接口。不提供通用月光强度聚合标量。",
+   "source": "规则/时空结构数学框架.md §11.6 接口层协议块 Q5/Q6; Grilling #103",
+   "old_model": "无（m_field 占位 MFieldStrength=0，接口形态 #38 已锁）",
+   "deviation_reason": "把 m_field 的场侧输入形式化为显式只读查询契约 + 校准状态分级",
+   "status": "active",
+   "numerical_locations": [
+    "规则/时空结构数学框架.md §11.6 接口层协议块 Q5/Q6"
+   ],
+   "added": "2026-08-30",
+   "updated": "2026-08-30",
+   "tags": [
+    "#103",
+    "moonlight"
+   ]
+  },
+  "MOON_PHASE_CHANGED": {
+   "definition": "游戏日推进时广播的失效/刷新通知事件（D→D+1 后 emit）：通知消费者当前月相基线已改变，消费者自行通过 moonState(D) 重新查询。广播是刷新通知、非第二状态源，不携带完整状态副本。",
+   "source": "规则/时空结构数学框架.md §11.6 接口层协议块 Q5; Grilling #103",
+   "old_model": "「空间切换 + 月相/昼夜节点刷新」（#69 D7 自然语言）",
+   "deviation_reason": "把 #69 D7 刷新时序落实为显式事件契约，与 moonState 查询解耦",
+   "status": "active",
+   "numerical_locations": [
+    "规则/时空结构数学框架.md §11.6 接口层协议块 Q5"
+   ],
+   "added": "2026-08-30",
+   "updated": "2026-08-30",
+   "tags": [
+    "#103",
+    "moonlight"
+   ]
+  },
+  "calibration_status": {
+   "definition": "校准产物状态枚举：PLACEHOLDER（未校准占位，仅允许只读 λ/剧情谓词/视觉呈现/原型测试且显式标记）| CALIBRATED（#35 产物已接入，正式遭遇/敌人/情境基线/SAN×月光权重方可消费）。校准缺失/版本不匹配 → 启动 fail-fast，禁止静默回退占位。",
+   "source": "规则/时空结构数学框架.md §11.6 接口层协议块 Q6/Q7; Grilling #103",
+   "old_model": "无（占位值与正式值无区分，存在误用风险）",
+   "deviation_reason": "把校准状态显式化，防止占位数值被当作正式数值进入下游",
+   "status": "active",
+   "numerical_locations": [
+    "规则/时空结构数学框架.md §11.6 接口层协议块 Q6"
+   ],
+   "added": "2026-08-30",
+   "updated": "2026-08-30",
+   "tags": [
+    "#103",
+    "moonlight"
+   ]
   }
  },
  "_metadata": {
   "last_updated": "2026-08-30",
-  "last_batch": "Grilling #102 E2 月相调制标定 — λ(t) 月相驱动波形/T_mod/ε_adiab/ρ_c/移动壳跟踪判据/成立区间下界 ε_adiab* 6 术语入库",
-  "total_terms": 254,
-  "active_terms": 234,
+  "last_batch": "Grilling #103 游戏日↔模拟时间接口层 — 游戏日/模拟时间/时段/λ(D) 月相离散采样/moonState(D)/MOON_PHASE_CHANGED/calibration_status 7 术语入库",
+  "total_terms": 261,
+  "active_terms": 241,
   "deprecated_terms": 20
  }
 }
