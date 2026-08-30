@@ -27,7 +27,7 @@
 | `BrainRegionCategory` | Cortical, Subcortical, Brainstem | cortical, subcortical, brainstem | brain_regions | 非可空 |
 | `OscillatoryBand` | Alpha, Beta, Gamma, Theta | alpha, beta, gamma, theta | brain_regions | 可空 |
 | `Neurotransmitter` | Gaba, Dopamine, Glutamate, Norepinephrine, Serotonin | GABA, dopamine, glutamate, norepinephrine, serotonin | brain_regions + brainstem edges | 可空 |
-| `EdgeRole` | Active, Silent, Modulating | active, silent, modulating | tripartite edges | 非可空 |
+| `EdgeRole` | Active, Silent, Modulating | active, silent, modulating | tripartite edges | 非可空（⚠️ Grilling #106：4 类边 `Role` 属性加 `[JsonRequired]`——JSON 缺失 `role` → `JsonException`，禁止静默回退 Active(0)） |
 | `BrainstemSystem` | LcNe, Raphe5Ht, SncDa, VtaDa | LC_NE, Raphe_5HT, SNc_DA, VTA_DA | brainstem edges | 非可空 |
 | `CstcPathway` | GoDirect, NogoIndirect, StopHyperdirect, Disinhibition, Thalamocortical | go_direct, ... | cstc edges | 非可空 |
 | `CstcStation` | CorticalInput, StriatalGate, PallidalOutput, ThalamicRelay, Stn | cortical_input, ..., stn | cstc edges | 非可空 |
@@ -307,6 +307,7 @@ public static GameData LoadAll(string dataDir)
 | v1.1 | 2026-08-12 | 修复审计 E1-E6 + W 级：§2.2 补 [JsonPropertyName]×41；Matrix→int[][]; RdocProfile 6 域可空；SignalSubtype 异构字段全量可空；signal_types 词表更新为实测 18 子类；agency/valence 值域修正；AC-4/AC-12 数据修复（悬挂引用+注册表对齐）；AC-6 改为一次性审计产物；AC-8~12 新增；约束表扩至 11 条 | 审计退回（report.md 2026-08-12） | Δ审计（§2.2 + §五 + §六 + §七） |
 | v1.2 | 2026-08-12 | Δ审计"有条件通过"补修：AC-13（mirror_of membership）/AC-14（1049 三体边 membership）新增；auto_activated_links 豁免在 AC 层注明；文本修正（词表最大消费方备注移位、约束8 来源列、异常行为时态、约束9 交集语义） | Δ审计结论（report.md v1.1 段） | 免重审（数据侧三路实测闭环） |
 | v1.3 | 2026-08-14 | Grilling #24 文档同步：D-2 收录 GameData + LoadAll（§三 新增段）；D-5 tripartite 根 `_` key 7→4；SituationPrimitives.cs 注释历史口径修正 | Grilling #24 盘点（引擎数据层偏差清单 D-2/D-5） | 免重审（纯文档同步） |
+| v1.4 | 2026-09-02 | Grilling #106：EdgeRole 行注明 4 类边 Role 加 `[JsonRequired]`（缺失 → JsonException） | Grilling #106 引擎 fail-fast（实施 #107） | 免重审（实现细节同步，随 #107 测试验证） |
 
 ---
 *创建: 2026-08-12 | 更新: 2026-08-12 | 版本: v1.2*

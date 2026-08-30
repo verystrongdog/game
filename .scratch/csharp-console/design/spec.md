@@ -156,7 +156,7 @@ public static class Program
 | AC-9 | 完整战斗冒烟 | `--seed 42` 无参数跑完整战斗（上限 = cal.MaxRounds=50——**v1.1 修正：原「60」与正典矛盾，审计 C1/console-03**）→ 正常退出 0；每回合 RenderRound 非空；NPC（p1）行动由 NpcActionProvider 自动（无键盘提示——审计 C2 组合 provider） |
 | AC-10 | 静息 trace 模式 | `--trace-resting 30` → 输出 `== 静息不动点 ==` + active 节点 min/max **渲染串（F3）∈ [0.535, 0.772]（v1.1 修正——审计 C5：M1 实测 max=0.771229 > 0.771，浮点区间取 0.772）** |
 | AC-11 | 确定性 | **脚本化输入前提（v1.1 补——审计 console-04）：两次运行喂同一脚本化输入流（PlayerActionProvider 的 TextReader 注入同一输入序列）** + `--seed 42` → 输出逐字符相同（重定向 stdout 比较） |
-| AC-12 | 异常 | 数据目录缺失 → 非零退出 + 错误信息；CliUsageException → 退出 1 + stderr 用法 |
+| AC-12 | 异常 | 数据目录缺失 → 非零退出 + 错误信息；CliUsageException → 退出 1 + stderr 用法；**数据校验失败（`JsonException`，如四类三体边缺 `role`——Grilling #106）→ 退出 1 + stderr「数据校验失败: {ex.Message}」（无未处理异常堆栈）** |
 | AC-13 | 渲染格式（v1.1 新增——审计 C3/C4/C7；v1.2 补 [顺序] 行——审计 C-07） | 完整回合输出含：`[速度]` 三分量行 ×2、`[顺序]` 行（`p{0} → p{1}` 形态——审计 C-07 补锚点）、`[a(t)]` 行 ×2（sensory/Precentral/Broca）、`[状态]` 行 ×2、`[行动]` 行 ×2（等待参与者含「等待」）、`[结算]` 事件行（m 为 F4 格式——`m=0.6250` 形态，审计 C7 格式统一；**A2 miss 行同 F4——`m=0.0000 (miss)`，v1.2 修正审计 Δ-C10**）、`[因子]` 行（物理四因子 / 精神三因子无 force——v1.2 修正审计 D2/Δ-C04）、结束含 `[结束]` 原因（**仅最终回合一次——v1.2 裁决审计 D7**） |
 
 ## 七、本 spec 自检清单
@@ -191,7 +191,8 @@ public static class Program
 | v1.0 | 2026-08-14 | 初稿 | 任务issue 01 | 全量审计 |
 | v1.1 | 2026-08-14 | 全量审计（3 专家 + 对抗验证，44 发现 → 31 CONFIRMED）修复：C1/console-03（AC-9「60」→ 50——MaxRounds 正典）；C2（组合 provider——NPC 行动接线 NpcActionProvider）；C3/console-07（补 [a(t)] 段——sensory/Precentral/Broca）；C4/console-08（补 [因子] 段——base×force×motivation×gate）；C5（静息区间 [0.535, 0.772]——M1 实测 0.771229）；C7/console-09（结算示例与 F4 格式统一）；C7/console-11（RenderSetup 循环前输出）；C8/console-09（ctx 构造定义——DeterministicRng 接线）；C9/console-13/C13（--trace-resting 非法值 <1）；C10（名字硬编码声明）；C11/console-08（RenderRound +cal 参数）；C14（SpeedScoreCalculator 实例化说明）；console-04（AC-11 脚本化输入前提）；console-06（速度重算表述统一）；console-10（EOF/null 输入处理）；console-15（重复参数后者覆盖）；AC-13 新增渲染格式验收；偏差 B6-B8 新增 | 全量审计（3❌ + 10⚠️ + 3ℹ️ 去重） | Δ审计 |
 | v1.2 | 2026-08-14 | Δ审计（3 专家 + 对抗验证，43 发现 → 21 CONFIRMED）修复：C-01（RenderRound +TurnManager tm——段 3/6 消费 LastRoundOrder/LastRoundActions，3 重断裂）；D2/Δ-C04/C-02（[因子] 段按事件类型区分——精神无 force 因子 base 回退 cal，3 专家同命中）；D3/Δ-C02/C-06（§5.2/§5.3 段号引用同步——结算段 7、结束段 9）；Δ-C01/C-03（CompositeActionProvider 类型定义——p 自由变量伪码不可执行；NpcActionProvider 无参构造声明）；D6/Δ-C06/C-04（WaitProvider 类定义 + 静息 trace 分支补 ctx）；D7/Δ-C03/C-05（[结束] 唯一输出源裁决——RenderRound 段 9，主循环退出后不重复，3 专家同命中）；D8/Δ-C07（A1 示例补「命中」后缀）；Δ-C05（salience 来源 = state.Salience[p]——flow 已交付）；Δ-C10（A2 m=0.0000 F4 格式）；C-07（AC-13 补 [顺序] 行锚点） | Δ审计（2❌ + 7⚠️ 去重） | 终审确认 |
+| v1.3 | 2026-09-02 | Grilling #106：AC-12 增「JsonException（数据校验失败，如缺 role）→ 退出 1 + stderr 数据校验失败」 | Grilling #106 引擎 fail-fast（实施 #107） | 免重审（实现细节同步，随 #107 测试验证） |
 
 ---
-*创建: 2026-08-14 | 更新: 2026-08-14 | 版本: v1.2*
+*创建: 2026-08-14 | 更新: 2026-09-02 | 版本: v1.3*
 *关联: [任务issue 01](issues/01-console-spec.md), [plan §九](../../../csharp-engine/design/plan.md), [csharp-flow spec](../../../csharp-flow/design/spec.md)*
