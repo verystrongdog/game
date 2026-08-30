@@ -1,9 +1,9 @@
 {
-  "description": "W_sensory — anatomical mapping from 6 sensory modalities to 69 functional_ids",
+  "description": "W_sensory — anatomical mapping from 8 sensory modalities to 69 functional_ids",
   "grilling": "Grilling #34 战斗事件空间 (2026-08-09)",
   "dimensions": {
     "functional_ids": 69,
-    "modalities": 6
+    "modalities": 8
   },
   "modalities": [
     "visual",
@@ -11,7 +11,9 @@
     "somatosensory",
     "pain",
     "social_cognition",
-    "language_cognition"
+    "language_cognition",
+    "olfactory",
+    "thermoreception"
   ],
   "rows": {
     "AccumbensCore": {
@@ -20,7 +22,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "AccumbensShell": {
       "visual": 0,
@@ -28,7 +32,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "Amygdala": {
       "visual": 0,
@@ -36,7 +42,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 1,
+      "thermoreception": 0
     },
     "AnteriorCingulateCortex": {
       "visual": 0,
@@ -44,7 +52,9 @@
       "somatosensory": 0,
       "pain": 1,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "AnteriorCingulateCortexDorsal": {
       "visual": 0,
@@ -52,7 +62,9 @@
       "somatosensory": 0,
       "pain": 1,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "BanksSTS": {
       "visual": 0,
@@ -60,7 +72,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 1,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "CaudalMiddleFrontal": {
       "visual": 0,
@@ -68,7 +82,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "Caudate": {
       "visual": 0,
@@ -76,7 +92,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "CerebellumCortex": {
       "visual": 0,
@@ -84,7 +102,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "Cuneus": {
       "visual": 1,
@@ -92,7 +112,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "DorsalRapheNucleus": {
       "visual": 0,
@@ -100,7 +122,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "Entorhinal": {
       "visual": 0,
@@ -108,7 +132,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "FrontalPole": {
       "visual": 0,
@@ -116,7 +142,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 1
+      "language_cognition": 1,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "FrontalPoleDMN": {
       "visual": 0,
@@ -124,7 +152,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 1,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "FrontalPoleExtreme": {
       "visual": 0,
@@ -132,7 +162,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 1
+      "language_cognition": 1,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "FrontalPoleFPN": {
       "visual": 0,
@@ -140,7 +172,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 1
+      "language_cognition": 1,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "FrontalPoleSN": {
       "visual": 0,
@@ -148,7 +182,9 @@
       "somatosensory": 0,
       "pain": 1,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "Fusiform": {
       "visual": 1,
@@ -156,7 +192,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "HippocampusCA1": {
       "visual": 0,
@@ -164,7 +202,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "HippocampusCA3": {
       "visual": 0,
@@ -172,7 +212,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "InferiorParietal": {
       "visual": 1,
@@ -180,7 +222,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 1,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "InferiorParietalAngular": {
       "visual": 1,
@@ -188,7 +232,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 1,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "InferiorTemporal": {
       "visual": 1,
@@ -196,7 +242,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "Insula": {
       "visual": 0,
@@ -204,7 +252,9 @@
       "somatosensory": 0,
       "pain": 1,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 1
     },
     "IsthmusCingulate": {
       "visual": 0,
@@ -212,7 +262,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "LateralOccipital": {
       "visual": 1,
@@ -220,7 +272,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "LateralOccipitalOccipitoParietal": {
       "visual": 1,
@@ -228,7 +282,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "LateralOrbitofrontal": {
       "visual": 0,
@@ -236,7 +292,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 1,
+      "thermoreception": 0
     },
     "Lingual": {
       "visual": 1,
@@ -244,7 +302,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "LocusCoeruleus": {
       "visual": 0,
@@ -252,7 +312,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "LocusCoeruleusRight": {
       "visual": 0,
@@ -260,7 +322,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "MedialOrbitalPrefrontalDMN": {
       "visual": 0,
@@ -268,7 +332,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 1,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "MedialOrbitalPrefrontalVMPFC": {
       "visual": 0,
@@ -276,7 +342,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 1,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "MedianRapheNucleus": {
       "visual": 0,
@@ -284,7 +352,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "MiddleTemporal": {
       "visual": 1,
@@ -292,7 +362,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "NucleusAccumbens": {
       "visual": 0,
@@ -300,7 +372,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "Pallidum": {
       "visual": 0,
@@ -308,7 +382,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "Paracentral": {
       "visual": 0,
@@ -316,7 +392,9 @@
       "somatosensory": 1,
       "pain": 1,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "Parahippocampal": {
       "visual": 0,
@@ -324,7 +402,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "ParsOpercularis": {
       "visual": 0,
@@ -332,7 +412,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 1
+      "language_cognition": 1,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "PeriaqueductalGray": {
       "visual": 0,
@@ -340,7 +422,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "Pericalcarine": {
       "visual": 1,
@@ -348,7 +432,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "PontineReticularNucleus": {
       "visual": 0,
@@ -356,7 +442,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "Postcentral": {
       "visual": 0,
@@ -364,7 +452,9 @@
       "somatosensory": 1,
       "pain": 1,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 1
     },
     "PosteriorCingulate": {
       "visual": 0,
@@ -372,7 +462,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "Precentral": {
       "visual": 0,
@@ -380,7 +472,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "Precuneus": {
       "visual": 0,
@@ -388,7 +482,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 1,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "Putamen": {
       "visual": 0,
@@ -396,7 +492,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "RostralAnteriorCingulateCortex": {
       "visual": 0,
@@ -404,7 +502,9 @@
       "somatosensory": 0,
       "pain": 1,
       "social_cognition": 1,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "RostralMiddleFrontalDLPFC": {
       "visual": 0,
@@ -412,7 +512,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 1
+      "language_cognition": 1,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "StriatumMatrix": {
       "visual": 0,
@@ -420,7 +522,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "SubstantiaNigraParsCompacta": {
       "visual": 0,
@@ -428,7 +532,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "SubstantiaNigraParsCompactaRight": {
       "visual": 0,
@@ -436,7 +542,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "SubthalamicNucleus": {
       "visual": 0,
@@ -444,7 +552,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "SuperiorColliculus": {
       "visual": 0,
@@ -452,7 +562,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "SuperiorFrontal": {
       "visual": 0,
@@ -460,7 +572,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 1,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "SuperiorFrontalMPFC": {
       "visual": 0,
@@ -468,7 +582,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 1,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "SuperiorParietal": {
       "visual": 1,
@@ -476,7 +592,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "SuperiorTemporal": {
       "visual": 0,
@@ -484,7 +602,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 1,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "SuperiorTemporalSulcus": {
       "visual": 0,
@@ -492,7 +612,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 1,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "SuperiorTemporalWernicke": {
       "visual": 0,
@@ -500,7 +622,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 1
+      "language_cognition": 1,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "Supramarginal": {
       "visual": 0,
@@ -508,7 +632,9 @@
       "somatosensory": 1,
       "pain": 0,
       "social_cognition": 1,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "SupramarginalTPJ": {
       "visual": 0,
@@ -516,7 +642,9 @@
       "somatosensory": 1,
       "pain": 0,
       "social_cognition": 1,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "TemporalPole": {
       "visual": 0,
@@ -524,7 +652,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 1,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "Thalamus": {
       "visual": 0,
@@ -532,7 +662,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "ThalamusPulvinar": {
       "visual": 0,
@@ -540,7 +672,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "TransverseTemporal": {
       "visual": 0,
@@ -548,7 +682,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "VentralStriatum": {
       "visual": 0,
@@ -556,7 +692,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     },
     "VentralTegmentalArea": {
       "visual": 0,
@@ -564,7 +702,9 @@
       "somatosensory": 0,
       "pain": 0,
       "social_cognition": 0,
-      "language_cognition": 0
+      "language_cognition": 0,
+      "olfactory": 0,
+      "thermoreception": 0
     }
   },
   "matrix_2d": [
@@ -574,12 +714,6 @@
       0,
       0,
       0,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
       0,
       0,
       0
@@ -590,36 +724,6 @@
       0,
       0,
       0,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      1,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      1,
-      0,
-      0
-    ],
-    [
-      0,
-      1,
-      0,
-      0,
-      1,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
       0,
       0,
       0
@@ -627,52 +731,6 @@
     [
       0,
       0,
-      0,
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    [
-      1,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      0,
-      0,
-      1
-    ],
-    [
       0,
       0,
       0,
@@ -684,69 +742,7 @@
       0,
       0,
       0,
-      0,
-      0,
-      1
-    ],
-    [
-      0,
-      0,
-      0,
-      0,
-      0,
-      1
-    ],
-    [
-      0,
-      0,
-      0,
       1,
-      0,
-      0
-    ],
-    [
-      1,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    [
-      1,
-      0,
-      0,
-      0,
-      1,
-      0
-    ],
-    [
-      1,
-      0,
-      0,
-      0,
-      1,
-      0
-    ],
-    [
-      1,
-      0,
       0,
       0,
       0,
@@ -758,9 +754,43 @@
       0,
       1,
       0,
+      0,
+      0,
       0
     ],
     [
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
       0,
       0,
       0,
@@ -774,45 +804,37 @@
       0,
       0,
       0,
+      0,
+      0,
       0
     ],
     [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
       1,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    [
-      1,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      0,
       0,
       0
     ],
@@ -822,28 +844,6 @@
       0,
       0,
       1,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      0,
-      1,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    [
-      1,
-      1,
-      0,
       0,
       0,
       0
@@ -854,20 +854,6 @@
       0,
       0,
       0,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      1,
       1,
       0,
       0
@@ -878,6 +864,28 @@
       0,
       0,
       0,
+      1,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
       0
     ],
     [
@@ -886,9 +894,13 @@
       0,
       0,
       0,
-      1
+      0,
+      0,
+      0
     ],
     [
+      0,
+      0,
       0,
       0,
       0,
@@ -901,127 +913,19 @@
       0,
       0,
       0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      1,
       1,
       0,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      0,
       0,
       0
     ],
     [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    [
-      0,
+      1,
       0,
       0,
       0,
       1,
-      0
-    ],
-    [
       0,
       0,
-      0,
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      1,
-      1,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      0,
-      0,
-      1
-    ],
-    [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      0,
-      1,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      0,
-      1,
       0
     ],
     [
@@ -1030,25 +934,13 @@
       0,
       0,
       0,
+      0,
+      0,
       0
     ],
     [
       0,
-      1,
       0,
-      0,
-      1,
-      0
-    ],
-    [
-      0,
-      1,
-      0,
-      0,
-      1,
-      0
-    ],
-    [
       0,
       1,
       0,
@@ -1059,28 +951,6 @@
     [
       0,
       0,
-      1,
-      0,
-      1,
-      0
-    ],
-    [
-      0,
-      0,
-      1,
-      0,
-      1,
-      0
-    ],
-    [
-      0,
-      0,
-      0,
-      0,
-      1,
-      0
-    ],
-    [
       0,
       0,
       0,
@@ -1089,19 +959,23 @@
       0
     ],
     [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    [
-      0,
       1,
       0,
       0,
       0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
       0
     ],
     [
@@ -1110,9 +984,413 @@
       0,
       0,
       0,
+      0,
+      1,
       0
     ],
     [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      1,
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      1,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      1,
+      1,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0
+    ],
+    [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
       0,
       0,
       0,
@@ -1182,6 +1460,14 @@
       "ParsOpercularis",
       "RostralMiddleFrontalDLPFC",
       "SuperiorTemporalWernicke"
+    ],
+    "olfactory": [
+      "LateralOrbitofrontal",
+      "Amygdala"
+    ],
+    "thermoreception": [
+      "Postcentral",
+      "Insula"
     ]
   },
   "cortical_nodes_with_sensory_input": [
@@ -1201,6 +1487,7 @@
     "Insula",
     "LateralOccipital",
     "LateralOccipitalOccipitoParietal",
+    "LateralOrbitofrontal",
     "Lingual",
     "MedialOrbitalPrefrontalDMN",
     "MedialOrbitalPrefrontalVMPFC",
@@ -1227,7 +1514,6 @@
     "CaudalMiddleFrontal",
     "Entorhinal",
     "IsthmusCingulate",
-    "LateralOrbitofrontal",
     "Parahippocampal",
     "PosteriorCingulate",
     "Precentral"
@@ -1296,8 +1582,8 @@
         "reason": "Wernicke's area (posterior STG) is language comprehension, not social perception. The social function of STG is in STS/mid-STG (SuperiorTemporal, SuperiorTemporalSulcus)."
       }
     },
-    "non_cortical_note": "25 nodes (14 subcortical + 11 brainstem) have all-zero W_sensory rows. Per runtime state model §4.1, only category=cortical nodes participate in WC dynamics and receive s(t). Amygdala pain/social processing arrives through corticocortical connections, not direct s(t).",
-    "nodes_without_direct_sensory": "7 cortical nodes lack direct modality-specific s(t): CaudalMiddleFrontal (premotor), Entorhinal (MTL memory), IsthmusCingulate (RSC spatial), LateralOrbitofrontal (reward), Parahippocampal (context), PosteriorCingulate (DMN hub), Precentral (M1 motor). They participate in WC dynamics through W·a and b_j inputs.",
+    "non_cortical_note": "25 nodes (14 subcortical + 11 brainstem) have all-zero W_sensory rows except Amygdala (olfactory, 2026-09-03 #108 Q2). Per runtime state model §4.1, only category=cortical nodes participate in WC dynamics and receive s(t); Amygdala pain/social processing still arrives through corticocortical connections.",
+    "nodes_without_direct_sensory": "7 cortical nodes lack direct modality-specific s(t): CaudalMiddleFrontal (premotor), Entorhinal (MTL memory), IsthmusCingulate (RSC spatial), Parahippocampal (context), PosteriorCingulate (DMN hub), Precentral (M1 motor). They participate in WC dynamics through W·a and b_j inputs.",
     "sources": [
       "data/brain_regions.json — 69 functional_id inventory",
       "data/connectivity/tripartite_model.json — node_profiles",
@@ -1305,7 +1591,8 @@
       "Desikan et al. (2006) NeuroImage 31:968-980",
       "Glasser et al. (2016) Nature 536:171-178",
       "Eisenberger et al. (2003) Science 302:290-292",
-      "Wager et al. (2013) NEJM 368:1388-1397"
+      "Wager et al. (2013) NEJM 368:1388-1397",
+      "Grilling #108 Q2 — olfactory {LateralOrbitofrontal, Amygdala} / thermoreception {Postcentral, Insula} (2026-09-03)"
     ]
   }
 }

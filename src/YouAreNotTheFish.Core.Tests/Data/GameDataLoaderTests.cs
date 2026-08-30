@@ -302,7 +302,7 @@ public class GameDataLoaderTests
             "Cannot find W_sensory.json. Tried:\n" + string.Join("\n", candidates));
     }
 
-    /// <summary>AC-1: 69×6 int 矩阵 + 6 模态 + RegionIds 69 个且与 Rows.Keys 序一致。</summary>
+    /// <summary>AC-1: 69×8 int 矩阵 + 8 模态 + RegionIds 69 个且与 Rows.Keys 序一致（#108 Q2 扩列嗅觉/热觉）。</summary>
     [Fact]
     public void LoadWsensory_DimensionsModalitiesAndRegionIds()
     {
@@ -311,10 +311,10 @@ public class GameDataLoaderTests
         Assert.Equal(new[]
         {
             "visual", "auditory", "somatosensory", "pain",
-            "social_cognition", "language_cognition"
+            "social_cognition", "language_cognition", "olfactory", "thermoreception"
         }, ws.Modalities);
         Assert.Equal(69, ws.Matrix.Length);
-        Assert.All(ws.Matrix, row => Assert.Equal(6, row.Length));
+        Assert.All(ws.Matrix, row => Assert.Equal(8, row.Length));
         Assert.Equal(69, ws.Rows.Count);
         Assert.Equal(69, ws.RegionIds.Length);
         // RegionIds 与 Rows.Keys 序一致（loader 后处理填充）

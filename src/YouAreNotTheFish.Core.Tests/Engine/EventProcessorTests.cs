@@ -683,12 +683,13 @@ public class EventProcessorTests
     }
 
     [Fact]
-    public void Sensory_ZeroRowSentinel_AmygdalaIsZero()
+    public void Sensory_ZeroRowSentinel_AccumbensIsZero()
     {
-        // 零行哨兵：subcortical fid 无感官输入（如 Amygdala）——从数据推导
+        // 零行哨兵：subcortical fid 无感官输入（AccumbensCore——Amygdala 自 #108 Q2 起为嗅觉锚点，不再是零行）
+        // 从数据推导
         var ws = Wsensory();
-        var amy = RegionIndex(ws, "Amygdala");
-        Assert.All(ws.Matrix[amy], v => Assert.Equal(0, v));
+        var acc = RegionIndex(ws, "AccumbensCore");
+        Assert.All(ws.Matrix[acc], v => Assert.Equal(0, v));
 
         var ep = new EventProcessor(ws, Cal());
         var ev = new PhysicalDamageEvent(1, 0, 1)
@@ -696,7 +697,7 @@ public class EventProcessorTests
             Hit = true, DamageDealt = 4f, DamageBlocked = 0f, IncomingDamage = 4f,
         };
         var result = ep.ProcessEvents([ev], new[] { Participant(50f, 80f), Participant(15f, 60f) }, new[] { 1, 2 });
-        Assert.Equal(0f, result.SensoryAccum[0][amy]);
+        Assert.Equal(0f, result.SensoryAccum[0][acc]);
     }
 
     // ---- AC-11：HealEvent/LinkGrowthEvent no-op ----
