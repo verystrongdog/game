@@ -8,7 +8,7 @@
 |----|------|
 | 覆盖 | `SmokeTests`（Tests/Smoke/SmokeTests.cs 新建）——引擎级端到端战斗（TurnManager + 双方自动行动）+ 确定性 + 集成点验证 |
 | 不覆盖 | 玩家交互路径（console 已覆盖）；新引擎代码（本 step 零实现）；性能基准 |
-| 前置依赖 | csharp-flow ✅ / csharp-console ✅（284/284） |
+| 前置依赖 | csharp-flow ✅ / csharp-console ✅（309/309，2026-08-30 #91 关闭后复测） |
 | 阻塞 | 无——12 个引擎任务收尾 |
 
 ## 二、接口定义

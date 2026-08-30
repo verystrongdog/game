@@ -1,6 +1,6 @@
 # 工作issue 01: csharp-console 实现（Console harness）
 
-> Status: resolved | Type: implementation | 维度: 管线 | Spec: ../../design/spec.md@v1.2 | Blocked by: sign-off ✅（2026-08-14 批准）
+> Status: resolved | Type: implementation | 维度: 管线 | Spec: ../../design/spec.md@v1.2 | Blocked by: sign-off ✅（2026-08-14 批准） | GitHub: [#91](https://github.com/verystrongdog/game/issues/91)
 
 ## 范围
 
@@ -76,6 +76,7 @@
 
 - 2026-08-14：创建。sign-off ✅（dog，2026-08-14）。spec v1.2（审计链：v1.0 全量 31 CONFIRMED → v1.1 → Δ 21 CONFIRMED → v1.2 → 终审 PASS + flow spec 补记）。
 - 2026-08-14：实现完成——284/284 全绿（新增 23），AC-1~13 逐条 ✅，结转 5 项全部回填。
+- 2026-08-30：**关闭**（Grilling #91）——关闭审查发现 12 引擎测试失败，根因 = #92 数据回归（重跑生成器覆盖注释产物，EdgeRole 默认 Active 致 b_j/M1 漂移）+ 镜像契约未同步。修复：恢复数据（重跑 build_function_labels.py，commit 30108af）+ 镜像契约测试更新（d2c76db）+ 防再犯门禁（373c2a0，validate_tripartite_annotations.py）。**当前 HEAD：309/309 全绿**，AC-1~13 ✅，M1 锚点保持 HARD。见 [决策树 Grilling #91](../../../docs/决策树.md)。
 
 ---
 *创建: 2026-08-14 | 更新: 2026-08-14*

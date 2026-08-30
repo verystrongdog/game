@@ -346,7 +346,7 @@ Phase 4 声明→响应→结算 dispatch。响应窗口内容按 §一范围 st
 | 8 | csharp-damage | DamageCalculator | ✅ 已交付（2026-08-14 盘点确认——178/178 绿；spec v1.1 + B7 E-1 裁决） |
 | 9 | csharp-events | EventProcessor | ✅ 已交付（2026-08-14 盘点确认——228/228 绿；spec v1.2.2） |
 | 10 | csharp-flow | CombatState + TurnManager + ActionResolver | ✅ 已交付（2026-08-14 盘点确认——261/261 绿；spec v1.2） |
-| 11 | csharp-console | Console harness | ✅ 已交付（2026-08-14 盘点确认——284/284 绿；spec v1.2） |
+| 11 | csharp-console | Console harness | ✅ 已交付（2026-08-14 盘点确认——309/309 绿（2026-08-30 #91 关闭复测）；spec v1.2） |
 | 12 | csharp-smoke | Smoke 集成测试 | ✅ 已交付（2026-08-14 盘点确认——294/294 绿；spec v1.2.1） |
 
 每 step 一个 feature：任务issue → spec → 审计 → sign-off → 工作issue → 自审（二层流水线）。Step 2 的 spec 同时建立引擎层 spec 模板（§七自检清单：数学公式逐项 vs 设计文档对照、边界值、确定性）。
