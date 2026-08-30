@@ -102,8 +102,8 @@ public sealed record CalibrationConfig
     /// <summary>恐慌偏移概率 p_panic（Q6）。值 0.5——恐慌真 → P(G 均匀随机)=p_panic / P(primary)=1−p_panic。行为契约非频率参数。来源：#108 Q6。</summary>
     public float PPanic { get; init; } = 0.5f;
 
-    /// <summary>诡异/负面组 G 的分组阈值 t_neg（Q6）。值 0.2——negative_valence ≥ t_neg 为 G 成员条件之一；规则参数非硬编码名单。来源：#108 Q6。</summary>
-    public float TNeg { get; init; } = 0.2f;
+    /// <summary>诡异/负面组 G 的分组阈值 t_neg（Q6）。值 0.2——negative_valence ≥ t_neg 为 G 成员条件之一；规则参数非硬编码名单。double（JSON 源为 double，避免 float 比较精度漂移）。来源：#108 Q6。</summary>
+    public double TNeg { get; init; } = 0.2;
 
     /// <summary>恐慌强度档 s_neg（Q7）。值 1.25（区间 [1,1.5] 中点）[NEW]——锁形式不锁数值，正式值归 #35 校准。</summary>
     public float SNeg { get; init; } = 1.25f;
