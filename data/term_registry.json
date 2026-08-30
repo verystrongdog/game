@@ -3698,13 +3698,27 @@
    ],
    "added": "2026-09-02",
    "updated": "2026-09-02"
+  },
+  "alpha_env": {
+   "definition": "环境基调强度向量——env_tones.json 每环境键的 alpha_env，恰好 8 值 ∈ [0,1]（8 模态：visual/auditory/somatosensory/pain/social_cognition/language_cognition/olfactory/thermoreception）。经 s_env = W_sensory × α_env 展开为环境基调通道；与情境原型注入正交（#108 Q7 强度不缩放 α_env）。",
+   "source": "Grilling #108 Q3/Q5; #105 实施（env_tones.json 契约）",
+   "old_model": "无——环境基调此前无独立参数名（s_env 已入库但 α_env 未独立建模）",
+   "deviation_reason": "环境基调强度需要独立参数名（区别于 s_env 合成结果）；demo 3 环境示例值 [NEW]，全环境表值归空间内容填充",
+   "status": "active",
+   "numerical_locations": [
+    "docs/决策树.md §Grilling #108 Q3",
+    ".scratch/grilling-75-p2-situation/task-plan.md §3.2",
+    "data/connectivity/env_tones.json"
+   ],
+   "added": "2026-09-03",
+   "updated": "2026-09-03"
   }
  },
  "_metadata": {
-  "last_updated": "2026-08-30",
-  "last_batch": "Grilling #103 游戏日↔模拟时间接口层 — 游戏日/模拟时间/时段/λ(D) 月相离散采样/moonState(D)/MOON_PHASE_CHANGED/calibration_status 7 术语入库",
-  "total_terms": 261,
-  "active_terms": 241,
+  "last_updated": "2026-09-03",
+  "last_batch": "Grilling #109 #105 实施 — alpha_env 1 术语入库",
+  "total_terms": 262,
+  "active_terms": 242,
   "deprecated_terms": 20
  }
 }

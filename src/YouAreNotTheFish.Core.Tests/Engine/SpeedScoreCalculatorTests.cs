@@ -96,7 +96,7 @@ public class SpeedScoreCalculatorTests
         {
             RegionIds = ["Pericalcarine", "TransverseTemporal", "AnteriorCingulateCortex", "Precentral"],
         };
-        var data = new GameData(null!, null!, wsensory, null!, null!);
+        var data = new GameData(null!, null!, wsensory, null!, null!, null!, null!, null!);
 
         Assert.Throws<KeyNotFoundException>(() => new SpeedScoreCalculator(data, CalibrationConfig.Default));
     }

@@ -20,6 +20,9 @@ public sealed class TurnManager
     private readonly SpeedScoreCalculator _speedScore;
     private readonly CstcGating _cstcGating;
     private readonly WMatrix _wMatrix;
+    private readonly SituationSelector _situationSelector;
+    private readonly int _day;
+    private readonly bool _mfieldInjected;
     private (int Participant, CombatAction Action)[] _lastActions = [];
     private int[] _lastOrder = [];
 
@@ -38,8 +41,9 @@ public sealed class TurnManager
     /// <param name="data">游戏数据。</param>
     /// <param name="cal">校准常量。</param>
     /// <param name="actionProvider">行动来源（demo = NpcActionProvider；测试可注入固定行动）。</param>
+    /// <param name="day">游戏日 D（Q10：demo 固定 D，推进机制不实现；默认 0=新月）。</param>
     /// <exception cref="ArgumentNullException">任一参数 null。</exception>
-    public TurnManager(GameData data, CalibrationConfig cal, IActionProvider actionProvider)
+    public TurnManager(GameData data, CalibrationConfig cal, IActionProvider actionProvider, int day = 0)
     {
         ArgumentNullException.ThrowIfNull(data);
         ArgumentNullException.ThrowIfNull(cal);
@@ -47,11 +51,19 @@ public sealed class TurnManager
         _data = data;
         _cal = cal;
         _actionProvider = actionProvider;
+        _day = day;
         _resolver = new ActionResolver(data, cal);
-        _eventProcessor = new EventProcessor(data.Wsensory, cal);
+        _eventProcessor = new EventProcessor(data.Wsensory, data.AlphaPatterns, cal);
         _speedScore = new SpeedScoreCalculator(data, cal);
         _cstcGating = new CstcGating(data);
         _wMatrix = WMatrixBuilder.Build(data);
+        // Q8：C1 重选触发机制放 TurnManager（SituationSelector 无状态纯函数；fid 断言在构造时执行——Q13 第二层）
+        _situationSelector = new SituationSelector(
+            data.EnvTones, data.SituationPrimitives, data.BrainRegions.Regions.Keys, cal);
+        // Q12：m_field 通道——CALIBRATED（正式）或 AllowPlaceholderDemo（显式 demo 例外）才注入；
+        // 默认 PLACEHOLDER 且非 demo → 通道关闭，s_total = s_事件 + s_env 正常运行
+        _mfieldInjected = cal.AllowPlaceholderDemo
+            || data.MoonlightLanding.CalibrationStatus == "CALIBRATED";
     }
 
     /// <summary>
@@ -69,6 +81,16 @@ public sealed class TurnManager
         var round = state.Round;
 
         // ---- Phase 1: 情境更新（运行时状态模型 §7.1 步骤 1-5）----
+        // Q12：三通道合成——s_total_i = SPending_i + s_env + m_field_i（Phase 1 注入点合成）
+        // m_field 每回合每参与者重算（依赖当前 SAN）；s_env 存 CombatState（情境刷新重算，Q8 下一回合生效）
+        MoonStateResult? moon = null;
+        float[]? mField = null;
+        if (_mfieldInjected)
+        {
+            moon = MoonState.Query(_day, _data.MoonlightLanding, _cal);
+            // 门禁（Q11）：CALIBRATED/AllowPlaceholderDemo 放行；PLACEHOLDER 非 demo → 通道关闭（构造时已判定）
+        }
+
         for (var p = 0; p < state.Participants.Count; p++)
         {
             // 步骤 1：tone 纯衰减一步（events §5.5.3「衰减是 step 10 Phase 1 的职责」；事件接收者 Phase 4 已注入，
@@ -78,7 +100,25 @@ public sealed class TurnManager
 
             // 步骤 2-5：b_j → WC 更新（s = 上回合累计，注入后清零）→ CSTC
             var b = CorticalBias.Compute(tone, _data);
-            var aNew = WcDynamics.Step(state.Participants[p].Wc, b, state.SPending[p], _wMatrix);
+
+            // 三通道合成（Q12）：s_total = SPending + s_env + m_field_i（m_field 依赖当前 SAN，每回合重算）
+            var sTotal = state.SPending[p];
+            if (state.SEnv.Count > 0 || _mfieldInjected)
+            {
+                sTotal = new float[state.SPending[p].Length];
+                Array.Copy(state.SPending[p], sTotal, sTotal.Length);
+                for (var j = 0; j < sTotal.Length; j++)
+                    sTotal[j] += state.SEnv[j];
+                if (_mfieldInjected && moon is not null)
+                {
+                    mField = MFieldComposer.Compute(
+                        _data.MoonlightLanding, moon, _data.Wsensory,
+                        state.Participants[p].San, _cal);
+                    for (var j = 0; j < sTotal.Length; j++)
+                        sTotal[j] += mField[j];
+                }
+            }
+            var aNew = WcDynamics.Step(state.Participants[p].Wc, b, sTotal, _wMatrix);
             Array.Clear(state.SPending[p], 0, state.SPending[p].Length);
 
             var (gurney, gates, salience) = _cstcGating.Step(aNew, tone, state.Participants[p].Gurney);
@@ -149,6 +189,15 @@ public sealed class TurnManager
                 state.AccumulateS(p2, result.SensoryAccum[p2]);
             }
             events.AddRange(batch);
+
+            // Q8：C1 重选挂钩——本窗口出现 Panic(Entered=true) 事件 → 重选情境（panic=true）。
+            // 生效时点 = 下一回合 Phase 1（本回合 Phase 1 已按旧情境注入完毕；此处只更新存储，不窗口内换情境）。
+            // 恐慌消退（Entered=false）不触发重选（C1 只有进入行）。
+            if (panics.Count > 0)
+            {
+                var sel = _situationSelector.Select(state.Situation.EnvironmentId, true, ctx.Rng);
+                state.ApplySituation(_data, state.Situation.EnvironmentId, sel);
+            }
 
             // 6. HP=0 → 移除队列（跳过剩余窗口）+ D 广播实时。
             // 修复（实现自审）：检查对象为**结算后被击杀的任一参与者**（非仅行动者 p——

@@ -7,12 +7,18 @@ namespace YouAreNotTheFish.Core.Data;
 /// </summary>
 /// <param name="BrainRegions">69 脑区。来源：brain_regions.json（csharp-data-layer spec AC-1~5）。</param>
 /// <param name="Tripartite">三体模型 51 节点 + 4 种边。来源：connectivity/tripartite_model.json。</param>
-/// <param name="Wsensory">69×6 感觉模态矩阵（RegionIds 即 canonical 69——约束 C1）。来源：connectivity/W_sensory.json。</param>
+/// <param name="Wsensory">69×8 感觉模态矩阵（RegionIds 即 canonical 69——约束 C1；#108 Q2 扩列嗅觉/热觉）。来源：connectivity/W_sensory.json。</param>
 /// <param name="SituationPrimitives">27 情境原型。来源：connectivity/situation_primitives.json。</param>
 /// <param name="SignalTypes">信号类型词表（4 类目 × 18 子类）。来源：signal_types.json。</param>
+/// <param name="AlphaPatterns">α pattern 表（14 事件 × 8 模态，Q1 契约）。来源：connectivity/alpha_patterns.json。</param>
+/// <param name="EnvTones">环境基调表（环境键 → α_env + situation.primary，Q3/Q5 契约）。来源：connectivity/env_tones.json。</param>
+/// <param name="MoonlightLanding">月光场落点（12 落点 + 主辅两档，Q9 契约）。来源：connectivity/moonlight_landing.json。</param>
 public sealed record GameData(
     BrainRegionsData BrainRegions,
     TripartiteModel Tripartite,
     WsensoryMatrix Wsensory,
     SituationPrimitives SituationPrimitives,
-    SignalTypesCatalog SignalTypes);
+    SignalTypesCatalog SignalTypes,
+    AlphaPatterns AlphaPatterns,
+    EnvTones EnvTones,
+    MoonlightLanding MoonlightLanding);

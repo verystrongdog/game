@@ -418,7 +418,10 @@ public class WMatrixBuilderTests
             tri,
             new WsensoryMatrix { RegionIds = ["BogusSourceFid", "BogusTargetFid"] },
             new SituationPrimitives(),
-            new SignalTypesCatalog());
+            new SignalTypesCatalog(),
+            new AlphaPatterns(),
+            new EnvTones(),
+            new MoonlightLanding());
 
         Assert.Throws<InvalidDataException>(() => WMatrixBuilder.Build(data));
     }

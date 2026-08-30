@@ -94,6 +94,41 @@ public sealed record CalibrationConfig
     /// <summary>回合上限 [NEW] 待校准。来源：csharp-flow spec §5.5 结束条件（demo 防死循环，待校准）。</summary>
     public int MaxRounds { get; init; } = 50;
 
+    // ---- 情境系统（Grilling #108 Q4/Q6/Q7/Q11/Q12，[NEW] 待 #35 校准后摘除）----
+
+    /// <summary>存在性恐慌阈值——任意参与者 SAN &lt; 阈值×SAN_max（含敌方）即 panic=true（Q4）。值 0.30（30%）。来源：#75 D2 / #108 Q4。</summary>
+    public float SituationPanicShift { get; init; } = 0.30f;
+
+    /// <summary>恐慌偏移概率 p_panic（Q6）。值 0.5——恐慌真 → P(G 均匀随机)=p_panic / P(primary)=1−p_panic。行为契约非频率参数。来源：#108 Q6。</summary>
+    public float PPanic { get; init; } = 0.5f;
+
+    /// <summary>诡异/负面组 G 的分组阈值 t_neg（Q6）。值 0.2——negative_valence ≥ t_neg 为 G 成员条件之一；规则参数非硬编码名单。double（JSON 源为 double，避免 float 比较精度漂移）。来源：#108 Q6。</summary>
+    public double TNeg { get; init; } = 0.2;
+
+    /// <summary>恐慌强度档 s_neg（Q7）。值 1.25（区间 [1,1.5] 中点）[NEW]——锁形式不锁数值，正式值归 #35 校准。</summary>
+    public float SNeg { get; init; } = 1.25f;
+
+    /// <summary>m_field 增益 g(SAN) 占位（Q12）。值 1.0——E7/#35 定正式形式，不动三通道架构。</summary>
+    public float MFieldGain { get; init; } = 1.0f;
+
+    /// <summary>PLACEHOLDER demo 例外开关（Q11）。默认 false——m_field 正式消费 fail-fast；Console --mfield-demo 显式开启。</summary>
+    public bool AllowPlaceholderDemo { get; init; } = false;
+
+    /// <summary>E_c 基线（新月端）[NEW] 占位。来源：#102 E2 线性端点族 E_c,min=1.0（E1 占位，归 #35）。</summary>
+    public double EcMin { get; init; } = 1.0;
+
+    /// <summary>E_c 月相增幅 [NEW] 占位。来源：#102 E2（ΔE_c&gt;0，ρ_c=E_c,max/E_c,min 归 #35）。</summary>
+    public double DeltaEc { get; init; } = 0.5;
+
+    /// <summary>E_th 基线（新月端）[NEW] 占位。来源：#102 E2 E_th,min=0.5（E1 占位，归 #35）。</summary>
+    public double EthMin { get; init; } = 0.5;
+
+    /// <summary>E_th 月相增幅 [NEW] 占位。来源：#102 E2 ΔE_th ∈ {−0.25, 0, +0.25} 方向族（归 #35）。</summary>
+    public double DeltaEth { get; init; } = 0.0;
+
+    /// <summary>期望 calibration_version（Q9/Q11 门禁匹配值）。值 0 = PLACEHOLDER 阶段；#35 校准后 bump。</summary>
+    public int ExpectedCalibrationVersion { get; init; } = 0;
+
     /// <summary>默认配置（demo 用）。</summary>
     public static CalibrationConfig Default { get; } = new();
 }
