@@ -93,8 +93,42 @@ public static class GameDataLoader
     }
 
     /// <summary>
-    /// 一次加载全部 6 个数据文件（spec@v1.1 §三 3.3 + #105 T2 alpha_patterns）——dataDir 为 data/ 目录。
-    /// 文件名固定；异常语义同现有 6 方法（FileNotFoundException/JsonException/InvalidOperationException）。
+    /// 从 env_tones.json 加载环境基调表（Grilling #108 Q3/Q5 契约）。
+    /// fail-fast（JsonException）：schema major 不匹配 / alpha_env 长度≠8 / 值 ∉ [0,1] /
+    /// 无 environments 键 / 环境键缺 display_name 或 situation.primary。
+    /// 运行时缺失环境键 → 抛（禁止回退零向量，Q3）。
+    /// </summary>
+    public static EnvTones LoadEnvTones(string jsonPath)
+    {
+        var json = File.ReadAllText(jsonPath);
+        var data = JsonSerializer.Deserialize<EnvTones>(json, Options)
+                   ?? throw new InvalidOperationException($"Failed to deserialize {jsonPath}");
+
+        if (!data.Schema.StartsWith("env_tones", StringComparison.Ordinal))
+            throw new JsonException($"env_tones schema 不匹配: \"{data.Schema}\"");
+        if (data.Version != 1)
+            throw new JsonException($"env_tones schema major 不匹配: version={data.Version}（期望 1）");
+        if (data.Environments.Count == 0)
+            throw new JsonException("env_tones environments 为空");
+
+        foreach (var (id, env) in data.Environments)
+        {
+            if (string.IsNullOrEmpty(env.DisplayName))
+                throw new JsonException($"env_tones 环境 \"{id}\" 缺 display_name");
+            if (env.AlphaEnv.Length != 8)
+                throw new JsonException($"env_tones {id} alpha_env 长度≠8: {env.AlphaEnv.Length}");
+            foreach (var v in env.AlphaEnv)
+                if (double.IsNaN(v) || double.IsInfinity(v) || v < 0.0 || v > 1.0)
+                    throw new JsonException($"env_tones {id} alpha_env 值 ∉ [0,1]: {v}");
+            if (string.IsNullOrEmpty(env.Situation.Primary))
+                throw new JsonException($"env_tones {id} 缺 situation.primary");
+        }
+        return data;
+    }
+
+    /// <summary>
+    /// 一次加载全部 7 个数据文件（spec@v1.1 §三 3.3 + #105 T2/T3 alpha_patterns/env_tones）——dataDir 为 data/ 目录。
+    /// 文件名固定；异常语义同现有 7 方法（FileNotFoundException/JsonException/InvalidOperationException）。
     /// </summary>
     public static GameData LoadAll(string dataDir) => new(
         LoadBrainRegions(Path.Combine(dataDir, "brain_regions.json")),
@@ -102,5 +136,6 @@ public static class GameDataLoader
         LoadWsensory(Path.Combine(dataDir, "connectivity", "W_sensory.json")),
         LoadSituationPrimitives(Path.Combine(dataDir, "connectivity", "situation_primitives.json")),
         LoadSignalTypes(Path.Combine(dataDir, "signal_types.json")),
-        LoadAlphaPatterns(Path.Combine(dataDir, "connectivity", "alpha_patterns.json")));
+        LoadAlphaPatterns(Path.Combine(dataDir, "connectivity", "alpha_patterns.json")),
+        LoadEnvTones(Path.Combine(dataDir, "connectivity", "env_tones.json")));
 }

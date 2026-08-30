@@ -11,10 +11,12 @@ namespace YouAreNotTheFish.Core.Data;
 /// <param name="SituationPrimitives">27 情境原型。来源：connectivity/situation_primitives.json。</param>
 /// <param name="SignalTypes">信号类型词表（4 类目 × 18 子类）。来源：signal_types.json。</param>
 /// <param name="AlphaPatterns">α pattern 表（14 事件 × 8 模态，Q1 契约）。来源：connectivity/alpha_patterns.json。</param>
+/// <param name="EnvTones">环境基调表（环境键 → α_env + situation.primary，Q3/Q5 契约）。来源：connectivity/env_tones.json。</param>
 public sealed record GameData(
     BrainRegionsData BrainRegions,
     TripartiteModel Tripartite,
     WsensoryMatrix Wsensory,
     SituationPrimitives SituationPrimitives,
     SignalTypesCatalog SignalTypes,
-    AlphaPatterns AlphaPatterns);
+    AlphaPatterns AlphaPatterns,
+    EnvTones EnvTones);
