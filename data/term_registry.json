@@ -2,9 +2,9 @@
  "_description": "术语注册表 — Grilling §3.0 定义基线声明的唯一数据源。术语定义/旧模型/偏离原因集中管理，避免 AI 在生成时被术语的旧现实世界模型劫持。",
  "_maintenance": "入库触发: 新核心术语 | 定义被修改 | Step 4 清扫发现未注册高频术语。numerical_locations 更新: 注册时填充 + grilling 新增引用时追加 + 定义变更时遍历复查。 | #87 创伤记忆/疾病三分类入库 + 苦痛记忆废弃 (2026-08-19) | #108 P2 情境系统实施前审查入库：G/t_neg/s_neg/p_panic/m_delta/环境 id (2026-09-02)",
  "_created": "2026-08-03",
- "_updated": "2026-09-02",
- "_batch": "grilling-38-moonlight-field",
- "_pending_candidates": "见 data/term_registry_candidates.md — 约20条P3级+单文档术语，后续grilling中逐批入库 Grilling #26-27: CSTC/EDR/CTC/三体神经模型/function_profile/cstc_loop/cstc_role/signal_type/gameplay_domain/STN/脑干广播/皮层-皮层连接/功能剖面/基底节门控 (14条已入库).",
+ "_updated": "2026-09-03",
+ "_batch": "grilling-111-plugin-architecture",
+ "_pending_candidates": "见 data/term_registry_candidates.md — 候补候选清单：P3级/单文档/待裁决术语登记处。Grilling #111 登记：降级协议（否决态）/单一事实源（推迟态）/语义层兜底（推迟）/#70 路线图模块化重构（推迟）。Grilling #26-27: CSTC/EDR/CTC/三体神经模型/function_profile/cstc_loop/cstc_role/signal_type/gameplay_domain/STN/脑干广播/皮层-皮层连接/功能剖面/基底节门控 (14条已入库).",
  "terms": {
   "态度": {
    "definition": "⚠️ 已废弃（2026-07-26）。认知 + 情绪 + 行为 = 态度，是三种成分的组合结算结果，不是独立实体。",
@@ -3599,16 +3599,18 @@
    ]
   },
   "calibration_status": {
-   "definition": "校准产物状态枚举：PLACEHOLDER（未校准占位，仅允许只读 λ/剧情谓词/视觉呈现/原型测试且显式标记）| CALIBRATED（#35 产物已接入，正式遭遇/敌人/情境基线/SAN×月光权重方可消费）。校准缺失/版本不匹配 → 启动 fail-fast，禁止静默回退占位。",
+   "definition": "校准产物状态枚举：PLACEHOLDER（未校准占位，仅允许只读 λ/剧情谓词/视觉呈现/原型测试且显式标记）| CALIBRATED（#35 产物已接入，正式遭遇/敌人/情境基线/SAN×月光权重方可消费）。校准缺失/版本不匹配 → 启动 fail-fast，禁止静默回退占位。 Grilling #111 定案：calibration_status 属数据产物契约字段/消费门禁（装配期有效性检查），不是引擎运行时状态机；「模块状态 ≠ 数据产物状态」。",
    "source": "规则/时空结构数学框架.md §11.6 接口层协议块 Q6/Q7; Grilling #103",
    "old_model": "无（占位值与正式值无区分，存在误用风险）",
    "deviation_reason": "把校准状态显式化，防止占位数值被当作正式数值进入下游",
    "status": "active",
    "numerical_locations": [
-    "规则/时空结构数学框架.md §11.6 接口层协议块 Q6"
+    "规则/时空结构数学框架.md §11.6 接口层协议块 Q6",
+    "docs/决策树.md Grilling #111（保留决策）",
+    ".scratch/grilling-111-plugin/试点审查报告.md"
    ],
    "added": "2026-08-30",
-   "updated": "2026-08-30",
+   "updated": "2026-09-03",
    "tags": [
     "#103",
     "moonlight"
@@ -3712,13 +3714,47 @@
    ],
    "added": "2026-09-03",
    "updated": "2026-09-03"
+  },
+  "插件化": {
+   "definition": "项目内采用语义 = 静态契约式模块化架构（见「静态契约式模块化架构」条目）：统一原则 = ①能力/Service seam ②明确接口边界 ③版本/契约信息 ④装配期有效性检查 ⑤正式装配失败 → fail-fast ⑥实现替换在装配层 ⑦开发期迭代机制与生产运行机制分离。active = 「项目内术语定义已确定」，非「全引擎已插件化改造」。",
+   "source": "docs/决策树.md Grilling #111（Q1-Q9）; issue #111",
+   "old_model": "运行时热插拔组件（插件崩溃/热换不影响宿主、按版本协商、坏插件可替换/mock）——DSH harness 哲学 1:1 转移",
+   "deviation_reason": "DSH 源码核查（/home/dog/deepseek-harness）证明其插件化 = 静态装配插件树 + 服务 seam 换实现 + Symbol 隔离 + 开发期 HMR 回滚，无运行时热插拔/版本协商/三态降级；项目只转移可转移部分，否决运行时机制。与学术轨「plug-in」（插件估计器，#95）同名不同域",
+   "status": "active",
+   "numerical_locations": [
+    "docs/决策树.md Grilling #111",
+    ".scratch/grilling-111-plugin/试点审查报告.md"
+   ],
+   "added": "2026-09-03",
+   "updated": "2026-09-03",
+   "tags": [
+    "#111",
+    "架构"
+   ]
+  },
+  "静态契约式模块化架构": {
+   "definition": "已采纳的引擎总体架构原则（Grilling #111）：模块 = 接口/能力边界 + 版本/契约信息 + 装配期有效性检查；正式装配失败 → fail-fast；实现替换在装配层；开发期迭代（HMR/回滚）与生产机制分离。不采纳：运行时 Ready/Degraded/Unavailable 通用三态、运行时热插拔、loader 版本协商、Symbol isolate 作故障隔离。Module 资格 = 三步资格审查流程（独立能力边界为本体判据；契约敏感性→版本声明；失败影响→fail-fast 门禁），非 A∧B∧C 机械充分必要。试点：IActionProvider（纯审查通过，六维验收 PASS×5+N/A）。",
+   "source": "docs/决策树.md Grilling #111（Q1-Q9）; .scratch/grilling-111-plugin/试点审查报告.md",
+   "old_model": "无（本术语由 Grilling #111 首次定义）",
+   "deviation_reason": "替代 issue body 的「插件化」默认模型（运行时热插拔）；与 DSH 实践（静态装配 + seam + HMR 开发期）对齐；否决三态状态机避免凭空增加机制",
+   "status": "active",
+   "numerical_locations": [
+    "docs/决策树.md Grilling #111",
+    ".scratch/grilling-111-plugin/试点审查报告.md"
+   ],
+   "added": "2026-09-03",
+   "updated": "2026-09-03",
+   "tags": [
+    "#111",
+    "架构"
+   ]
   }
  },
  "_metadata": {
   "last_updated": "2026-09-03",
-  "last_batch": "Grilling #109 #105 实施 — alpha_env 1 术语入库",
-  "total_terms": 262,
-  "active_terms": 242,
+  "last_batch": "Grilling #111 项目总体插件化 — 插件化/静态契约式模块化架构 2 术语入库 + calibration_status 注记 + candidates.md 补齐",
+  "total_terms": 271,
+  "active_terms": 251,
   "deprecated_terms": 20
  }
 }
