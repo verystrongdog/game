@@ -273,6 +273,52 @@ public class ConsoleAppTests
         Assert.Contains("用法", err);
     }
 
+    // ---- #107 Q4/Q5：Console 缺 role → JsonException → stderr「数据校验失败」+ exit 1 ----
+
+    [Fact]
+    public void MissingRole_DataValidationFailed_Exit1()
+    {
+        var exe = ConsoleDll();
+        var fixture = CreateMissingRoleFixture();
+        try
+        {
+            var psi = new System.Diagnostics.ProcessStartInfo("dotnet", $"\"{exe}\" --trace-resting 1")
+            {
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+            };
+            psi.Environment["YANTF_DATA_DIR"] = fixture;
+            using var proc = System.Diagnostics.Process.Start(psi)!;
+            var err = proc.StandardError.ReadToEnd();
+            proc.WaitForExit(30_000);
+
+            Assert.Equal(1, proc.ExitCode);
+            // 锁 stderr 内容而非仅 exit code（#106 Q5）：
+            Assert.Contains("数据校验失败", err);
+            // Q4 防假阳性：必须是 JsonException 路径触发 fail-fast，而非夹具缺后续文件走 FileNotFound（「数据目录缺失」）
+            Assert.DoesNotContain("数据目录缺失", err);
+            Assert.DoesNotContain("Unhandled exception", err); // 无未处理异常堆栈
+        }
+        finally
+        {
+            Directory.Delete(fixture, recursive: true);
+        }
+    }
+
+    /// <summary>
+    /// #107 Q4 夹具：真实 brain_regions.json + 缺 role 的 tripartite_model.json（仅此两文件）。
+    /// LoadAll 顺序 brain_regions → tripartite（第 2 个）→ …：缺 role → [JsonRequired] 抛 JsonException 先于后续 FileNotFound。
+    /// </summary>
+    private static string CreateMissingRoleFixture()
+    {
+        var dir = Path.Combine(Path.GetTempPath(), "yantf-fixture-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(Path.Combine(dir, "connectivity"));
+        File.Copy(Path.Combine(FindDataDir(), "brain_regions.json"), Path.Combine(dir, "brain_regions.json"));
+        File.WriteAllText(Path.Combine(dir, "connectivity", "tripartite_model.json"),
+            "{\"brainstem\": [{\"source\": \"LocusCoeruleus\", \"target\": \"x\"}]}");
+        return dir;
+    }
+
     private static CombatContext Ctx() => new(new DeterministicRng(42), Data(), CalibrationConfig.Default);
 
     /// <summary>Console exe 路径（测试 bin → src → YouAreNotTheFish.Console/bin/Debug/net8.0）。</summary>

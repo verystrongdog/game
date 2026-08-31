@@ -141,6 +141,11 @@ public static class Program
 
     private static string FindDataDir()
     {
+        // #107 Q4：YANTF_DATA_DIR 显式覆盖（Console 回归测试注入坏数据用）——
+        // 已设置 → 用之（无效路径自然走「数据目录缺失」fail-fast）；未设置 → 完全走既有发现策略。
+        if (Environment.GetEnvironmentVariable("YANTF_DATA_DIR") is { Length: > 0 } envDir)
+            return envDir;
+
         // 从执行目录向上回溯 + 绝对路径候选（镜像测试项目 DataDirCandidates 约定）
         var dir = AppContext.BaseDirectory;
         for (var i = 0; i < 8 && dir is not null; i++)

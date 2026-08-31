@@ -16,7 +16,8 @@ public record CorticocorticalEdge
     [JsonPropertyName("function_label")] public FunctionLabel[] FunctionLabel { get; init; } = [];
     [JsonPropertyName("gameplay_labels")] public GameplayDomain[] GameplayLabels { get; init; } = [];
     [JsonPropertyName("description")] public string Description { get; init; } = "";
-    [JsonPropertyName("role")] public EdgeRole Role { get; init; }
+    // #106 Q1/#107：Role 缺失 → JsonException（禁止静默回退 Active(0)——#92 事故根因）
+    [JsonPropertyName("role")] [JsonRequired] public EdgeRole Role { get; init; }
 }
 
 /// <summary>脑干投射边（114 条）。source 为 functional_id，target 为 dk_name。</summary>
@@ -30,7 +31,7 @@ public record BrainstemProjection
     [JsonPropertyName("description")] public string Description { get; init; } = "";
     [JsonPropertyName("function_label")] public FunctionLabel[] FunctionLabel { get; init; } = [];
     [JsonPropertyName("gameplay_labels")] public GameplayDomain[] GameplayLabels { get; init; } = [];
-    [JsonPropertyName("role")] public EdgeRole Role { get; init; }
+    [JsonPropertyName("role")] [JsonRequired] public EdgeRole Role { get; init; }
 }
 
 /// <summary>CSTC 环路边（47 条）。source/target 均为 dk_name。</summary>
@@ -45,7 +46,7 @@ public record CstcEdge
     [JsonPropertyName("description")] public string Description { get; init; } = "";
     [JsonPropertyName("function_label")] public FunctionLabel[] FunctionLabel { get; init; } = [];
     [JsonPropertyName("gameplay_labels")] public GameplayDomain[] GameplayLabels { get; init; } = [];
-    [JsonPropertyName("role")] public EdgeRole Role { get; init; }
+    [JsonPropertyName("role")] [JsonRequired] public EdgeRole Role { get; init; }
 }
 
 /// <summary>特化通路（112 条）——跨层级快速通道（杏仁核捷径、穿通通路等）。source/target 为 dk_name 或 functional_id。</summary>
@@ -62,5 +63,6 @@ public record PrivilegedPathway
     [JsonPropertyName("function_label")] public FunctionLabel[] FunctionLabel { get; init; } = [];
     [JsonPropertyName("gameplay_labels")] public GameplayDomain[] GameplayLabels { get; init; } = [];
     [JsonPropertyName("description")] public string Description { get; init; } = "";
-    [JsonPropertyName("role")] public EdgeRole Role { get; init; }
+    // #106 Q1/#107：Role 缺失 → JsonException（禁止静默回退 Active(0)——#92 事故根因）
+    [JsonPropertyName("role")] [JsonRequired] public EdgeRole Role { get; init; }
 }

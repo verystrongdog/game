@@ -589,6 +589,65 @@ public class GameDataLoaderTests
         }
     }
 
+    // ─── #107：四类边 Role [JsonRequired]（缺 role → JsonException，禁止静默回退 Active(0)）───
+
+    private static string WriteTempJson(string json)
+    {
+        var tmp = Path.GetTempFileName();
+        File.WriteAllText(tmp, json);
+        return tmp;
+    }
+
+    [Theory]
+    [InlineData("{\"brainstem\": [{\"source\": \"LocusCoeruleus\", \"target\": \"x\"}]}")]
+    [InlineData("{\"cstc\": [{\"source\": \"x\", \"target\": \"y\"}]}")]
+    [InlineData("{\"corticocortical\": [{\"source\": \"x\", \"target\": \"y\"}]}")]
+    [InlineData("{\"privileged_pathways\": [{\"source\": \"x\", \"target\": \"y\"}]}")]
+    public void Loader_MissingRole_ThrowsJsonException(string badJson)
+    {
+        var tmp = WriteTempJson(badJson);
+        try
+        {
+            Assert.Throws<JsonException>(() => GameDataLoader.LoadTripartiteModel(tmp));
+        }
+        finally
+        {
+            File.Delete(tmp);
+        }
+    }
+
+    [Fact]
+    public void Loader_NullRole_ThrowsJsonException()
+    {
+        // "role":null → SnakeCaseEnumConverter.Read GetString() 返回 null → 比较失败抛 JsonException（#106 Q1 实测路径，非 JsonRequired 路径）
+        var tmp = WriteTempJson("{\"brainstem\": [{\"source\": \"x\", \"target\": \"y\", \"role\": null}]}");
+        try
+        {
+            Assert.Throws<JsonException>(() => GameDataLoader.LoadTripartiteModel(tmp));
+        }
+        finally
+        {
+            File.Delete(tmp);
+        }
+    }
+
+    [Fact]
+    public void Loader_ExplicitRole_LoadsFine()
+    {
+        // 显式 "role":"active" → 正常通过（验收语义：不能写成「所有最终得到 Active 的情况都失败」）
+        var tmp = WriteTempJson("{\"brainstem\": [{\"source\": \"x\", \"target\": \"y\", \"role\": \"active\"}]}");
+        try
+        {
+            var model = GameDataLoader.LoadTripartiteModel(tmp);
+            Assert.Single(model.Brainstem);
+            Assert.Equal(EdgeRole.Active, model.Brainstem[0].Role);
+        }
+        finally
+        {
+            File.Delete(tmp);
+        }
+    }
+
     // ─── AC-13 / AC-14 membership ───────────────────────────────
 
     /// <summary>AC-13: mirror_of 目标全部 ∈ functional_ids（恰 2 条）。</summary>
