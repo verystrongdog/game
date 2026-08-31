@@ -40,3 +40,6 @@ data/connectivity/abagen/
 
 # 模拟实验结果（生成物，不进版本控制）
 data/sim_results/
+
+# .NET 沙箱内本地 NuGet 缓存（build 产物，不进版本控制）
+.nuget-pkgs/
