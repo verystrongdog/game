@@ -1,0 +1,25 @@
+{
+  "_description": "12 gameplay_domain → 8 行为角色权重映射表 (Grilling #72 P1a D3)。作为 link_contexts_tripartite.json 角色分类的唯一映射来源。",
+  "_design_doc": "规则/技能树系统/技能生成机制.md（链路上下文范式，Grilling #20）+ .scratch/grilling-72-p1a-skill-context/task-plan.md §四",
+  "_rules": [
+    "role_scores(edge)[r] = Σ_domain w(domain, r) × [domain ∈ edge.gameplay_labels]",
+    "primary_role = argmax_r role_scores；secondary_role = 次高分 r（score > 0.25）",
+    "权重 ∈ [0, 1]；每行至少一个正权重",
+    "权重为初始值（对齐旧 classify_link_roles 角色语义），具体数值属设计校准层（#35 可调）"
+  ],
+  "domains": {
+    "motor_execution": { "attack_physical": 1.0 },
+    "sensory_perception": { "perceive": 1.0 },
+    "cognitive_control": { "attack_mental": 0.2, "support": 0.5, "disrupt": 0.3 },
+    "social_cognition": { "attack_mental": 0.4, "support": 0.3, "disrupt": 0.3 },
+    "memory_consolidation": { "attack_mental": 0.2, "perceive": 0.3, "support": 0.5 },
+    "reward_learning": { "approach": 1.0 },
+    "threat_defense": { "defend": 0.6, "flee": 0.4 },
+    "arousal_modulation": { "defend": 0.3, "flee": 0.2, "perceive": 0.5 },
+    "interoception": { "defend": 0.5, "perceive": 0.5 },
+    "habit_learning": { "attack_physical": 0.5, "approach": 0.3, "disrupt": 0.2 },
+    "action_gating": { "attack_physical": 0.6, "approach": 0.4 },
+    "thalamic_relay": { "perceive": 0.5, "support": 0.5 }
+  },
+  "roles": ["attack_physical", "attack_mental", "defend", "flee", "approach", "perceive", "support", "disrupt"]
+}
