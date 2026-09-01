@@ -1,7 +1,7 @@
 # [Grilling] NPC 人生自主起草功能（矩阵驱动）
 
 Type: grilling
-Status: open
+Status: closed（✅ 2026-09-01 六问闭合 + 收尾落盘，GitHub #87 已关闭）
 维度: 事件 + 管线
 前置: #89 素材库内容生产（社会演化矩阵 / 病案书素材池）✅
 阻塞: 无（#89 素材生产挂起中，本 issue 并行设计生成功能）
