@@ -26,7 +26,9 @@ public sealed record CalibrationConfig
     /// <summary>δ 缩放因子 [NEW] 待校准。来源：运行时状态模型 §5.5 ⚠️ 延迟注。</summary>
     public float DeltaScale { get; init; } = 0.3f;
 
-    /// <summary>精神缩放——未启用（demo 用固定 base 2），1.0 为禁用占位。来源：运行时状态模型 §8.1 ⚠️ 待赋值。</summary>
+    /// <summary>精神缩放——未启用（demo 用固定 base 2），1.0 为禁用占位。来源：运行时状态模型 §8.1。
+    /// ✅ 2026-09-03 Grilling #35 定案：采纳 a(t) 派生轨，scale_mental 设计值 ≈ 3（暂定，PENDING_IMPLEMENTATION）；
+    /// 引擎 CalcMentalDamage 接入前保持 1.0 禁用（运行值不动，受控暂态——规范世界新轨/运行世界旧轨）。</summary>
     public float ScaleMental { get; init; } = 1.0f;
 
     /// <summary>期望伤害（A1 m 公式分母）。来源：核心机制 §4.2。</summary>
