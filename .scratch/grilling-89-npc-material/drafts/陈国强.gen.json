@@ -1,0 +1,284 @@
+{
+  "_metadata": {
+    "role": "陈国强",
+    "draft": "v0.5-ai-drafted",
+    "status": "草稿 v0.5（加厚版 5898+，待审阅）",
+    "candidate": "患者 2",
+    "source_view": "drafts/陈国强-叙事视图.md",
+    "derived_from": "AI 起草（#87 A'-Generator）",
+    "input_source": "canonical",
+    "gen_schema": "M2 初始参考集 + 转化链 + 资格门（#113）扩展字段",
+    "issue": "#89"
+  },
+  "identity": {
+    "name": "陈国强",
+    "gender": "男",
+    "birth_year": 1973,
+    "birth_region": "东北哈尔滨（单位制老工业区）",
+    "occupation": "铸造厂钳工 → 4050 人员 → 零工",
+    "education": "技校（顶替进厂）",
+    "入院年龄": 42,
+    "入院年份": 2015,
+    "note": "SUD 轻档——资格门实际拦截案例（MDD L_agg 更高但 DEPRESSIVE=0 被挡）"
+  },
+  "lifespan": [
+    {
+      "year": 1973,
+      "age": 0,
+      "event": "出生，哈尔滨，父亲铸造厂八级工",
+      "macro": "单位制黄金年代"
+    },
+    {
+      "year": 1991,
+      "age": 18,
+      "event": "顶替进厂当钳工；技术比武第三名",
+      "macro": "国企尚稳"
+    },
+    {
+      "year": 1998,
+      "age": 25,
+      "event": "买断工龄 2 万 4 下岗；再就业屡败",
+      "macro": "下岗潮重灾期"
+    },
+    {
+      "year": 2000,
+      "age": 27,
+      "event": "开始饮酒（解乏→离不开）",
+      "macro": ""
+    },
+    {
+      "year": 2005,
+      "age": 32,
+      "event": "妻子离婚，女儿随母（3 岁）",
+      "macro": ""
+    },
+    {
+      "year": 2008,
+      "age": 35,
+      "event": "金融危机后零工更少，一天一斤白酒",
+      "macro": "2008 金融危机"
+    },
+    {
+      "year": 2010,
+      "age": 37,
+      "event": "肝硬化早期；戒酒 3 个月后复饮",
+      "macro": ""
+    },
+    {
+      "year": 2015,
+      "age": 42,
+      "event": "酒醉抽搐送医；诊断酒精依赖（SUD）；自愿住院戒酒",
+      "macro": "2013 精神卫生法后"
+    }
+  ],
+  "relations": [
+    {
+      "person": "前妻",
+      "type": "前配偶",
+      "bond": "2005 离婚（他自觉无资格争抚养权）",
+      "trauma_link": "E2 丧失 来源"
+    },
+    {
+      "person": "女儿",
+      "type": "子女",
+      "bond": "随母；他住院理由=不想让女儿觉得父亲是酒鬼",
+      "trauma_link": "动机锚"
+    },
+    {
+      "person": "老周",
+      "type": "工友/酒友",
+      "bond": "下岗后互相扶持的兄弟；探视者",
+      "trauma_link": "保护因素（弱）"
+    },
+    {
+      "person": "母亲",
+      "type": "血亲",
+      "bond": "快八十，他出院后住母亲屋——'我得伺候我这个儿子'",
+      "trauma_link": "愧疚源"
+    }
+  ],
+  "traits_origin": [
+    {
+      "trait": "单位制认同/技术自尊",
+      "origin_event": "厂子没了=人也不会活了（'咱俩年轻时候也算人才吧'）",
+      "source": "叙事视图 v0.1"
+    },
+    {
+      "trait": "自我放弃/不争",
+      "origin_event": "离婚不争抚养权——'没资格'的自我否定",
+      "source": "叙事视图 v0.1"
+    },
+    {
+      "trait": "象棋好（唯一赢的领域）",
+      "origin_event": "厂里没人下得过；病房教会两个小伙子",
+      "source": "叙事视图 v0.1"
+    }
+  ],
+  "life_memories": [
+    {
+      "id": "L1",
+      "type": "高光记忆",
+      "detail": "技术比武第三名，车间挂照片",
+      "use": "对话树：'厂子没了'集体记忆"
+    },
+    {
+      "id": "L2",
+      "type": "无意义碎片",
+      "detail": "象棋；不吃鱼（鱼刺阴影）；记得哈尔滨所有公交线路；用了二十年的铝饭盒（父亲给的）",
+      "use": "日常寒暄（B2）"
+    }
+  ],
+  "dialogue_samples": [
+    {
+      "id": "D1",
+      "scene": "戒断期",
+      "lines": [
+        "我不是想喝，我是不知道手该放哪儿。"
+      ],
+      "trait": "戒断反应+对'失控'的诚实"
+    },
+    {
+      "id": "D2",
+      "scene": "老周探视",
+      "lines": [
+        "我女儿会不会觉得她爸丢人？"
+      ],
+      "trait": "深层愧疚，只在信任的人面前"
+    },
+    {
+      "id": "D3",
+      "scene": "出院前",
+      "lines": [
+        "我妈快八十了，还得伺候我这个五十岁的儿子。我真不是东西。"
+      ],
+      "trait": "自责+自嘲"
+    }
+  ],
+  "symptoms_presentation": {
+    "当前诊断": "酒精依赖（SUD）",
+    "主诉": "15 年饮酒史，一天一斤白酒；戒断反应（手抖/失眠/焦虑）；酒精性肝病早期；情绪低落但未达重性抑郁发作标准",
+    "行为覆盖对接": "SUD 行为覆盖（成瘾驱动：奖赏线索敏化——戒断期对酒精线索高反应）",
+    "资格声明": {
+      "DEPRESSIVE": 0,
+      "HYPOMANIA": 0,
+      "MANIA": 0,
+      "SUBSTANCE": 1,
+      "CYCLIC": 0
+    },
+    "资格裁决": "SUD ELIGIBLE（SUBSTANCE=1）；**MDD INELIGIBLE（DEPRESSIVE=0 一票否决）——教学案例：MDD L_agg=1.54 > SUD L_agg=1.05 但被资格门拦截**",
+    "临床注记": "SUD 的 LOSS_OF_CONTROL/TOLERANCE/WITHDRAWAL 三原子为 #113 延迟项（未归位），本案例仅用 SUBSTANCE_USE_HISTORY 必要正向候选"
+  },
+  "behavior_7params": {
+    "方法": "SUD 相关标签：敏化-奖励（DA_VTA+0.2, 5HT−0.2, bias_limbic+0.15）+ 抑制不足（5HT−0.2, bias_somatic+0.15）——5HT 取最大 −0.2",
+    "params": {
+      "NE_baseline": 0.3,
+      "DA_VTA_baseline": 0.6,
+      "DA_SNc_baseline": 0.5,
+      "5HT_baseline": 0.3,
+      "bias_somatic": 0.15,
+      "bias_cognitive": 0.0,
+      "bias_limbic": 0.15
+    },
+    "游戏表现": "对酒类线索高反应（奖赏敏化）；冲动抑制弱（5HT↓）；戒断期手抖/焦虑（NE 中高）",
+    "6标签": [
+      "敏化-奖励",
+      "抑制不足"
+    ]
+  },
+  "trauma_memories": [
+    {
+      "id": "E1",
+      "event_type": "经济/剥夺",
+      "A": 0.6,
+      "N": 0.7,
+      "F": 0.4,
+      "D_seg": 0.05,
+      "t_anchor": "1998",
+      "entities": [
+        "工厂"
+      ],
+      "g": 0.7,
+      "k": 0.9,
+      "delta_I": 0.6,
+      "description": "下岗+4050 再就业失败"
+    },
+    {
+      "id": "E2",
+      "event_type": "丧失/哀悼",
+      "A": 0.7,
+      "N": 0.6,
+      "F": 0.5,
+      "D_seg": 0.05,
+      "t_anchor": "2005",
+      "entities": [
+        "前妻",
+        "女儿"
+      ],
+      "g": 0.7,
+      "k": 0.9,
+      "delta_I": 0.7,
+      "description": "离婚、女儿被带走"
+    },
+    {
+      "id": "E3",
+      "event_type": "慢性冲突/高压",
+      "A": 0.5,
+      "N": 0.6,
+      "F": 0.4,
+      "D_seg": 0.05,
+      "t_anchor": "2010-2015",
+      "entities": [],
+      "g": 0.7,
+      "k": 0.9,
+      "delta_I": 0.5,
+      "description": "戒酒-复饮循环+独居"
+    },
+    {
+      "id": "E4",
+      "event_type": "经济/剥夺",
+      "A": 0.4,
+      "N": 0.65,
+      "F": 0.35,
+      "D_seg": 0.05,
+      "t_anchor": "2008-2015",
+      "entities": [],
+      "g": 0.7,
+      "k": 0.9,
+      "delta_I": 0.4,
+      "description": "金融危机后零工稀少"
+    }
+  ],
+  "transformation": {
+    "params": {
+      "g": 0.7,
+      "k": 0.9,
+      "beta_0": 1.0,
+      "beta_t": "β₀×D(t)，简化 1.0",
+      "A_trauma_I": 0.7,
+      "A_trauma_L": 1.0
+    },
+    "L_total": 1.54,
+    "I_max": 0.7,
+    "病理化": "✅ L=1.54 ≥ 1.0",
+    "资格门": "**SUD ELIGIBLE；MDD INELIGIBLE（DEPRESSIVE=0）**——资格门拦截教学案例",
+    "主病选择": "资格过滤后候选 {SUD}（E1/E3/E4 召回 SUD，E2 召回无）→ 主病 SUD",
+    "聚合": {
+      "SUD": {
+        "L_agg": 1.05,
+        "档位": "轻",
+        "来源": "E1+E3+E4（经济/慢性）"
+      },
+      "MDD": {
+        "L_agg": 1.54,
+        "档位": "被资格门拦截（DEPRESSIVE=0）"
+      }
+    },
+    "disease_profile": {
+      "主病": "SUD 物质使用障碍（酒精）",
+      "档位": "轻",
+      "CGI-S": "3-4",
+      "m_offset示例": "SUD 病理边轻档（pathology_edges.json）",
+      "备注": "[NEW 初值可调]；SUD 三原子延迟项未参与"
+    }
+  }
+}
