@@ -135,25 +135,56 @@ class LifeEvents:
     memories: list
     trace: list = field(default_factory=list)
 
-def event_generator(soil: Soil, rng: random.Random) -> LifeEvents:
-    """按人生阶段生成 3-6 条创伤记忆。宏观事件→事件类型的映射在 MVP 用随机+地域偏置。
-    简化假设（MVP 测试用，非正典定案）：每阶段 1-2 条记忆，事件类型从可用池随机。"""
-    # 按阶段数量: 少年/青年/中年 各 1-2 条（中年可能为空——1995-2005 段）
-    stages = [("少年期", soil.social_conditions[:2]), ("青年期", ["时代"], ["时代"])]
+# 诱发类型表: 躁狂/轻躁狂史 → 事件序列须含的诱发类型（双相谱临床: 丧失/慢性 诱发）
+MANIA_TRIGGER_TYPES = ["丧失/哀悼", "慢性冲突/高压"]
+
+# 声明×事件一致性规则（#87 Q3 MVP 发现, 2026-09-03）:
+# 临床史声明独立于事件采样(#113 Q2-3 选 A 正向); 但 EventGenerator 须保证:
+#   若 MANIA=1 → 事件序列须含 ≥1 诱发类型(丧失/慢性), 否则 BD-I 无从落病
+#   若 HYPOMANIA=1 → 同上(BD-II 需诱发)
+# 实现: 事件生成时若声明需诱发且未含, 强制补一条诱发事件
+
+def sample_clinical_history(rng: random.Random) -> dict:
+    """临床史声明独立采样（先于事件生成，#113 Q2-3 正向：声明独立于事件）。
+    MVP 测试参数（非正典定案）: 原子基准概率 [P(1), P(0), P(MISSING)]"""
+    atom_base = {
+        "DEPRESSIVE_EPISODE_HISTORY": (0.30, 0.55, 0.15),
+        "SUBSTANCE_USE_HISTORY":      (0.15, 0.75, 0.10),
+        "MANIA_HISTORY":              (0.10, 0.80, 0.10),
+        "HYPOMANIA_HISTORY":          (0.12, 0.78, 0.10),
+        "CYCLIC_MOOD_HISTORY":        (0.12, 0.78, 0.10),
+    }
+    ch = {}
+    for atom in ATOMS:
+        p1, p0, pm = atom_base[atom]
+        r = rng.random()
+        if r < p1: v = 1
+        elif r < p1 + p0: v = 0
+        else: v = "MISSING"
+        ch[atom] = v
+    return ch
+
+def event_generator(soil: Soil, clinical_history: dict, rng: random.Random) -> LifeEvents:
+    """按人生阶段生成 3-6 条创伤记忆。事件类型随机采样 + 声明×事件一致性约束。
+    简化假设（MVP 测试用，非正典定案）。"""
     memories = []
     all_types = list(EVENT_TYPE_CANDIDATES.keys())
-    # 每条记忆：随机选事件类型（轻微地域/时代偏置省略，MVP 均匀采样）
+    # 声明一致性: 需要诱发的声明
+    need_trigger = []
+    if clinical_history.get("MANIA_HISTORY") == 1 or clinical_history.get("HYPOMANIA_HISTORY") == 1:
+        need_trigger = MANIA_TRIGGER_TYPES  # 躁狂/轻躁狂史 → 需丧失/慢性诱发
+    # 声明DEPRESSIVE=1 无需强制（MDD 候选面广，5 类事件均含 MDD）
+    # 声明SUBSTANCE=1 需诱发? SUD 候选来自经济/慢性 → 不强制的 case 观察
     n_mem = rng.randint(3, 6)
+    chosen_types = []
     for i in range(n_mem):
         etype = rng.choice(all_types)
+        chosen_types.append(etype)
         a_lo, a_hi = EVENT_A_RANGE[etype]
         A = round(rng.uniform(a_lo, a_hi), 2)
-        # 表征：N/F MVP 简化——按事件类型给默认偏向（后续可接 §3.2.3 偏好）
-        # 用随机 N/F（0-1），D_seg 小概率高（区隔化罕见）
         N = round(rng.uniform(0.1, 0.95), 2)
         F = round(rng.uniform(0.1, 0.95), 2)
         D_seg = round(0.95 if rng.random() < 0.05 else rng.uniform(0.0, 0.15), 2)
-        # g/k: MVP 用 g ∈ [0.5, 0.9], k ∈ [0.7, 1.0]（保护因素作输入）
         g = round(rng.uniform(0.5, 0.9), 2)
         k = round(rng.uniform(0.7, 1.0), 2)
         delta_I = round(k * A, 2)
@@ -163,8 +194,23 @@ def event_generator(soil: Soil, rng: random.Random) -> LifeEvents:
             t_anchor=f"{stage_name}(第{i+1}条)",
             trace=[f"Event{i+1}: type={etype} A={A} (range {a_lo}-{a_hi})",
                    f"Event{i+1}: N={N} F={F} D_seg={D_seg} g={g} k={k} ΔI={delta_I}"]))
-    return LifeEvents(memories=memories, trace=[f"Events: {n_mem} 条记忆"])
-
+    # 一致性保证: 若需诱发且未含诱发类型 → 追加一条诱发事件
+    if need_trigger and not any(t in need_trigger for t in chosen_types):
+        etype = rng.choice(need_trigger)
+        a_lo, a_hi = EVENT_A_RANGE[etype]
+        A = round(rng.uniform(a_lo, a_hi), 2)
+        N = round(rng.uniform(0.1, 0.95), 2)
+        F = round(rng.uniform(0.1, 0.95), 2)
+        D_seg = round(0.95 if rng.random() < 0.05 else rng.uniform(0.0, 0.15), 2)
+        g = round(rng.uniform(0.5, 0.9), 2)
+        k = round(rng.uniform(0.7, 1.0), 2)
+        delta_I = round(k * A, 2)
+        memories.append(TraumaMemory(
+            event_type=etype, A=A, N=N, F=F, D_seg=D_seg, g=g, k=k, delta_I=delta_I,
+            t_anchor=f"诱发补录(声明×事件一致性)",
+            trace=[f"Event+诱发: type={etype} A={A} (声明 MANIA/HYPOMANIA=1 需诱发)",
+                   f"Event+诱发: ΔI={delta_I}"]))
+    return LifeEvents(memories=memories, trace=[f"Events: {len(memories)} 条记忆 (含一致性约束)"])
 # ============================================================
 # 阶段 4: Transformer —— 病理化 + 候选召回 + 资格门 + 聚合档位
 # ============================================================
@@ -187,8 +233,8 @@ class Transformation:
     clinical_history: dict    # 原子声明（MVP 由生成器采样产出）
     trace: list = field(default_factory=list)
 
-def transformer(memories: list, rng: random.Random) -> Transformation:
-    """病理化(§3.1) → 候选召回(§3.2.1) → 资格门(§3.2.2) → 聚合(§3.3)。"""
+def transformer(memories: list, clinical_history: dict, rng: random.Random) -> Transformation:
+    """病理化(§3.1) → 候选召回(§3.2.1) → 资格门(§3.2.2, 消费传入的 clinical_history) → 聚合(§3.3)。"""
     trace = []
     # --- 1. 病理化: L = ΣΔI×g, I_max; 阈值 A_trauma_L=1.0, A_trauma_I=0.7 (β=1.0 简化)
     # ΔI = k×A（#88 输入约定）；L = Σ ΔI×g = Σ k×A×g（剂量-反应，§二）
@@ -205,37 +251,7 @@ def transformer(memories: list, rng: random.Random) -> Transformation:
                 candidates.append(d)
     trace.append(f"候选召回: {candidates}")
 
-    # --- 3. 资格门: 采样 clinical_history 原子声明（MVP: 生成器产出规范化声明）
-    # MVP 简化: 事件类型与原子声明轻度关联（真实应由叙事依据决定，MVP 演示资格门工作）
-    # 每类原子有独立的"基准概率" + 事件提示（如 丧失记忆 → DEPRESSIVE 更可能=1）
-    event_types = {m.event_type for m in memories}
-    # 原子基准概率（MVP 测试参数，非正典）: [P(1), P(0), P(MISSING)]
-    atom_base = {
-        "DEPRESSIVE_EPISODE_HISTORY": (0.30, 0.55, 0.15),
-        "SUBSTANCE_USE_HISTORY":      (0.15, 0.75, 0.10),
-        "MANIA_HISTORY":              (0.10, 0.80, 0.10),
-        "HYPOMANIA_HISTORY":          (0.12, 0.78, 0.10),
-        "CYCLIC_MOOD_HISTORY":        (0.12, 0.78, 0.10),
-    }
-    # 事件提示: 经历某类事件 → 相关原子概率提升
-    event_hints = {
-        "丧失/哀悼": ["DEPRESSIVE_EPISODE_HISTORY"],
-        "慢性冲突/高压": ["DEPRESSIVE_EPISODE_HISTORY"],
-        "生理/疾病": ["DEPRESSIVE_EPISODE_HISTORY"],
-        "经济/剥夺": ["DEPRESSIVE_EPISODE_HISTORY"],
-        "威胁/暴力": [],
-    }
-    clinical_history = {}
-    for atom in ATOMS:
-        p1, p0, pm = atom_base[atom]
-        if any(atom in event_hints.get(et, []) for et in event_types):
-            p1 = min(p1 + 0.15, 0.6)  # 事件提示提升 P(1)
-            p0 = max(p0 - 0.15, 0.3)
-        r = rng.random()
-        if r < p1: v = 1
-        elif r < p1 + p0: v = 0
-        else: v = "MISSING"
-        clinical_history[atom] = v
+    # --- 3. 资格门: 消费传入的 clinical_history（#113 Q2-3: 声明独立于事件, 由生成器产出）
     trace.append(f"临床史声明: {clinical_history}")
 
     # 资格判定
@@ -359,8 +375,9 @@ def q6_axis(artifact: dict) -> dict:
 def generate_one(seed: int) -> dict:
     rng = random.Random(seed)
     soil = soil_sampler(rng)
-    events = event_generator(soil, rng)
-    trans = transformer(events.memories, rng)
+    clinical_history = sample_clinical_history(rng)  # 声明先于事件 (#113 Q2-3 正向)
+    events = event_generator(soil, clinical_history, rng)  # 事件服从声明一致性
+    trans = transformer(events.memories, clinical_history, rng)
     art = derive_artifact(soil, events, trans, rng)
     art["_metadata"]["seed"] = seed
     return art
