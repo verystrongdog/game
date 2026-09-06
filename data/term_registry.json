@@ -1,6 +1,6 @@
 {
   "_description": "术语注册表 — Grilling §3.0 定义基线声明的唯一数据源。术语定义/旧模型/偏离原因集中管理，避免 AI 在生成时被术语的旧现实世界模型劫持。",
-  "_maintenance": "入库触发: 新核心术语 | 定义被修改 | Step 4 清扫发现未注册高频术语。numerical_locations 更新: 注册时填充 + grilling 新增引用时追加 + 定义变更时遍历复查。 | #87 创伤记忆/疾病三分类入库 + 苦痛记忆废弃 (2026-08-19) | #108 P2 情境系统实施前审查入库：G/t_neg/s_neg/p_panic/m_delta/环境 id (2026-09-02) | #113 疾病资格层入库：Eligibility(d) 疾病资格层/资格语义锚/资格证据原子/资格状态三值/资格核验全局不变量 (2026-09-03) | #116 批次1 性创伤通道资格核验入库：BPD_PATTERN_HISTORY/IDENTITY_STATE_HISTORY/PTSD 表征资格签名（2026-09-06） | #116 批次2 SSD 先行定案入库：SOMATIC_SYMPTOM_HISTORY/SYMPTOM_PSYCHOLOGICAL_OVERINVESTMENT/SYMPTOM_DURATION_6M（2026-09-06） | #116 批次2 SZ 谱定案入库：SZ_POSITIVE_COURSE_HISTORY/STPD_PATTERN_HISTORY/SZAFFECTIVE_COURSE_HISTORY（2026-09-06）",
+  "_maintenance": "入库触发: 新核心术语 | 定义被修改 | Step 4 清扫发现未注册高频术语。numerical_locations 更新: 注册时填充 + grilling 新增引用时追加 + 定义变更时遍历复查。 | #87 创伤记忆/疾病三分类入库 + 苦痛记忆废弃 (2026-08-19) | #108 P2 情境系统实施前审查入库：G/t_neg/s_neg/p_panic/m_delta/环境 id (2026-09-02) | #113 疾病资格层入库：Eligibility(d) 疾病资格层/资格语义锚/资格证据原子/资格状态三值/资格核验全局不变量 (2026-09-03) | #116 批次1 性创伤通道资格核验入库：BPD_PATTERN_HISTORY/IDENTITY_STATE_HISTORY/PTSD 表征资格签名（2026-09-06） | #116 批次2 SSD 先行定案入库：SOMATIC_SYMPTOM_HISTORY/SYMPTOM_PSYCHOLOGICAL_OVERINVESTMENT/SYMPTOM_DURATION_6M（2026-09-06） | #116 批次2 SZ 谱定案入库：SZ_POSITIVE_COURSE_HISTORY/STPD_PATTERN_HISTORY/SZAFFECTIVE_COURSE_HISTORY（2026-09-06） | #116 批次2 进食障碍族定案入库：6 域原子（2026-09-06）",
   "_created": "2026-08-03",
   "_updated": "2026-09-06",
   "_batch": "grilling-113-disease-eligibility-2026-09-03",
@@ -3954,6 +3954,66 @@
       "status": "active",
       "numerical_locations": [
         "规则/技能树系统/创伤记忆转化接口.md §3.2.2 SZ 行"
+      ]
+    },
+    "BINGE_HISTORY": {
+      "definition": "进食障碍共享域原子（E_d^hist，#116 批次2 定案 2026-09-06）：#87 存在性声明『失控性暴食发作史』（量大 + 失控感两成分，DSM-5 BN A=BED A 逐字共享；ICD-11 6B81/6B82 同句）。BN/BED 必要正向；频率窗（≥1 次/周）留声明侧。",
+      "source": "规则/技能树系统/创伤记忆转化接口.md §3.2.2 批次签名表 ED 行（2026-09-06）；.scratch/grilling-116-disease-gen-evolution/资格核验批次2-全量解锁/进食障碍族-收尾-裁决点.md",
+      "old_model": "—",
+      "deviation_reason": "三病域级 AND 无跨条 polythetic（T6：BPD 单宽配方不可照搬）；条内或/计数留声明侧；判别靠病级正向域组合（BINGE 共享 + 补偿/低体重判别键）",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/创伤记忆转化接口.md §3.2.2 ED 行"
+      ]
+    },
+    "COMPENSATORY_BEHAVIOR_HISTORY": {
+      "definition": "进食障碍共享域原子（E_d^hist，#116 批次2 定案 2026-09-06）：#87 存在性声明『为防增重的补偿行为史』（催吐/泻药/利尿剂/禁食/过度运动——域级非清除级，无清除 BN 合法）。BN 必要正向；BED 由声明侧排除（无规律补偿语义）。",
+      "source": "规则/技能树系统/创伤记忆转化接口.md §3.2.2 批次签名表 ED 行（2026-09-06）；.scratch/grilling-116-disease-gen-evolution/资格核验批次2-全量解锁/进食障碍族-收尾-裁决点.md",
+      "old_model": "—",
+      "deviation_reason": "三病域级 AND 无跨条 polythetic（T6：BPD 单宽配方不可照搬）；条内或/计数留声明侧；判别靠病级正向域组合（BINGE 共享 + 补偿/低体重判别键）",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/创伤记忆转化接口.md §3.2.2 ED 行"
+      ]
+    },
+    "LOW_WEIGHT_PATTERN": {
+      "definition": "进食障碍共享域原子（E_d^hist，#116 批次2 定案 2026-09-06）：#87 存在性声明『显著低体重模式/史』（AN A：相对年龄/性别/发育轨迹；BMI 数值/百分位留声明侧）。AN 必要正向（AN vs 非典型 AN/躯体他因判别键）。",
+      "source": "规则/技能树系统/创伤记忆转化接口.md §3.2.2 批次签名表 ED 行（2026-09-06）；.scratch/grilling-116-disease-gen-evolution/资格核验批次2-全量解锁/进食障碍族-收尾-裁决点.md",
+      "old_model": "—",
+      "deviation_reason": "三病域级 AND 无跨条 polythetic（T6：BPD 单宽配方不可照搬）；条内或/计数留声明侧；判别靠病级正向域组合（BINGE 共享 + 补偿/低体重判别键）",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/创伤记忆转化接口.md §3.2.2 ED 行"
+      ]
+    },
+    "WEIGHT_GAIN_PREVENTION": {
+      "definition": "进食障碍共享域原子（E_d^hist，#116 批次2 定案 2026-09-06）：#87 存在性声明『怕增重/防增重行为存在性』（AN B：恐惧 ∨ 持久防增重行为，二选判定留声明侧）。AN 必要正向。",
+      "source": "规则/技能树系统/创伤记忆转化接口.md §3.2.2 批次签名表 ED 行（2026-09-06）；.scratch/grilling-116-disease-gen-evolution/资格核验批次2-全量解锁/进食障碍族-收尾-裁决点.md",
+      "old_model": "—",
+      "deviation_reason": "三病域级 AND 无跨条 polythetic（T6：BPD 单宽配方不可照搬）；条内或/计数留声明侧；判别靠病级正向域组合（BINGE 共享 + 补偿/低体重判别键）",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/创伤记忆转化接口.md §3.2.2 ED 行"
+      ]
+    },
+    "BODY_IMAGE_DISTURBANCE": {
+      "definition": "进食障碍共享域原子（E_d^hist，#116 批次2 定案 2026-09-06）：#87 存在性声明『体重/体形体验紊乱或过度影响自我评价』（AN C 三选或 / BN D undue influence，判定留声明侧）。AN/BN 必要正向；BED 无此条款（暴食后内疚≠体像条款）。",
+      "source": "规则/技能树系统/创伤记忆转化接口.md §3.2.2 批次签名表 ED 行（2026-09-06）；.scratch/grilling-116-disease-gen-evolution/资格核验批次2-全量解锁/进食障碍族-收尾-裁决点.md",
+      "old_model": "—",
+      "deviation_reason": "三病域级 AND 无跨条 polythetic（T6：BPD 单宽配方不可照搬）；条内或/计数留声明侧；判别靠病级正向域组合（BINGE 共享 + 补偿/低体重判别键）",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/创伤记忆转化接口.md §3.2.2 ED 行"
+      ]
+    },
+    "BED_DISTRESS_PATTERN": {
+      "definition": "进食障碍域原子（E_d^hist，#116 批次2 定案 2026-09-06）：#87 存在性声明『暴食后显著痛苦/内疚』（DSM-5 BED C + B⑤；≥3/5 计数留声明侧）。BED 必要正向。",
+      "source": "规则/技能树系统/创伤记忆转化接口.md §3.2.2 批次签名表 ED 行（2026-09-06）；.scratch/grilling-116-disease-gen-evolution/资格核验批次2-全量解锁/进食障碍族-收尾-裁决点.md",
+      "old_model": "—",
+      "deviation_reason": "三病域级 AND 无跨条 polythetic（T6：BPD 单宽配方不可照搬）；条内或/计数留声明侧；判别靠病级正向域组合（BINGE 共享 + 补偿/低体重判别键）",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/创伤记忆转化接口.md §3.2.2 ED 行"
       ]
     }
   },
