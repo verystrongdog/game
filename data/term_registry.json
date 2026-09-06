@@ -1,6 +1,6 @@
 {
   "_description": "术语注册表 — Grilling §3.0 定义基线声明的唯一数据源。术语定义/旧模型/偏离原因集中管理，避免 AI 在生成时被术语的旧现实世界模型劫持。",
-  "_maintenance": "入库触发: 新核心术语 | 定义被修改 | Step 4 清扫发现未注册高频术语。numerical_locations 更新: 注册时填充 + grilling 新增引用时追加 + 定义变更时遍历复查。 | #87 创伤记忆/疾病三分类入库 + 苦痛记忆废弃 (2026-08-19) | #108 P2 情境系统实施前审查入库：G/t_neg/s_neg/p_panic/m_delta/环境 id (2026-09-02) | #113 疾病资格层入库：Eligibility(d) 疾病资格层/资格语义锚/资格证据原子/资格状态三值/资格核验全局不变量 (2026-09-03) | #116 批次1 性创伤通道资格核验入库：BPD_PATTERN_HISTORY/IDENTITY_STATE_HISTORY/PTSD 表征资格签名（2026-09-06） | #116 批次2 SSD 先行定案入库：SOMATIC_SYMPTOM_HISTORY/SYMPTOM_PSYCHOLOGICAL_OVERINVESTMENT/SYMPTOM_DURATION_6M（2026-09-06） | #116 批次2 SZ 谱定案入库：SZ_POSITIVE_COURSE_HISTORY/STPD_PATTERN_HISTORY/SZAFFECTIVE_COURSE_HISTORY（2026-09-06） | #116 批次2 进食障碍族定案入库：6 域原子（2026-09-06）",
+  "_maintenance": "入库触发: 新核心术语 | 定义被修改 | Step 4 清扫发现未注册高频术语。numerical_locations 更新: 注册时填充 + grilling 新增引用时追加 + 定义变更时遍历复查。 | #87 创伤记忆/疾病三分类入库 + 苦痛记忆废弃 (2026-08-19) | #108 P2 情境系统实施前审查入库：G/t_neg/s_neg/p_panic/m_delta/环境 id (2026-09-02) | #113 疾病资格层入库：Eligibility(d) 疾病资格层/资格语义锚/资格证据原子/资格状态三值/资格核验全局不变量 (2026-09-03) | #116 批次1 性创伤通道资格核验入库：BPD_PATTERN_HISTORY/IDENTITY_STATE_HISTORY/PTSD 表征资格签名（2026-09-06） | #116 批次2 SSD 先行定案入库：SOMATIC_SYMPTOM_HISTORY/SYMPTOM_PSYCHOLOGICAL_OVERINVESTMENT/SYMPTOM_DURATION_6M（2026-09-06） | #116 批次2 SZ 谱定案入库：SZ_POSITIVE_COURSE_HISTORY/STPD_PATTERN_HISTORY/SZAFFECTIVE_COURSE_HISTORY（2026-09-06） | #116 批次2 进食障碍族定案入库：6 域原子（2026-09-06） | #116 批次2 PDD 定案入库：PDD_PERSISTENT_DEPRESSION_PATTERN（2026-09-06）",
   "_created": "2026-08-03",
   "_updated": "2026-09-06",
   "_batch": "grilling-113-disease-eligibility-2026-09-03",
@@ -4014,6 +4014,16 @@
       "status": "active",
       "numerical_locations": [
         "规则/技能树系统/创伤记忆转化接口.md §3.2.2 ED 行"
+      ]
+    },
+    "PDD_PERSISTENT_DEPRESSION_PATTERN": {
+      "definition": "PDD 资格证据原子（E_d^hist，#116 批次2 定案 2026-09-06）：#87 单原子『已声明的 ≥2 年持续低落病程模式存在性』（DSM-5 PDD A+C 语义；≥2 年/儿童 1 年双时程、≥2/6 计数、无 >2 月缓解窗全留声明侧；CYCLIC + SSD SYMPTOM_DURATION_6M 双先例）。PDD 排除原子 = MANIA_HISTORY ∨ HYPOMANIA_HISTORY ∨ CYCLIC_MOOD_HISTORY = 1（DSM E 条——与 BD-I/BD-II/环性分离锚，首次引入排除原子）。DEPRESSIVE_EPISODE_HISTORY 不进 PDD 门（非必要非充分，MDD 侧消费；双 ELIGIBLE 合法）。",
+      "source": "规则/技能树系统/创伤记忆转化接口.md §3.2.2 批次签名表 PDD 行（2026-09-06）；.scratch/grilling-116-disease-gen-evolution/资格核验批次2-全量解锁/PDD-收尾-裁决点.md",
+      "old_model": "—",
+      "deviation_reason": "PDD 资格核心 = 病程模式（≥2 年）非发作史；快照级表征无时间维（与 MDD 偏好距离 0.112 不可分离）；E 条排除 = 同候选集 BD/环性分离的直接 DSM 锚",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/创伤记忆转化接口.md §3.2.2 PDD 行"
       ]
     }
   },
