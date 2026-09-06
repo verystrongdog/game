@@ -347,7 +347,7 @@ docs/
 
 data/                           ← 结构化数据（JSON/NPY）
 tools/                          ← Blender自动化/数据生成脚本
-sim_*.py                        ← 数值模拟验证
+sim/                           ← Python 数值模拟验证
 ```
 
 ---

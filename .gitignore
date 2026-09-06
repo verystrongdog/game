@@ -47,3 +47,7 @@ data/sim_results/
 # 子代理临时抓取
 .evtmp_*/
 .scratch/.dsh-tmp-*/
+
+# 外部 AI 会话转写存档（过程物，仅本地；chatX 为 #117 输入已跟踪例外）
+参考/会话存档/*
+!参考/会话存档/chatX_transcript.txt
