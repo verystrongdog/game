@@ -78,10 +78,10 @@
 |:-:|------|------|------|
 | C1 | DSM-5 Criterion C 原文语义："**There is evidence of conduct disorder with onset before age 15 years.**"——必备独立条款，非 A 标准内部项 | DSM-5-TR 转引（StatPearls/Mirror）；DSM-5 原文逐字 [需核验] | Criterion C 与 Criterion A 时间窗不同：A = "since age 15"，C = "before age 15" |
 | C2 | Criterion B："The individual is at least age 18 years." | 同上 | 年龄硬条款（§四.3 候选原子材料） |
-| C3 | "Adults who do not have evidence of conduct disorder in childhood but otherwise meet the criteria for ASPD can be diagnosed with **adult antisocial behavior**"——该编码**非正式精神障碍诊断**（ICD-9 V 码 / ICD-10 Z 码，具体码号 [需核验]） | StatPearls 转述（[NCBI NBK546673](https://www.ncbi.nlm.nih.gov/books/NBK546673/)） | DSM 为"无 CD 史的成人反社会行为"单设了**非障碍编码**——材料指向"CD 史"在 DSM 分类学上是 ASPD 的强必备语义（§二.1） |
+| C3 | "Adults who do not have evidence of conduct disorder in childhood but otherwise meet the criteria for ASPD can be diagnosed with **adult antisocial behavior**"——该编码**非正式精神障碍诊断**；码号（2026-09-06 核验）：**V71.01（ICD-9-CM）/ Z72.811（ICD-10-CM "Antisocial behavior, adult"）** | StatPearls 转述（[NCBI NBK546673](https://www.ncbi.nlm.nih.gov/books/NBK546673/)）；[ICD10data Z72.811](https://www.icd10data.com/ICD10CM/Codes/Z00-Z99/Z69-Z76/Z72-/Z72.811)；DSM-5 原书 "Other Conditions" 条目逐字 [需核验] | DSM 为"无 CD 史的成人反社会行为"单设了**非障碍编码**——材料指向"CD 史"在 DSM 分类学上是 ASPD 的强必备语义（§二.1） |
 | C4 | MSD：诊断要求转述 "patients must have evidence that a conduct disorder has been present before age 15 years" + "ASPD is diagnosed only in people ≥ 18 years" | [MSD Manual Professional, ASPD](https://www.msdmanuals.com/professional/psychiatric-disorders/personality-disorders/antisocial-personality-disorder-aspd) | 与 C1/C2 一致 |
 
-> **注记**：品行障碍（CD）本身是儿童/青少年期诊断（DSM-5 行为障碍章；CD 要求年龄 <18 且"若 ≥18 岁则未达到 ASPD 标准"——CD 与 ASPD 的诊断边界在 18 岁衔接，见 §三.3）；"品行障碍史（15 岁前）"是**作为 ASPD 的历史前件被回溯引用**，不是当前 CD 诊断。
+> **注记**：品行障碍（CD）本身是儿童/青少年期诊断（DSM-5 行为障碍章）。CD 门槛（SAMHSA CBHSQ 2016 表 3.37 引 DSM-5 2013，公共领域逐字）：A = 近 12 个月 4 组 **15 条中 ≥3 条**（≥1 条在近 6 个月；组：Aggression to people and animals / Destruction of property / Deceitfulness or theft / Serious violations of rules）+ B = 功能损害 + **C = "If the individual is age 18 years or older, criteria are not met for Antisocial Personality Disorder."**（CD↔ASPD 在 18 岁边界互斥衔接，见 §三.3）；起病分型 childhood(312.81/F91.1)/adolescent(312.82/F91.2)/unspecified(312.89/F91.9)；specifier "with limited prosocial emotions"（CU，见 §五 E5）。"品行障碍史（15 岁前）"是**作为 ASPD 的历史前件被回溯引用**，不是当前 CD 诊断。
 
 ### 1.3 DSM-5 人格障碍通用标准（父类语义锚）
 
@@ -100,8 +100,8 @@
 
 | # | 材料 | 来源 | 备注 |
 |:-:|------|------|------|
-| T1 | DSM-5-TR 未改动 ASPD 的 A/B/C 标准与 ≥3/7 门槛（[需核验逐字对照]）；**Criterion D 措辞**：DSM-5-TR 转引为 "not exclusively during the course of **schizophrenia or bipolar disorder**"，DSM-IV-TR 旧版为 "schizophrenia or a **manic episode**"；DSM-5(2013) 究竟用哪个措辞 [需核验] | StatPearls（DSM-5-TR）；WikiDoc（DSM-5）；DSM-IV-TR 历史对照 | "双相期间"范围表述差异——语义锚版本选择是裁决输入 |
-| T2 | DSM-5 Section III（AMPD 替代模型，供进一步研究）对 ASPD 的定义走"人格功能损害 + 病理性特质"路线，其特质组合含 **manipulativeness/deceitfulness/callousness/hostility/irresponsibility/impulsivity/risk taking**（数量门槛与逐字 [需核验]）——"callousness（冷酷）"只在替代模型作为特质之一出现，不在 Section II 门槛内 | DSM-5 Section III [需核验] | 与 §五（"冷漠"表征的 DSM 落点）直接相关 |
+| T1 | DSM-5-TR 未改动 ASPD 的 A/B/C 标准与 ≥3/7 门槛；**Criterion D 措辞（版次核验 2026-09-06）**：证据指向 **DSM-5(2013) 与 DSM-5-TR 均作 "schizophrenia or bipolar disorder"**（SAMHSA TIP42 Exhibit 4.7 引 APA 2013 p.659、VUMC 2014-15、MUSC、Carepatron、德语维基一致）；"a **manic episode**" 是 **DSM-IV(-TR)** 措辞（Lumen 教材标 DSM-IV-TR、Behavenet DSM-IV 快照命中）——原"DSM-5→TR 改措辞"假设**大概率不成立**，真实分界在 DSM-IV→DSM-5；残留：APA 印刷对页（DSM-5 p.659 / DSM-5-TR p.771）逐字 | [SAMHSA TIP42 Exhibit 4.7](https://www.ncbi.nlm.nih.gov/sites/books/NBK571021/box/ch4.b23/)（引 APA 2013 p.659）；StatPearls（DSM-5-TR）；VUMC 2014-15；[德语维基 DSM-5 德译](https://de.wikipedia.org/wiki/Dissoziale_Pers%C3%B6nlichkeitsst%C3%B6rung) | 两版 "bipolar disorder" 一致——§1.1/§4.4 E1 引用的 D 措辞以 "bipolar disorder" 为准；语义锚版本冲突假设需下调 |
+| T2 | DSM-5 Section III（AMPD）ASPD（已核验（镜像），VUMC 2014-15 复述 DSM-5 2013 + 德语维基二重佐证）：Criterion A = 人格功能损害（Identity/Self-direction/Empathy/Intimacy 四域中 ≥2 达中度或以上）；Criterion B = **≥6/7 病理性特质**（antagonism：manipulativeness/callousness/deceitfulness/hostility；disinhibition：risk taking/impulsivity/irresponsibility）；注 ≥18 岁 + **"Specify if: With psychopathic features"**——"callousness（冷酷）"只在替代模型以特质出现，**psychopathic features 附加语也只存在于替代模型**；官方对页逐字与特质顺序 [需核验] | DSM-5 Section III（VUMC 2014-15 镜像；德语维基）；官方逐字 [需核验] | 与 §五（"冷漠"表征的 DSM 落点）直接相关；AMPD Self-direction 措辞 "failure to conform to lawful or **culturally normative** ethical behavior"（§三.1 文化语境的官方文本间接锚） |
 
 ### 1.5 ICD-11 定位
 
@@ -154,8 +154,8 @@
 
 | # | 材料 | 来源 | 备注 |
 |:-:|------|------|------|
-| A4 | **ICD-11 无 CD 史要求**：dissociality 特质域 + 严重度即可描述，不引用品行障碍前史条款 | ICD-11 CDDG（§1.5，逐字 [需核验]） | 两锚冲突点；"CD 史必要"是 DSM-5 分类决策而非跨系统共有的医学事实 |
-| A5 | 流行病学：多数 CD 儿童**不**发展成 ASPD（StatPearls 引：约 25% 女孩 / 40% 男孩 CD 最终发展成 ASPD [数值 [需核验]]）——CD 史是 ASPD 的必要**分类条件**，但不构成充分/高概率条件；从 CD 到 ASPD 有大量流失 | [StatPearls](https://www.ncbi.nlm.nih.gov/books/NBK546673/) | G4：逻辑地位（分类必备）≠ 临床发生概率 |
+| A4 | **ICD-11 无 CD 史要求**：dissociality 特质域 + 严重度即可描述，不引用品行障碍前史条款（已核验（镜像），见 §1.5） | ICD-11 CDDG（§1.5） | 两锚冲突点；"CD 史必要"是 DSM-5 分类决策而非跨系统共有的医学事实 |
+| A5 | 流行病学：多数 CD 儿童**不**发展成 ASPD——**口径并存（2026-09-06 核验）**：常引值 **25-40%**（StatPearls：约 25% 女/40% 男；Wikipedia/LibreTexts 同量级）；**Gelhorn 2007（NESARC 成人回顾口径）得 75% 进展**，并称常引 40%（如 AACAP 参数摘要）或为低估——回顾偏倚 + CD 定义宽，与前瞻口径不可直接比；Robins 1966："约一半品行问题儿童未长成反社会人格"。两口径并存时**不得单取其一**当资格依据 | [StatPearls](https://www.ncbi.nlm.nih.gov/books/NBK546673/)；[Gelhorn et al. 2007, PMC2764329](https://pmc.ncbi.nlm.nih.gov/articles/PMC2764329/)；[IACAPAP D.3](https://dev.iacapap.org/_Resources/Persistent/6fb0edebbe8df29086098fe1f929e36e4bf5798e/D.3-CONDUCT-DISORDER-072012.pdf)（转述 Robins 1966）；[Wikipedia ASPD](https://en.wikipedia.org/wiki/Antisocial_personality_disorder) | G4：逻辑地位（分类必备）≠ 临床发生概率；CD→ASPD 概率低/高**不影响**"CD 史是 DSM-5 分类必要条件"的语义 |
 | A6 | 临床可操作性批评：成人对 15 岁前行为史的报告常不可靠，需旁证（collateral）——"无档案化 CD 史"可能反映信息缺失而非事实否定 | StatPearls（评估段：collateral information） | MISSING ≠ FALSE 的项目语义在临床有对应物 |
 | A7 | 品行障碍史是 DSM-5 **Criterion**（历史前件条款）而非核心定义（essential feature = 漠视/侵犯他人权利的普遍模式，落在 Criterion A）——若做"资格原子"须区分：核心定义承载"模式存在性"，Criterion C 承载"15 岁前发展史" | DSM-5（§1.1） | 任务点名的材料分界：CD 史 ≠ ASPD 的定义核心 |
 
@@ -210,8 +210,8 @@
 | SUD（物质使用障碍） | 为获物质而盗窃/欺骗/违法、不负责任、冲动（与 A-1/2/3/6 表面重叠） | SUD = 物质使用模式（失控/损害等）；DSM-5 ASPD 鉴别要求查**清醒期行为**：反社会行为仅见于物质相关状态 → 归 SUD/物质所致，非 ASPD；**但 ASPD 可与 SUD 共病**（清醒期模式仍在） | [MSD](https://www.msdmanuals.com/professional/psychiatric-disorders/personality-disorders/antisocial-personality-disorder-aspd)（sobriety 鉴别）；StatPearls 鉴别段 | "物质相关违法史"单独不得放行 ASPD（项目 SUBSTANCE_USE_HISTORY 原子先例——SUD 轨道分流）；需"清醒期仍持续"的持久模式成分 |
 | 孤立/情境性违法行为 | 一次或偶发违法、受罚后不再犯 | 与长期反社会特质不一致（"isolated acts of misbehavior"与持久模式不符）；无跨情境渗透性 | [StatPearls](https://www.ncbi.nlm.nih.gov/books/NBK546673/) 鉴别段 | 单次/偶发事件 ≠ 模式声明（§2.3 C4） |
 | 成人反社会行为（无 CD 史） | 成年后持续违法/欺骗，满足部分 A 条款 | DSM 明确：无 15 岁前 CD 证据 → **adult antisocial behavior（Z 码，非障碍）**，不得诊 ASPD | StatPearls（§1.2 C3） | **CD 史成分缺失 = 拦截点**——支持 CONDUCT_DISORDER_HISTORY 类原子材料（§四.3） |
-| 环境性反社会行为（团伙/战区/贫困街区） | 在特定环境中长期参与帮派暴力/盗窃/勒索（行为面与 A 条款重叠） | PD 通用标准 A 要求模式"显著偏离**个体自身文化**的期望"；DSM-5 注记反社会行为须在**社会文化语境**中评估（在某语境适应/规范的生存行为 ≠ 人格偏离）[逐字 [需核验]]；CDDG 特质域评定亦须考虑文化规范 [需核验] | DSM-5 PD 通用标准 A；ASPD 文化相关段 [需核验]；转化接口 §3.2.1 :145 环境语义注记 | 团伙成员/环境适应样本须由声明侧"文化/情境语境"区分——环境存在性不是资格证据（:145） |
-| 心理病态（psychopathy，非 DSM 诊断） | 冷酷、操纵、无悔意（与 A-2/7 及"冷漠叙事化"表征高度相似） | psychopathy（PCL-R，Hare）含情感/人际核心（缺乏共情、夸大、情感肤浅），**不是 DSM-5 诊断类别**；多数 psychopath 符合 ASPD 但反之不然——ASPD 门槛不含共情/情感条款 | Hare & Neumann 2008；[StatPearls](https://www.ncbi.nlm.nih.gov/books/NBK546673/) | "冷酷无共情"作为资格成分会与 psychopathy 构念混淆——§五 表征域核心材料 |
+| 环境性反社会行为（团伙/战区/贫困街区） | 在特定环境中长期参与帮派暴力/盗窃/勒索（行为面与 A 条款重叠） | PD 通用标准 A 要求模式"显著偏离**个体自身文化**的期望"；AMPD Self-direction 措辞含 "failure to conform to lawful or **culturally normative** ethical behavior"（文化相对措辞的官方文本间接锚，§1.4 T2）；DSM-5 Section II ASPD 文化相关段**逐字未获免费源** [需核验]；CDDG 特质域评定须考虑文化规范 [需核验] | DSM-5 PD 通用标准 A；AMPD（VUMC 镜像，§1.4 T2）；ASPD 文化段 [需核验]；转化接口 §3.2.1 :145 环境语义注记 | 团伙成员/环境适应样本须由声明侧"文化/情境语境"区分——环境存在性不是资格证据（:145） |
+| 心理病态（psychopathy，非 DSM 诊断） | 冷酷、操纵、无悔意（与 A-2/7 及"冷漠叙事化"表征高度相似） | psychopathy（PCL-R，Hare）含情感/人际核心（缺乏共情、夸大、情感肤浅），**不是 DSM-5 诊断类别**（psychopathic features 只以 Section III ASPD 附加语存在，§1.4 T2）；多数 psychopath 符合 ASPD 但反之不然；实证（2026-09-06 核验）：Coid & Ullrich 2010 监狱样本 211/470 符 ASPD，其中 **31.8% PCL-R≥25**（切分 25）；Ogloff 2006：囚犯 50-80% 符 ASPD vs ~15% psychopathy（[著录 [需核验]]）——ASPD 门槛不含共情/情感条款 | Hare & Neumann 2008（*Annu Rev Clin Psychol* 4:217-246）；[Coid & Ullrich 2010, *Compr Psychiatry* 51(4):426-433](https://pubmed.ncbi.nlm.nih.gov/20579518/)；[StatPearls](https://www.ncbi.nlm.nih.gov/books/NBK546673/) | "冷酷无共情"作为资格成分会与 psychopathy 构念混淆——§五 表征域核心材料 |
 
 ### 3.2 冲动 / 攻击 / 去抑制组
 
@@ -228,7 +228,7 @@
 
 | 反样本 | 表面相似（ASPD 类） | 为什么不是 ASPD（区分锚） | 来源 | 拦截要点 |
 |--------|-------------------|------------------------|------|---------|
-| 品行障碍（CD，<18） | 15 岁前即有反复侵犯权利/规范行为——与 ASPD 的 Criterion C 前史同款 | CD 是 **<18 岁**诊断；DSM-5 CD 诊断要求含"若 ≥18 岁则须未达 ASPD 标准"（CD↔ASPD 在 18 岁边界互斥衔接 [逐字 [需核验]]）；<18 岁不得诊 ASPD（Criterion B） | DSM-5 CD/ASPD 标准（§1.2 注） | 年龄 <18 样本 = CD 轨道，不得放行 ASPD；≥18 且有 CD 史者才进入 ASPD 候选 |
+| 品行障碍（CD，<18） | 15 岁前即有反复侵犯权利/规范行为——与 ASPD 的 Criterion C 前史同款 | CD 是 **<18 岁**诊断；CD Criterion C 逐字（CBHSQ 表 3.37 引 DSM-5 2013）："If the individual is age 18 years or older, criteria are not met for Antisocial Personality Disorder."——CD↔ASPD 在 18 岁边界互斥衔接；<18 岁不得诊 ASPD（Criterion B） | [SAMHSA CBHSQ 表 3.37](https://ncbi.nlm.nih.gov/books/NBK519704/table/ch3.t37/)；DSM-5 CD/ASPD 标准（§1.2 注） | 年龄 <18 样本 = CD 轨道（312.8x/F91.x），不得放行 ASPD；≥18 且有 CD 史者才进入 ASPD 候选 |
 | 青少年期局限型反社会（adolescence-limited） | 青少年期违法/反社会行为（A 条款表象） | Moffitt 双轨迹：**adolescence-limited**（青春期常见、多数成年消退，非人格障碍）vs **life-course-persistent**（早发 CD + 持续 → ASPD 风险）；多数青少年反社会者成年后消退——模式不持久 → PD 通用标准 D 不满足 | Moffitt 1993（*Psychol Rev* 100:674-701，双轨迹理论）；[数值 [需核验]] | 青少年期单段行为史不得作 ASPD 证据——需"15 岁前 CD + 15 岁后持续"两段连续模式（§2.1 A7/§四.3） |
 | ADHD × CD 早发组合 | 童年多动冲动 + 行为问题（CD 高风险样本） | ADHD+CD 早于 10 岁 ↑ 成年 ASPD 风险（Storebø & Simonsen 2016）——**风险因素**；是否成病仍须过 ASPD 门槛（成年 A + B + C） | MSD 病因段（引 Storebø & Simonsen 2016） | 风险关联文献不得单独证明资格（G2） |
 
@@ -292,7 +292,7 @@
 |:-:|------|------|------|
 | E1 | Criterion D："antisocial behavior **not exclusively** during the course of schizophrenia or bipolar disorder"——排除范围是"仅在病程中"；**非"不得共病"**（SZ/双相与 ASPD 可独立共病，只要模式在发作外也存在） | DSM-5-TR Criterion D（§1.4 T1） | "仅"字的语义粒度是声明侧/裁决的关键 |
 | E2 | PD 通用标准 E/F（不能更好地被其他障碍解释 / 非物质或躯体所致）——BPD 定案先例把这些归 **#87 声明侧纪律**（替代解释规则），不进资格门 | 转化接口 :234；BPD 收尾 #4 | ASPD 是否沿用（E/F 同款）+ Criterion D 单独处理方式 = 裁决 |
-| E3 | 共病事实材料：ASPD×SUD 高度共病（MSD 转述 ECA：大多数 ASPD 患者有 SUD，约一半 SUD 患者符合 ASPD [数值 [需核验]]）；ASPD×BPD 共病在 NESARC 全国样本中显著（共现者 SUD/司法接触更重——[Personality and Mental Health, pmh.1491](https://onlinelibrary.wiley.com/doi/full/10.1002/pmh.1491)，作者/年份/率值 [需核验]）；Bateman & Fonagy 2008 述共病临床常见 | [MSD](https://www.msdmanuals.com/professional/psychiatric-disorders/personality-disorders/antisocial-personality-disorder-aspd)；Wiley pmh.1491；Bateman & Fonagy 2008 *J Clin Psychol* 64(2):181-194 | 硬排除原子会大量误杀共病样本——材料提示"分流而非排除"方向（BPD 先例同） |
+| E3 | 共病事实材料：ASPD×SUD 高度共病——**Helle 2019**（*Alcohol Res Curr Rev* 40(1):05，[PMC6927749](https://pmc.ncbi.nlm.nih.gov/articles/PMC6927749/)）：ASPD 患者中 AUD ≈68%，临床 AUD 样本中 ASPD 19-22%；MSD 转述 ECA"约一半 SUD 患者符合 ASPD"（[数值出处 [需核验]]，两口径并存）；ASPD×BPD 共病在 NESARC 全国样本中显著（共现者 SUD/司法接触更重——[pmh.1491](https://onlinelibrary.wiley.com/doi/full/10.1002/pmh.1491)，作者/年份/率值 [需核验]）；Bateman & Fonagy 2008 述共病临床常见 | Helle 2019；[MSD](https://www.msdmanuals.com/professional/psychiatric-disorders/personality-disorders/antisocial-personality-disorder-aspd)；Wiley pmh.1491；Bateman & Fonagy 2008 *J Clin Psychol* 64(2):181-194 | 硬排除原子会大量误杀共病样本——材料提示"分流而非排除"方向（BPD 先例同） |
 | E4 | 与 BPD 不同：BPD 门槛内无 D 式病程排除条款，其"共病合法无硬排除"结论不能自动继承到 ASPD 的 Criterion D——D 若做成排除原子需论证"N_j⟹¬ASPD"（仅病程中反社会 ⟹ 非 ASPD，方向成立 [材料层]）；若归声明侧则语义 = "声明已排除仅病程中反社会" | 转化接口 :199-201（归位原则）；DSM-5 Criterion D | 归位裁决输入 |
 
 ### 4.5 工程可行性项目内材料
@@ -317,7 +317,7 @@ E_d^hist 来源 = #87 A′-Generator **规范化声明字段**（转化接口 §
 | # | 材料 | 来源 | 方向 |
 |:-:|------|------|:---:|
 | R1 | ASPD 自传记忆研究：监狱患者自我定义记忆（self-defining memory）提取任务中，ASPD 组情绪调节/心理化缺损相关；ASPD 组检索自传记忆时**面部情绪反应减弱**（冷漠的检索时呈现面） | Gandolphe 团队系列（[PLOS ONE 2022, self-defining memory 面部反应](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0268818)；[PubMed 29548510 罪犯自传记忆特异性](https://pubmed.ncbi.nlm.nih.gov/29548510/)；[HAL 2024 论文预览](https://theses.hal.science/tel-04767352v1/preview/2024ULILH028.pdf)；作者/细节 [需核验]） | 表征/呈现侧材料（检索时情感呈现差异），非资格证据 |
-| R2 | 共情分离材料：ASPD/psychopathy 存在**认知共情（理解他人心理）保留、情感共情（对他人痛苦的情绪反应）缺损**的证据（meta/综述篇目与效应量 [需核验]） | 综述检索中（详见 V10） | "共情缺失"是临床/神经心理学特征（功能域），非记忆形态 |
+| R2 | 共情分离材料（**勿对 ASPD 一刀切**，2026-09-06 核验）：Campos et al. 2022 meta（*Clin Psychol Rev* 94:102145）：**psychopathy** 组情感共情缺损更大（g_aff≈−0.40 vs g_cog≈−0.22）；一般**反社会行为**组反而认知共情更受损（g_cog≈−0.43 vs g_aff≈−0.11）——"认知共情保留/情感缺损"只对 psychopathy 亚组近似成立，不能推广为 ASPD 全样本（精确值 [需核验 原文]） | Campos et al. 2022，DOI [10.1016/j.cpr.2022.102145](https://doi.org/10.1016/j.cpr.2022.102145)（见 V10） | "共情缺失"是临床/神经心理学特征（功能域，且按 psychopathy/反社会行为分组而异），非记忆形态 |
 | R3 | 项目机制锚一致：aspd_eNN 全部解耦沉默 = "信号发不出"（冷酷共情缺失 + 低威胁反应），与"冷漠叙事化"呈现的机制故事同源；但机制层 ≠ 资格证据（G1：资格门只消费 #87 规范化声明） | 疾病目录 ASPD :19；转化接口 :178-179 | 起草侧机制材料 |
 
 ### 5.3 命题 E：纯表征（N=0.70"冷漠叙事化"）能否资格化？——支持面材料
@@ -333,7 +333,7 @@ E_d^hist 来源 = #87 A′-Generator **规范化声明字段**（转化接口 §
 | # | 材料 | 来源 | 备注 |
 |:-:|------|------|------|
 | E4 | DSM-5/ICD-11 的 ASPD/dissociality 诊断特征**全部为临床史/行为模式级**（违法/欺骗/攻击/鲁莽/不负责任 + CD 史），**无一条**基于"记忆形态/叙事风格/区隔化"；(N,F,D_seg) 不出现在任何 ASPD 标准中 | DSM-5（§1.1/§1.2）；ICD-11 CDDG（§1.5） | 纯表征门缺少 DSM 语义锚（G2），同 BPD 文件 C4 论证 |
-| E5 | "冷漠/共情缺失"在 DSM 的落点：(a) A-7 无悔意（polythetic 单条，且以行为指标判定）；(b) CD 的 **with limited prosocial emotions（CU）specifier（<18 岁、限儿童/青少年）**；(c) Section III AMPD callousness 特质（替代模型）——**均不是记忆形态，且无一为 Section II 门槛必备** | DSM-5 A-7（§1.1）；CD CU specifier [需核验]；§1.4 T2 | "冷漠"的临床史/行为属性而非记忆属性 |
+| E5 | "冷漠/共情缺失"在 DSM 的落点：(a) A-7 无悔意（polythetic 单条，且以行为指标判定）；(b) CD 的 **with limited prosocial emotions（CU）specifier**（4 特征 ≥2：lack of remorse or guilt / callous—lack of empathy / unconcerned about performance / shallow or deficient affect；持续 ≥12 月、多关系/场景——CBHSQ 表 3.37 逐字；仅用于 CD，<18 语境）；(c) Section III AMPD callousness 特质 + "With psychopathic features" 附加语（替代模型）——**均不是记忆形态，且无一为 Section II 门槛必备** | DSM-5 A-7（§1.1）；[SAMHSA CBHSQ 表 3.37](https://ncbi.nlm.nih.gov/books/NBK519704/table/ch3.t37/)；§1.4 T2 | "冷漠"的临床史/行为属性而非记忆属性 |
 | E6 | 高 N（叙事完整）指向**叙事化谱系**而非 ASPD：ASPD N=0.70 与环性同值，且低于 GAD/OCD/MDD/PDD（0.75-0.95）——纯高 N 样本会与抑郁谱（MDD 反刍叙事、PDD 慢性叙事）混淆；"完整叙述创伤"是多数非碎片化障碍的共有形态 | 转化接口 §3.2.3 :253-275 | 纯 N 门无 ASPD 特异性（同 BPD 文件 C8 高 F 混淆反样本的镜像论证） |
 | E7 | "叙事冷漠"可来自**状态性/非人格障碍因素**：抑郁期情感钝化、SZ 阴性症状、解离性麻木（PTSD/DID 叙述可平板）、SUD、文化性情感表达规范——须与"持久冷漠模式"区分（PD 通用标准 D），区分在声明侧 | DSM-5 各障碍文本（状态性）；PD 通用标准 D | 表征域无法区分状态/特质（记忆形态不携带病程语义） |
 | E8 | 反样本直接威胁：psychopathy 式"冷酷叙事"是最接近"冷漠叙事化"的非 ASPD 构念（§3.1 行）——若纯表征可资格化，冷酷叙事样本（可能无 CD 史、无 A 行为模式）将误放 | §3.1；Hare & Neumann 2008 | 表征信号无法承载 CD 史/年龄/病程排除 |
@@ -356,18 +356,20 @@ E_d^hist 来源 = #87 A′-Generator **规范化声明字段**（转化接口 §
 
 ### 6.1 [需核验] 汇总（写作时未能核对原文/文献的项）
 
+> **核验注记（2026-09-06）**：V1-V14 中已标注"已核验"的条目由两个后台核验子代理于 2026-09-06 完成（web_search + 免费权威镜像原文抓取交叉验证）：DSM-5 侧镜像 = StatPearls（DSM-5-TR）+ SAMHSA TIP42 Exhibit 4.7 / CBHSQ 表 3.37（DSM-5 2013 公共领域逐字）+ VUMC 2014-15 教学镜像；ICD-11 侧 = WHO 官方英文 CDDG 书付费（WHO IRIS），经 mrcpsych.uk/FindACode/familydoctor.cn 镜像 + WHO IRIS 意大利语 CDDR 官方全文交叉核对。**"镜像已核验"≠"APA/WHO 印刷版对页逐字"**——后者残留项仍标 [需核验]。配套详档：[ASPD-DSM细节核验-证据补充.md](ASPD-DSM细节核验-证据补充.md)（§七 另有 7 项独立缺口清单）。
+
 | # | 项 | 类型 | 建议核验源 |
 |:-:|----|------|-----------|
-| V1 | DSM-5(2013) vs DSM-5-TR Criterion D 措辞（"schizophrenia or a manic episode" vs "schizophrenia or bipolar disorder"） | 原文核对 | DSM-5 印刷版 / APA 官方 |
-| V2 | ICD-11 代码结构（6D10.0/.1/.2、6D11.0-6D11.5）与 6D11.2 dissociality CDDG 逐字 | 原文核对 | WHO ICD-11 MMS/CDDG（icd.who.int） |
-| V3 | ICD-11 是否含"人格障碍须持续 ≥2 年/首见童年青少年"逐字；无 CD 史要求的逐字确认 | 原文核对 | WHO CDDG |
-| V4 | DSM-5/TR ASPD 与 CD 标准逐字英文与中文译本（本文为中文工作整理）；CD 15 条 4 组、CD↔ASPD 18 岁互斥衔接条款、CU specifier 逐字 | 原文核对 | DSM-5 印刷版/授权译本 |
+| V1 | Criterion D 措辞 → **已核验（镜像，2026-09-06）**：DSM-5(2013) 与 DSM-5-TR 均 "schizophrenia or bipolar disorder"，"a manic episode" 属 DSM-IV(-TR)；残留：APA 印刷对页（DSM-5 p.659 / DSM-5-TR p.771）逐字 | 原文核对（残留项） | DSM-5/DSM-5-TR 印刷版（§1.4 T1） |
+| V2 | ICD-11 代码结构 → **已核验（镜像）**：6D10.0/.1/.2/.Z、6D11.0-6D11.5、6D11.2=Dissociality、QE50.7 人格困难；6D11.2 仅可与 6D10 严重度或人格困难组合（WHO coding note 逐字 [需核验]）；残留：CDDG 官方英文逐字、官方 F60.2 迁移映射表 | 原文核对（残留项） | WHO ICD-11 MMS/CDDG（icd.who.int）；英文镜像（§1.5） |
+| V3 | ICD-11 PD 通用要求 → **已核验（镜像）**：持续 ≥2 年为要求；起病叙述（childhood→adolescence→adulthood）属病程描述非硬门槛；无 CD 史要求；排除措辞含 "not due to the direct effects of a medication or substance, including withdrawal effects"；残留：官方英文逐字 | 原文核对（残留项） | WHO CDDG / 镜像（§1.5） |
+| V4 | DSM-5/TR ASPD 与 CD 标准逐字 → **部分已核验**：A-D 英文逐字（StatPearls TR + SAMHSA Exhibit 4.7/CBHSQ 引 DSM-5 2013）；CD 15 条 4 组、CD Criterion C、CU specifier 逐字（CBHSQ 表 3.37）；残留：DSM-5-TR 版 CD 逐字是否与 2013 全同、DSM-5 原书 "Other Conditions" 条目逐字、中文译本 | 原文核对（残留项） | DSM-5 印刷版/授权译本；[CBHSQ 表 3.37](https://ncbi.nlm.nih.gov/books/NBK519704/table/ch3.t37/) |
 | V5 | DSM-5 Section III AMPD ASPD 特质组合（含 callousness）与数量门槛 | 原文核对 | DSM-5 Section III |
-| V6 | adult antisocial behavior Z 码具体码号（V71.01？/Z72.81？） | 编码核对 | DSM-5 附录/ICD-10-CM |
-| V7 | CD→ASPD 比例数值（StatPearls 25% 女孩/40% 男孩）与 Moffitt 双轨迹比例 | 数值/著录 | 原文/系统性综述 |
-| V8 | 共病率数值（ASPD×SUD 约半数、ASPD×BPD 率值；NESARC 共现样本 pmh.1491 作者/年份） | 数值 | ECA/NESARC 原文（Grant 2004、Compton 2005、Regier 1990）；[pmh.1491](https://onlinelibrary.wiley.com/doi/full/10.1002/pmh.1491) |
-| V9 | psychopathy–ASPD 重叠率数值（监狱样本中 ASPD 符合 PCL-R 比例） | 数值 | Coid & Ullrich 2010 等 |
-| V10 | ASPD/psychopathy 认知/情感共情分离的 meta 篇目与效应量 | 文献著录 | 综述/meta 检索（2026-09-06 核验中） |
+| V6 | adult antisocial behavior 码号 → **已核验**：V71.01（ICD-9-CM）/ **Z72.811**（ICD-10-CM "Antisocial behavior, adult"）；残留：DSM-5 原书条目逐字 | 编码核对（残留项） | [ICD10data Z72.811](https://www.icd10data.com/ICD10CM/Codes/Z00-Z99/Z69-Z76/Z72-/Z72.811)；DSM-5 附录 |
+| V7 | CD→ASPD 比例 → **已核验（口径并存）**：常引 25-40%（StatPearls 25% 女/40% 男；Wikipedia）；Gelhorn 2007 NESARC 回顾 75%（口径例外）；Robins 1966 约半数不发展；残留：各数值一手页码（Robins/AACAP 参数摘要）与 Moffitt 双轨迹比例 | 数值/著录（残留项） | [Gelhorn 2007](https://pmc.ncbi.nlm.nih.gov/articles/PMC2764329/)；IACAPAP D.3；原文（§2.1 A5） |
+| V8 | 共病率 → **部分已核验**：ASPD 12 月患病 3.63%（Grant 2004 NESARC）；BPD 终生 5.9%（Grant 2008）；ASPD 中 AUD ≈68%、临床 AUD 样本 ASPD 19-22%（Helle 2019）；残留：ASPD×BPD 共现率 NESARC 数值、pmh.1491 作者/年份、MSD"约一半 SUD 符 ASPD"（ECA）出处核对 | 数值（残留项） | [Helle 2019 PMC6927749](https://pmc.ncbi.nlm.nih.gov/articles/PMC6927749/)；Grant 2004/2008 [需核验著录]；[pmh.1491](https://onlinelibrary.wiley.com/doi/full/10.1002/pmh.1491)；§4.4 E3 |
+| V9 | psychopathy–ASPD 重叠 → **部分已核验**：Coid & Ullrich 2010 监狱 211/470 符 ASPD、其中 31.8% PCL-R≥25；Ogloff 2006 囚犯 50-80% ASPD vs ~15% psychopathy（[著录 [需核验]]）；残留："几乎所有 psychopath 也符 ASPD"方向数值 | 数值（残留项） | [Coid & Ullrich 2010](https://pubmed.ncbi.nlm.nih.gov/20579518/)；Ogloff 2006；§3.1 |
+| V10 | 共情分离 meta → **已核验**：Campos et al. 2022（*Clin Psychol Rev* 94:102145）；psychopathy 组 g_aff≈−0.40 > g_cog≈−0.22；反社会行为组 g_cog≈−0.43 > g_aff≈−0.11；残留：精确效应量与置信区间（原文） | 文献著录（残留：精确值） | [DOI 10.1016/j.cpr.2022.102145](https://doi.org/10.1016/j.cpr.2022.102145)；§5.2 R2 |
 | V11 | R1 自传记忆/面部反应研究作者、样本、结果细节 | 文献细节 | PLOS ONE 2022 / PubMed 29548510 原文 |
 | V12 | DSM-5 ASPD 文化相关诊断段逐字（团伙/语境评估）；BPD 鉴别段"照料 vs 利益"逐字；IED 共病表述核验 | 原文核对 | DSM-5 各障碍 Differential/Culture 节 |
 | V13 | 项目内对照：Dugré 2020/Dugré & Potvin 2021 与疾病目录 frontmatter 著录一致性 | 勘误 | pathology_edges.json 文献字段 |

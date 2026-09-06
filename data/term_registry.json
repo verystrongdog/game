@@ -1,6 +1,6 @@
 {
   "_description": "术语注册表 — Grilling §3.0 定义基线声明的唯一数据源。术语定义/旧模型/偏离原因集中管理，避免 AI 在生成时被术语的旧现实世界模型劫持。",
-  "_maintenance": "入库触发: 新核心术语 | 定义被修改 | Step 4 清扫发现未注册高频术语。numerical_locations 更新: 注册时填充 + grilling 新增引用时追加 + 定义变更时遍历复查。 | #87 创伤记忆/疾病三分类入库 + 苦痛记忆废弃 (2026-08-19) | #108 P2 情境系统实施前审查入库：G/t_neg/s_neg/p_panic/m_delta/环境 id (2026-09-02) | #113 疾病资格层入库：Eligibility(d) 疾病资格层/资格语义锚/资格证据原子/资格状态三值/资格核验全局不变量 (2026-09-03) | #116 批次1 性创伤通道资格核验入库：BPD_PATTERN_HISTORY/IDENTITY_STATE_HISTORY/PTSD 表征资格签名（2026-09-06） | #116 批次2 SSD 先行定案入库：SOMATIC_SYMPTOM_HISTORY/SYMPTOM_PSYCHOLOGICAL_OVERINVESTMENT/SYMPTOM_DURATION_6M（2026-09-06） | #116 批次2 SZ 谱定案入库：SZ_POSITIVE_COURSE_HISTORY/STPD_PATTERN_HISTORY/SZAFFECTIVE_COURSE_HISTORY（2026-09-06） | #116 批次2 进食障碍族定案入库：6 域原子（2026-09-06） | #116 批次2 PDD 定案入库：PDD_PERSISTENT_DEPRESSION_PATTERN（2026-09-06） | #116 批次2 焦虑谱定案入库：4 模式原子（2026-09-06）",
+  "_maintenance": "入库触发: 新核心术语 | 定义被修改 | Step 4 清扫发现未注册高频术语。numerical_locations 更新: 注册时填充 + grilling 新增引用时追加 + 定义变更时遍历复查。 | #87 创伤记忆/疾病三分类入库 + 苦痛记忆废弃 (2026-08-19) | #108 P2 情境系统实施前审查入库：G/t_neg/s_neg/p_panic/m_delta/环境 id (2026-09-02) | #113 疾病资格层入库：Eligibility(d) 疾病资格层/资格语义锚/资格证据原子/资格状态三值/资格核验全局不变量 (2026-09-03) | #116 批次1 性创伤通道资格核验入库：BPD_PATTERN_HISTORY/IDENTITY_STATE_HISTORY/PTSD 表征资格签名（2026-09-06） | #116 批次2 SSD 先行定案入库：SOMATIC_SYMPTOM_HISTORY/SYMPTOM_PSYCHOLOGICAL_OVERINVESTMENT/SYMPTOM_DURATION_6M（2026-09-06） | #116 批次2 SZ 谱定案入库：SZ_POSITIVE_COURSE_HISTORY/STPD_PATTERN_HISTORY/SZAFFECTIVE_COURSE_HISTORY（2026-09-06） | #116 批次2 进食障碍族定案入库：6 域原子（2026-09-06） | #116 批次2 PDD 定案入库：PDD_PERSISTENT_DEPRESSION_PATTERN（2026-09-06） | #116 批次2 焦虑谱定案入库：4 模式原子（2026-09-06） | #116 批次2 ASPD 定案入库：ASPD_PATTERN_HISTORY/CONDUCT_DISORDER_HISTORY（2026-09-06）",
   "_created": "2026-08-03",
   "_updated": "2026-09-06",
   "_batch": "grilling-113-disease-eligibility-2026-09-03",
@@ -4064,6 +4064,26 @@
       "status": "active",
       "numerical_locations": [
         "规则/技能树系统/创伤记忆转化接口.md §3.2.2 焦虑谱行"
+      ]
+    },
+    "ASPD_PATTERN_HISTORY": {
+      "definition": "ASPD 资格原子（E_d^hist，#116 批次2 定案 2026-09-06）：#87 单宽原子『≥18 岁起漠视/侵犯他人权利行为模式存在性』（≥3/7 判定留声明侧，BPD 配方）。与 CONDUCT_DISORDER_HISTORY 构成双原子 AND。Criterion D（非仅 SZ/双相期间）= 声明侧纪律。",
+      "source": "规则/技能树系统/创伤记忆转化接口.md §3.2.2 ASPD 行（2026-09-06）",
+      "old_model": "—",
+      "deviation_reason": "ASPD = 成人行为模式（polythetic ≥3/7）+ 独立品行障碍史条款（非 polythetic）——BPD 单宽不足以覆盖独立条款",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/创伤记忆转化接口.md §3.2.2 ASPD 行"
+      ]
+    },
+    "CONDUCT_DISORDER_HISTORY": {
+      "definition": "ASPD 资格原子（E_d^hist，#116 批次2 定案 2026-09-06）：#87 独立史实原子『15 岁前品行障碍存在性』（DSM-5 ASPD Criterion C——非 polythetic 独立必备条款；年龄窗判定留声明侧，DEPRESSIVE/SSD 时长原子先例）。ASPD 必要正向（双原子 AND）；Z 码成人反社会/adolescence-limited 反样本拦截键。",
+      "source": "规则/技能树系统/创伤记忆转化接口.md §3.2.2 ASPD 行（2026-09-06）",
+      "old_model": "—",
+      "deviation_reason": "Criterion C 是离散可独立声明的历史事实（15 岁前），与成人 ≥3/7 模式证据来源/时间窗/判定方式不同",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/创伤记忆转化接口.md §3.2.2 ASPD 行"
       ]
     }
   },
