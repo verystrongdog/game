@@ -51,3 +51,17 @@ data/sim_results/
 # 外部 AI 会话转写存档（过程物，仅本地；chatX 为 #117 输入已跟踪例外）
 参考/会话存档/*
 !参考/会话存档/chatX_transcript.txt
+
+# .scratch 外审存档与运行日志（过程物，仅本地）
+.scratch/**/*.html
+.scratch/**/*.log
+.scratch/grilling-tmp/
+.scratch/grilling/
+.scratch/tmp-chatgpt/
+.scratch/**/.work/
+
+# grilling-89 素材正文（书籍/自述全文——版权内容，仅本地；书目/检索索引 md 保留入库）
+.scratch/grilling-89-npc-material/ref/**/*.txt
+.scratch/grilling-89-npc-material/ref/**/*.html
+.scratch/grilling-89-npc-material/ref/**/*.epub
+.scratch/grilling-89-npc-material/ref/一手叙事/15-知乎-阿龙-三十多岁单亲爸爸的婚姻自述.md
