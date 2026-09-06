@@ -43,3 +43,7 @@ data/sim_results/
 
 # .NET 沙箱内本地 NuGet 缓存（build 产物，不进版本控制）
 .nuget-pkgs/
+
+# 子代理临时抓取
+.evtmp_*/
+.scratch/.dsh-tmp-*/
