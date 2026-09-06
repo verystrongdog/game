@@ -94,7 +94,7 @@
 | C | 导致临床上显著的痛苦或社会、职业等重要功能损害 | 损害性要件（ASPD 的"痛苦"常在他方而非本人——材料注记） |
 | D | 该模式稳定且持续时间长，起病可追溯至青少年期或成年早期 | 早发 + 慢性要件；ASPD 模式起病可追溯至**青少年期（15 岁前后）**且有 CD 前史 |
 | E | 该模式不能更好地被其他精神障碍所解释 | 排除他因要件（§三 反样本语义） |
-| F | 该模式不是物质或躯体疾病（如头部外伤）的生理效应所致 | 排除物质/躯体要件（§三.5 器质性人格改变） |
+| F | 该模式不是物质或躯体疾病（如头部外伤）的生理效应所致 | 排除物质/躯体要件（§三.4 器质性人格改变） |
 
 ### 1.4 DSM-5-TR 注记与 DSM-5 Section III（替代模型）提示
 
@@ -292,7 +292,7 @@
 |:-:|------|------|------|
 | E1 | Criterion D："antisocial behavior **not exclusively** during the course of schizophrenia or bipolar disorder"——排除范围是"仅在病程中"；**非"不得共病"**（SZ/双相与 ASPD 可独立共病，只要模式在发作外也存在） | DSM-5-TR Criterion D（§1.4 T1） | "仅"字的语义粒度是声明侧/裁决的关键 |
 | E2 | PD 通用标准 E/F（不能更好地被其他障碍解释 / 非物质或躯体所致）——BPD 定案先例把这些归 **#87 声明侧纪律**（替代解释规则），不进资格门 | 转化接口 :234；BPD 收尾 #4 | ASPD 是否沿用（E/F 同款）+ Criterion D 单独处理方式 = 裁决 |
-| E3 | 共病事实材料：ASPD×SUD 高度共病（MSD：大多数 ASPD 患者有 SUD，约一半 SUD 患者符合 ASPD [ECA/Regier 1990 引述 [需核验]]）；ASPD×BPD 共病常见（Bateman & Fonagy 2008） | [MSD](https://www.msdmanuals.com/professional/psychiatric-disorders/personality-disorders/antisocial-personality-disorder-aspd)；Bateman & Fonagy 2008 | 硬排除原子会大量误杀共病样本——材料提示"分流而非排除"方向（BPD 先例同） |
+| E3 | 共病事实材料：ASPD×SUD 高度共病（MSD 转述 ECA：大多数 ASPD 患者有 SUD，约一半 SUD 患者符合 ASPD [数值 [需核验]]）；ASPD×BPD 共病在 NESARC 全国样本中显著（共现者 SUD/司法接触更重——[Personality and Mental Health, pmh.1491](https://onlinelibrary.wiley.com/doi/full/10.1002/pmh.1491)，作者/年份/率值 [需核验]）；Bateman & Fonagy 2008 述共病临床常见 | [MSD](https://www.msdmanuals.com/professional/psychiatric-disorders/personality-disorders/antisocial-personality-disorder-aspd)；Wiley pmh.1491；Bateman & Fonagy 2008 *J Clin Psychol* 64(2):181-194 | 硬排除原子会大量误杀共病样本——材料提示"分流而非排除"方向（BPD 先例同） |
 | E4 | 与 BPD 不同：BPD 门槛内无 D 式病程排除条款，其"共病合法无硬排除"结论不能自动继承到 ASPD 的 Criterion D——D 若做成排除原子需论证"N_j⟹¬ASPD"（仅病程中反社会 ⟹ 非 ASPD，方向成立 [材料层]）；若归声明侧则语义 = "声明已排除仅病程中反社会" | 转化接口 :199-201（归位原则）；DSM-5 Criterion D | 归位裁决输入 |
 
 ### 4.5 工程可行性项目内材料
@@ -317,7 +317,7 @@ E_d^hist 来源 = #87 A′-Generator **规范化声明字段**（转化接口 §
 | # | 材料 | 来源 | 方向 |
 |:-:|------|------|:---:|
 | R1 | ASPD 自传记忆研究：监狱患者自我定义记忆（self-defining memory）提取任务中，ASPD 组情绪调节/心理化缺损相关；ASPD 组检索自传记忆时**面部情绪反应减弱**（冷漠的检索时呈现面） | Gandolphe 团队系列（[PLOS ONE 2022, self-defining memory 面部反应](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0268818)；[PubMed 29548510 罪犯自传记忆特异性](https://pubmed.ncbi.nlm.nih.gov/29548510/)；[HAL 2024 论文预览](https://theses.hal.science/tel-04767352v1/preview/2024ULILH028.pdf)；作者/细节 [需核验]） | 表征/呈现侧材料（检索时情感呈现差异），非资格证据 |
-| R2 | 共情分离材料：ASPD/psychopathy 存在**认知共情（理解他人心理）保留、情感共情（对他人痛苦的情绪反应）缺损**的证据（meta/综述篇目与效应量 [需核验]） | 待核验综述（子代理核验中） | "共情缺失"是临床/神经心理学特征（功能域），非记忆形态 |
+| R2 | 共情分离材料：ASPD/psychopathy 存在**认知共情（理解他人心理）保留、情感共情（对他人痛苦的情绪反应）缺损**的证据（meta/综述篇目与效应量 [需核验]） | 综述检索中（详见 V10） | "共情缺失"是临床/神经心理学特征（功能域），非记忆形态 |
 | R3 | 项目机制锚一致：aspd_eNN 全部解耦沉默 = "信号发不出"（冷酷共情缺失 + 低威胁反应），与"冷漠叙事化"呈现的机制故事同源；但机制层 ≠ 资格证据（G1：资格门只消费 #87 规范化声明） | 疾病目录 ASPD :19；转化接口 :178-179 | 起草侧机制材料 |
 
 ### 5.3 命题 E：纯表征（N=0.70"冷漠叙事化"）能否资格化？——支持面材料
@@ -365,9 +365,9 @@ E_d^hist 来源 = #87 A′-Generator **规范化声明字段**（转化接口 §
 | V5 | DSM-5 Section III AMPD ASPD 特质组合（含 callousness）与数量门槛 | 原文核对 | DSM-5 Section III |
 | V6 | adult antisocial behavior Z 码具体码号（V71.01？/Z72.81？） | 编码核对 | DSM-5 附录/ICD-10-CM |
 | V7 | CD→ASPD 比例数值（StatPearls 25% 女孩/40% 男孩）与 Moffitt 双轨迹比例 | 数值/著录 | 原文/系统性综述 |
-| V8 | 共病率数值（ASPD×SUD 约半数、ASPD×BPD 率值） | 数值 | ECA/NESARC 原文（Grant 2004、Compton 2005、Regier 1990） |
+| V8 | 共病率数值（ASPD×SUD 约半数、ASPD×BPD 率值；NESARC 共现样本 pmh.1491 作者/年份） | 数值 | ECA/NESARC 原文（Grant 2004、Compton 2005、Regier 1990）；[pmh.1491](https://onlinelibrary.wiley.com/doi/full/10.1002/pmh.1491) |
 | V9 | psychopathy–ASPD 重叠率数值（监狱样本中 ASPD 符合 PCL-R 比例） | 数值 | Coid & Ullrich 2010 等 |
-| V10 | ASPD/psychopathy 认知/情感共情分离的 meta 篇目与效应量 | 文献著录 | 综述/meta 检索（子代理核验中） |
+| V10 | ASPD/psychopathy 认知/情感共情分离的 meta 篇目与效应量 | 文献著录 | 综述/meta 检索（2026-09-06 核验中） |
 | V11 | R1 自传记忆/面部反应研究作者、样本、结果细节 | 文献细节 | PLOS ONE 2022 / PubMed 29548510 原文 |
 | V12 | DSM-5 ASPD 文化相关诊断段逐字（团伙/语境评估）；BPD 鉴别段"照料 vs 利益"逐字；IED 共病表述核验 | 原文核对 | DSM-5 各障碍 Differential/Culture 节 |
 | V13 | 项目内对照：Dugré 2020/Dugré & Potvin 2021 与疾病目录 frontmatter 著录一致性 | 勘误 | pathology_edges.json 文献字段 |
