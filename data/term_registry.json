@@ -1,6 +1,6 @@
 {
   "_description": "术语注册表 — Grilling §3.0 定义基线声明的唯一数据源。术语定义/旧模型/偏离原因集中管理，避免 AI 在生成时被术语的旧现实世界模型劫持。",
-  "_maintenance": "入库触发: 新核心术语 | 定义被修改 | Step 4 清扫发现未注册高频术语。numerical_locations 更新: 注册时填充 + grilling 新增引用时追加 + 定义变更时遍历复查。 | #87 创伤记忆/疾病三分类入库 + 苦痛记忆废弃 (2026-08-19) | #108 P2 情境系统实施前审查入库：G/t_neg/s_neg/p_panic/m_delta/环境 id (2026-09-02) | #113 疾病资格层入库：Eligibility(d) 疾病资格层/资格语义锚/资格证据原子/资格状态三值/资格核验全局不变量 (2026-09-03) | #116 批次1 性创伤通道资格核验入库：BPD_PATTERN_HISTORY/IDENTITY_STATE_HISTORY/PTSD 表征资格签名（2026-09-06）",
+  "_maintenance": "入库触发: 新核心术语 | 定义被修改 | Step 4 清扫发现未注册高频术语。numerical_locations 更新: 注册时填充 + grilling 新增引用时追加 + 定义变更时遍历复查。 | #87 创伤记忆/疾病三分类入库 + 苦痛记忆废弃 (2026-08-19) | #108 P2 情境系统实施前审查入库：G/t_neg/s_neg/p_panic/m_delta/环境 id (2026-09-02) | #113 疾病资格层入库：Eligibility(d) 疾病资格层/资格语义锚/资格证据原子/资格状态三值/资格核验全局不变量 (2026-09-03) | #116 批次1 性创伤通道资格核验入库：BPD_PATTERN_HISTORY/IDENTITY_STATE_HISTORY/PTSD 表征资格签名（2026-09-06） | #116 批次2 SSD 先行定案入库：SOMATIC_SYMPTOM_HISTORY/SYMPTOM_PSYCHOLOGICAL_OVERINVESTMENT/SYMPTOM_DURATION_6M（2026-09-06）",
   "_created": "2026-08-03",
   "_updated": "2026-09-06",
   "_batch": "grilling-113-disease-eligibility-2026-09-03",
@@ -3894,6 +3894,36 @@
       "status": "active",
       "numerical_locations": [
         "规则/技能树系统/创伤记忆转化接口.md §3.2.2 批次1 新增资格签名（PTSD 行）+ §四 参数速查表（θ_F/θ_N）"
+      ]
+    },
+    "SOMATIC_SYMPTOM_HISTORY": {
+      "definition": "SSD 资格证据原子（E_d^hist，#116 批次2 定案 2026-09-06）：#87 规范化的『已声明的持续躯体症状存在性』（≠ 次数/部位，DSM-5 SSD 标准 A）。SSD 三原子必要正向 AND 之一（∧ SYMPTOM_PSYCHOLOGICAL_OVERINVESTMENT ∧ SYMPTOM_DURATION_6M）。=0 → INELIGIBLE；MISSING → UNDETERMINED。",
+      "source": "规则/技能树系统/创伤记忆转化接口.md §3.2.2 批次签名表 SSD 行（2026-09-06）；.scratch/grilling-116-disease-gen-evolution/资格核验批次2-全量解锁/SSD-收尾-裁决点.md",
+      "old_model": "—（#113 工作地图初判 B 表征——#89-D26 核验修正 A 临床史：SSD 资格核心 = DSM B 标准心理过度投入，非记忆形态）",
+      "deviation_reason": "SSD 是临床史型（症状+心理投入）非表征型；DSM-5 已移除『医学无法解释』要求，可共病躯体疾病",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/创伤记忆转化接口.md §3.2.2 SSD 行 + §四 参数速查表"
+      ]
+    },
+    "SYMPTOM_PSYCHOLOGICAL_OVERINVESTMENT": {
+      "definition": "SSD 资格证据原子（E_d^hist，#116 批次2 定案 2026-09-06）：#87 规范化的『已声明的与躯体症状相关的心理过度投入存在性』（不相称持续想法/持续高焦虑/过度时间精力，DSM-5 SSD 标准 B）——SSD 与单纯躯体疾病/正常反应区分的核心。三原子必要正向 AND 之一。",
+      "source": "规则/技能树系统/创伤记忆转化接口.md §3.2.2 SSD 行（2026-09-06）；.scratch/grilling-116-disease-gen-evolution/资格核验批次2-全量解锁/SSD-收尾-裁决点.md",
+      "old_model": "—",
+      "deviation_reason": "反样本门核心：IAD（无躯体症状）/转换障碍（无过度投入）/正常慢病患者（关注相称）均被此原子拦截",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/创伤记忆转化接口.md §3.2.2 SSD 行"
+      ]
+    },
+    "SYMPTOM_DURATION_6M": {
+      "definition": "SSD 资格证据原子（E_d^hist，#116 批次2 定案 2026-09-06）：#87 规范化的『已声明的躯体症状持续 ≥6 月事实』（DSM-5 SSD 标准 C）——时长判定留 #87 声明侧（CYCLIC_MOOD_HISTORY 配方：资格门不现场算病程，转化接口 :213 禁止项指向现场计算而非声明侧原子）。三原子必要正向 AND 之一。",
+      "source": "规则/技能树系统/创伤记忆转化接口.md §3.2.2 SSD 行（2026-09-06）",
+      "old_model": "—",
+      "deviation_reason": "防急性反应误判 SSD；时长条件由 #87 声明承载而非资格门从症状推导",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/创伤记忆转化接口.md §3.2.2 SSD 行"
       ]
     }
   },
