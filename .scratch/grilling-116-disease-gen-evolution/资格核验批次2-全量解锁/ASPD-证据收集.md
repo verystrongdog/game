@@ -105,17 +105,17 @@
 
 ### 1.5 ICD-11 定位
 
-**来源**：ICD-11（WHO, 2019 发布 / 2022 生效 / 现行 2024 版），MMS 代码与 CDDG 临床描述（逐字 [需核验]；在线浏览器 https://icd.who.int/browse/2024-01/mms/zh 或 icd.who.int/browse/2024-01/mms/en）。
+**来源**：ICD-11（WHO, 2019 发布 / 2022 生效 / 现行 2024 版），MMS 代码与 CDDG 临床描述。WHO 官方英文 CDDG 书为付费（WHO IRIS）；本文件引文经公开镜像交叉核对：英文 [mrcpsych.uk 6D11 概述](https://www.mrcpsych.uk/2022/05/icd-11-criteria-for-prominent.html)、[FindACode 6D11.2](https://www.findacode.com/icd-11/code-1913158855.html)、中文镜像 [familydoctor.cn 6D11.2](https://www.familydoctor.cn/icd11/mental/dissocial-personality-disorder-difficulty.html)，并对照 WHO IRIS 意大利语 CDDR 官方全文逐句核对（子代理核验 2026-09-06）——镜像转述可确认条目已标"已核验（镜像）"，官方英文逐字仍标 [需核验]。
 
 | 项 | ICD-11 定位 | 备注 |
 |----|------------|------|
-| 人格障碍本体 | 6D10 Personality disorder，按严重度分型：6D10.0 轻度 / 6D10.1 中度 / 6D10.2 重度（[代码编号 [需核验]]） | 维度化严重度 + 特质域限定语，取代 ICD-10 类别式 F60.x |
-| ASPD 对应 | **无独立"反社会型/非社交型人格障碍"类别或 pattern 限定语**——对应物 = 6D10 人格障碍（严重度）**+ 6D11.2 dissociality（社交紊乱）特质域限定语** | 与 DSM-5 独立类别逻辑不同；ICD-10 F60.2 dissocial personality disorder 的迁移映射 = 6D10.x + 6D11.2（映射表 [需核验]） |
-| 特质域限定语 | 6D11.0 negative affectivity / .1 detachment / **.2 dissociality** / .3 disinhibition / .4 anankastia / .5 borderline pattern（ICD-11 唯二保留的"pattern"之一是 borderline pattern；**无 dissocial pattern**） | 编号与"限定语仅用于中/重度"问题 [需核验] |
-| 品行障碍史要求 | ICD-11 CDDG **不要求** DSM-5 Criterion C 式的"15 岁前品行障碍史"（[需核验]）——dissociality 是特质域描述；品行障碍（儿童/青少年）在 ICD-11 是独立类别 conduct-dissocial disorder（6C91 系，[需核验编号]） | 两分类系统对"CD 史是否必要"立场不同——资格语义锚选择的重要材料（§四.4） |
-| 人格障碍通用要求 | CDDG：自我/人际功能问题 + 模式**长期持续**（"present over an extended period"；是否逐字含 "≥2 年" [需核验]）+ 通常首见于童年/青少年并延续至成年 + 非其他障碍/物质/躯体直接效应所致（[需核验]） | 与 DSM-5 通用标准 D/F 对应 |
+| 人格障碍本体 | 6D10 Personality disorder，严重度分型：**6D10.0 轻度 / 6D10.1 中度 / 6D10.2 重度 / 6D10.Z 未特指**（已核验（镜像）） | 维度化严重度 + 特质域限定语，取代 ICD-10 类别式 F60.x |
+| ASPD 对应 | **无独立"反社会型/非社交型人格障碍"类别或 pattern 限定语**——对应物 = 6D10 人格障碍（严重度）**+ 6D11.2 dissociality（社交紊乱）特质域限定语**；WHO coding note 语义："6D11.2 … should ONLY be used in combination with a Personality disorder category (Mild/Moderate/Severe) **or Personality difficulty**" [需核验逐字] | 与 DSM-5 独立类别逻辑不同；ICD-10 F60.2 的官方迁移映射表未公开下载到（映射关系 = 6D10.x + 6D11.2 [需核验]） |
+| 特质域限定语 | 6D11.0 negative affectivity / .1 detachment / **.2 dissociality** / .3 disinhibition / .4 anankastia / .5 borderline pattern（已核验（镜像）：6D11.5 borderline pattern 为 ICD-11 保留的唯二 pattern 之一，**无 dissocial pattern**）；另有人格困难 Personality difficulty（QE50.7，[编号 [需核验]]） | 6D11.2 只作限定语（与 6D10 严重度或人格困难组合使用），不可独立成类——材料支持"ICD-11 侧 ASPD 无独立类别" |
+| 品行障碍史要求 | ICD-11 CDDG **不要求** DSM-5 Criterion C 式的"15 岁前品行障碍史"（已核验（镜像））——dissociality 是特质域描述；品行障碍（儿童/青少年）在 ICD-11 是**独立类别** conduct-dissocial disorder（6C91 系：6C91.0 儿童起病型等，+ limited prosocial emotions 限定语 [需核验逐字]） | 两分类系统对"CD 史是否必要"立场不同——资格语义锚选择的重要材料（§四.4） |
+| 人格障碍通用要求 | CDDG：自我/人际功能问题 + 模式**长期持续 ≥2 年**（"≥2 年"已核验（镜像））+ 病程叙述"tend to appear first in childhood, increase during adolescence, continue into adulthood"（**属病程段描述、非硬门槛条款**）+ 排除措辞"not due to the direct effects of a medication or substance, including withdrawal effects…"（已核验（镜像）） | 与 DSM-5 通用标准 D/F 对应；起病叙述 vs 硬条款的区分是裁决材料 |
 
-**ICD-11 6D11.2 dissociality 内容要点**（依 CDDG 转述，逐字 [需核验]）：漠视社会义务与惯例以及他人权利与感受；自我价值感膨胀（inflated sense of self-worth）；**冷酷（callousness）**、缺乏共情；操纵性与欺骗性；把他人当作工具；敌意、攻击性、鲁莽、漠视自身与他人安全；行为可包括反复违法与违反社会规范。
+**ICD-11 6D11.2 dissociality 内容要点**（依 CDDG 转述；已核验（镜像），官方英文逐字 [需核验]）：核心 = "**disregard for the rights and feelings of others, encompassing both self-centeredness and lack of empathy**"；清单含操纵性（manipulative）、欺骗性（deceptive）、冷酷（callousness）、无情/不择手段（ruthlessness）等。**注意措辞差异**：ICD-11 的 dissociality 核心措辞 ≠ ICD-10 F60.2 旧文"disregard for social obligations…"——迁移映射语义以 ICD-11 新文为准 [需核验]。
 
 > **两种分类逻辑的结构差异（材料，供 §四 使用）**：DSM-5 = 独立疾病类别，门槛 = A（≥3/7 polythetic，15 岁以来）∧ B（≥18）∧ C（CD 史 <15）∧ D（非仅 SZ/双相期间）∧ PD 通用标准；ICD-11 = 严重度维度 + dissociality 特质域限定语（描述性、无计数门槛、**无 CD 史要求**）。资格层以哪个为"语义锚"、两锚冲突（尤其 CD 史是否必备）如何处理，属用户裁决项，本文件不表态。
 
