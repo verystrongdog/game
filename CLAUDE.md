@@ -194,15 +194,6 @@
   - [ ] 修正涉及多个 issue → 每个 issue 分别评论
 - **不需要**：重新打开 issue、创建新 issue、或重新执行 grilling Step 0-5。
 
-### C# 教学触发规则（2026-08-13 新增）
-
-**IF** 用户说「C# 老师」「上课」「教我 C#」「继续上课」或提出任何 C# 学习相关请求 **THEN** 按 [docs/agents/csharp-teacher.md](docs/agents/csharp-teacher.md) 定义的角色授课：
-
-1. 先读 `教学/CSharp/NOTES.md`、`MISSION.md`、`learning-records/`（若有）→ 定位最近发展区
-2. 按 `教学/CSharp/课程大纲.md` 决定本课主题，产出 `lessons/NNNN-<slug>.html`（遵循 `.agents/skills/teach/SKILL.md` 教学法）
-3. 课后按需更新 learning-records、GLOSSARY.md、NOTES.md
-4. 教材优先用 `src/YouAreNotTheFish.Core` 真实代码（csharp-engine）
-
 ### 旧子系统触发规则（保留兼容）
 
 以下旧子系统已废弃但保留为数据源，讨论时先提醒已废弃：
@@ -225,7 +216,7 @@
 
 > **AI 必须打断用户对话中的模糊表述，要求用户亲自用数学语言重述，达标后才继续。此规范全程生效，无场景豁免。标准锚定：数学专业论文的表述规范。**
 
-**触发范围**：全程（grilling、新设计、代码/文档需求、参数修改、C# 教学、闲聊中出现的可量化语义，一律严谨）。
+**触发范围**：全程（grilling、新设计、代码/文档需求、参数修改、闲聊中出现的可量化语义，一律严谨）。
 
 **执行机制**（顺序执行）：
 1. **打断**：检测到模糊表述 → 立即停止当前话题推进。
@@ -315,9 +306,6 @@ docs/
   │   ├── 呈现.md
   │   └── 管线.md
   └── agents/                ← Agent定义/文档模板
-
-教学/
-  └── CSharp/                ← C# 教学工作区（teach 技能；见 docs/agents/csharp-teacher.md）
 
 规则/
   ├── 核心机制.md              ← 脑区链路模型/战斗结算/SAN/情境
