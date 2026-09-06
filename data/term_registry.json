@@ -1,8 +1,8 @@
 {
   "_description": "术语注册表 — Grilling §3.0 定义基线声明的唯一数据源。术语定义/旧模型/偏离原因集中管理，避免 AI 在生成时被术语的旧现实世界模型劫持。",
-  "_maintenance": "入库触发: 新核心术语 | 定义被修改 | Step 4 清扫发现未注册高频术语。numerical_locations 更新: 注册时填充 + grilling 新增引用时追加 + 定义变更时遍历复查。 | #87 创伤记忆/疾病三分类入库 + 苦痛记忆废弃 (2026-08-19) | #108 P2 情境系统实施前审查入库：G/t_neg/s_neg/p_panic/m_delta/环境 id (2026-09-02) | #113 疾病资格层入库：Eligibility(d) 疾病资格层/资格语义锚/资格证据原子/资格状态三值/资格核验全局不变量 (2026-09-03)",
+  "_maintenance": "入库触发: 新核心术语 | 定义被修改 | Step 4 清扫发现未注册高频术语。numerical_locations 更新: 注册时填充 + grilling 新增引用时追加 + 定义变更时遍历复查。 | #87 创伤记忆/疾病三分类入库 + 苦痛记忆废弃 (2026-08-19) | #108 P2 情境系统实施前审查入库：G/t_neg/s_neg/p_panic/m_delta/环境 id (2026-09-02) | #113 疾病资格层入库：Eligibility(d) 疾病资格层/资格语义锚/资格证据原子/资格状态三值/资格核验全局不变量 (2026-09-03) | #116 批次1 性创伤通道资格核验入库：BPD_PATTERN_HISTORY/IDENTITY_STATE_HISTORY/PTSD 表征资格签名（2026-09-06）",
   "_created": "2026-08-03",
-  "_updated": "2026-09-03",
+  "_updated": "2026-09-06",
   "_batch": "grilling-113-disease-eligibility-2026-09-03",
   "_pending_candidates": "见 data/term_registry_candidates.md — 候补候选清单：P3级/单文档/待裁决术语登记处。Grilling #111 登记：降级协议（否决态）/单一事实源（推迟态）/语义层兜底（推迟）/#70 路线图模块化重构（推迟）。Grilling #26-27: CSTC/EDR/CTC/三体神经模型/function_profile/cstc_loop/cstc_role/signal_type/gameplay_domain/STN/脑干广播/皮层-皮层连接/功能剖面/基底节门控 (14条已入库).",
   "terms": {
@@ -3865,6 +3865,36 @@
       ],
       "added": "2026-09-03",
       "updated": "2026-09-03"
+    },
+    "BPD_PATTERN_HISTORY": {
+      "definition": "BPD 资格证据原子（E_d^hist，#116 批次1 定案 2026-09-06）：#87 规范化的单一模式存在性声明——『已声明的 BPD 式持久人格模式存在性（多域跨情境模式：人际两极化/情绪反应性不稳/冲动自损/身份紊乱/空虚等，由 #87 按 DSM-5 PD 通用标准 A-F + BPD 模式域判定后声明）』。≠ 症状计数——≥5/9 组合判定留在声明侧，资格门不现场数条款。CYCLIC_MOOD_HISTORY 配方同构。BPD 通道：工作地图 C 混合修正为 A 临床史主导（无记忆签名/OGM 方向，核验修正同 SSD 先例）。BPD_PATTERN_HISTORY=0 → INELIGIBLE；MISSING → UNDETERMINED。",
+      "source": "规则/技能树系统/创伤记忆转化接口.md §3.2.2 批次1 新增资格签名（2026-09-06）；.scratch/grilling-116-disease-gen-evolution/资格核验批次1-性创伤通道/BPD-核验收尾.md",
+      "old_model": "—（#113 工作地图初判 C 混合：表征域组合——核验否决：BPD 无记忆区隔化/感官碎片签名，高 F 会与 PTSD 混淆）",
+      "deviation_reason": "人格障碍是持久模式非发作史——不能用症状计数或单域分原子（polythetic 下任何单域非必要）；单一宽模式声明 + 判定留声明侧是唯一不触发『症状计数→原子』禁止项的形态",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/创伤记忆转化接口.md §3.2.2 批次1 新增资格签名（BPD 行）"
+      ]
+    },
+    "IDENTITY_STATE_HISTORY": {
+      "definition": "DID 资格证据原子（E_d^hist，#116 批次1 定案 2026-09-06）：#87 规范化的身份结构存在性声明——『已声明的 ≥2 人格状态 / 自我感与自主感断裂存在性』。≠ 状态计数（CYCLIC 配方）。DID 通道：工作地图 B 表征修正为 C 混合——与 D_seg（记忆区隔，E_d^mem #90 访问层标记）组成双成分（DSM 双支柱：Criterion A 身份 + Criterion B 记忆空缺）。IDENTITY_STATE_HISTORY=0 → INELIGIBLE；MISSING → UNDETERMINED。纯 D_seg 门被反样本否决（DA/PTSD 解离亚型有遗忘无身份结构）。",
+      "source": "规则/技能树系统/创伤记忆转化接口.md §3.2.2 批次1 新增资格签名（2026-09-06）；.scratch/grilling-116-disease-gen-evolution/资格核验批次1-性创伤通道/DID-核验收尾.md",
+      "old_model": "—（#113 工作地图初判 B 表征：D_seg 单条件——核验否决：遗忘无身份瓦解 vs 身份瓦解无遗忘 双向反样本）",
+      "deviation_reason": "DID 诊断需身份域与记忆域双支柱（DSM-5）；记忆区隔自报-客观脱节（Huntjens 2006）要求身份结构由独立声明承载而非从记忆表征反推",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/创伤记忆转化接口.md §3.2.2 批次1 新增资格签名（DID 行）"
+      ]
+    },
+    "PTSD 表征资格签名": {
+      "definition": "PTSD 资格表征域组合签名（#116 批次1 定案 2026-09-06）：∃ 记忆 m: m.event_type ∈ {威胁/暴力, 性创伤} ∧ F(m) ≥ θ_F=0.80 ∧ N(m) ≤ θ_N=0.40（θ [NEW 初值可调]）。Criterion A 由事件类型承载（不需 TRAUMA_EXPOSURE_HISTORY 原子）；『∃ 单条记忆』语义（单次威胁/性创伤事件即可）。反样本否决 F 单条件（感官碎片非 PTSD 独有，综述 f5）→ 组合签名。表征偏好（N,F,D_seg）=0.15,0.95 ≠ 资格阈值（外审 t6a97ab3d）。",
+      "source": "规则/技能树系统/创伤记忆转化接口.md §3.2.2 批次1 新增资格签名（2026-09-06）；.scratch/grilling-116-disease-gen-evolution/资格核验批次1-性创伤通道/PTSD-核验收尾.md",
+      "old_model": "PTSD = F ≥ ? 单条件（否决：感官碎片非 PTSD 独有——MDD/社交焦虑高 F 反样本）",
+      "deviation_reason": "F 语义 = SAM 感知碎片非普通记忆模糊；资格需 F+N 双门 + 事件类型门（Brewin 双表征：SAM 主导 ⟹ VAM 弱）",
+      "status": "active",
+      "numerical_locations": [
+        "规则/技能树系统/创伤记忆转化接口.md §3.2.2 批次1 新增资格签名（PTSD 行）+ §四 参数速查表（θ_F/θ_N）"
+      ]
     }
   },
   "_metadata": {
