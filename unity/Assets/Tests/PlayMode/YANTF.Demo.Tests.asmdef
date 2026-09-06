@@ -1,0 +1,15 @@
+{
+    "name": "YANTF.Demo.Tests",
+    "rootNamespace": "YANTF.Demo.Tests",
+    "references": ["YANTF.Demo"],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false,
+    "optionalUnityReferences": ["TestAssemblies"]
+}

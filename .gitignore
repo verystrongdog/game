@@ -65,3 +65,21 @@ data/sim_results/
 .scratch/grilling-89-npc-material/ref/**/*.html
 .scratch/grilling-89-npc-material/ref/**/*.epub
 .scratch/grilling-89-npc-material/ref/一手叙事/15-知乎-阿龙-三十多岁单亲爸爸的婚姻自述.md
+
+# Unity editor install (local headless validation, Grilling #122)
+.unity-editor/
+.nuget-packages/
+.nuget-http-cache/
+
+# Unity project artifacts (unity/)
+unity/[Ll]ibrary/
+unity/[Tt]emp/
+unity/[Oo]bj/
+unity/[Ll]ogs/
+unity/[Uu]serSettings/
+unity/*.csproj
+unity/*.sln
+unity/Assets/Plugins/*.pdb
+
+# Unity CLI local install / licensing (sandbox, Grilling #122)
+.unity-home/
