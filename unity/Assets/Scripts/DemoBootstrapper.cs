@@ -44,8 +44,8 @@ namespace YANTF.Demo
             Hud = hudGo.AddComponent<DemoHud>();
             Hud.Init(Driver);
 
-            PlayerActor.Logged += s => Debug.Log($"[沙盘] {s}");
-            EnemyActor.Logged += s => Debug.Log($"[沙盘] {s}");
+            PlayerActor.Logged += (actor, msg) => Debug.Log($"[沙盘] {actor.displayName}: {msg}");
+            EnemyActor.Logged += (actor, msg) => Debug.Log($"[沙盘] {actor.displayName}: {msg}");
         }
 
         private DemoActor SpawnActor(string name, Vector3 pos, Color tint, float hp, float san)
