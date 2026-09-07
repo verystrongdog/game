@@ -25,6 +25,10 @@ namespace YANTF.WalkerLab
         public float gravity = -22f;
         [Tooltip("空中转向灵敏度系数")]
         public float airTurnFactor = 0.35f;
+        [Tooltip("空中方向修正系数 0..1（0=完全惯性不可控，1=空中满速跟手）")]
+        public float airControl = 0.15f;
+        [Tooltip("空中水平速度衰减 /s（0=无衰减）")]
+        public float airDrag = 0.5f;
 
         [Header("相机跟随（可关）")]
         public bool followCamera = true;
@@ -43,6 +47,7 @@ namespace YANTF.WalkerLab
         private Transform _armL, _armR, _legL, _legR;
         private Color _tint = new Color(0.55f, 0.7f, 1f, 1f);
         private float _airTime;
+        private Vector3 _airVelocity;   // 空中水平速度（起跳惯性 + 弱修正）
 
         // ---- 测试/脚本驱动输入（SetMoveInput），供 PlayMode 冒烟测试与未来 AI 驱动 ----
         private Vector3 _scriptDir;
@@ -157,14 +162,17 @@ namespace YANTF.WalkerLab
             dir = Vector3.ClampMagnitude(dir, 1f);
 
             bool grounded = _cc.isGrounded;
+            Vector3 horizontal;
             if (grounded)
             {
                 _vSpeed = -1f; // 轻微贴地
                 _airTime = 0f;
+                horizontal = dir * speed;   // 落地：键盘全速驱动
                 if (jumpQueued)
                 {
                     _vSpeed = Mathf.Sqrt(2f * Mathf.Abs(gravity) * jumpHeight);
                     IsAirborne = true;
+                    _airVelocity = horizontal; // 起跳：水平保留地面速度 → 空中惯性
                 }
                 else IsAirborne = false;
             }
@@ -172,13 +180,19 @@ namespace YANTF.WalkerLab
             {
                 _airTime += dt;
                 IsAirborne = true;
+                // 空中：仅惯性 + 轻微方向修正，避免"按住方向键跳跃=平移"
+                Vector3 want = dir * speed;
+                _airVelocity = Vector3.Lerp(_airVelocity, want, airControl * dt);
+                float drag = Mathf.Clamp01(1f - airDrag * dt);
+                _airVelocity *= drag;
+                if (_airVelocity.sqrMagnitude < 0.0001f) _airVelocity = Vector3.zero;
+                horizontal = _airVelocity;
             }
 
             _vSpeed += gravity * dt;
             _vSpeed = Mathf.Max(_vSpeed, -40f);
 
             // 移动：水平方向 + 垂直速度
-            Vector3 horizontal = dir * speed;
             IsRunning = run && horizontal.sqrMagnitude > 0.01f && grounded;
 
             Vector3 motion = new Vector3(horizontal.x, _vSpeed, horizontal.z);

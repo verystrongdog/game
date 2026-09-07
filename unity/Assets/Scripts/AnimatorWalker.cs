@@ -23,6 +23,10 @@ namespace YANTF.WalkerLab
         public float jumpHeight = 1.4f;
         [Tooltip("重力 m/s^2（向下）")]
         public float gravity = -22f;
+        [Tooltip("空中方向修正系数 0..1（0=完全惯性不可控，1=空中满速跟手）")]
+        public float airControl = 0.15f;
+        [Tooltip("空中水平速度衰减 /s（0=无衰减）")]
+        public float airDrag = 0.5f;
 
         [Header("引用（Editor 场景生成器注入）")]
         public Animator animator;
@@ -36,6 +40,7 @@ namespace YANTF.WalkerLab
         private CharacterController _cc;
         private float _vSpeed;
         private bool _jumpAnimStarted;
+        private Vector3 _airVelocity;   // 空中水平速度（起跳惯性 + 弱修正）
 
         // 测试/脚本驱动
         private Vector3 _scriptDir;
@@ -94,20 +99,35 @@ namespace YANTF.WalkerLab
             dir = Vector3.ClampMagnitude(dir, 1f);
 
             bool grounded = _cc.isGrounded;
+            Vector3 horizontal;
             if (grounded)
             {
+                // 落地：水平速度直接由键盘/脚本输入驱动（全速可控）
                 _vSpeed = -1f;
+                horizontal = dir * speed;
                 if (jumpQueued)
                 {
                     _vSpeed = Mathf.Sqrt(2f * Mathf.Abs(gravity) * jumpHeight);
                     _jumpAnimStarted = false;
+                    // 起跳：水平保留当前地面速度 → 空中惯性
+                    _airVelocity = horizontal;
                 }
+                IsRunning = run && horizontal.sqrMagnitude > 0.01f;
             }
+            else
+            {
+                // 空中：仅惯性 + 轻微方向修正，避免"按住方向键跳跃=平移"
+                Vector3 want = dir * speed;
+                _airVelocity = Vector3.Lerp(_airVelocity, want, airControl * dt);
+                float drag = Mathf.Clamp01(1f - airDrag * dt);
+                _airVelocity *= drag;
+                if (_airVelocity.sqrMagnitude < 0.0001f) _airVelocity = Vector3.zero;
+                horizontal = _airVelocity;
+                IsRunning = false;
+            }
+
             _vSpeed += gravity * dt;
             _vSpeed = Mathf.Max(_vSpeed, -40f);
-
-            Vector3 horizontal = dir * speed;
-            IsRunning = run && horizontal.sqrMagnitude > 0.01f && grounded;
 
             Vector3 motion = new Vector3(horizontal.x, _vSpeed, horizontal.z);
             _cc.Move(motion * dt);
