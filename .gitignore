@@ -83,3 +83,4 @@ unity/Assets/Plugins/*.pdb
 
 # Unity CLI local install / licensing (sandbox, Grilling #122)
 .unity-home/
+unity/*.log
