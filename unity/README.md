@@ -52,6 +52,23 @@ unity command editor_play  # 进 Play 模式（验证用）
 
 > ⚠️ 已知简化：白盒人体为单段四肢（无肘/膝细分），摆动为枢轴旋转占位——外部人形模型/Animator 接入点即 `WalkerController.BuildBody` 与 `UpdatePose`；移动参数为演示常量（非正典数值）。
 
+## 二·C、Ki 动画角色场景（Kevin Iglesias 人形模型 + 走/跑/跳动画）
+
+> 在 Walker（几何体程序动画）基础上，验证**外部人形模型 + 现成动画资产**的接入：官方演示模型（Humanoid Avatar + 完整骨骼：脊柱/肩臂/五指/腿脚趾）配 Animator，播放 Kevin Iglesias Human Basic Motions 的 Idle/Walk/Run/Jump 动画。维度：呈现 + 管线（外部模型/动画接入点）。
+
+| 项 | 内容 |
+|----|------|
+| 场景 | `KiWalkerLab.unity`（新）：Kevin Iglesias 演示人形 + Animator 四状态 |
+| 操作 | **WASD/方向键** 移动、**Shift** 奔跑、**Space** 跳跃 |
+| 模型 | `Human_BasicMotionsDummy_M.prefab`（Avatar=`HumanM_ModelAvatar`，Humanoid） |
+| 动画 | `AnimatorWalker.controller`（Idle/Walk/Run/Jump 四状态，clip 取自导入 FBX：`Male/Idles`、`Movement/Walk|Run|Jump`） |
+| 位移 | CharacterController（`AnimatorWalker.Awake` 按 SkinnedMesh bounds 自适应胶囊） |
+| 接入点 | `AnimatorWalker.cs`（状态机切换）+ `KiWalkerLabBuilder.cs`（Editor 构建 controller + 场景） |
+
+**生成/运行**：菜单 **YANTF → 移动实验 → 创建 Kevin Iglesias 动画场景** → 打开 `Assets/Scenes/KiWalkerLab.unity` → 按 **Play**。
+
+> ⚠️ 已知简化：动画原地播放、位移全交 CC（非 RootMotion，`[RM]` 版动画留作后续对照）；跳高/速度参数为演示常量（非正典）；Jump 动画非循环，空中播完定格末帧、落地切回地面状态。
+
 ## 三、工程结构
 
 ```
@@ -59,7 +76,8 @@ unity/
 ├── Assets/
 │   ├── Editor/
 │   │   ├── SceneBuilder.cs        # 菜单/headless 生成 Demo 场景
-│   │   └── WalkerLabBuilder.cs    # 菜单/headless 生成 Walker 移动实验场景
+│   │   ├── WalkerLabBuilder.cs    # 菜单/headless 生成 Walker 移动实验场景
+│   │   └── KiWalkerLabBuilder.cs  # 菜单/headless 生成 Ki 动画角色场景（含 controller）
 │   ├── Scripts/                      # 运行时（asmdef: YANTF.Demo）
 │   │   ├── DemoTypes.cs              # 动作/阶段枚举、结算请求/结果
 │   │   ├── DemoActor.cs              # 实体运行时状态（HP/SAN/防御/CD，事件）
@@ -68,6 +86,7 @@ unity/
 │   │   ├── DemoCombatDriver.cs       # 回合沙盘驱动 + 输入
 │   │   ├── DemoHud.cs                # uGUI HUD（代码构建）
 │   │   ├── WalkerController.cs       # 几何体人体 + CharacterController 走/跑/跳（WalkerLab）
+│   │   ├── AnimatorWalker.cs         # Animator + CharacterController 走/跑/跳（KiWalkerLab）
 │   │   └── DemoBootstrapper.cs       # 运行时构建整个世界
 │   └── Tests/PlayMode/               # asmdef: YANTF.Demo.Tests（冒烟测试）
 │       ├── DemoSmokeTests.cs
