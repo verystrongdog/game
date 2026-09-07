@@ -34,12 +34,32 @@ unity command editor_play  # 进 Play 模式（验证用）
 # 测试命令行：Unity -batchmode -runTests -testPlatform PlayMode -projectPath . -testResults results.xml
 ```
 
+## 二·B、Walker 移动实验场景（几何体人体走/跑/跳）
+
+> 独立于回合战斗沙盘的 **locomotion（自由移动）呈现验证**：几何体白盒人体（Capsule/Sphere 拼装）+ `CharacterController` 实时移动，验证「在地面上走动/奔跑/跳跃」的手感与程序化步态动画。维度：呈现 + 规则（移动层）。
+
+| 项 | 内容 |
+|----|------|
+| 场景 | `WalkerLab.unity`（新）：蓝色几何体人体 + 参照柱 ×4 + 地面 |
+| 操作 | **WASD/方向键** 移动（相对相机）、**Shift** 奔跑、**Space** 跳跃 |
+| 移动 | `CharacterController`（重力 / 碰撞 / 贴地 / 45° 坡度 / 0.3 台阶）；走 3.2 m/s、跑 6.4 m/s、跳 1.5 m 抬升 |
+| 动画 | 程序化（无 Animator）：摆臂摆腿随速度变频变幅（走/跑区分）、空中收腿姿态、Idle 呼吸 |
+| 相机 | 第三人称平滑跟随（WalkerController.followCamera） |
+| 骨架 | `WalkerController.BuildBody()` 幂等组装 hips→torso/head/armL/R(+mesh)/legL/R(+mesh)，图元去 Collider（碰撞全交给 CC） |
+| 测试 | `WalkerLabSmokeTests`（3 个 PlayMode）：骨架完整 / 重力落地+走跑速度差 / 跳跃离地回落 |
+
+**生成/运行**：菜单 **YANTF → 移动实验 → 创建 Walker 场景**（`Assets/Editor/WalkerLabBuilder.cs`，Editor 模式实体化几何体并保存场景，打开即见人体层级）→ 打开 `Assets/Scenes/WalkerLab.unity` → 按 **Play**。
+
+> ⚠️ 已知简化：白盒人体为单段四肢（无肘/膝细分），摆动为枢轴旋转占位——外部人形模型/Animator 接入点即 `WalkerController.BuildBody` 与 `UpdatePose`；移动参数为演示常量（非正典数值）。
+
 ## 三、工程结构
 
 ```
 unity/
 ├── Assets/
-│   ├── Editor/SceneBuilder.cs        # 菜单/headless 生成 Demo 场景
+│   ├── Editor/
+│   │   ├── SceneBuilder.cs        # 菜单/headless 生成 Demo 场景
+│   │   └── WalkerLabBuilder.cs    # 菜单/headless 生成 Walker 移动实验场景
 │   ├── Scripts/                      # 运行时（asmdef: YANTF.Demo）
 │   │   ├── DemoTypes.cs              # 动作/阶段枚举、结算请求/结果
 │   │   ├── DemoActor.cs              # 实体运行时状态（HP/SAN/防御/CD，事件）
@@ -47,8 +67,11 @@ unity/
 │   │   ├── DemoSolver.cs             # IDemoSolver + WhiteboxSolver（临时）
 │   │   ├── DemoCombatDriver.cs       # 回合沙盘驱动 + 输入
 │   │   ├── DemoHud.cs                # uGUI HUD（代码构建）
+│   │   ├── WalkerController.cs       # 几何体人体 + CharacterController 走/跑/跳（WalkerLab）
 │   │   └── DemoBootstrapper.cs       # 运行时构建整个世界
 │   └── Tests/PlayMode/               # asmdef: YANTF.Demo.Tests（冒烟测试）
+│       ├── DemoSmokeTests.cs
+│       └── WalkerLabSmokeTests.cs
 ├── Packages/manifest.json            # uGUI 2.0.0 + Test Framework 1.4.5
 └── ProjectSettings/ProjectVersion.txt
 ```
