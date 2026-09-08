@@ -47,13 +47,16 @@ namespace YANTF.EditorTools
             Debug.Log("[MixamoSetup] 完成。打开 Assets/Scenes/ActionLab.unity → Play：WASD 走 / Shift 跑 / Space 跳 / 1物攻 2精攻 3防御 4受击 5倒下 / R 重置");
         }
 
+        private static readonly string ProjectRoot =
+            Path.GetFullPath(Path.Combine(Application.dataPath, ".."));
+
         private static int CopyFiles()
         {
             int copied = 0;
             foreach (var (src, dest) in Files)
             {
                 string fullSrc = Path.Combine(SourceDir, src);
-                string fullDest = Path.Combine(Directory.GetCurrentDirectory(), dest);
+                string fullDest = Path.Combine(ProjectRoot, dest);
                 if (!File.Exists(fullSrc))
                 {
                     Debug.LogWarning("[MixamoSetup] 源文件缺失（跳过）: " + fullSrc);
