@@ -53,9 +53,9 @@ public class ActionLabSmokeTests
     public void ActionIds_Constants_MirrorCatalog()
     {
         var consts = new List<string>();
-        foreach (var f in typeof(ActionIds).GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.Literal))
+        foreach (var f in typeof(ActionIds).GetFields(BindingFlags.Public | BindingFlags.Static))
         {
-            if (f.FieldType == typeof(string)) consts.Add((string)f.GetValue(null));
+            if (f.IsLiteral && f.FieldType == typeof(string)) consts.Add((string)f.GetValue(null));
         }
         CollectionAssert.AreEquivalent(consts, Ids(ActionCatalog.All),
             "ActionIds 常量应与 ActionCatalog 词条一一对应（三面对一锚）");
