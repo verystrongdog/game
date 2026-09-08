@@ -74,12 +74,16 @@ unity command editor_play  # 进 Play 模式（验证用）
 > 动作受控词表（12 词条：L1 落地 9 = 待机/走/跑/跳/物攻/精攻/防御/受击/倒下；L2 登记 3 = 坐/站/对话）+ 引用契约 A（纯状态 + 脚本 CrossFade）+ 来源矩阵 + 扩展协议——见 [动作库规格.md](动作库规格.md)。
 > 载体 = 新建 `ActionLab` 演示场（**Mixamo X Bot 真人模型** 🔧（#124 锚定，Y Bot 备用）+ 词表 controller + 按键触发 + HUD 当前动作名），实施分 Batch0（AI 产码：词表/`ActionIds`/`ActionPlayer`/幂等 builder/PlayMode 断言）→ Batch1（用户手动：Mixamo 导入 + 9 状态手摆）→ Batch2（手感收尾）。执行层契约见 [决策记录 #124](../../.scratch/grilling-124-actionlab/决策记录.md)。
 
-## 二·E、ActionLab 实施手册（Batch0 交付，用户执行）
+## 二·E、ActionLab 实施手册（Batch0 交付）
+
+**前提**：Windows 侧 `git pull`（Batch0 代码与一键工具入库）；下载的 7 个 FBX 在 `C:\Users\9527\Downloads\`。
 
 **目标**：把词表 L1 9 态在 X Bot 载体上接成可 Play 演示的动作场；防漂移断言随导入自动升级。
 
-1. **导入载体**：把 `X Bot.fbx`、`Y Bot.fbx` 复制到 `Assets/Mixamo/Characters/` → Inspector → Rig → Animation Type = **Humanoid** → Apply（自动生成 Avatar）。
-2. **导入 5 条战斗/反馈 clip**（均已下载核验，无蒙皮纯动画；复制时**改名 = 词表 id**，文件名 ≠ 语义，见 [动作库规格.md](动作库规格.md) §二 来源列）：
+1. **一键导入 + 生成**（取代手动的复制/改名/Rig/菜单四步）：菜单 **YANTF → 动作演示 → 一键导入 Mixamo 资产并生成 ActionLab（首次）**（`Assets/Editor/MixamoSetup.cs`）——自动完成：
+   - 复制 `X Bot.fbx`/`Y Bot.fbx` → `Assets/Mixamo/Characters/`；复制 5 条 clip 并**改名 = 词表 id** → `Assets/Animations/Mixamo/Combat/`（映射见下，文件名 ≠ 语义，见 [动作库规格.md](动作库规格.md) §二 来源列）；
+   - 全部设 Rig = **Humanoid** → Apply；
+   - 调幂等 builder：建 12 态 controller（L1 9 态命名=id）→ 按资产存在性挂 clip（缺口留空 + Console 清单）→ 生成 `Assets/Scenes/ActionLab.unity`。
 
    | 下载文件 | 复制为 `Assets/Animations/Mixamo/Combat/` | 词条 |
    |---|---|---|
@@ -89,11 +93,10 @@ unity command editor_play  # 进 Play 模式（验证用）
    | `Head Hit.fbx` | `HitReaction.fbx` | 受击（通用性 Play 后判） |
    | `Dying.fbx` | `Down.fbx` | 倒下 |
 
-   每文件 Rig 设 Humanoid → Apply。
-3. **生成场景**：菜单 **YANTF → 动作演示 → 创建 ActionLab**（幂等 builder：建 12 态 controller——L1 9 态命名=id；按 catalog 路径自动挂 clip，未找到的状态留空并在 Console 输出缺口清单）→ 打开 `Assets/Scenes/ActionLab.unity` → **Play**。
-4. **操作**：WASD/方向键 移动、Shift 跑、Space 跳（locomotion）；`1`物攻 `2`精攻 `3`防御 `4`受击 `5`倒下（动作键）；HUD 顶部显示当前动作名。
-5. **验收（目视清单，规格 §六）**：① 待机→走→跑→停顺滑；② 每动作触发后 HUD 显示正确动作名；③ 物攻→受击（打断）→回待机；④ 防御姿态循环不穿模；⑤ 倒下停留不悬浮；⑥ 衔接过渡帧可接受（不可接受 → 调 fade / 换 clip / 该动作局部迁 B，见规格 §四）。
-6. **测试**：Test Runner → PlayMode → Run All（防漂移断言按资产存在性分档：已导入 clip 的状态断言「有 clip」，未导入状态断言「状态存在 + clip 空」，随导入自动全绿）。
+   （源目录不是默认值时改 `MixamoSetup.SourceDir`；单项手动导入与生成仍可用「创建 ActionLab 场景」菜单。）
+2. **操作**：打开 `Assets/Scenes/ActionLab.unity` → **Play**：WASD/方向键 移动、Shift 跑、Space 跳（locomotion）；`1`物攻 `2`精攻 `3`防御(再按退出) `4`受击 `5`倒下 `R`重置；HUD 顶部显示当前动作名。
+3. **验收（目视清单，规格 §六）**：① 待机→走→跑→停顺滑；② 每动作触发后 HUD 显示正确动作名；③ 物攻→受击（打断）→回待机；④ 防御姿态循环不穿模；⑤ 倒下停留不悬浮；⑥ 衔接过渡帧可接受（不可接受 → 调 fade / 换 clip / 该动作局部迁 B，见规格 §四）。
+4. **测试**：Test Runner → PlayMode → Run All（防漂移断言按资产存在性分档：已导入 clip 的状态断言「有 clip」，未导入状态断言「状态存在 + clip 空」，随导入自动全绿）。
 
 > ⚠️ 已知：X Bot 上 KI Walk/Run retarget 质量为首验点（载体锚定 #124 决策依据）；Jab Cross 为组合拳，若直拳单次语义不合 → 换 Punch 类 clip 或走程序化兜底。
 
@@ -106,7 +109,8 @@ unity/
 │   │   ├── SceneBuilder.cs        # 菜单/headless 生成 Demo 场景
 │   │   ├── WalkerLabBuilder.cs    # 菜单/headless 生成 Walker 移动实验场景
 │   │   ├── KiWalkerLabBuilder.cs  # 菜单/headless 生成 Ki 动画角色场景（含 controller）
-│   │   └── ActionLabBuilder.cs    # 菜单/headless 生成 ActionLab（12 态 controller + X Bot 场景）
+│   │   ├── ActionLabBuilder.cs    # 菜单/headless 生成 ActionLab（12 态 controller + X Bot 场景）
+│   │   └── MixamoSetup.cs         # 一键导入 Mixamo 资产（复制/改名/Rig Humanoid）+ 生成 ActionLab
 │   ├── Scripts/                      # 运行时（asmdef: YANTF.Demo）
 │   │   ├── DemoTypes.cs              # 动作/阶段枚举、结算请求/结果
 │   │   ├── DemoActor.cs              # 实体运行时状态（HP/SAN/防御/CD，事件）
