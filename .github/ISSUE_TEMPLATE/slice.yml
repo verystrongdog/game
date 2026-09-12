@@ -1,0 +1,132 @@
+name: 切片（Slice）
+description: 当前可玩目标。约束见 design/engineering/issue-process.md §4。
+labels: [type:slice, state:needs-triage]
+body:
+  - type: dropdown
+    id: issue-type
+    attributes:
+      label: 类型
+      description: 本表单只对一种类型开放，保持选中即可。这一项渲染出的 `### 类型` 章节是校验器的解析锚点，使网页通道与 CLI 通道产出的正文结构逐字一致（校验器只认正文，不认标签）。
+      options:
+        - Slice
+    validations:
+      required: true
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: 动机
+      description: 这个切片解决什么问题、为什么是现在、不做会怎样。切片合同在 design/slices/<id>/slice.md；准入状态由 owner 在 PLAYABLE.md 声明，未准入期间不得新增正式玩家行为（R7）。
+      placeholder: |
+        问题：
+        为什么是现在：
+        不做会怎样：
+        当前 PLAYABLE.md 状态：NO_AUTHORIZED_PLAYABLE
+    validations:
+      required: true
+
+  - type: textarea
+    id: capability-delta
+    attributes:
+      label: 能力增量
+      description: markdown 表格，三列：能力 | 轴 | 从 → 到。轴只能取 Design / Implementation / Integration / Health，状态只用 WORKFLOW.md §二 各轴的合法取值；能力名逐字取自 design/slices/<id>/slice.md §二。≤ 3 行、≤ 4 个单元格（A1 / I12）——切片本身若切不动，说明它该拆成依赖有序的多条（R3）。
+      placeholder: |
+        | 能力 | 轴 | 从 → 到 |
+        |---|---|---|
+        | Core → Unity 适配层 | Implementation | `FAKE` → `PARTIAL` |
+        | HUD 与反馈 | Implementation | `NONE` → `PARTIAL` |
+    validations:
+      required: true
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: 依赖
+      description: "三行 key: value，缺一不可。blocked-by 取已关闭的 `#NN`（逗号分隔）或 `无`；consumed-by 取 `#NN` / `<切片 id>` / `证据:<路径>` / `门禁:<gate id>` / `待建:<描述>` / `终态`；requires 取 `gate:<gate id>` / `PLAYABLE:<状态>` / `能力:<能力名>=<轴>:<状态>` / `owner:<决策项>`，或 `无`。取值域见 issue-process.md §4.1.1，不得自造。"
+      placeholder: |
+        blocked-by: #12, #15
+        consumed-by: 终态
+        requires: PLAYABLE:AUTHORIZED_PLAYABLE:CP-01, gate:unity
+    validations:
+      required: true
+
+  - type: textarea
+    id: gates
+    attributes:
+      label: 门禁
+      description: "将跑的 gate id 或脚本命令，一行一条；gate id 必须存在于 design/engineering/gates.json，可选 docs-integrity / engine / cross-language / clean-checkout / fixture-index / issues / unity。注意 `unity` 当前 `available: false`（本环境无 Unity Editor）——声明它即不得标 state:ready-for-agent（I6 / R8），且未运行不是通过：切片的试玩证据在有 Unity 的机器上才能产出。"
+      placeholder: |
+        engine
+        unity
+        docs-integrity
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-delta
+    attributes:
+      label: 预期差分
+      description: 开工前登记：允许发生什么变化（文件 / 行为 / 计数），以及预期不变的是什么。切片阶段的玩家可观察行为按 must-prove 逐条登记，其余行为预期不变；事后补登则本阶段判据失效（R9）。
+      placeholder: |
+        允许变化：
+        预期不变：
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: 验收标准
+      description: checklist，2–8 条，每条独立可判，并写明改动前的状态。关闭判据是玩家能从入口到出口、must-prove 有试玩证据、owner 决定接受 / 迭代 / 放弃；代码写完不算证据（WORKFLOW.md §六）。
+      placeholder: |
+        - [ ] 改动前：<当前不可玩 / 停在 NONE> → 改动后：玩家能从入口走到出口
+        - [ ] must-prove M1 有绑定 build/commit 的试玩证据
+    validations:
+      required: true
+
+  - type: textarea
+    id: exclusions
+    attributes:
+      label: 明确排除
+      description: 本 issue 不做的事，含切片合同 design/slices/<id>/slice.md §1.3 的明确排除条目；不得在切片执行中顺手扩张范围。
+      placeholder: |
+        - 不做：
+        - 推迟到：
+    validations:
+      required: true
+
+  - type: textarea
+    id: rollback
+    attributes:
+      label: 回滚
+      description: 回滚方式 + 演练结论。切片失败时的处置是回到上一稳定状态并撤销新增玩家行为；不可回滚的（数据迁移、大范围改名、删除）写明为何，并按 A4 单独成 issue。
+      placeholder: |
+        方式：git revert <本切片提交组>，PLAYABLE.md 恢复上一状态
+        演练：临时 worktree 中验证可恢复上一状态
+    validations:
+      required: true
+
+  - type: textarea
+    id: player-path
+    attributes:
+      label: 玩家路径
+      description: 从入口到出口的玩家可观察路径，逐行箭头；逐字复述 design/slices/<id>/slice.md §1.1，不新造路径。完成判据是玩家能从入口走到出口。
+      placeholder: |
+        夜间病房醒来
+          → 进入短走廊
+          → 遭遇一个同时具有 HP/SAN 的敌对实体
+          → 使用真实 Core 完成物理攻击、防御、精神攻击
+          → 到达护士站并结束切片
+    validations:
+      required: true
+
+  - type: textarea
+    id: must-prove
+    attributes:
+      label: must-prove
+      description: 逐条复述 design/slices/<id>/slice.md §1.2 的 must-prove（本 issue 只引用并复述，不新造），每条标明试玩状态 UNTESTED / OBSERVED / SUPPORTED / REFUTED / INCONCLUSIVE，并绑定 build/commit 与证据。
+      placeholder: |
+        M1 <断言> — 试玩状态：UNTESTED
+        M2 <断言> — 试玩状态：UNTESTED
+    validations:
+      required: true

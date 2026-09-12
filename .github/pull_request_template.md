@@ -1,6 +1,7 @@
 ## 关联 Issue
 
-<!-- 如有关联的 Issue（设计矛盾 / 子系统提案 等），在此引用 -->
+<!-- 引用受本 PR 影响的 issue（类型见 WORKFLOW.md §三：Task / Implementation / Bug / Experiment / RFC / Slice）。
+     issue 的创建与分解约束见 design/engineering/issue-process.md -->
 Closes #
 
 ## 变更类型
@@ -34,9 +35,9 @@ Closes #
 <!-- 填表确认 -->
 
 - [ ] `design/README.md` 是否需要同步？→ 已检查
-- [ ] `design/framework/six-dimensions.md` 状态是否需要更新？→ 已检查
+- [ ] `design/framework/six-dimensions.md` 的「维度 → 文档列表」是否需要更新？→ 已检查
 - [ ] 是否 `grep` 了受影响的关键术语，清理了跨文件残留引用？→ 已完成
-- [ ] 所有交叉引用路径是否有效？→ 已验证
+- [ ] 所有交叉引用路径是否有效？（`python3 code/tools/validate_cross_refs.py` 报 0 死链）→ 已验证
 
 ## Review Checklist
 

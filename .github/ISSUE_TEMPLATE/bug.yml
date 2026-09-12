@@ -1,0 +1,126 @@
+name: 缺陷（Bug）
+description: 可复现行为违背已接受预期。约束见 design/engineering/issue-process.md §4。
+labels: [type:bug, state:needs-triage]
+body:
+  - type: dropdown
+    id: issue-type
+    attributes:
+      label: 类型
+      description: 本表单只对一种类型开放，保持选中即可。这一项渲染出的 `### 类型` 章节是校验器的解析锚点，使网页通道与 CLI 通道产出的正文结构逐字一致（校验器只认正文，不认标签）。
+      options:
+        - Bug
+    validations:
+      required: true
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: 动机
+      description: 这件事解决什么问题、为什么是现在、不做会怎样。写清它阻塞了谁（当前成果 / 切片 / 某条 issue）；不阻塞的发现按单线程约束进候选队列，不抢当前工作。
+      placeholder: |
+        问题：
+        为什么是现在：
+        不做会怎样：
+    validations:
+      required: true
+
+  - type: textarea
+    id: capability-delta
+    attributes:
+      label: 能力增量
+      description: markdown 表格，三列：能力 | 轴 | 从 → 到。轴只能取 Design / Implementation / Integration / Health，状态只用 WORKFLOW.md §二 各轴的合法取值；能力名逐字取自 design/slices/<id>/slice.md §二。修复典型落 Health 轴 `REGRESSED` → `PASS`。≤ 3 行、≤ 4 个单元格（A1 / I12）。
+      placeholder: |
+        | 能力 | 轴 | 从 → 到 |
+        |---|---|---|
+        | 回合结算（物理/精神攻击/防御） | Health | `REGRESSED` → `PASS` |
+    validations:
+      required: true
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: 依赖
+      description: "三行 key: value，缺一不可。blocked-by 取已关闭的 `#NN`（逗号分隔）或 `无`；consumed-by 取 `#NN` / `<切片 id>` / `证据:<路径>` / `门禁:<gate id>` / `待建:<描述>` / `终态`；requires 取 `gate:<gate id>` / `PLAYABLE:<状态>` / `能力:<能力名>=<轴>:<状态>` / `owner:<决策项>`，或 `无`。取值域见 issue-process.md §4.1.1，不得自造。"
+      placeholder: |
+        blocked-by: 无
+        consumed-by: 门禁:engine
+        requires: gate:engine
+    validations:
+      required: true
+
+  - type: textarea
+    id: gates
+    attributes:
+      label: 门禁
+      description: "将跑的 gate id 或脚本命令，一行一条；gate id 必须存在于 design/engineering/gates.json，可选 docs-integrity / engine / cross-language / clean-checkout / fixture-index / issues / unity。注意 `unity` 当前 `available: false`（本环境无 Unity Editor）——声明它即不得标 state:ready-for-agent（I6 / R8）。"
+      placeholder: |
+        engine
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-delta
+    attributes:
+      label: 预期差分
+      description: 开工前登记：允许发生什么变化（文件 / 行为 / 计数），以及预期不变的是什么。修复只应让失败的复现转为通过——其余输出不得漂移；事后补登则本阶段判据失效（R9）。
+      placeholder: |
+        允许变化：
+        预期不变：
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: 验收标准
+      description: checklist，2–8 条，每条独立可判。关闭判据要求修复前稳定失败、修复后通过，并有回归测试与受影响范围检查（WORKFLOW.md §六）。
+      placeholder: |
+        - [ ] 改动前：<复现命令> 稳定失败 → 改动后：通过
+        - [ ] 回归测试：<用例> 覆盖该行为，改动前缺失
+    validations:
+      required: true
+
+  - type: textarea
+    id: exclusions
+    attributes:
+      label: 明确排除
+      description: 本 issue 不做的事，含推迟清单里的相关条目；顺手发现的其他问题不并入本次修复（单线程约束）。
+      placeholder: |
+        - 不做：
+        - 另开 issue：
+    validations:
+      required: true
+
+  - type: textarea
+    id: rollback
+    attributes:
+      label: 回滚
+      description: 回滚方式 + 演练结论；不可回滚的（数据迁移、大范围改名、删除）写明为何，并按 A4 单独成 issue。
+      placeholder: |
+        方式：git revert <本 issue 的提交组>
+        演练：临时 worktree 中验证可恢复上一状态
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: 复现
+      description: 稳定失败的最短步骤 / 命令，含环境（build / commit / 种子）。关闭判据的机器形态就是这句话：改动前它必须稳定失败。
+      placeholder: |
+        1. 在 <环境 / build / commit> 下执行：
+        2. python3 code/tools/validate_cross_refs.py
+        3. 观察到：
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-vs-actual
+    attributes:
+      label: 期望 vs 实际
+      description: 已接受的预期是什么、实际观察到什么；两者都写，并给出预期的权威来源（design/ 文件 §节），凭记忆的预期不算。
+      placeholder: |
+        期望：<来源：design/<文档>.md §<节>>
+        实际：
+    validations:
+      required: true
