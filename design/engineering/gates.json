@@ -1,0 +1,85 @@
+{
+  "_comment": "门禁能力表——issue 的『门禁』字段引用本表的 gate id。散文权威是 design/engineering/build-and-test.md（§三 CI / §四 判据 / §五 已知缺口）；两侧不一致时以 build-and-test.md 为准并修本表。消费者：code/tools/validate_issues.py（规则 I6）与 design/engineering/issue-process.md §5.1。",
+  "_created": "2026-09-12",
+  "_source": "design/engineering/build-and-test.md §一/§三/§四/§五 + .github/workflows/ci.yml（实测）",
+  "environment": {
+    "id": "local-bootstrap",
+    "as_of": "2026-09-12",
+    "description": "本机 = 无 Unity Editor + 无 net8.0 runtime。可用门禁按此环境判定；换个环境（如有 Unity 的机器）时只改 available 字段，不动 gate id。",
+    "dotnet_sdk": "10.0.400",
+    "dotnet_target_framework": "net8.0",
+    "dotnet_roll_forward_required": true,
+    "python": "3.10.12"
+  },
+  "gates": [
+    {
+      "id": "docs-integrity",
+      "kind": "ci-job",
+      "ci_job": "docs-integrity",
+      "command": "python3 code/tools/run_all_checks.py",
+      "available": true,
+      "covers": "11 个校验器的编排（与 CI 循环逐项对齐）",
+      "criterion": "11/11 退出码 0",
+      "note": "有副作用：会写 .checks-state.json（被 gitignore）。CI 里跑的是等价的显式循环，不用本编排器。"
+    },
+    {
+      "id": "clean-checkout",
+      "kind": "script",
+      "ci_job": "docs-integrity",
+      "command": "python3 code/tools/check_clean_checkout.py",
+      "available": true,
+      "covers": "受控文件是否引用未受控路径；代码里是否有开发机绝对路径",
+      "criterion": "退出码 0"
+    },
+    {
+      "id": "fixture-index",
+      "kind": "script",
+      "ci_job": "docs-integrity",
+      "command": "python3 code/tools/build_runtime_data_fixtures.py --check",
+      "available": true,
+      "covers": "data/runtime-fixtures/ 索引与磁盘一致",
+      "criterion": "退出码 0（无差异）"
+    },
+    {
+      "id": "engine",
+      "kind": "ci-job",
+      "ci_job": "engine",
+      "command": "DOTNET_ROLL_FORWARD=Major dotnet test code/src/YouAreNotTheFish.sln -c Release",
+      "available": true,
+      "covers": "C# 逻辑引擎构建 + 测试",
+      "criterion": "416 passed / 0 failed（计数以 design/engineering/build-and-test.md §四 为准）",
+      "note": "本机无 net8.0 runtime，必须 DOTNET_ROLL_FORWARD=Major。离线时设 NUGET_PACKAGES=<repo>/.nuget-pkgs（该目录非干净检出可依赖）。"
+    },
+    {
+      "id": "cross-language",
+      "kind": "script",
+      "ci_job": "engine",
+      "command": "python3 code/tools/compare_fixture_verdicts.py",
+      "available": true,
+      "covers": "53 条 fixture 的 Python 侧与 C# 侧接受/拒绝判定逐条比对",
+      "criterion": "差异为空",
+      "note": "需要 dotnet，故归在 CI 的 engine job。"
+    },
+    {
+      "id": "issues",
+      "kind": "script",
+      "ci_job": "issues-snapshot",
+      "command": "python3 code/tools/validate_issues.py --from-github",
+      "available": true,
+      "covers": "开放 issue 的字段完整性、依赖边与单线程约束（规则 I1–I12）",
+      "criterion": "退出码 0",
+      "note": "需要 gh 已认证（本机）或 GITHUB_TOKEN + issues:read（CI）。"
+    },
+    {
+      "id": "unity",
+      "kind": "ci-job",
+      "ci_job": "unity",
+      "command": "Unity Editor 6000.5.2f1 的批处理构建 + PlayMode 测试",
+      "available": false,
+      "unavailable_reason": "本环境无 Unity Editor 与许可证；CI 的 unity job 显式报告 NOT_AVAILABLE，不静默跳过。",
+      "covers": "Unity 资产身份、Core→Unity 接缝、切片试玩",
+      "criterion": "无法在本环境判定（未运行不是通过）",
+      "blocks": ["P4b Unity 资产身份", "P4d Core→Unity 接缝", "P5 实现并试玩 CP-01"]
+    }
+  ]
+}
