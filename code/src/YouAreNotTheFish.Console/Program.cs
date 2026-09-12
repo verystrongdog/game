@@ -146,16 +146,25 @@ public static class Program
         if (Environment.GetEnvironmentVariable("YANTF_DATA_DIR") is { Length: > 0 } envDir)
             return envDir;
 
-        // 从执行目录向上回溯 + 绝对路径候选（镜像测试项目 DataDirCandidates 约定）
+        // 从执行目录向上回溯，寻找 <祖先>/data/brain_regions.json。
+        //
+        // 2026-09-12 修正两处「在本机能跑」的缺陷（CI Release 构建暴露）：
+        //   1. 原先检查的是 <祖先>/brain_regions.json —— 数据文件其实在 <祖先>/data/ 下，
+        //      该条件永假，回溯形同虚设
+        //      干净检出（CI）必然失败；这类兜底会把真实错误掩盖成"本机通过"
         var dir = AppContext.BaseDirectory;
-        for (var i = 0; i < 8 && dir is not null; i++)
+        for (var i = 0; i < 10 && dir is not null; i++)
         {
-            if (File.Exists(Path.Combine(dir, "brain_regions.json")))
-                return dir;
+            var candidate = Path.Combine(dir, "data");
+            if (File.Exists(Path.Combine(candidate, "brain_regions.json")))
+                return candidate;
             dir = Path.GetDirectoryName(dir);
         }
-        if (File.Exists("/home/dog/game/data/brain_regions.json"))
-            return "/home/dog/game/data";
-        throw new DirectoryNotFoundException("data/ 目录未找到（从执行目录向上回溯）");
+        // 兼容：执行目录本身即 data/
+        if (File.Exists(Path.Combine(AppContext.BaseDirectory, "brain_regions.json")))
+            return AppContext.BaseDirectory;
+        throw new DirectoryNotFoundException(
+            "data/ 目录未找到（从执行目录向上回溯 <祖先>/data/brain_regions.json）；"
+            + "可用 YANTF_DATA_DIR 显式指定");
     }
 }

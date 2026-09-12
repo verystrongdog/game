@@ -18,7 +18,6 @@ public class SmokeTests
         Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "..", "..", "data"),
         Path.GetFullPath(Path.Combine(AppContext.BaseDirectory,
             "..", "..", "..", "..", "..", "..", "..", "data")),
-        "/home/dog/game/data",
     ];
 
     private const ulong Seed = 7; // seed sweep 实测选定（spec §2.1 程序）

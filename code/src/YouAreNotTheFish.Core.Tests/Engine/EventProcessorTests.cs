@@ -17,7 +17,6 @@ public class EventProcessorTests
         Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "..", "..", "data"),
         Path.GetFullPath(Path.Combine(AppContext.BaseDirectory,
             "..", "..", "..", "..", "..", "..", "..", "data")),
-        "/home/dog/game/data",
     ];
 
     private static string FindDataDir()

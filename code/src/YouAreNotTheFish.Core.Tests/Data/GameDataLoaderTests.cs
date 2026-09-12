@@ -17,7 +17,6 @@ public class GameDataLoaderTests
             Path.Combine(DataDir, "brain_regions.json"),
             Path.GetFullPath(Path.Combine(AppContext.BaseDirectory,
                 "..", "..", "..", "..", "..", "..", "..", "data", "brain_regions.json")),
-            "/home/dog/game/data/brain_regions.json"
         };
         foreach (var path in candidates)
         {
@@ -154,7 +153,6 @@ public class GameDataLoaderTests
         var candidates = new[]
         {
             Path.Combine(DataDir, "connectivity", "tripartite_model.json"),
-            "/home/dog/game/data/connectivity/tripartite_model.json"
         };
         foreach (var path in candidates)
         {
@@ -292,7 +290,6 @@ public class GameDataLoaderTests
         var candidates = new[]
         {
             Path.Combine(DataDir, "connectivity", "W_sensory.json"),
-            "/home/dog/game/data/connectivity/W_sensory.json"
         };
         foreach (var path in candidates)
         {
@@ -366,7 +363,6 @@ public class GameDataLoaderTests
         var candidates = new[]
         {
             Path.Combine(DataDir, "connectivity", "situation_primitives.json"),
-            "/home/dog/game/data/connectivity/situation_primitives.json"
         };
         foreach (var path in candidates)
         {
@@ -462,7 +458,6 @@ public class GameDataLoaderTests
         var candidates = new[]
         {
             Path.Combine(DataDir, "signal_types.json"),
-            "/home/dog/game/data/signal_types.json"
         };
         foreach (var path in candidates)
         {
