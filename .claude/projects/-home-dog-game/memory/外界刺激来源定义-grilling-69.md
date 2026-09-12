@@ -51,5 +51,5 @@
 
 ## 实施落点
 
-- 完整任务计划：[../../../../设计归档/grilling/grilling-69-external-stimulus/task-plan.md](../../../../设计归档/grilling/grilling-69-external-stimulus/task-plan.md)（已四维质检通过）
+- 完整任务计划：[../../../../设计归档/grilling/grilling-69-external-stimulus/task-plan.md](../../../../design/archive/grilling/grilling-69-external-stimulus/task-plan.md)（已四维质检通过）
 - task-plan 已标注 T6b：data/README.md 与 引擎数据关系规格 的 69×6→69×8 同步（一致性清扫发现）

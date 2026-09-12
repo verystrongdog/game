@@ -14,9 +14,9 @@
   4. 输出 brain_regions.json → Phase 2 技能坐标映射
 
 用法:
-  python tools/brain_atlas_to_blender.py          # 只查文献坐标 (无需下载)
-  python tools/brain_atlas_to_blender.py --download  # 下载 OBJ 并计算质心
-  python tools/brain_atlas_to_blender.py --blender    # 输出可直接在 Blender 中运行的 bpy 脚本
+  python code/tools/brain_atlas_to_blender.py          # 只查文献坐标 (无需下载)
+  python code/tools/brain_atlas_to_blender.py --download  # 下载 OBJ 并计算质心
+  python code/tools/brain_atlas_to_blender.py --blender    # 输出可直接在 Blender 中运行的 bpy 脚本
 """
 
 import json
@@ -611,16 +611,16 @@ def update_coords_from_objs(obj_dir, output_path="data/brain_regions.json"):
 # ═══════════════════════════════════════════════════════════
 
 def generate_blender_script(brain_regions_json, skill_coords_json=None,
-                            output_path="tools/place_skill_nodes_blender.py"):
+                            output_path="code/tools/place_skill_nodes_blender.py"):
     """
     生成可在 Blender 中运行的 Python 脚本，批量创建技能节点.
 
     用法 (在 Blender Scripting 面板):
       import sys; sys.path.append('/path/to/game/tools')
-      exec(open('tools/place_skill_nodes_blender.py').read())
+      exec(open('code/tools/place_skill_nodes_blender.py').read())
 
     或命令行:
-      blender --background --python tools/place_skill_nodes_blender.py
+      blender --background --python code/tools/place_skill_nodes_blender.py
     """
 
     with open(brain_regions_json, "r", encoding="utf-8") as f:
@@ -758,4 +758,4 @@ if __name__ == "__main__":
         generate_blender_script("data/brain_regions.json", args.skill_coords)
 
     print("\n✅ 管线完成")
-    print(f"   下一步: Phase 2 — 建立技能→脑区映射表 (tools/map_skills_to_regions.py)")
+    print(f"   下一步: Phase 2 — 建立技能→脑区映射表 (code/tools/map_skills_to_regions.py)")

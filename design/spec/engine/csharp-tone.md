@@ -24,14 +24,14 @@
 | 阻塞 | step 6 csharp-cstc（DA 环路混合需要 tone）、step 9 csharp-events（调用 Step）、step 11 csharp-console（--trace-resting） |
 | 输入数据 | `data/connectivity/tripartite_model.json` brainstem（114 条）——均经 GameDataLoader.LoadAll 加载 |
 
-本规格的决策依据 = [任务issue 01](../../设计归档/grilling/csharp-tone/design/issues/01-tone-spec.md) D1-D12（其「数据实测」表为本 spec 全部计数与锚点的出处，2026-08-13 python 实测 JSON，非凭记忆）。
+本规格的决策依据 = [任务issue 01](../../archive/grilling/csharp-tone/design/issues/01-tone-spec.md) D1-D12（其「数据实测」表为本 spec 全部计数与锚点的出处，2026-08-13 python 实测 JSON，非凭记忆）。
 
 ### 偏差声明（与设计文档/plan 的已知差异，实现必须照此执行）
 
 | # | 偏差 | 依据 |
 |----|------|------|
 | B1 | **Step 签名加参**：plan §4.3 签名 `Step(ToneState, float[])` → 本 spec `Step(ToneState, float[], CalibrationConfig)`，Step 内部应用 `cfg.DeltaScale` | 任务issue Q2 用户裁决（2026-08-13）；δ_scale 杠杆留在动力学层 + 可注入（对齐 csharp-engine-types 决策 D3 实例化模式） |
-| B2 | **tone 解析解**：[运行时状态模型](../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E8%BF%90%E8%A1%8C%E6%97%B6%E7%8A%B6%E6%80%81%E6%A8%A1%E5%9E%8B.md) §5.2/§7.1 为 Euler → 解析指数解（plan §十二-2 已裁定） | plan 审计数值证明 Euler 在此参数下失真；τ_tone 0.3-1.5 无 underflow 风险（k_t ≥ 0.0357） |
+| B2 | **tone 解析解**：[运行时状态模型](../../rules/skill-tree/%E8%BF%90%E8%A1%8C%E6%97%B6%E7%8A%B6%E6%80%81%E6%A8%A1%E5%9E%8B.md) §5.2/§7.1 为 Euler → 解析指数解（plan §十二-2 已裁定） | plan 审计数值证明 Euler 在此参数下失真；τ_tone 0.3-1.5 无 underflow 风险（k_t ≥ 0.0357） |
 | B3 | **tone 值域 [0,1]**：核心机制 §十一 写 [0.1, 2.0] → 取 NPC AI §4.1 [0, 1] + clip（plan §十二-7 已裁定） | 文档内部冲突，与 §5.2 clip(tone, 0, 1) 一致 |
 | B4 | **M1「略高」预测修正**：plan §八 预测「实际 b_j>0 会略高」→ 实测 max 0.7712（python 预览；C# 实测值最终写回文档） | 任务issue 数据实测表 M1 预览行；文档写回以 C# 实测为准 |
 
@@ -58,7 +58,7 @@ delta 为**未缩放原始 δ**（pattern × magnitude，§5.5）；缩放由 St
 
 ## 三、接口定义
 
-新文件 `src/YouAreNotTheFish.Core/Engine/ToneUpdater.cs` 与 `src/YouAreNotTheFish.Core/Engine/CorticalBias.cs`（Engine/ 目录已存在；plan §3.2 L2 约定：纯函数、无副作用、无 RNG）。
+新文件 `code/src/YouAreNotTheFish.Core/Engine/ToneUpdater.cs` 与 `code/src/YouAreNotTheFish.Core/Engine/CorticalBias.cs`（Engine/ 目录已存在；plan §3.2 L2 约定：纯函数、无副作用、无 RNG）。
 
 ```csharp
 namespace YouAreNotTheFish.Core.Engine;
@@ -173,7 +173,7 @@ public static class CorticalBias
 |---|---------|----------|
 | AC-15 | 30 回合静息 trace（组合 WMatrixBuilder.Build + CorticalBias.Compute(baseline) + WcDynamics.Step；tone=baseline、s=0、a(0)=0.10） | 收敛断言：round 30 与 round 29 max\|Δ\| < 1e-5（python 预览 round 10 即 7e-7）；active（W 行非零，从 W 推导）∈ [0.53, 0.78]（预览 [0.535174, 0.771229]——经本 spec 复核；任务issue 预览行原为全 69 节点口径已修正，见 audit/report.md F3-data）；排除节点 a == σ(b_j) 三组：b=0 → 0.3775407 / b=0.7 → 0.5498340 / b=0.9 → 0.5986877（1e-5）；**ITestOutputHelper 输出 69 节点实测值表**（供 M1 文档写回） |
 
-M1 文档写回义务（工作issue 完成标准之一）：实测值写入 [运行时状态模型](../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E8%BF%90%E8%A1%8C%E6%97%B6%E7%8A%B6%E6%80%81%E6%A8%A1%E5%9E%8B.md) §7.3（静息态叙述）+ [回合战斗流程](../../%E8%A7%84%E5%88%99/%E5%9B%9E%E5%90%88%E6%88%98%E6%96%97%E6%B5%81%E7%A8%8B.md) §3.3（静息基线 0.10 叙述）+ [皮层动力学-通用层](../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E7%9A%AE%E5%B1%82%E5%8A%A8%E5%8A%9B%E5%AD%A6-%E9%80%9A%E7%94%A8%E5%B1%82.md) §4.2/§4.3（σ(0) 笔误 + Euler 叙述）——plan §十三-8 清扫清单 + csharp-wc-dynamics sign-off 结转 #4 一并执行。
+M1 文档写回义务（工作issue 完成标准之一）：实测值写入 [运行时状态模型](../../rules/skill-tree/%E8%BF%90%E8%A1%8C%E6%97%B6%E7%8A%B6%E6%80%81%E6%A8%A1%E5%9E%8B.md) §7.3（静息态叙述）+ [回合战斗流程](../../rules/%E5%9B%9E%E5%90%88%E6%88%98%E6%96%97%E6%B5%81%E7%A8%8B.md) §3.3（静息基线 0.10 叙述）+ [皮层动力学-通用层](../../rules/skill-tree/%E7%9A%AE%E5%B1%82%E5%8A%A8%E5%8A%9B%E5%AD%A6-%E9%80%9A%E7%94%A8%E5%B1%82.md) §4.2/§4.3（σ(0) 笔误 + Euler 叙述）——plan §十三-8 清扫清单 + csharp-wc-dynamics sign-off 结转 #4 一并执行。
 
 ## 七、本 spec 自检清单
 
@@ -191,11 +191,11 @@ M1 文档写回义务（工作issue 完成标准之一）：实测值写入 [运
 | 版本 | 日期 | 变更 | 触发 | 审计范围 |
 |------|------|------|------|----------|
 | v1.0 | 2026-08-13 | 初稿 | 任务issue 01（数据实测 + Q1/Q2 裁决 + D1-D12） | 全量审计 |
-| v1.1 | 2026-08-13 | E1 §四 4.1 Δ 备注出处修正（运行时状态模型 §4.3 → 皮层动力学-通用层 §4.3）；E2 新增 AC-16（CorticalBias 契约防御）+ §七 第 5 项补契约防御；E3 AC-11 Shell→AccumbensShell；E4 AC-12 PAG→PeriaqueductalGray + Thalamus×2 明确为 Thalamus+ThalamusPulvinar；E5 AC-15 复核注释（任务issue 预览行口径修正）；F6 AC-13 边界 fid 注释（10 个 pre-clamp 恰 2.0）；任务issue 数据实测表 + map.md 同源数字一并修正 | 全量审计 conditional（0❌/5⚠️/1 refuted，[report.md](../../设计归档/grilling/csharp-tone/design/audit/report.md)） | Δ审计（变更章节 + 半径扩张） |
+| v1.1 | 2026-08-13 | E1 §四 4.1 Δ 备注出处修正（运行时状态模型 §4.3 → 皮层动力学-通用层 §4.3）；E2 新增 AC-16（CorticalBias 契约防御）+ §七 第 5 项补契约防御；E3 AC-11 Shell→AccumbensShell；E4 AC-12 PAG→PeriaqueductalGray + Thalamus×2 明确为 Thalamus+ThalamusPulvinar；E5 AC-15 复核注释（任务issue 预览行口径修正）；F6 AC-13 边界 fid 注释（10 个 pre-clamp 恰 2.0）；任务issue 数据实测表 + map.md 同源数字一并修正 | 全量审计 conditional（0❌/5⚠️/1 refuted，[report.md](../../archive/grilling/csharp-tone/design/audit/report.md)） | Δ审计（变更章节 + 半径扩张） |
 
 ---
 *创建: 2026-08-13 | 更新: 2026-08-13 | 版本: v1.1*
-*关联: [csharp-engine plan](csharp-engine-roadmap.md) §4.3/§八/§十二-2/§十二-7, [任务issue 01](../../设计归档/grilling/csharp-tone/design/issues/01-tone-spec.md), [运行时状态模型](../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E8%BF%90%E8%A1%8C%E6%97%B6%E7%8A%B6%E6%80%81%E6%A8%A1%E5%9E%8B.md) §5, [csharp-wc-dynamics spec](csharp-wc-dynamics.md) §四*
+*关联: [csharp-engine plan](csharp-engine-roadmap.md) §4.3/§八/§十二-2/§十二-7, [任务issue 01](../../archive/grilling/csharp-tone/design/issues/01-tone-spec.md), [运行时状态模型](../../rules/skill-tree/%E8%BF%90%E8%A1%8C%E6%97%B6%E7%8A%B6%E6%80%81%E6%A8%A1%E5%9E%8B.md) §5, [csharp-wc-dynamics spec](csharp-wc-dynamics.md) §四*
 
 ## 参数速查表
 

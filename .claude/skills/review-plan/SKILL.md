@@ -28,7 +28,7 @@ description: 基于符号执行的方案/规格文档审查。追踪数据从定
 
 执行方式：
 ```
-python3 tools/run_all_checks.py --format json
+python3 code/tools/run_all_checks.py --format json
 ```
 
 AI 必须：
@@ -150,7 +150,7 @@ N×M>50 → 抽样。全边界：数值型 min+max+null，枚举型全部值+nul
 ## 停止条件
 
 ### 正常停止
-1. **项目边界停**：数据源是项目外不可变物。`tools/` 目录下脚本默认为"非标准工具，需 trace"
+1. **项目边界停**：数据源是项目外不可变物。`code/tools/` 目录下脚本默认为"非标准工具，需 trace"
 2. **类型闭合停**：输入类型已定义 + 输出类型已定义 + 叉乘覆盖 + 边界已处理
 3. **重复模式停**：与之前 trace 步骤同构，引用之前结论
 
@@ -263,7 +263,7 @@ Skill 运行中监控，触发时提示用户：
 
 ## Worked Example 参考
 
-目标文件: `实体/疾病目录/双相障碍I型.md`（继承 `奖赏系统障碍` 父类，含完整功能域配置表和非线性跳变）。
+目标文件: `design/entities/diseases/双相障碍I型.md`（继承 `奖赏系统障碍` 父类，含完整功能域配置表和非线性跳变）。
 
 展示 H1-H6 全部触发类型的 15-20 行 trace。仅在"类型分类退化"信号触发时考虑补充第二个。
 
@@ -277,5 +277,5 @@ Skill 运行中监控，触发时提示用户：
 
 ---
 
-*基于: [方案-v2.md](../../../设计归档/grilling/review-plan-design/方案-v2.md) | 创建: 2026-08-01*
+*基于: [方案-v2.md](../../../design/archive/grilling/review-plan-design/%E6%96%B9%E6%A1%88-v2.md) | 创建: 2026-08-01*
 *关联: [#17](https://github.com/verystrongdog/game/issues/17)*

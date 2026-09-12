@@ -47,7 +47,7 @@ csharp-engine plan §十一 step 6 = **CstcGating**——Layer 3 CSTC 门控（�
 | 12 | clamp[0,1] 与负阈值互斥 | a_GPi ≥ 0 → O_GPi ≥ 0.2 → gate ≤ 0.8 恒（放行上限被 clamp 锁死）→ 负阈值必须配无 clamp |
 | 13 | 解析收敛 | exp(−25) = 1.39e-11；\|a−u\| ≤ 3.5（值域 [−1.5, 2.0]）时残差 ≤ 4.9e-11（🔧 2026-08-13 修正：原「2.2 → 3e-11」按旧值域 [0,1] 推导）；\|u\| ≥ 0.01 时 **a(t+Δ) 与 u 逐位相等**（float32 舍入，实测失败边界 \|u\| ≤ 0.0004） |
 | 14 | DA 极端 ramp | DA=1 → m_SD2=0 → O_SD2≡0（恒零合法）；m_SD1=2 饱和点 a ≥ 0.7 |
-| 15 | 文献 PDF 错标 | 参考/文献/ 两个「Gurney-2001」PDF 实测为 BMJ 论文与 White Rose eprints（文件名与内容不符，不可引用）。真源 = data/connectivity/README_gurney_model.md + ModelDBRepository/83560 GitHub（本 issue 行 #10 数据即来自后者原始代码） |
+| 15 | 文献 PDF 错标 | reference/literature/ 两个「Gurney-2001」PDF 实测为 BMJ 论文与 White Rose eprints（文件名与内容不符，不可引用）。真源 = data/connectivity/README_gurney_model.md + ModelDBRepository/83560 GitHub（本 issue 行 #10 数据即来自后者原始代码） |
 
 ## 追问
 

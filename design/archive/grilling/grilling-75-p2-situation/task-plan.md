@@ -1,6 +1,6 @@
 # Grilling #75 P2 情境系统进引擎 — 实施任务计划（Grilling #108 执行契约版）
 
-> Grilling #75 (GitHub #75) 结论：情境系统进引擎——α_patterns 数据化 + 27 原型选择器 + s_env/m_field 三通道 + 情境只读状态接口。4 项共识：事件/持续场分离 / 映射表+SAN 调制+节点注入 / 三通道并入 s 数组 / 隐式涌现+只读接口。
+> Grilling #75 (GitHub #75) 结论：情境系统进引擎——α_patterns 数据化 + 27 原型选择器 + s_env/m_field 三通道 + 情境只读状态接口。4 项共识：design/events/持续场分离 / 映射表+SAN 调制+节点注入 / 三通道并入 s 数组 / 隐式涌现+只读接口。
 > **Grilling #108（2026-09-02 实施前审查）**：在 #75/#104 锁定决策约束下，将 15 个实施层开放点（Q1-Q15）定案为**执行契约**——开发者拿到本文档后无需再问设计问题即可实施 #105。本文档为决策→实施的桥梁。
 
 ## 目录
@@ -29,7 +29,7 @@
 
 | 编号 | 决策 | 类型 |
 |------|------|------|
-| D1 | 事件/持续场分离：`alpha_patterns.json` 只放 14 战斗事件（#69 schema 原样，8 模态）；`env_tones.json` 独立放环境基调 α_env（空间类型 → 8 模态强度） | 数据 |
+| D1 | design/events/持续场分离：`alpha_patterns.json` 只放 14 战斗事件（#69 schema 原样，8 模态）；`env_tones.json` 独立放环境基调 α_env（空间类型 → 8 模态强度） | 数据 |
 | D2 | 情境选择器 = 空间→原型映射表（`typical_game_scenario` 辅助建表）+ 低 SAN 概率偏移（恐慌→诡异/负面原型）+ **key_brain_regions 直接节点注入**（心理情境非感官，不走 W_sensory）+ 刷新时机 = 空间切换 + SAN 阈值跨越（C1） | 算法 |
 | D3 | 三通道并入 s 数组：`s_total[69] = s_事件 + s_env + m_field`——`WcDynamics.Step` 签名零改动；正典文档层写 `h = ΣW·a + b + s_total` | 落点 |
 | D4 | 情境 salience = 隐式涌现（原型注入 → a(t) → salience 自然反映，不查表）+ **只读情境状态接口**（当前原型 id + 强度，供 P3/UI/叙事） | 接口 |
@@ -60,7 +60,7 @@
 | Q10 | `MoonState` 静态纯函数 + `Query(int day)` → `MoonStateResult(Phase=λ(D), Shell={E_c(λ),E_th(λ)}, QhatBaseline[69], CalibrationStatus, Version)`；E_c/E_th 按 #102 E2 形式结构实现（常量挂 CalibrationConfig 为 PLACEHOLDER）；**N=69 为占位契约**（graph identity 闭合后升级）；D 推进与 MOON_PHASE_CHANGED 广播**不实现**（demo 固定 D） |
 | Q11 | `CalibrationGate.EnsureCalibrated(status, version)` 挂载于 **m_field 合成注入点**（PLACEHOLDER/version 不匹配 → fail-fast，接 #106 分层）；**s_env / α_env / 情境原型注入不挂门禁**（三通道正交）；demo 例外 = `CalibrationConfig.AllowPlaceholderDemo`（默认 false）+ Console `--mfield-demo` + 每回合醒目警告；三数据文件 schema major 加载期统一校验；MoonState.Query 运行时自检（0≤λ≤1/E_c>0/0<E_th<E_c/有限） |
 | Q12 | 三通道 **Phase 1 注入点合成**：`s_total_i = SPending_i + s_env + m_field_i`；SPending 保持事件累加语义不变；`s_env[69]` 存 CombatState（情境刷新重算，Q8 下一回合生效）；`m_field_i[j] = QhatBaseline[j] × g(SAN_i) × R[j]`，**g ≡ 1.0 占位**（E7/#35 定正式形式）、q̂ 无空间差异（延迟）；WcDynamics.Step 签名零改动 |
-| Q13 | fid 一致性校验器**两层防线**：① `tools/validate_situation_fids.py` 管线侧（名称 ∈ region_name_map.regions 且 name == functional_id；37 去重名 100% 命中报告；失败 exit 非零；新增原型自动纳入；不建 dk→fid 映射表）② SituationSelector 构造时引擎侧全量断言 fid ∈ 已知集（未知 → 加载期异常）；不要求 ⊆ W_sensory/W_active（情境 fid 与 moonlight 落点校验分离） |
+| Q13 | fid 一致性校验器**两层防线**：① `code/tools/validate_situation_fids.py` 管线侧（名称 ∈ region_name_map.regions 且 name == functional_id；37 去重名 100% 命中报告；失败 exit 非零；新增原型自动纳入；不建 dk→fid 映射表）② SituationSelector 构造时引擎侧全量断言 fid ∈ 已知集（未知 → 加载期异常）；不要求 ⊆ W_sensory/W_active（情境 fid 与 moonlight 落点校验分离） |
 | Q14 | Console 新增 `--demo-situation` 非交互 trace 模式（`--env`/`--day`/`--rounds`/`--seed`/`--mfield-demo`）；输出：初始环境/情境/strength + 每回合 λ(D) + WC a(t) 摘要 + 首回合 s_env 注入前后对比 + mfield-demo 时 PLACEHOLDER 警告；`CombatState.Create(environment)` 默认 ward，非法 id → CliUsageException → exit 1；不污染 RunBattle；同 seed 同输出 |
 | Q15 | 测试矩阵 G1-G9（引擎 C# 复用 BadJson 模式 / Console 进程级复用 InvalidArgs_Exit1 / fid 校验器管线侧 python + 引擎断言）；现有 309 测试全绿 = P2 回归门槛；**p_panic 用契约断言**（恐慌假 → 必 primary；恐慌真 → 必 ∈ {G ∪ primary}；同 seed 同选择），不做频率统计（无样本量正典） |
 
@@ -198,7 +198,7 @@ SituationSelector.Select(environment, panic, rng) → (archetypeId, strength)   
 s_env_j = (W_sensory × α_env)_j + Σ_原型注入          // 全局同值（空间级），Q4
 ```
 
-- **fid 一致性校验（Q13 两层防线）**：① `tools/validate_situation_fids.py`（断言名称 ∈ `region_name_map.regions` 且 `name == functional_id`；37 去重名 100% 命中为验收门槛；失败 exit 非零；未来新增原型自动防回归；**不建立 dk→fid 翻译映射表**——翻译需求 = 0）② SituationSelector 构造时引擎侧全量断言 fid ∈ 已知集（未知 → 加载期异常，禁止静默零注入）
+- **fid 一致性校验（Q13 两层防线）**：① `code/tools/validate_situation_fids.py`（断言名称 ∈ `region_name_map.regions` 且 `name == functional_id`；37 去重名 100% 命中为验收门槛；失败 exit 非零；未来新增原型自动防回归；**不建立 dk→fid 翻译映射表**——翻译需求 = 0）② SituationSelector 构造时引擎侧全量断言 fid ∈ 已知集（未知 → 加载期异常，禁止静默零注入）
 - 情境 fid **不要求 ⊆ W_sensory/W_active**（心理情境非感官；该约束只属于 moonlight_landing，不混用）
 
 ## 五、三通道输入落点
@@ -259,7 +259,7 @@ public sealed record SituationState(string ArchetypeId, float Strength, string E
 | T1 | W_sensory.json 扩列 69×8（嗅觉 {LateralOrbitofrontal,Amygdala} / 热觉 {Postcentral,Insula}，原 6 列不变，Q2）+ 元字段同步 | 数据 | `W_sensory.json` | D1 |
 | T2 | alpha_patterns.json（14 事件 8 模态，m_alpha 二态 `"m_delta"`，Q1）+ EventProcessor 去硬编码（读 JSON，绑定留代码，加载期 fail-fast JsonException） | 数据+代码 | `alpha_patterns.json` + `EventProcessor.cs` | T1 |
 | T3 | env_tones.json（ward/corridor/nurse_station + display_name + situation.primary，无 alternates，Q3/Q5） | 数据 | `env_tones.json` | D1 |
-| T4 | **fid 一致性校验器两层防线**（Q13）：`tools/validate_situation_fids.py`（37 名 100% 命中/失败非零退出/新原型自动纳入）+ SituationSelector 引擎侧加载断言 | 代码 | 校验脚本 + 验证报告 + 引擎断言 | T3 |
+| T4 | **fid 一致性校验器两层防线**（Q13）：`code/tools/validate_situation_fids.py`（37 名 100% 命中/失败非零退出/新原型自动纳入）+ SituationSelector 引擎侧加载断言 | 代码 | 校验脚本 + 验证报告 + 引擎断言 | T3 |
 | T5 | SituationSelector（Select 纯函数：env_map=env_tones.primary + G 构造期计算(Q6) + p_panic 概率 + 强度双档(Q7)）+ `CurrentEnvironment` 传入 CombatState | 代码 | `Engine/SituationSelector.cs` + `CombatState.Situation` + `CombatState.Create(environment)` | T4 |
 | T6 | 三通道合成（Q12）+ m_field 通道（moonlight_landing.json(Q9) + MoonState.cs(Q10) + CalibrationGate(Q11)）+ 只读 SituationState | 代码 | `MoonState.cs` + `CalibrationGate.cs` + `CombatState` 扩展 + `CalibrationConfig`（AllowPlaceholderDemo/MFieldGain/SituationPanicShift/s_neg [NEW]） | T2/T5 |
 | T7 | Console `--demo-situation` 模式（Q14）+ 测试矩阵 G1-G9（Q15）+ 文档同步 | 代码+测试+文档 | 测试绿 + 决策树/六维状态/memory | T5/T6 |
@@ -272,16 +272,16 @@ public sealed record SituationState(string ArchetypeId, float Strength, string E
 | `data/connectivity/alpha_patterns.json` | 新建（Q1 契约） | 数据 |
 | `data/connectivity/env_tones.json` | 新建（Q3/Q5 契约） | 数据 |
 | `data/connectivity/moonlight_landing.json` | **新建（Q9 schema，r/α_s PLACEHOLDER）** | 数据 |
-| `src/YouAreNotTheFish.Core/Engine/EventProcessor.cs` | 改写（读 JSON 去硬编码，Q1 fail-fast） | 代码 |
-| `src/YouAreNotTheFish.Core/Engine/SituationSelector.cs` | 新建（Q4-Q8） | 代码 |
-| `src/YouAreNotTheFish.Core/Engine/MoonState.cs` | **新建（Q10 契约骨架）** | 代码 |
-| `src/YouAreNotTheFish.Core/Engine/CalibrationGate.cs` | **新建（Q11 门禁）** | 代码 |
-| `src/YouAreNotTheFish.Core/Entity/CombatState.cs` | 改写（Situation + s_env[69] 存储 + Create(environment)） | 代码 |
-| `src/YouAreNotTheFish.Core/Types/CalibrationConfig.cs` | 改写（+AllowPlaceholderDemo/MFieldGain/SituationPanicShift/s_neg/t_neg [NEW]） | 代码 |
-| `tools/validate_situation_fids.py` | **新建（Q13 管线校验器）** | 代码 |
-| `src/YouAreNotTheFish.Core.Tests/` | 新增（G1-G9 矩阵，Q15） | 测试 |
-| `src/YouAreNotTheFish.Console/` | 改写（`--demo-situation` + `--mfield-demo` + `--env`，Q14） | 代码 |
-| `docs/决策树/` / `docs/设计框架-六维状态.md` / `项目总览.md` / memory | 追加（Grilling #108） | 文档 |
+| `code/src/YouAreNotTheFish.Core/Engine/EventProcessor.cs` | 改写（读 JSON 去硬编码，Q1 fail-fast） | 代码 |
+| `code/src/YouAreNotTheFish.Core/Engine/SituationSelector.cs` | 新建（Q4-Q8） | 代码 |
+| `code/src/YouAreNotTheFish.Core/Engine/MoonState.cs` | **新建（Q10 契约骨架）** | 代码 |
+| `code/src/YouAreNotTheFish.Core/Engine/CalibrationGate.cs` | **新建（Q11 门禁）** | 代码 |
+| `code/src/YouAreNotTheFish.Core/Entity/CombatState.cs` | 改写（Situation + s_env[69] 存储 + Create(environment)） | 代码 |
+| `code/src/YouAreNotTheFish.Core/Types/CalibrationConfig.cs` | 改写（+AllowPlaceholderDemo/MFieldGain/SituationPanicShift/s_neg/t_neg [NEW]） | 代码 |
+| `code/tools/validate_situation_fids.py` | **新建（Q13 管线校验器）** | 代码 |
+| `code/src/YouAreNotTheFish.Core.Tests/` | 新增（G1-G9 矩阵，Q15） | 测试 |
+| `code/src/YouAreNotTheFish.Console/` | 改写（`--demo-situation` + `--mfield-demo` + `--env`，Q14） | 代码 |
+| `design/decisions/` / `design/framework/six-dimensions.md` / `design/README.md` / memory | 追加（Grilling #108） | 文档 |
 
 ## 九、数据契约与校验
 
@@ -317,10 +317,10 @@ public sealed record SituationState(string ArchetypeId, float Strength, string E
 |------|------|
 | α pattern 迁移比对 | 迁移前后 6 位逐位比对（脚本） |
 | W_sensory 形状 | 69×8 断言（validate 工具扩展） |
-| **fid 一致性校验（Q13）** | `tools/validate_situation_fids.py`：27 原型 key_brain_regions 名称 ∈ region_name_map.regions 且 name == functional_id（100% 命中，失败不静默降级） |
+| **fid 一致性校验（Q13）** | `code/tools/validate_situation_fids.py`：27 原型 key_brain_regions 名称 ∈ region_name_map.regions 且 name == functional_id（100% 命中，失败不静默降级） |
 | **R 落点校验（Q9）** | 引擎加载期四项校验：supp 互斥/归一化/supp⊆W_active（fid→dk）/非负+r>0——归 P2；#103 artifact 6 项硬校验归 #71，**不混淆** |
-| 引擎测试绿 | `dotnet test src/YouAreNotTheFish.Core.Tests`（309 + G1-G9 全绿） |
-| 交叉引用 | `python3 tools/validate_cross_refs.py` |
+| 引擎测试绿 | `dotnet test code/src/YouAreNotTheFish.Core.Tests`（309 + G1-G9 全绿） |
+| 交叉引用 | `python3 code/tools/validate_cross_refs.py` |
 
 ## 十、验收标准
 
@@ -350,4 +350,4 @@ public sealed record SituationState(string ArchetypeId, float Strength, string E
 ---
 
 *创建: 2026-08-16 | 更新: 2026-09-02 (Grilling #104：m_field 段落对齐 #101/#103——结构实现+PLACEHOLDER+门禁；T4 改 fid 一致性校验器；env_tones demo 3 环境集锁定；推迟清单 m_field 项解除) | 更新: 2026-09-02 (Grilling #108 实施前审查：Q1-Q15 执行契约注入——m_alpha 二态/m_delta、W_sensory 锚点、env_tones slug+primary 删 alternates、全局情境+G 组+p_panic+强度双档+C1 下一回合、moonlight_landing schema+MoonState+门禁+注入点合成、fid 校验两层防线、--demo-situation、G1-G9 矩阵)*
-*关联: [Grilling #69 task-plan](./../grilling-69-external-stimulus/task-plan.md), [Grilling #70 路线图 task-plan](./../grilling-70-engine-roadmap/task-plan.md), [Grilling #104 实施 issue](https://github.com/verystrongdog/game/issues/105), [Grilling #108 实施前审查 issue](https://github.com/verystrongdog/game/issues/108), [运行时状态模型](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E8%BF%90%E8%A1%8C%E6%97%B6%E7%8A%B6%E6%80%81%E6%A8%A1%E5%9E%8B.md), [situation_primitives.json](../../../data/connectivity/situation_primitives.json), [核心机制](../../../%E8%A7%84%E5%88%99/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md), [数学语言书写规范](../../../docs/agents/math-language-writing.md)*
+*关联: [Grilling #69 task-plan](../grilling-69-external-stimulus/task-plan.md), [Grilling #70 路线图 task-plan](../grilling-70-engine-roadmap/task-plan.md), [Grilling #104 实施 issue](https://github.com/verystrongdog/game/issues/105), [Grilling #108 实施前审查 issue](https://github.com/verystrongdog/game/issues/108), [运行时状态模型](../../../rules/skill-tree/%E8%BF%90%E8%A1%8C%E6%97%B6%E7%8A%B6%E6%80%81%E6%A8%A1%E5%9E%8B.md), [situation_primitives.json](../../../../data/connectivity/situation_primitives.json), [核心机制](../../../rules/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md), [数学语言书写规范](../../../conventions/agents/math-language-writing.md)*

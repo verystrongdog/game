@@ -2,7 +2,7 @@
 """
 同步 .scratch/ 本地 issue 文件 ↔ GitHub issues（通过 gh CLI）。
 
-约定（见 docs/agents/issue-tracker.md §GitHub 镜像同步）：
+约定（见 design/conventions/agents/issue-tracker.md §GitHub 镜像同步）：
 - 本地 issue 头部元数据行: > Status: claimed | Type: task | 维度: 管线 | GitHub: #42
 - H1 标题 = GitHub issue 标题；元数据行之后的内容 = GitHub issue body
 - 无 GitHub ref → gh issue create，并把 ref 写回文件元数据行
@@ -10,7 +10,7 @@
 - Status: resolved / closed → gh issue close
 - 幂等：可随时重复运行
 
-用法: python3 tools/sync_issues.py [--dry-run]
+用法: python3 code/tools/sync_issues.py [--dry-run]
 """
 import re
 import subprocess
@@ -19,9 +19,9 @@ import tempfile
 from pathlib import Path
 
 REPO = "verystrongdog/game"
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parent.parent.parent
 
-# Type → GitHub labels 映射（与 docs/agents/triage-labels.md 词表一致）
+# Type → GitHub labels 映射（与 design/conventions/agents/triage-labels.md 词表一致）
 TYPE_LABELS = {
     "task": ["ready-for-agent"],
     "implementation": ["implementation"],
@@ -101,9 +101,9 @@ def write_github_ref(path: Path, num: str) -> None:
     text = path.read_text(encoding="utf-8")
     link = f"https://github.com/{REPO}/issues/{num}"
     if re.search(r"GitHub:", text):
-        text = re.sub(r"GitHub:\s*(?:\[#|#)?\d+(?:\][^|\n>]*)?", f"GitHub: [#{num}]({link})", text)
+        text = re.sub(r"GitHub:\s*(?:\[#|#)?\d+(?:\][^|\n>]*)?", f"GitHub: [#{num}](%7Blink%7D)", text)
     else:
-        text = re.sub(r"(> Status:.*)", rf"\1 | GitHub: [#{num}]({link})", text)
+        text = re.sub(r"(> Status:.*)", rf"\1 | GitHub: [#{num}](%7Blink%7D)", text)
     path.write_text(text, encoding="utf-8")
 
 

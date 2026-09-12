@@ -7,7 +7,7 @@ build_function_labels.py — 从 function_profile 组合推导连接功能语义
 推导 function_label 和 gameplay_labels。空交集 → role:silent。
 
 设计依据: Grilling #26 (GitHub #27) D10/D13
-  规则/技能树系统/脑功能层级模型.md §二十.8/§二十.9
+  design/rules/skill-tree/脑功能层级模型.md §二十.8/§二十.9
 """
 
 import json
@@ -15,7 +15,7 @@ import sys
 from pathlib import Path
 from collections import defaultdict
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parent.parent.parent
 
 
 # ─── 数据加载 ───────────────────────────────────────────────────
@@ -312,7 +312,7 @@ def main():
     # 写入
     print("\n[3/3] 写入...")
     model["_function_labels_applied"] = True
-    model["_function_labels_generated_by"] = "tools/build_function_labels.py"
+    model["_function_labels_generated_by"] = "code/tools/build_function_labels.py"
     model["_function_labels_created"] = "2026-08-07"
 
     output_path = ROOT / "data/connectivity/tripartite_model.json"

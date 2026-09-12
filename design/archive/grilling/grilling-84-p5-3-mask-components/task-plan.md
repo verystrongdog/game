@@ -93,7 +93,7 @@ CombatState.EffectiveM[edge] = clamp(LinkState.M[edge] + Σ药物偏移 + Σ组�
 ```
 疾病重叠判定（§8.10.3）:
   组件 edge ∈ 角色初始疾病已调制的边 → 组件无效（不叠加）
-  判定数据: 疾病目录（实体/疾病目录/——14 角色已引用疾病，边级调制数据）
+  判定数据: 疾病目录（design/entities/diseases/——14 角色已引用疾病，边级调制数据）
   demo: 1-2 角色验证（如 PTSD 角色 + 闪回组件）
 
 拮抗互斥（§8.9.2——接口预留）:
@@ -117,13 +117,13 @@ CombatState.EffectiveM[edge] = clamp(LinkState.M[edge] + Σ药物偏移 + Σ组�
 
 | 文件 | 操作 | 类型 |
 |------|------|------|
-| `src/YouAreNotTheFish.Core/Types/MaskComponent.cs` + `MaskSet.cs` | 新建 | 代码 |
-| `src/YouAreNotTheFish.Core/Engine/MaskBonus.cs` + `MaskOverlap.cs` | 新建 | 代码 |
-| `src/YouAreNotTheFish.Core/Types/AntagonisticPairs.cs` | 新建（接口占位） | 代码 |
-| `src/YouAreNotTheFish.Core/Entity/CombatState.cs` | 改写（EffectiveM 扩展） | 代码 |
-| `src/YouAreNotTheFish.Core.Tests/` | 新增 | 测试 |
-| `src/YouAreNotTheFish.Console/` | 改写 | 代码 |
-| `docs/决策树/` / `docs/设计框架-六维状态.md` / memory | 追加 | 文档 |
+| `code/src/YouAreNotTheFish.Core/Types/MaskComponent.cs` + `MaskSet.cs` | 新建 | 代码 |
+| `code/src/YouAreNotTheFish.Core/Engine/MaskBonus.cs` + `MaskOverlap.cs` | 新建 | 代码 |
+| `code/src/YouAreNotTheFish.Core/Types/AntagonisticPairs.cs` | 新建（接口占位） | 代码 |
+| `code/src/YouAreNotTheFish.Core/Entity/CombatState.cs` | 改写（EffectiveM 扩展） | 代码 |
+| `code/src/YouAreNotTheFish.Core.Tests/` | 新增 | 测试 |
+| `code/src/YouAreNotTheFish.Console/` | 改写 | 代码 |
+| `design/decisions/` / `design/framework/six-dimensions.md` / memory | 追加 | 文档 |
 
 ## 十、数据契约与校验
 
@@ -140,13 +140,13 @@ CombatState.EffectiveM[edge] = clamp(LinkState.M[edge] + Σ药物偏移 + Σ组�
 
 | 校验 | 命令 |
 |------|------|
-| 引擎测试绿 | `dotnet test src/YouAreNotTheFish.Core.Tests` |
+| 引擎测试绿 | `dotnet test code/src/YouAreNotTheFish.Core.Tests` |
 | MaskSet | 槽位/锁死/多面具 单测 |
 | 组件调制 | 叠加/拮抗/冲突 单测 |
 | 同角色加成 | 2-5 件倍率 单测 |
 | 疾病重叠 | edge ∈ 疾病边无效 单测 |
 | 拮抗互斥 | 互斥对拒绝 单测 |
-| 交叉引用 | `python3 tools/validate_cross_refs.py` |
+| 交叉引用 | `python3 code/tools/validate_cross_refs.py` |
 
 ## 十一、验收标准
 
@@ -170,4 +170,4 @@ CombatState.EffectiveM[edge] = clamp(LinkState.M[edge] + Σ药物偏移 + Σ组�
 ---
 
 *创建: 2026-08-16 | 更新: 2026-08-16*
-*关联: [Grilling #70 路线图 task-plan](./../grilling-70-engine-roadmap/task-plan.md), [角色与面具](../../../%E5%AE%9E%E4%BD%93/%E8%A7%92%E8%89%B2%E4%B8%8E%E9%9D%A2%E5%85%B7.md), [Grilling #72 P1a task-plan](./../grilling-72-p1a-skill-context/task-plan.md), [Grilling #73 P1b task-plan](./../grilling-73-p1b-linkstate/task-plan.md), [Grilling #83 P5-2 task-plan](./../grilling-83-p5-2-consumables/task-plan.md), [数学语言书写规范](../../../docs/agents/math-language-writing.md)*
+*关联: [Grilling #70 路线图 task-plan](../grilling-70-engine-roadmap/task-plan.md), [角色与面具](../../../entities/%E8%A7%92%E8%89%B2%E4%B8%8E%E9%9D%A2%E5%85%B7.md), [Grilling #72 P1a task-plan](../grilling-72-p1a-skill-context/task-plan.md), [Grilling #73 P1b task-plan](../grilling-73-p1b-linkstate/task-plan.md), [Grilling #83 P5-2 task-plan](../grilling-83-p5-2-consumables/task-plan.md), [数学语言书写规范](../../../conventions/agents/math-language-writing.md)*

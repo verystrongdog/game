@@ -22,7 +22,7 @@
 import json, math
 from pathlib import Path
 
-DATA_DIR = Path(__file__).parent.parent / "data"
+DATA_DIR = Path(__file__).parent.parent.parent / "data"
 DAMAGE_SCALE = 8.0
 
 # ── C_control 表 (来自 sim_battle_v4.py) ──

@@ -2586,7 +2586,7 @@
    ],
    "laterality_delta": 0.0,
    "is_new": false,
-   "literature": "旧 link_312（PAG→杏仁核，LeDoux 2000 / Paxinos 2004）；RDoC 急性威胁 dPAG；[广泛性焦虑障碍.md](../../实体/疾病目录/广泛性焦虑障碍.md) 防御域↑（日常刺激被解读为威胁）",
+   "literature": "旧 link_312（PAG→杏仁核，LeDoux 2000 / Paxinos 2004）；RDoC 急性威胁 dPAG；[广泛性焦虑障碍.md](../../design/entities/diseases/%E5%B9%BF%E6%B3%9B%E6%80%A7%E7%84%A6%E8%99%91%E9%9A%9C%E7%A2%8D.md) 防御域↑（日常刺激被解读为威胁）",
    "hooks": "行为覆盖①（泛化威胁解读）"
   },
   {
@@ -2603,7 +2603,7 @@
    ],
    "laterality_delta": 0.0,
    "is_new": false,
-   "literature": "旧 link_332（蓝斑→杏仁核 NE，Hansen 2024 fc=0.7）；RDoC 唤醒域；[GAD 思路链](../../实体/疾病目录/广泛性焦虑障碍.md) 蓝斑 NE 持续激活",
+   "literature": "旧 link_332（蓝斑→杏仁核 NE，Hansen 2024 fc=0.7）；RDoC 唤醒域；[GAD 思路链](../../design/entities/diseases/%E5%B9%BF%E6%B3%9B%E6%80%A7%E7%84%A6%E8%99%91%E9%9A%9C%E7%A2%8D.md) 蓝斑 NE 持续激活",
    "hooks": "非线性跳变①（持续警觉锁定）"
   },
   {
@@ -2654,7 +2654,7 @@
    ],
    "laterality_delta": 0.0,
    "is_new": true,
-   "literature": "Guo 2026 岛叶 ALFF↑（共享模式）；[GAD 思路链](../../实体/疾病目录/广泛性焦虑障碍.md) 心跳/呼吸/肌肉紧张被过度解读为危险信号",
+   "literature": "Guo 2026 岛叶 ALFF↑（共享模式）；[GAD 思路链](../../design/entities/diseases/%E5%B9%BF%E6%B3%9B%E6%80%A7%E7%84%A6%E8%99%91%E9%9A%9C%E7%A2%8D.md) 心跳/呼吸/肌肉紧张被过度解读为危险信号",
    "hooks": "行为覆盖②（内感受→威胁闭环）"
   },
   {
@@ -2756,7 +2756,7 @@
    ],
    "laterality_delta": 0.0,
    "is_new": false,
-   "literature": "旧 link_008_L 语义转移（ACC→dlPFC 情绪调节，ENIGMA 5.23 L——无直连，见 §四）；2023 MKDA meta 前额叶对杏仁核调控减弱；[GAD 思路链](../../实体/疾病目录/广泛性焦虑障碍.md) 认知控制↓（< PTSD 严重度）",
+   "literature": "旧 link_008_L 语义转移（ACC→dlPFC 情绪调节，ENIGMA 5.23 L——无直连，见 §四）；2023 MKDA meta 前额叶对杏仁核调控减弱；[GAD 思路链](../../design/entities/diseases/%E5%B9%BF%E6%B3%9B%E6%80%A7%E7%84%A6%E8%99%91%E9%9A%9C%E7%A2%8D.md) 认知控制↓（< PTSD 严重度）",
    "hooks": "行为覆盖④（L5 压制 −30%）"
   },
   {
@@ -5425,7 +5425,7 @@
    ],
    "laterality_delta": 0.0,
    "is_new": false,
-   "literature": "旧 link_332（蓝斑→杏仁核 NE，Hansen 2024 fc=0.7）；[特定恐惧症.md](../../实体/疾病目录/特定恐惧症.md) 唤醒域（刺激触发）",
+   "literature": "旧 link_332（蓝斑→杏仁核 NE，Hansen 2024 fc=0.7）；[特定恐惧症.md](../../design/entities/diseases/%E7%89%B9%E5%AE%9A%E6%81%90%E6%83%A7%E7%97%87.md) 唤醒域（刺激触发）",
    "hooks": "行为覆盖①（恐惧刺激→NE 唤醒）"
   },
   {
@@ -5459,7 +5459,7 @@
    ],
    "laterality_delta": 0.0,
    "is_new": false,
-   "literature": "旧 link_003_L（ACC→海马旁回，ENIGMA 4.89 L）；[特定恐惧症.md](../../实体/疾病目录/特定恐惧症.md) 记忆域恐惧条件化↑",
+   "literature": "旧 link_003_L（ACC→海马旁回，ENIGMA 4.89 L）；[特定恐惧症.md](../../design/entities/diseases/%E7%89%B9%E5%AE%9A%E6%81%90%E6%83%A7%E7%97%87.md) 记忆域恐惧条件化↑",
    "hooks": "行为覆盖①（情境匹配——刺激识别端）"
   },
   {

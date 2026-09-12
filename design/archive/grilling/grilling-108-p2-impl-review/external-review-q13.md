@@ -13,7 +13,7 @@ Q13 定案：**选 A——管线校验器 + 引擎侧消费即断言。**
 
 **第一层：管线侧**
 
-`tools/validate_situation_fids.py`
+`code/tools/validate_situation_fids.py`
 
 固定检查：
 
@@ -82,7 +82,7 @@ Q6 已经锁定 G 是从注册的 27 个 prototype **构造期计算**出来的�
 
 ### Q13 正式定案
 
-> **Q13：选 A。** 实施 `tools/validate_situation_fids.py` 作为管线侧只读校验器，断言 `key_brain_regions` 名称存在于 `region_name_map.regions`，且 `name == functional_id`；输出 27 原型展开后的 37 个去重名称 100% 命中报告，失败非零退出，并自动覆盖未来新增原型。
+> **Q13：选 A。** 实施 `code/tools/validate_situation_fids.py` 作为管线侧只读校验器，断言 `key_brain_regions` 名称存在于 `region_name_map.regions`，且 `name == functional_id`；输出 27 原型展开后的 37 个去重名称 100% 命中报告，失败非零退出，并自动覆盖未来新增原型。
 >
 > SituationSelector 加载全部 27 个 prototype 时，在引擎侧再次断言 `key_brain_regions` 中 fid 均属于已知 fid 集；未知 fid → 加载期异常，不允许静默降级或零注入。
 >

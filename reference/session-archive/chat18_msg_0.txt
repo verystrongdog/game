@@ -1,0 +1,218 @@
+Q7：**①基本确认；②确认主体，但我建议增加一条“图身份/拓扑匹配”作为硬校验，并把最后的连续性/单调性明确降级为诊断而非兼容性硬门。**
+
+这是一个很重要的工程点：**仅检查 `qhat_baseline` 的维度等于 N 不够。**  
+如果两个图都有 1024 个节点，但节点连接关系不同，那么它们的 `τ_char`、壳态乃至 `qhat` 都可能不同。仅凭 `N=1024` 不能证明校准产物属于当前运行时图。
+
+## ① schema 归属：PASS
+
+我同意：
+
+> **#103 定义 `moonState` 查询契约及 calibration artifact schema；#35 是数值生产者，不拥有接口 schema。**
+
+版本采用 `major.minor`：
+
+- **major**：字段删除、字段语义改变、单位/归一化定义改变、消费者需要改变解释方式 → **不兼容**；
+- **minor**：向后兼容的字段增加、元数据增加 → **兼容**。
+
+另外建议不要让 `calibration_version` 和 `schema_version` 混成一个东西：
+
+```text
+schema_version
+    = “这个文件的结构/语义是什么？”
+
+calibration_version
+    = “这是 #35 第几版数值产物？”
+```
+
+两者职责不同，应该分别保存。
+
+---
+
+# ② 五条校验：主体 PASS，但加一条硬校验
+
+我建议最终成为 **6 项**：
+
+### A. λ 定义域覆盖：PASS
+
+校准数据必须覆盖：
+
+\[
+\lambda\in[0,1].
+\]
+
+如果采用离散表 + 插值，必须覆盖两个端点：
+
+```text
+λ = 0
+λ = 1
+```
+
+不能出现“实际表只从 0.01 到 0.99，然后运行时悄悄外推”的情况。
+
+---
+
+### B. q̂ 维度匹配：PASS，但升级为“图身份匹配”
+
+不能只检查：
+
+```text
+len(qhat_baseline) == N
+```
+
+还应该检查校准产物所对应的**图身份**与当前运行时图一致。
+
+至少需要一个稳定的 graph/schema identity，例如：
+
+```text
+graph_id / graph_hash
+N
+node_order_hash
+```
+
+其中真正关键的是：
+
+> **q̂ 的节点顺序必须与运行时节点 ID/索引语义一致。**
+
+所以最终硬校验应该是：
+
+```text
+calibration.graph_identity
+        ==
+runtime.graph_identity
+
+AND
+
+qhat.shape == (N,)
+```
+
+这样即使未来出现：
+
+```text
+G_H v1: 1024 nodes
+G_H v2: 1024 nodes
+```
+
+也不会错误加载 v1 的 q̂ 到 v2。
+
+**这一条我认为应该加入 Q7。**
+
+---
+
+### C. gap(λ) ≥ 0.1 E_c(λ)：PASS
+
+继续保留：
+
+\[
+E_c(\lambda)-E_{th}(\lambda)
+\ge 0.1E_c(\lambda).
+\]
+
+因为这是 E2 已经锁定的结构约束，不是 #103 新增的物理假设。
+
+---
+
+### D. B 族健全性：PASS
+
+保留：
+
+\[
+E_c(\lambda)>0,
+\qquad
+0<E_{th}(\lambda)<E_c(\lambda).
+\]
+
+这里最好明确：**这是硬校验，不只是“看起来合理”。**
+
+---
+
+### E. 连续性/单调性：保留，但属于诊断
+
+这里我不同意把它和前四项放在完全相同的硬门等级。
+
+尤其：
+
+> “\(E_c\) 随 λ 非降”
+
+你现在说的是：
+
+> **若最终标定仍走线性族。**
+
+那就说明它并不是接口契约本身的普适不变量。
+
+因此：
+
+```text
+结构/安全不变量
+→ HARD FAIL
+
+形状/拟合诊断
+→ DIAGNOSTIC
+```
+
+如果未来 #35 得出一个非单调但经过验证的 \(E_c(\lambda)\)，不能因为 #103 当初把“单调”写成硬门，就把合法的新标定产物拒绝掉。
+
+所以我建议记录成：
+
+> **连续性、单调性属于 calibration diagnostic；若当前标定模型预注册要求单调，则该模型内部可将其提升为硬校验，但不属于 P0 通用 schema 不变量。**
+
+---
+
+# 还需要一个很小的补充：数值有效性
+
+虽然可以归到 B 项，但我建议在实现规范里明确检查：
+
+```text
+E_c       finite
+E_th      finite
+qhat      finite
+```
+
+以及不能出现 NaN/Inf。
+
+否则：
+
+```text
+E_c = NaN
+```
+
+可能绕过一些普通的比较逻辑，最后一路进入消费者。
+
+这属于普通的数据完整性校验，不是新的理论约束。
+
+---
+
+# 因此 Q7 最终结构
+
+我建议正式锁成：
+
+| 校验 | 类型 |
+|---|---|
+| schema major version 匹配 | **HARD** |
+| λ ∈ [0,1] 覆盖，含端点 | **HARD** |
+| graph identity / node-order 匹配 + q̂ 维度=N | **HARD** |
+| \(E_c-E_{th}\ge0.1E_c\) | **HARD** |
+| \(E_c>0,\ 0<E_{th}<E_c\) | **HARD** |
+| 数值 finite / 无 NaN、Inf | **HARD** |
+| E_c/E_th 连续性、单调性 | **DIAGNOSTIC**（模型预注册时可升级） |
+
+这样会比原来的“五条”更安全。
+
+## Q7 最终裁决
+
+> **Q7 PASS：`moonState` 查询契约及 calibration artifact schema 由 #103 接口层定义；#35 仅负责按该 schema 产出数值。schema 采用 major.minor 版本语义：major 变更表示破坏兼容，minor 变更表示向后兼容扩展；`schema_version` 与 `calibration_version` 分离，分别表示数据结构/语义版本和具体校准产物版本。**
+>
+> **校准产物启动时必须通过 schema major 匹配及机检校验。硬校验包括：λ∈[0,1] 定义域覆盖（含端点）、当前运行时图身份/拓扑及节点顺序匹配且 q̂ 维度=N、gap(λ)≥0.1E_c(λ)、E_c>0 且 0<E_th<E_c、以及所有数值 finite。连续性/单调性作为诊断项保留；只有当当前标定模型自身预注册要求时才升级为硬校验。**
+>
+> **#103 不定义具体校准数值；校验脚本实现归管线排期。**
+
+**Q7 PASS。**
+
+我特别建议把新增的 **graph identity / node-order hash** 写进 #103，而不要等到 #35 实现时再补。因为这是目前从“数学协议”进入“实际运行时”后，最容易出现、同时也最隐蔽的一类错配。
+
+---
+
+If you want, I can:
+
+- Explain the importance of graph identity in calibration validation
+- Describe a practical procedure for implementing the 6 hard validation checks
+- Discuss implications of keeping continuity/monotonicity as diagnostic only

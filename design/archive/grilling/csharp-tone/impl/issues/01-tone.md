@@ -15,11 +15,11 @@
 
 本 issue 独占修改的文件清单（已 grep 其他进行中 work issue：无冲突；各测试类自带 FindDataDir helper，无需改动共享测试基础设施）：
 
-- `src/YouAreNotTheFish.Core/Engine/ToneUpdater.cs` — 新建
-- `src/YouAreNotTheFish.Core/Engine/CorticalBias.cs` — 新建
-- `src/YouAreNotTheFish.Core.Tests/Engine/ToneUpdaterTests.cs` — 新建（AC-1~8）
-- `src/YouAreNotTheFish.Core.Tests/Engine/CorticalBiasTests.cs` — 新建（AC-9~14, AC-16）
-- `src/YouAreNotTheFish.Core.Tests/Engine/M1RestingTraceTests.cs` — 新建（AC-15）
+- `code/src/YouAreNotTheFish.Core/Engine/ToneUpdater.cs` — 新建
+- `code/src/YouAreNotTheFish.Core/Engine/CorticalBias.cs` — 新建
+- `code/src/YouAreNotTheFish.Core.Tests/Engine/ToneUpdaterTests.cs` — 新建（AC-1~8）
+- `code/src/YouAreNotTheFish.Core.Tests/Engine/CorticalBiasTests.cs` — 新建（AC-9~14, AC-16）
+- `code/src/YouAreNotTheFish.Core.Tests/Engine/M1RestingTraceTests.cs` — 新建（AC-15）
 
 ## 完成标准
 

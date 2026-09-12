@@ -1,0 +1,185 @@
+Q6：**①确认；②确认。Q6 PASS。**
+
+这一问我认为应该严格锁定，因为它实际上决定了 **#102 的实验占位值能不能安全地进入运行时**。你的分层是对的。
+
+### ① 返回结构 + 校准状态 + 消费分级：PASS
+
+正式确认：
+
+```text id=\"w8r4kx\"
+moonState(D) → {
+    phase: λ(D),
+    shell: {
+        E_c(λ),
+        E_th(λ)
+    },
+    qhat_baseline: ℝ^N,
+    calibration_status:
+        PLACEHOLDER | CALIBRATED,
+    calibration_version
+}
+```
+
+其中有三个关键不变量：
+
+**第一，`phase` 是解析确定的。**
+
+\[
+\lambda(D)=\frac{1-\cos(2\pi D/29.5)}2
+\]
+
+不依赖查表，也不存在校准版本问题。
+
+**第二，`shell` 与 `qhat_baseline` 是“基线壳态”，不是当前动力学状态。**
+
+也就是说：
+
+```text id=\"c1q5xh\"
+moonState(D)
+      │
+      └── 基线壳态
+             │
+             ├── E ≈ E_c
+             └── q̂_baseline
+```
+
+而不是当前实际：
+
+```text id=\"zq3j4k\"
+E = E_c + ΔE_local + ΔE_collective
+q̂ = q̂_baseline + Δq̂
+```
+
+后者留给 E3/E4。
+
+**第三，`calibration_status` 必须成为显式状态。**
+
+这点很重要。不能让调用方猜：
+
+> “这个 E_th 看起来像真的，应该可以用了吧？”
+
+---
+
+### PLACEHOLDER 的消费规则：确认
+
+我同意你的分级：
+
+| 消费者 | PLACEHOLDER |
+|---|---|
+| 只读 λ / 月相谓词 | ✅ |
+| 剧情条件判断 | ✅ |
+| 视觉/呈现 | ✅ |
+| 原型/测试 | ⚠️ 必须显式标记 |
+| 正式遭遇强度 | ❌ |
+| 正式敌人强度 | ❌ |
+| 正式情境基线数值 | ❌ |
+| 正式 SAN×月光强度权重 | ❌ |
+
+这里建议把“禁止正式数值消费”理解成**接口契约级禁止**，而不是运行时发现了 PLACEHOLDER 才随便打印一个 warning。
+
+如果正式模式要求 CALIBRATED，而拿到 PLACEHOLDER，应该直接拒绝该消费路径。
+
+---
+
+## ② fail-fast + 不静默回退：PASS
+
+这个我明确赞成。
+
+启动时：
+
+```text id=\"qkqv7h\"
+加载 #35 calibration artifact
+        │
+   schema/version 校验
+        │
+    ┌───┴────┐
+    ▼        ▼
+  PASS     FAIL
+    │        │
+    ▼        ▼
+启动      fail-fast
+```
+
+**绝对不能：**
+
+```text
+校准表缺失
+   ↓
+“那就先用 E2 占位值吧”
+   ↓
+游戏继续运行
+```
+
+因为这样最危险的不是崩溃，而是**产生看起来合理、实际上没有校准依据的数据**。
+
+运行时防御性越界则可以保留你提出的：
+
+> 返回占位 + 告警
+
+因为理论上 `[0,1]` 已由解析 λ 保证，但防御性检查仍然值得存在。
+
+不过这里我建议进一步区分：
+
+- **正常 `D ∈ ℕ₀` → λ 必在 `[0,1]`**；
+- **实现 bug 导致 λ 越界 → diagnostic/error path**；
+- 不应把真正的内部错误伪装成“正常 PLACEHOLDER”。
+
+因此“返回占位 + 告警”可以保留，但**必须留下可观测错误信号**，不能让调用方把它当正常状态。
+
+---
+
+## ③ 扰动动力学量不进 `moonState`：PASS
+
+这一点必须锁死。
+
+接口只回答：
+
+> **“在当前 D 下，系统的月相基线是什么？”**
+
+它不回答：
+
+> **“此刻经过事件扰动以后，系统实际处于什么能量状态？”**
+
+所以：
+
+```text id=\"4i8j2m\"
+              moonState(D)
+                   │
+                   ▼
+             基线壳态
+                   │
+          ┌────────┴────────┐
+          ▼                 ▼
+      E_c / E_th        q̂_baseline
+          
+                   ↓
+             E3 / E4 动力学
+                   ↓
+       F_local / F_collective
+                   ↓
+           实际瞬态状态
+```
+
+这样 `moonState` 就不会逐渐变成一个“万能世界状态查询”。
+
+---
+
+# Q6 最终裁决
+
+> **Q6 PASS：`moonState(D)` 返回解析月相 `λ(D)`、月相对应的基线壳参数 `E_c(λ)/E_th(λ)`、空间图节点上的 `qhat_baseline`，以及显式的 `calibration_status ∈ {PLACEHOLDER, CALIBRATED}` 与 `calibration_version`。PLACEHOLDER 仅允许原型/测试及不依赖校准数值的只读、呈现、剧情谓词消费；正式强度/难度/情境基线/SAN×月光权重等数值消费必须要求 CALIBRATED。**
+>
+> **校准产物启动时执行 schema/version 校验；缺失或版本不匹配直接 fail-fast，禁止静默回退 E2 占位值。运行时越界仅作为防御性错误路径处理并留下告警/诊断信号。`moonState` 始终只表示月相基线壳态，不携带 E3/E4 的 F_local/F_collective 瞬态能量偏移或 q̂ 增强。**
+
+**Q6 PASS。**
+
+到这里，#103 已经不仅是“时间映射协议”，而是把**时间 → 月相 → 基线壳态 → 消费端**的接口边界完整封住了。
+
+下一问我会优先审 **Q7：`calibration_version` / schema 版本究竟由谁定义，以及 #35 校准产物与 `moonState` 的兼容性契约**。这是 Q6 中唯一还没有完全落地的工程接口问题。
+
+---
+
+If you want, I can:
+
+- 详细展开Q7审查calibration_version及兼容性契约内容
+- 示例说明如何在运行时检测与处理PLACEHOLDER状态
+- 探讨如何将Q6策略应用于其他类似状态接口设计

@@ -22,7 +22,7 @@
 | 不覆盖 | SpeedWeights/SpeedComponents（plan §4.5 → step 7）；s_pending、CombatState、TurnManager（step 10）；14 事件 kind 枚举与 δ 派生逻辑（step 9，本 spec §五仅列映射约束） |
 | 前置依赖 | csharp-data-layer ✅（24/24 绿）；[csharp-engine plan v1.1](csharp-engine-roadmap.md) sign-off ✅ 2026-08-13 |
 | 阻塞 | step 3-9 全部引擎模块（类型契约未落地则无法编译） |
-| 引用源 | [运行时状态模型](../../规则/技能树系统/运行时状态模型.md)、[回合战斗流程](../../规则/回合战斗流程.md)、[核心机制](../../规则/核心机制.md)、[基础行动设计](../../规则/技能树系统/操作层/基础行动设计.md)、框架 memory `code-framework-plan-2026-08-06` §3.5 |
+| 引用源 | [运行时状态模型](../../rules/skill-tree/%E8%BF%90%E8%A1%8C%E6%97%B6%E7%8A%B6%E6%80%81%E6%A8%A1%E5%9E%8B.md)、[回合战斗流程](../../rules/%E5%9B%9E%E5%90%88%E6%88%98%E6%96%97%E6%B5%81%E7%A8%8B.md)、[核心机制](../../rules/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md)、[基础行动设计](../../rules/skill-tree/operations/%E5%9F%BA%E7%A1%80%E8%A1%8C%E5%8A%A8%E8%AE%BE%E8%AE%A1.md)、框架 memory `code-framework-plan-2026-08-06` §3.5 |
 
 ---
 
@@ -174,7 +174,7 @@ L1 聚合 record——5 个数据文件各对应一个已交付 record（决策 
 | SituationPrimitives | SituationPrimitives | connectivity/situation_primitives.json | 同上 |
 | SignalTypes | SignalTypesCatalog | signal_types.json | 同上 |
 
-字段类型名与 Data 层已交付 record 一致（已核对 `src/YouAreNotTheFish.Core/Data/` 实际声明；实现时如发现漂移按 L2 修正回路处理）。
+字段类型名与 Data 层已交付 record 一致（已核对 `code/src/YouAreNotTheFish.Core/Data/` 实际声明；实现时如发现漂移按 L2 修正回路处理）。
 
 ---
 
@@ -330,4 +330,4 @@ instance record + `static CalibrationConfig Default`（决策 D3——plan §七
 ---
 
 *创建: 2026-08-13 | 更新: 2026-08-13 | 版本: v1.1*
-*关联: [csharp-engine plan v1.1](csharp-engine-roadmap.md), [任务issue 01](../../设计归档/grilling/csharp-engine-types/design/issues/01-types-spec.md), [运行时状态模型](../../规则/技能树系统/运行时状态模型.md), [回合战斗流程](../../规则/回合战斗流程.md), [核心机制](../../规则/核心机制.md)*
+*关联: [csharp-engine plan v1.1](csharp-engine-roadmap.md), [任务issue 01](../../archive/grilling/csharp-engine-types/design/issues/01-types-spec.md), [运行时状态模型](../../rules/skill-tree/%E8%BF%90%E8%A1%8C%E6%97%B6%E7%8A%B6%E6%80%81%E6%A8%A1%E5%9E%8B.md), [回合战斗流程](../../rules/%E5%9B%9E%E5%90%88%E6%88%98%E6%96%97%E6%B5%81%E7%A8%8B.md), [核心机制](../../rules/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md)*

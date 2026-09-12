@@ -17,14 +17,14 @@
 
 | # | 文献 | 类型 | 关键数据点（→ 病理边用途） |
 |---|------|------|--------------------------|
-| 1 | **Hibar et al. (2016)** ENIGMA BD（[疾病-脑区链路映射-文献数据源.md](../../../%E5%8F%82%E8%80%83/%E6%96%87%E7%8C%AE/%E7%96%BE%E7%97%85-%E8%84%91%E5%8C%BA%E9%93%BE%E8%B7%AF%E6%98%A0%E5%B0%84-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md) §3.2） | 结构 meta | BD-I：**海马↓ d=−0.203、丘脑↓（显著，效应量<精分）**、侧脑室↑ d=+0.251 → e11/e12 结构层负偏移的 ENIGMA 依据（结构证据 → 三体边解耦沉默） |
+| 1 | **Hibar et al. (2016)** ENIGMA BD（[疾病-脑区链路映射-文献数据源.md](../../../../reference/literature/%E7%96%BE%E7%97%85-%E8%84%91%E5%8C%BA%E9%93%BE%E8%B7%AF%E6%98%A0%E5%B0%84-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md) §3.2） | 结构 meta | BD-I：**海马↓ d=−0.203、丘脑↓（显著，效应量<精分）**、侧脑室↑ d=+0.251 → e11/e12 结构层负偏移的 ENIGMA 依据（结构证据 → 三体边解耦沉默） |
 | 2 | **Guo et al. (2026)** *Transl Psychiatry*（254 实验, 10,456 患者，跨诊断 ALFF meta） | 静息态 ALFF meta | BD 特异性偏离 = **ALFF↑ 双侧 IFG / ACC-mPFC / 纹状体 / 尾状核 + ALFF↓ 楔前叶**（文献数据源 §2.3）→ e04（尾状核）/e14（楔前叶）方向锚 + 奖赏域边群（e01/e02/e15/e16）的纹状体侧证据 |
 | 3 | **锂盐保护海马体积**（frontmatter 文献；文献数据源 §七 双相） | 临床/结构 | 锂盐（BD 一线治疗）逆转/保护海马体积 → e11 结构负偏移的**治疗锚**：海马保护 = 治疗缓解的结构基础（与 e11 挂接） |
 | 4 | **奖赏超敏模型**（Robinson & Berridge 1993 incentive sensitization，NPC AI §4.2「敏化-奖励」；Damme et al. 2022 mOFC/NAcc 体积↑，BSD 谱系共享） | 理论 + 结构 | 躁狂极奖赏敏感性↑↑ → e01/e16 躁狂极正偏移的机制锚（冲动趋近/欣快/目标驱动）；抑郁极镜像 = 快感缺失（文献数据源 §七 MDD：VTA→NAcc 解耦） |
 
 **辅助锚（方向/范围补充）**：
 
-- **NPC AI §5.2**（[NPC AI 行为模型.md](../../../规则/技能树系统/NPC AI 行为模型.md)）——「躁狂 = 敏化-奖励 + 抑制不足：VTA→NAcc ↑, dlPFC 抑制 ↓」→ e01 躁狂极 + e08/e09 解耦的结构基础；§6.3 Boss 阶段切换 = 相位状态机落点。
+- **NPC AI §5.2**（[NPC AI 行为模型.md](../../../rules/skill-tree/NPC%20AI%20%E8%A1%8C%E4%B8%BA%E6%A8%A1%E5%9E%8B.md)）——「躁狂 = 敏化-奖励 + 抑制不足：VTA→NAcc ↑, dlPFC 抑制 ↓」→ e01 躁狂极 + e08/e09 解耦的结构基础；§6.3 Boss 阶段切换 = 相位状态机落点。
 - **RDoC v4**——正性效价（奖赏评估/预期：OFC、腹侧纹状体、VTA/SN、外侧缰核；奖赏学习：VTA/SN→腹/背侧纹状体）；唤醒/调节（睡眠：蓝斑、食欲素——双相相关）→ e01/e02/e05 回路级锚。
 - **旧链路注册表（link_registry.json，⚠️ 已废弃 2026-08-07）**——link_336/344/338/332/327/008_L/082_L/003_L/155_L 的方向/量级作为语义继承源，见 §四。
 - **左右脑偏侧化-文献数据源.md §八**——BD 无稳健偏侧证据（对照 PTSD 左偏源自 Guo 2026 左杏仁核/海马；BD 的 ALFF 为双侧）→ laterality_delta 全部取 0（§6.5 规则 2；#92 原则偏侧仅装饰层，不做核心机制）。
@@ -214,4 +214,4 @@ NPC AI §5.2：**躁狂 = 敏化-奖励 + 抑制不足**（VTA→NAcc ↑, dlPFC
 ---
 
 *创建: 2026-08-21 | 更新: 2026-08-21*
-*关联: [grilling-88.md](grilling-88.md), [ptsd-pilot.md](ptsd-pilot.md), [双相障碍I型](../../../%E5%AE%9E%E4%BD%93/%E7%96%BE%E7%97%85%E7%9B%AE%E5%BD%95/%E5%8F%8C%E7%9B%B8%E9%9A%9C%E7%A2%8DI%E5%9E%8B.md), [双相障碍II型](../../../%E5%AE%9E%E4%BD%93/%E7%96%BE%E7%97%85%E7%9B%AE%E5%BD%95/%E5%8F%8C%E7%9B%B8%E9%9A%9C%E7%A2%8DII%E5%9E%8B.md), [NPC AI 行为模型](../../../规则/技能树系统/NPC AI 行为模型.md) §4/§5.2/§6.3, [偏侧化架构](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E5%81%8F%E4%BE%A7%E5%8C%96%E6%9E%B6%E6%9E%84.md) §四/§八, [脑功能层级模型](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E8%84%91%E5%8A%9F%E8%83%BD%E5%B1%82%E7%BA%A7%E6%A8%A1%E5%9E%8B.md) §十八, [疾病-脑区链路映射-文献数据源](../../../%E5%8F%82%E8%80%83/%E6%96%87%E7%8C%AE/%E7%96%BE%E7%97%85-%E8%84%91%E5%8C%BA%E9%93%BE%E8%B7%AF%E6%98%A0%E5%B0%84-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md) §2.3/§3.2/§七, [角色与面具](../../../%E5%AE%9E%E4%BD%93/%E8%A7%92%E8%89%B2%E4%B8%8E%E9%9D%A2%E5%85%B7.md) §8.8, [tripartite_model.json](../../../data/connectivity/tripartite_model.json)*
+*关联: [grilling-88.md](../disease-pilots/grilling-88.md), [ptsd-pilot.md](../disease-pilots/ptsd-pilot.md), [双相障碍I型](../../../entities/diseases/%E5%8F%8C%E7%9B%B8%E9%9A%9C%E7%A2%8DI%E5%9E%8B.md), [双相障碍II型](../../../entities/diseases/%E5%8F%8C%E7%9B%B8%E9%9A%9C%E7%A2%8DII%E5%9E%8B.md), [NPC AI 行为模型](../../../rules/skill-tree/NPC%20AI%20%E8%A1%8C%E4%B8%BA%E6%A8%A1%E5%9E%8B.md) §4/§5.2/§6.3, [偏侧化架构](../../../rules/skill-tree/%E5%81%8F%E4%BE%A7%E5%8C%96%E6%9E%B6%E6%9E%84.md) §四/§八, [脑功能层级模型](../../../rules/skill-tree/%E8%84%91%E5%8A%9F%E8%83%BD%E5%B1%82%E7%BA%A7%E6%A8%A1%E5%9E%8B.md) §十八, [疾病-脑区链路映射-文献数据源](../../../../reference/literature/%E7%96%BE%E7%97%85-%E8%84%91%E5%8C%BA%E9%93%BE%E8%B7%AF%E6%98%A0%E5%B0%84-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md) §2.3/§3.2/§七, [角色与面具](../../../entities/%E8%A7%92%E8%89%B2%E4%B8%8E%E9%9D%A2%E5%85%B7.md) §8.8, [tripartite_model.json](../../../../data/connectivity/tripartite_model.json)*

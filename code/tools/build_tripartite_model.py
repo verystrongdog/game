@@ -23,10 +23,10 @@ build_tripartite_model.py — 三体神经模型生成器
        由 build_function_labels.py 追加；重跑后必须重跑该脚本（两步管线）。
     2. privileged_pathways（112 条 curated whitelist）——手工维护，生成器不产出；
        重跑后此数据会丢失，须从 git 恢复。
-  完整性校验：python3 tools/validate_tripartite_annotations.py（fail-fast）。
+  完整性校验：python3 code/tools/validate_tripartite_annotations.py（fail-fast）。
 
 设计依据: Grilling #26 (GitHub #27) — 三体神经模型，16 项决策
-  规则/技能树系统/脑功能层级模型.md §二十
+  design/rules/skill-tree/脑功能层级模型.md §二十
 """
 
 import json
@@ -36,7 +36,7 @@ from pathlib import Path
 from collections import defaultdict
 from itertools import combinations
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parent.parent.parent
 
 # ─── 常量 ───────────────────────────────────────────────────────
 
@@ -752,8 +752,8 @@ def main():
     # 组装模型
     model = {
         "_description": "三体神经模型 — 三种通信原语替代旧 364 链路 pairwise 有向模型。Grilling #26 (2026-08-07)。",
-        "_design_doc": "规则/技能树系统/脑功能层级模型.md §二十",
-        "_generated_by": "tools/build_tripartite_model.py",
+        "_design_doc": "design/rules/skill-tree/脑功能层级模型.md §二十",
+        "_generated_by": "code/tools/build_tripartite_model.py",
         "_created": "2026-08-07",
         "graph_nodes": {
             dk: {

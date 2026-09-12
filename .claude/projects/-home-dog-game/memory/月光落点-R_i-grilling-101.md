@@ -33,4 +33,4 @@ s_total_j = s_事件_j + s_env_j + m_field_j（三通道输入层加法，WC 非
 - r、α_s 正式数值 → #35（PLACEHOLDER 消费分级）
 - 幻觉调制/信念胜利路径等未来语义 → 走 Q2 互斥分区新增
 
-*关联: docs/决策树/ #101 条目, 规则/时空结构数学框架.md §11.5, data/term_registry.json (R/神经落点/s_env)*
+*关联: design/decisions/ #101 条目, design/rules/时空结构数学框架.md §11.5, data/term_registry.json (R/神经落点/s_env)*

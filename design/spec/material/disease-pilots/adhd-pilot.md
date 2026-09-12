@@ -1,6 +1,6 @@
 # ADHD 重映射试点
 
-> 26 病重映射第二批试点（模板：[ptsd-pilot.md](ptsd-pilot.md) §六 字段规范）。本文件把旧 `link_NNN` 链路表（挂已废弃 link_registry.json）重映射为三体模型上的 **18 条病理边（全部命中 `tripartite_model.json` 现有边，0 条「病理新增」）**。核心病理 = **dlPFC/ACC 发育性解耦（非受损而是成熟延迟）+ DMN 干扰（FPN→DMN 抑制腿失连 + DMN 核心过度活跃）+ NE 调节失灵（波动非方向性）+ 延迟折扣率↑**。ENIGMA 效应量小（d < 0.25）→ 全表 m 量级偏小。档位过滤 B′：CGI-S 3-6 → **轻/中档可用、无重档**（重档值并入中档）。7 参数推导与标签组合交叉验证：§5.2 无 ADHD 行，设计建议「抑制不足 + 敏化-奖励」近似，发育性解耦 + NE 波动超出 6 标签表达 → **参数直调方案（NPC AI §4.3 第 3 级粒度）**，建议 §5.2 新增行。
+> 26 病重映射第二批试点（模板：[ptsd-pilot.md](../disease-pilots/ptsd-pilot.md) §六 字段规范）。本文件把旧 `link_NNN` 链路表（挂已废弃 link_registry.json）重映射为三体模型上的 **18 条病理边（全部命中 `tripartite_model.json` 现有边，0 条「病理新增」）**。核心病理 = **dlPFC/ACC 发育性解耦（非受损而是成熟延迟）+ DMN 干扰（FPN→DMN 抑制腿失连 + DMN 核心过度活跃）+ NE 调节失灵（波动非方向性）+ 延迟折扣率↑**。ENIGMA 效应量小（d < 0.25）→ 全表 m 量级偏小。档位过滤 B′：CGI-S 3-6 → **轻/中档可用、无重档**（重档值并入中档）。7 参数推导与标签组合交叉验证：§5.2 无 ADHD 行，设计建议「抑制不足 + 敏化-奖励」近似，发育性解耦 + NE 波动超出 6 标签表达 → **参数直调方案（NPC AI §4.3 第 3 级粒度）**，建议 §5.2 新增行。
 
 ## 目录
 
@@ -17,7 +17,7 @@
 
 | # | 文献 | 类型 | 关键数据点（→ 病理边用途） |
 |---|------|------|--------------------------|
-| 1 | **ENIGMA ADHD mega-analysis**（[疾病-脑区链路映射-文献数据源.md](../../../%E5%8F%82%E8%80%83/%E6%96%87%E7%8C%AE/%E7%96%BE%E7%97%85-%E8%84%91%E5%8C%BA%E9%93%BE%E8%B7%AF%E6%98%A0%E5%B0%84-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md) §七 ADHD） | 结构 mega | **岛叶 + 内嗅皮层 + 颞中回表面积↓（d=−0.07~−0.24）**；杏仁核体积↓；额顶网络表面积↓（d=−0.08~−0.13，外化障碍特异）→ e11/e13/e14 结构锚 + e03 |
+| 1 | **ENIGMA ADHD mega-analysis**（[疾病-脑区链路映射-文献数据源.md](../../../../reference/literature/%E7%96%BE%E7%97%85-%E8%84%91%E5%8C%BA%E9%93%BE%E8%B7%AF%E6%98%A0%E5%B0%84-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md) §七 ADHD） | 结构 mega | **岛叶 + 内嗅皮层 + 颞中回表面积↓（d=−0.07~−0.24）**；杏仁核体积↓；额顶网络表面积↓（d=−0.08~−0.13，外化障碍特异）→ e11/e13/e14 结构锚 + e03 |
 | 2 | **Norman et al. (2016)** *Biol Psychiatry*（dlPFC 成熟延迟） | 纵向影像 | 认知控制任务中 dlPFC **低激活——发育延迟而非受损** → 解耦沉默为主病理类型（e04/e05/e06） |
 | 3 | **DMN 干扰假说**（Sonuga-Barke & Castellanos 2007；文献数据源 §七 ADHD「DMN 干扰——任务中 DMN 抑制不足」） | 功能假说 | 任务负激活缺失 → FPN→DMN 抑制腿失连（e01）+ DMN 核心过度活跃（e17）+ DMN-FPN 反相关不足（e03） |
 | 4 | **延迟折扣率↑**（文献数据源 §七 ADHD「奖赏」） | 奖赏机制 | 腹侧纹状体对**即时奖赏过度敏感**（→ e15）+ dlPFC 对**延迟奖赏调控不足**（→ e16） |
@@ -210,4 +210,4 @@
 ---
 
 *创建: 2026-08-21 | 更新: 2026-08-21*
-*关联: [grilling-88.md](grilling-88.md), [ptsd-pilot.md](ptsd-pilot.md), [注意缺陷多动障碍](../../../%E5%AE%9E%E4%BD%93/%E7%96%BE%E7%97%85%E7%9B%AE%E5%BD%95/%E6%B3%A8%E6%84%8F%E7%BC%BA%E9%99%B7%E5%A4%9A%E5%8A%A8%E9%9A%9C%E7%A2%8D.md), [NPC AI 行为模型](../../../规则/技能树系统/NPC AI 行为模型.md) §4.2/§4.3/§5.2, [偏侧化架构](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E5%81%8F%E4%BE%A7%E5%8C%96%E6%9E%B6%E6%9E%84.md) §四/§八, [脑功能层级模型](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E8%84%91%E5%8A%9F%E8%83%BD%E5%B1%82%E7%BA%A7%E6%A8%A1%E5%9E%8B.md) §二十, [疾病-脑区链路映射-文献数据源](../../../%E5%8F%82%E8%80%83/%E6%96%87%E7%8C%AE/%E7%96%BE%E7%97%85-%E8%84%91%E5%8C%BA%E9%93%BE%E8%B7%AF%E6%98%A0%E5%B0%84-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md) §3.1/§七, [tripartite_model.json](../../../data/connectivity/tripartite_model.json), [link_registry.json](../../../data/connectivity/link_registry.json)（⚠️ 已废弃 2026-08-07）*
+*关联: [grilling-88.md](../disease-pilots/grilling-88.md), [ptsd-pilot.md](../disease-pilots/ptsd-pilot.md), [注意缺陷多动障碍](../../../entities/diseases/%E6%B3%A8%E6%84%8F%E7%BC%BA%E9%99%B7%E5%A4%9A%E5%8A%A8%E9%9A%9C%E7%A2%8D.md), [NPC AI 行为模型](../../../rules/skill-tree/NPC%20AI%20%E8%A1%8C%E4%B8%BA%E6%A8%A1%E5%9E%8B.md) §4.2/§4.3/§5.2, [偏侧化架构](../../../rules/skill-tree/%E5%81%8F%E4%BE%A7%E5%8C%96%E6%9E%B6%E6%9E%84.md) §四/§八, [脑功能层级模型](../../../rules/skill-tree/%E8%84%91%E5%8A%9F%E8%83%BD%E5%B1%82%E7%BA%A7%E6%A8%A1%E5%9E%8B.md) §二十, [疾病-脑区链路映射-文献数据源](../../../../reference/literature/%E7%96%BE%E7%97%85-%E8%84%91%E5%8C%BA%E9%93%BE%E8%B7%AF%E6%98%A0%E5%B0%84-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md) §3.1/§七, [tripartite_model.json](../../../../data/connectivity/tripartite_model.json), [link_registry.json](../../../../data/connectivity/link_registry.json)（⚠️ 已废弃 2026-08-07）*

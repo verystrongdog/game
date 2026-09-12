@@ -51,13 +51,13 @@ GitHub: [#117](https://github.com/verystrongdog/game/issues/117)
 
 ## 受影响文件（预判）
 
-- `参考/记忆生成器理论评审-*.md`（若产出）
-- `docs/决策树/`（本 issue）
+- `reference/记忆生成器理论评审-*.md`（若产出）
+- `design/decisions/`（本 issue）
 - `data/term_registry.json`（符号/术语候选——#40 先例学术轨术语已入库）
 
 ---
 *创建: 2026-09-06 | 状态: open*
-*输入: [chatX_transcript.txt](../../../%E5%8F%82%E8%80%83/%E4%BC%9A%E8%AF%9D%E5%AD%98%E6%A1%A3/chatX_transcript.txt) | 关联: [#116](https://github.com/verystrongdog/game/issues/116)*
+*输入: [chatX_transcript.txt](../../../../reference/session-archive/chatX_transcript.txt) | 关联: [#116](https://github.com/verystrongdog/game/issues/116)*
 
 ## 决策记录
 
@@ -82,8 +82,8 @@ GitHub: [#117](https://github.com/verystrongdog/game/issues/117)
 **裁决**：采纳终稿——自评表逐行裁决见参考文档 §七（r_t/q_t 撤回、δ_t 升格、s_t sim 未定、R/G 框架成立、V1 条件成立、其余成立）；总可行性分档 = ①结构层可行（骨架采纳）②价值层撤回（决策论规范 + 代理量落地）③缺口排序（ρ > π_ψ > f_θ > s_t sim；U/G_W 理论边界）。最终回答：记忆生成器能（限定版），从零生成一生不能。
 
 ## Step 4 落盘（2026-09-06）
-- 参考/记忆生成器理论-可行性评审-v1.md（新建）
-- docs/决策树/（追加本 issue 条目）
+- reference/记忆生成器理论-可行性评审-v1.md（新建）
+- design/decisions/（追加本 issue 条目）
 - term_registry 候选清单 → 待用户确认
 - 一致性清扫 → 待执行
 - 六维状态/项目总览：学术轨不入正典，无同步项

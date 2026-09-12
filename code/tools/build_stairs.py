@@ -11,7 +11,7 @@
 用法:
   1. 打开 Blender → Scripting 工作区 → 打开此文件 → Run Script
   2. 或命令行:
-     blender --background --python tools/build_stairs.py
+     blender --background --python code/tools/build_stairs.py
 
 生成物:
   - 集合 "楼梯" 下 13 阶踏步

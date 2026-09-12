@@ -113,4 +113,4 @@ A4 的 expected = 2×(1+motivation) − 忍耐被动。忍耐被动常量值 −
 
 ---
 *创建: 2026-08-13 | 更新: 2026-08-13*
-*关联: [plan §4.7](../../../../../规格/引擎/csharp-engine-roadmap.md)*
+*关联: [plan §4.7](../../../../../spec/engine/csharp-engine-roadmap.md)*

@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """生成冲突战模拟器 HTML v2 — 从 data/*.json 卡池生成独立 HTML 文件.
 
-用法: python3 tools/gen_battle_html.py > 冲突战模拟器_v2.html
+用法: python3 code/tools/gen_battle_html.py > 冲突战模拟器_v2.html
       然后直接在浏览器中打开该文件.
 """
 
 import json, sys
 from pathlib import Path
 
-DATA = Path(__file__).parent.parent / "data"
+DATA = Path(__file__).parent.parent.parent / "data"
 
 def load(name):
     with open(DATA / name, encoding='utf-8') as f:

@@ -26,7 +26,7 @@
 ```text
 hospital-level-design/
   README.md
-  docs/
+  design/framework/
   references/
     raw/
     processed/
@@ -36,13 +36,13 @@ hospital-level-design/
   plans/
 ```
 
-### `docs/`
+### `design/framework/`
 
 项目说明、交接文档、资产清单、规则约定和阶段计划。
 
 当前文档：
 
-- [00-医院场地建模交接.md](./docs/00-%E5%8C%BB%E9%99%A2%E5%9C%BA%E5%9C%B0%E5%BB%BA%E6%A8%A1%E4%BA%A4%E6%8E%A5.md)
+- [00-医院场地建模交接.md](docs/00-%E5%8C%BB%E9%99%A2%E5%9C%BA%E5%9C%B0%E5%BB%BA%E6%A8%A1%E4%BA%A4%E6%8E%A5.md)
 
 ### `references/raw/`
 

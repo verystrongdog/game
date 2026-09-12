@@ -13,41 +13,41 @@
 
 游戏 = 规则 × 实体 × 空间 × 事件，通过呈现交付，由管线生产。仓库按此六维组织设计文档，并配套结构化数据（脑区/三体神经模型/情境原型）、数值模拟脚本与 C# 逻辑引擎。
 
-**当前阶段**：纸面设计 + 数值模拟验证 + 引擎核心实施（战斗/情境/NPC salience 已跑通，技能树与实体系统按 P 系列批次推进）。详见 [docs/设计框架-六维状态.md](docs/设计框架-六维状态.md)。
+**当前阶段**：纸面设计 + 数值模拟验证 + 引擎核心实施（战斗/情境/NPC salience 已跑通，技能树与实体系统按 P 系列批次推进）。详见 [design/framework/six-dimensions.md](design/framework/six-dimensions.md)。
 
 ## 仓库导航
 
 | 路径 | 内容 |
 |------|------|
-| [docs/](docs/) | 全局检查点：六维状态路由表、六维度索引、决策树（grilling 历史）、agent 文档 |
-| [项目总览.md](项目总览.md) | 项目入口总览 |
-| [规则/](规则/) | 维度文档：核心机制（脑区链路/战斗结算/SAN）、回合流程、技能树系统、时空结构数学框架 |
-| [实体/](实体/) | 维度文档：角色与面具、敌人与事件、疾病目录、武器装备、消耗品 |
-| [空间/](空间/) | 维度文档：空间与关卡设计、治疗中心建模 |
-| [事件/](事件/) | 维度文档：游戏循环、世界观与叙事、任务/剧情/奖励系统、NPC 人生生成器 |
-| [呈现/](呈现/) | 维度文档：战斗界面布局（其余待建设） |
-| [管线/](管线/) | 维度文档（预烘焙管线已废弃，引擎路线图见 .scratch） |
+| [design/framework/](design/framework) | 全局检查点：六维状态路由表、六维度索引、决策树（grilling 历史）、agent 文档 |
+| [design/README.md](design/README.md) | 项目入口总览 |
+| [design/rules/](design/rules) | 维度文档：核心机制（脑区链路/战斗结算/SAN）、回合流程、技能树系统、时空结构数学框架 |
+| [design/entities/](design/entities) | 维度文档：角色与面具、敌人与事件、疾病目录、武器装备、消耗品 |
+| [design/space/](design/space) | 维度文档：空间与关卡设计、治疗中心建模 |
+| [design/events/](design/events) | 维度文档：游戏循环、世界观与叙事、任务/剧情/奖励系统、NPC 人生生成器 |
+| [design/presentation/](design/presentation) | 维度文档：战斗界面布局（其余待建设） |
+| [design/pipeline/](design/pipeline) | 维度文档（预烘焙管线已废弃，引擎路线图见 .scratch） |
 | [data/](data/README.md) | 结构化数据：脑区、三体神经模型、情境原型、病理边、调制参数（JSON） |
-| [src/](src/) | C# 逻辑引擎：`YouAreNotTheFish.Core`（.NET 8 库）+ `.Console` harness + 测试 |
-| [sim/](sim/) | Python 数值模拟验证脚本 |
-| [tools/](tools/) | 数据生成/校验工具脚本（validate_*.py 等） |
-| [参考/](参考/) | 研究与参考、灵感收件箱、学术文献、素材索引 |
+| [code/src/](code/src) | C# 逻辑引擎：`YouAreNotTheFish.Core`（.NET 8 库）+ `.Console` harness + 测试 |
+| [code/sim/](code/sim) | Python 数值模拟验证脚本 |
+| [code/tools/](code/tools) | 数据生成/校验工具脚本（validate_*.py 等） |
+| [reference/](reference) | 研究与参考、灵感收件箱、学术文献、素材索引 |
 | [.scratch/](.scratch/) | grilling/issue-tracker 工作区（决策记录入库；外审存档/素材正文等过程物仅本地，不入库） |
-| 垃圾桶/ | 已废弃内容归档（保留为 git 历史语义，活跃文档不引用） |
+| design/archive/trash/ | 已废弃内容归档（保留为 git 历史语义，活跃文档不引用） |
 
 ## 入口文档
 
-- [docs/设计框架-六维状态.md](docs/设计框架-六维状态.md) — 六维路由表 + 全局 grilling 优先级（新设计先在此定位）
-- [docs/决策树/](docs/%E5%86%B3%E7%AD%96%E6%A0%91/README.md) — 所有 grilling 会话的决策分叉记录（查询历史决策）
+- [design/framework/six-dimensions.md](design/framework/six-dimensions.md) — 六维路由表 + 全局 grilling 优先级（新设计先在此定位）
+- [design/decisions/](design/decisions/README.md) — 所有 grilling 会话的决策分叉记录（查询历史决策）
 - [CLAUDE.md](CLAUDE.md) — AI 协作规范（术语表/触发规则/引用铁律）
-- [项目总览.md](项目总览.md) — 项目总入口
+- [design/README.md](design/README.md) — 项目总入口
 
 ## 维护约定
 
-- 设计讨论按六维定位，决策写入设计文档 + [docs/决策树/](docs/%E5%86%B3%E7%AD%96%E6%A0%91/README.md) + 注册表 `data/term_registry.json`
+- 设计讨论按六维定位，决策写入设计文档 + [design/decisions/](design/decisions/README.md) + 注册表 `data/term_registry.json`
 - 仓库过程物（外部 AI 会话存档、书籍全文、运行日志）**不入库**：`.gitignore` 已排除，磁盘保留
 - Git 提交信息用中文，按主题小步提交
 
 ---
 *创建: 2026-09-06*
-*关联: [项目总览](项目总览.md), [docs/设计框架-六维状态.md](docs/设计框架-六维状态.md), [CLAUDE.md](CLAUDE.md)*
+*关联: [项目总览](design/README.md), [design/framework/six-dimensions.md](design/framework/six-dimensions.md), [CLAUDE.md](CLAUDE.md)*

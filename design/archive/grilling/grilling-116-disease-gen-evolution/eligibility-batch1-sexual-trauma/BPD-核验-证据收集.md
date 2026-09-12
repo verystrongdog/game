@@ -7,7 +7,7 @@
 |----|-----|
 | Type | 资格核验批次 1（证据收集，子代理产出，待用户裁决） |
 | 归属 | [#116](https://github.com/verystrongdog/game/issues/116) 配额表驱动核验批次（平凡实例化裁定 D6） |
-| 前置 | #113 资格层（Eligibility(d)/原子三值/G1-G4）+ [批次总览](总览.md) |
+| 前置 | #113 资格层（Eligibility(d)/原子三值/G1-G4）+ [批次总览](%E6%80%BB%E8%A7%88.md) |
 | 目标病 | 边缘型人格障碍（BPD） |
 | 项目通道 | **C 混合**（#113 工作地图初判：临床史原子 + 表征域组合） |
 | 父类 | 人格障碍 |
@@ -39,7 +39,7 @@
 | 禁止项 | L_agg→原子；创伤事件→原子；症状计数→原子；DSM 内部症状/时长条件→Eligibility 原子（归 #87 声明依据） | 转化接口 §3.2.2 :213 |
 | 表征偏好表 BPD | (N, F, D_seg) = (0.55, 0.65, 0.15)——"情绪记忆高反应但可叙述" | 转化接口 §3.2.3 :253 |
 | 对照偏好 | PTSD (0.15, 0.95, 0.10)、DID (0.10, 0.98, 0.95)、MDD (0.90, 0.20, 0.05) | 转化接口 §3.2.3 |
-| BPD 病理边文献锚 | Schulze et al. 2016："too much drive, too little control"；13 条边（e01 vlPFC→杏仁核解耦沉默、e03 杏仁核→PAG 过度耦合、e05/e11/e13 海马情绪记忆、e10 拒绝敏感等） | `实体/疾病目录/边缘型人格障碍.md` + `data/connectivity/pathology_edges.json` |
+| BPD 病理边文献锚 | Schulze et al. 2016："too much drive, too little control"；13 条边（e01 vlPFC→杏仁核解耦沉默、e03 杏仁核→PAG 过度耦合、e05/e11/e13 海马情绪记忆、e10 拒绝敏感等） | `design/entities/diseases/边缘型人格障碍.md` + `data/connectivity/pathology_edges.json` |
 | 先例原子 | CYCLIC_MOOD_HISTORY = 已声明的反复亚阈值心境波动病程模式存在性（≠ 时期计数） | 转化接口 §3.2.2 :211 |
 
 **引用约定**：DSM-5 标准条文为中文工作整理（非官方译本），关键英文短语保留原文；逐字准确性存疑处一律标 [需核验]。文献只给"支持/反对某命题的材料"，不因"有文献"即认定命题成立（G2：病因关联文献不得单独证明资格必要性）。
@@ -288,8 +288,8 @@ E_d^hist 的来源是 #87 A′-Generator **规范化声明字段**（转化接�
 | 锚 | 内容 | 出处 |
 |----|------|------|
 | 表征偏好 | BPD (N, F, D_seg) = (0.55, 0.65, 0.15)——"情绪记忆高反应但可叙述" | 转化接口 §3.2.3 :253 |
-| 病理边 | e01 vlPFC→杏仁核 解耦沉默（"too little control"）、e03 杏仁核→PAG 过度耦合（"too much drive"）、e05/e11/e13 海马/旁海马激活↑（人际创伤史→情绪记忆高反应）、e10 拒绝敏感 | `data/connectivity/pathology_edges.json`（borderline-personality_eNN，文献字段引 Schulze 2016）；`实体/疾病目录/边缘型人格障碍.md` |
-| 文献条目勘误提示 | 项目文件引用 "Schulze et al. (2016) Biol Psychiatry 79(9)"；外部记录（PubMed 25935068/DOI 10.1016/j.biopsych.2015.03.027）显示 **79(2):97-106（2016-01-15）**——卷期号差异 [需核验勘误]，作者 Schulze L, Schmahl C, Niedtfeld I | 实体/疾病目录/边缘型人格障碍.md frontmatter vs PubMed 记录 |
+| 病理边 | e01 vlPFC→杏仁核 解耦沉默（"too little control"）、e03 杏仁核→PAG 过度耦合（"too much drive"）、e05/e11/e13 海马/旁海马激活↑（人际创伤史→情绪记忆高反应）、e10 拒绝敏感 | `data/connectivity/pathology_edges.json`（borderline-personality_eNN，文献字段引 Schulze 2016）；`design/entities/diseases/边缘型人格障碍.md` |
+| 文献条目勘误提示 | 项目文件引用 "Schulze et al. (2016) Biol Psychiatry 79(9)"；外部记录（PubMed 25935068/DOI 10.1016/j.biopsych.2015.03.027）显示 **79(2):97-106（2016-01-15）**——卷期号差异 [需核验勘误]，作者 Schulze L, Schmahl C, Niedtfeld I | design/entities/diseases/边缘型人格障碍.md frontmatter vs PubMed 记录 |
 | 区隔化语义 | D_seg = 记忆区隔化（分区存储），对接 #90 COMPARTMENTALIZED 状态，DID 核心机制 | 转化接口 §3.2.3 :230 |
 
 ### 5.2 BPD 记忆/表征研究材料（外部文献）
@@ -318,7 +318,7 @@ E_d^hist 的来源是 #87 A′-Generator **规范化声明字段**（转化接�
 | C6 | 结构解离理论（The Haunted Self 体系）把 BPD 归为"次级结构解离"（ANP + 单个 EP 的部分分裂），DID 为"第三级"（多 EP + 失忆）——即便在该理论内部，BPD 也不是 DID 型区隔化；且该理论为**临床理论**，非诊断标准 | van der Hart, Nijenhuis & Steele 2004/2006（The Haunted Self；2010 综述）；[映射表逐项 [需核验]] | 理论文献 ≠ 资格语义锚（G2） |
 | C7 | BPD 解离实证研究以"状态/特质解离量表分高"为主，其现象多为**人格解体/现实感丧失等 detachment 型**，而非记忆 compartmentalization 型 | 解离分型文献（Holmes et al. 2005 detachment vs compartmentalization；[BPD 具体实证篇目 [需核验]]） | 项目 D_seg 语义若为记忆分区存储，BPD 侧缺乏对应签名 |
 | C8 | BPD 记忆研究（M2）指向**过度概括化（OGM）**——与"感官碎片化（高 F，SAM 型）"方向不同甚至相反；项目表征偏好 BPD (F=0.65) 介于 PTSD (0.95) 与 MDD (0.20) 之间，与"情绪记忆高反应但可叙述（N=0.55）"一致 | M2 meta；转化接口 §3.2.3 | 若用 F 阈值化 BPD，会与 PTSD 高 F 样本直接混淆（反样本 §3.3/3.5） |
-| C9 | 表征域组合成分与临床史原子的分工：DSM 语义锚在临床史/行为模式（§一），E_d^mem 只能作组合证据（C 混合通道预定），不能单独充当资格门（PTSD-F 单条件反样本教训，批次纪律） | 批次纪律（[批次总览](总览.md) §三.3）；转化接口 §3.2.2 | 结构性提示，不裁决 |
+| C9 | 表征域组合成分与临床史原子的分工：DSM 语义锚在临床史/行为模式（§一），E_d^mem 只能作组合证据（C 混合通道预定），不能单独充当资格门（PTSD-F 单条件反样本教训，批次纪律） | 批次纪律（[批次总览](%E6%80%BB%E8%A7%88.md) §三.3）；转化接口 §3.2.2 | 结构性提示，不裁决 |
 
 ### 5.5 BPD 特征 → 证据域候选对应初判表（归位材料）
 
@@ -357,9 +357,9 @@ E_d^hist 的来源是 #87 A′-Generator **规范化声明字段**（转化接�
 
 - 本文件为**证据收集层**产物：§一（定位）、§二（必要性输入）、§三（反样本）、§四（原子候选材料）、§五（表征域材料）全部为素材，供用户裁决资格原子语义、必要性/排除归位、通道组合方式与（后续批次的）数值。
 - 移交的下一动作（由用户/主代理裁决后执行）：五步核验的"结果层"（必要性/排除归位表、组合结构、数值、判定函数）与 Step 4 写入（归位表更新、转化接口 §3.2.2 原子表追加、term_registry 入库）——**均不在本文件范围**。
-- 本批次并行产出：[PTSD-核验收尾.md](PTSD-%E6%A0%B8%E9%AA%8C%E6%94%B6%E5%B0%BE.md)（判定函数草案待裁决）、[DID-核验-证据收集.md]（若产出）、[总览.md](总览.md)。
+- 本批次并行产出：[PTSD-核验收尾.md](PTSD-%E6%A0%B8%E9%AA%8C%E6%94%B6%E5%B0%BE.md)（判定函数草案待裁决）、[DID-核验-证据收集.md]（若产出）、[总览.md](%E6%80%BB%E8%A7%88.md)。
 
 ---
 
 *创建: 2026-09-06 | 更新: 2026-09-06 | 状态: 证据收集完成（待用户裁决）*
-*关联: [批次总览](总览.md), [PTSD-核验收尾](PTSD-%E6%A0%B8%E9%AA%8C%E6%94%B6%E5%B0%BE.md), [转化接口 §3.2.2](../../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E5%88%9B%E4%BC%A4%E8%AE%B0%E5%BF%86%E8%BD%AC%E5%8C%96%E6%8E%A5%E5%8F%A3.md), [边缘型人格障碍](../../../../%E5%AE%9E%E4%BD%93/%E7%96%BE%E7%97%85%E7%9B%AE%E5%BD%95/%E8%BE%B9%E7%BC%98%E5%9E%8B%E4%BA%BA%E6%A0%BC%E9%9A%9C%E7%A2%8D.md), [决策树 #113](../../../../docs/%E5%86%B3%E7%AD%96%E6%A0%91/README.md)*
+*关联: [批次总览](%E6%80%BB%E8%A7%88.md), [PTSD-核验收尾](PTSD-%E6%A0%B8%E9%AA%8C%E6%94%B6%E5%B0%BE.md), [转化接口 §3.2.2](../../../../rules/skill-tree/%E5%88%9B%E4%BC%A4%E8%AE%B0%E5%BF%86%E8%BD%AC%E5%8C%96%E6%8E%A5%E5%8F%A3.md), [边缘型人格障碍](../../../../entities/diseases/%E8%BE%B9%E7%BC%98%E5%9E%8B%E4%BA%BA%E6%A0%BC%E9%9A%9C%E7%A2%8D.md), [决策树 #113](../../../../decisions/README.md)*

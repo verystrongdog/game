@@ -126,15 +126,15 @@ ActionKind.UseItem（M1 通道——杂项动作，与环境交互同款 §10.13
 | 文件 | 操作 | 类型 |
 |------|------|------|
 | `data/drugs.json` | 新建 | 数据 |
-| `src/YouAreNotTheFish.Core/Types/Drug.cs` | 新建 | 代码 |
-| `src/YouAreNotTheFish.Core/Entity/CombatState.cs` | 改写（EffectiveM/计数） | 代码 |
-| `src/YouAreNotTheFish.Core/Entity/DrugPersistentState.cs` | 新建（跨战斗接口） | 代码 |
-| `src/YouAreNotTheFish.Core/Engine/WMatrixBuilder.cs` | 改写（EffectiveM 消费/重算入口） | 代码 |
-| `src/YouAreNotTheFish.Core/Flow/ActionResolver.cs` | 改写（UseItem） | 代码 |
-| `src/YouAreNotTheFish.Core/Types/Enums.cs`（UseItem/钳制） | 改写 | 代码 |
-| `src/YouAreNotTheFish.Core.Tests/` | 新增 | 测试 |
-| `src/YouAreNotTheFish.Console/` | 改写 | 代码 |
-| `docs/决策树/` / `docs/设计框架-六维状态.md` / memory | 追加 | 文档 |
+| `code/src/YouAreNotTheFish.Core/Types/Drug.cs` | 新建 | 代码 |
+| `code/src/YouAreNotTheFish.Core/Entity/CombatState.cs` | 改写（EffectiveM/计数） | 代码 |
+| `code/src/YouAreNotTheFish.Core/Entity/DrugPersistentState.cs` | 新建（跨战斗接口） | 代码 |
+| `code/src/YouAreNotTheFish.Core/Engine/WMatrixBuilder.cs` | 改写（EffectiveM 消费/重算入口） | 代码 |
+| `code/src/YouAreNotTheFish.Core/Flow/ActionResolver.cs` | 改写（UseItem） | 代码 |
+| `code/src/YouAreNotTheFish.Core/Types/Enums.cs`（UseItem/钳制） | 改写 | 代码 |
+| `code/src/YouAreNotTheFish.Core.Tests/` | 新增 | 测试 |
+| `code/src/YouAreNotTheFish.Console/` | 改写 | 代码 |
+| `design/decisions/` / `design/framework/six-dimensions.md` / memory | 追加 | 文档 |
 
 ## 九、数据契约与校验
 
@@ -151,13 +151,13 @@ ActionKind.UseItem（M1 通道——杂项动作，与环境交互同款 §10.13
 
 | 校验 | 命令 |
 |------|------|
-| 引擎测试绿 | `dotnet test src/YouAreNotTheFish.Core.Tests` |
+| 引擎测试绿 | `dotnet test code/src/YouAreNotTheFish.Core.Tests` |
 | 调制叠加 | 单药/双药/拮抗超限 单测 |
 | 钳制 | 区间锁定 单测 |
 | 同域降级 | 后药强度降级 单测 |
 | 过量 | 单场 2 次触发 单测 |
 | 禁止组合 | 致死阻止/危险警告 单测 |
-| 交叉引用 | `python3 tools/validate_cross_refs.py` |
+| 交叉引用 | `python3 code/tools/validate_cross_refs.py` |
 
 ## 十、验收标准
 
@@ -182,4 +182,4 @@ ActionKind.UseItem（M1 通道——杂项动作，与环境交互同款 §10.13
 ---
 
 *创建: 2026-08-16 | 更新: 2026-08-16*
-*关联: [Grilling #70 路线图 task-plan](./../grilling-70-engine-roadmap/task-plan.md), [消耗品系统](../../../%E5%AE%9E%E4%BD%93/%E6%B6%88%E8%80%97%E5%93%81%E7%B3%BB%E7%BB%9F.md), [Grilling #72 P1a task-plan](./../grilling-72-p1a-skill-context/task-plan.md), [Grilling #73 P1b task-plan](./../grilling-73-p1b-linkstate/task-plan.md), [数学语言书写规范](../../../docs/agents/math-language-writing.md)*
+*关联: [Grilling #70 路线图 task-plan](../grilling-70-engine-roadmap/task-plan.md), [消耗品系统](../../../entities/%E6%B6%88%E8%80%97%E5%93%81%E7%B3%BB%E7%BB%9F.md), [Grilling #72 P1a task-plan](../grilling-72-p1a-skill-context/task-plan.md), [Grilling #73 P1b task-plan](../grilling-73-p1b-linkstate/task-plan.md), [数学语言书写规范](../../../conventions/agents/math-language-writing.md)*

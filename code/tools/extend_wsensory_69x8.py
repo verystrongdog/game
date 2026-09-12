@@ -12,7 +12,7 @@
 - 元字段同步：modalities / dimensions.modalities / modality_nodes /
   cortical_nodes_with_sensory_input / cortical_nodes_without_sensory_input / metadata
 
-用法: python3 tools/extend_wsensory_69x8.py [--check]  （--check 只断言不写回）
+用法: python3 code/tools/extend_wsensory_69x8.py [--check]  （--check 只断言不写回）
 """
 import argparse
 import copy
@@ -20,7 +20,7 @@ import json
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parent.parent.parent
 PATH = ROOT / "data" / "connectivity" / "W_sensory.json"
 
 ORIGINAL_MODALITIES = ["visual", "auditory", "somatosensory", "pain",

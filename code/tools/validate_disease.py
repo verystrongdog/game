@@ -2,7 +2,7 @@
 """
 疾病md文件校验器 v2（Grilling #88 重映射后）
 
-解析 实体/疾病目录/*.md，校验：
+解析 design/entities/diseases/*.md，校验：
 - 病理边引用表 edge_id ∈ pathology_edges.json（且 disease_id 匹配）
 - pathology_edges.json 自身：端点 ∈ tripartite graph_nodes、禁镜像实体、
   三体边命中（非「病理新增」时）、|m| ≤ 0.6、Δ ∈ [−1,+1]、相位键仅限 bipolar-I/II
@@ -13,8 +13,8 @@
 旧版（2026-08-03）查 link_registry.json（⚠️ 已废弃 2026-08-07 #26），已由本版替代。
 
 用法:
-  python3 tools/validate_disease.py                          # 扫描全部
-  python3 tools/validate_disease.py 实体/疾病目录/偏执型精神分裂症.md  # 单个
+  python3 code/tools/validate_disease.py                          # 扫描全部
+  python3 code/tools/validate_disease.py design/entities/diseases/偏执型精神分裂症.md  # 单个
 """
 import json
 import re
@@ -27,8 +27,8 @@ except ImportError:
     print("需要 PyYAML: pip install pyyaml")
     sys.exit(1)
 
-ROOT = Path(__file__).parent.parent
-DISEASE_DIR = ROOT / "实体/疾病目录"
+ROOT = Path(__file__).parent.parent.parent
+DISEASE_DIR = ROOT / "design/entities/疾病目录"
 PARENT_DIR = DISEASE_DIR / "_父类"
 TRI = ROOT / "data/connectivity/tripartite_model.json"
 PE = ROOT / "data/connectivity/pathology_edges.json"
@@ -249,7 +249,7 @@ def validate_hook_refs(text: str, path_edges: dict) -> list[str]:
 def validate_drop_pool(drop_table: list[dict], path_edges: dict, disease_id: str) -> tuple[list[str], list[str]]:
     errors, warnings = [], []
     drop_ids: set[str] = set()
-    weight_re = re.compile(r"^(\d+)\s*[（(](核心|关联|边缘)[)）]$")
+    weight_re = re.compile(r"^(\d+)\s*[（(](%E6%A0%B8%E5%BF%83%7C%E5%85%B3%E8%81%94%7C%E8%BE%B9%E7%BC%98)[)）]$")
     max_w = 0
     for row in drop_table:
         ids_str = row.get("病理边ID", "").strip()

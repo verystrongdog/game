@@ -9,7 +9,7 @@ import json
 from pathlib import Path
 from collections import defaultdict
 
-ROOT = Path(__file__).parent.parent
+ROOT = Path(__file__).parent.parent.parent
 
 # 6 个性格标签定义 — 基于 NPC AI 行为模型 §4.1
 TAG_DEFS = {
@@ -94,7 +94,7 @@ def main():
 
     output = {
         "_description": "性格标签 → 链路 ID 映射 — 自动生成初稿，人工可覆盖",
-        "_source": "tools/generate_tag_links.py",
+        "_source": "code/tools/generate_tag_links.py",
         "_note": "collateral_links 留空待人工审核后补充",
         "tags": {},
     }

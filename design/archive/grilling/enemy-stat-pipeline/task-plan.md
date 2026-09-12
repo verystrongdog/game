@@ -22,15 +22,15 @@
 
 ### 输入
 
-- 19 种疾病文件（`实体/疾病目录/*.md`）— 每个包含功能域 m 偏移表 + 默认标签 + 行为覆盖 + 非线性跳变 + 组件掉落池 + CGI-S 域扩展表
+- 19 种疾病文件（`design/entities/diseases/*.md`）— 每个包含功能域 m 偏移表 + 默认标签 + 行为覆盖 + 非线性跳变 + 组件掉落池 + CGI-S 域扩展表
 - 6 性格标签（`data/connectivity/personality_tag_links.json`）— 每个标签 → 15 核心链路 + 连带偏移 ±0.15
-- 5 类敌人来源 × 3 级 CGI-S × 19 种疾病（`实体/敌人与事件.md` §4.1）— HP/SAN 数值范围
-- 空间遭遇数据（`空间/空间与关卡设计.md` §七）— 楼层密度 + 来源构成
+- 5 类敌人来源 × 3 级 CGI-S × 19 种疾病（`design/entities/敌人与事件.md` §4.1）— HP/SAN 数值范围
+- 空间遭遇数据（`design/space/空间与关卡设计.md` §七）— 楼层密度 + 来源构成
 - 364 链路 + 13 功能域（`data/connectivity/link_registry.json`）
 
 ### 输出
 
-- 每份人设 → 一个完整 Stat Block（身份/脑区配置/数值基线/情境响应/特殊规则五层结构，定义于 `实体/敌人与事件.md` §4.2）
+- 每份人设 → 一个完整 Stat Block（身份/脑区配置/数值基线/情境响应/特殊规则五层结构，定义于 `design/entities/敌人与事件.md` §4.2）
 - 杂兵：纯模板生成。精英：模板 + MSE/风险评估字段微调
 - 最终数据格式：JSON（`data/enemies/stat_blocks/*.json`），供预烘焙管线消费
 
@@ -249,7 +249,7 @@ Alter系统:
 
 ## 三、病历 → Stat Block 映射规则
 
-Stat Block 五层结构定义见 `实体/敌人与事件.md` §4.2。以下逐层定义人设字段到 stat 字段的映射。
+Stat Block 五层结构定义见 `design/entities/敌人与事件.md` §4.2。以下逐层定义人设字段到 stat 字段的映射。
 
 ### 3.1 身份层
 
@@ -806,7 +806,7 @@ N = CGI-S 决定：中=2, 重=3-4。每个 Alter：
 
 ### 7.2 阶段 2: 人设 → Stat Block 脚本化
 
-编写 `tools/build_enemy_stats.py`：
+编写 `code/tools/build_enemy_stats.py`：
 
 ```
 输入: data/enemies/clinical_records/*.yaml
@@ -835,7 +835,7 @@ N = CGI-S 决定：中=2, 重=3-4。每个 Alter：
 
 ### 7.4 阶段 4: 校验
 
-编写 `tools/validate_enemy_stats.py`：
+编写 `code/tools/validate_enemy_stats.py`：
 
 ```
   1. 每份 stat block 中的所有链路 ID 必须在 link_registry.json 中存在
@@ -898,6 +898,6 @@ N = CGI-S 决定：中=2, 重=3-4。每个 Alter：
 ---
 
 *创建: 2026-08-01 | 更新: 2026-08-01 (Grilling #18 — 22 项决策 + 两轮 review-plan trace 31 行)*
-*关联: [敌人与事件](../../../%E5%AE%9E%E4%BD%93/%E6%95%8C%E4%BA%BA%E4%B8%8E%E4%BA%8B%E4%BB%B6.md), [核心机制](../../../%E8%A7%84%E5%88%99/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md), [NPC AI 行为模型](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/NPC%20AI%20%E8%A1%8C%E4%B8%BA%E6%A8%A1%E5%9E%8B.md), [决策树](../../../docs/%E5%86%B3%E7%AD%96%E6%A0%91/README.md), [疾病目录/](../../../%E5%AE%9E%E4%BD%93/%E7%96%BE%E7%97%85%E7%9B%AE%E5%BD%95)*
+*关联: [敌人与事件](../../../entities/%E6%95%8C%E4%BA%BA%E4%B8%8E%E4%BA%8B%E4%BB%B6.md), [核心机制](../../../rules/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md), [NPC AI 行为模型](../../../rules/skill-tree/NPC%20AI%20%E8%A1%8C%E4%B8%BA%E6%A8%A1%E5%9E%8B.md), [决策树](../../../decisions/README.md), [疾病目录/](../../../entities/diseases)*
 *依赖 grilling: [#18](https://github.com/verystrongdog/game/issues/18)*
 *审查: [review-trace-2026-08-01-2005-task-plan.md](../review-trace-2026-08-01-2005-task-plan.md) (第一轮) / [review-trace-2026-08-01-2030-task-plan-v2.md](../review-trace-2026-08-01-2030-task-plan-v2.md) (第二轮)*

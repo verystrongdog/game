@@ -14,8 +14,8 @@ description: 任务 md 四维质检。检测 AI 生成的决策总结/任务规�
 | 判定 | 说明 |
 |------|------|
 | ✅ 是任务 md | 位于 `.scratch/` 下，文件名含 `task-plan` / `plan` / `summary` / `grilling-NN-task-plan` / `PLAN` 等，或用户显式说明「这是讨论后总结的任务 md」 |
-| ⚠️ 需确认 | 文件在正式文档目录（`规则/` `实体/` 等）→ 提醒用户该文件不属于任务 md 范畴，但可做格式规范检查 |
-| ⚠️ 已废弃 | 文件标记 `⚠️ 已废弃` 或位于 `参考/废弃/` `垃圾桶/` → 跳过（仅提示用户） |
+| ⚠️ 需确认 | 文件在正式文档目录（`design/rules/` `design/entities/` 等）→ 提醒用户该文件不属于任务 md 范畴，但可做格式规范检查 |
+| ⚠️ 已废弃 | 文件标记 `⚠️ 已废弃` 或位于 `reference/deprecated/` `design/archive/trash/` → 跳过（仅提示用户） |
 
 ## 执行流程
 
@@ -55,28 +55,28 @@ description: 任务 md 四维质检。检测 AI 生成的决策总结/任务规�
 
 #### 维度② 术语与正典一致性
 
-数据源：`data/term_registry.json`（`terms` 下每条含 `status`），以及 `CLAUDE.md §核心术语表`、`docs/决策树/` 的已否决方向。
+数据源：`data/term_registry.json`（`terms` 下每条含 `status`），以及 `CLAUDE.md §核心术语表`、`design/decisions/` 的已否决方向。
 
 | 检查项 | 判定 |
 |--------|------|
-| T1 deprecated 术语出现 | **强制**：运行 `python3 tools/list_deprecated_terms.py`（从 `data/term_registry.json` 动态读取，**勿用记忆或任何硬编码清单**）得到完整 deprecated 清单。任务 md 中（非 `⚠️ 已废弃` 标注段）出现任一 → ❌ 违规。可用 `python3 tools/list_deprecated_terms.py --check <词>` 快速判定单词 |
+| T1 deprecated 术语出现 | **强制**：运行 `python3 code/tools/list_deprecated_terms.py`（从 `data/term_registry.json` 动态读取，**勿用记忆或任何硬编码清单**）得到完整 deprecated 清单。任务 md 中（非 `⚠️ 已废弃` 标注段）出现任一 → ❌ 违规。可用 `python3 code/tools/list_deprecated_terms.py --check <词>` 快速判定单词 |
 | T2 术语定义误用 | 出现与注册表定义冲突的用法，如「态度卡」「SAN 是血条」「意志力=SAN」「颜色表示情绪」→ ❌ 违规 |
 | T3 新符号 | 出现注册表没有的新参数符号且未标注 `[NEW]` → ⚠️ 提示 |
 | T4 术语翻译/混用 | 同一概念中英混写（如同时用「SAN」和「理智值」指同一物）→ ⚠️ 提示 |
-| T5 与决策树冲突 | 文档方向与 `docs/决策树/` 已否决方向冲突 → ❌ 违规（需 Read 决策树确认） |
+| T5 与决策树冲突 | 文档方向与 `design/decisions/` 已否决方向冲突 → ❌ 违规（需 Read 决策树确认） |
 
 > 单字母参数（`β` `η` `κ`）可能误报（如希腊字母出现在公式变量中但非月光场参数）。此时以语义判断：若上下文是月光场 v2 相关 → 违规；若只是普通公式变量 → 忽略并在报告中说明。**脚本输出只给出注册表清单，误报判定始终以 AI 语义判断为准。**
 
 #### 维度③ 交叉引用完整性
 
-- [ ] 复用 Layer 1 脚本对**目标 md 引用的活跃文档**做核验：`python3 tools/validate_cross_refs.py`（死链/段引用）
+- [ ] 复用 Layer 1 脚本对**目标 md 引用的活跃文档**做核验：`python3 code/tools/validate_cross_refs.py`（死链/段引用）
 - [ ] 注意：`run_all_checks.py` / `validate_*.py` 的 `collect_md_files` **排除 `.scratch/`**，因此**任务 md 自身的链接脚本不扫**，需手动核验（Step 3）
-- [ ] 垃圾桶隔离：任务 md 中出现 `垃圾桶/` 路径或已移入垃圾桶的文件路径 → ❌（见 `tools/validate_trash_isolation.py` 的 `FILES_IN_TRASH` 列表）
+- [ ] 垃圾桶隔离：任务 md 中出现 `design/archive/trash/` 路径或已移入垃圾桶的文件路径 → ❌（见 `code/tools/validate_trash_isolation.py` 的 `FILES_IN_TRASH` 列表）
 - [ ] `*关联:*` 指向的文件必须存在且非垃圾桶文件
 
 #### 维度④ 数学语言充分性
 
-对照 `docs/agents/math-language-writing.md` 规范，扫描自然语言段落，找「可被公式/表格/受控词表替代却用了含糊自然语言」的地方：
+对照 `design/conventions/agents/math-language-writing.md` 规范，扫描自然语言段落，找「可被公式/表格/受控词表替代却用了含糊自然语言」的地方：
 
 | 检查项 | 触发词示例 | 判定 |
 |--------|-----------|------|
@@ -95,8 +95,8 @@ description: 任务 md 四维质检。检测 AI 生成的决策总结/任务规�
 
 - [ ] 提取任务 md 中所有 `[text](path)` 链接与 `*关联:*` 列表
 - [ ] 逐条解析相对路径（相对源文件目录），检查目标文件是否存在
-- [ ] 带锚点 `#` / `§` 的 → 用 `tools/validate_cross_refs.py` 同款逻辑检查目标段是否存在（可直接调用脚本）
-- [ ] 命中 `垃圾桶/`、`.trash/`、`参考/废弃/` → 检查是否在 `⚠️ 已废弃` 标注段内，否则 ❌
+- [ ] 带锚点 `#` / `§` 的 → 用 `code/tools/validate_cross_refs.py` 同款逻辑检查目标段是否存在（可直接调用脚本）
+- [ ] 命中 `design/archive/trash/`、`.trash/`、`reference/deprecated/` → 检查是否在 `⚠️ 已废弃` 标注段内，否则 ❌
 - [ ] 有 `--quick` 或文件数 > 20 链接 → 抽查（随机 5 条 + 所有关联列表）
 
 ### Step 4 — 报告输出
@@ -162,5 +162,5 @@ description: 任务 md 四维质检。检测 AI 生成的决策总结/任务规�
 
 ---
 
-*基于: [数学语言书写规范](../../../docs/agents/math-language-writing.md), [term_registry.json](../../../data/term_registry.json) | 创建: 2026-08-16*
+*基于: [数学语言书写规范](../../../design/conventions/agents/math-language-writing.md), [term_registry.json](../../../data/term_registry.json) | 创建: 2026-08-16*
 *关联: [review-plan skill](../review-plan/SKILL.md), [CLAUDE.md](../../../CLAUDE.md)*

@@ -6,7 +6,7 @@
 
 用法:
   方式1 (Blender 内):  Scripting 工作区 → 打开此文件 → Run Script
-  方式2 (命令行):     blender --background --python tools/build_brain_skill_tree.py
+  方式2 (命令行):     blender --background --python code/tools/build_brain_skill_tree.py
 
 前置:
   - blender_assets/all_obj/ 已解压 (brain-for-blender OBJ)
@@ -29,8 +29,8 @@ from pathlib import Path
 #  CONFIG — 根据你的环境调整
 # ═══════════════════════════════════════════════════════════
 
-# 项目根目录 (此脚本在 tools/ 下, 项目根是上级目录)
-PROJECT_DIR = Path(__file__).resolve().parent.parent
+# 项目根目录 (此脚本在 code/tools/ 下, 项目根是上级目录)
+PROJECT_DIR = Path(__file__).resolve().parent.parent.parent
 
 # OBJ 目录
 OBJ_BASE = PROJECT_DIR / "技能树系统" / "blender_assets" / "all_obj"
@@ -348,7 +348,7 @@ def place_skill_nodes():
 
     if not skills_path.exists():
         log(f"⚠ skill_coords.json not found at {skills_path}")
-        log("  Run: python tools/map_skills_to_regions.py")
+        log("  Run: python code/tools/map_skills_to_regions.py")
         return
 
     with open(skills_path, "r", encoding="utf-8") as f:

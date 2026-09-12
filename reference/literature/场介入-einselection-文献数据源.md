@@ -1,6 +1,6 @@
 # 场介入 Einselection — 文献数据源
 
-> **⚠️ 已废弃（2026-08-11 [Grilling #38](../../%E8%AE%BE%E8%AE%A1%E5%BD%92%E6%A1%A3/grilling/grilling-38-moonlight-field/README.md)）**：Einselection / Kofman & Kurizki 替代量子指针是月光场 v2 模型（静态标量场）的理论骨架，与 CGL+AGC 不同。保留完整内容作为学术文献参考。
+> **⚠️ 已废弃（2026-08-11 [Grilling #38](../../design/archive/grilling/grilling-38-moonlight-field/README.md)）**：Einselection / Kofman & Kurizki 替代量子指针是月光场 v2 模型（静态标量场）的理论骨架，与 CGL+AGC 不同。保留完整内容作为学术文献参考。
 
 > 月光场的物理基础——方向从「抵抗退相干」转向「偏向 einselection」。环境仍然在退相干、增殖记录、锁定指针态。**场改变的是：被锁定的指针基是哪一个。** 理论入口为 Kofman & Kurizki (2022) 的替代量子指针框架。
 
@@ -193,4 +193,4 @@ H_MB^eff = H_MB + H_field−meter + H_field−observer
 ---
 
 *创建: 2026-08-04 | 更新: 2026-08-04*
-*关联: 月光场-标量场模型 ⚠️ 已废弃（`参考/废弃/月光场/月光场-标量场模型.md`）, [方案C-退相干抑制-文献数据源](方案C-退相干抑制-文献数据源.md), Kofman & Kurizki 2022（PDF 未入库，正文 §2.2 有摘录）, [Zurek 2022](0707.2832.pdf), [Polychronakos 2024](2202.04203.pdf)*
+*关联: 月光场-标量场模型 ⚠️ 已废弃（`reference/deprecated/moonlight-field/月光场-标量场模型.md`）, [方案C-退相干抑制-文献数据源](%E6%96%B9%E6%A1%88C-%E9%80%80%E7%9B%B8%E5%B9%B2%E6%8A%91%E5%88%B6-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md), Kofman & Kurizki 2022（PDF 未入库，正文 §2.2 有摘录）, [Zurek 2022](0707.2832.pdf), [Polychronakos 2024](2202.04203.pdf)*

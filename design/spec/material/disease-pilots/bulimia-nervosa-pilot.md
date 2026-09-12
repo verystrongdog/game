@@ -1,6 +1,6 @@
 # 神经性贪食症（BN）重映射试点
 
-> 26 病重映射第 4 份试点（照 [PTSD 试点](ptsd-pilot.md) §六 字段规范复制）。本文件把旧 `link_336/344/155_L/326/008_L/363` 链路表（挂已废弃 link_registry.json）重映射为三体模型上的 **10 条病理边**（全部命中 `tripartite_model.json` 现有边，0 条"病理新增"）。核心病理 = **奖赏↑（暴食期过度耦合）**（VTA→NAcc / SNc→Putamen）+ **认知控制↓（抑制失败）**（认知 CSTC 环路 dlPFC→Caudate 解耦，替代不存在的 ACC→dlPFC 直连）+ **内感受岛叶↑**（LC→insula 过度警觉）+ **清除习惯化**（Putamen→Thalamus + precentral→Putamen）。**BN 与 AN 为相反模式**：BN = 奖赏↑ 认知↓；AN = 奖赏↓ 认知↑（同边异号，§三.4 对照）。7 参数推导与 NPC AI §4.2/§5.2 标签组合「抑制不足 + 敏化-奖励」交叉验证：DA_VTA/5HT/bias_somatic/bias_limbic 一致，DA_SNc +0.1 与 bias_cognitive −0.15 为**标签缺口裁决**（[NEW]）。
+> 26 病重映射第 4 份试点（照 [PTSD 试点](../disease-pilots/ptsd-pilot.md) §六 字段规范复制）。本文件把旧 `link_336/344/155_L/326/008_L/363` 链路表（挂已废弃 link_registry.json）重映射为三体模型上的 **10 条病理边**（全部命中 `tripartite_model.json` 现有边，0 条"病理新增"）。核心病理 = **奖赏↑（暴食期过度耦合）**（VTA→NAcc / SNc→Putamen）+ **认知控制↓（抑制失败）**（认知 CSTC 环路 dlPFC→Caudate 解耦，替代不存在的 ACC→dlPFC 直连）+ **内感受岛叶↑**（LC→insula 过度警觉）+ **清除习惯化**（Putamen→Thalamus + precentral→Putamen）。**BN 与 AN 为相反模式**：BN = 奖赏↑ 认知↓；AN = 奖赏↓ 认知↑（同边异号，§三.4 对照）。7 参数推导与 NPC AI §4.2/§5.2 标签组合「抑制不足 + 敏化-奖励」交叉验证：DA_VTA/5HT/bias_somatic/bias_limbic 一致，DA_SNc +0.1 与 bias_cognitive −0.15 为**标签缺口裁决**（[NEW]）。
 
 ## 目录
 
@@ -24,7 +24,7 @@
 
 **辅助锚（方向/范围补充）**：
 
-- **豆状核→Putamen 映射**——Bronleigh 2022「奖赏区（豆状核）↑」：豆状核（lentiform）= 壳核（`Putamen`）+ 苍白球（`Pallidum`）；BN 奖赏超敏主载体取壳核侧（e01/e02/e09，纹状体 DA 通路），苍白球侧由 AN 的 Datta 2025 组分3 表达（set-shift，见 [AN 试点](anorexia-nervosa-pilot.md) an_e08）。
+- **豆状核→Putamen 映射**——Bronleigh 2022「奖赏区（豆状核）↑」：豆状核（lentiform）= 壳核（`Putamen`）+ 苍白球（`Pallidum`）；BN 奖赏超敏主载体取壳核侧（e01/e02/e09，纹状体 DA 通路），苍白球侧由 AN 的 Datta 2025 组分3 表达（set-shift，见 [AN 试点](../disease-pilots/anorexia-nervosa-pilot.md) an_e08）。
 - **AN 对标方向翻转**（旧 BN 思路链）——同一父类下与 AN 方向相反的表达；AN 的 e01/e05/e06 同边异号对照见 §三.4。
 - **NPC AI §4.2**——标签「抑制不足」（5HT −0.2, bias_somatic +0.15）与「敏化-奖励」（DA_VTA +0.2, 5HT −0.2, bias_limbic +0.15）。
 - **旧链路注册表（link_registry.json，⚠️ 已废弃）**——6 条旧链路的方向/量级（Schultz1997 / Paxinos2004 / Hansen2024 / Alexander1986_CSTC / ENIGMA）作为语义继承源，见 §四。
@@ -113,7 +113,7 @@ NPC AI §4.2「抑制不足」+「敏化-奖励」双标签（多标签叠加取
 ### 3.3 域特异裁决规则（[NEW]，写入 §六.6 供 25 病复制）
 
 > 触发条件：脑干广播边群的 m 偏移集中于单一感觉/内感受域（BN 的 LC→insula；AN 的 LC→insula/pericalcarine），而非跨域发散。
-> 裁决：域特异增益不驱动全局 tone 推导；全局 tone 以标签组合为锚（判断标准见 [AN 试点](anorexia-nervosa-pilot.md) §3.3）。
+> 裁决：域特异增益不驱动全局 tone 推导；全局 tone 以标签组合为锚（判断标准见 [AN 试点](../disease-pilots/anorexia-nervosa-pilot.md) §3.3）。
 
 ### 3.4 BN vs AN 相反模式对照（任务硬性要求）
 
@@ -195,4 +195,4 @@ NPC AI §4.2「抑制不足」+「敏化-奖励」双标签（多标签叠加取
 ---
 
 *创建: 2026-08-21 | 更新: 2026-08-21*
-*关联: [grilling-88.md](grilling-88.md), [PTSD 重映射试点](ptsd-pilot.md), [神经性贪食症](../../../%E5%AE%9E%E4%BD%93/%E7%96%BE%E7%97%85%E7%9B%AE%E5%BD%95/%E7%A5%9E%E7%BB%8F%E6%80%A7%E8%B4%AA%E9%A3%9F%E7%97%87.md), [神经性厌食症](../../../%E5%AE%9E%E4%BD%93/%E7%96%BE%E7%97%85%E7%9B%AE%E5%BD%95/%E7%A5%9E%E7%BB%8F%E6%80%A7%E5%8E%8C%E9%A3%9F%E7%97%87.md)（相反模式对照）, [NPC AI 行为模型](../../../规则/技能树系统/NPC AI 行为模型.md) §4.2/§5.2, [疾病-脑区链路映射-文献数据源](../../../%E5%8F%82%E8%80%83/%E6%96%87%E7%8C%AE/%E7%96%BE%E7%97%85-%E8%84%91%E5%8C%BA%E9%93%BE%E8%B7%AF%E6%98%A0%E5%B0%84-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md) §七, [tripartite_model.json](../../../data/connectivity/tripartite_model.json), [link_registry.json](../../../data/connectivity/link_registry.json)（⚠️ 已废弃）*
+*关联: [grilling-88.md](../disease-pilots/grilling-88.md), [PTSD 重映射试点](../disease-pilots/ptsd-pilot.md), [神经性贪食症](../../../entities/diseases/%E7%A5%9E%E7%BB%8F%E6%80%A7%E8%B4%AA%E9%A3%9F%E7%97%87.md), [神经性厌食症](../../../entities/diseases/%E7%A5%9E%E7%BB%8F%E6%80%A7%E5%8E%8C%E9%A3%9F%E7%97%87.md)（相反模式对照）, [NPC AI 行为模型](../../../rules/skill-tree/NPC%20AI%20%E8%A1%8C%E4%B8%BA%E6%A8%A1%E5%9E%8B.md) §4.2/§5.2, [疾病-脑区链路映射-文献数据源](../../../../reference/literature/%E7%96%BE%E7%97%85-%E8%84%91%E5%8C%BA%E9%93%BE%E8%B7%AF%E6%98%A0%E5%B0%84-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md) §七, [tripartite_model.json](../../../../data/connectivity/tripartite_model.json), [link_registry.json](../../../../data/connectivity/link_registry.json)（⚠️ 已废弃）*

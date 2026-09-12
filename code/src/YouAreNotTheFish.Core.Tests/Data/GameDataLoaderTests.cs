@@ -6,7 +6,7 @@ namespace YouAreNotTheFish.Core.Tests.Data;
 public class GameDataLoaderTests
 {
     private static readonly string DataDir = Path.Combine(
-        AppContext.BaseDirectory, "..", "..", "..", "..", "..", "data");
+        AppContext.BaseDirectory, "..", "..", "..", "..", "..", "..", "data");
 
     /// <summary>Helper: find brain_regions.json by trying a few candidate locations.</summary>
     private static string FindBrainRegionsJson()
@@ -16,7 +16,7 @@ public class GameDataLoaderTests
         {
             Path.Combine(DataDir, "brain_regions.json"),
             Path.GetFullPath(Path.Combine(AppContext.BaseDirectory,
-                "..", "..", "..", "..", "..", "..", "data", "brain_regions.json")),
+                "..", "..", "..", "..", "..", "..", "..", "data", "brain_regions.json")),
             "/home/dog/game/data/brain_regions.json"
         };
         foreach (var path in candidates)

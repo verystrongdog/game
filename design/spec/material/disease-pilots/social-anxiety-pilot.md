@@ -28,7 +28,7 @@
 - **post-event processing（社交后反刍）**——SAD 患者在社交事件后反复咀嚼表现（Clark & Wells 认知模型）→ 建议标签「反刍」的临床依据（§三.2）。
 - **左右脑偏侧化-文献数据源**——SAD 无稳健左右偏侧证据 → 全部边 Δ = 0。
 
-> **转换规则声明**：同 [ptsd-pilot.md](ptsd-pilot.md)——文献脑区/网络层结论 → 三体边层为设计师翻译（文献数据源 §八）；m 偏移量级参照同类焦虑病（GAD/SP 试点）设计校准，**新增病全部数值标记 `[NEW]`，待数值校准**。
+> **转换规则声明**：同 [ptsd-pilot.md](../disease-pilots/ptsd-pilot.md)——文献脑区/网络层结论 → 三体边层为设计师翻译（文献数据源 §八）；m 偏移量级参照同类焦虑病（GAD/SP 试点）设计校准，**新增病全部数值标记 `[NEW]`，待数值校准**。
 
 ---
 
@@ -206,5 +206,5 @@ NPC AI §4.2「敏化-威胁 + 反刍」双标签（本文件 §3.0 建议，多
 ---
 
 *创建: 2026-08-21 | 更新: 2026-08-21*
-*关联: [grilling-88.md](grilling-88.md), [ptsd-pilot.md](ptsd-pilot.md), [广泛性焦虑障碍](../../../%E5%AE%9E%E4%BD%93/%E7%96%BE%E7%97%85%E7%9B%AE%E5%BD%95/%E5%B9%BF%E6%B3%9B%E6%80%A7%E7%84%A6%E8%99%91%E9%9A%9C%E7%A2%8D.md), [特定恐惧症](../../../%E5%AE%9E%E4%BD%93/%E7%96%BE%E7%97%85%E7%9B%AE%E5%BD%95/%E7%89%B9%E5%AE%9A%E6%81%90%E6%83%A7%E7%97%87.md), [NPC AI 行为模型](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/NPC%20AI%20%E8%A1%8C%E4%B8%BA%E6%A8%A1%E5%9E%8B.md) §4.2/§5.2/§7.2, [脑功能层级模型](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E8%84%91%E5%8A%9F%E8%83%BD%E5%B1%82%E7%BA%A7%E6%A8%A1%E5%9E%8B.md) §二十, [疾病-脑区链路映射-文献数据源](../../../%E5%8F%82%E8%80%83/%E6%96%87%E7%8C%AE/%E7%96%BE%E7%97%85-%E8%84%91%E5%8C%BA%E9%93%BE%E8%B7%AF%E6%98%A0%E5%B0%84-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md) §四/§七, [tripartite_model.json](../../../data/connectivity/tripartite_model.json)*
-*待办: 疾病目录新建 [社交焦虑障碍](../../../%E5%AE%9E%E4%BD%93/%E7%96%BE%E7%97%85%E7%9B%AE%E5%BD%95/%E7%A4%BE%E4%BA%A4%E7%84%A6%E8%99%91%E9%9A%9C%E7%A2%8D.md)（父类 焦虑唤醒障碍，Q0.5）+ term_registry 入库（Q0.4 命名标准——DSM-5 命名 + disease_id=`social-anxiety`）*
+*关联: [grilling-88.md](../disease-pilots/grilling-88.md), [ptsd-pilot.md](../disease-pilots/ptsd-pilot.md), [广泛性焦虑障碍](../../../entities/diseases/%E5%B9%BF%E6%B3%9B%E6%80%A7%E7%84%A6%E8%99%91%E9%9A%9C%E7%A2%8D.md), [特定恐惧症](../../../entities/diseases/%E7%89%B9%E5%AE%9A%E6%81%90%E6%83%A7%E7%97%87.md), [NPC AI 行为模型](../../../rules/skill-tree/NPC%20AI%20%E8%A1%8C%E4%B8%BA%E6%A8%A1%E5%9E%8B.md) §4.2/§5.2/§7.2, [脑功能层级模型](../../../rules/skill-tree/%E8%84%91%E5%8A%9F%E8%83%BD%E5%B1%82%E7%BA%A7%E6%A8%A1%E5%9E%8B.md) §二十, [疾病-脑区链路映射-文献数据源](../../../../reference/literature/%E7%96%BE%E7%97%85-%E8%84%91%E5%8C%BA%E9%93%BE%E8%B7%AF%E6%98%A0%E5%B0%84-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md) §四/§七, [tripartite_model.json](../../../../data/connectivity/tripartite_model.json)*
+*待办: 疾病目录新建 [社交焦虑障碍](../../../entities/diseases/%E7%A4%BE%E4%BA%A4%E7%84%A6%E8%99%91%E9%9A%9C%E7%A2%8D.md)（父类 焦虑唤醒障碍，Q0.5）+ term_registry 入库（Q0.4 命名标准——DSM-5 命名 + disease_id=`social-anxiety`）*

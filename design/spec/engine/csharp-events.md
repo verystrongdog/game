@@ -15,7 +15,7 @@
 
 ### 2.1 StatusChangeEvent 扩展（L2 跨 feature 类型变更，任务issue Q1=A）
 
-`src/YouAreNotTheFish.Core/Types/CombatEvents.cs`——StatusChangeEvent 追加 3 个 float 字段：
+`code/src/YouAreNotTheFish.Core/Types/CombatEvents.cs`——StatusChangeEvent 追加 3 个 float 字段：
 
 | 字段 | 类型 | 语义 | 来源 |
 |------|------|------|------|
@@ -29,7 +29,7 @@
 
 ### 2.2 CalibrationConfig 新增常量
 
-`src/YouAreNotTheFish.Core/Types/CalibrationConfig.cs`——追加 1 个常量：
+`code/src/YouAreNotTheFish.Core/Types/CalibrationConfig.cs`——追加 1 个常量：
 
 | 常量 | 类型 | 值 | 来源 |
 |------|------|-----|------|
@@ -274,4 +274,4 @@ public sealed class EventProcessor
 
 ---
 *创建: 2026-08-13 | 更新: 2026-08-14 | 版本: v1.2.2*
-*关联: [任务issue 01](../../设计归档/grilling/csharp-events/design/issues/01-events-spec.md), [plan §4.7](csharp-engine-roadmap.md), [运行时状态模型 §5.5](../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E8%BF%90%E8%A1%8C%E6%97%B6%E7%8A%B6%E6%80%81%E6%A8%A1%E5%9E%8B.md), [types spec §二 2.11](csharp-engine-types.md)*
+*关联: [任务issue 01](../../archive/grilling/csharp-events/design/issues/01-events-spec.md), [plan §4.7](csharp-engine-roadmap.md), [运行时状态模型 §5.5](../../rules/skill-tree/%E8%BF%90%E8%A1%8C%E6%97%B6%E7%8A%B6%E6%80%81%E6%A8%A1%E5%9E%8B.md), [types spec §二 2.11](csharp-engine-types.md)*

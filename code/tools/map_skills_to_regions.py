@@ -8,7 +8,7 @@
 对比新旧坐标差异。
 
 用法:
-  python tools/map_skills_to_regions.py
+  python code/tools/map_skills_to_regions.py
 """
 
 import json
@@ -298,7 +298,7 @@ def main():
     # 输出
     output = {
         "_description": "74技能节点坐标映射: PAD推导(旧) → MNI解剖(新)",
-        "_source": "Phase 2: tools/map_skills_to_regions.py",
+        "_source": "Phase 2: code/tools/map_skills_to_regions.py",
         "_created": "2026-07-11",
         "_stats": {
             "total_skills": len(output_skills),

@@ -132,9 +132,9 @@ public class ThreatJudgeTests
 
     private static readonly string[] DataDirCandidates =
     [
-        Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "..", "data"),
+        Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "..", "..", "data"),
         Path.GetFullPath(Path.Combine(AppContext.BaseDirectory,
-            "..", "..", "..", "..", "..", "..", "data")),
+            "..", "..", "..", "..", "..", "..", "..", "data")),
         "/home/dog/game/data",
     ];
 

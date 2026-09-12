@@ -15,9 +15,9 @@
 
 ## 处置
 
-- 本目录仅为**止损备份**，内容未并入 `unity/Assets/Scripts/` —— 归位方式由用户决定。
+- 本目录仅为**止损备份**，内容未并入 `code/unity/Assets/Scripts/` —— 归位方式由用户决定。
 - 归位时注意：`CameraOrbit.cs` / `SitPoint.cs` 属 `feat/unity-presentation-slice` 那条线的工作，与 `main` 上 #122–#126 的 Unity 沙盘不是同一条；直接并入 main 前建议先确认版本关系。
 
 ---
 *创建: 2026-09-12*
-*关联: [决策记录 #126](../grilling-126-rosefield/决策记录.md)*
+*关联: [决策记录 #126](../grilling-126-rosefield/%E5%86%B3%E7%AD%96%E8%AE%B0%E5%BD%95.md)*

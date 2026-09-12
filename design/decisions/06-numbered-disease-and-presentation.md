@@ -40,15 +40,15 @@
 ### 受影响文件
 
 - `../设计归档/grilling/grilling-35-calibration/决策记录.md`（新建——决策表 + 治理发现 + 推迟清单）
-- `规则/核心机制.md`（§4.2 暴击参数 θ_crit 0.82/k_crit 1.0 + §4.3 迁移标注：新轨定案/旧轨=历史实现）
-- `规则/技能树系统/操作层/基础行动设计.md`（§二 精神攻击公式迁移 + §三 暴击参数 + §四 速查表）
-- `规则/技能树系统/运行时状态模型.md`（§4.5 延迟注闭合 → #74 D3 / §5.5 事件不变量 / §8.1 S_mental·S_mem·scale_mental·θ_mem 定案 + w_perception/w_execution 废弃声明）
-- `规则/回合战斗流程.md`（§8.3 FleeSanRestore +10 暂定 + 时段级防护）
-- `规则/技能树系统/NPC AI 行为模型.md`（§9.1 恐慌双机制分工：C1 边沿/PanicToneShift 稳态）
-- `实体/敌人与事件.md`（§十二 压抑计数触发 → 转实体域标注）
+- `design/rules/核心机制.md`（§4.2 暴击参数 θ_crit 0.82/k_crit 1.0 + §4.3 迁移标注：新轨定案/旧轨=历史实现）
+- `design/rules/skill-tree/operations/基础行动设计.md`（§二 精神攻击公式迁移 + §三 暴击参数 + §四 速查表）
+- `design/rules/skill-tree/运行时状态模型.md`（§4.5 延迟注闭合 → #74 D3 / §5.5 事件不变量 / §8.1 S_mental·S_mem·scale_mental·θ_mem 定案 + w_perception/w_execution 废弃声明）
+- `design/rules/回合战斗流程.md`（§8.3 FleeSanRestore +10 暂定 + 时段级防护）
+- `design/rules/skill-tree/NPC AI 行为模型.md`（§9.1 恐慌双机制分工：C1 边沿/PanicToneShift 稳态）
+- `design/entities/敌人与事件.md`（§十二 压抑计数触发 → 转实体域标注）
 - `data/term_registry.json`（w_perception/w_execution 废弃 + scale_mental 迁移状态 + Δ_skill m 缩放）
-- `src/YouAreNotTheFish.Core/Types/CalibrationConfig.cs`（ScaleMental 注释：设计值 ≈3 暂定 PENDING，运行值 1.0 不动）
-- `docs/决策树/`（本文）+ `docs/设计框架-六维状态.md`（规则 +1）+ memory（`战斗输出权重校准-grilling-35.md`）
+- `code/src/YouAreNotTheFish.Core/Types/CalibrationConfig.cs`（ScaleMental 注释：设计值 ≈3 暂定 PENDING，运行值 1.0 不动）
+- `design/decisions/`（本文）+ `design/framework/six-dimensions.md`（规则 +1）+ memory（`战斗输出权重校准-grilling-35.md`）
 
 ### 推迟
 
@@ -94,13 +94,13 @@
 
 ### 受影响文件
 
-- `规则/技能树系统/创伤记忆转化接口.md`（新增 §3.2.2 资格层 + §3.2.3 主病选择顺延 + §3.3 档位前置条件 + §四 速查表 + 头部/文末更新）
-- `docs/决策树/`（本文）
-- `docs/设计框架-六维状态.md`（规则维度转化接口条目补充）
+- `design/rules/skill-tree/创伤记忆转化接口.md`（新增 §3.2.2 资格层 + §3.2.3 主病选择顺延 + §3.3 档位前置条件 + §四 速查表 + 头部/文末更新）
+- `design/decisions/`（本文）
+- `design/framework/six-dimensions.md`（规则维度转化接口条目补充）
 - `data/term_registry.json`（新术语：Eligibility(d) 疾病资格层/资格语义锚/资格证据原子/ELIGIBLE-INELIGIBLE-UNDETERMINED/G1-G4 全局不变量 等）
 - `../设计归档/grilling/grilling-113-disease-eligibility/grilling-113-disease-eligibility.md`（决策记录）
 - `.scratch/grilling-113-disease-eligibility/chatgpt_share_t6a96f10e~t6a970c9a37.html`（外审存档 ×17）
-- `参考/灵感收件箱.md`（2026-09-01 两条灵感，含资格门活例标注）
+- `reference/灵感收件箱.md`（2026-09-01 两条灵感，含资格门活例标注）
 - memory（`疾病资格层-grilling-113.md`）
 
 ### 推迟
@@ -111,7 +111,7 @@
 - E_d^mem 阈值化（DID→D_seg、PTSD→F 的资格阈值）→ 表征病批次
 - 前瞻性风险分层（"高危未发病"状态）→ 独立机制，不属 Eligibility（职责边界三条已锁）
 
-**推迟项执行进展注记（2026-09-03，#89 病种扩容线推进）**：首批非心境谱病种核验已在 #89 侧启动，详见 [grilling-89 记录](../../%E8%AE%BE%E8%AE%A1%E5%BD%92%E6%A1%A3/grilling/grilling-89-npc-material/grilling-89-npc-material.md) #89-D19~D26：
+**推迟项执行进展注记（2026-09-03，#89 病种扩容线推进）**：首批非心境谱病种核验已在 #89 侧启动，详见 [grilling-89 记录](../archive/grilling/grilling-89-npc-material/grilling-89-npc-material.md) #89-D19~D26：
 
 - **PTSD（B 表征病初判）**：走 E_d^mem 路径核验——证据基础完成（`PTSD-F资格阈值-证据基础.md`）：F 语义锚定（SAM 碎片）+ **反样本证据否决"F 单条件资格"**（感官碎片非 PTSD 独有，综述 f5）→ 规则方向 = 事件类型 ∈ {威胁/暴力,性创伤} ∧ F≥θ_F ∧ 可能 N≤θ_N；θ_F/θ_N 数值待本批次
 - **SSD（B 表征病初判 → 修正建议 A 临床史病）**：DSM-5 核验（`SSD资格核验-第1-2步.md`）——资格核心 = B 标准（症状+心理过度投入）= 临床史非记忆形态；e08/e09 创伤→躯体化是发病机制非资格 → **修正 #113 地图初判**，待本批次确认
@@ -131,13 +131,13 @@
 - **D6（Q6）**：自评表逐行裁决——价值部分系统性乐观（第 4 行 q_t「可靠候选」撤回、第 7 行「写 V1 可以」限定为 ρ 先行+代理量+无 q̂ 版），结构部分基本可靠（第 5/6/8/9 行成立）；最终回答：记忆生成器 = 能（限定版），从零生成一生 = 不能（缺外部 U + 结构缺口 ρ/π_ψ/f_θ）
 
 **受影响文件**：
-- `参考/记忆生成器理论-可行性评审-v1.md`（新建——评审产物）
-- `docs/决策树/`（本条目）
-- `data/term_registry.json`（不修改——术语候选清单用户 D 裁决 2026-09-06：全部不入库；q̂ 冲突与术语区分注记仅存 参考/记忆生成器理论-可行性评审-v1.md §九）
+- `reference/记忆生成器理论-可行性评审-v1.md`（新建——评审产物）
+- `design/decisions/`（本条目）
+- `data/term_registry.json`（不修改——术语候选清单用户 D 裁决 2026-09-06：全部不入库；q̂ 冲突与术语区分注记仅存 reference/记忆生成器理论-可行性评审-v1.md §九）
 
 **推迟清单**：ρ 边语义候选（结果/价值关联 + 时间邻近 + 语义相似）→ **见 [Grilling #118](https://github.com/verystrongdog/game/issues/118)**（ρ v0 = 时间邻近 ∨ 同类别同 v 方向，已实例化）；π_ψ 准则 / f_θ 表示 / s_t sim → 见 #118（Q6/Q7/Q8 已实例化 v0）；U 与 G_W → 「一生」级目标理论边界声明，与 意识结构侧 暂停轨同为学术前沿（恢复接续点见 memory 意识结构侧暂停注记）
 
-*关联: [#116](https://github.com/verystrongdog/game/issues/116)（同源输入的 #116 决策流另行处理）, [chatX_transcript.txt](../../%E5%8F%82%E8%80%83/%E4%BC%9A%E8%AF%9D%E5%AD%98%E6%A1%A3/chatX_transcript.txt)*
+*关联: [#116](https://github.com/verystrongdog/game/issues/116)（同源输入的 #116 决策流另行处理）, [chatX_transcript.txt](../../reference/session-archive/chatX_transcript.txt)*
 
 ## [Grilling] 人生经历生成器 V0 — 双通道轨迹律设计 (2026-09-06，Q1-Q10)
 
@@ -157,12 +157,12 @@
 - **Q10** 检验：6 条件 × N=200；T 扫参 {200,1000,5000}；主度量 D̄ + ΔD_decision（决策点距离增量），辅事件序列相似度；门禁 G1 非退化 / G2 不坍缩 / G3 消融可归因（指标锁数值不锁）；H1 报告效应量
 
 **受影响文件**：
-- `参考/人生经历生成器-双通道-V0-设计.md`（新建——V0 规格，含参数速查表 §十一：全部 [NEW 待标定]，不在规格阶段拍数值）
-- `docs/决策树/`（本条目）
+- `reference/人生经历生成器-双通道-V0-设计.md`（新建——V0 规格，含参数速查表 §十一：全部 [NEW 待标定]，不在规格阶段拍数值）
+- `design/decisions/`（本条目）
 
 **推迟清单**：阶段结构（V1 第一扩展）/ 困境期连续窗口深化 / 短视消费纹理 / 风险机遇轴·能力轴 / 可信轨 M-B 定义 / 日历时间慢变量（与 #116 D(t) 交汇时另行裁决轨道）；模拟实现批次另开 issue（#94 sim 批次先例）
 
-*关联: [#117](https://github.com/verystrongdog/game/issues/117), [#116](https://github.com/verystrongdog/game/issues/116), [V0 规格](../../%E5%8F%82%E8%80%83/%E4%BA%BA%E7%94%9F%E7%BB%8F%E5%8E%86%E7%94%9F%E6%88%90%E5%99%A8-%E5%8F%8C%E9%80%9A%E9%81%93-V0-%E8%AE%BE%E8%AE%A1.md)*
+*关联: [#117](https://github.com/verystrongdog/game/issues/117), [#116](https://github.com/verystrongdog/game/issues/116), [V0 规格](../../reference/%E4%BA%BA%E7%94%9F%E7%BB%8F%E5%8E%86%E7%94%9F%E6%88%90%E5%99%A8-%E5%8F%8C%E9%80%9A%E9%81%93-V0-%E8%AE%BE%E8%AE%A1.md)*
 
 ## [Grilling] #114 生成器生态问题 — 两问题归宿 + 生产范式移交（2026-09-06 闭合）
 
@@ -177,9 +177,9 @@
 ### 受影响文件
 
 - `../设计归档/grilling/grilling-116-disease-gen-evolution/决策记录-平凡实例化.md`（新建——裁定全文）
-- `事件/NPC人生生成器设计.md`（§一 修订注 + 头部修订声明）
-- `docs/决策树/`（本条目 + #116 条目）
-- `docs/设计框架-六维状态.md`（规则 +1：患者生成范式行；事件 #87 行补注）
+- `design/events/NPC人生生成器设计.md`（§一 修订注 + 头部修订声明）
+- `design/decisions/`（本条目 + #116 条目）
+- `design/framework/six-dimensions.md`（规则 +1：患者生成范式行；事件 #87 行补注）
 - memory（`患者生成范式-平凡实例化-grilling-116.md`）
 - issue #114 关闭评论
 
@@ -214,9 +214,9 @@
 ### 受影响文件
 
 - `../设计归档/grilling/grilling-116-disease-gen-evolution/决策记录-平凡实例化.md`（新建——裁定全文）
-- `事件/NPC人生生成器设计.md`（头部修订声明 + §一 修订注）
-- `docs/决策树/`（本条目 + #114 条目）
-- `docs/设计框架-六维状态.md`（规则 +1：患者生成范式行；事件 #87 行补注）
+- `design/events/NPC人生生成器设计.md`（头部修订声明 + §一 修订注）
+- `design/decisions/`（本条目 + #114 条目）
+- `design/framework/six-dimensions.md`（规则 +1：患者生成范式行；事件 #87 行补注）
 - memory（`患者生成范式-平凡实例化-grilling-116.md`）
 - issue #116 评论（决策同步）
 
@@ -231,7 +231,7 @@
 
 **闭合注记（2026-09-06）：** issue #116 已完成 Step 5 关闭——关闭总结评论（决策表 + 受影响文件 + 推迟清单）见 [issue #116](https://github.com/verystrongdog/game/issues/116#issuecomment-5557298206)。
 
-*关联: [#114](https://github.com/verystrongdog/game/issues/114), [#115](https://github.com/verystrongdog/game/issues/115), [#117](https://github.com/verystrongdog/game/issues/117), [#118](https://github.com/verystrongdog/game/issues/118), [决策记录](../../%E8%AE%BE%E8%AE%A1%E5%BD%92%E6%A1%A3/grilling/grilling-116-disease-gen-evolution/%E5%86%B3%E7%AD%96%E8%AE%B0%E5%BD%95-%E5%B9%B3%E5%87%A1%E5%AE%9E%E4%BE%8B%E5%8C%96.md), [NPC人生生成器设计](../../%E4%BA%8B%E4%BB%B6/NPC%E4%BA%BA%E7%94%9F%E7%94%9F%E6%88%90%E5%99%A8%E8%AE%BE%E8%AE%A1.md)*
+*关联: [#114](https://github.com/verystrongdog/game/issues/114), [#115](https://github.com/verystrongdog/game/issues/115), [#117](https://github.com/verystrongdog/game/issues/117), [#118](https://github.com/verystrongdog/game/issues/118), [决策记录](../archive/grilling/grilling-116-disease-gen-evolution/%E5%86%B3%E7%AD%96%E8%AE%B0%E5%BD%95-%E5%B9%B3%E5%87%A1%E5%AE%9E%E4%BE%8B%E5%8C%96.md), [NPC人生生成器设计](../events/NPC%E4%BA%BA%E7%94%9F%E7%94%9F%E6%88%90%E5%99%A8%E8%AE%BE%E8%AE%A1.md)*
 
 ## [Grilling] #119 — m（髓鞘化）语义层定案：物理基础与认知通道解耦（2026-09-06 开题，闭合）
 
@@ -253,11 +253,11 @@
 ### 受影响文件
 
 - `data/term_registry.json`（髓鞘化条目：definition 复合成熟度声明 + deviation_reason + numerical_locations 补调制 v2）
-- `规则/技能树系统/调制参数/链路调制上限参考表-v2.md`（§调制因子速查术语修正 + 髓鞘化同步行 = m 效率读出 + 链路参数表示例档位标注）
-- `规则/核心机制.md`（§1.3 语义注记块）
-- `规则/技能树系统/脑功能层级模型.md`（§12.1 关键突破行 = 自动化跃迁语义）
-- `规则/技能树系统/运行时状态模型.md`（§九 m 语义注记：内外状态分离/两类读出/门控不变）
-- `docs/决策树/`（本条）+ `docs/设计框架-六维状态.md`（髓鞘化成长行注记）
+- `design/rules/skill-tree/modulation/链路调制上限参考表-v2.md`（§调制因子速查术语修正 + 髓鞘化同步行 = m 效率读出 + 链路参数表示例档位标注）
+- `design/rules/核心机制.md`（§1.3 语义注记块）
+- `design/rules/skill-tree/脑功能层级模型.md`（§12.1 关键突破行 = 自动化跃迁语义）
+- `design/rules/skill-tree/运行时状态模型.md`（§九 m 语义注记：内外状态分离/两类读出/门控不变）
+- `design/decisions/`（本条）+ `design/framework/six-dimensions.md`（髓鞘化成长行注记）
 - `../设计归档/grilling/grilling-119-m-semantics/决策记录.md`（决策记录）
 - memory（`m-语义层-grilling-119.md`）
 
@@ -268,7 +268,7 @@
 - 分参触发条件（m 成分区分需求）——无消费者，延迟
 - 术语注册候选：「自动化跃迁」「复合成熟度」——grilling 结束用户裁决是否入库
 
-*关联: [#73](https://github.com/verystrongdog/game/issues/73), [#26](https://github.com/verystrongdog/game/issues/26), [决策记录](../../%E8%AE%BE%E8%AE%A1%E5%BD%92%E6%A1%A3/grilling/grilling-119-m-semantics/%E5%86%B3%E7%AD%96%E8%AE%B0%E5%BD%95.md)*
+*关联: [#73](https://github.com/verystrongdog/game/issues/73), [#26](https://github.com/verystrongdog/game/issues/26), [决策记录](../archive/grilling/grilling-119-m-semantics/%E5%86%B3%E7%AD%96%E8%AE%B0%E5%BD%95.md)*
 
 ## [Grilling] 角色发展轴 — "角色设定"演化载体的引用-组装式设计（2026-09-06 开题，闭合）
 
@@ -294,10 +294,10 @@
 
 ### 受影响文件
 
-- `实体/角色发展轴.md`（新建——正典文档，glue 契约 + IN/OUT 端点 + 议题/里程碑定义）
-- `事件/任务目标系统.md`（§2.3 接口角色注记 + §十一 延迟项更新）
-- `docs/决策树/`（本条目）
-- `docs/设计框架-六维状态.md`（实体 ✅ +1）
+- `design/entities/角色发展轴.md`（新建——正典文档，glue 契约 + IN/OUT 端点 + 议题/里程碑定义）
+- `design/events/任务目标系统.md`（§2.3 接口角色注记 + §十一 延迟项更新）
+- `design/decisions/`（本条目）
+- `design/framework/six-dimensions.md`（实体 ✅ +1）
 - `data/term_registry.json`（议题/里程碑/角色发展轴等入库）
 - memory（`角色发展轴-grilling-121.md`）
 - issue #121 关闭评论
@@ -310,7 +310,7 @@
 - #120 定案项：就绪门槛形式 / 三型 × 链路绑定表 / 涨幅频率 / 里程碑可浪费性
 - OUT-3 结局输入 / OUT-4 角色解锁 / S5 行为倾向演化 / 轴呈现量化（随自问层）
 
-*关联: [#120](https://github.com/verystrongdog/game/issues/120), [#119](https://github.com/verystrongdog/game/issues/119), [#90](https://github.com/verystrongdog/game/issues/90), [角色发展轴](../../%E5%AE%9E%E4%BD%93/%E8%A7%92%E8%89%B2%E5%8F%91%E5%B1%95%E8%BD%B4.md), [决策记录](../../%E8%AE%BE%E8%AE%A1%E5%BD%92%E6%A1%A3/grilling/grilling-121-role-development-axis/%E5%86%B3%E7%AD%96%E8%AE%B0%E5%BD%95.md)*
+*关联: [#120](https://github.com/verystrongdog/game/issues/120), [#119](https://github.com/verystrongdog/game/issues/119), [#90](https://github.com/verystrongdog/game/issues/90), [角色发展轴](../entities/%E8%A7%92%E8%89%B2%E5%8F%91%E5%B1%95%E8%BD%B4.md), [决策记录](../archive/grilling/grilling-121-role-development-axis/%E5%86%B3%E7%AD%96%E8%AE%B0%E5%BD%95.md)*
 
 ## [Grilling] #120 — 关键突破触发规则：里程碑→突破资格→休息执行（2026-09-06 开题，闭合）
 
@@ -331,11 +331,11 @@ Q1 用户裁定：突破触发应跟**角色本身身心发展进程**相关，�
 
 ### 受影响文件
 
-- `规则/技能树系统/关键突破.md`（新建——触发规则正典：触发链/就绪门槛/突破效果/玩家词表/范围边界）
-- `规则/核心机制.md`（§1.3 阶段表换玩家词 + 词表注记 + 突破引用）
-- `实体/角色发展轴.md`（§六 #120 消费端定案注记）
+- `design/rules/skill-tree/关键突破.md`（新建——触发规则正典：触发链/就绪门槛/突破效果/玩家词表/范围边界）
+- `design/rules/核心机制.md`（§1.3 阶段表换玩家词 + 词表注记 + 突破引用）
+- `design/entities/角色发展轴.md`（§六 #120 消费端定案注记）
 - `data/term_registry.json`（新术语：关键突破；髓鞘化条目补阶段词表注记）
-- `docs/决策树/`（本条）+ `docs/设计框架-六维状态.md` + `docs/维度/事件.md`（关键突破空缺闭合）
+- `design/decisions/`（本条）+ `design/framework/six-dimensions.md` + `design/framework/dimensions/事件.md`（关键突破空缺闭合）
 - `../设计归档/grilling/grilling-120-breakthrough/决策记录.md` + memory（`关键突破触发-grilling-120.md`）
 - issue #120 关闭总结评论
 
@@ -347,7 +347,7 @@ Q1 用户裁定：突破触发应跟**角色本身身心发展进程**相关，�
 - 自问层详细设计（渐悟 UI/OUT-2 投影，#121 推迟项 2）
 - IN-4 创伤记忆处理反向通道（单独议题）
 
-*关联: [#119](https://github.com/verystrongdog/game/issues/119), [#121](https://github.com/verystrongdog/game/issues/121), [关键突破](../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E5%85%B3%E9%94%AE%E7%AA%81%E7%A0%B4.md)*
+*关联: [#119](https://github.com/verystrongdog/game/issues/119), [#121](https://github.com/verystrongdog/game/issues/121), [关键突破](../rules/skill-tree/%E5%85%B3%E9%94%AE%E7%AA%81%E7%A0%B4.md)*
 
 ## [Grilling] #122 — Unity 呈现沙盘：可控角色 + 指令→动作→UI 反馈最小闭环（2026-09-06 开题，闭合）
 
@@ -355,9 +355,9 @@ Q1 用户裁定：突破触发应跟**角色本身身心发展进程**相关，�
 
 ### 决策
 
-- **D1（载体与范围）**：`unity/` 工程骨架 + 单场景白盒演示场——移动(WASD 自由，非战棋网格) + 基础行动(1=物攻/2=防御/3=精攻)；不含回合全量/网格/敌方AI/脑区3D。呈现验证载体，非正典实体模板。
+- **D1（载体与范围）**：`code/unity/` 工程骨架 + 单场景白盒演示场——移动(WASD 自由，非战棋网格) + 基础行动(1=物攻/2=防御/3=精攻)；不含回合全量/网格/敌方AI/脑区3D。呈现验证载体，非正典实体模板。
 - **D2（结算驱动）= 轻量手动回合沙盘**：每回合选 M1 动作 + Broca 动作 + [执行回合] → 玩家动作 → 陪练简单 AI → 冷却/防御按行动窗口口径（回合流程 §9）；不触碰引擎 TurnManager。简化注记：M1→Broca 固定顺序、射程 2.0/6.0m 演示常量、陪练 AI 非 NPC Affordance Competition。
-- **D3（版本/目录）**：Unity 6 (6000.0.83f1)，目录 `unity/`（.gitignore 已预留）。
+- **D3（版本/目录）**：Unity 6 (6000.0.83f1)，目录 `code/unity/`（.gitignore 已预留）。
 - **D4/D5（角色模型）**：暂无外部模型 → 白盒人形 + 程序化动作；`CharacterVisual` 为模型接入点（外部模型目标保留）。
 - **D6（引擎消费）⏸ 挂起（Q6b）**：选定"附加 netstandard2.1 桥接项目"方向；实施时暴露兼容墙——netstandard2.1 缺 `ArgumentNullException.ThrowIfNull`（71 处/22 文件）、collection expressions(C#12)、records(IsExternalInit)。子集桥接（4 文件 + DamageCalculator.cs 1 处引擎改动）vs 全量引擎重构（71 处）待用户定案。当前 `WhiteboxSolver` 临时镜像 `CalibrationConfig.Default`（替换透明）。
 - **D7（UI 集）**：uGUI——左下状态面板（HP/SAN 条+数值、防御/冷却/回合标签）+ 右下行动栏（1/2/3/执行/重置）+ 日志；陪练头顶精确数值标注为**调试显示**（非正典敌方模糊规则 §3.8）；无 AP 显示（正典不设 AP）。
@@ -366,11 +366,11 @@ Q1 用户裁定：突破触发应跟**角色本身身心发展进程**相关，�
 
 ### 受影响文件
 
-- `unity/`（新工程：Assets/Scripts 8 文件 + Assets/Editor/SceneBuilder + Assets/Tests/PlayMode 冒烟测试 2 例 + Packages/manifest + ProjectSettings + README）
-- `.gitignore`（unity/ 产物 + .unity-editor/.unity-home/.nuget-* 本地安装）
-- `src/YouAreNotTheFish.Core.Unity/`（⏸ 桥接项目草稿，Q6b 定案后启用）
-- `../设计归档/grilling/grilling-122-unity-slice/决策记录.md` + `docs/设计框架-六维状态.md` + `docs/决策树/`（本条）
-- 本机验证：打开 `unity/` → YANTF→创建 Demo 场景 → Play / PlayMode 测试
+- `code/unity/`（新工程：Assets/Scripts 8 文件 + Assets/Editor/SceneBuilder + Assets/Tests/PlayMode 冒烟测试 2 例 + Packages/manifest + ProjectSettings + README）
+- `.gitignore`（code/unity/ 产物 + .unity-editor/.unity-home/.nuget-* 本地安装）
+- `code/src/YouAreNotTheFish.Core.Unity/`（⏸ 桥接项目草稿，Q6b 定案后启用）
+- `../设计归档/grilling/grilling-122-unity-slice/决策记录.md` + `design/framework/six-dimensions.md` + `design/decisions/`（本条）
+- 本机验证：打开 `code/unity/` → YANTF→创建 Demo 场景 → Play / PlayMode 测试
 
 ### 推迟清单
 
@@ -378,7 +378,7 @@ Q1 用户裁定：突破触发应跟**角色本身身心发展进程**相关，�
 - 状态面板细部规格 grilling（本沙盘为 UI 调试底子，回炉）
 - 外部人形模型接入 → 见 [#123 动作库规格](#grilling-123--unity-沙盘角色动作集规格动作受控词表--动画来源--引用契约2026-09-07-开题闭合)（动作面已规格化，接入=下游消费者）；unity-brain-connect 神经演示（复用本工程阶段 0.1）
 
-*关联: [#122 决策记录](../../%E8%AE%BE%E8%AE%A1%E5%BD%92%E6%A1%A3/grilling/grilling-122-unity-slice/%E5%86%B3%E7%AD%96%E8%AE%B0%E5%BD%95.md), [unity/README.md](../../unity/README.md)*
+*关联: [#122 决策记录](../archive/grilling/grilling-122-unity-slice/%E5%86%B3%E7%AD%96%E8%AE%B0%E5%BD%95.md), [code/unity/README.md](../../code/unity/README.md)*
 
 ## [Grilling] #123 — Unity 沙盘角色动作集规格：动作受控词表 + 动画来源 + 引用契约（2026-09-07 开题，闭合）
 
@@ -402,11 +402,11 @@ Q1 用户裁定：突破触发应跟**角色本身身心发展进程**相关，�
 
 ### 受影响文件
 
-- `呈现/动作库规格.md`（新建——词表 12 词条 + 元规则 + 契约 A + 来源矩阵 + 批次）
+- `design/presentation/动作库规格.md`（新建——词表 12 词条 + 元规则 + 契约 A + 来源矩阵 + 批次）
 - `../设计归档/grilling/grilling-123-action-vocabulary/决策记录.md`（新建）
-- `docs/决策树/`（本条 + #122 推迟项注记「外部人形模型接入 → 见 #123」）
-- `docs/设计框架-六维状态.md`（呈现 ✅ +1；反馈动画空缺依赖更新）
-- `unity/README.md` + `项目总览.md`（入口链接）
+- `design/decisions/`（本条 + #122 推迟项注记「外部人形模型接入 → 见 #123」）
+- `design/framework/six-dimensions.md`（呈现 ✅ +1；反馈动画空缺依赖更新）
+- `code/unity/README.md` + `design/README.md`（入口链接）
 - memory（`动作集-grilling-123.md`）
 
 ### 推迟清单
@@ -417,7 +417,7 @@ Q1 用户裁定：突破触发应跟**角色本身身心发展进程**相关，�
 - 词表 JSON 化（数据驱动需要时）
 - 反馈动画方向 grilling（动作底子已备 ✅）
 
-*关联: [#123 决策记录](../../%E8%AE%BE%E8%AE%A1%E5%BD%92%E6%A1%A3/grilling/grilling-123-action-vocabulary/%E5%86%B3%E7%AD%96%E8%AE%B0%E5%BD%95.md), [呈现/动作库规格.md](../../呈现/动作库规格.md), [#122](https://github.com/verystrongdog/game/issues/122)*
+*关联: [#123 决策记录](../archive/grilling/grilling-123-action-vocabulary/%E5%86%B3%E7%AD%96%E8%AE%B0%E5%BD%95.md), [design/presentation/动作库规格.md](../presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md), [#122](https://github.com/verystrongdog/game/issues/122)*
 
 ## [Grilling] #124 — ActionLab 动作填充尝试：载体锚定 Mixamo X Bot + 执行形态（2026-09-08 开题，闭合）
 
@@ -441,10 +441,10 @@ Q1 用户裁定：突破触发应跟**角色本身身心发展进程**相关，�
 ### 受影响文件
 
 - `../设计归档/grilling/grilling-124-actionlab/决策记录.md`（新建——决策表/写入验证表/推迟清单）
-- `呈现/动作库规格.md`（🔧 闭合后修正：载体 + 来源矩阵实证）
-- `docs/决策树/`（本条 + #123 推迟项「ActionLab 实施 → 见 #124」）
-- `docs/设计框架-六维状态.md`（呈现行 + footer）
-- `unity/README.md`（§二·E ActionLab 实施手册）+ `项目总览.md`（入口）
+- `design/presentation/动作库规格.md`（🔧 闭合后修正：载体 + 来源矩阵实证）
+- `design/decisions/`（本条 + #123 推迟项「ActionLab 实施 → 见 #124」）
+- `design/framework/six-dimensions.md`（呈现行 + footer）
+- `code/unity/README.md`（§二·E ActionLab 实施手册）+ `design/README.md`（入口）
 - GitHub：Issue #124 关闭总结；#123 🔧 闭合后修正评论
 - memory（`动作集实施-grilling-124.md`）
 
@@ -456,7 +456,7 @@ Q1 用户裁定：突破触发应跟**角色本身身心发展进程**相关，�
 - L2（Sit/Stand/Talk）接线（消费端就绪时）
 - Batch0 代码实施（ActionIds/ActionCatalog/ActionPlayer/ActionLabDriver/ActionLabBuilder/ActionLabSmokeTests + README §二·E）——同会话交付
 
-*关联: [#124 决策记录](../../%E8%AE%BE%E8%AE%A1%E5%BD%92%E6%A1%A3/grilling/grilling-124-actionlab/%E5%86%B3%E7%AD%96%E8%AE%B0%E5%BD%95.md), [呈现/动作库规格.md](../../呈现/动作库规格.md), [#123 决策记录](../../%E8%AE%BE%E8%AE%A1%E5%BD%92%E6%A1%A3/grilling/grilling-123-action-vocabulary/%E5%86%B3%E7%AD%96%E8%AE%B0%E5%BD%95.md), [#124](https://github.com/verystrongdog/game/issues/124)*
+*关联: [#124 决策记录](../archive/grilling/grilling-124-actionlab/%E5%86%B3%E7%AD%96%E8%AE%B0%E5%BD%95.md), [design/presentation/动作库规格.md](../presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md), [#123 决策记录](../archive/grilling/grilling-123-action-vocabulary/%E5%86%B3%E7%AD%96%E8%AE%B0%E5%BD%95.md), [#124](https://github.com/verystrongdog/game/issues/124)*
 
 ---
 
@@ -492,13 +492,13 @@ Q1 用户裁定：突破触发应跟**角色本身身心发展进程**相关，�
 ### 受影响文件
 
 - `../设计归档/grilling/grilling-126-rosefield/决策记录.md`（新建——决策表/本机实测/写入验证表/校验结果/推迟清单）
-- `呈现/地块数据-Konza草原.md`（新建——数据源/判据/实测/口径/复现命令）
-- `呈现/玫瑰株丛密度.md`（新建——密度文献/布置/覆盖率判据推导）
-- `unity/Assets/Resources/YANTF/konza_plot_101x101_r16.bytes`（新建——高度图 20 402 B）
-- `unity/Assets/Scripts/HeightField.cs`、`RoseMeshFactory.cs`、`RoseFieldLab.cs`（新建）
-- `unity/Assets/Shaders/RoseInstanced.shader`、`unity/Assets/Editor/RoseFieldLabBuilder.cs`、`unity/Assets/Tests/PlayMode/RoseFieldSmokeTests.cs`（新建）
-- `unity/README.md`（§二·F 新增 + §三 结构树 + footer）
-- `docs/设计框架-六维状态.md`（呈现行 + 管线行 + footer）
+- `design/presentation/地块数据-Konza草原.md`（新建——数据源/判据/实测/口径/复现命令）
+- `design/presentation/玫瑰株丛密度.md`（新建——密度文献/布置/覆盖率判据推导）
+- `code/unity/Assets/Resources/YANTF/konza_plot_101x101_r16.bytes`（新建——高度图 20 402 B）
+- `code/unity/Assets/Scripts/HeightField.cs`、`RoseMeshFactory.cs`、`RoseFieldLab.cs`（新建）
+- `code/unity/Assets/Shaders/RoseInstanced.shader`、`code/unity/Assets/Editor/RoseFieldLabBuilder.cs`、`code/unity/Assets/Tests/PlayMode/RoseFieldSmokeTests.cs`（新建）
+- `code/unity/README.md`（§二·F 新增 + §三 结构树 + footer）
+- `design/framework/six-dimensions.md`（呈现行 + 管线行 + footer）
 - GitHub：Issue #126 关闭总结
 - memory（`玫瑰花海实验-grilling-126.md`）
 
@@ -510,8 +510,8 @@ Q1 用户裁定：突破触发应跟**角色本身身心发展进程**相关，�
 - 遮蔽剔除 / LOD / 视锥分块（当前 4563 株全量提交）
 - 花海入正典（若需要）→ 回空间维度 grilling（三层空间归属 + 月光分布接口）
 
-*关联: [#126 决策记录](../../%E8%AE%BE%E8%AE%A1%E5%BD%92%E6%A1%A3/grilling/grilling-126-rosefield/%E5%86%B3%E7%AD%96%E8%AE%B0%E5%BD%95.md), [地块数据-Konza草原](../../%E5%91%88%E7%8E%B0/%E5%9C%B0%E5%9D%97%E6%95%B0%E6%8D%AE-Konza%E8%8D%89%E5%8E%9F.md), [玫瑰株丛密度](../../%E5%91%88%E7%8E%B0/%E7%8E%AB%E7%91%B0%E6%A0%AA%E4%B8%9B%E5%AF%86%E5%BA%A6.md), [unity/README](../../unity/README.md), [#126](https://github.com/verystrongdog/game/issues/126)*
+*关联: [#126 决策记录](../archive/grilling/grilling-126-rosefield/%E5%86%B3%E7%AD%96%E8%AE%B0%E5%BD%95.md), [地块数据-Konza草原](../presentation/%E5%9C%B0%E5%9D%97%E6%95%B0%E6%8D%AE-Konza%E8%8D%89%E5%8E%9F.md), [玫瑰株丛密度](../presentation/%E7%8E%AB%E7%91%B0%E6%A0%AA%E4%B8%9B%E5%AF%86%E5%BA%A6.md), [code/unity/README](../../code/unity/README.md), [#126](https://github.com/verystrongdog/game/issues/126)*
 
 ---
-*创建: 2026-09-12（由 docs/决策树/ 拆分）| 更新: 2026-09-12*
-*关联: [决策树总索引](README.md), [设计框架-六维状态](../设计框架-六维状态.md)*
+*创建: 2026-09-12（由 design/decisions/ 拆分）| 更新: 2026-09-12*
+*关联: [决策树总索引](README.md), [设计框架-六维状态](../framework/six-dimensions.md)*

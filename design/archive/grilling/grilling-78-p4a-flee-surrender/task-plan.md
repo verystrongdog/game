@@ -94,7 +94,7 @@ IsOver(state):
 
 | # | 任务 | 类型 | 产出 | 依赖 |
 |---|------|------|------|------|
-| T1 | 正典写入：回合战斗流程 §8.2/§8.3 补 [NEW] 值（FleeSanRestore/理性阈值/投降 demo 判定注） | 文档 | `规则/回合战斗流程.md` | D1-D3 |
+| T1 | 正典写入：回合战斗流程 §8.2/§8.3 补 [NEW] 值（FleeSanRestore/理性阈值/投降 demo 判定注） | 文档 | `design/rules/回合战斗流程.md` | D1-D3 |
 | T2 | `ExitStatus` + `ActionKind.Flee/Surrender` + 通道校验 | 代码 | `Types/Enums.cs` + `Types/ParticipantState.cs` + `Types/CombatAction.cs` | D4 |
 | T3 | 逃跑流程（Fled 标记 + 移出队列 + A7 emit + SAN 恢复 + Δm 跳过标记） | 代码 | `Flow/ActionResolver.cs` + `Engine/EventProcessor.cs`（A7 接线） | T2 |
 | T4 | 投降流程（判定 + Surrendered + 战斗结束触发） | 代码 | `Flow/ActionResolver.cs` | T2 |
@@ -105,16 +105,16 @@ IsOver(state):
 
 | 文件 | 操作 | 类型 |
 |------|------|------|
-| `规则/回合战斗流程.md`（§8.2/§8.3 补 [NEW]） | 改写 | 文档 |
-| `src/YouAreNotTheFish.Core/Types/Enums.cs` | 改写（ExitStatus/ActionKind） | 代码 |
-| `src/YouAreNotTheFish.Core/Types/ParticipantState.cs` | 改写（+ExitStatus） | 代码 |
-| `src/YouAreNotTheFish.Core/Flow/ActionResolver.cs` | 改写（逃跑/投降） | 代码 |
-| `src/YouAreNotTheFish.Core/Engine/EventProcessor.cs` | 改写（A7 接线） | 代码 |
-| `src/YouAreNotTheFish.Core/Flow/TurnManager.cs` | 改写（IsOver） | 代码 |
-| `src/YouAreNotTheFish.Core.Types/CalibrationConfig.cs` | 改写（+2 [NEW]） | 代码 |
-| `src/YouAreNotTheFish.Core.Tests/` | 新增 | 测试 |
-| `src/YouAreNotTheFish.Console/` | 改写 | 代码 |
-| `docs/决策树/` / `docs/设计框架-六维状态.md` / memory | 追加 | 文档 |
+| `design/rules/回合战斗流程.md`（§8.2/§8.3 补 [NEW]） | 改写 | 文档 |
+| `code/src/YouAreNotTheFish.Core/Types/Enums.cs` | 改写（ExitStatus/ActionKind） | 代码 |
+| `code/src/YouAreNotTheFish.Core/Types/ParticipantState.cs` | 改写（+ExitStatus） | 代码 |
+| `code/src/YouAreNotTheFish.Core/Flow/ActionResolver.cs` | 改写（逃跑/投降） | 代码 |
+| `code/src/YouAreNotTheFish.Core/Engine/EventProcessor.cs` | 改写（A7 接线） | 代码 |
+| `code/src/YouAreNotTheFish.Core/Flow/TurnManager.cs` | 改写（IsOver） | 代码 |
+| `code/src/YouAreNotTheFish.Core.Types/CalibrationConfig.cs` | 改写（+2 [NEW]） | 代码 |
+| `code/src/YouAreNotTheFish.Core.Tests/` | 新增 | 测试 |
+| `code/src/YouAreNotTheFish.Console/` | 改写 | 代码 |
+| `design/decisions/` / `design/framework/six-dimensions.md` / memory | 追加 | 文档 |
 
 ## 十、数据契约与校验
 
@@ -129,12 +129,12 @@ IsOver(state):
 
 | 校验 | 命令 |
 |------|------|
-| 引擎测试绿 | `dotnet test src/YouAreNotTheFish.Core.Tests` |
+| 引擎测试绿 | `dotnet test code/src/YouAreNotTheFish.Core.Tests` |
 | 通道校验 | Flee/Surrender 非法通道抛错 |
-| 逃跑流程 | A7 事件/恢复/Δm 跳过 单测 |
+| 逃跑流程 | A7 design/events/恢复/Δm 跳过 单测 |
 | 投降判定 | 理性/非理性/SAN 边界 单测 |
 | IsOver | 全员逃跑/投降 → 结束 单测 |
-| 交叉引用 | `python3 tools/validate_cross_refs.py` |
+| 交叉引用 | `python3 code/tools/validate_cross_refs.py` |
 
 ## 十一、验收标准
 
@@ -157,4 +157,4 @@ IsOver(state):
 ---
 
 *创建: 2026-08-16 | 更新: 2026-08-16*
-*关联: [Grilling #70 路线图 task-plan](./../grilling-70-engine-roadmap/task-plan.md), [回合战斗流程](../../../%E8%A7%84%E5%88%99/%E5%9B%9E%E5%90%88%E6%88%98%E6%96%97%E6%B5%81%E7%A8%8B.md), [核心机制](../../../%E8%A7%84%E5%88%99/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md), [Grilling #73 P1b task-plan](./../grilling-73-p1b-linkstate/task-plan.md), [数学语言书写规范](../../../docs/agents/math-language-writing.md)*
+*关联: [Grilling #70 路线图 task-plan](../grilling-70-engine-roadmap/task-plan.md), [回合战斗流程](../../../rules/%E5%9B%9E%E5%90%88%E6%88%98%E6%96%97%E6%B5%81%E7%A8%8B.md), [核心机制](../../../rules/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md), [Grilling #73 P1b task-plan](../grilling-73-p1b-linkstate/task-plan.md), [数学语言书写规范](../../../conventions/agents/math-language-writing.md)*

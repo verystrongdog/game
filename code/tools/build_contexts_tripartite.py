@@ -30,7 +30,7 @@ Grilling #72 (P1a) D2/D3/D5 落地。替代旧 link_contexts.json（基于已废
 
 设计依据:
   - ../设计归档/grilling/grilling-72-p1a-skill-context/task-plan.md §三/§四/§六
-  - docs/决策树/ [Grilling] P1a 技能上下文三体重建（数据层）(2026-08-16)
+  - design/decisions/ [Grilling] P1a 技能上下文三体重建（数据层）(2026-08-16)
 """
 
 import json
@@ -38,7 +38,7 @@ import sys
 from pathlib import Path
 from collections import defaultdict
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parent.parent.parent
 
 # ─── 契约常量 ───────────────────────────────────────────────────
 SCHEMA = "link_contexts_tripartite"

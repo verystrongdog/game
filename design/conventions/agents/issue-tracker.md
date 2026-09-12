@@ -52,11 +52,11 @@ Used by `/wayfinder`. The **map** is a file with one **child** file per ticket.
 
 ## GitHub 镜像同步（2026-08-12 新增）
 
-本地 issue 文件为真相源，通过 `tools/sync_issues.py` 镜像到 GitHub（幂等，可随时重复运行）：
+本地 issue 文件为真相源，通过 `code/tools/sync_issues.py` 镜像到 GitHub（幂等，可随时重复运行）：
 
 ```bash
-python3 tools/sync_issues.py           # 全量同步
-python3 tools/sync_issues.py --dry-run # 预览将执行的操作
+python3 code/tools/sync_issues.py           # 全量同步
+python3 code/tools/sync_issues.py --dry-run # 预览将执行的操作
 ```
 
 约定：

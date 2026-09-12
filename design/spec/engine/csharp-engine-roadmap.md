@@ -31,8 +31,8 @@
 | 项 | 内容 |
 |----|------|
 | 覆盖 | WC 69 节点动力学（解析解）、脑干 4 tone、b_j 注入、CSTC 3 环路 Gurney 门控、速度排序（察觉/决断/执行）、物理/精神伤害结算、14 事件 δ/s 处理、NPC 3 基础行动 salience、5 Phase 回合编排、控制台 demo（2 参与者 1v1） |
-| 不覆盖 | 空间系统（12 格/控制区/AOE/借机攻击/视线——[回合战斗流程](../../规则/回合战斗流程.md) §十，原型期推迟）、逃跑/投降（§8.2-8.3）、HP↔SAN 互转（[核心机制](../../规则/核心机制.md) §5.3）、响应窗口 link 交互全文（L1 期待/L3 精准/L5 叙事重构等——demo 无 link）、观察者效应"相信被打败"（待设计）、技能树/LinkState 全量（demo 仅 m_default）、情境原型 archetype 选择（demo 不消费 situation archetype，s 由事件驱动、默认 α=0 中性原型） |
-| 前置依赖 | csharp-data-layer ✅ 已交付（2026-08-12，24/24 测试绿）、[运行时状态模型](../../规则/技能树系统/运行时状态模型.md)、[回合战斗流程](../../规则/回合战斗流程.md)、[核心机制](../../规则/核心机制.md)、[皮层动力学-通用层](../../规则/技能树系统/皮层动力学-通用层.md)、[NPC AI 行为模型](../../规则/技能树系统/NPC AI 行为模型.md)、[基础行动设计](../../规则/技能树系统/操作层/基础行动设计.md) |
+| 不覆盖 | 空间系统（12 格/控制区/AOE/借机攻击/视线——[回合战斗流程](../../rules/%E5%9B%9E%E5%90%88%E6%88%98%E6%96%97%E6%B5%81%E7%A8%8B.md) §十，原型期推迟）、逃跑/投降（§8.2-8.3）、HP↔SAN 互转（[核心机制](../../rules/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md) §5.3）、响应窗口 link 交互全文（L1 期待/L3 精准/L5 叙事重构等——demo 无 link）、观察者效应"相信被打败"（待设计）、技能树/LinkState 全量（demo 仅 m_default）、情境原型 archetype 选择（demo 不消费 situation archetype，s 由事件驱动、默认 α=0 中性原型） |
+| 前置依赖 | csharp-data-layer ✅ 已交付（2026-08-12，24/24 测试绿）、[运行时状态模型](../../rules/skill-tree/%E8%BF%90%E8%A1%8C%E6%97%B6%E7%8A%B6%E6%80%81%E6%A8%A1%E5%9E%8B.md)、[回合战斗流程](../../rules/%E5%9B%9E%E5%90%88%E6%88%98%E6%96%97%E6%B5%81%E7%A8%8B.md)、[核心机制](../../rules/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md)、[皮层动力学-通用层](../../rules/skill-tree/%E7%9A%AE%E5%B1%82%E5%8A%A8%E5%8A%9B%E5%AD%A6-%E9%80%9A%E7%94%A8%E5%B1%82.md)、[NPC AI 行为模型](../../rules/skill-tree/NPC%20AI%20%E8%A1%8C%E4%B8%BA%E6%A8%A1%E5%9E%8B.md)、[基础行动设计](../../rules/skill-tree/operations/%E5%9F%BA%E7%A1%80%E8%A1%8C%E5%8A%A8%E8%AE%BE%E8%AE%A1.md) |
 | 阻塞 | 后续 link/技能/装备 feature 依赖本引擎核心；NPC Affordance Competition 全量（7 参数化）依赖 demo 验证 |
 
 ---
@@ -85,7 +85,7 @@ L5 Presentation      Unity（本阶段无）
 
 `WMatrixBuilder.Build(GameData data) → WMatrix`（demo 无 LinkState：全部 m_mean = m_default）
 
-数据绑定（修复 #8，逐条对照 [皮层动力学-通用层](../../规则/技能树系统/皮层动力学-通用层.md) §5.1-5.5）：
+数据绑定（修复 #8，逐条对照 [皮层动力学-通用层](../../rules/skill-tree/%E7%9A%AE%E5%B1%82%E5%8A%A8%E5%8A%9B%E5%AD%A6-%E9%80%9A%E7%94%A8%E5%B1%82.md) §5.1-5.5）：
 
 1. **fan-out broadcast**：同一 dk_name 的多个 functional_id 共享输入权重模式——`W[fid_A][fid_B] = w(dk(fid_A), dk(fid_B))`。通过 `graph_nodes.functional_ids[]` 建 dk_name→fid 列表（12/51 节点 fan-out 2-4）。
 2. **w 公式**：`w(A,B) = edr_probability × m_mean × focus_multiplier`（§5.2），自连接 = 0，行归一化 `/(Σ + 0.01)`（ε=0.01，§5.4）。
@@ -164,7 +164,7 @@ speed = w1 × 察觉 + w2 × 决断 + w3 × 执行          (w1=w2=w3=1/3 默认
 
 ### 4.6 DamageCalculator
 
-物理（[核心机制](../../规则/核心机制.md) §4.2 + [基础行动设计](../../规则/技能树系统/操作层/基础行动设计.md) §四）：
+物理（[核心机制](../../rules/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md) §4.2 + [基础行动设计](../../rules/skill-tree/operations/%E5%9F%BA%E7%A1%80%E8%A1%8C%E5%8A%A8%E8%AE%BE%E8%AE%A1.md) §四）：
 
 ```
 CalcPhysicalDamage(int baseDamage, int weaponBonus, float forceMod, float motivationMod, float gateBonus, IRng rng) → (float damage, bool hit)
@@ -192,7 +192,7 @@ hp_damage = floor1(san_damage × 0.5)
 
 14 事件 δ pattern 表 + magnitude 表完整实现（运行时状态模型 §5.5 两张表）：
 
-- A6 δ = sign(权重表固定符号)（[NPC AI 行为模型](../../规则/技能树系统/NPC AI 行为模型.md) §3.3，非动态符号）；A6 α = 0。
+- A6 δ = sign(权重表固定符号)（[NPC AI 行为模型](../../rules/skill-tree/NPC%20AI%20%E8%A1%8C%E4%B8%BA%E6%A8%A1%E5%9E%8B.md) §3.3，非动态符号）；A6 α = 0。
 - `m < 0.01` → 跳过 emit（§5.5）。
 - C1 guard：仅 ΔSAN<0 且 old ≥ 30% 且 new < 30%（§5.5 C1 行）。
 - α magnitude：A 类 m_α=1.0；B/C/D 类 m_α=m（§5.5）。
@@ -427,4 +427,4 @@ Phase 4 声明→响应→结算 dispatch。响应窗口内容按 §一范围 st
 
 ---
 *创建: 2026-08-13 | 更新: 2026-08-13*
-*关联: [csharp-data-layer map](../../设计归档/grilling/csharp-data-layer/map.md), [运行时状态模型](../../规则/技能树系统/运行时状态模型.md), [回合战斗流程](../../规则/回合战斗流程.md), [核心机制](../../规则/核心机制.md), [皮层动力学-通用层](../../规则/技能树系统/皮层动力学-通用层.md), [NPC AI 行为模型](../../规则/技能树系统/NPC AI 行为模型.md), [基础行动设计](../../规则/技能树系统/操作层/基础行动设计.md)*
+*关联: [csharp-data-layer map](../../archive/grilling/csharp-data-layer/map.md), [运行时状态模型](../../rules/skill-tree/%E8%BF%90%E8%A1%8C%E6%97%B6%E7%8A%B6%E6%80%81%E6%A8%A1%E5%9E%8B.md), [回合战斗流程](../../rules/%E5%9B%9E%E5%90%88%E6%88%98%E6%96%97%E6%B5%81%E7%A8%8B.md), [核心机制](../../rules/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md), [皮层动力学-通用层](../../rules/skill-tree/%E7%9A%AE%E5%B1%82%E5%8A%A8%E5%8A%9B%E5%AD%A6-%E9%80%9A%E7%94%A8%E5%B1%82.md), [NPC AI 行为模型](../../rules/skill-tree/NPC%20AI%20%E8%A1%8C%E4%B8%BA%E6%A8%A1%E5%9E%8B.md), [基础行动设计](../../rules/skill-tree/operations/%E5%9F%BA%E7%A1%80%E8%A1%8C%E5%8A%A8%E8%AE%BE%E8%AE%A1.md)*

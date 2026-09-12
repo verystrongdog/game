@@ -7,10 +7,10 @@ list_deprecated_terms.py — deprecated 术语清单查询脚本（单一正典�
 避免在任何 skill/规范文档中硬编码术语清单（硬编码会随注册表更新而漂移）。
 
 用法:
-  python3 tools/list_deprecated_terms.py                 # text：每行一个术语
-  python3 tools/list_deprecated_terms.py --format json   # JSON 数组
-  python3 tools/list_deprecated_terms.py --format table  # 含 definition 摘要的表格
-  python3 tools/list_deprecated_terms.py --check 态度     # 检查单个词是否 deprecated（exit 0=是）
+  python3 code/tools/list_deprecated_terms.py                 # text：每行一个术语
+  python3 code/tools/list_deprecated_terms.py --format json   # JSON 数组
+  python3 code/tools/list_deprecated_terms.py --format table  # 含 definition 摘要的表格
+  python3 code/tools/list_deprecated_terms.py --check 态度     # 检查单个词是否 deprecated（exit 0=是）
 """
 
 import argparse
@@ -18,7 +18,7 @@ import json
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).parent.parent
+ROOT = Path(__file__).parent.parent.parent
 REGISTRY = ROOT / "data" / "term_registry.json"
 
 

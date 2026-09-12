@@ -113,7 +113,7 @@ Grilling #70 盘点发现 F-1：`link_contexts.json`（364 条）与 `link_regis
 | # | 任务 | 类型 | 产出 | 依赖 |
 |---|------|------|------|------|
 | T1 | `domain_role_map.json`（§四 映射表落地） | 数据 | `data/connectivity/domain_role_map.json` | D3 |
-| T2 | 重建脚本 `tools/build_contexts_tripartite.py`（读 tripartite+kroell14+映射表 → 双视图 JSON + stats + uncovered 报告） | 代码 | `link_contexts_tripartite.json` | T1 |
+| T2 | 重建脚本 `code/tools/build_contexts_tripartite.py`（读 tripartite+kroell14+映射表 → 双视图 JSON + stats + uncovered 报告） | 代码 | `link_contexts_tripartite.json` | T1 |
 | T3 | 运行重建 + 验证报告：uncovered 边 / 角色分布 vs 旧 364 / 候选池规模与分布 | 执行 | `rebuild-report.md` | T2 |
 | T4 | signal_type 辅助修正评估（冲突边清单 → 是否启用修正） | 分析 | 报告章节 | T3 |
 | T5 | 文档同步：决策树 #72 / 六维状态 / `技能生成机制.md` 60 候选池 ⚠️ 注更新（填新规模）/ memory | 文档 | — | T3 |
@@ -135,11 +135,11 @@ Grilling #70 盘点发现 F-1：`link_contexts.json`（364 条）与 `link_regis
 | 文件 | 操作 | 类型 |
 |------|------|------|
 | `data/connectivity/domain_role_map.json` | 新建 | 数据 |
-| `tools/build_contexts_tripartite.py` | 新建 | 代码 |
+| `code/tools/build_contexts_tripartite.py` | 新建 | 代码 |
 | `data/connectivity/link_contexts_tripartite.json` | 新建 | 数据 |
 | `rebuild-report.md` | 新建 | 报告 |
-| `规则/技能树系统/技能生成机制.md`（§二 ⚠️ 注更新） | 改写 | 文档 |
-| `docs/决策树/` / `docs/设计框架-六维状态.md` / memory | 追加 | 文档 |
+| `design/rules/skill-tree/技能生成机制.md`（§二 ⚠️ 注更新） | 改写 | 文档 |
+| `design/decisions/` / `design/framework/six-dimensions.md` / memory | 追加 | 文档 |
 | `data/README.md`（引擎 5 文件索引外补 link_contexts_tripartite） | 改写（可选） | 文档 |
 
 ## 八、数据契约与校验
@@ -156,8 +156,8 @@ Grilling #70 盘点发现 F-1：`link_contexts.json`（364 条）与 `link_regis
 | 校验 | 命令 |
 |------|------|
 | 转置一致性 | 重建脚本内断言（contexts vs edge_contexts） |
-| 交叉引用 | `python3 tools/validate_cross_refs.py` |
-| 注册表 deprecated | `python3 tools/list_deprecated_terms.py`（任务 md 不出现旧 link_NNN/60 候选为当前值表述） |
+| 交叉引用 | `python3 code/tools/validate_cross_refs.py` |
+| 注册表 deprecated | `python3 code/tools/list_deprecated_terms.py`（任务 md 不出现旧 link_NNN/60 候选为当前值表述） |
 
 ## 九、验收标准
 
@@ -181,4 +181,4 @@ Grilling #70 盘点发现 F-1：`link_contexts.json`（364 条）与 `link_regis
 ---
 
 *创建: 2026-08-16 | 更新: 2026-08-16*
-*关联: [Grilling #70 路线图 task-plan](./../grilling-70-engine-roadmap/task-plan.md), [技能生成机制](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E6%8A%80%E8%83%BD%E7%94%9F%E6%88%90%E6%9C%BA%E5%88%B6.md), [NPC AI 行为模型](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/NPC%20AI%20%E8%A1%8C%E4%B8%BA%E6%A8%A1%E5%9E%8B.md), [tripartite_model.json](../../../data/connectivity/tripartite_model.json), [kroell14_networks.json](../../../data/connectivity/kroell14_networks.json), [数学语言书写规范](../../../docs/agents/math-language-writing.md)*
+*关联: [Grilling #70 路线图 task-plan](../grilling-70-engine-roadmap/task-plan.md), [技能生成机制](../../../rules/skill-tree/%E6%8A%80%E8%83%BD%E7%94%9F%E6%88%90%E6%9C%BA%E5%88%B6.md), [NPC AI 行为模型](../../../rules/skill-tree/NPC%20AI%20%E8%A1%8C%E4%B8%BA%E6%A8%A1%E5%9E%8B.md), [tripartite_model.json](../../../../data/connectivity/tripartite_model.json), [kroell14_networks.json](../../../../data/connectivity/kroell14_networks.json), [数学语言书写规范](../../../conventions/agents/math-language-writing.md)*

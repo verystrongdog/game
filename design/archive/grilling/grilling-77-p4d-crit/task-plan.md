@@ -105,24 +105,24 @@ EventProcessor: A3/B3 与 A1/B1 同路径（δ 实时注入 + s 打包）——A
 
 | 文件 | 位置 | 内容 |
 |------|------|------|
-| `规则/技能树系统/操作层/基础行动设计.md` | §二 物理攻击 | 新增「暴击判定」段（crit_rate 公式/×1.5/A3B3 触发）；§三 L4 识别行细化（主动观察/弱点状态引用） |
-| `规则/核心机制.md` | §4.2 | 暴击公式 + 参数速查新增暴击行 |
-| `规则/技能树系统/运行时状态模型.md` | §5.5 | A3/B3 行补触发源注（物理暴击判定通过；A3 追加于 A1 后） |
+| `design/rules/skill-tree/operations/基础行动设计.md` | §二 物理攻击 | 新增「暴击判定」段（crit_rate 公式/×1.5/A3B3 触发）；§三 L4 识别行细化（主动观察/弱点状态引用） |
+| `design/rules/核心机制.md` | §4.2 | 暴击公式 + 参数速查新增暴击行 |
+| `design/rules/skill-tree/运行时状态模型.md` | §5.5 | A3/B3 行补触发源注（物理暴击判定通过；A3 追加于 A1 后） |
 
 ## 九、文件清单
 
 | 文件 | 操作 | 类型 |
 |------|------|------|
-| `规则/技能树系统/操作层/基础行动设计.md` | 改写（暴击段） | 文档 |
-| `规则/核心机制.md` | 改写（§4.2 + 速查） | 文档 |
-| `规则/技能树系统/运行时状态模型.md` | 改写（§5.5 注） | 文档 |
-| `src/YouAreNotTheFish.Core/Engine/DamageCalculator.cs` | 改写（暴击） | 代码 |
-| `src/YouAreNotTheFish.Core/Engine/EventProcessor.cs` | 改写（A3/B3） | 代码 |
-| `src/YouAreNotTheFish.Core/Types/Enums.cs` + `Entity/CombatState.cs` | 改写（弱点状态） | 代码 |
-| `src/YouAreNotTheFish.Core/Types/CalibrationConfig.cs` | 改写（+5 [NEW] 参数） | 代码 |
-| `src/YouAreNotTheFish.Core/Engine/SkillResolver.cs` | 改写（识别效果） | 代码 |
-| `src/YouAreNotTheFish.Core.Tests/` | 新增 | 测试 |
-| `docs/决策树/` / `docs/设计框架-六维状态.md` / memory | 追加 | 文档 |
+| `design/rules/skill-tree/operations/基础行动设计.md` | 改写（暴击段） | 文档 |
+| `design/rules/核心机制.md` | 改写（§4.2 + 速查） | 文档 |
+| `design/rules/skill-tree/运行时状态模型.md` | 改写（§5.5 注） | 文档 |
+| `code/src/YouAreNotTheFish.Core/Engine/DamageCalculator.cs` | 改写（暴击） | 代码 |
+| `code/src/YouAreNotTheFish.Core/Engine/EventProcessor.cs` | 改写（A3/B3） | 代码 |
+| `code/src/YouAreNotTheFish.Core/Types/Enums.cs` + `Entity/CombatState.cs` | 改写（弱点状态） | 代码 |
+| `code/src/YouAreNotTheFish.Core/Types/CalibrationConfig.cs` | 改写（+5 [NEW] 参数） | 代码 |
+| `code/src/YouAreNotTheFish.Core/Engine/SkillResolver.cs` | 改写（识别效果） | 代码 |
+| `code/src/YouAreNotTheFish.Core.Tests/` | 新增 | 测试 |
+| `design/decisions/` / `design/framework/six-dimensions.md` / memory | 追加 | 文档 |
 
 ## 十、数据契约与校验
 
@@ -138,12 +138,12 @@ EventProcessor: A3/B3 与 A1/B1 同路径（δ 实时注入 + s 打包）——A
 
 | 校验 | 命令 |
 |------|------|
-| 引擎测试绿 | `dotnet test src/YouAreNotTheFish.Core.Tests` |
+| 引擎测试绿 | `dotnet test code/src/YouAreNotTheFish.Core.Tests` |
 | crit_rate 边界 | base/θ/k/cap 单测（a_exec 低→base，高→cap） |
 | ×1.5 量化 | round1 后一位小数断言 |
 | A3/B3 | 暴击时事件列表含 A3+B3；δ/α pattern 断言 |
 | 弱点状态 | 持续/刷新/精神 ×1.5 单测 |
-| 交叉引用 | `python3 tools/validate_cross_refs.py` |
+| 交叉引用 | `python3 code/tools/validate_cross_refs.py` |
 
 ## 十一、验收标准
 
@@ -165,4 +165,4 @@ EventProcessor: A3/B3 与 A1/B1 同路径（δ 实时注入 + s 打包）——A
 ---
 
 *创建: 2026-08-16 | 更新: 2026-08-16*
-*关联: [Grilling #70 路线图 task-plan](./../grilling-70-engine-roadmap/task-plan.md), [基础行动设计](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E6%93%8D%E4%BD%9C%E5%B1%82/%E5%9F%BA%E7%A1%80%E8%A1%8C%E5%8A%A8%E8%AE%BE%E8%AE%A1.md), [核心机制](../../../%E8%A7%84%E5%88%99/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md), [运行时状态模型](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E8%BF%90%E8%A1%8C%E6%97%B6%E7%8A%B6%E6%80%81%E6%A8%A1%E5%9E%8B.md), [Grilling #74 P1c task-plan](./../grilling-74-p1c-skill-execution/task-plan.md), [数学语言书写规范](../../../docs/agents/math-language-writing.md)*
+*关联: [Grilling #70 路线图 task-plan](../grilling-70-engine-roadmap/task-plan.md), [基础行动设计](../../../rules/skill-tree/operations/%E5%9F%BA%E7%A1%80%E8%A1%8C%E5%8A%A8%E8%AE%BE%E8%AE%A1.md), [核心机制](../../../rules/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md), [运行时状态模型](../../../rules/skill-tree/%E8%BF%90%E8%A1%8C%E6%97%B6%E7%8A%B6%E6%80%81%E6%A8%A1%E5%9E%8B.md), [Grilling #74 P1c task-plan](../grilling-74-p1c-skill-execution/task-plan.md), [数学语言书写规范](../../../conventions/agents/math-language-writing.md)*

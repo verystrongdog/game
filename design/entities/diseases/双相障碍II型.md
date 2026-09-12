@@ -71,4 +71,4 @@ CGI-S范围: 3-6
 
 ---
 *创建: 2026-08-01 | 更新: 2026-08-21*
-*关联: [双相障碍II型 pilot](../../规格/素材/病种试点/bipolar-II-pilot.md), [pathology_edges.json](../../data/connectivity/pathology_edges.json), [奖赏系统障碍](_%E7%88%B6%E7%B1%BB/%E5%A5%96%E8%B5%8F%E7%B3%BB%E7%BB%9F%E9%9A%9C%E7%A2%8D.md), [双相障碍I型](双相障碍I型.md)*
+*关联: [双相障碍II型 pilot](../../spec/material/disease-pilots/bipolar-II-pilot.md), [pathology_edges.json](../../../data/connectivity/pathology_edges.json), [奖赏系统障碍](_parent-classes/%E5%A5%96%E8%B5%8F%E7%B3%BB%E7%BB%9F%E9%9A%9C%E7%A2%8D.md), [双相障碍I型](%E5%8F%8C%E7%9B%B8%E9%9A%9C%E7%A2%8DI%E5%9E%8B.md)*

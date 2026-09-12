@@ -146,15 +146,15 @@ SAN 特殊状态:
 
 | 文件 | 操作 | 类型 |
 |------|------|------|
-| `src/YouAreNotTheFish.Core/Types/NpcPersonality.cs` | 新建 | 代码 |
-| `src/YouAreNotTheFish.Core/Engine/RoleToneWeights.cs` | 新建 | 代码 |
+| `code/src/YouAreNotTheFish.Core/Types/NpcPersonality.cs` | 新建 | 代码 |
+| `code/src/YouAreNotTheFish.Core/Engine/RoleToneWeights.cs` | 新建 | 代码 |
 | `data/connectivity/personality_tags.json` | 新建 | 数据 |
-| `src/YouAreNotTheFish.Core/Engine/NpcSalience.cs` | 重写 | 代码 |
-| `src/YouAreNotTheFish.Core/Types/ParticipantState.cs` + `Engine/ToneUpdater.cs` | 改写（baseline） | 代码 |
-| `src/YouAreNotTheFish.Core/Engine/CandidateSetBuilder.cs` | 新建 | 代码 |
-| `src/YouAreNotTheFish.Core.Tests/` | 新增 | 测试 |
-| `src/YouAreNotTheFish.Console/` | 改写 | 代码 |
-| `docs/决策树/` / `docs/设计框架-六维状态.md` / memory | 追加 | 文档 |
+| `code/src/YouAreNotTheFish.Core/Engine/NpcSalience.cs` | 重写 | 代码 |
+| `code/src/YouAreNotTheFish.Core/Types/ParticipantState.cs` + `Engine/ToneUpdater.cs` | 改写（baseline） | 代码 |
+| `code/src/YouAreNotTheFish.Core/Engine/CandidateSetBuilder.cs` | 新建 | 代码 |
+| `code/src/YouAreNotTheFish.Core.Tests/` | 新增 | 测试 |
+| `code/src/YouAreNotTheFish.Console/` | 改写 | 代码 |
+| `design/decisions/` / `design/framework/six-dimensions.md` / memory | 追加 | 文档 |
 
 ## 十、数据契约与校验
 
@@ -169,11 +169,11 @@ SAN 特殊状态:
 
 | 校验 | 命令 |
 |------|------|
-| 引擎测试绿 | `dotnet test src/YouAreNotTheFish.Core.Tests` |
+| 引擎测试绿 | `dotnet test code/src/YouAreNotTheFish.Core.Tests` |
 | tone_bias 逐项 | 8 角色 × 4 tone 单测断言 |
 | T_SAN 分段 | SAN 边界（60/30/0）单测 |
 | argmax vs Softmax | Boss 同种子同行动；杂兵分布非退化 |
-| 交叉引用 | `python3 tools/validate_cross_refs.py` |
+| 交叉引用 | `python3 code/tools/validate_cross_refs.py` |
 
 ## 十一、验收标准
 
@@ -197,4 +197,4 @@ SAN 特殊状态:
 ---
 
 *创建: 2026-08-16 | 更新: 2026-08-16*
-*关联: [Grilling #70 路线图 task-plan](./../grilling-70-engine-roadmap/task-plan.md), [NPC AI 行为模型](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/NPC%20AI%20%E8%A1%8C%E4%B8%BA%E6%A8%A1%E5%9E%8B.md), [运行时状态模型](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E8%BF%90%E8%A1%8C%E6%97%B6%E7%8A%B6%E6%80%81%E6%A8%A1%E5%9E%8B.md), [Grilling #74 P1c task-plan](./../grilling-74-p1c-skill-execution/task-plan.md), [数学语言书写规范](../../../docs/agents/math-language-writing.md)*
+*关联: [Grilling #70 路线图 task-plan](../grilling-70-engine-roadmap/task-plan.md), [NPC AI 行为模型](../../../rules/skill-tree/NPC%20AI%20%E8%A1%8C%E4%B8%BA%E6%A8%A1%E5%9E%8B.md), [运行时状态模型](../../../rules/skill-tree/%E8%BF%90%E8%A1%8C%E6%97%B6%E7%8A%B6%E6%80%81%E6%A8%A1%E5%9E%8B.md), [Grilling #74 P1c task-plan](../grilling-74-p1c-skill-execution/task-plan.md), [数学语言书写规范](../../../conventions/agents/math-language-writing.md)*

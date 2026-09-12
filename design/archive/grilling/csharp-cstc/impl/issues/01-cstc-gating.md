@@ -8,8 +8,8 @@
 
 ## 文件所有权声明
 
-- `src/YouAreNotTheFish.Core/Engine/CstcGating.cs` — 新建
-- `src/YouAreNotTheFish.Core.Tests/Engine/CstcGatingTests.cs` — 新建
+- `code/src/YouAreNotTheFish.Core/Engine/CstcGating.cs` — 新建
+- `code/src/YouAreNotTheFish.Core.Tests/Engine/CstcGatingTests.cs` — 新建
 
 （创建前 grep 确认无其他进行中 work issue 冲突。）
 
@@ -28,8 +28,8 @@ spec v1.1 §六 AC-1~AC-15 逐条 ✅ + `dotnet build` 零错误 + `dotnet test`
 
 ## 实现
 
-- `src/YouAreNotTheFish.Core/Engine/CstcGating.cs` — 按 spec §三/§四 实现（构造 + CiRows + Step + StepLoop + Ramp + 常量），一次成型零修改
-- `src/YouAreNotTheFish.Core.Tests/Engine/CstcGatingTests.cs` — AC-1~15 共 15 个测试方法（测试侧 ExpectedLoop/ExpectedU2 镜像 + Iterate300 固定 300 回合 + M1 链重建 + 合成数据防御）
+- `code/src/YouAreNotTheFish.Core/Engine/CstcGating.cs` — 按 spec §三/§四 实现（构造 + CiRows + Step + StepLoop + Ramp + 常量），一次成型零修改
+- `code/src/YouAreNotTheFish.Core.Tests/Engine/CstcGatingTests.cs` — AC-1~15 共 15 个测试方法（测试侧 ExpectedLoop/ExpectedU2 镜像 + Iterate300 固定 300 回合 + M1 链重建 + 合成数据防御）
 
 ## 代码自审（证据式）
 

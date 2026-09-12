@@ -12,8 +12,8 @@ description: Grill the user relentlessly about a plan, decision, or idea. Use wh
 ## Step 0 — 定位（每次 grilling 前）
 
 ### 0.1-0.2 基础定位
-1. **读取路由表**：`docs/设计框架-六维状态.md`（项目根目录下），确认本次话题属于哪个维度，在全局优先级中的位置
-2. **读取维度索引**：`docs/维度/<维度名>.md`，确认该维度已有设计和空缺
+1. **读取路由表**：`design/framework/six-dimensions.md`（项目根目录下），确认本次话题属于哪个维度，在全局优先级中的位置
+2. **读取维度索引**：`design/framework/dimensions/<维度名>.md`，确认该维度已有设计和空缺
 
 ### 0.3-0.5 前置资料包（v2 新增）
 3. **读取所有直接相关的设计文档**，建立"已读清单"。容量规则：如相关文件 > 5 个，优先读取索引文件（维度 .md）和最高层级设计文档，具体子系统文件标记为"待按需读取"（追问涉及时再读）
@@ -27,8 +27,8 @@ description: Grill the user relentlessly about a plan, decision, or idea. Use wh
 ## Step 0 — 前置资料包
 
 ### 预读（已完整读入上下文）
-- [x] `docs/设计框架-六维状态.md`
-- [x] `docs/维度/<维度名>.md`
+- [x] `design/framework/six-dimensions.md`
+- [x] `design/framework/dimensions/<维度名>.md`
 - [x] ...
 
 ### 待按需读取（标记为可能相关，追问涉及时再读）
@@ -46,7 +46,7 @@ description: Grill the user relentlessly about a plan, decision, or idea. Use wh
 
 ## Step 1 — 话题验证
 
-`grep` `docs/决策树/` 中是否已有同名话题的「决策」或「被否决」→ 有则告知用户。`gh issue list --label grilling --state open` 是否有重复 grilling issue → 有则链接已有 issue。不通过则不创建 issue。
+`grep` `design/decisions/` 中是否已有同名话题的「决策」或「被否决」→ 有则告知用户。`gh issue list --label grilling --state open` 是否有重复 grilling issue → 有则链接已有 issue。不通过则不创建 issue。
 
 ---
 
@@ -113,7 +113,7 @@ If a *fact* can be found by exploring the environment (filesystem, tools, etc.),
 **我的建议**：[建议内容]
 
 **事实依据**：
-- `规则/核心机制.md` §5.1 — SAN ≥ 60 稳定，< 30 恐慌，= 0 随机行为
+- `design/rules/核心机制.md` §5.1 — SAN ≥ 60 稳定，< 30 恐慌，= 0 随机行为
 - `memory/xxx.md` — [事实描述]
 - 以下为新建议，非已有事实：[列出新提出的参数/规则]
 ```
@@ -264,9 +264,9 @@ If a *fact* can be found by exploring the environment (filesystem, tools, etc.),
 ## Step 4 — 写入（达成共识后）
 
 1. **写入设计文档**：将决策写入受影响的具体 md 文件
-2. **更新决策树**：追加到 `docs/决策树/`。追加前 `grep` 与本次相关的「延迟」项 → 新记录标注来源，旧记录加注「→ 见」
-3. **更新六维状态**：修改 `docs/设计框架-六维状态.md` 对应维度的状态（✅/⚠️/❌）和 grilling 队列
-4. **检查项目总览**：确认 `项目总览.md` 的设计共识和待解决问题是否需要同步更新
+2. **更新决策树**：追加到 `design/decisions/`。追加前 `grep` 与本次相关的「延迟」项 → 新记录标注来源，旧记录加注「→ 见」
+3. **更新六维状态**：修改 `design/framework/six-dimensions.md` 对应维度的状态（✅/⚠️/❌）和 grilling 队列
+4. **检查项目总览**：确认 `design/README.md` 的设计共识和待解决问题是否需要同步更新
 5. **写入 memory**：将关键决策摘要写入 `~/.claude/projects/-home-dog-game/memory/` 对应文件
 6. **写入验证表**（v2 新增）：逐条对照 grilling 决策 → 写入内容，输出验证表：
 

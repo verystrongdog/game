@@ -284,5 +284,5 @@ VAD: V=−0.854, A=+0.680, D=−0.414  (NRC VAD 归一化)
 ---
 
 *创建: 2026-07-06 | 更新: 2026-07-14 (接口说明更新)*
-*关联: [情绪模型](./情绪模型.md), [心境与情绪-两层模型](./心境与情绪-两层模型.md), [态度系统](../态度系统/态度系统.md)*
+*关联: [情绪模型](../emotion-system/%E6%83%85%E7%BB%AA%E6%A8%A1%E5%9E%8B.md), [心境与情绪-两层模型](../emotion-system/%E5%BF%83%E5%A2%83%E4%B8%8E%E6%83%85%E7%BB%AA-%E4%B8%A4%E5%B1%82%E6%A8%A1%E5%9E%8B.md), [态度系统](../attitude-system/%E6%80%81%E5%BA%A6%E7%B3%BB%E7%BB%9F.md)*
 *数据来源: NRC VAD Lexicon (Mohammad, ACL 2018) + Warriner et al. (Behavior Research Methods, 2013)*

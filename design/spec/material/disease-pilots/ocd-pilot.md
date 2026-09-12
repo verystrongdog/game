@@ -1,6 +1,6 @@
 # OCD 重映射试点
 
-> 26 病重映射第二批试点（模板：[ptsd-pilot.md](ptsd-pilot.md) §六 字段规范）。本文件把旧 `link_NNN` 链路表（挂已废弃 link_registry.json）重映射为三体模型上的 **17 条病理边（全部命中 `tripartite_model.json` 现有边，0 条「病理新增」）**，每条含 `{source, target, 边类型, 病理类型, m偏移三档, laterality_delta, 文献依据, 行为覆盖/非线性跳变挂接}`。核心病理 = **CSTC 环路过度耦合无法终止**（认知环路走 Caudate：ACC→Caudate / dlPFC→Caudate；躯体环路走 Putamen：SNc→Putamen / superiorfrontal→Putamen GO + Putamen→Pallidum NO-GO 腿解耦）+ 奖赏-边缘环路劫持（OFC→Accumbens↑、海马 ALFF↑）+ DMN 背内侧↓。档位过滤 B′：CGI-S 3-7 → **三档全可用**。7 参数推导（4 tone + 3 CSTC bias）与 NPC AI §5.2 标签组合「敏化-威胁 + 抑制不足」交叉验证：5/7 一致，DA_SNc、bias_cognitive 两处由 CSTC 核心机制修正（参数直调，[NEW 数值校准层]）——敌我同构闭环成立。
+> 26 病重映射第二批试点（模板：[ptsd-pilot.md](../disease-pilots/ptsd-pilot.md) §六 字段规范）。本文件把旧 `link_NNN` 链路表（挂已废弃 link_registry.json）重映射为三体模型上的 **17 条病理边（全部命中 `tripartite_model.json` 现有边，0 条「病理新增」）**，每条含 `{source, target, 边类型, 病理类型, m偏移三档, laterality_delta, 文献依据, 行为覆盖/非线性跳变挂接}`。核心病理 = **CSTC 环路过度耦合无法终止**（认知环路走 Caudate：ACC→Caudate / dlPFC→Caudate；躯体环路走 Putamen：SNc→Putamen / superiorfrontal→Putamen GO + Putamen→Pallidum NO-GO 腿解耦）+ 奖赏-边缘环路劫持（OFC→Accumbens↑、海马 ALFF↑）+ DMN 背内侧↓。档位过滤 B′：CGI-S 3-7 → **三档全可用**。7 参数推导（4 tone + 3 CSTC bias）与 NPC AI §5.2 标签组合「敏化-威胁 + 抑制不足」交叉验证：5/7 一致，DA_SNc、bias_cognitive 两处由 CSTC 核心机制修正（参数直调，[NEW 数值校准层]）——敌我同构闭环成立。
 
 ## 目录
 
@@ -17,10 +17,10 @@
 
 | # | 文献 | 类型 | 关键数据点（→ 病理边用途） |
 |---|------|------|--------------------------|
-| 1 | **CSTC 皮质-纹状体-丘脑-皮质模型**（Alexander et al. 1986, PMID 3085570；[疾病-脑区链路映射-文献数据源.md](../../../%E5%8F%82%E8%80%83/%E6%96%87%E7%8C%AE/%E7%96%BE%E7%97%85-%E8%84%91%E5%8C%BA%E9%93%BE%E8%B7%AF%E6%98%A0%E5%B0%84-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md) §七 OCD「核心回路」） | 回路模型 | OCD = CSTC 闭环**过度耦合无法终止**；腹侧动机环路 OFC→NAcc→丘脑 → 认知/躯体/边缘三环路病边设计（e01/e04/e07/e12） |
+| 1 | **CSTC 皮质-纹状体-丘脑-皮质模型**（Alexander et al. 1986, PMID 3085570；[疾病-脑区链路映射-文献数据源.md](../../../../reference/literature/%E7%96%BE%E7%97%85-%E8%84%91%E5%8C%BA%E9%93%BE%E8%B7%AF%E6%98%A0%E5%B0%84-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md) §七 OCD「核心回路」） | 回路模型 | OCD = CSTC 闭环**过度耦合无法终止**；腹侧动机环路 OFC→NAcc→丘脑 → 认知/躯体/边缘三环路病边设计（e01/e04/e07/e12） |
 | 2 | **文献数据源 §七 OCD 连接表** | 连接 meta 汇总 | **↑OFC-腹侧纹状体/NAcc**（→ e12）、**↑底丘脑核(STN)-壳核**（→ e16，STN 唯一出边 STOP 超直接）、**↓壳核-OFC/IFG/岛叶**（→ e08 NO-GO 腿解耦）、**↓DMN背内侧(PCC-dmPFC)**（→ e15 precuneus→dmPFC 解耦） |
 | 3 | **Guo et al. (2026)** *Transl Psychiatry*（254 实验, 10,456 患者，跨诊断 ALFF meta） | 静息态 ALFF meta | OCD 特异性偏离 = **ALFF↑ 海马 / 左侧 IFG / ACC-mPFC；ALFF↓ 右侧岛叶 / 壳核**（文献数据源 §2.3）→ e02/e13/e14 方向锚 + 偏侧说明（§二 图例） |
-| 4 | **NPC AI §4.2/§5.2 标签校准**（[NPC AI 行为模型](../../../规则/技能树系统/NPC AI 行为模型.md)） | 设计校准 | OCD = 敏化-威胁 + 抑制不足 → 纹状体-丘脑-皮层环路↑；tone ±0.1~±0.2、bias ±0.15 幅值锚（→ §三 7 参数量级） |
+| 4 | **NPC AI §4.2/§5.2 标签校准**（[NPC AI 行为模型](../../../rules/skill-tree/NPC%20AI%20%E8%A1%8C%E4%B8%BA%E6%A8%A1%E5%9E%8B.md)） | 设计校准 | OCD = 敏化-威胁 + 抑制不足 → 纹状体-丘脑-皮层环路↑；tone ±0.1~±0.2、bias ±0.15 幅值锚（→ §三 7 参数量级） |
 
 **辅助锚（方向/范围补充）**：
 
@@ -202,4 +202,4 @@ NPC AI §5.2「强迫症 = 敏化-威胁 + 抑制不足」双标签（多标签�
 ---
 
 *创建: 2026-08-21 | 更新: 2026-08-21*
-*关联: [grilling-88.md](grilling-88.md), [ptsd-pilot.md](ptsd-pilot.md), [强迫症](../../../%E5%AE%9E%E4%BD%93/%E7%96%BE%E7%97%85%E7%9B%AE%E5%BD%95/%E5%BC%BA%E8%BF%AB%E7%97%87.md), [NPC AI 行为模型](../../../规则/技能树系统/NPC AI 行为模型.md) §4.2/§5.2, [偏侧化架构](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E5%81%8F%E4%BE%A7%E5%8C%96%E6%9E%B6%E6%9E%84.md) §四/§八, [脑功能层级模型](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E8%84%91%E5%8A%9F%E8%83%BD%E5%B1%82%E7%BA%A7%E6%A8%A1%E5%9E%8B.md) §二十, [疾病-脑区链路映射-文献数据源](../../../%E5%8F%82%E8%80%83/%E6%96%87%E7%8C%AE/%E7%96%BE%E7%97%85-%E8%84%91%E5%8C%BA%E9%93%BE%E8%B7%AF%E6%98%A0%E5%B0%84-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md) §2.3/§七, [左右脑偏侧化-文献数据源](../../../%E5%8F%82%E8%80%83/%E6%96%87%E7%8C%AE/%E5%B7%A6%E5%8F%B3%E8%84%91%E5%81%8F%E4%BE%A7%E5%8C%96-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md) §八, [tripartite_model.json](../../../data/connectivity/tripartite_model.json), [link_registry.json](../../../data/connectivity/link_registry.json)（⚠️ 已废弃 2026-08-07）*
+*关联: [grilling-88.md](../disease-pilots/grilling-88.md), [ptsd-pilot.md](../disease-pilots/ptsd-pilot.md), [强迫症](../../../entities/diseases/%E5%BC%BA%E8%BF%AB%E7%97%87.md), [NPC AI 行为模型](../../../rules/skill-tree/NPC%20AI%20%E8%A1%8C%E4%B8%BA%E6%A8%A1%E5%9E%8B.md) §4.2/§5.2, [偏侧化架构](../../../rules/skill-tree/%E5%81%8F%E4%BE%A7%E5%8C%96%E6%9E%B6%E6%9E%84.md) §四/§八, [脑功能层级模型](../../../rules/skill-tree/%E8%84%91%E5%8A%9F%E8%83%BD%E5%B1%82%E7%BA%A7%E6%A8%A1%E5%9E%8B.md) §二十, [疾病-脑区链路映射-文献数据源](../../../../reference/literature/%E7%96%BE%E7%97%85-%E8%84%91%E5%8C%BA%E9%93%BE%E8%B7%AF%E6%98%A0%E5%B0%84-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md) §2.3/§七, [左右脑偏侧化-文献数据源](../../../../reference/literature/%E5%B7%A6%E5%8F%B3%E8%84%91%E5%81%8F%E4%BE%A7%E5%8C%96-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md) §八, [tripartite_model.json](../../../../data/connectivity/tripartite_model.json), [link_registry.json](../../../../data/connectivity/link_registry.json)（⚠️ 已废弃 2026-08-07）*

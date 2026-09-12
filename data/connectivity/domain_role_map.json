@@ -1,6 +1,6 @@
 {
   "_description": "12 gameplay_domain → 8 行为角色权重映射表 (Grilling #72 P1a D3)。作为 link_contexts_tripartite.json 角色分类的唯一映射来源。",
-  "_design_doc": "规则/技能树系统/技能生成机制.md（链路上下文范式，Grilling #20）+ ../../设计归档/grilling/grilling-72-p1a-skill-context/task-plan.md §四",
+  "_design_doc": "design/rules/skill-tree/技能生成机制.md（链路上下文范式，Grilling #20）+ ../../设计归档/grilling/grilling-72-p1a-skill-context/task-plan.md §四",
   "_rules": [
     "role_scores(edge)[r] = Σ_domain w(domain, r) × [domain ∈ edge.gameplay_labels]",
     "primary_role = argmax_r role_scores；secondary_role = 次高分 r（score > 0.25）",

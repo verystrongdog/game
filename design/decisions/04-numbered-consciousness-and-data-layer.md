@@ -41,7 +41,7 @@
 ### 受影响文件
 
 - `../设计归档/grilling/grilling-40-consciousness/papers`（新建——7 框架论文 + 简报）
-- `docs/决策树/`（本文）
+- `design/decisions/`（本文）
 
 ### 推迟/不讨论
 
@@ -65,7 +65,7 @@
 
 #### 受影响文件（延伸讨论）
 
-- `docs/决策树/`（本文）
+- `design/decisions/`（本文）
 - `memory/主观意识数学定义-grilling-40.md`（更新）
 
 #### 推迟/不讨论（延伸讨论）
@@ -98,11 +98,11 @@
 
 ### 受影响文件
 
-- `事件/世界观与叙事.md`（新增 §世界观地基：意识包裹——统一解释 + 硬性约束）
-- `规则/核心机制.md`（§6.1 医院主导观察者加容器关系注释；§七 观察者效应胜利路径加作用域限定）
-- `规则/时空结构数学框架.md`（§七 边界声明加元声明——结构核/现象壳分离）
-- `docs/决策树/`（本文）
-- `docs/设计框架-六维状态.md`（事件维度：新增世界观地基 ✅；规则空缺：观察者效应桥接前提到位）
+- `design/events/世界观与叙事.md`（新增 §世界观地基：意识包裹——统一解释 + 硬性约束）
+- `design/rules/核心机制.md`（§6.1 医院主导观察者加容器关系注释；§七 观察者效应胜利路径加作用域限定）
+- `design/rules/时空结构数学框架.md`（§七 边界声明加元声明——结构核/现象壳分离）
+- `design/decisions/`（本文）
+- `design/framework/six-dimensions.md`（事件维度：新增世界观地基 ✅；规则空缺：观察者效应桥接前提到位）
 - `data/term_registry.json`（新增：意识包裹、不可证实性；更新：主观意识补注、观察者效应补注、基底独立原则边界注）
 - `memory/意识包裹审计-grilling-41-pre.md`（四路审计前置报告）
 - `memory/意识包裹-grilling-41.md`（本 grilling 决策摘要）
@@ -153,12 +153,12 @@
 
 ### 受影响文件
 
-- `规则/时空结构数学框架.md`（新增 §十一 月光场实例化——主产物）
-- `规则/核心机制.md`（§6.3 月光调制口径更新）
-- `规则/技能树系统/运行时状态模型.md`（§4.5 m_field 接口注）
+- `design/rules/时空结构数学框架.md`（新增 §十一 月光场实例化——主产物）
+- `design/rules/核心机制.md`（§6.3 月光调制口径更新）
+- `design/rules/skill-tree/运行时状态模型.md`（§4.5 m_field 接口注）
 - `data/term_registry.json`（月光/m_field 更新；新增：理论投影、实例化判据、去噪不变性）
-- `docs/决策树/`（本文）
-- `docs/设计框架-六维状态.md`（5.1 状态更新）
+- `design/decisions/`（本文）
+- `design/framework/six-dimensions.md`（5.1 状态更新）
 - `../设计归档/grilling/grilling-38-moonlight-field`（README + 本 grilling 记录）
 - `memory/月光场机制桥接-grilling-38.md`
 
@@ -170,21 +170,21 @@
 
 ### 决策
 
-- **F1（D5 边界 — 玩家向正典去容器级表述）**：`事件/世界观与叙事.md` §月光本质 A-version 移除「容器注意力的可见痕迹」——玩家向正典（月光三重叠加）不再含容器级表述；容器注意力解释（#41 D3）移入 §世界观地基·统一解释，标注「设计层读解——不入游戏文本」。
-- **F2（D5/D9 边界 — 消除"更深真相存在"暗示）**：`事件/游戏循环.md` §9.2「月光知道答案，但它不告诉你」→「答案是否存在，本身就是一个谜」——悬念保留、零断言，与不可证实性（无客观层可裁决）及三重叠加兼容。
+- **F1（D5 边界 — 玩家向正典去容器级表述）**：`design/events/世界观与叙事.md` §月光本质 A-version 移除「容器注意力的可见痕迹」——玩家向正典（月光三重叠加）不再含容器级表述；容器注意力解释（#41 D3）移入 §世界观地基·统一解释，标注「设计层读解——不入游戏文本」。
+- **F2（D5/D9 边界 — 消除"更深真相存在"暗示）**：`design/events/游戏循环.md` §9.2「月光知道答案，但它不告诉你」→「答案是否存在，本身就是一个谜」——悬念保留、零断言，与不可证实性（无客观层可裁决）及三重叠加兼容。
 
 ### 推迟/未决
 
 - **F3 都灵之马措辞**：「容器边界职能的人格化」（世界观 :146）+「容器/容器代理」（核心机制 §七）与 D6 一致性——未裁决，维持现状。候选方案：核心机制删「容器代理」措辞改「无敌叙事 NPC（无敌由叙事固定，与容器无涉）」+ 世界观 :146 加设计层注。
-- **F4 术语残留（#38 改名清扫缺口）**：`项目总览.md`「三重叠加态」已顺手修正 ✅；待处理：term_registry 月光条目「坍缩表观」v2 残留、`参考/灵感收件箱.md`、`参考/文献/精神类药物参考-消耗品设计数据源.md` 的旧名（观察者效应）。建议随 CGL+AGC 定稿（5.1 桥接）一并清扫。
+- **F4 术语残留（#38 改名清扫缺口）**：`design/README.md`「三重叠加态」已顺手修正 ✅；待处理：term_registry 月光条目「坍缩表观」v2 残留、`reference/灵感收件箱.md`、`reference/literature/精神类药物参考-消耗品设计数据源.md` 的旧名（观察者效应）。建议随 CGL+AGC 定稿（5.1 桥接）一并清扫。
 - **F5 5.1 桥接开题前 D8 边界确认**：机制桥接文本不得引用意识包裹/容器——待新任务「理论模型↔游戏实现接口」承接。
 
 ### 受影响文件
 
-- `事件/世界观与叙事.md`（:29 移除容器表述；§世界观地基 加设计层注）
-- `事件/游戏循环.md`（§9.2 改写）
-- `项目总览.md`（:74 术语修正）
-- `docs/决策树/`（本文）
+- `design/events/世界观与叙事.md`（:29 移除容器表述；§世界观地基 加设计层注）
+- `design/events/游戏循环.md`（§9.2 改写）
+- `design/README.md`（:74 术语修正）
+- `design/decisions/`（本文）
 - `memory/意识包裹复核-grilling-99.md`（本 grilling 决策摘要）
 
 ---
@@ -205,25 +205,25 @@
 - **D4（E-1 物理 motivation 下界）**：`clamp(motivationMod, −1, MotivationCap)`——原实现下界 0（负值归零）。正典仅定义上界 +100%，下界无裁决；统一 [−1,1] 与精神攻击（不 clamp）及 flow 层 producer（csharp-flow spec §5.1 clamp(tone_bias,−1,1)）口径一致——沮丧（低动机）时物理出力下降。落地：DamageCalculator.cs:52 + AC-4 锚点 4.0→2.0 + csharp-damage spec B7 + 核心机制 §4.2
 - **D5（D-1 region_name_map 口径）**：70→69——删 #26 D6 已废弃聚合体（AmygdalaHippocampus/BasalGangliaIndirectPathway）+ 补 SubthalamicNucleus，与 brain_regions.json 键集完全一致（python3 验证）
 - **D6（C-1 plan step 表同步）**：step 8-12 由"待开始"更新为"✅ 已交付"（git 证实 26 提交 294/294 绿）；变更日志加 v1.2 行
-- **D7（数据关系规格形态）**：A 数据流图 + B 模块接口表合一（用户选 C）——《引擎数据关系规格.md》落位 `规则/技能树系统/`（正式正典），ASCII 图，含 §六 Unity 接缝
+- **D7（数据关系规格形态）**：A 数据流图 + B 模块接口表合一（用户选 C）——《引擎数据关系规格.md》落位 `design/rules/skill-tree/`（正式正典），ASCII 图，含 §六 Unity 接缝
 - **D8（附带清扫）**：核心机制 §2.1 Euler 残留→解析解、§十一 tone baseline [0.1,2.0]→[0,1]、脑功能层级模型 §十八 70→69（L5 7→8 dk 补 caudalanteriorcingulate、L1 16→14 删 2 聚合体、L0 11→12 补 STN）、data/README 重写为引擎 5 文件、CombatEvents.cs:87 HpDamage 注释更正、data-layer spec v1.3（收录 GameData/LoadAll）、engine-types spec 值域表体修正
 
 ### 受影响文件
 
-- `规则/技能树系统/引擎数据关系规格.md`（新建——正式正典）
+- `design/rules/skill-tree/引擎数据关系规格.md`（新建——正式正典）
 - `../设计归档/grilling/grilling-24-engine-data-relations/引擎数据层偏差清单.md`（新建——盘点产物）
-- `src/YouAreNotTheFish.Core/Engine/DamageCalculator.cs`（E-1 motivation 下界 −1）
-- `src/YouAreNotTheFish.Core.Tests/Engine/DamageCalculatorTests.cs`（AC-4 锚点 4.0→2.0）
-- `src/YouAreNotTheFish.Core/Types/CombatEvents.cs`（T-1 HpDamage 注释）
+- `code/src/YouAreNotTheFish.Core/Engine/DamageCalculator.cs`（E-1 motivation 下界 −1）
+- `code/src/YouAreNotTheFish.Core.Tests/Engine/DamageCalculatorTests.cs`（AC-4 锚点 4.0→2.0）
+- `code/src/YouAreNotTheFish.Core/Types/CombatEvents.cs`（T-1 HpDamage 注释）
 - `data/connectivity/region_name_map.json`（D-1：69 对齐）
 - `data/README.md`（C-2：重写索引）
-- `规则/核心机制.md`（§2.1 解析解、§4.2 motivation 下界、§十一 tone baseline）
-- `规则/技能树系统/脑功能层级模型.md`（§十八 70→69 + L5/L1/L0 清单）
+- `design/rules/核心机制.md`（§2.1 解析解、§4.2 motivation 下界、§十一 tone baseline）
+- `design/rules/skill-tree/脑功能层级模型.md`（§十八 70→69 + L5/L1/L0 清单）
 - `../规格/引擎/csharp-engine-roadmap.md`（C-1 step 表 + T-4/T-5）
 - `../规格/引擎/csharp-damage.md`（B7 + AC-4 + §3.1）
 - `../规格/引擎/csharp-data-layer.md`（v1.3：GameData/LoadAll + D-5）
 - `../规格/引擎/csharp-engine-types.md`（T-2/T-3 值域表体）
-- `docs/设计框架-六维状态.md`（管线维度更新）
+- `design/framework/six-dimensions.md`（管线维度更新）
 - `data/term_registry.json`（motivation_mod 定义补下界）
 
 ### 延迟
@@ -269,7 +269,7 @@
 
 - 数据侧：`W_sensory.json` 扩列至 69×8；新建 `alpha_patterns.json`。C# `WsensoryMatrix.cs` 按需零改动（动态读列），`EventProcessor.cs` 改为配置驱动（去硬编码 α pattern）。
 - 文档侧：`运行时状态模型.md` §4.5 扩展、`皮层动力学-通用层.md` §六 同步。
-- 完整实施计划见 [../设计归档/grilling/grilling-69-external-stimulus/task-plan.md](../../%E8%AE%BE%E8%AE%A1%E5%BD%92%E6%A1%A3/grilling/grilling-69-external-stimulus/task-plan.md)（已通过四维质检）。
+- 完整实施计划见 [../设计归档/grilling/grilling-69-external-stimulus/task-plan.md](../archive/grilling/grilling-69-external-stimulus/task-plan.md)（已通过四维质检）。
 
 ### 延迟
 
@@ -282,7 +282,7 @@
 - `../设计归档/grilling/grilling-69-external-stimulus/task-plan.md`（新建，已质检）
 - `../设计归档/grilling/task-check-2026-08-16-1910-grilling-69-task-plan.md`（质检报告）
 - `data/term_registry.json`（本次同步更新：s(t) 定义 6→8 模态 + 新增 5 术语）
-- `docs/设计框架-六维状态.md`（规则维度更新）
+- `design/framework/six-dimensions.md`（规则维度更新）
 
 ---
 
@@ -315,8 +315,8 @@
 ### 受影响文件
 
 - `../设计归档/grilling/grilling-70-engine-roadmap/task-plan.md`（新建——主产物，P0-P6 批次表 + 依赖图 + 里程碑）
-- `docs/决策树/`（本文）；#24 延迟项 E-2/3/4/5 加注「→ 见 #70」
-- `docs/设计框架-六维状态.md`（管线维度队列更新）
+- `design/decisions/`（本文）；#24 延迟项 E-2/3/4/5 加注「→ 见 #70」
+- `design/framework/six-dimensions.md`（管线维度队列更新）
 - `data/term_registry.json`（候选：Δ_skill [NEW]，待用户确认）
 - `memory/grill-engine-roadmap-70.md`（决策摘要）
 - 关联开放 issue：**#35**（并行校准轨）、#23（代码框架校验管线）、#38（m_field 依赖）
@@ -361,9 +361,9 @@
 ### 受影响文件
 
 - `../设计归档/grilling/grilling-71-balance-tool/task-plan.md`（新建——主产物：架构/CLI/指标/任务 T1-T8/验收）
-- `docs/决策树/`（本文）
-- `docs/设计框架-六维状态.md`（管线队列：P0 数值平衡工具方案 ✅）
-- `规则/核心机制.md`（§10.1 F-5 修表）+ `实体/敌人与事件.md`（§十二 F-5 修表）
+- `design/decisions/`（本文）
+- `design/framework/six-dimensions.md`（管线队列：P0 数值平衡工具方案 ✅）
+- `design/rules/核心机制.md`（§10.1 F-5 修表）+ `design/entities/敌人与事件.md`（§十二 F-5 修表）
 - `memory/数值平衡工具-grilling-71.md`（决策摘要）
 - 关联：#35（校准 grilling 消费工具）、#70（P0 并行校准轨）、#23（validate 脚本体系，不重复）
 
@@ -401,11 +401,11 @@
 ### 受影响文件
 
 - `../设计归档/grilling/grilling-72-p1a-skill-context/task-plan.md`（新建——主产物：schema/映射表/任务 T1-T5/验证）
-- `docs/决策树/`（本文）
-- `docs/设计框架-六维状态.md`（管线队列 P1a ✅ 方案已定）
+- `design/decisions/`（本文）
+- `design/framework/six-dimensions.md`（管线队列 P1a ✅ 方案已定）
 - `data/connectivity/domain_role_map.json`（T1 落地）+ `link_contexts_tripartite.json`（T2 产出）
-- `tools/build_contexts_tripartite.py`（T2）+ `rebuild-report.md`（T3）
-- `规则/技能树系统/技能生成机制.md`（§二 60 候选池注更新）
+- `code/tools/build_contexts_tripartite.py`（T2）+ `rebuild-report.md`（T3）
+- `design/rules/skill-tree/技能生成机制.md`（§二 60 候选池注更新）
 - `memory/技能上下文三体重建-grilling-72.md`
 
 ### 推迟
@@ -448,9 +448,9 @@
 
 ### 受影响文件
 
-- `../设计归档/grilling/grilling-73-p1b-linkstate/task-plan.md`（新建——主产物：数据结构/初始化/Δm 规则/接口/T1-T6/验收）
-- `docs/决策树/`（本文）
-- `docs/设计框架-六维状态.md`（管线队列 P1b ✅ 方案已定）
+- `../设计归档/grilling/grilling-73-p1b-linkstate/task-plan.md`（新建——主产物：数据结构/初始化/Δm design/rules/接口/T1-T6/验收）
+- `design/decisions/`（本文）
+- `design/framework/six-dimensions.md`（管线队列 P1b ✅ 方案已定）
 - 实施后：`Entity/LinkState.cs` / `Types/FocusSet.cs` / `Engine/MyleinGrowth.cs`（新建）+ `WMatrixBuilder.cs` / `TurnManager.cs` / `CombatState.cs` / Console / Tests（改写）
 - `memory/髓鞘化成长引擎-grilling-73.md`
 
@@ -483,8 +483,8 @@
 ### 受影响文件
 
 - `../设计归档/grilling/grilling-74-p1c-skill-execution/task-plan.md`（新建——主产物：数据结构/通道映射/结算流程/A6/T1-T6/验收）
-- `docs/决策树/`（本文）
-- `docs/设计框架-六维状态.md`（管线队列 P1c ✅ 方案已定）
+- `design/decisions/`（本文）
+- `design/framework/six-dimensions.md`（管线队列 P1c ✅ 方案已定）
 - 实施后：SkillDefinition.cs / SkillCatalog.cs / SkillResolver.cs（新建）+ CombatAction/Enums/ActionResolver/CalibrationConfig/Console/Tests（改写）
 - `memory/技能执行引擎-grilling-74.md`
 
@@ -504,7 +504,7 @@
 
 ### 决策
 
-- **D1（数据边界）**：事件/持续场分离——alpha_patterns.json 只放 14 战斗事件（#69 schema 原样，8 模态）；env_tones.json 独立放环境基调 α_env（空间类型→8 模态强度）
+- **D1（数据边界）**：design/events/持续场分离——alpha_patterns.json 只放 14 战斗事件（#69 schema 原样，8 模态）；env_tones.json 独立放环境基调 α_env（空间类型→8 模态强度）
 - **D2（情境选择器）**：空间→原型映射表（typical_game_scenario 辅助）+ 低 SAN 概率偏移（恐慌→诡异/负面原型，p_panic=0.5 [NEW]）+ key_brain_regions **直接节点注入**（心理情境非感官，不走 W_sensory）+ 刷新时机 = 空间切换 + C1 事件
 - **D3（三通道落点）**：并入 s 数组——s_total = s_事件 + s_env + m_field；WcDynamics.Step 签名零改动。**🔧 修正 (2026-09-02 #104 Q1)**：原「m_field 占位全 0，MFieldStrength=0 [NEW]，节点落点 #38 后填」已更新——#101 闭合 R 落点结构、#103 定 moonState(D)/calibration_status 分级，m_field 按**结构实现 + PLACEHOLDER 分级 + 门禁**（见 #104 条目）
 - **D4（情境 salience）**：隐式涌现（原型注入→a(t)→salience 自然反映，不查表——正典原则 4）+ 只读情境状态接口（SituationState: 原型 id+强度+环境 id，供 P3/UI/叙事）
@@ -516,8 +516,8 @@
 ### 受影响文件
 
 - `../设计归档/grilling/grilling-75-p2-situation/task-plan.md`（新建——主产物：schema/选择器/落点/T1-T7/验收）
-- `docs/决策树/`（本文）
-- `docs/设计框架-六维状态.md`（管线队列 P2 ✅ 方案已定）
+- `design/decisions/`（本文）
+- `design/framework/six-dimensions.md`（管线队列 P2 ✅ 方案已定）
 - 实施后：W_sensory.json（69×8）+ alpha_patterns.json + env_tones.json（数据）+ EventProcessor/SituationSelector/CombatState/CalibrationConfig/Console/Tests（代码）
 - `memory/情境系统引擎-grilling-75.md`
 
@@ -549,8 +549,8 @@ NpcSalience 从 demo 占位升级为正式 Affordance Competition：7 参数化�
 ### 受影响文件
 
 - `../设计归档/grilling/grilling-76-p3-npc-affordance/task-plan.md`（新建——主产物：数据结构/候选集/选择规则/E-4 清单/T1-T7/验收）
-- `docs/决策树/`（本文）
-- `docs/设计框架-六维状态.md`（管线队列 P3 ✅ 方案已定）
+- `design/decisions/`（本文）
+- `design/framework/six-dimensions.md`（管线队列 P3 ✅ 方案已定）
 - 实施后：NpcPersonality.cs / RoleToneWeights.cs / personality_tags.json（新建）+ NpcSalience.cs 重写 + ParticipantState/ToneUpdater/CandidateSetBuilder/Console/Tests（改写）
 - `memory/NPC全量引擎-grilling-76.md`
 
@@ -583,10 +583,10 @@ NpcSalience 从 demo 占位升级为正式 Affordance Competition：7 参数化�
 ### 受影响文件
 
 - `../设计归档/grilling/grilling-77-p4d-crit/task-plan.md`（新建——主产物）
-- `规则/技能树系统/操作层/基础行动设计.md`（§二 暴击段 + §三 L4 细化）
-- `规则/核心机制.md`（§4.2 暴击公式 + §十一 速查）
-- `规则/技能树系统/运行时状态模型.md`（§5.5 A3/B3 触发源注）
-- `docs/决策树/`（本文）+ `docs/设计框架-六维状态.md`（规则空缺 F-3 闭合）
+- `design/rules/skill-tree/operations/基础行动设计.md`（§二 暴击段 + §三 L4 细化）
+- `design/rules/核心机制.md`（§4.2 暴击公式 + §十一 速查）
+- `design/rules/skill-tree/运行时状态模型.md`（§5.5 A3/B3 触发源注）
+- `design/decisions/`（本文）+ `design/framework/six-dimensions.md`（规则空缺 F-3 闭合）
 - `memory/暴击机制-grilling-77.md`
 
 ### 推迟
@@ -613,8 +613,8 @@ NpcSalience 从 demo 占位升级为正式 Affordance Competition：7 参数化�
 ### 受影响文件
 
 - `../设计归档/grilling/grilling-78-p4a-flee-surrender/task-plan.md`（新建——主产物）
-- `规则/回合战斗流程.md`（§8.2 投降行 + §8.3 逃跑规则补 [NEW]，✅ 已写入）
-- `docs/决策树/`（本文）+ `docs/设计框架-六维状态.md`（P4a ✅）
+- `design/rules/回合战斗流程.md`（§8.2 投降行 + §8.3 逃跑规则补 [NEW]，✅ 已写入）
+- `design/decisions/`（本文）+ `design/framework/six-dimensions.md`（P4a ✅）
 - 实施后：Enums/CombatAction/ParticipantState（ExitStatus）+ ActionResolver（逃跑投降）+ EventProcessor（A7）+ TurnManager（IsOver）+ CalibrationConfig（+2 [NEW]）
 - `memory/逃跑投降引擎-grilling-78.md`
 
@@ -642,8 +642,8 @@ HP↔SAN 互转落地引擎：兑换动作 + 分段公式 + 单次/单场上限�
 ### 受影响文件
 
 - `../设计归档/grilling/grilling-79-p4b-hp-san-convert/task-plan.md`（新建——主产物）
-- `规则/核心机制.md`（§5.3 边界注）
-- `docs/决策树/`（本文）+ `docs/设计框架-六维状态.md`（P4b ✅）
+- `design/rules/核心机制.md`（§5.3 边界注）
+- `design/decisions/`（本文）+ `design/framework/six-dimensions.md`（P4b ✅）
 - 实施后：Enums/CombatAction（+2 动作）+ CombatState（累计字段）+ ActionResolver（兑换结算）+ Console/Tests
 - `memory/HP-SAN互转引擎-grilling-79.md`
 
@@ -676,7 +676,7 @@ HP↔SAN 互转落地引擎：兑换动作 + 分段公式 + 单次/单场上限�
 ### 受影响文件
 
 - `../设计归档/grilling/grilling-80-p4e-space/task-plan.md`（新建——主产物，T1-T9）
-- `docs/决策树/`（本文）+ `docs/设计框架-六维状态.md`（P4e ✅——P4 全部方案闭合）
+- `design/decisions/`（本文）+ `design/framework/six-dimensions.md`（P4e ✅——P4 全部方案闭合）
 - 实施后：battlefields.json + Position/BattlefieldMath/ZoneAttack/Flanking/AoeResolver（新建）+ SkillDefinition(+Range/Aoe) + CombatAction(+Movement) + CombatState(+Positions) + ActionResolver + NpcSalience（攻最近）+ Console/Tests
 - `memory/空间系统引擎-grilling-80.md`
 
@@ -704,8 +704,8 @@ HP↔SAN 互转落地引擎：兑换动作 + 分段公式 + 单次/单场上限�
 ### 受影响文件
 
 - `../设计归档/grilling/grilling-81-p4c-response-window/task-plan.md`（新建——主产物）
-- `规则/回合战斗流程.md`（§6.2 补注，✅ 已写入）
-- `docs/决策树/`（本文）+ `docs/设计框架-六维状态.md`（P4c ✅——**P4 全部闭合**）
+- `design/rules/回合战斗流程.md`（§6.2 补注，✅ 已写入）
+- `design/decisions/`（本文）+ `design/framework/six-dimensions.md`（P4c ✅——**P4 全部闭合**）
 - 实施后：ResponseResolver（替换 Noop）+ SocialCognitionNodes + DamageCalculator（忍耐/NarrativeBoost）+ StatusKind.NarrativeBoost + CombatState + CalibrationConfig(+2 [NEW]) + Console/Tests
 - `memory/响应窗口引擎-grilling-81.md`
 
@@ -733,7 +733,7 @@ HP↔SAN 互转落地引擎：兑换动作 + 分段公式 + 单次/单场上限�
 ### 受影响文件
 
 - `../设计归档/grilling/grilling-82-p5-1-equipment/task-plan.md`（新建——主产物，T1-T7）
-- `docs/决策树/`（本文）+ `docs/设计框架-六维状态.md`（P5-1 ✅）
+- `design/decisions/`（本文）+ `design/framework/six-dimensions.md`（P5-1 ✅）
 - 实施后：equipment.json + Equipment/EquipmentSet/StatusEffects/MentalWeaponResolver（新建）+ DamageCalculator/Enums/CombatState/Console/Tests
 - `memory/武器护甲引擎-grilling-82.md`
 
@@ -765,7 +765,7 @@ HP↔SAN 互转落地引擎：兑换动作 + 分段公式 + 单次/单场上限�
 ### 受影响文件
 
 - `../设计归档/grilling/grilling-83-p5-2-consumables/task-plan.md`（新建——主产物，T1-T7）
-- `docs/决策树/`（本文）+ `docs/设计框架-六维状态.md`（P5-2 ✅）
+- `design/decisions/`（本文）+ `design/framework/six-dimensions.md`（P5-2 ✅）
 - 实施后：drugs.json + Drug/EffectiveM/DrugPersistentState + WMatrixBuilder（EffectiveM 消费）+ ActionResolver（UseItem）+ Enums/CombatState/Console/Tests
 - `memory/消耗品引擎-grilling-83.md`
 
@@ -793,7 +793,7 @@ HP↔SAN 互转落地引擎：兑换动作 + 分段公式 + 单次/单场上限�
 ### 受影响文件
 
 - `../设计归档/grilling/grilling-84-p5-3-mask-components/task-plan.md`（新建——主产物，T1-T6）
-- `docs/决策树/`（本文）+ `docs/设计框架-六维状态.md`（P5-3 ✅——**P5 全部闭合，P1-P5 设计讨论完成**）
+- `design/decisions/`（本文）+ `design/framework/six-dimensions.md`（P5-3 ✅——**P5 全部闭合，P1-P5 设计讨论完成**）
 - 实施后：MaskComponent/MaskSet/MaskBonus/MaskOverlap/AntagonisticPairs + CombatState（EffectiveM 扩展）+ Console/Tests
 - `memory/面具组件引擎-grilling-84.md`
 
@@ -805,7 +805,7 @@ HP↔SAN 互转落地引擎：兑换动作 + 分段公式 + 单次/单场上限�
 
 ## [Grilling] 对话数学语言规范固化 (2026-08-16，6 项决策)
 
-> Issue: [#85](https://github.com/verystrongdog/game/issues/85) | 维度: 管线（元过程/质量保障） | 前置: 无（元话题） | 关联: [数学语言书写规范](../agents/math-language-writing.md) §七、CLAUDE.md §对话数学语言规范
+> Issue: [#85](https://github.com/verystrongdog/game/issues/85) | 维度: 管线（元过程/质量保障） | 前置: 无（元话题） | 关联: [数学语言书写规范](../conventions/agents/math-language-writing.md) §七、CLAUDE.md §对话数学语言规范
 
 ### 话题
 
@@ -817,16 +817,16 @@ HP↔SAN 互转落地引擎：兑换动作 + 分段公式 + 单次/单场上限�
 - **D2（标准锚定）**：数学专业论文的表述规范——符号先定义后使用/量词显式/条件完整/阈值区间分布精确/枚举受控/断言可机械核验；叙事（意图/动机/情绪）可保留
 - **D3（执行强度）**：AI 打断 → 用户亲自重述 → AI 验证达标后继续。AI 不代写（代写剥夺思维训练本体）
 - **D4（打断形式）**：固定句式指出具体模糊点（引用触发词+所在句子）+ 触发词类型提示（阈值模糊/枚举未受控/量词缺失/符号未定义，仅分类不代写）；**零容忍**，初犯同样打断
-- **D5（写入位置）**：分层固化——①CLAUDE.md 新增「对话数学语言规范」条目（只增不删）②`docs/agents/math-language-writing.md` 新增 §七 对话交互规范（人类输入方向），与已有 AI 产出方向合并为单一权威文档 ③`data/term_registry.json` 入库「数学语言」「模糊量词」 ④决策树 + issue #85
+- **D5（写入位置）**：分层固化——①CLAUDE.md 新增「对话数学语言规范」条目（只增不删）②`design/conventions/agents/math-language-writing.md` 新增 §七 对话交互规范（人类输入方向），与已有 AI 产出方向合并为单一权威文档 ③`data/term_registry.json` 入库「数学语言」「模糊量词」 ④决策树 + issue #85
 - **D6（自我更新）**：对话规范受自己约束（自指）——发现未覆盖的模糊形态 → AI 指出"此为规范未覆盖项" → 记入待修订清单，grilling 结束或积累 5 条后单独讨论修订；修订只增不删
 
 ### 受影响文件
 
 - `CLAUDE.md`（新增 §对话数学语言规范）
-- `docs/agents/math-language-writing.md`（新增 §七 对话交互规范 + 目录/尾部更新）
+- `design/conventions/agents/math-language-writing.md`（新增 §七 对话交互规范 + 目录/尾部更新）
 - `data/term_registry.json`（入库「数学语言」「模糊量词」，144→146）
-- `docs/决策树/`（本文）
-- `docs/设计框架-六维状态.md`（管线维度状态更新）
+- `design/decisions/`（本文）
+- `design/framework/six-dimensions.md`（管线维度状态更新）
 - `memory/对话数学语言规范-grilling-85.md`
 
 ### 推迟
@@ -865,20 +865,20 @@ HP↔SAN 互转落地引擎：兑换动作 + 分段公式 + 单次/单场上限�
 ### 决策 — 素材库管线（M 系列）
 
 - **M1（人机协同）**：用户构建角色背景（人脑综合：哪些经历塑造性格）+ AI 检索现实资料（事实收集）+ AI 派生工程化视图
-- **M2（双轨存储）**：`实体/角色背景/<角色>.md`（纯文本原文，AI 不改写）+ `<角色>.gen.json`（AI 派生，schema 可拓展）；双向链接
+- **M2（双轨存储）**：`design/entities/角色背景/<角色>.md`（纯文本原文，AI 不改写）+ `<角色>.gen.json`（AI 派生，schema 可拓展）；双向链接
 - **M3（批次）**：自下而上——P1 普通 NPC 生态 → P2 重要 NPC → P3 14 角色核心层 → P4 Boss 生命史。顺序同构引擎管线（脑区数据 → 连接 → 涌现）
 - **M4（起点切片）**：住院楼 1F 生态（玩家醒来楼层）；规模编写时定
 - **M5（模板策略）**：不构建生态位模板——按具体情境逐 NPC 构建；素材驱动（先积累素材池，够大后挑选构建）
 
 ### 受影响文件
 
-- `事件/剧情系统设计.md`（新建——主产物，全文 7 章）
-- `事件/任务目标系统.md`（§6.1 命名修正：脊柱线/理解线 → 结构性主线/叙事性主线）
-- `docs/维度/事件.md`（索引 + 待设计项更新）
-- `docs/设计框架-六维状态.md`（事件 ✅ +2 → 9；空缺表故事主线/对话序列闭合）
-- `docs/决策树/`（本文）
+- `design/events/剧情系统设计.md`（新建——主产物，全文 7 章）
+- `design/events/任务目标系统.md`（§6.1 命名修正：脊柱线/理解线 → 结构性主线/叙事性主线）
+- `design/framework/dimensions/事件.md`（索引 + 待设计项更新）
+- `design/framework/six-dimensions.md`（事件 ✅ +2 → 9；空缺表故事主线/对话序列闭合）
+- `design/decisions/`（本文）
 - `data/term_registry.json`（新术语入库：结构性主线/叙事性主线/对话树/剧情系统三元组/生态/切片/双轨存储等）
-- `项目总览.md`（事件索引同步）
+- `design/README.md`（事件索引同步）
 - `memory/剧情系统设计-grilling-86.md`
 
 ### 推迟
@@ -897,7 +897,7 @@ HP↔SAN 互转落地引擎：兑换动作 + 分段公式 + 单次/单场上限�
 
 ### 话题
 
-记忆内容层物理储存 = 运行时基础设施（从 #87-D10 拆出）：「一条记忆」的数据结构/存储位置/写入管线/检索接口/生命周期。现状核查：#91 动力学变量无记忆实体、m 是链路强度非内容、唯一先例 = 敌人跨战斗记忆（敌人与事件 §4.6）。数学基础 = 两份新建文献综述（[记忆储存机制-文献综述](../../%E5%8F%82%E8%80%83/%E6%96%87%E7%8C%AE/%E8%AE%B0%E5%BF%86%E5%82%A8%E5%AD%98%E6%9C%BA%E5%88%B6-%E6%96%87%E7%8C%AE%E7%BB%BC%E8%BF%B0.md)、[记忆数学模型-文献综述](../../%E5%8F%82%E8%80%83/%E6%96%87%E7%8C%AE/%E8%AE%B0%E5%BF%86%E6%95%B0%E5%AD%A6%E6%A8%A1%E5%9E%8B-%E6%96%87%E7%8C%AE%E7%BB%BC%E8%BF%B0.md)，2026-08-20 各 16/18 篇）+ 数学建模工作稿（六阶段状态机 E/C/S/R/RC/F）。
+记忆内容层物理储存 = 运行时基础设施（从 #87-D10 拆出）：「一条记忆」的数据结构/存储位置/写入管线/检索接口/生命周期。现状核查：#91 动力学变量无记忆实体、m 是链路强度非内容、唯一先例 = 敌人跨战斗记忆（敌人与事件 §4.6）。数学基础 = 两份新建文献综述（[记忆储存机制-文献综述](../../reference/literature/%E8%AE%B0%E5%BF%86%E5%82%A8%E5%AD%98%E6%9C%BA%E5%88%B6-%E6%96%87%E7%8C%AE%E7%BB%BC%E8%BF%B0.md)、[记忆数学模型-文献综述](../../reference/literature/%E8%AE%B0%E5%BF%86%E6%95%B0%E5%AD%A6%E6%A8%A1%E5%9E%8B-%E6%96%87%E7%8C%AE%E7%BB%BC%E8%BF%B0.md)，2026-08-20 各 16/18 篇）+ 数学建模工作稿（六阶段状态机 E/C/S/R/RC/F）。
 
 ### 决策
 
@@ -912,12 +912,12 @@ HP↔SAN 互转落地引擎：兑换动作 + 分段公式 + 单次/单场上限�
 
 ### 受影响文件
 
-- `规则/技能树系统/记忆内容层.md`（新建——正典，schema + 六阶段 + 生命周期 + 接口）
+- `design/rules/skill-tree/记忆内容层.md`（新建——正典，schema + 六阶段 + 生命周期 + 接口）
 - `../设计归档/grilling/grilling-90-memory-storage/数学建模-记忆过程.md`（新建——六阶段数学推导工作稿）
 - `../设计归档/grilling/grilling-90-memory-storage/grilling-90.md`（issue 工作文件，D1-D8 决策记录）
-- `参考/文献/记忆储存机制-文献综述.md`（新建——16 篇）
-- `参考/文献/记忆数学模型-文献综述.md`（新建——18 篇）
-- `docs/设计框架-六维状态.md`（规则/管线 ✅ 同步）
+- `reference/literature/记忆储存机制-文献综述.md`（新建——16 篇）
+- `reference/literature/记忆数学模型-文献综述.md`（新建——18 篇）
+- `design/framework/six-dimensions.md`（design/rules/管线 ✅ 同步）
 - `data/term_registry.json`（新术语入库候选：记忆内容层/可提取性/勾起/再巩固/区隔化等）
 - `memory/记忆内容层-grilling-90.md`（新建）
 
@@ -958,16 +958,16 @@ HP↔SAN 互转落地引擎：兑换动作 + 分段公式 + 单次/单场上限�
 - **D7（Q5）— Y′ 端点 + Δ**：pathology_edges.json 端点 = 50 实体名，附机器可读 `laterality_delta ∈ [−1,+1]`（默认 0）。X（DK 偏侧名 + 合并规则）否决：L_/R_ 名最终也须换算成 Δ，多包一层命名再做一次翻译。Y（偏侧仅注释）否决：与 D3 入库冲突。
 - **D8（Q6）— Q0.1 以「B + Δ」定案**：#88 重映射锚点 = 50 实体名 + laterality_delta，双轨废止。依赖：#92 先闭合，#88 端点规格解除阻塞。
 - **D9（Q7+Q8）— 显示层派生规则**：标签阈值 t=0.5 [NEW 初值可调]（|combined| ≥ t → 左/右偏标签，否则双侧，显示层专用零结算）；叠加 = baseline + ΣΔ 线性求和（不落盘），显示层 clamp [−1,+1]。
-- **D10（Q9+Q10）— 正交声明 + Δ 随病理边**：mni_xyz = 解剖代表位置，与偏侧系数正交（坐标混杂是合并语义正常结果，不修正；3D 偏侧呈现留给呈现维度）；laterality_delta 随 pathology_edges.json 病理边走，受 [角色与面具.md §8.8.2](../../实体/角色与面具.md) 文献铁律约束（D2 方案 2 偏侧进 frontmatter 否决：与 #88 疾病文件扩展议题纠缠）。
+- **D10（Q9+Q10）— 正交声明 + Δ 随病理边**：mni_xyz = 解剖代表位置，与偏侧系数正交（坐标混杂是合并语义正常结果，不修正；3D 偏侧呈现留给呈现维度）；laterality_delta 随 pathology_edges.json 病理边走，受 [角色与面具.md §8.8.2](../entities/%E8%A7%92%E8%89%B2%E4%B8%8E%E9%9D%A2%E5%85%B7.md) 文献铁律约束（D2 方案 2 偏侧进 frontmatter 否决：与 #88 疾病文件扩展议题纠缠）。
 
 ### 受影响文件
 
-- `规则/技能树系统/偏侧化架构.md`（新建——正典，字段规格/叠加规则/镜像处置/正交声明/参数速查表）
-- `规则/技能树系统/脑功能层级模型.md`（§二十 新增 20.11 偏侧小节）
+- `design/rules/skill-tree/偏侧化架构.md`（新建——正典，字段规格/叠加规则/镜像处置/正交声明/参数速查表）
+- `design/rules/skill-tree/脑功能层级模型.md`（§二十 新增 20.11 偏侧小节）
 - `data/connectivity/tripartite_model.json`（graph_nodes 49 节点 + lateralization: 0.0，镜像 2 节点除外）
 - `data/brain_regions.json`（58 个带 dk_name 条目 + lateralization；LC_R/SNc_R 镜像展开 10 字段 + mirror_of）
 - `data/term_registry.json`（5 术语入库：偏侧化/laterality_delta/镜像实体/LC_R/SNc_R）
-- `docs/设计框架-六维状态.md`（规则+管线状态同步）
+- `design/framework/six-dimensions.md`（规则+管线状态同步）
 - `memory/偏侧化架构-grilling-92.md`（新建）
 
 ### 相关决策树条目对接
@@ -1060,9 +1060,9 @@ HP↔SAN 互转落地引擎：兑换动作 + 分段公式 + 单次/单场上限�
 
 ### 受影响文件
 
-- `规则/技能树系统/创伤记忆转化接口.md`（新建——正典）
-- `规则/技能树系统/记忆内容层.md`（A_trauma 移交标注 → 已定义）
-- `docs/决策树/`（本文）
+- `design/rules/skill-tree/创伤记忆转化接口.md`（新建——正典）
+- `design/rules/skill-tree/记忆内容层.md`（A_trauma 移交标注 → 已定义）
+- `design/decisions/`（本文）
 - `data/term_registry.json`（候选：不成熟度/转化接口）
 
 ### 推迟
@@ -1088,10 +1088,10 @@ HP↔SAN 互转落地引擎：兑换动作 + 分段公式 + 单次/单场上限�
 
 ### 受影响文件
 
-- `规则/技能树系统/创伤记忆转化接口.md`（正典，§3.0-§3.2.2 完整）
+- `design/rules/skill-tree/创伤记忆转化接口.md`（正典，§3.0-§3.2.2 完整）
 - 24 经历型疾病文件（frontmatter `创伤易感事件类型`）
-- `实体/疾病目录/注意缺陷多动障碍.md`（发育性声明）
-- `docs/决策树/`（本文）
+- `design/entities/diseases/注意缺陷多动障碍.md`（发育性声明）
+- `design/decisions/`（本文）
 
 ### 推迟
 
@@ -1127,9 +1127,9 @@ v6 定稿已知开放问题 #1（Diff 复制膨胀：S⊕S 使 Diff 2.70→5.33�
 
 ### 受影响文件
 
-- `参考/意识结构侧-下一阶段路线-v7.md`（新建——v7 定稿，Q1-Q6 全量决策 + v6 开放问题对照表 + 参数速查表）
-- `参考/意识结构侧-Layer0-2定稿-v6.md`（开放问题 #1/#2/#3/#5/#6 加注「→ 见 v7」+ 头部衔接声明 + 关联更新）
-- `docs/决策树/`（本文）
+- `reference/意识结构侧-下一阶段路线-v7.md`（新建——v7 定稿，Q1-Q6 全量决策 + v6 开放问题对照表 + 参数速查表）
+- `reference/意识结构侧-Layer0-2定稿-v6.md`（开放问题 #1/#2/#3/#5/#6 加注「→ 见 v7」+ 头部衔接声明 + 关联更新）
+- `design/decisions/`（本文）
 - `data/term_registry.json`（候选入库，待用户确认——见 issue 关闭评论）
 
 ### 相关决策树条目对接
@@ -1178,9 +1178,9 @@ v6 定稿已知开放问题 #1（Diff 复制膨胀：S⊕S 使 Diff 2.70→5.33�
 ### 受影响文件
 
 - `sim_consciousness_v7_components.py` / `sim_consciousness_v7_rb_test.py` / `sim_consciousness_v7_benchmark.py`（新建——模拟实现批次三脚本）
-- `docs/决策树/`（本文 + #93 推迟项标注「→ 见 #94」）
+- `design/decisions/`（本文 + #93 推迟项标注「→ 见 #94」）
 - `../设计归档/grilling/grilling-94-sim-batch/grilling-94.md`（本批决策日志 D1-D7 + D8′/D10′ + 实测记录）
-- `参考/意识结构侧-下一阶段路线-v7.md`（衔接：#93 推迟项 → #94 完成；v7 定义未被修改——D6 为构造修正非定义修正）
+- `reference/意识结构侧-下一阶段路线-v7.md`（衔接：#93 推迟项 → #94 完成；v7 定义未被修改——D6 为构造修正非定义修正）
 
 ### 推迟
 
@@ -1194,5 +1194,5 @@ v6 定稿已知开放问题 #1（Diff 复制膨胀：S⊕S 使 Diff 2.70→5.33�
 ---
 
 ---
-*创建: 2026-09-12（由 docs/决策树/ 拆分）| 更新: 2026-09-12*
-*关联: [决策树总索引](README.md), [设计框架-六维状态](../设计框架-六维状态.md)*
+*创建: 2026-09-12（由 design/decisions/ 拆分）| 更新: 2026-09-12*
+*关联: [决策树总索引](README.md), [设计框架-六维状态](../framework/six-dimensions.md)*

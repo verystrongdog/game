@@ -16,7 +16,7 @@
 import json
 from pathlib import Path
 
-DATA_DIR = Path(__file__).parent.parent / "data"
+DATA_DIR = Path(__file__).parent.parent.parent / "data"
 
 # ── 90 个态度的叙事名称映射: {id: narrative_name} ──
 NAMES = {

@@ -1,6 +1,6 @@
 # 项目总览
 
-> 游戏设计六维框架入口。设计状态和 grilling 路由表见 **[设计框架-六维状态](docs/设计框架-六维状态.md)**。
+> 游戏设计六维框架入口。设计状态和 grilling 路由表见 **[设计框架-六维状态](framework/six-dimensions.md)**。
 
 ## 项目
 
@@ -19,12 +19,12 @@
 
 | 维度 | 回答的问题 | 完成度 | 详情 |
 |------|-----------|--------|------|
-| **规则** | 能发生什么？怎么发生？ | ~90% | [设计框架-六维状态 §规则](docs/设计框架-六维状态.md#规则) |
-| **实体** | 谁是参与者？他们有什么？ | ~70% | [设计框架-六维状态 §实体](docs/设计框架-六维状态.md#实体) |
-| **空间** | 他们在哪里？怎么连接？ | ~52% | [设计框架-六维状态 §空间](docs/设计框架-六维状态.md#空间) |
-| **事件** | 在什么时候触发？以什么顺序？ | ~69% | [设计框架-六维状态 §事件](docs/设计框架-六维状态.md#事件) |
-| **呈现** | 玩家怎么感知和操作？ | ~25% | [设计框架-六维状态 §呈现](docs/设计框架-六维状态.md#呈现) |
-| **管线** | 怎么造出来、怎么验证？ | ~86% | [设计框架-六维状态 §管线](docs/设计框架-六维状态.md#管线) |
+| **规则** | 能发生什么？怎么发生？ | ~90% | [设计框架-六维状态 §规则](framework/six-dimensions.md#规则) |
+| **实体** | 谁是参与者？他们有什么？ | ~70% | [设计框架-六维状态 §实体](framework/six-dimensions.md#实体) |
+| **空间** | 他们在哪里？怎么连接？ | ~52% | [设计框架-六维状态 §空间](framework/six-dimensions.md#空间) |
+| **事件** | 在什么时候触发？以什么顺序？ | ~69% | [设计框架-六维状态 §事件](framework/six-dimensions.md#事件) |
+| **呈现** | 玩家怎么感知和操作？ | ~25% | [设计框架-六维状态 §呈现](framework/six-dimensions.md#呈现) |
+| **管线** | 怎么造出来、怎么验证？ | ~86% | [设计框架-六维状态 §管线](framework/six-dimensions.md#管线) |
 
 **分拣标准**（拿到任何设计决策时问自己）：
 - 删除所有角色和地点后，逻辑仍成立？→ **规则**
@@ -36,7 +36,7 @@
 
 ## 当前 Grilling 优先级
 
-详见 [设计框架-六维状态 §汇总与优先级](docs/设计框架-六维状态.md#汇总与优先级)。
+详见 [设计框架-六维状态 §汇总与优先级](framework/six-dimensions.md#汇总与优先级)。
 
 **第 1-3 优先级 ✅ 全部完成。** 当前进入第 4 优先级（内容填充）。
 
@@ -127,7 +127,7 @@
   - L1 扭曲房间：关键预设 + 其余四参数半生成（病情主题×楼层×月光×L1→L2标记）
   - L2 患者内心世界：全预设，每个敌人有叙事关联，无杂兵概念
   - 楼梯间无常规遭遇（鬼打墙独立事件系统处理）
-- **NPC AI = Affordance Competition 实时 salience**：行动选择从 WC+CSTC+tone 状态中涌现（Cisek 2007 + GPR 2001），运行时成本接近零，无需离线烘焙。性格由 4 tone baseline + 3 CSTC bias 参数化，6 概念标签为设计师简写界面。旧预烘焙管线（`管线/预烘焙管线脚本设计.md`）已废弃（2026-08-09）
+- **NPC AI = Affordance Competition 实时 salience**：行动选择从 WC+CSTC+tone 状态中涌现（Cisek 2007 + GPR 2001），运行时成本接近零，无需离线烘焙。性格由 4 tone baseline + 3 CSTC bias 参数化，6 概念标签为设计师简写界面。旧预烘焙管线（`design/pipeline/预烘焙管线脚本设计.md`）已废弃（2026-08-09）
 - **回合战斗流程（2026-07-28）**：
   - 不设 AP——基底节 CSTC 环路门控，M1/Broca 双通道独立放行各 1 动作
   - 速度排序 = 察觉+决断+执行 三成分等权加权，动态重算
@@ -142,60 +142,60 @@
 ## 文档索引（按六维分类）
 
 ### 规则
-- [核心机制](规则/核心机制.md) — 脑区链路模型/战斗结算/SAN/情境
-- [回合战斗流程](规则/回合战斗流程.md) — 基底节门控/双通道/速度排序/5阶段/响应窗口
-- [技能树系统](%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/README.md) — 技能生成机制/链路上下文/NPC AI/调制参数/3D可视化
-- [data/connectivity/](data/connectivity/) — 链路矩阵/情境原型/调制天花板
+- [核心机制](rules/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md) — 脑区链路模型/战斗结算/SAN/情境
+- [回合战斗流程](rules/%E5%9B%9E%E5%90%88%E6%88%98%E6%96%97%E6%B5%81%E7%A8%8B.md) — 基底节门控/双通道/速度排序/5阶段/响应窗口
+- [技能树系统](rules/skill-tree/README.md) — 技能生成机制/链路上下文/NPC AI/调制参数/3D可视化
+- [data/connectivity/](../data/connectivity) — 链路矩阵/情境原型/调制天花板
 
 ### 实体
-- [角色与面具](实体/角色与面具.md) — 14 角色/面具/共享症状
-- [角色发展轴](实体/角色发展轴.md) — 角色设定(S1-S6)演化载体（引用-组装式，2026-09-06 grilling #121；里程碑→突破 #120 接口）
-- [敌人与事件](实体/敌人与事件.md) — 敌人分类/病情分级/思维造物/遭遇系统
-- [疾病目录](实体/疾病目录/) — 26 病 × 8 父类（Grilling #88 重映射，`pathology_edges.json` 348 条病理边）
-- [pathology_edges.json](data/connectivity/pathology_edges.json) — 26 病病理边注册表（schema v1.1，edge_id `<disease_id>_e<NN>` + laterality_delta）
+- [角色与面具](entities/%E8%A7%92%E8%89%B2%E4%B8%8E%E9%9D%A2%E5%85%B7.md) — 14 角色/面具/共享症状
+- [角色发展轴](entities/%E8%A7%92%E8%89%B2%E5%8F%91%E5%B1%95%E8%BD%B4.md) — 角色设定(S1-S6)演化载体（引用-组装式，2026-09-06 grilling #121；里程碑→突破 #120 接口）
+- [敌人与事件](entities/%E6%95%8C%E4%BA%BA%E4%B8%8E%E4%BA%8B%E4%BB%B6.md) — 敌人分类/病情分级/思维造物/遭遇系统
+- [疾病目录](entities/diseases) — 26 病 × 8 父类（Grilling #88 重映射，`pathology_edges.json` 348 条病理边）
+- [pathology_edges.json](../data/connectivity/pathology_edges.json) — 26 病病理边注册表（schema v1.1，edge_id `<disease_id>_e<NN>` + laterality_delta）
 
 ### 空间
-- [空间与关卡设计](空间/空间与关卡设计.md) — 三层空间模型（L0物理医院/L1扭曲空间/L2患者世界）
-- [治疗中心建模](%E7%A9%BA%E9%97%B4/%E6%B2%BB%E7%96%97%E4%B8%AD%E5%BF%83%E5%BB%BA%E6%A8%A1/README.md) — 医院建筑参考/Blender 场景
+- [空间与关卡设计](space/%E7%A9%BA%E9%97%B4%E4%B8%8E%E5%85%B3%E5%8D%A1%E8%AE%BE%E8%AE%A1.md) — 三层空间模型（L0物理医院/L1扭曲空间/L2患者世界）
+- [治疗中心建模](space/treatment-center-modeling/README.md) — 医院建筑参考/Blender 场景
 
 ### 事件
-- [游戏循环](事件/游戏循环.md) — 连续世界/时间/死亡/结局/驱动力
-- [任务目标系统](事件/任务目标系统.md) — 笔记本三层/任务生命周期/Boss叙事网络
-- [剧情系统设计](事件/剧情系统设计.md) — 对话树结构/素材库管线（2026-08-16 grilling #86）
-- [NPC人生生成器](事件/NPC人生生成器设计.md) — 矩阵自主起草 NPC 前半生/六问闭合（2026-09-01 grilling #87）
-- [奖励掉落系统](事件/奖励掉落系统.md) — 战后掉落/环境拾取/任务奖励/以物易物经济
-- [世界观与叙事](事件/世界观与叙事.md) — 月光本质/意识外显效应/拜月教
+- [游戏循环](events/%E6%B8%B8%E6%88%8F%E5%BE%AA%E7%8E%AF.md) — 连续世界/时间/死亡/结局/驱动力
+- [任务目标系统](events/%E4%BB%BB%E5%8A%A1%E7%9B%AE%E6%A0%87%E7%B3%BB%E7%BB%9F.md) — 笔记本三层/任务生命周期/Boss叙事网络
+- [剧情系统设计](events/%E5%89%A7%E6%83%85%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1.md) — 对话树结构/素材库管线（2026-08-16 grilling #86）
+- [NPC人生生成器](events/NPC%E4%BA%BA%E7%94%9F%E7%94%9F%E6%88%90%E5%99%A8%E8%AE%BE%E8%AE%A1.md) — 矩阵自主起草 NPC 前半生/六问闭合（2026-09-01 grilling #87）
+- [奖励掉落系统](events/%E5%A5%96%E5%8A%B1%E6%8E%89%E8%90%BD%E7%B3%BB%E7%BB%9F.md) — 战后掉落/环境拾取/任务奖励/以物易物经济
+- [世界观与叙事](events/%E4%B8%96%E7%95%8C%E8%A7%82%E4%B8%8E%E5%8F%99%E4%BA%8B.md) — 月光本质/意识外显效应/拜月教
 
 ### 呈现
-- [战斗界面布局](呈现/战斗界面布局.md) — 37项决策：整体布局/操作流/脑区面板/HUD/信息展示/过渡/键盘快捷键
-- [3D可视化](%E5%91%88%E7%8E%B0/3D%E5%8F%AF%E8%A7%86%E5%8C%96) — 可视化规范/Blender管线/HTML原型（目录在规则/下）
-- [Unity 呈现沙盘工程](unity/README.md) — 白盒回合沙盘/KiWalkerLab 真人动画演示（2026-09-06 grilling #122）
-- [Unity 沙盘动作集规格](%E5%91%88%E7%8E%B0/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md) — 动作受控词表/引用契约/来源矩阵/扩展协议（2026-09-07 grilling #123）
-- [ActionLab 实施执行层](设计归档/grilling/grilling-124-actionlab/决策记录.md) — 载体锚定 Mixamo X Bot/Y Bot + Batch0 执行契约（2026-09-08 grilling #124）
-- [玫瑰花海场景（实验 lab）](设计归档/grilling/grilling-126-rosefield/决策记录.md) — 真实 1 m lidar 草原地形 + 商业化密度株丛 + 小人穿行（2026-09-12 grilling #126，**不入正典**）
+- [战斗界面布局](presentation/%E6%88%98%E6%96%97%E7%95%8C%E9%9D%A2%E5%B8%83%E5%B1%80.md) — 37项决策：整体布局/操作流/脑区面板/HUD/信息展示/过渡/键盘快捷键
+- [3D可视化](presentation/visualization-3d) — 可视化规范/Blender管线/HTML原型（目录在规则/下）
+- [Unity 呈现沙盘工程](../code/unity/README.md) — 白盒回合沙盘/KiWalkerLab 真人动画演示（2026-09-06 grilling #122）
+- [Unity 沙盘动作集规格](presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md) — 动作受控词表/引用契约/来源矩阵/扩展协议（2026-09-07 grilling #123）
+- [ActionLab 实施执行层](archive/grilling/grilling-124-actionlab/%E5%86%B3%E7%AD%96%E8%AE%B0%E5%BD%95.md) — 载体锚定 Mixamo X Bot/Y Bot + Batch0 执行契约（2026-09-08 grilling #124）
+- [玫瑰花海场景（实验 lab）](archive/grilling/grilling-126-rosefield/%E5%86%B3%E7%AD%96%E8%AE%B0%E5%BD%95.md) — 真实 1 m lidar 草原地形 + 商业化密度株丛 + 小人穿行（2026-09-12 grilling #126，**不入正典**）
 
 ### 管线
-- [NPC AI 行为模型](规则/技能树系统/NPC%20AI%20行为模型.md) — Affordance Competition 实时 salience（替代旧预烘焙）
-- [Grilling 质量保障体系](%E8%AE%BE%E8%AE%A1%E5%BD%92%E6%A1%A3/grilling/%E6%96%B9%E6%B3%95%E8%AE%BA/grilling-%E8%B4%A8%E9%87%8F%E4%BF%9D%E9%9A%9C%E4%BD%93%E7%B3%BB-v2.md) — 引用即读取铁律/强化流程/项目级引用规范/校验脚本体系 — 12项决策 (2026-08-01)
-- [数学语言书写规范](docs/agents/math-language-writing.md) — 双向规范：AI 写文档 + 对话交互（打断-重述-验证），6项决策 (2026-08-16 grilling #85)
-- [data/](data/README.md) — 结构化数据（JSON/NPY）
-- [tools/](tools/) — Blender自动化/数据生成/命名规范化/链路分类/标签映射
+- [NPC AI 行为模型](rules/skill-tree/NPC%20AI%20%E8%A1%8C%E4%B8%BA%E6%A8%A1%E5%9E%8B.md) — Affordance Competition 实时 salience（替代旧预烘焙）
+- [Grilling 质量保障体系](archive/grilling/methodology/grilling-%E8%B4%A8%E9%87%8F%E4%BF%9D%E9%9A%9C%E4%BD%93%E7%B3%BB-v2.md) — 引用即读取铁律/强化流程/项目级引用规范/校验脚本体系 — 12项决策 (2026-08-01)
+- [数学语言书写规范](conventions/agents/math-language-writing.md) — 双向规范：AI 写文档 + 对话交互（打断-重述-验证），6项决策 (2026-08-16 grilling #85)
+- [data/](../data/README.md) — 结构化数据（JSON/NPY）
+- [code/tools/](../code/tools) — Blender自动化/数据生成/命名规范化/链路分类/标签映射
 - sim_*.py — 数值模拟验证
-- [docs/agents/](docs/agents/) — Agent定义/文档模板
+- [design/conventions/agents/](conventions/agents) — Agent定义/文档模板
 
 ### 设计历史
-- [决策树](docs/%E5%86%B3%E7%AD%96%E6%A0%91/README.md) — 所有 grilling 决策分叉的追加式记录（设计文档 = 当前状态，决策树 = 怎么走到的）
+- [决策树](decisions/README.md) — 所有 grilling 决策分叉的追加式记录（设计文档 = 当前状态，决策树 = 怎么走到的）
 
-### 参考/废弃
-- [灵感收件箱](参考/灵感收件箱.md) — 未成形的想法
-- [研究与参考](参考/研究与参考.md) — 学术文献与参考材料
-- [态度系统](参考/废弃/态度系统/) — ⚠️ 已废弃：态度引擎（保留为数据源）
-- [情绪系统](参考/废弃/情绪系统/) — ⚠️ 已废弃：PAD情绪空间（保留为数据源）
-- [行为系统](参考/废弃/行为系统/) — ⚠️ 已废弃：7驱动行为模型（保留为数据源）
-- [认知系统](参考/废弃/认知系统/) — ⚠️ 已废弃：5模块认知模型（保留为数据源）
-- [卡牌系统](参考/废弃/卡牌系统/) — ⚠️ 已废弃：卡牌设计（保留为参数参考）
+### reference/废弃
+- [灵感收件箱](../reference/%E7%81%B5%E6%84%9F%E6%94%B6%E4%BB%B6%E7%AE%B1.md) — 未成形的想法
+- [研究与参考](../reference/%E7%A0%94%E7%A9%B6%E4%B8%8E%E5%8F%82%E8%80%83.md) — 学术文献与参考材料
+- [态度系统](../reference/deprecated/attitude-system) — ⚠️ 已废弃：态度引擎（保留为数据源）
+- [情绪系统](../reference/deprecated/emotion-system) — ⚠️ 已废弃：PAD情绪空间（保留为数据源）
+- [行为系统](../reference/deprecated/behavior-system) — ⚠️ 已废弃：7驱动行为模型（保留为数据源）
+- [认知系统](../reference/deprecated/cognitive-system) — ⚠️ 已废弃：5模块认知模型（保留为数据源）
+- [卡牌系统](../reference/deprecated/card-system) — ⚠️ 已废弃：卡牌设计（保留为参数参考）
 
 ---
 
 *创建: 2026-07-06 | 更新: 2026-07-31 (空间遭遇规则 grilling — 35项决策：明雷/暗雷混合/楼层密度/昼夜分离/L1半生成四参数/户外独立表/护士站辐射)*
-*关联: [设计框架-六维状态](docs/设计框架-六维状态.md), [脑功能层级模型](规则/技能树系统/脑功能层级模型.md), [NPC AI 行为模型](规则/技能树系统/NPC%20AI%20行为模型.md)*
+*关联: [设计框架-六维状态](framework/six-dimensions.md), [脑功能层级模型](rules/skill-tree/%E8%84%91%E5%8A%9F%E8%83%BD%E5%B1%82%E7%BA%A7%E6%A8%A1%E5%9E%8B.md), [NPC AI 行为模型](rules/skill-tree/NPC%20AI%20%E8%A1%8C%E4%B8%BA%E6%A8%A1%E5%9E%8B.md)*

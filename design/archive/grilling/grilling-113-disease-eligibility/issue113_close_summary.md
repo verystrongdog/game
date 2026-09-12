@@ -22,12 +22,12 @@
 
 ### 受影响文件
 
-- `规则/技能树系统/创伤记忆转化接口.md`（§3.2.2 资格层 + §3.2.3 顺延 + §3.3 前置条件 + §四 + 头部/文末）
-- `docs/决策树/`（Grilling #113 条目）
-- `docs/设计框架-六维状态.md`（规则维度）
+- `design/rules/skill-tree/创伤记忆转化接口.md`（§3.2.2 资格层 + §3.2.3 顺延 + §3.3 前置条件 + §四 + 头部/文末）
+- `design/decisions/`（Grilling #113 条目）
+- `design/framework/six-dimensions.md`（规则维度）
 - `data/term_registry.json`（+5 术语）
 - `.`（决策记录 + 外审存档 19 份）
-- `参考/灵感收件箱.md`（2 条灵感，含资格门活例）
+- `reference/灵感收件箱.md`（2 条灵感，含资格门活例）
 - memory（`疾病资格层-grilling-113.md`）
 
 ### 推迟清单（#113 后续批次——方法已定、当前无消费者）

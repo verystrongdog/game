@@ -44,7 +44,7 @@
 ### 文档层面
 - 每个子系统有独立目录和 README 级别的 .md 文件。
 - "待解决问题"用独立文件记录（如 `行为系统/待解决问题.md`）。
-- 废弃内容标记 `⚠️ 已废弃` 并说明废弃原因，移入 `垃圾桶/` 或 `.trash/`。
+- 废弃内容标记 `⚠️ 已废弃` 并说明废弃原因，移入 `design/archive/trash/` 或 `.trash/`。
 - **垃圾桶隔离原则（2026-08-03 新增）**：内容移入垃圾桶后，**项目中任何活跃文档（含索引、README、规格文档、维度状态）不得引用垃圾桶中的文件**。移动文件的同时必须 grep 全项目所有引用该文件路径的地方，一并更新或删除。废弃的数字/术语（如"37个技能""激活点预算"）同理——活跃文档中不得出现，只允许出现在决策树历史记录和标注了 `⚠️ 已废弃` 的段落中。
 - 设计文档使用中文，代码注释中英皆可。
 - **自动发现机制**：触发规则按目录匹配（如 `情绪系统/*.md`），新增 md 文件放入对应子系统目录后会被自动读取，无需手动修改 CLAUDE.md。新增子系统目录时，在"触发-响应规则"中加一条目录级规则即可。
@@ -105,8 +105,8 @@
 - **分支命名**：`feat/<功能名>` 或 `exp/<实验名>`（如 `feat/skill-tree`）。
 
 ### 文件管理
-- 设计文档（.md）、模拟脚本（.py）、原型（.html）、数据文件（.json）、工具脚本（tools/）→ 全部进版本控制。
-- `data/` 和 `tools/` 是设计的数据源和工具，不是生成物，必须提交。
+- 设计文档（.md）、模拟脚本（.py）、原型（.html）、数据文件（.json）、工具脚本（code/tools/）→ 全部进版本控制。
+- `data/` 和 `code/tools/` 是设计的数据源和工具，不是生成物，必须提交。
 - 外部库文件（如 `lib/three.module.js`）应优先用 CDN，如需本地副本则必须提交。
 - 不该进 git 的已在 `.gitignore` 中排除（Python cache、IDE 配置、OS 杂文件等）。
 
@@ -123,16 +123,16 @@
 
 游戏 = 规则 × 实体 × 空间 × 事件 → 通过呈现交付，由管线生产。
 
-**任何设计讨论必须先定位维度**。路由表：[docs/设计框架-六维状态.md](docs/设计框架-六维状态.md)。
+**任何设计讨论必须先定位维度**。路由表：[design/framework/six-dimensions.md](design/framework/six-dimensions.md)。
 
 ### 当用户提出新设计/新功能时（按六维分拣）
 
-1. **IF** 涉及"能发生什么、怎么发生"（战斗结算/资源流动/AI决策/回合结构/数值公式）→ **THEN** 先读取 `docs/维度/规则.md`（索引），再按需读取具体文档
-2. **IF** 涉及"谁是参与者"（角色/敌人/NPC/物品/装备）→ **THEN** 先读取 `docs/维度/实体.md`
-3. **IF** 涉及"在哪里发生"（房间/区域/关卡/空间连接）→ **THEN** 先读取 `docs/维度/空间.md`
-4. **IF** 涉及"什么时候触发"（遭遇/对话/叙事节拍/游戏循环/任务）→ **THEN** 先读取 `docs/维度/事件.md`
-5. **IF** 涉及"玩家怎么感知和操作"（UI/输入/反馈/视觉风格/声音）→ **THEN** 先读取 `docs/维度/呈现.md`
-6. **IF** 涉及"怎么造出来"（数据格式/构建脚本/原型/测试）→ **THEN** 先读取 `docs/维度/管线.md`
+1. **IF** 涉及"能发生什么、怎么发生"（战斗结算/资源流动/AI决策/回合结构/数值公式）→ **THEN** 先读取 `design/framework/dimensions/规则.md`（索引），再按需读取具体文档
+2. **IF** 涉及"谁是参与者"（角色/敌人/NPC/物品/装备）→ **THEN** 先读取 `design/framework/dimensions/实体.md`
+3. **IF** 涉及"在哪里发生"（房间/区域/关卡/空间连接）→ **THEN** 先读取 `design/framework/dimensions/空间.md`
+4. **IF** 涉及"什么时候触发"（遭遇/对话/叙事节拍/游戏循环/任务）→ **THEN** 先读取 `design/framework/dimensions/事件.md`
+5. **IF** 涉及"玩家怎么感知和操作"（UI/输入/反馈/视觉风格/声音）→ **THEN** 先读取 `design/framework/dimensions/呈现.md`
+6. **IF** 涉及"怎么造出来"（数据格式/构建脚本/原型/测试）→ **THEN** 先读取 `design/framework/dimensions/管线.md`
 
 ### Grilling 专用规则
 
@@ -142,22 +142,22 @@
 
 **IF** 用户调用 `/grilling` 但未指定具体话题 **THEN** 在进入 Step 0 之前，必须先执行以下检索：
 
-- [ ] 读取 `docs/设计框架-六维状态.md` 全部内容（项目全局检查点）
-- [ ] 读取全部六个维度索引：`docs/维度/规则.md` `实体.md` `空间.md` `事件.md` `呈现.md` `管线.md`
-- [ ] 读取 `docs/决策树/` 了解已完成 grilling 的轮次和决策数
+- [ ] 读取 `design/framework/six-dimensions.md` 全部内容（项目全局检查点）
+- [ ] 读取全部六个维度索引：`design/framework/dimensions/规则.md` `实体.md` `空间.md` `事件.md` `呈现.md` `管线.md`
+- [ ] 读取 `design/decisions/` 了解已完成 grilling 的轮次和决策数
 - [ ] 按六维状态中的「全局 Grilling 优先级」顺序，列出当前所有未完成话题
 - [ ] 给出推荐话题和建议理由
 - [ ] 等待用户确认话题后，再进入 Step 0
 
 #### Step 0 — 定位（不可跳过）
-- [ ] 读取 `docs/设计框架-六维状态.md`，确认话题在全局优先级中的位置
-- [ ] 读取 `docs/维度/<维度名>.md`，确认该维度已有设计和空缺
+- [ ] 读取 `design/framework/six-dimensions.md`，确认话题在全局优先级中的位置
+- [ ] 读取 `design/framework/dimensions/<维度名>.md`，确认该维度已有设计和空缺
 - [ ] **【v2 新增】前置资料包**：读取所有直接相关的设计文档和决策树历史记录。如相关文件 > 5 个，优先读取索引文件，具体子系统文件在追问涉及时按需读取
 - [ ] **【v2 新增】输出资料包完整性声明**：列出"预读"清单（已完整读入上下文）+"待按需读取"清单，声明未在清单中的事实性引用视为违规
 - [ ] 向用户确认话题边界："本次 grilling 聚焦 [维度] 的 [话题]，依赖 [X]，阻塞 [Y]"
 
 #### Step 1 — 话题验证（不可跳过，不通过则不创建 issue）
-- [ ] `grep` `docs/决策树/` 中是否已有同名话题的「决策」或「被否决」→ 有则告知用户
+- [ ] `grep` `design/decisions/` 中是否已有同名话题的「决策」或「被否决」→ 有则告知用户
 - [ ] `gh issue list --label grilling --state open` 是否有重复 grilling issue → 有则链接已有 issue
 
 #### Step 2 — 创建 Issue（验证通过后、追问开始前，不可跳过）
@@ -173,10 +173,10 @@
 
 #### Step 4 — 写入（达成共识后，不可跳过）
 - [ ] 将决策写入受影响的 md 设计文档
-- [ ] 将决策树追加到 `docs/决策树/`
+- [ ] 将决策树追加到 `design/decisions/`
 - [ ] 追加前 `grep` 决策树中与本次相关的「延迟」项 → 新记录标注来源，旧记录加注「→ 见」
-- [ ] 更新 `docs/设计框架-六维状态.md` 对应维度的状态（✅/⚠️/❌）
-- [ ] 检查 `项目总览.md` 是否需要同步
+- [ ] 更新 `design/framework/six-dimensions.md` 对应维度的状态（✅/⚠️/❌）
+- [ ] 检查 `design/README.md` 是否需要同步
 - [ ] 将关键决策摘要写入 memory 文件
 - [ ] **【v2 新增】写入验证表**：逐条对照 grilling 决策 → 写入内容，输出验证表（决策编号/摘要/写入文件/位置/验证状态），每项标记 ✅已验证 或 ⚠️需人类复查
 - [ ] **🔥 一致性清扫（强制，v2 强化）**：`grep` 本次废弃/修改的关键词（术语+参数名+文件名+废弃概念名+**废弃文件路径片段**）。命中 ≤10 → 全部 Read；>10 → 按优先级（设计文档 > 索引 > 数据JSON > 工具脚本）分批 Read。**必须额外检查**：(a) 移动进垃圾桶的文件是否还有活跃文档引用它（路径断裂），(b) 废弃的数字/术语是否仍在活跃规格文档中以非废弃标注的方式出现，(c) **【v3 新增】术语定义变更时对照 `term_registry.json` 的 numerical_locations 做兼容性复查**
@@ -190,7 +190,7 @@
 - **触发条件**：已关闭的 grilling issue 中的决策被实质性修改（公式增删项、阈值变更、参数重定义、术语定义修正），而非纯文本修正（错字、格式）。
 - **必须执行**：
   - [ ] 在对应的 GitHub issue 下发修正评论，格式：`## 🔧 闭合后修正 (YYYY-MM-DD)` + 修正项表格（原决策 / 修正后 / 根因）
-  - [ ] 在 `docs/决策树/` 对应 grilling 条目下追加 `**🔧 修正 (YYYY-MM-DD):**` 行，简述修正内容和 commit hash
+  - [ ] 在 `design/decisions/` 对应 grilling 条目下追加 `**🔧 修正 (YYYY-MM-DD):**` 行，简述修正内容和 commit hash
   - [ ] 修正涉及多个 issue → 每个 issue 分别评论
 - **不需要**：重新打开 issue、创建新 issue、或重新执行 grilling Step 0-5。
 
@@ -199,7 +199,7 @@
 以下旧子系统已废弃但保留为数据源，讨论时先提醒已废弃：
 - 态度引擎/态度结算 → 已废弃，NPC AI 改用脑区链路模型。Glob `态度系统/*.md` 确认是否有后续更新
 - 卡牌设计/卡牌内容 → 已废弃。旧卡牌参数在 `data/` 下作为参考
-- 认知/情绪/行为独立系统 → 已废弃，查看 `docs/维度/规则.md` 了解当前正典
+- 认知/情绪/行为独立系统 → 已废弃，查看 `design/framework/dimensions/规则.md` 了解当前正典
 
 ### 任务 md 质检触发规则（2026-08-16 新增）
 
@@ -207,10 +207,10 @@
 
 1. ①格式规范（对照本文件 §md 文件格式规范：文件头摘要/文末关联/目录/单 H1/中文编号/废弃标记/参数速查表）
 2. ②术语与正典一致性（对照 `data/term_registry.json`：deprecated 术语、定义误用、与决策树冲突）
-3. ③交叉引用完整性（复用 `tools/validate_*.py` 核验活跃目标；检查垃圾桶隔离）
-4. ④数学语言充分性（对照 [docs/agents/math-language-writing.md](docs/agents/math-language-writing.md)：模糊量词/无符号数值/阈值模糊/枚举未受控等，给出公式化改写建议）
+3. ③交叉引用完整性（复用 `code/tools/validate_*.py` 核验活跃目标；检查垃圾桶隔离）
+4. ④数学语言充分性（对照 [design/conventions/agents/math-language-writing.md](design/conventions/agents/math-language-writing.md)：模糊量词/无符号数值/阈值模糊/枚举未受控等，给出公式化改写建议）
 
-**AI 写任务 md 时**（grilling/issue 讨论结束后的决策总结）默认按 [数学语言书写规范](docs/agents/math-language-writing.md) 书写：凡能用公式/表格/受控词表表达的数值、分支、阈值、枚举，一律用数学语言，降低自然语言歧义。产出任务 md 后建议自检一遍再交付。
+**AI 写任务 md 时**（grilling/issue 讨论结束后的决策总结）默认按 [数学语言书写规范](design/conventions/agents/math-language-writing.md) 书写：凡能用公式/表格/受控词表表达的数值、分支、阈值、枚举，一律用数学语言，降低自然语言歧义。产出任务 md 后建议自检一遍再交付。
 
 ### 对话数学语言规范（2026-08-16 Grilling #85 新增）
 
@@ -225,7 +225,7 @@
 4. **验证**：按论文标准验证——达标 → 继续原话题；不达标 → 再次打断，指出剩余问题。
 5. **零容忍**：从第一天起严格执行，初犯同样打断。
 
-**判定触发词**（同 [数学语言书写规范](docs/agents/math-language-writing.md) §二，扩充）：`较大/较小/若干/一些/适量/适度/偶尔/经常/通常/大概率/小概率/取决于/视情况/根据条件/成比例/延迟/立即/短暂/持续一段时间/从…到…/比较强/比较高/一段距离/某种/某类` 等模糊量词或程度副词。
+**判定触发词**（同 [数学语言书写规范](design/conventions/agents/math-language-writing.md) §二，扩充）：`较大/较小/若干/一些/适量/适度/偶尔/经常/通常/大概率/小概率/取决于/视情况/根据条件/成比例/延迟/立即/短暂/持续一段时间/从…到…/比较强/比较高/一段距离/某种/某类` 等模糊量词或程度副词。
 
 **达标验证清单**（对照论文标准）：①符号先定义后使用 ②量词显式（所有/存在/当且仅当）③适用条件完整 ④阈值/区间/分布精确（`∈ [a,b]`/`>`/`≤`/`P = p`）⑤枚举受控（`S ∈ {…}`）⑥断言可机械核验。
 
@@ -234,7 +234,7 @@
 **规范自我更新**：对话规范受自己约束。发现规范未覆盖的模糊形态 → AI 指出"此为规范未覆盖项"，记入待修订清单，grilling 结束或积累 5 条后单独讨论修订。修订只增不删，沿用本文件自指约束铁律。
 
 ### 当用户要求修改/扩展设计时
-1. **IF** 提出的方向在 `docs/决策树/` 中被否决 → **THEN** 立即警告用户该方向已被废弃，并说明废弃原因
+1. **IF** 提出的方向在 `design/decisions/` 中被否决 → **THEN** 立即警告用户该方向已被废弃，并说明废弃原因
 2. **IF** 涉及数值参数 → **THEN** 搜索现有文档确认参数是否已有定义，不要凭空创造
 3. **IF** 改动影响多个维度 → **THEN** 列出受影响维度清单，确认依赖关系后再动手
 
@@ -280,23 +280,23 @@
 
 **自检触发信号**：出现"根据我们之前的讨论…""项目中使用的是…""按照 CLAUDE.md 的规定…"或任何不带文件路径/段落号的参数引用时 → 触发自检 → 有 Read 记录支撑则合法，无则违规。
 
-**引用格式（段引用优先）**：`规则/核心机制.md` §5.1（段引用，稳健）；`:314`（行号，精确但易漂移）。优先段引用。
+**引用格式（段引用优先）**：`design/rules/核心机制.md` §5.1（段引用，稳健）；`:314`（行号，精确但易漂移）。优先段引用。
 
 ### 项目级引用规范（2026-08-01 Grilling #16 新增）
 
-- **文件路径**：使用项目根目录下的相对路径（如 `规则/核心机制.md`）。`memory/` 是 `~/.claude/projects/-home-dog-game/memory/` 的简写。
+- **文件路径**：使用项目根目录下的相对路径（如 `design/rules/核心机制.md`）。`memory/` 是 `~/.claude/projects/-home-dog-game/memory/` 的简写。
 - **参数定义**：所有数值参数须有来源注释（文献出处或设计文档章节引用）。新增参数标注 `[NEW]` + issue 编号，issue 关闭后下一次涉及该文件的编辑中摘除。
 - **交叉引用**：格式 `[显示文本](相对路径)`，展示文本清晰描述目标内容（不只是裸文件名），优先用段引用（`§八`）而非 URL 锚点（渲染器差异）。
 - **决策引用**：决策树节点引用格式 `决策树: [Grilling] <话题> §第N题 → 结论`。Memory 引用格式 `memory: <文件名> §N`。
-- 详见 `设计归档/grilling/方法论/grilling-质量保障体系-v2.md` §四。
+- 详见 `design/archive/grilling/methodology/grilling-质量保障体系-v2.md` §四。
 
 ---
 
 ## 项目文件地图（按六维分类）
 
 ```
-项目总览.md                  ← 入口 → 六维框架索引
-docs/
+design/README.md                  ← 入口 → 六维框架索引
+design/framework/
   ├── 设计框架-六维状态.md    ← Grilling 路由表 + 全局检查点
   ├── 维度/                  ← 每维度的独立索引
   │   ├── 规则.md
@@ -307,7 +307,7 @@ docs/
   │   └── 管线.md
   └── agents/                ← Agent定义/文档模板
 
-规则/
+design/rules/
   ├── 核心机制.md              ← 脑区链路模型/战斗结算/SAN/情境
   ├── 回合战斗流程.md          ← 基底节门控/双通道/速度排序/响应窗口
   └── 技能树系统/
@@ -318,23 +318,23 @@ docs/
       ├── NPC AI 行为模型.md   ← 预烘焙查表/性格标签/敌我同构
       └── 3D可视化/            ← 可视化规范/Blender管线/HTML原型
 
-实体/
+design/entities/
   ├── 角色与面具.md            ← 14角色/面具/共享症状
   └── 敌人与事件.md            ← 敌人分类/CGI-S分级/思维造物
 
-空间/
+design/space/
   ├── 空间与关卡设计.md        ← 三层空间模型/关卡设计
   └── 治疗中心建模/            ← 医院建筑参考/Blender场景
 
-事件/
+design/events/
   ├── 世界观与叙事.md          ← 月光本质/意识外显效应/拜月教
   └── 游戏循环.md              ← 连续世界/时间/死亡/结局/驱动力
 
-呈现/                         ← (待建设)
+design/presentation/                         ← (待建设)
 
-管线/                         ← (待建设)
+design/pipeline/                         ← (待建设)
 
-参考/
+reference/
   ├── 研究与参考.md
   ├── 灵感收件箱.md            ← 未成形的想法
   ├── 文献/                    ← 学术论文/参考PDF
@@ -346,8 +346,8 @@ docs/
       └── 卡牌系统/            ← ⚠️ 已废弃：卡牌设计（保留为参数参考）
 
 data/                           ← 结构化数据（JSON/NPY）
-tools/                          ← Blender自动化/数据生成脚本
-sim/                           ← Python 数值模拟验证
+code/tools/                          ← Blender自动化/数据生成脚本
+code/sim/                           ← Python 数值模拟验证
 ```
 
 ---
@@ -368,12 +368,12 @@ sim/                           ← Python 数值模拟验证
 
 ### Issue tracker
 
-Issues and specs live as markdown files under `.scratch/<feature-slug>/`. See `docs/agents/issue-tracker.md`.
+Issues and specs live as markdown files under `.scratch/<feature-slug>/`. See `design/conventions/agents/issue-tracker.md`.
 
 ### Triage labels
 
-Five canonical roles: `needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`. See `docs/agents/triage-labels.md`.
+Five canonical roles: `needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`. See `design/conventions/agents/triage-labels.md`.
 
 ### Domain docs
 
-Single-context layout: `CONTEXT.md` + `docs/adr/` at repo root. See `docs/agents/domain.md`.
+Single-context layout: `CONTEXT.md` + `design/framework/adr/` at repo root. See `design/conventions/agents/domain.md`.

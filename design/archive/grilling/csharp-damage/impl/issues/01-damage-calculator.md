@@ -4,7 +4,7 @@
 
 ## 范围
 
-实现 [spec v1.1](../../../../../规格/引擎/csharp-damage.md) 全部内容，覆盖 AC-1~18：
+实现 [spec v1.1](../../../../../spec/engine/csharp-damage.md) 全部内容，覆盖 AC-1~18：
 
 - `DamageCalculator`（Engine/DamageCalculator.cs 新建）——CalcPhysicalDamage / CalcMentalDamage / Round1 / Floor1
 - CalibrationConfig 新增 12 伤害常量 [NEW] + 4 demo 模板常量 int→float
@@ -13,12 +13,12 @@
 
 ## 文件所有权声明
 
-- `src/YouAreNotTheFish.Core/Engine/DamageCalculator.cs` — 新建
-- `src/YouAreNotTheFish.Core/Types/CalibrationConfig.cs` — 修改（12 常量 + 4 模板 int→float）
-- `src/YouAreNotTheFish.Core/Types/ParticipantState.cs` — 修改（Hp/HpMax/San/SanMax int→float + CreateDefault(float,float)）
-- `src/YouAreNotTheFish.Core/Types/CombatEvents.cs` — 修改（PhysicalDamageEvent 6 + MentalDamageEvent 8 int→float）
-- `src/YouAreNotTheFish.Core.Tests/Engine/DamageCalculatorTests.cs` — 新建（AC-1~17）
-- `src/YouAreNotTheFish.Core.Tests/Types/ParticipantStateTests.cs` / `CombatEventsTests.cs` — 验证（不改断言值，AC-18 回执）
+- `code/src/YouAreNotTheFish.Core/Engine/DamageCalculator.cs` — 新建
+- `code/src/YouAreNotTheFish.Core/Types/CalibrationConfig.cs` — 修改（12 常量 + 4 模板 int→float）
+- `code/src/YouAreNotTheFish.Core/Types/ParticipantState.cs` — 修改（Hp/HpMax/San/SanMax int→float + CreateDefault(float,float)）
+- `code/src/YouAreNotTheFish.Core/Types/CombatEvents.cs` — 修改（PhysicalDamageEvent 6 + MentalDamageEvent 8 int→float）
+- `code/src/YouAreNotTheFish.Core.Tests/Engine/DamageCalculatorTests.cs` — 新建（AC-1~17）
+- `code/src/YouAreNotTheFish.Core.Tests/Types/ParticipantStateTests.cs` / `CombatEventsTests.cs` — 验证（不改断言值，AC-18 回执）
 - `../../../../规格/引擎/csharp-engine-types.md` — 变更日志补 🔧 修正行（结转 #1）
 
 grep 检查：其他进行中 work issue 无上述文件所有权（全部 prior issue 已 resolved）。

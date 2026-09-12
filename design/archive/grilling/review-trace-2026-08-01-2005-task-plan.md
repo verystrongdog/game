@@ -6,12 +6,12 @@
 ## 前置输入
 - [x] 无 --pre-check
 - [x] H1 被引用文件自动拉入:
-  - [x] `实体/敌人与事件.md` §4.1 §4.2（HP/SAN 范围 + Stat Block 结构）— 已读，验证通过
+  - [x] `design/entities/敌人与事件.md` §4.1 §4.2（HP/SAN 范围 + Stat Block 结构）— 已读，验证通过
   - [x] `data/connectivity/personality_tag_links.json` — 6 标签 × 15 核心链路，验证通过
-  - [x] `实体/疾病目录/GAD.md` `MDD.md` `偏执型精神分裂症.md` — 功能域配置表格式一致，验证通过
-  - [x] `规则/核心机制.md` §2.1 — 激活点公式 `4 + floor(SAN/30)`，验证通过
+  - [x] `design/entities/diseases/GAD.md` `MDD.md` `偏执型精神分裂症.md` — 功能域配置表格式一致，验证通过
+  - [x] `design/rules/核心机制.md` §2.1 — 激活点公式 `4 + floor(SAN/30)`，验证通过
   - [x] `data/connectivity/link_registry.json` — 364 条目，验证通过
-  - [x] `规则/技能树系统/NPC AI 行为模型.md` §4.2 — 多标签叠加"取最大值（不累加）"，验证通过
+  - [x] `design/rules/skill-tree/NPC AI 行为模型.md` §4.2 — 多标签叠加"取最大值（不累加）"，验证通过
 
 ## Trace Table
 

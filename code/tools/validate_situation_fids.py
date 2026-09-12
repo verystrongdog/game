@@ -11,14 +11,14 @@
 - 失败 → exit 非零（不静默降级；管线门禁）
 - 新增原型自动纳入（遍历 situation_primitives.json 全量，无硬编码名单）
 
-用法: python3 tools/validate_situation_fids.py [--report]
+用法: python3 code/tools/validate_situation_fids.py [--report]
 """
 import argparse
 import json
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parent.parent.parent
 SP_PATH = ROOT / "data" / "connectivity" / "situation_primitives.json"
 RN_PATH = ROOT / "data" / "connectivity" / "region_name_map.json"
 

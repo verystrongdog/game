@@ -17,16 +17,16 @@
 
 | # | 文献 | 类型 | 关键数据点（→ 病理边用途） |
 |---|------|------|--------------------------|
-| 1 | **Haznedar et al. (2005)** *Biol Psychiatry*（16 环性 vs 36 HC） | 结构 | **壳核 + 丘脑体积↓（区别于 BD I/II 的特征）**；前额叶灰质↓（BA12+BA32，OFC/扣带前缘）（[疾病-脑区链路映射-文献数据源.md](../../../%E5%8F%82%E8%80%83/%E6%96%87%E7%8C%AE/%E7%96%BE%E7%97%85-%E8%84%91%E5%8C%BA%E9%93%BE%E8%B7%AF%E6%98%A0%E5%B0%84-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md) §七环性心境）→ e05（Putamen→Thalamus relay 减弱）、e08（dlPFC 轻度↓）的结构锚 |
+| 1 | **Haznedar et al. (2005)** *Biol Psychiatry*（16 环性 vs 36 HC） | 结构 | **壳核 + 丘脑体积↓（区别于 BD I/II 的特征）**；前额叶灰质↓（BA12+BA32，OFC/扣带前缘）（[疾病-脑区链路映射-文献数据源.md](../../../../reference/literature/%E7%96%BE%E7%97%85-%E8%84%91%E5%8C%BA%E9%93%BE%E8%B7%AF%E6%98%A0%E5%B0%84-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md) §七环性心境）→ e05（Putamen→Thalamus relay 减弱）、e08（dlPFC 轻度↓）的结构锚 |
 | 2 | **Damme et al. (2022)** *JCPP Advances* | 结构/功能 | **mOFC/NAcc 体积↑（BSD 谱系，male-specific d≈1.01）**——奖励超敏模型 → e07（mOFC→NAcc 过度耦合）⭐新增依据 |
 | 3 | **文献数据源 §七 环性心境** | 汇总 | 奖赏敏感性↑（奖励超敏模型 BSD 谱系共享）；**SMN 内在活动↑ 与 cyclothymic temperament 正相关**；认知控制域 dlPFC↓ 轻度（效应量 < BD-I）→ e09（SMN）、e08（dlPFC）、e01/e07（奖赏域） |
 | 4 | **RDoC v4（NIMH）** | 回路矩阵 | 正性效价（奖赏评估/预期/学习）：OFC、腹侧纹状体、VTA/SN → MDD/双相/成瘾（文献数据源 §四.1）→ 奖赏域边集（e01/e07）回路级锚 |
 
 **辅助锚（方向/范围补充）**：
 
-- **Gordon, Palmer & Cooper (2010)** *Clin EEG Neurosci*——六病同测 EEG alpha 偏侧：MDD 右偏仅趋势水平；[左右脑偏侧化-文献数据源.md](../../../%E5%8F%82%E8%80%83/%E6%96%87%E7%8C%AE/%E5%B7%A6%E5%8F%B3%E8%84%91%E5%81%8F%E4%BE%A7%E5%8C%96-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md) §八：**MDD 偏侧证据弱，谨慎不作核心机制** → 环性心境全边 laterality_delta = 0。
+- **Gordon, Palmer & Cooper (2010)** *Clin EEG Neurosci*——六病同测 EEG alpha 偏侧：MDD 右偏仅趋势水平；[左右脑偏侧化-文献数据源.md](../../../../reference/literature/%E5%B7%A6%E5%8F%B3%E8%84%91%E5%81%8F%E4%BE%A7%E5%8C%96-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md) §八：**MDD 偏侧证据弱，谨慎不作核心机制** → 环性心境全边 laterality_delta = 0。
 - **旧链路注册表（link_registry.json，⚠️ 已废弃 2026-08-07）**——6 条旧链路的方向/量级/通路描述（Hansen 2024 / Paxinos 2004 / ENIGMA / Alexander 1986 CSTC）作为语义继承源，见 §四。
-- **MDD 试点（[mdd-pilot.md](mdd-pilot.md)）**——抑郁谱系共享边（VTA→NAcc 解耦、DMN 反刍）在此降档复用，保证谱系内量级梯度（MDD > 环性）。
+- **MDD 试点（[mdd-pilot.md](../disease-pilots/mdd-pilot.md)）**——抑郁谱系共享边（VTA→NAcc 解耦、DMN 反刍）在此降档复用，保证谱系内量级梯度（MDD > 环性）。
 
 > **转换规则声明**：文献给出脑区/网络层结论，三体边层映射为设计师翻译；m 偏移量级沿用旧文件设计校准值（环性 = MDD × 0.5~0.7 梯度 + BD-II × 0.5 推导），**全部数值有来源，新增数值标记 `[NEW]`**。
 
@@ -176,4 +176,4 @@ NPC AI §4.2/§5.2：环性心境 = 「敏化-奖励 + 反刍」双标签（多�
 ---
 
 *创建: 2026-08-21 | 更新: 2026-08-21*
-*关联: [grilling-88.md](grilling-88.md), [持续性心境障碍](../../../%E5%AE%9E%E4%BD%93/%E7%96%BE%E7%97%85%E7%9B%AE%E5%BD%95/%E6%8C%81%E7%BB%AD%E6%80%A7%E5%BF%83%E5%A2%83%E9%9A%9C%E7%A2%8D.md), [mdd-pilot.md](mdd-pilot.md), [NPC AI 行为模型](../../../规则/技能树系统/NPC AI 行为模型.md) §4.2/§5.2, [偏侧化架构](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E5%81%8F%E4%BE%A7%E5%8C%96%E6%9E%B6%E6%9E%84.md) §四/§八, [疾病-脑区链路映射-文献数据源](../../../%E5%8F%82%E8%80%83/%E6%96%87%E7%8C%AE/%E7%96%BE%E7%97%85-%E8%84%91%E5%8C%BA%E9%93%BE%E8%B7%AF%E6%98%A0%E5%B0%84-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md) §二/§三/§四/§七, [左右脑偏侧化-文献数据源](../../../%E5%8F%82%E8%80%83/%E6%96%87%E7%8C%AE/%E5%B7%A6%E5%8F%B3%E8%84%91%E5%81%8F%E4%BE%A7%E5%8C%96-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md) §八, [tripartite_model.json](../../../data/connectivity/tripartite_model.json)*
+*关联: [grilling-88.md](../disease-pilots/grilling-88.md), [持续性心境障碍](../../../entities/diseases/%E6%8C%81%E7%BB%AD%E6%80%A7%E5%BF%83%E5%A2%83%E9%9A%9C%E7%A2%8D.md), [mdd-pilot.md](../disease-pilots/mdd-pilot.md), [NPC AI 行为模型](../../../rules/skill-tree/NPC%20AI%20%E8%A1%8C%E4%B8%BA%E6%A8%A1%E5%9E%8B.md) §4.2/§5.2, [偏侧化架构](../../../rules/skill-tree/%E5%81%8F%E4%BE%A7%E5%8C%96%E6%9E%B6%E6%9E%84.md) §四/§八, [疾病-脑区链路映射-文献数据源](../../../../reference/literature/%E7%96%BE%E7%97%85-%E8%84%91%E5%8C%BA%E9%93%BE%E8%B7%AF%E6%98%A0%E5%B0%84-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md) §二/§三/§四/§七, [左右脑偏侧化-文献数据源](../../../../reference/literature/%E5%B7%A6%E5%8F%B3%E8%84%91%E5%81%8F%E4%BE%A7%E5%8C%96-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md) §八, [tripartite_model.json](../../../../data/connectivity/tripartite_model.json)*

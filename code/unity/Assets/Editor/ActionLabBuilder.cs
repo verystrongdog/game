@@ -33,7 +33,7 @@ namespace YANTF.EditorTools
             if (xBot == null)
             {
                 Debug.LogError("[ActionLab] 找不到载体模型: " + XBotPath +
-                               "\n请先按 unity/README.md §二·E 步骤 1 导入 X Bot.fbx（Rig → Humanoid → Apply）。" +
+                               "\n请先按 code/unity/README.md §二·E 步骤 1 导入 X Bot.fbx（Rig → Humanoid → Apply）。" +
                                "Y Bot 备用路径: " + YBotPath);
                 return;
             }

@@ -1,6 +1,6 @@
 # 拖延症重映射试点
 
-> 26 病重映射第二批试点（模板：[ptsd-pilot.md](ptsd-pilot.md) §六 字段规范）。本文件把旧 `link_NNN` 链路表（挂已废弃 link_registry.json）重映射为三体模型上的 **11 条病理边（全部命中 `tripartite_model.json` 现有边，0 条「病理新增」）**。核心病理 = **dmPFC（节点 `superiorfrontal`，fid SuperiorFrontalMPFC）努力折扣信号异常（Le Bouc & Pessiglione 2022）+ dlPFC 灰质体积↓（解耦沉默）+ DMN 过度活跃压倒前额叶控制 + 岛叶努力感知异常**。跨诊断特征（CGI-S 1-3，轻症维度），可与其他疾病 NPC 叠加。档位过滤 B′：CGI-S 1-3 → **仅轻档 + 亚临床（1-2）可达，重档 = 3 仍为轻症量级**（中/重档值为上限参考）。7 参数推导与标签组合交叉验证：旧默认标签「反刍」仅捕获 NE 内转成分，回避型结构（bias 负向）超出 6 标签表达 → **参数直调方案**，建议 NPC AI §5.2 新增行。
+> 26 病重映射第二批试点（模板：[ptsd-pilot.md](../disease-pilots/ptsd-pilot.md) §六 字段规范）。本文件把旧 `link_NNN` 链路表（挂已废弃 link_registry.json）重映射为三体模型上的 **11 条病理边（全部命中 `tripartite_model.json` 现有边，0 条「病理新增」）**。核心病理 = **dmPFC（节点 `superiorfrontal`，fid SuperiorFrontalMPFC）努力折扣信号异常（Le Bouc & Pessiglione 2022）+ dlPFC 灰质体积↓（解耦沉默）+ DMN 过度活跃压倒前额叶控制 + 岛叶努力感知异常**。跨诊断特征（CGI-S 1-3，轻症维度），可与其他疾病 NPC 叠加。档位过滤 B′：CGI-S 1-3 → **仅轻档 + 亚临床（1-2）可达，重档 = 3 仍为轻症量级**（中/重档值为上限参考）。7 参数推导与标签组合交叉验证：旧默认标签「反刍」仅捕获 NE 内转成分，回避型结构（bias 负向）超出 6 标签表达 → **参数直调方案**，建议 NPC AI §5.2 新增行。
 
 ## 目录
 
@@ -19,8 +19,8 @@
 |---|------|------|--------------------------|
 | 1 | **Le Bouc & Pessiglione (2022)** *Nat Commun* | 努力决策 fMRI | **dmPFC 努力折扣信号预测拖延**——预期努力成本随时间急剧衰减（「以后做就不费力」认知偏差）；努力折扣 > 奖赏折扣 → e07（dmPFC→NAcc 估值环路过度耦合，节点 `superiorfrontal`） |
 | 2 | **Amalia et al. (2024)** 系统综述（23 项研究, n=6,087） | 结构/网络综述 | **dlPFC 灰质体积↓**（→ e04 认知 gate 解耦）；**认知控制网络-DMN 连接 disrupted**（→ e02/e03 连接解耦）；DMN 过度活跃压倒前额叶控制信号（→ e11） |
-| 3 | **文献数据源 §七 拖延症 特征**（[疾病-脑区链路映射-文献数据源.md](../../../%E5%8F%82%E8%80%83/%E6%96%87%E7%8C%AE/%E7%96%BE%E7%97%85-%E8%84%91%E5%8C%BA%E9%93%BE%E8%B7%AF%E6%98%A0%E5%B0%84-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md)） | 特征汇总 | 跨诊断——低自控 + 高奖赏敏感性 + 反刍 + 无聊易感；**左侧 dlPFC 刺激→任务完成意愿↑（因果证据，干预性非病理偏侧）**；对应功能域：认知控制域（dlPFC↓ / dmPFC 努力折扣异常）、奖赏域（时间折扣偏误——远期奖赏价值↓）、内感受域（岛叶努力感知异常） |
-| 4 | **NPC AI §4.2/§5.2 标签校准**（[NPC AI 行为模型](../../../规则/技能树系统/NPC AI 行为模型.md)） | 设计校准 | 旧默认标签「反刍」（NE−0.1 内转、bias_cognitive+0.15）；tone ±0.1~±0.2、bias ±0.15 幅值锚（→ §三 7 参数量级） |
+| 3 | **文献数据源 §七 拖延症 特征**（[疾病-脑区链路映射-文献数据源.md](../../../../reference/literature/%E7%96%BE%E7%97%85-%E8%84%91%E5%8C%BA%E9%93%BE%E8%B7%AF%E6%98%A0%E5%B0%84-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md)） | 特征汇总 | 跨诊断——低自控 + 高奖赏敏感性 + 反刍 + 无聊易感；**左侧 dlPFC 刺激→任务完成意愿↑（因果证据，干预性非病理偏侧）**；对应功能域：认知控制域（dlPFC↓ / dmPFC 努力折扣异常）、奖赏域（时间折扣偏误——远期奖赏价值↓）、内感受域（岛叶努力感知异常） |
+| 4 | **NPC AI §4.2/§5.2 标签校准**（[NPC AI 行为模型](../../../rules/skill-tree/NPC%20AI%20%E8%A1%8C%E4%B8%BA%E6%A8%A1%E5%9E%8B.md)） | 设计校准 | 旧默认标签「反刍」（NE−0.1 内转、bias_cognitive+0.15）；tone ±0.1~±0.2、bias ±0.15 幅值锚（→ §三 7 参数量级） |
 
 **辅助锚（方向/范围补充）**：
 
@@ -175,4 +175,4 @@
 ---
 
 *创建: 2026-08-21 | 更新: 2026-08-21*
-*关联: [grilling-88.md](grilling-88.md), [ptsd-pilot.md](ptsd-pilot.md), [拖延症](../../../%E5%AE%9E%E4%BD%93/%E7%96%BE%E7%97%85%E7%9B%AE%E5%BD%95/%E6%8B%96%E5%BB%B6%E7%97%87.md), [注意缺陷多动障碍](../../../%E5%AE%9E%E4%BD%93/%E7%96%BE%E7%97%85%E7%9B%AE%E5%BD%95/%E6%B3%A8%E6%84%8F%E7%BC%BA%E9%99%B7%E5%A4%9A%E5%8A%A8%E9%9A%9C%E7%A2%8D.md), [NPC AI 行为模型](../../../规则/技能树系统/NPC AI 行为模型.md) §4.2/§4.3/§5.2, [偏侧化架构](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E5%81%8F%E4%BE%A7%E5%8C%96%E6%9E%B6%E6%9E%84.md) §四/§八, [脑功能层级模型](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E8%84%91%E5%8A%9F%E8%83%BD%E5%B1%82%E7%BA%A7%E6%A8%A1%E5%9E%8B.md) §二十, [疾病-脑区链路映射-文献数据源](../../../%E5%8F%82%E8%80%83/%E6%96%87%E7%8C%AE/%E7%96%BE%E7%97%85-%E8%84%91%E5%8C%BA%E9%93%BE%E8%B7%AF%E6%98%A0%E5%B0%84-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md) §七, [tripartite_model.json](../../../data/connectivity/tripartite_model.json), [link_registry.json](../../../data/connectivity/link_registry.json)（⚠️ 已废弃 2026-08-07）*
+*关联: [grilling-88.md](../disease-pilots/grilling-88.md), [ptsd-pilot.md](../disease-pilots/ptsd-pilot.md), [拖延症](../../../entities/diseases/%E6%8B%96%E5%BB%B6%E7%97%87.md), [注意缺陷多动障碍](../../../entities/diseases/%E6%B3%A8%E6%84%8F%E7%BC%BA%E9%99%B7%E5%A4%9A%E5%8A%A8%E9%9A%9C%E7%A2%8D.md), [NPC AI 行为模型](../../../rules/skill-tree/NPC%20AI%20%E8%A1%8C%E4%B8%BA%E6%A8%A1%E5%9E%8B.md) §4.2/§4.3/§5.2, [偏侧化架构](../../../rules/skill-tree/%E5%81%8F%E4%BE%A7%E5%8C%96%E6%9E%B6%E6%9E%84.md) §四/§八, [脑功能层级模型](../../../rules/skill-tree/%E8%84%91%E5%8A%9F%E8%83%BD%E5%B1%82%E7%BA%A7%E6%A8%A1%E5%9E%8B.md) §二十, [疾病-脑区链路映射-文献数据源](../../../../reference/literature/%E7%96%BE%E7%97%85-%E8%84%91%E5%8C%BA%E9%93%BE%E8%B7%AF%E6%98%A0%E5%B0%84-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md) §七, [tripartite_model.json](../../../../data/connectivity/tripartite_model.json), [link_registry.json](../../../../data/connectivity/link_registry.json)（⚠️ 已废弃 2026-08-07）*

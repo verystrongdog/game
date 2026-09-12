@@ -40,7 +40,7 @@
     { "trait": "照护倾向", "origin_event": "被李老师照护的经历 → 选择护理职业", "source": "叙事视图 v0.1" }
   ],
   "story_hooks": [
-    { "hook": "护士站昼夜机制", "type": "生态位", "desc": "住院楼 1F 生态护理人员——玩家醒来第一个见到的人（起点切片 M4）", "consume_by": "空间/生态" },
+    { "hook": "护士站昼夜机制", "type": "生态位", "desc": "住院楼 1F 生态护理人员——玩家醒来第一个见到的人（起点切片 M4）", "consume_by": "design/space/生态" },
     { "hook": "'有人管我'", "type": "玩家对照", "desc": "与患者 NPC 的对照系——同样的土壤可以有不同的出口", "consume_by": "剧情/主题" }
   ],
   "trauma_memories": [

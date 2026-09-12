@@ -4,7 +4,7 @@
 
 ## 范围
 
-实现 [spec v1.2.2](../../../../../规格/引擎/csharp-events.md) 全部内容，覆盖 AC-1~15：
+实现 [spec v1.2.2](../../../../../spec/engine/csharp-events.md) 全部内容，覆盖 AC-1~15：
 
 - `EventProcessor`（Engine/EventProcessor.cs 新建）——ProcessEvents：δ 派生（A1/A2/A4/A5/B1/B2/B4/C1/D1/D2）+ Σ 聚合一次 Step + s 打包
 - `EventProcessingResult`（Types/EventProcessingResult.cs 新建）
@@ -14,11 +14,11 @@
 
 ## 文件所有权声明
 
-- `src/YouAreNotTheFish.Core/Engine/EventProcessor.cs` — 新建
-- `src/YouAreNotTheFish.Core/Types/EventProcessingResult.cs` — 新建
-- `src/YouAreNotTheFish.Core/Types/CombatEvents.cs` — 修改（StatusChangeEvent +3 float 字段）
-- `src/YouAreNotTheFish.Core/Types/CalibrationConfig.cs` — 修改（EndurancePassivePenalty=1）
-- `src/YouAreNotTheFish.Core.Tests/Engine/EventProcessorTests.cs` — 新建（AC-1~15）
+- `code/src/YouAreNotTheFish.Core/Engine/EventProcessor.cs` — 新建
+- `code/src/YouAreNotTheFish.Core/Types/EventProcessingResult.cs` — 新建
+- `code/src/YouAreNotTheFish.Core/Types/CombatEvents.cs` — 修改（StatusChangeEvent +3 float 字段）
+- `code/src/YouAreNotTheFish.Core/Types/CalibrationConfig.cs` — 修改（EndurancePassivePenalty=1）
+- `code/src/YouAreNotTheFish.Core.Tests/Engine/EventProcessorTests.cs` — 新建（AC-1~15）
 - `../../../../规格/引擎/csharp-engine-types.md` — 变更日志补 🔧 修正行（结转 #1）
 
 grep 检查：其他进行中 work issue 无上述文件所有权（全部 prior issue 已 resolved）。
@@ -98,4 +98,4 @@ spec §六 AC-1~15 逐条对照 + spec §七 自检清单 9 项 + sign-off 结�
 
 ---
 *创建: 2026-08-14 | 更新: 2026-08-14*
-*关联: [spec v1.2.2](../../../../../规格/引擎/csharp-events.md), [审计报告](../../design/audit/report.md), [sign-off](../../design/audit/sign-off.md)*
+*关联: [spec v1.2.2](../../../../../spec/engine/csharp-events.md), [审计报告](../../design/audit/report.md), [sign-off](../../design/audit/sign-off.md)*

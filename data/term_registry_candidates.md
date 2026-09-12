@@ -19,4 +19,4 @@
 
 ---
 *创建: 2026-09-03 | 更新: 2026-09-03*
-*关联: [data/term_registry.json](term_registry.json), [docs/决策树/](../docs/%E5%86%B3%E7%AD%96%E6%A0%91/README.md) Grilling #111*
+*关联: [data/term_registry.json](term_registry.json), [design/decisions/](../design/decisions/README.md) Grilling #111*

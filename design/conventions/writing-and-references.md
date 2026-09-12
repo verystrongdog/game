@@ -2,7 +2,7 @@
 
 > 设计文档的**引用格式与参数定义**统一标准：文件路径怎么引、参数怎么写、决策怎么引、交叉引用怎么标。任何文档（人类或 AI 撰写）都应遵守。
 
-> **来源**：2026-09-12 仓库重构 Phase 2 从 `设计归档/grilling/方法论/grilling-质量保障体系-v2.md` §四 迁出。原文档已随 grilling 归档至 [设计归档/grilling/方法论/](../设计归档/grilling/方法论/grilling-质量保障体系-v2.md)。本文件是**现行规范正文**——原 §四 不再是引用目标。
+> **来源**：2026-09-12 仓库重构 Phase 2 从 `design/archive/grilling/methodology/grilling-质量保障体系-v2.md` §四 迁出。原文档已随 grilling 归档至 [design/archive/grilling/methodology/](../archive/grilling/methodology/grilling-%E8%B4%A8%E9%87%8F%E4%BF%9D%E9%9A%9C%E4%BD%93%E7%B3%BB-v2.md)。本文件是**现行规范正文**——原 §四 不再是引用目标。
 
 ## 目录
 
@@ -17,11 +17,11 @@
 
 ```
 # 段引用（推荐，最稳健——不受行号漂移影响）
-`规则/核心机制.md` §八             →  文件 §节号
-`规则/核心机制.md` §5.1            →  文件 §子节
+`design/rules/核心机制.md` §八             →  文件 §节号
+`design/rules/核心机制.md` §5.1            →  文件 §子节
 
 # 精确引用（需要精确到行时使用，注意行号随编辑漂移）
-`规则/核心机制.md:314`             →  文件:行号
+`design/rules/核心机制.md:314`             →  文件:行号
 `data/canon/brain_regions.json`    →  完整相对路径（数据文件不需要行号）
 ```
 
@@ -36,8 +36,8 @@
 ```markdown
 | 参数 | 符号 | 默认值 | 范围 | 来源 |
 |------|------|--------|------|------|
-| SAN 基线 | SAN₀ | 80 | 70-90 | `规则/核心机制.md` §5.1 |
-| 敌人杂兵 HP | NpcHp | 25 | 20-30 | `实体/敌人与事件.md` §4.1 |
+| SAN 基线 | SAN₀ | 80 | 70-90 | `design/rules/核心机制.md` §5.1 |
+| 敌人杂兵 HP | NpcHp | 25 | 20-30 | `design/entities/敌人与事件.md` §4.1 |
 ```
 
 **来源列必填**，且必须是可核验的引用（设计文档章节 / 文献出处 / 数据文件）。违反此条即无法追溯参数依据。
@@ -63,13 +63,13 @@
 决策树: <话题> §第N题  →  结论
 
 # 设计归档引用（第一手决策记录）
-设计归档: 设计归档/grilling/<slug>/决策记录.md §N
+设计归档: design/archive/grilling/<slug>/决策记录.md §N
 
 # Issue 引用
 [#16] → https://github.com/verystrongdog/game/issues/16
 ```
 
-**两层引用关系**：[决策树](%E5%86%B3%E7%AD%96%E6%A0%91/README.md) 是跨轮次的索引与分叉记录；`设计归档/grilling/<slug>/决策记录.md` 是单轮的原始结论正本。引用结论优先引决策树条目，需要完整追问过程时再引归档。
+**两层引用关系**：[决策树](../decisions/README.md) 是跨轮次的索引与分叉记录；`design/archive/grilling/<slug>/决策记录.md` 是单轮的原始结论正本。引用结论优先引决策树条目，需要完整追问过程时再引归档。
 
 ## 四、交叉引用规范
 
@@ -77,7 +77,7 @@
 
 ```markdown
 # 正确 ✅
-详见 [核心机制 §八 可塑性巩固](../规则/核心机制.md) —— §八 可塑性巩固 小节
+详见 [核心机制 §八 可塑性巩固](../rules/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md) —— §八 可塑性巩固 小节
 
 # 错误 ❌
 详见 核心机制.md 的可塑性巩固部分
@@ -93,4 +93,4 @@
 
 ---
 *创建: 2026-09-12 | 更新: 2026-09-12*
-*关联: [设计框架-六维状态](设计框架-六维状态.md), [决策树](%E5%86%B3%E7%AD%96%E6%A0%91/README.md), [grilling 方法论归档](../设计归档/grilling/方法论/grilling-质量保障体系-v2.md)*
+*关联: [设计框架-六维状态](../framework/six-dimensions.md), [决策树](../decisions/README.md), [grilling 方法论归档](../archive/grilling/methodology/grilling-%E8%B4%A8%E9%87%8F%E4%BF%9D%E9%9A%9C%E4%BD%93%E7%B3%BB-v2.md)*

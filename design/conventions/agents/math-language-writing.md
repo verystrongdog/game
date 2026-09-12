@@ -21,7 +21,7 @@
 ## 一、为什么用数学语言
 
 1. **歧义传递**：任务 md 是「grilling 决策 → 实施」的桥梁。自然语言在每一跳都可能被 AI 错误解释（「较大」「少量」「一定概率」等模糊量词尤其危险）。
-2. **可验证性**：公式和表格可以机械校验（对照 `term_registry.json` 的 `numerical_locations`、`tools/validate_params.py`），而自然语言段落无法被脚本验证。
+2. **可验证性**：公式和表格可以机械校验（对照 `term_registry.json` 的 `numerical_locations`、`code/tools/validate_params.py`），而自然语言段落无法被脚本验证。
 3. **可测试性**：数学表达能直接映射为单元测试断言（如 `a(t)` 递推式 → 对应实现函数的测试用例）。
 4. **减少往返**：一次写准，避免「AI 理解错 → 用户纠正 → AI 重写」的多轮返工。
 
@@ -91,7 +91,7 @@
 
 - 写 md 前先查 `data/term_registry.json`：术语名、参数符号、默认值、`numerical_locations`。
 - 使用的每个核心术语/参数符号，都应能在注册表中查到，或明确标注 `[NEW]` 待后续 grilling 入库。
-- **禁用废弃术语**（`status: deprecated`）——除非在标注 `⚠️ 已废弃` 的段落中作历史说明。**完整清单以注册表为准**，运行时查询：`python3 tools/list_deprecated_terms.py`（勿用记忆或硬编码清单）。
+- **禁用废弃术语**（`status: deprecated`）——除非在标注 `⚠️ 已废弃` 的段落中作历史说明。**完整清单以注册表为准**，运行时查询：`python3 code/tools/list_deprecated_terms.py`（勿用记忆或硬编码清单）。
 - 引用链接统一 `[显示名](相对路径)`，标注段落 `§N`，遵循「引用即读取铁律」。
 
 ---
@@ -130,7 +130,7 @@
 
 ### 7.7 与 AI 产出方向的关系
 
-两条方向共享同一套论文标准内核（§7.4 六条），仅在**执行对象**上区分：§一至§六约束 AI 写文档，§七约束用户说需求。总纲入口：[CLAUDE.md §对话数学语言规范](../../CLAUDE.md)。
+两条方向共享同一套论文标准内核（§7.4 六条），仅在**执行对象**上区分：§一至§六约束 AI 写文档，§七约束用户说需求。总纲入口：[CLAUDE.md §对话数学语言规范](../../../CLAUDE.md)。
 
 ---
 
@@ -149,4 +149,4 @@
 ---
 
 *创建: 2026-08-16 | 更新: 2026-08-16（Grilling #85：新增 §七 对话交互规范——人类输入方向，打断-重述-验证机制）*
-*关联: [term_registry.json](../../data/term_registry.json), [review-plan skill](../../.claude/skills/review-plan/SKILL.md), [task-checker skill](../../.claude/skills/task-checker/SKILL.md), [CLAUDE.md §对话数学语言规范](../../CLAUDE.md)*
+*关联: [term_registry.json](../../../data/term_registry.json), [review-plan skill](../../../.claude/skills/review-plan/SKILL.md), [task-checker skill](../../../.claude/skills/task-checker/SKILL.md), [CLAUDE.md §对话数学语言规范](../../../CLAUDE.md)*

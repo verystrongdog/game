@@ -431,7 +431,7 @@ OTHER_NEW = {
         "lobe": "temporal",
         "mni": [-28, -36, -18],
         "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.parahippocampal.obj",
-        "level": 1,  # 旁海马皮层，空间/情景记忆
+        "level": 1,  # 旁海马皮层，design/space/情景记忆
         "notes": "空间导航/场景识别(PPA). 海马体的主要皮层输入. 内嗅皮层-海马的中继"
     },
     # 峡部扣带 (retrosplenial)
@@ -601,4 +601,4 @@ if __name__ == "__main__":
 
     # 输出
     generate(output_path)
-    print(f"\n下一步: 用 tools/map_skills_to_regions.py 重新映射技能坐标")
+    print(f"\n下一步: 用 code/tools/map_skills_to_regions.py 重新映射技能坐标")

@@ -69,7 +69,16 @@ data/sim_results/
 .nuget-packages/
 .nuget-http-cache/
 
-# Unity project artifacts (unity/)
+# Unity project artifacts（2026-09-12 Phase 3：unity/ 迁至 code/unity/，前缀同步）
+code/unity/[Ll]ibrary/
+code/unity/[Tt]emp/
+code/unity/[Oo]bj/
+code/unity/[Ll]ogs/
+code/unity/[Uu]serSettings/
+code/unity/*.csproj
+code/unity/*.sln
+code/unity/Assets/Plugins/*.pdb
+# 兼容：若仍有人把 Unity 工程放在旧位置
 unity/[Ll]ibrary/
 unity/[Tt]emp/
 unity/[Oo]bj/
@@ -81,6 +90,7 @@ unity/Assets/Plugins/*.pdb
 
 # Unity CLI local install / licensing (sandbox, Grilling #122)
 .unity-home/
+code/unity/*.log
 unity/*.log
 
 # 仓库重构前的本地安全备份（bundle + 工作区快照，仅本地，重构完成后删除）

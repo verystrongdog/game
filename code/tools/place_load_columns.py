@@ -10,10 +10,10 @@
 
 用法:
   # 仅计算、查看点位（不需要 Blender）
-  python3 tools/place_load_columns.py --calc
+  python3 code/tools/place_load_columns.py --calc
 
   # 在 Blender 中运行（放置全部柱子）
-  blender --background --python tools/place_load_columns.py
+  blender --background --python code/tools/place_load_columns.py
   或: Blender 内 Scripting 工作区 → 打开此文件 → Run Script
 """
 

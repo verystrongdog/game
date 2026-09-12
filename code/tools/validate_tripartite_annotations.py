@@ -10,11 +10,11 @@ validate_tripartite_annotations.py — tripartite_model.json 注释完整性校�
   基础图 schema + 注释字段完整性 + #92 lateralization + 手工 privileged_pathways。
 
 设计依据:
-  - 规则/技能树系统/脑功能层级模型.md §二十（三体模型）
-  - 规则/技能树系统/偏侧化架构.md §9.2（T8 校验）
+  - design/rules/skill-tree/脑功能层级模型.md §二十（三体模型）
+  - design/rules/skill-tree/偏侧化架构.md §9.2（T8 校验）
   - Grilling #91（2026-08-30）数据回归修复
 
-用法: python3 tools/validate_tripartite_annotations.py [data_dir]
+用法: python3 code/tools/validate_tripartite_annotations.py [data_dir]
 退出码: 0 = PASS；1 = FAIL（fail-fast，第一条错误即退出）
 """
 
@@ -22,7 +22,7 @@ import json
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parent.parent.parent
 
 # ─── 校验契约 ───────────────────────────────────────────────────
 

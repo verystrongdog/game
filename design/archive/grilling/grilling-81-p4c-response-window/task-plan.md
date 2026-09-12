@@ -93,7 +93,7 @@ Resolve(declared, state, ctx):
 
 | # | 任务 | 类型 | 产出 | 依赖 |
 |---|------|------|------|------|
-| T1 | 正典 §6.2 补注：触发条件语义（L4 a(t) 驱动/忍耐自动/叙事重构 B 条件）+ "防御主动"表述残留澄清 | 文档 | `规则/回合战斗流程.md` | D2-D4 |
+| T1 | 正典 §6.2 补注：触发条件语义（L4 a(t) 驱动/忍耐自动/叙事重构 B 条件）+ "防御主动"表述残留澄清 | 文档 | `design/rules/回合战斗流程.md` | D2-D4 |
 | T2 | `ResponseResolver` 正式实现（3 响应分发 + 触发检查） | 代码 | `Flow/ResponseResolver.cs`（替换 Noop） | D1 |
 | T3 | L4 读意图：社会认知节点集 + 阈值判定 + 自动防御（无冷却） | 代码 | `Engine/SocialCognitionNodes.cs` + `ResponseResolver` | T2 |
 | T4 | 忍耐·主动：自动触发 + Broca 占用 + CD + 减免翻倍接入 DamageCalculator | 代码 | `ResponseResolver` + `Engine/DamageCalculator.cs` | T2 |
@@ -104,16 +104,16 @@ Resolve(declared, state, ctx):
 
 | 文件 | 操作 | 类型 |
 |------|------|------|
-| `规则/回合战斗流程.md`（§6.2 补注） | 改写 | 文档 |
-| `src/YouAreNotTheFish.Core/Flow/ResponseResolver.cs` | 新建（替换 Noop） | 代码 |
-| `src/YouAreNotTheFish.Core/Engine/SocialCognitionNodes.cs` | 新建（节点集） | 代码 |
-| `src/YouAreNotTheFish.Core/Engine/DamageCalculator.cs` | 改写（忍耐主动/NarrativeBoost） | 代码 |
-| `src/YouAreNotTheFish.Core/Types/Enums.cs`（StatusKind.NarrativeBoost） | 改写 | 代码 |
-| `src/YouAreNotTheFish.Core/Entity/CombatState.cs` | 改写（状态计时） | 代码 |
-| `src/YouAreNotTheFish.Core/Types/CalibrationConfig.cs` | 改写（+2 [NEW]） | 代码 |
-| `src/YouAreNotTheFish.Core.Tests/` | 新增 | 测试 |
-| `src/YouAreNotTheFish.Console/` | 改写 | 代码 |
-| `docs/决策树/` / `docs/设计框架-六维状态.md` / memory | 追加 | 文档 |
+| `design/rules/回合战斗流程.md`（§6.2 补注） | 改写 | 文档 |
+| `code/src/YouAreNotTheFish.Core/Flow/ResponseResolver.cs` | 新建（替换 Noop） | 代码 |
+| `code/src/YouAreNotTheFish.Core/Engine/SocialCognitionNodes.cs` | 新建（节点集） | 代码 |
+| `code/src/YouAreNotTheFish.Core/Engine/DamageCalculator.cs` | 改写（忍耐主动/NarrativeBoost） | 代码 |
+| `code/src/YouAreNotTheFish.Core/Types/Enums.cs`（StatusKind.NarrativeBoost） | 改写 | 代码 |
+| `code/src/YouAreNotTheFish.Core/Entity/CombatState.cs` | 改写（状态计时） | 代码 |
+| `code/src/YouAreNotTheFish.Core/Types/CalibrationConfig.cs` | 改写（+2 [NEW]） | 代码 |
+| `code/src/YouAreNotTheFish.Core.Tests/` | 新增 | 测试 |
+| `code/src/YouAreNotTheFish.Console/` | 改写 | 代码 |
+| `design/decisions/` / `design/framework/six-dimensions.md` / memory | 追加 | 文档 |
 
 ## 十、数据契约与校验
 
@@ -129,11 +129,11 @@ Resolve(declared, state, ctx):
 
 | 校验 | 命令 |
 |------|------|
-| 引擎测试绿 | `dotnet test src/YouAreNotTheFish.Core.Tests` |
+| 引擎测试绿 | `dotnet test code/src/YouAreNotTheFish.Core.Tests` |
 | L4 阈值 | 社会认知节点高/低于阈值 响应可用性 单测 |
 | 忍耐主动 | CD/Broca 占用/减免翻倍 单测 |
 | 叙事重构 | 友方受伤触发/自身受伤不触发/下窗口生效/消失 单测 |
-| 交叉引用 | `python3 tools/validate_cross_refs.py` |
+| 交叉引用 | `python3 code/tools/validate_cross_refs.py` |
 
 ## 十一、验收标准
 
@@ -156,4 +156,4 @@ Resolve(declared, state, ctx):
 ---
 
 *创建: 2026-08-16 | 更新: 2026-08-16*
-*关联: [Grilling #70 路线图 task-plan](./../grilling-70-engine-roadmap/task-plan.md), [回合战斗流程](../../../%E8%A7%84%E5%88%99/%E5%9B%9E%E5%90%88%E6%88%98%E6%96%97%E6%B5%81%E7%A8%8B.md), [核心机制](../../../%E8%A7%84%E5%88%99/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md), [基础行动设计](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E6%93%8D%E4%BD%9C%E5%B1%82/%E5%9F%BA%E7%A1%80%E8%A1%8C%E5%8A%A8%E8%AE%BE%E8%AE%A1.md), [Grilling #74 P1c task-plan](./../grilling-74-p1c-skill-execution/task-plan.md), [数学语言书写规范](../../../docs/agents/math-language-writing.md)*
+*关联: [Grilling #70 路线图 task-plan](../grilling-70-engine-roadmap/task-plan.md), [回合战斗流程](../../../rules/%E5%9B%9E%E5%90%88%E6%88%98%E6%96%97%E6%B5%81%E7%A8%8B.md), [核心机制](../../../rules/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md), [基础行动设计](../../../rules/skill-tree/operations/%E5%9F%BA%E7%A1%80%E8%A1%8C%E5%8A%A8%E8%AE%BE%E8%AE%A1.md), [Grilling #74 P1c task-plan](../grilling-74-p1c-skill-execution/task-plan.md), [数学语言书写规范](../../../conventions/agents/math-language-writing.md)*

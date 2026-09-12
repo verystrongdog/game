@@ -346,4 +346,4 @@ enemySanRatio = target.San / target.SanMax
 
 ---
 *创建: 2026-08-14 | 更新: 2026-08-14 | 版本: v1.2*
-*关联: [任务issue 01](../../设计归档/grilling/csharp-flow/design/issues/01-flow-spec.md), [plan §五](csharp-engine-roadmap.md), [回合战斗流程](../../%E8%A7%84%E5%88%99/%E5%9B%9E%E5%90%88%E6%88%98%E6%96%97%E6%B5%81%E7%A8%8B.md), [NPC AI 行为模型](../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/NPC%20AI%20%E8%A1%8C%E4%B8%BA%E6%A8%A1%E5%9E%8B.md), [运行时状态模型](../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E8%BF%90%E8%A1%8C%E6%97%B6%E7%8A%B6%E6%80%81%E6%A8%A1%E5%9E%8B.md)*
+*关联: [任务issue 01](../../archive/grilling/csharp-flow/design/issues/01-flow-spec.md), [plan §五](csharp-engine-roadmap.md), [回合战斗流程](../../rules/%E5%9B%9E%E5%90%88%E6%88%98%E6%96%97%E6%B5%81%E7%A8%8B.md), [NPC AI 行为模型](../../rules/skill-tree/NPC%20AI%20%E8%A1%8C%E4%B8%BA%E6%A8%A1%E5%9E%8B.md), [运行时状态模型](../../rules/skill-tree/%E8%BF%90%E8%A1%8C%E6%97%B6%E7%8A%B6%E6%80%81%E6%A8%A1%E5%9E%8B.md)*

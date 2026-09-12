@@ -11,11 +11,11 @@ validate_params.py — 跨文件参数一致性校验脚本
 输出符合 review-plan --pre-check 格式。
 
 用法:
-  python3 tools/validate_params.py                           # 扫描全部活跃 md
-  python3 tools/validate_params.py 规则/核心机制.md          # 指定文件
-  python3 tools/validate_params.py --format json              # JSON 输出
-  python3 tools/validate_params.py --extract-only             # 仅提取不检查（Step 1）
-  python3 tools/validate_params.py --output report.json       # 输出到文件
+  python3 code/tools/validate_params.py                           # 扫描全部活跃 md
+  python3 code/tools/validate_params.py design/rules/核心机制.md          # 指定文件
+  python3 code/tools/validate_params.py --format json              # JSON 输出
+  python3 code/tools/validate_params.py --extract-only             # 仅提取不检查（Step 1）
+  python3 code/tools/validate_params.py --output report.json       # 输出到文件
 """
 
 import json
@@ -42,9 +42,9 @@ DEPRECATED_PATH_KEYWORDS = [
 
 # 上下文域目录——每份文件描述同一模板的不同实例（如每个病种试点各自声明该病对
 # 同名神经递质参数的偏离量），同名参数值本就不同，不参与跨文件 C1 比较。
-# 2026-09-12 仓库重构 Phase 2：迁入 规格/素材/病种试点/ 后暴露（27 份试点互比产生假阳性）。
+# 2026-09-12 仓库重构 Phase 2：迁入 design/spec/material/disease-pilots/ 后暴露（27 份试点互比产生假阳性）。
 CONTEXT_SCOPED_DIRS = [
-    "规格/素材/病种试点/",
+    "design/spec/material/disease-pilots/",
 ]
 
 # 参数表的列名识别（模糊匹配——不同文档用不同措辞）
@@ -417,7 +417,7 @@ def values_match(v1: str, v2: str) -> bool:
 
 def load_exceptions() -> dict:
     """加载例外配置文件，返回 {symbol: {reason, locations}}"""
-    exc_file = ROOT / "tools/validate_params_exceptions.json"
+    exc_file = ROOT / "code/tools/validate_params_exceptions.json"
     if not exc_file.exists():
         return {}
     try:
@@ -549,13 +549,13 @@ def check_cross_system(all_params: list[dict]) -> list[dict]:
     # C4.1 — SAN 阈值一致性：全文扫描关键设计文档
     # 检查两种表示方式：绝对值 (SAN ≥ 60) 和百分比 (SAN% ≥ 60%)
     san_threshold_files = [
-        "规则/核心机制.md",
-        "规则/技能树系统/NPC AI 行为模型.md",
-        "实体/敌人与事件.md",
-        "规则/回合战斗流程.md",
-        "事件/游戏循环.md",
-        "事件/月光场-标量场模型.md",
-        "空间/空间与关卡设计.md",
+        "design/rules/核心机制.md",
+        "design/rules/skill-tree/NPC AI 行为模型.md",
+        "design/entities/敌人与事件.md",
+        "design/rules/回合战斗流程.md",
+        "design/events/游戏循环.md",
+        "design/events/月光场-标量场模型.md",
+        "design/space/空间与关卡设计.md",
     ]
     # (阈值名, 绝对值正则, 百分比正则)
     # 绝对值: SAN 后不紧跟 %，然后比较符+数值（数值后也不紧跟 %）
@@ -622,7 +622,7 @@ def check_cross_system(all_params: list[dict]) -> list[dict]:
     # C4.2 — 拮抗天花板检查（依赖 validate_disease.py 已验证的数据）
     # 来源: grilling 2026-07-27 §11.5 — 对链 m 总和 ≤ 1.4
     # 5.0 阈值 = 保守上限（19 种疾病各含 2-8 条链路偏移，|m|≤0.5，累计 >5 提示需人工复查）
-    disease_dir = ROOT / "实体/疾病目录"
+    disease_dir = ROOT / "design/entities/疾病目录"
     ceiling_violations = []
     if disease_dir.exists():
         for md_file in disease_dir.glob("*.md"):

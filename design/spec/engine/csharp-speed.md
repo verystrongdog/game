@@ -165,4 +165,4 @@ public static class TurnOrderBuilder
 
 ---
 *创建: 2026-08-13 | 更新: 2026-08-13 | 版本: v1.1*
-*关联: [任务issue 01](../../设计归档/grilling/csharp-speed/design/issues/01-speed-spec.md), [csharp-engine plan §4.5](csharp-engine-roadmap.md), [回合战斗流程](../../%E8%A7%84%E5%88%99/%E5%9B%9E%E5%90%88%E6%88%98%E6%96%97%E6%B5%81%E7%A8%8B.md) §3.1-3.5, [运行时状态模型](../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E8%BF%90%E8%A1%8C%E6%97%B6%E7%8A%B6%E6%80%81%E6%A8%A1%E5%9E%8B.md) §7.1/§7.3/§8.1*
+*关联: [任务issue 01](../../archive/grilling/csharp-speed/design/issues/01-speed-spec.md), [csharp-engine plan §4.5](csharp-engine-roadmap.md), [回合战斗流程](../../rules/%E5%9B%9E%E5%90%88%E6%88%98%E6%96%97%E6%B5%81%E7%A8%8B.md) §3.1-3.5, [运行时状态模型](../../rules/skill-tree/%E8%BF%90%E8%A1%8C%E6%97%B6%E7%8A%B6%E6%80%81%E6%A8%A1%E5%9E%8B.md) §7.1/§7.3/§8.1*

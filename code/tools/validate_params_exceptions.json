@@ -6,43 +6,43 @@
       "symbol": "ε",
       "reason": "同名异义（非值冲突）。皮层动力学-通用层 / 运行时状态模型中的 ε = 0.01，是 Wilson-Cowan 方程的数值稳定项；时空结构数学框架中的「ε → 0 = 硬开关」是另一参数的极限符号，两者只是共用同一符号。2026-09-12 仓库重构 Phase 1 审核确认。",
       "locations": [
-        "规则/技能树系统/皮层动力学-通用层.md",
-        "规则/技能树系统/运行时状态模型.md",
-        "规则/时空结构数学框架.md"
+        "design/rules/skill-tree/皮层动力学-通用层.md",
+        "design/rules/skill-tree/运行时状态模型.md",
+        "design/rules/时空结构数学框架.md"
       ]
     },
     {
       "symbol": "k",
       "reason": "同义不同写法（非冲突）。创伤记忆转化接口.md 声明值域「> 0（基准 1.0）」并在正文说明保护因素作为输入而非等价 k；NPC人生生成器设计.md 与同文件另一处声明具体值「1.0」。值域与默认值互补，无矛盾。2026-09-12 仓库重构 Phase 1 审核确认。",
       "locations": [
-        "规则/技能树系统/创伤记忆转化接口.md",
-        "事件/NPC人生生成器设计.md"
+        "design/rules/skill-tree/创伤记忆转化接口.md",
+        "design/events/NPC人生生成器设计.md"
       ]
     },
     {
       "symbol": "β₀",
       "reason": "同义不同写法（非冲突）。创伤记忆转化接口.md 声明值域「∈ (0,1]（默认 1.0）」，NPC人生生成器设计.md 声明具体值「1.0（来源开放）」。默认值落在声明值域内，无矛盾。2026-09-12 仓库重构 Phase 1 审核确认。",
       "locations": [
-        "规则/技能树系统/创伤记忆转化接口.md",
-        "事件/NPC人生生成器设计.md"
+        "design/rules/skill-tree/创伤记忆转化接口.md",
+        "design/events/NPC人生生成器设计.md"
       ]
     },
     {
       "symbol": "s_j",
       "reason": "同名异义（非值冲突，但是真实的符号重载隐患）。记忆内容层.md §3.4 的 s_j = 记忆检索【相似度】= w₁·(P·T_j)/N + w₂·(c_R·c_E,j)；csharp-wc-dynamics.md §参数表的 s_j = Wilson-Cowan 方程【感官输入上界】≤ 2.0（12 个 bimodal 节点）。两个完全不同的量共用同一符号。建议后续为其中一个改符号（如感官输入改 s_in,j）以消除歧义；在改名之前记入例外以放行校验。2026-09-12 仓库重构 Phase 2 审核确认。",
       "locations": [
-        "规则/技能树系统/记忆内容层.md",
-        "规格/引擎/csharp-wc-dynamics.md"
+        "design/rules/skill-tree/记忆内容层.md",
+        "design/spec/engine/csharp-wc-dynamics.md"
       ]
     },
     {
       "symbol": "N",
-      "reason": "同名异义（非值冲突，但是真实的符号重载隐患）。呈现/玫瑰株丛密度.md §参数表的 N = 10⁴ m² 内的【玫瑰株数】= 4563（六角错行网格落点数）；皮层动力学-通用层.md / 运行时状态模型.md / csharp-wmatrix.md 的 N = WC 方程【节点数量】= 69（brain_regions.json）。N 是极通用的符号，两个语境各自局部定义、互不相关。2026-09-12 仓库重构 Phase 2 审核确认（该文件原在 unity/ 不在扫描范围，迁入 呈现/ 后暴露）。",
+      "reason": "同名异义（非值冲突，但是真实的符号重载隐患）。design/presentation/玫瑰株丛密度.md §参数表的 N = 10⁴ m² 内的【玫瑰株数】= 4563（六角错行网格落点数）；皮层动力学-通用层.md / 运行时状态模型.md / csharp-wmatrix.md 的 N = WC 方程【节点数量】= 69（brain_regions.json）。N 是极通用的符号，两个语境各自局部定义、互不相关。2026-09-12 仓库重构 Phase 2 审核确认（该文件原在 code/unity/ 不在扫描范围，迁入 design/presentation/ 后暴露）。",
       "locations": [
-        "呈现/玫瑰株丛密度.md",
-        "规则/技能树系统/皮层动力学-通用层.md",
-        "规则/技能树系统/运行时状态模型.md",
-        "规格/引擎/csharp-wmatrix.md"
+        "design/presentation/玫瑰株丛密度.md",
+        "design/rules/skill-tree/皮层动力学-通用层.md",
+        "design/rules/skill-tree/运行时状态模型.md",
+        "design/spec/engine/csharp-wmatrix.md"
       ]
     }
   ]

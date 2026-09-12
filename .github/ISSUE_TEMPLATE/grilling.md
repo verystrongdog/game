@@ -12,7 +12,7 @@ assignees: []
 
 ## 六维定位
 
-<!-- 必填：阅读 docs/设计框架-六维状态.md 后填写 -->
+<!-- 必填：阅读 design/framework/six-dimensions.md 后填写 -->
 
 - **维度**：规则 / 实体 / 空间 / 事件 / 呈现 / 管线
 - **依赖**：哪些已完成设计是本次讨论的前提？
@@ -28,4 +28,4 @@ assignees: []
 
 ---
 
-*关联: [设计框架-六维状态](../../docs/%E8%AE%BE%E8%AE%A1%E6%A1%86%E6%9E%B6-%E5%85%AD%E7%BB%B4%E7%8A%B6%E6%80%81.md)*
+*关联: [设计框架-六维状态](../../design/framework/six-dimensions.md)*

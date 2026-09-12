@@ -136,16 +136,16 @@ m = 1.0（与 A7/C1/D1/D2 同类：事件固定最大）；经 EventProcessor δ
 
 | 文件 | 操作 | 类型 |
 |------|------|------|
-| `src/YouAreNotTheFish.Core/Types/SkillDefinition.cs` | 新建 | 代码 |
-| `src/YouAreNotTheFish.Core/Data/SkillCatalog.cs` | 新建 | 代码 |
-| `src/YouAreNotTheFish.Core/Engine/SkillResolver.cs` | 新建 | 代码 |
-| `src/YouAreNotTheFish.Core/Types/CombatAction.cs` + `Enums.cs` | 改写（+Skill） | 代码 |
-| `src/YouAreNotTheFish.Core/Flow/ActionResolver.cs` | 改写（dispatch） | 代码 |
-| `src/YouAreNotTheFish.Core/Types/CalibrationConfig.cs` | 改写（+SkillDeltaSkill 等 [NEW]） | 代码 |
-| `src/YouAreNotTheFish.Core.Tests/` | 新增 | 测试 |
-| `src/YouAreNotTheFish.Console/` | 改写 | 代码 |
+| `code/src/YouAreNotTheFish.Core/Types/SkillDefinition.cs` | 新建 | 代码 |
+| `code/src/YouAreNotTheFish.Core/Data/SkillCatalog.cs` | 新建 | 代码 |
+| `code/src/YouAreNotTheFish.Core/Engine/SkillResolver.cs` | 新建 | 代码 |
+| `code/src/YouAreNotTheFish.Core/Types/CombatAction.cs` + `Enums.cs` | 改写（+Skill） | 代码 |
+| `code/src/YouAreNotTheFish.Core/Flow/ActionResolver.cs` | 改写（dispatch） | 代码 |
+| `code/src/YouAreNotTheFish.Core/Types/CalibrationConfig.cs` | 改写（+SkillDeltaSkill 等 [NEW]） | 代码 |
+| `code/src/YouAreNotTheFish.Core.Tests/` | 新增 | 测试 |
+| `code/src/YouAreNotTheFish.Console/` | 改写 | 代码 |
 | `data/connectivity/link_contexts_tripartite.json`（P1a 产物） | 依赖 | 数据 |
-| `docs/决策树/` / `docs/设计框架-六维状态.md` / memory | 追加 | 文档 |
+| `design/decisions/` / `design/framework/six-dimensions.md` / memory | 追加 | 文档 |
 
 ## 九、数据契约与校验
 
@@ -160,11 +160,11 @@ m = 1.0（与 A7/C1/D1/D2 同类：事件固定最大）；经 EventProcessor δ
 
 | 校验 | 命令 |
 |------|------|
-| 引擎测试绿 | `dotnet test src/YouAreNotTheFish.Core.Tests` |
+| 引擎测试绿 | `dotnet test code/src/YouAreNotTheFish.Core.Tests` |
 | 通道校验 | Skill 动作 role→通道 映射单测（非法通道抛错） |
 | A6 sign | 8 角色 × 4 tone 逐项断言 |
 | 注入效果 | demo：技能执行后 CorticalNodes a(t) 提升 + base 变化可见 |
-| 交叉引用 | `python3 tools/validate_cross_refs.py` |
+| 交叉引用 | `python3 code/tools/validate_cross_refs.py` |
 
 ## 十、验收标准
 
@@ -188,4 +188,4 @@ m = 1.0（与 A7/C1/D1/D2 同类：事件固定最大）；经 EventProcessor δ
 ---
 
 *创建: 2026-08-16 | 更新: 2026-08-16*
-*关联: [Grilling #70 路线图 task-plan](./../grilling-70-engine-roadmap/task-plan.md), [Grilling #72 P1a task-plan](./../grilling-72-p1a-skill-context/task-plan.md), [Grilling #73 P1b task-plan](./../grilling-73-p1b-linkstate/task-plan.md), [运行时状态模型](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E8%BF%90%E8%A1%8C%E6%97%B6%E7%8A%B6%E6%80%81%E6%A8%A1%E5%9E%8B.md), [技能生成机制](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E6%8A%80%E8%83%BD%E7%94%9F%E6%88%90%E6%9C%BA%E5%88%B6.md), [NPC AI 行为模型](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/NPC%20AI%20%E8%A1%8C%E4%B8%BA%E6%A8%A1%E5%9E%8B.md), [数学语言书写规范](../../../docs/agents/math-language-writing.md)*
+*关联: [Grilling #70 路线图 task-plan](../grilling-70-engine-roadmap/task-plan.md), [Grilling #72 P1a task-plan](../grilling-72-p1a-skill-context/task-plan.md), [Grilling #73 P1b task-plan](../grilling-73-p1b-linkstate/task-plan.md), [运行时状态模型](../../../rules/skill-tree/%E8%BF%90%E8%A1%8C%E6%97%B6%E7%8A%B6%E6%80%81%E6%A8%A1%E5%9E%8B.md), [技能生成机制](../../../rules/skill-tree/%E6%8A%80%E8%83%BD%E7%94%9F%E6%88%90%E6%9C%BA%E5%88%B6.md), [NPC AI 行为模型](../../../rules/skill-tree/NPC%20AI%20%E8%A1%8C%E4%B8%BA%E6%A8%A1%E5%9E%8B.md), [数学语言书写规范](../../../conventions/agents/math-language-writing.md)*

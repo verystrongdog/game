@@ -4,7 +4,7 @@
 
 ## 范围
 
-实现 [spec v1.2.1](../../../../../规格/引擎/csharp-smoke.md) 全部内容，覆盖 AC-1~9：
+实现 [spec v1.2.1](../../../../../spec/engine/csharp-smoke.md) 全部内容，覆盖 AC-1~9：
 
 - `SmokeTests`（Tests/Smoke/SmokeTests.cs 新建）——端到端完整战斗（双方 NPC 自动 + HP 80/SAN 80 模板）+ 确定性 + 集成验证点
 - 零新引擎代码（纯测试 feature）

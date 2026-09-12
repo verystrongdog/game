@@ -8,12 +8,12 @@
 
 ## 文件所有权声明
 
-- `src/YouAreNotTheFish.Core/Types/SpeedComponents.cs` — 从 0 字节占位实现（SpeedComponents + SpeedWeights）
-- `src/YouAreNotTheFish.Core/Engine/SpeedScoreCalculator.cs` — 新建
-- `src/YouAreNotTheFish.Core/Engine/TurnOrderBuilder.cs` — 新建
-- `src/YouAreNotTheFish.Core.Tests/Engine/SpeedScoreCalculatorTests.cs` — 新建
-- `src/YouAreNotTheFish.Core.Tests/Engine/TurnOrderBuilderTests.cs` — 新建
-- `src/YouAreNotTheFish.Core.Tests/Types/SpeedComponentsTests.cs` — 新建（AC-15）
+- `code/src/YouAreNotTheFish.Core/Types/SpeedComponents.cs` — 从 0 字节占位实现（SpeedComponents + SpeedWeights）
+- `code/src/YouAreNotTheFish.Core/Engine/SpeedScoreCalculator.cs` — 新建
+- `code/src/YouAreNotTheFish.Core/Engine/TurnOrderBuilder.cs` — 新建
+- `code/src/YouAreNotTheFish.Core.Tests/Engine/SpeedScoreCalculatorTests.cs` — 新建
+- `code/src/YouAreNotTheFish.Core.Tests/Engine/TurnOrderBuilderTests.cs` — 新建
+- `code/src/YouAreNotTheFish.Core.Tests/Types/SpeedComponentsTests.cs` — 新建（AC-15）
 
 ## 完成标准
 

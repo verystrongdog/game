@@ -4,9 +4,9 @@
 
 ## 范围
 
-实现 [spec v1.2](../../../../../规格/引擎/csharp-console.md) 全部内容，覆盖 AC-1~13：
+实现 [spec v1.2](../../../../../spec/engine/csharp-console.md) 全部内容，覆盖 AC-1~13：
 
-- `YouAreNotTheFish.Console` 可执行项目（src/YouAreNotTheFish.Console/，引用 Core）
+- `YouAreNotTheFish.Console` 可执行项目（code/src/YouAreNotTheFish.Console/，引用 Core）
 - `CliArgs`（--seed/--trace-resting 解析，非法值/重复参数）
 - `PlayerActionProvider`（键盘 IActionProvider——TextReader/Writer 注入、3 次重试、EOF 处理）
 - `CompositeActionProvider`（p==0 玩家 / p!=0 NPC 分派）+ `WaitProvider`（静息 trace）
@@ -76,7 +76,7 @@
 
 - 2026-08-14：创建。sign-off ✅（dog，2026-08-14）。spec v1.2（审计链：v1.0 全量 31 CONFIRMED → v1.1 → Δ 21 CONFIRMED → v1.2 → 终审 PASS + flow spec 补记）。
 - 2026-08-14：实现完成——284/284 全绿（新增 23），AC-1~13 逐条 ✅，结转 5 项全部回填。
-- 2026-08-30：**关闭**（Grilling #91）——关闭审查发现 12 引擎测试失败，根因 = #92 数据回归（重跑生成器覆盖注释产物，EdgeRole 默认 Active 致 b_j/M1 漂移）+ 镜像契约未同步。修复：恢复数据（重跑 build_function_labels.py，commit 30108af）+ 镜像契约测试更新（d2c76db）+ 防再犯门禁（373c2a0，validate_tripartite_annotations.py）。**当前 HEAD：309/309 全绿**，AC-1~13 ✅，M1 锚点保持 HARD。见 [决策树 Grilling #91](../../../../../docs/决策树/README.md)。
+- 2026-08-30：**关闭**（Grilling #91）——关闭审查发现 12 引擎测试失败，根因 = #92 数据回归（重跑生成器覆盖注释产物，EdgeRole 默认 Active 致 b_j/M1 漂移）+ 镜像契约未同步。修复：恢复数据（重跑 build_function_labels.py，commit 30108af）+ 镜像契约测试更新（d2c76db）+ 防再犯门禁（373c2a0，validate_tripartite_annotations.py）。**当前 HEAD：309/309 全绿**，AC-1~13 ✅，M1 锚点保持 HARD。见 [决策树 Grilling #91](../../../../../decisions/README.md)。
 
 ---
 *创建: 2026-08-14 | 更新: 2026-08-14*

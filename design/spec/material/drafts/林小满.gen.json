@@ -321,7 +321,7 @@
       "hook": "姐姐（关键支持者）",
       "type": "生态位",
       "desc": "照看孩子+送医——家庭支持网络节点",
-      "consume_by": "空间/关系"
+      "consume_by": "design/space/关系"
     }
   ]
 }

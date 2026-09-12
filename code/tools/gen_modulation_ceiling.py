@@ -27,7 +27,7 @@ import numpy as np
 from pathlib import Path
 from collections import defaultdict
 
-ROOT = Path(__file__).parent.parent
+ROOT = Path(__file__).parent.parent.parent
 
 # === 1. 加载数据 ===
 
@@ -615,7 +615,7 @@ def gen_markdown(results, json_output):
     lines.append('---')
     lines.append('')
     lines.append('*生成: 2026-07-27 | 数据来源: ENIGMA Toolbox HCP SC, Hansen et al. (2024) Nat Neurosci, Kroell (2024)*')
-    lines.append(f'*JSON: [link_modulation_ceiling.json](../data/connectivity/link_modulation_ceiling.json)*')
+    lines.append(f'*JSON: [link_modulation_ceiling.json](../../data/connectivity/link_modulation_ceiling.json)*')
 
     output_md = ROOT / '技能树系统/链路调制上限参考表.md'
     with open(output_md, 'w') as f:

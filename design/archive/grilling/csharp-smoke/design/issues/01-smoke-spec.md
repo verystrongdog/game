@@ -24,4 +24,4 @@
 
 ---
 *创建: 2026-08-14*
-*关联: [plan §八/§十](../../../../../规格/引擎/csharp-engine-roadmap.md)*
+*关联: [plan §八/§十](../../../../../spec/engine/csharp-engine-roadmap.md)*

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """从 data/emotions.json + 情绪卡模板 生成 data/emotion_cards.json。
 
-用法: python3 tools/gen_emotion_cards.py
+用法: python3 code/tools/gen_emotion_cards.py
 来源: 卡牌系统/情绪卡模板.md, data/emotions.json
 """
 
@@ -460,7 +460,7 @@ def validate_cards(cards: list[dict], emotions_json_path: str) -> list[str]:
 
 
 def main():
-    root = Path(__file__).parent.parent
+    root = Path(__file__).parent.parent.parent
     emotions_path = root / "data" / "emotions.json"
     output_path = root / "data" / "emotion_cards.json"
 

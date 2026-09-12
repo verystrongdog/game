@@ -464,7 +464,7 @@
 #### Task 1.5 — Kroell 14 网络 → JSON
 - **产出**：`data/connectivity/kroell14_networks.json`
 - **内容**：14 网络名 + 每网络的脑区列表（用 dk_name）+ 网络间关系（重叠/拮抗）
-- **来源**：迁移 `tools/build_link_legitimacy_matrix.py` L242-316 硬编码数据 + `data/connectivity/kroell14_networks.md`
+- **来源**：迁移 `code/tools/build_link_legitimacy_matrix.py` L242-316 硬编码数据 + `data/connectivity/kroell14_networks.md`
 - **预计**：~200 行 JSON
 
 #### Task 1.6 — 术语注册表入库
@@ -472,7 +472,7 @@
 - **候选**：CSTC / EDR (指数距离衰减) / CTC (Coherence through Communication) / 三体神经模型 / 功能剖面 / function_profile / gameplay_domain / STN / 脑干广播 / 皮层-皮层连接 / signal_type / cstc_loop / cstc_role / Tripartite
 - **预计**：~150 行 JSON
 
-### Phase 2: 脚本层（tools/）
+### Phase 2: 脚本层（code/tools/）
 
 #### Task 2.1 — 写 `build_tripartite_model.py`
 - **产出**：新脚本，替代 `build_link_legitimacy_matrix.py`
@@ -505,11 +505,11 @@
 - **预计**：~250 行 Python
 
 #### Task 2.3 — 旧脚本迁移至垃圾桶
-- **产出**：9 个文件移动到 `垃圾桶/`
+- **产出**：9 个文件移动到 `design/archive/trash/`
 - **清单**：同原计划 §四 删除/迁移文件
 - **预计**：`git mv` 9 个文件
 
-### Phase 3: 文档层（docs/）
+### Phase 3: 文档层（design/framework/）
 
 #### Task 3.1 — 更新 `脑功能层级模型.md`
 - **产出**：新增 §二十（三体神经模型），§十五 四规则标注废弃
@@ -526,11 +526,11 @@
 ### Phase 4: 验证
 
 #### Task 4.1 — 运行三体模型生成
-- `python3 tools/build_tripartite_model.py` → 无报错
+- `python3 code/tools/build_tripartite_model.py` → 无报错
 - 输出 `data/connectivity/tripartite_model.json` 包含 3 段
 
 #### Task 4.2 — 运行功能标签生成
-- `python3 tools/build_function_labels.py` → 无报错
+- `python3 code/tools/build_function_labels.py` → 无报错
 - 每条连接均有 `function_label` + `gameplay_labels`
 
 #### Task 4.3 — 交叉引用校验
@@ -546,8 +546,8 @@
 |------|------|-------|
 | `data/signal_types.json` | 数据 | 1 |
 | `data/connectivity/kroell14_networks.json` | 数据 | 1 |
-| `tools/build_tripartite_model.py` | 脚本 | 2 |
-| `tools/build_function_labels.py` | 脚本 | 2 |
+| `code/tools/build_tripartite_model.py` | 脚本 | 2 |
+| `code/tools/build_function_labels.py` | 脚本 | 2 |
 | `data/connectivity/tripartite_model.json` | 生成物 | 4 |
 
 ### 修改文件
@@ -555,20 +555,20 @@
 |------|---------|-------|
 | `data/brain_regions.json` | +STN, +20 function_profile, +2 mirror_of, -2 聚合体 | 1 |
 | `data/term_registry.json` | +~14 术语 | 1 |
-| `规则/技能树系统/脑功能层级模型.md` | +§二十 三体模型, §十五 标废弃 | 3 |
-| `docs/决策树/` | +Grilling #26 记录 | 3 |
-| `docs/设计框架-六维状态.md` | 规则+管线维度更新 | 3 |
+| `design/rules/skill-tree/脑功能层级模型.md` | +§二十 三体模型, §十五 标废弃 | 3 |
+| `design/decisions/` | +Grilling #26 记录 | 3 |
+| `design/framework/six-dimensions.md` | 规则+管线维度更新 | 3 |
 
-### 删除/迁移文件（→ 垃圾桶/）
+### 删除/迁移文件（→ design/archive/trash/）
 | 文件 | 替代 |
 |------|------|
-| `tools/build_link_legitimacy_matrix.py` | build_tripartite_model.py |
-| `tools/build_link_registry.py` | 三体模型内置 ID |
-| `tools/rebuild_link_registry.py` | 同上 |
-| `tools/classify_link_roles.py` | build_function_labels.py |
-| `tools/build_link_contexts.py` | function_profile 派生 |
-| `tools/validate_link_data.py` | 新校验脚本 |
-| `tools/gen_skill_reference.py` | 不再适用 |
+| `code/tools/build_link_legitimacy_matrix.py` | build_tripartite_model.py |
+| `code/tools/build_link_registry.py` | 三体模型内置 ID |
+| `code/tools/rebuild_link_registry.py` | 同上 |
+| `code/tools/classify_link_roles.py` | build_function_labels.py |
+| `code/tools/build_link_contexts.py` | function_profile 派生 |
+| `code/tools/validate_link_data.py` | 新校验脚本 |
+| `code/tools/gen_skill_reference.py` | 不再适用 |
 | `data/connectivity/link_legitimacy_matrix.json` | tripartite_model.json |
 | `data/connectivity/link_behavior_roles.json` | tripartite_model.json 内置 role |
 
@@ -597,4 +597,4 @@
 ---
 
 *创建: 2026-08-07 | 更新: 2026-08-07 (v2: review-plan 追加 4 决策 + signal_type 词表 + 剖面粒度调整 + cstc_loop 字段)*
-*关联: Grilling #26 (GitHub #27), [脑功能层级模型.md](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E8%84%91%E5%8A%9F%E8%83%BD%E5%B1%82%E7%BA%A7%E6%A8%A1%E5%9E%8B.md), [决策树.md](../../../docs/%E5%86%B3%E7%AD%96%E6%A0%91/README.md), [signal_types.json](../../../data/signal_types.json)*
+*关联: Grilling #26 (GitHub #27), [脑功能层级模型.md](../../../rules/skill-tree/%E8%84%91%E5%8A%9F%E8%83%BD%E5%B1%82%E7%BA%A7%E6%A8%A1%E5%9E%8B.md), [决策树.md](../../../decisions/README.md), [signal_types.json](../../../../data/signal_types.json)*

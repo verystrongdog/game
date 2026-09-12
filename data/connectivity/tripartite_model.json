@@ -1,7 +1,7 @@
 {
   "_description": "三体神经模型 — 三种通信原语替代旧 364 链路 pairwise 有向模型。Grilling #26 (2026-08-07)。",
-  "_design_doc": "规则/技能树系统/脑功能层级模型.md §二十",
-  "_generated_by": "tools/build_tripartite_model.py",
+  "_design_doc": "design/rules/skill-tree/脑功能层级模型.md §二十",
+  "_generated_by": "code/tools/build_tripartite_model.py",
   "_created": "2026-08-07",
   "graph_nodes": {
     "transversetemporal": {
@@ -24613,6 +24613,6 @@
     }
   ],
   "_function_labels_applied": true,
-  "_function_labels_generated_by": "tools/build_function_labels.py",
+  "_function_labels_generated_by": "code/tools/build_function_labels.py",
   "_function_labels_created": "2026-08-07"
 }

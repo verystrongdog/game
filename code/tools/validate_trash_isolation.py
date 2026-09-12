@@ -7,7 +7,7 @@
   2. 活跃 .md 文件中是否出现了 #20 已废弃的术语
   3. 活跃 .md 文件中的链接是否指向垃圾桶
 
-用法: python tools/validate_trash_isolation.py [--verbose]
+用法: python code/tools/validate_trash_isolation.py [--verbose]
 退出码: 0 = 全部通过, 1 = 有问题
 """
 
@@ -15,18 +15,18 @@ import re
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).parent.parent
+ROOT = Path(__file__).parent.parent.parent
 
 # ── 垃圾桶中的文件 (#20 批次2移动) ────────────────────────
 
 FILES_IN_TRASH = [
-    "规则/技能树系统/操作层/L0-脑干技能设计.md",
-    "规则/技能树系统/操作层/L1-边缘系统技能设计.md",
-    "规则/技能树系统/操作层/L2-旁边缘技能设计.md",
-    "规则/技能树系统/操作层/L3-初级感觉技能设计.md",
-    "规则/技能树系统/操作层/L4-高级单模态技能设计.md",
-    "规则/技能树系统/操作层/L5-跨模态认知技能设计.md",
-    "规则/技能树系统/操作层/L6-跨模态整合技能设计.md",
+    "design/archive/trash/deprecated-skill-tree/L0-脑干技能设计.md",
+    "design/archive/trash/deprecated-skill-tree/L1-边缘系统技能设计.md",
+    "design/archive/trash/deprecated-skill-tree/L2-旁边缘技能设计.md",
+    "design/archive/trash/deprecated-skill-tree/L3-初级感觉技能设计.md",
+    "design/archive/trash/deprecated-skill-tree/L4-高级单模态技能设计.md",
+    "design/archive/trash/deprecated-skill-tree/L5-跨模态认知技能设计.md",
+    "design/archive/trash/deprecated-skill-tree/L6-跨模态整合技能设计.md",
 ]
 
 # 路径片段形式的垃圾桶引用
@@ -40,23 +40,23 @@ DEPRECATED_TERMS = [
         r"37\s*个?\s*(操作|技能)(?![项决])",
         "37个操作/技能 (D20 已废弃)",
         ["⚠️", "已废弃", "D20", "#20", "决策树"],
-        ["docs/决策树/"],
+        ["design/decisions/"],
     ),
     # 表格中的裸 37: "37 (L0-L5)" 或 "37(L0-L5)"
     (
         r"\b37\b\s*\(?L\d",
         "37 (L0-L5) 旧技能计数 (D20 已废弃, L6已删除 #25)",
         ["⚠️", "已废弃", "D20", "#20", "决策树"],
-        ["docs/决策树/", "docs/grilling"],
+        ["design/decisions/", "design/framework/grilling"],
     ),
     (
         r"激活点预算",
         "激活点预算 (玩家侧已改聚焦容量 D4/D7)",
         ["⚠️", "已废弃", "范式修正", "#20"],
         [
-            "docs/决策树/",
-            "管线/预烘焙管线脚本设计.md",
-            "规则/技能树系统/NPC AI 行为模型.md",
+            "design/decisions/",
+            "design/pipeline/预烘焙管线脚本设计.md",
+            "design/rules/skill-tree/NPC AI 行为模型.md",
             ".scratch/",
         ],
     ),
@@ -66,9 +66,9 @@ DEPRECATED_TERMS = [
         "激活点模型章节 (玩家侧已改聚焦容量)",
         ["⚠️", "已废弃", "#20", "决策树", "NPC AI", "预烘焙"],
         [
-            "docs/决策树/",
-            "管线/预烘焙管线脚本设计.md",
-            "规则/技能树系统/NPC AI 行为模型.md",
+            "design/decisions/",
+            "design/pipeline/预烘焙管线脚本设计.md",
+            "design/rules/skill-tree/NPC AI 行为模型.md",
             ".scratch/",
         ],
     ),
@@ -76,13 +76,13 @@ DEPRECATED_TERMS = [
         r"在线手动选择",
         "在线手动选择链路 (D5 全局激活)",
         ["⚠️", "已废弃", "决策树"],
-        ["docs/决策树/"],
+        ["design/decisions/"],
     ),
     (
         r"手动激活.*(链路|脑区)",
         "手动激活链路 (D5 全局激活, NPC情境自动激活除外)",
         ["⚠️", "已废弃", "决策树", "情境自动激活"],
-        ["docs/决策树/"],
+        ["design/decisions/"],
     ),
     # 旧"每回合激活"模型
     (
@@ -90,9 +90,9 @@ DEPRECATED_TERMS = [
         "每回合激活点模型 (D4/D7 已废弃)",
         ["⚠️", "已废弃", "#20", "决策树"],
         [
-            "docs/决策树/",
-            "管线/预烘焙管线脚本设计.md",
-            "规则/技能树系统/NPC AI 行为模型.md",
+            "design/decisions/",
+            "design/pipeline/预烘焙管线脚本设计.md",
+            "design/rules/skill-tree/NPC AI 行为模型.md",
             ".scratch/",
         ],
     ),
@@ -101,21 +101,21 @@ DEPRECATED_TERMS = [
 # ── 豁免路径 ──────────────────────────────────────────────
 
 EXEMPT_PREFIX = [
-    "docs/决策树/",
+    "design/decisions/",
     ".scratch/",
-    "垃圾桶/",
+    "design/archive/trash/",
     ".trash/",
-    "参考/废弃/",
+    "reference/deprecated/",
     # grilling 源记录归档——非活跃正典，允许提及已废弃术语（2026-09-12 重构 Phase 2 新建）
-    "设计归档/",
+    "design/archive/",
     # 仓库重构期的本地安全备份（非项目内容，重构完成后删除）
     ".refactor-backup/",
     # 已标注 ⚠️ 废弃的前置系统 (保留为参考数据源, CLAUDE.md §文档层面)
-    # 2026-09-12 仓库重构：该文件已从 垃圾桶/ 迁至 规则/技能树系统/已废弃/（与 10 个同门文件同处）
-    "规则/技能树系统/已废弃/链路槽位与激活系统.md",
+    # 2026-09-12 仓库重构：该文件已从 design/archive/trash/ 迁至 design/rules/skill-tree/deprecated/（与 10 个同门文件同处）
+    "design/rules/skill-tree/deprecated/链路槽位与激活系统.md",
 ]
 
-EXEMPT_DIRS = {"垃圾桶", ".trash", "已废弃", ".scratch", ".refactor-backup", "设计归档"}
+EXEMPT_DIRS = {"trash", "deprecated", "archive", ".trash", ".scratch", ".refactor-backup"}
 
 
 def is_exempt(rel_path: str) -> bool:

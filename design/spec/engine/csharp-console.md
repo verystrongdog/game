@@ -15,7 +15,7 @@
 
 ### 2.1 项目
 
-`src/YouAreNotTheFish.Console/YouAreNotTheFish.Console.csproj`——`<OutputType>Exe</OutputType>`、`net8.0`、ProjectReference → `YouAreNotTheFish.Core`。命名空间 `YouAreNotTheFish.ConsoleApp`。
+`code/src/YouAreNotTheFish.Console/YouAreNotTheFish.Console.csproj`——`<OutputType>Exe</OutputType>`、`net8.0`、ProjectReference → `YouAreNotTheFish.Core`。命名空间 `YouAreNotTheFish.ConsoleApp`。
 
 ### 2.2 CliArgs（参数解析，纯函数）
 
@@ -195,4 +195,4 @@ public static class Program
 
 ---
 *创建: 2026-08-14 | 更新: 2026-09-02 | 版本: v1.3*
-*关联: [任务issue 01](../../设计归档/grilling/csharp-console/design/issues/01-console-spec.md), [plan §九](csharp-engine-roadmap.md), [csharp-flow spec](csharp-flow.md)*
+*关联: [任务issue 01](../../archive/grilling/csharp-console/design/issues/01-console-spec.md), [plan §九](csharp-engine-roadmap.md), [csharp-flow spec](csharp-flow.md)*

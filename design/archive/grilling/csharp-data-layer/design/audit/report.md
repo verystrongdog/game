@@ -112,7 +112,7 @@ spec 引用了 Grilling #26 时代的旧词表，数据文件已更新但 spec �
 
 三个 AC（AC-1/3/5）按 spec 原样实现必失败，且失败原因是 spec 自身错误而非实现错误。§2.2 待实现部分 18 处映射失配将导致静默数据全丢。AC-4 因数据悬挂必失败。
 
-**§2.1 已实现部分 100 字段全部正确，`src/YouAreNotTheFish.Core/Data/` 无需改动。**
+**§2.1 已实现部分 100 字段全部正确，`code/src/YouAreNotTheFish.Core/Data/` 无需改动。**
 
 ### 必须修复（E1-E6，全改 spec 不改数据文件）
 

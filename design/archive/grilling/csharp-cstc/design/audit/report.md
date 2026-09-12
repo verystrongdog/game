@@ -89,4 +89,4 @@
 
 ---
 *创建: 2026-08-13 | 更新: 2026-08-13*
-*关联: [spec.md](../spec.md) v1.0/v1.1, [任务issue 01](../issues/01-cstc-spec.md), [csharp-engine plan](../../../../../规格/引擎/csharp-engine-roadmap.md) §4.4*
+*关联: [spec.md](../spec.md) v1.0/v1.1, [任务issue 01](../issues/01-cstc-spec.md), [csharp-engine plan](../../../../../spec/engine/csharp-engine-roadmap.md) §4.4*

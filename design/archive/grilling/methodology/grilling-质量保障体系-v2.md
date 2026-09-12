@@ -62,10 +62,10 @@
 
 | 引用类型 | 示例 | 必须 Read 的文件 |
 |----------|------|-----------------|
-| 数值参数 | "SAN 基线是 80" | `规则/核心机制.md` 或对应 grilling memory |
-| 公式 | "Δm = base(L) × (1-sigmoid(m,0.45,10)) × g(n)" | `规则/核心机制.md` §八 |
-| 已有决策 | "我们之前决定过 NPC 用预烘焙查表" | `docs/决策树/` + 对应的 grilling memory |
-| 文件路径 | "在 `规则/技能树系统/操作层/` 下" | `ls` 或 Glob 确认路径存在 |
+| 数值参数 | "SAN 基线是 80" | `design/rules/核心机制.md` 或对应 grilling memory |
+| 公式 | "Δm = base(L) × (1-sigmoid(m,0.45,10)) × g(n)" | `design/rules/核心机制.md` §八 |
+| 已有决策 | "我们之前决定过 NPC 用预烘焙查表" | `design/decisions/` + 对应的 grilling memory |
+| 文件路径 | "在 `design/rules/skill-tree/operations/` 下" | `ls` 或 Glob 确认路径存在 |
 | 数据结构 | "link_legitimacy_matrix.json 约有 360+ 条链路" | `data/connectivity/link_legitimacy_matrix.json`（快照：364 条 @2026-08-01，实际以 `_stats.legal_links` 为准） |
 | 交叉引用 | "详见 §五" | Read 目标文件确认小节存在 |
 
@@ -86,7 +86,7 @@
 
 正确的引用格式（优先使用段引用，因为行号随编辑漂移）：
 
-> `规则/核心机制.md` §5.1 — SAN ≥ 60 稳定（行 314），< 30 恐慌（行 316），= 0 随机行为（行 318）
+> `design/rules/核心机制.md` §5.1 — SAN ≥ 60 稳定（行 314），< 30 恐慌（行 316），= 0 随机行为（行 318）
 
 **行号 vs 段引用的选择原则**：段引用（`§5.1`）更稳健但粒度粗；行号精确但易过时。**优先使用段引用，仅在需要精确定位某句话时附加行号。**
 
@@ -131,7 +131,7 @@ Step 4 — 写入 [新增: 逐条验证]
   ├── 4.5 【新】逐条对照 grilling 决策 → 写入内容，输出"写入验证表"
   └── 4.6 一致性清扫（已有，强化：grep 关键词 + 按优先级 Read）
        ├── 关键词提取：本次修改的所有术语 + 参数名 + 文件名 + 废弃/替换的概念名
-       ├── 命中文件优先级：设计文档（规则/实体/空间/事件）> 索引文件（维度.md）> 数据 JSON > 工具脚本
+       ├── 命中文件优先级：设计文档（design/rules/实体/空间/事件）> 索引文件（维度.md）> 数据 JSON > 工具脚本
        └── 命中 ≤ 10 个 → 全部 Read 确认；命中 > 10 个 → 先 Read 高优先级文件，低优先级 grep 上下文行判断
 
 Step 5 — 关闭 Issue [新增: 质量门禁]
@@ -182,15 +182,15 @@ Step 5 — 关闭 Issue [新增: 质量门禁]
 ## Step 0 — 前置资料包
 
 ### 预读（已完整读入上下文）
-- [x] `docs/设计框架-六维状态.md`
-- [x] `docs/维度/管线.md`
-- [x] `docs/决策树/` (行 800-950 相关段)
-- [x] `规则/核心机制.md`
+- [x] `design/framework/six-dimensions.md`
+- [x] `design/framework/dimensions/管线.md`
+- [x] `design/decisions/` (行 800-950 相关段)
+- [x] `design/rules/核心机制.md`
 - [x] `CLAUDE.md`
 
 ### 待按需读取（标记为可能相关，追问涉及时再读）
-- [ ] `管线/预烘焙管线脚本设计.md` — 如涉及工具链流程
-- [ ] `docs/agents/issue-tracker.md` — 如涉及流程规范
+- [ ] `design/pipeline/预烘焙管线脚本设计.md` — 如涉及工具链流程
+- [ ] `design/conventions/agents/issue-tracker.md` — 如涉及流程规范
 
 ### 声明
 以上"预读"清单中的文件构成本次 grilling 的资料基础。
@@ -210,7 +210,7 @@ Step 5 — 关闭 Issue [新增: 质量门禁]
 **我的建议**：[建议内容]
 
 **事实依据**：
-- `规则/核心机制.md` §5.1 — SAN ≥ 60 稳定，< 30 恐慌，= 0 随机行为
+- `design/rules/核心机制.md` §5.1 — SAN ≥ 60 稳定，< 30 恐慌，= 0 随机行为
 - `memory/numerical-calibration-grilling-2026-07-31.md` — 玩家 HP 基线 50
   <!-- memory/ = ~/.claude/projects/-home-dog-game/memory/；发给外部窗口时替换为完整路径，见附录 B -->
 - 以下为新建议，非已有事实：[列出新提出的参数/规则]
@@ -223,9 +223,9 @@ Step 5 — 关闭 Issue [新增: 质量门禁]
 
 | 决策编号 | 决策摘要 | 写入文件 | 写入位置 | 验证状态 |
 |----------|----------|----------|----------|----------|
-| D1 | [摘要] | `规则/核心机制.md` | §八 新增段落 | ✅ 已验证 |
-| D2 | [摘要] | `docs/决策树/` | 末尾追加 | ✅ 已验证 |
-| D3 | [摘要] | `管线/xxx.md` | §三 修改 | ⚠️ 需要人类复查 |
+| D1 | [摘要] | `design/rules/核心机制.md` | §八 新增段落 | ✅ 已验证 |
+| D2 | [摘要] | `design/decisions/` | 末尾追加 | ✅ 已验证 |
+| D3 | [摘要] | `design/pipeline/xxx.md` | §三 修改 | ⚠️ 需要人类复查 |
 ```
 
 ### 3.3 决策深度自检规则
@@ -258,11 +258,11 @@ Step 5 — 关闭 Issue [新增: 质量门禁]
 
 ```
 # 段引用（推荐，最稳健——不受行号漂移影响）
-`规则/核心机制.md` §八             →  文件 §节号
-`规则/核心机制.md` §5.1            →  文件 §子节
+`design/rules/核心机制.md` §八             →  文件 §节号
+`design/rules/核心机制.md` §5.1            →  文件 §子节
 
 # 精确引用（需要精确到行时使用，注意行号随编辑漂移）
-`规则/核心机制.md:314`             →  文件:行号
+`design/rules/核心机制.md:314`             →  文件:行号
 `data/connectivity/link_legitimacy_matrix.json`  → 完整相对路径（数据文件不需要行号）
 
 # Memory 引用（路径约定见附录 B）
@@ -279,7 +279,7 @@ Step 5 — 关闭 Issue [新增: 质量门禁]
 | 参数 | 符号 | 默认值 | 范围 | 来源 |
 |------|------|--------|------|------|
 | SAN 基线 | SAN₀ | 80 | 70-90 | `memory/numerical-calibration-grilling-2026-07-31.md` |
-| 激活点起始 | AP₀ | 4 | 固定 | Cowan 2001, `规则/核心机制.md` §2.1 |
+| 激活点起始 | AP₀ | 4 | 固定 | Cowan 2001, `design/rules/核心机制.md` §2.1 |
 ```
 
 **🆕 新增参数必须标注 `[NEW]` 和所属 grilling issue 编号**：
@@ -309,7 +309,7 @@ memory: numerical-calibration-grilling-2026-07-31.md §N
 
 ```markdown
 # 正确 ✅
-详见 [核心机制 §八 可塑性巩固](../../../%E8%A7%84%E5%88%99/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md) —— §八 可塑性巩固 小节
+详见 [核心机制 §八 可塑性巩固](../../../rules/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md) —— §八 可塑性巩固 小节
 
 # 错误 ❌
 详见 核心机制.md 的可塑性巩固部分
@@ -332,8 +332,8 @@ memory: numerical-calibration-grilling-2026-07-31.md §N
 
 | 脚本 | 功能 | 当前状态 |
 |------|------|----------|
-| `tools/validate_cards.py` | 检查 `emotion_cards.json` 和 `cognition_cards.json` 的完整性和数值范围 | ⚠️ 旧系统校验，保留为参考 |
-| `tools/validate_disease.py` | 校验 `实体/疾病目录/*.md` 的链路 ID、m 偏移范围、CGI-S 一致性 | ✅ 活跃使用 |
+| `code/tools/validate_cards.py` | 检查 `emotion_cards.json` 和 `cognition_cards.json` 的完整性和数值范围 | ⚠️ 旧系统校验，保留为参考 |
+| `code/tools/validate_disease.py` | 校验 `design/entities/diseases/*.md` 的链路 ID、m 偏移范围、CGI-S 一致性 | ✅ 活跃使用 |
 
 #### 已有脚本迁移计划
 
@@ -341,18 +341,18 @@ memory: numerical-calibration-grilling-2026-07-31.md §N
 
 | 脚本 | 迁移内容 | 优先级 |
 |------|----------|--------|
-| `tools/validate_cards.py` | 保留不修改（旧系统已废弃，脚本仅供历史数据校验） | — |
-| `tools/validate_disease.py` | 适配统一 JSON 输出格式（§5.4），增加 `--format json` 和 `--output` 参数 | P1（阶段 3） |
+| `code/tools/validate_cards.py` | 保留不修改（旧系统已废弃，脚本仅供历史数据校验） | — |
+| `code/tools/validate_disease.py` | 适配统一 JSON 输出格式（§5.4），增加 `--format json` 和 `--output` 参数 | P1（阶段 3） |
 
 #### 新增脚本
 
 | 脚本 | 功能 | 优先级 | 触发时机 |
 |------|------|--------|----------|
-| `tools/validate_cross_refs.py` | 扫描所有 md 文件中的交叉引用 `[text](path)`，检测死链 | P0 | 提交前 / grilling Step 5 |
-| `tools/validate_params.py` | 扫描所有 md 中的参数表，检测同名参数多处定义是否一致 | P0 | 提交前 / grilling Step 5 |
-| `tools/validate_file_structure.py` | 检查 CLAUDE.md 描述的文件结构与实际目录是否一致 | P1 | 定期 |
-| `tools/validate_grilling_quality.py` | 检查最近一轮 grilling 的产物完整性（决策树追加/六维更新/memory 写入/文档修改） | P0 | grilling Step 5 |
-| `tools/validate_json_schema.py` | 检查 `data/` 下 JSON 文件与 schema 一致 | P1 | 提交前 |
+| `code/tools/validate_cross_refs.py` | 扫描所有 md 文件中的交叉引用 `[text](path)`，检测死链 | P0 | 提交前 / grilling Step 5 |
+| `code/tools/validate_params.py` | 扫描所有 md 中的参数表，检测同名参数多处定义是否一致 | P0 | 提交前 / grilling Step 5 |
+| `code/tools/validate_file_structure.py` | 检查 CLAUDE.md 描述的文件结构与实际目录是否一致 | P1 | 定期 |
+| `code/tools/validate_grilling_quality.py` | 检查最近一轮 grilling 的产物完整性（决策树追加/六维更新/memory 写入/文档修改） | P0 | grilling Step 5 |
+| `code/tools/validate_json_schema.py` | 检查 `data/` 下 JSON 文件与 schema 一致 | P1 | 提交前 |
 
 > **命名规范**：所有校验脚本统一使用 `validate_` 前缀。原计划中的 `check_grilling_quality.py` 更名为 `validate_grilling_quality.py`。
 
@@ -360,7 +360,7 @@ memory: numerical-calibration-grilling-2026-07-31.md §N
 
 ```python
 """
-扫描 docs/ 和 规则/ 下所有 .md 文件，提取其中的交叉引用（格式: [text](path)），
+扫描 design/framework/ 和 design/rules/ 下所有 .md 文件，提取其中的交叉引用（格式: [text](path)），
 检查目标文件是否存在。
 CLI: --format json|text, --output <file>, --base-dir <项目根目录>
 输出: 统一 JSON 格式（见 §5.4），列出死链列表 + 源文件位置。
@@ -373,8 +373,8 @@ CLI: --format json|text, --output <file>, --base-dir <项目根目录>
 """
 输入: grilling issue 编号
 检查项:
-1. docs/决策树/ 中是否有对应记录（grep issue编号）
-2. docs/设计框架-六维状态.md 对应维度是否有更新
+1. design/decisions/ 中是否有对应记录（grep issue编号）
+2. design/framework/six-dimensions.md 对应维度是否有更新
 3. memory/ 下是否有新/改 memory 文件
 4. 是否有 md 文件在本轮中被修改（git diff --name-only）
 5. (未来) 写入验证表是否每一项都标记为"已验证"
@@ -400,7 +400,7 @@ CLI: --issue <N>, --format json|text, --output <file>
   },
   "blocker": [
     {
-      "source_file": "规则/核心机制.md",
+      "source_file": "design/rules/核心机制.md",
       "source_line": 489,
       "target": "../参考/废弃/态度系统/态度结算.md",
       "reason": "文件不存在（已删除或路径错误）"
@@ -435,22 +435,22 @@ CLI: --issue <N>, --format json|text, --output <file>
 
 ### 阶段 2：第一层脚本（P0，下一个工作块） ⏱ 预估 3-5 小时
 
-- [ ] 实现 `tools/validate_cross_refs.py`（按 §5.2 规格 + 附录 A CLI 规范）
-- [ ] 实现 `tools/validate_grilling_quality.py`（按 §5.3 规格 + 附录 A CLI 规范）
+- [ ] 实现 `code/tools/validate_cross_refs.py`（按 §5.2 规格 + 附录 A CLI 规范）
+- [ ] 实现 `code/tools/validate_grilling_quality.py`（按 §5.3 规格 + 附录 A CLI 规范）
 - [ ] 首次运行两个脚本，修复发现的 blocker 级问题
 - [ ] 可选：将两个脚本加入 pre-commit hook（手动触发优先）
 
 ### 阶段 3：第二层脚本 + 补丁（P1） ⏱ 预估 5-8 小时
 
-- [ ] 实现 `tools/validate_params.py`
+- [ ] 实现 `code/tools/validate_params.py`
 - [ ] 现有文档交叉引用逐文件修复（第一轮死链清理）
 - [ ] 参数表标准化整改（逐文件追加参数速查表，统一格式）
-- [ ] `tools/validate_disease.py` 适配统一 JSON 输出格式
+- [ ] `code/tools/validate_disease.py` 适配统一 JSON 输出格式
 
 ### 阶段 4：持续改进（P2） ⏱ 预估 3-5 小时
 
-- [ ] 实现 `tools/validate_file_structure.py`
-- [ ] 实现 `tools/validate_json_schema.py`
+- [ ] 实现 `code/tools/validate_file_structure.py`
+- [ ] 实现 `code/tools/validate_json_schema.py`
 - [ ] 校验结果纳入 git hook（拒绝不符合质量门禁的提交）
 
 ---
@@ -459,7 +459,7 @@ CLI: --issue <N>, --format json|text, --output <file>
 
 ### CLI 接口
 
-所有 `tools/validate_*.py` 脚本须支持以下标准参数：
+所有 `code/tools/validate_*.py` 脚本须支持以下标准参数：
 
 ```
 usage: validate_xxx.py [--format {json,text}] [--output FILE] [--base-dir DIR] [options]
@@ -487,7 +487,7 @@ Script-specific options:
 
 - Python ≥ 3.10
 - 标准库优先（`json`, `argparse`, `pathlib`, `re`）
-- 仅在必要时引入第三方库（如 `jsonschema` 用于 JSON Schema 校验），并在 `tools/requirements.txt` 中声明
+- 仅在必要时引入第三方库（如 `jsonschema` 用于 JSON Schema 校验），并在 `code/tools/requirements.txt` 中声明
 
 ### 输出约定
 
@@ -517,4 +517,4 @@ Script-specific options:
 ---
 
 *创建: 2026-08-01 | 更新: 2026-08-01 (v3 — 第三轮审查 6 条修正：案例标注/过渡方案/计数修正/自检语义/示例标注/摘除条件)*
-*关联: [设计框架-六维状态](../../../docs/%E8%AE%BE%E8%AE%A1%E6%A1%86%E6%9E%B6-%E5%85%AD%E7%BB%B4%E7%8A%B6%E6%80%81.md), [项目配置文件](../../../CLAUDE.md), [v2 批改意见](grilling-质量保障体系-v2-批改意见.md), [v2 审查意见](grilling-质量保障体系-v2-审查意见.md), [v3 审查意见](grilling-质量保障体系-v2-审查意见-v3.md), [Grilling Issue #16](https://github.com/verystrongdog/game/issues/16)*
+*关联: [设计框架-六维状态](../../../framework/six-dimensions.md), [项目配置文件](../../../../CLAUDE.md), [v2 批改意见](grilling-%E8%B4%A8%E9%87%8F%E4%BF%9D%E9%9A%9C%E4%BD%93%E7%B3%BB-v2-%E6%89%B9%E6%94%B9%E6%84%8F%E8%A7%81.md), [v2 审查意见](grilling-%E8%B4%A8%E9%87%8F%E4%BF%9D%E9%9A%9C%E4%BD%93%E7%B3%BB-v2-%E5%AE%A1%E6%9F%A5%E6%84%8F%E8%A7%81.md), [v3 审查意见](grilling-%E8%B4%A8%E9%87%8F%E4%BF%9D%E9%9A%9C%E4%BD%93%E7%B3%BB-v2-%E5%AE%A1%E6%9F%A5%E6%84%8F%E8%A7%81-v3.md), [Grilling Issue #16](https://github.com/verystrongdog/game/issues/16)*

@@ -1,6 +1,6 @@
 # 工作issue 01: WcDynamics.Step 实现 + AC-1~12 测试
 
-> Status: resolved | Type: implementation | Spec: [../../design/spec.md@v1.1](../../../../../规格/引擎/csharp-wc-dynamics.md) | Blocked by: sign-off ✅（2026-08-13 批准）| GitHub: [#53](https://github.com/verystrongdog/game/issues/53)
+> Status: resolved | Type: implementation | Spec: [../../design/spec.md@v1.1](../../../../../spec/engine/csharp-wc-dynamics.md) | Blocked by: sign-off ✅（2026-08-13 批准）| GitHub: [#53](https://github.com/verystrongdog/game/issues/53)
 
 ## 范围
 
@@ -8,8 +8,8 @@
 
 ## 文件所有权声明
 
-- `src/YouAreNotTheFish.Core/Engine/WcDynamics.cs` — 新建
-- `src/YouAreNotTheFish.Core.Tests/Engine/WcDynamicsTests.cs` — 新建
+- `code/src/YouAreNotTheFish.Core/Engine/WcDynamics.cs` — 新建
+- `code/src/YouAreNotTheFish.Core.Tests/Engine/WcDynamicsTests.cs` — 新建
 
 （创建前已 grep：无其他进行中工作issue 修改上述文件。）
 
@@ -19,8 +19,8 @@ spec §六 AC-1~12 逐条对照（见下自审表）。
 
 ## 实现
 
-- `src/YouAreNotTheFish.Core/Engine/WcDynamics.cs` — Step（解析解，同步更新，契约防御，B1/B2/B3 注释逐条对应）
-- `src/YouAreNotTheFish.Core.Tests/Engine/WcDynamicsTests.cs` — AC-1~12 共 14 个 [Fact]
+- `code/src/YouAreNotTheFish.Core/Engine/WcDynamics.cs` — Step（解析解，同步更新，契约防御，B1/B2/B3 注释逐条对应）
+- `code/src/YouAreNotTheFish.Core.Tests/Engine/WcDynamicsTests.cs` — AC-1~12 共 14 个 [Fact]
 
 ## 代码自审（证据式）
 

@@ -6,7 +6,7 @@
 更新 data/brain_regions.json 中的坐标。
 
 用法:
-  python tools/refine_coords_from_objs.py
+  python code/tools/refine_coords_from_objs.py
 """
 
 import json

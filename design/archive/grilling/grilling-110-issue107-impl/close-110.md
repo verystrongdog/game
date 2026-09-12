@@ -21,11 +21,11 @@
 
 | 决策 | 写入文件 | 位置 | 验证 |
 |------|----------|------|------|
-| Q1-Q6 | `docs/决策树/` | §Grilling #110 | ✅ 已验证 |
-| #106 注记 | `docs/决策树/` | §Grilling #106 推迟段「→ 见」 | ✅ 已验证 |
+| Q1-Q6 | `design/decisions/` | §Grilling #110 | ✅ 已验证 |
+| #106 注记 | `design/decisions/` | §Grilling #106 推迟段「→ 见」 | ✅ 已验证 |
 | 实施（4 处 [JsonRequired] + 7 测试） | `TripartiteEdges.cs` / `GameDataLoaderTests.cs` / `ConsoleAppTests.cs` | 353/353 绿 | ✅ 已验证 |
-| 六维状态 | `docs/设计框架-六维状态.md` | #106 行 + 完成度 25→26 + footer | ✅ 已验证 |
-| 项目总览 | `项目总览.md` | 5.0 行 #107 注记 | ✅ 已验证 |
+| 六维状态 | `design/framework/six-dimensions.md` | #106 行 + 完成度 25→26 + footer | ✅ 已验证 |
+| 项目总览 | `design/README.md` | 5.0 行 #107 注记 | ✅ 已验证 |
 | 实现说明 | `../../设计归档/grilling/grilling-107-fail-fast-impl/实现说明.md` | 全文 | ✅ 已验证 |
 | 外审存档 | `.` ×3 | — | ✅ 已验证 |
 

@@ -11,7 +11,7 @@
   6. 输出 JSON 清单（方便程序化引用）
 
 用法：
-  python3 tools/process_hospital_atlas.py [--pdf PATH] [--out PATH] [--dpi N]
+  python3 code/tools/process_hospital_atlas.py [--pdf PATH] [--out PATH] [--dpi N]
 
 依赖：
   - poppler-utils (pdftoppm)

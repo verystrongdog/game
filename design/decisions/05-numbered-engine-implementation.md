@@ -41,8 +41,8 @@
 ### 受影响文件
 
 - `data/term_registry.json`（6 术语入库：estimator-validity/Ĉ_obs/A_pair/synthetic observation 轨/not_testable/scaled observation 轨）
-- `docs/决策树/`（本文）
-- `参考/意识结构侧-下一阶段路线-v7.md`（衔接注记 + 参数速查表补充：选格阈值 0.15、α=0.01、R=32）
+- `design/decisions/`（本文）
+- `reference/意识结构侧-下一阶段路线-v7.md`（衔接注记 + 参数速查表补充：选格阈值 0.15、α=0.01、R=32）
 - `../设计归档/grilling/grilling-95-estimator-validity/grilling-95.md`（决策日志 + 写入验证表）
 - memory（`estimator-validity-grilling-95.md`）
 
@@ -96,9 +96,9 @@
 
 ### 受影响文件
 
-- `docs/决策树/`（本文：#97 条目 + #95 Q9 修正行（Step 6）+ #93/#94/#95 推迟项「→ 见 #97」标注）
+- `design/decisions/`（本文：#97 条目 + #95 Q9 修正行（Step 6）+ #93/#94/#95 推迟项「→ 见 #97」标注）
 - `data/term_registry.json`（4 术语入库：TE/cTE/plug-in/E_S^(1)，224 条）
-- `参考/意识结构侧-下一阶段路线-v7.md`（头部衔接注记 + §七「cTE 变体（Grilling #97）」小节 + 参数速查表补充 3 行）
+- `reference/意识结构侧-下一阶段路线-v7.md`（头部衔接注记 + §七「cTE 变体（Grilling #97）」小节 + 参数速查表补充 3 行）
 - `../设计归档/grilling/grilling-97-cte-variant/grilling-97.md`（决策日志 + 写入验证表）
 - memory（`意识结构侧推迟清单与cTE变体-grilling-97.md`）
 - GitHub：#95 闭合后修正评论（Step 6）+ #96 scope 扩展评论
@@ -152,7 +152,7 @@ Grilling #96（实现 issue）的实现规划——把冻结设计落成可运�
 
 ### 受影响文件
 
-- `docs/决策树/`（本文：#98 条目 + #95/#97 推迟项「→ 见 #98」标注）
+- `design/decisions/`（本文：#98 条目 + #95/#97 推迟项「→ 见 #98」标注）
 - `../设计归档/grilling/grilling-96-estimator-validity-implement/grilling-96.md`（决策日志 + 写入验证表）
 - GitHub：#96 issue body（实现合同，needs-triage → ready-for-agent）+ #98 关闭 + 总结评论
 - memory（`script4-estimator-validity-implementation-grilling-96.md`）
@@ -227,10 +227,10 @@ Grilling #96（实现 issue）的实现规划——把冻结设计落成可运�
 ### 受影响文件
 
 - `sim_moonlight_e1.py`（新，E1 协议实现）
-- `规则/时空结构数学框架.md`（§四 记号修正 h'(x_th)；§11.6 E1 协议块）
-- `docs/决策树/`（本文）
-- `docs/设计框架-六维状态.md`（管线 +1；5.1 更新）
-- `项目总览.md`（5.1 行更新）
+- `design/rules/时空结构数学框架.md`（§四 记号修正 h'(x_th)；§11.6 E1 协议块）
+- `design/decisions/`（本文）
+- `design/framework/six-dimensions.md`（管线 +1；5.1 更新）
+- `design/README.md`（5.1 行更新）
 - `data/term_registry.json`（候选入库：壳态/B 族/A1 + §十一 短标识符核查——待用户确认）
 - GitHub：#35 scope 扩展、#101 开题、#100 关闭
 - memory（`E1壳态保持性-grilling-100.md`）
@@ -278,10 +278,10 @@ E1（#100）PASS 后，E2 验证移动壳问题：λ(t) → E_c(λ(t)), E_th(λ(
 
 ### 受影响文件
 
-- `规则/时空结构数学框架.md`（§11.6 E2 协议块 + 参数速查表扩展 + §11.6 E2 定义加注）
-- `docs/决策树/`（本文 + :3517/#38 Q7 加注）
-- `docs/设计框架-六维状态.md`（5.1 状态更新）
-- `项目总览.md`（5.1 行更新）
+- `design/rules/时空结构数学框架.md`（§11.6 E2 协议块 + 参数速查表扩展 + §11.6 E2 定义加注）
+- `design/decisions/`（本文 + :3517/#38 Q7 加注）
+- `design/framework/six-dimensions.md`（5.1 状态更新）
+- `design/README.md`（5.1 行更新）
 - `data/term_registry.json`（六项候选入库，见 Q9）
 - `sim_moonlight_e2.py`（实现并跑通，PASS；含 numba JIT 热路径 + 纯 Python 回退）
 - memory（`E2月相调制标定-grilling-102.md`）
@@ -317,11 +317,11 @@ E2（#102）PASS 产出成立区间下界 ε_adiab* ≤ 0.63（下界未解析�
 
 ### 受影响文件
 
-- `规则/时空结构数学框架.md`（§11.6 接口层协议块 Q1-Q8 + 参数速查表 7 项扩展）
-- `事件/游戏循环.md`（§2.1 时段基线=呈现层表观 / §2.2 游戏日推进锚点 / §4.3 λ(D) 月相推进）
-- `docs/决策树/`（本文）
-- `docs/设计框架-六维状态.md`（5.1 接口层闭合 + 规则/事件状态更新）
-- `项目总览.md`（5.1 行更新）
+- `design/rules/时空结构数学框架.md`（§11.6 接口层协议块 Q1-Q8 + 参数速查表 7 项扩展）
+- `design/events/游戏循环.md`（§2.1 时段基线=呈现层表观 / §2.2 游戏日推进锚点 / §4.3 λ(D) 月相推进）
+- `design/decisions/`（本文）
+- `design/framework/six-dimensions.md`（5.1 接口层闭合 + design/rules/事件状态更新）
+- `design/README.md`（5.1 行更新）
 - `data/term_registry.json`（游戏日/模拟时间/时段/moonState(D)/λ(D)/MOON_PHASE_CHANGED/calibration_status 等入库）
 - memory（`游戏日模拟时间接口层-grilling-103.md`）
 - GitHub：#103（总结评论 + 关闭）
@@ -357,11 +357,11 @@ E2（#102）PASS 产出成立区间下界 ε_adiab* ≤ 0.63（下界未解析�
 
 ### 受影响文件
 
-- `规则/时空结构数学框架.md`（§11.5 R_i 从「待独立 grilling」更新为已锁定结构 + 参数速查表）
-- `规则/技能树系统/运行时状态模型.md`（§4.5 m_field 接口注更新）
-- `规则/核心机制.md`（§6.3 措辞修正：「放大」降级系统响应层描述）
-- `docs/决策树/`（本文）；旧延迟项加注「→ 见 #101」：:2249（#38 推迟）、:2374（#69 延迟）、:2424（#70 推迟）
-- `docs/设计框架-六维状态.md`（规则维度 5.1 状态更新）
+- `design/rules/时空结构数学框架.md`（§11.5 R_i 从「待独立 grilling」更新为已锁定结构 + 参数速查表）
+- `design/rules/skill-tree/运行时状态模型.md`（§4.5 m_field 接口注更新）
+- `design/rules/核心机制.md`（§6.3 措辞修正：「放大」降级系统响应层描述）
+- `design/decisions/`（本文）；旧延迟项加注「→ 见 #101」：:2249（#38 推迟）、:2374（#69 延迟）、:2424（#70 推迟）
+- `design/framework/six-dimensions.md`（规则维度 5.1 状态更新）
 - `data/term_registry.json`（s_env 措辞修正「真实物理存在」→「空间内容呈现」；R_i/神经落点 入库）
 - memory（`月光落点-R_i-grilling-101.md`）
 - GitHub：#101（Step 0 评论 + 总结评论 + 关闭）
@@ -381,7 +381,7 @@ E2（#102）PASS 产出成立区间下界 ε_adiab* ≤ 0.63（下界未解析�
 
 ### 背景
 
-#75 方案（事件/持续场分离 + 27 原型选择器 + 三通道 + 只读接口）含 m_field「占位全 0」段落，写于 #101/#103 之前；#101 闭合 R 落点结构、#103 定 moonState(D) 契约与 calibration_status 分级 → #75 task-plan 需对齐更新，P2 方可实施。
+#75 方案（design/events/持续场分离 + 27 原型选择器 + 三通道 + 只读接口）含 m_field「占位全 0」段落，写于 #101/#103 之前；#101 闭合 R 落点结构、#103 定 moonState(D) 契约与 calibration_status 分级 → #75 task-plan 需对齐更新，P2 方可实施。
 
 ### 决策（Q1-Q4+Q6）
 
@@ -393,16 +393,16 @@ E2（#102）PASS 产出成立区间下界 ε_adiab* ≤ 0.63（下界未解析�
 
 ### 事实核查（引用即读取）
 
-- 引擎 `src/YouAreNotTheFish.Core/` 无 moonState/calibration_status/MFieldStrength/R 落点代码（grep 0 匹配）→ moonState(D) 契约骨架引擎实现归属 P2（#103 未指定实现批次）
+- 引擎 `code/src/YouAreNotTheFish.Core/` 无 moonState/calibration_status/MFieldStrength/R 落点代码（grep 0 匹配）→ moonState(D) 契约骨架引擎实现归属 P2（#103 未指定实现批次）
 - `situation_primitives.json` 27 原型 key_brain_regions 共 201 条、去重 37 名；37/37 ∈ region_name_map.regions 且 name == functional_id（python3 实测）
 - git 单线历史（--graph 无 merge）+ implementation issue 串行时间线（43→46→51→53→55→57→61→63 逐关后开）→ 项目串行惯例实证
 - #91（csharp-console 实现）OPEN，console 代码已在 HEAD（1f86b67）
 
 ### 受影响文件
 
-- `docs/决策树/`（本文）；#75 条目加注、#101 推迟项加注「→ 见 #104」
+- `design/decisions/`（本文）；#75 条目加注、#101 推迟项加注「→ 见 #104」
 - `../设计归档/grilling/grilling-75-p2-situation/task-plan.md`（更新：m_field 段落 #101/#103 对齐 + T4 fid 校验器 + demo 3 环境集 + 推迟清单 m_field 项解除）
-- `docs/设计框架-六维状态.md`（管线队列 P2 状态更新）
+- `design/framework/six-dimensions.md`（管线队列 P2 状态更新）
 - GitHub：#105（P2 实施 issue，排队中）+ #104（本文）
 - memory（`情境系统引擎-grilling-104.md`）
 
@@ -433,7 +433,7 @@ E2（#102）PASS 产出成立区间下界 ε_adiab* ≤ 0.63（下界未解析�
 - **Q2（M1 锚点策略）**：**保持 HARD，不降级**。数据恢复后实测静息不动点回到原窗口（0.535~0.771），5 个锚点测试未改断言全部通过。外部建议的 C 混合策略（精确窗口 DIAGNOSTIC）**未采纳落地**——降级会掩盖可恢复的数据回归；仅记录为「未来图数据合法变更时的锚点政策」（对齐 #103 hard-validate/DIAGNOSTIC 分层）。
 - **Q3（恢复手段）**：**重跑 build_function_labels.py**（两步管线第二步），非 git checkout 旧数据（旧数据无 #92 lateralization，回滚会破坏 #92 产物）。验证：4 字段全量序列化集合与 66d1dd2^ 逐边 0 差异；lateralization 保留（49 节点 = 0.0，镜像 2 节点无）；node_profiles 不变。
 - **Q4（镜像契约）**：3 个失败拆 2 类——`LoadTripartiteModel_EnumFieldsAreParsed` 是 role 恢复的消费方（自动转绿）；2 个 brain_regions 镜像测试更新为 #92 D6 语义（镜像 = 主变体完整剖面 + mirror_of 溯源，断言不依赖具体枚举值）。
-- **Q5（门禁）**：**① 校验脚本 `tools/validate_tripartite_annotations.py`（只读 fail-fast：4 类边 role 合法值/注释字段存在性/lateralization 契约/privileged 非空/注释元字段）+ ② 生成器头部防再犯警告**。原子化重跑方案**否决**：临时管线验证证明生成器输出 privileged=0（手工数据会丢失）。③ 引擎 fail-fast（EdgeRole 缺失默认 Active 的静默失败）**后置**为独立决策，不进 #91 关闭条件。
+- **Q5（门禁）**：**① 校验脚本 `code/tools/validate_tripartite_annotations.py`（只读 fail-fast：4 类边 role 合法值/注释字段存在性/lateralization 契约/privileged 非空/注释元字段）+ ② 生成器头部防再犯警告**。原子化重跑方案**否决**：临时管线验证证明生成器输出 privileged=0（手工数据会丢失）。③ 引擎 fail-fast（EdgeRole 缺失默认 Active 的静默失败）**后置**为独立决策，不进 #91 关闭条件。
 
 ### 结果
 
@@ -443,9 +443,9 @@ E2（#102）PASS 产出成立区间下界 ε_adiab* ≤ 0.63（下界未解析�
 ### 受影响文件
 
 - `data/connectivity/tripartite_model.json`（重跑注释脚本恢复 4 字段——commit 30108af）
-- `src/YouAreNotTheFish.Core.Tests/Data/GameDataLoaderTests.cs` + `src/YouAreNotTheFish.Core/Data/FunctionProfile.cs`（镜像契约测试更新 + 注释同步——commit d2c76db）
-- `tools/validate_tripartite_annotations.py`（新增）+ `tools/build_tripartite_model.py`（防再犯警告——commit 373c2a0）
-- `docs/决策树/`（本文）、`docs/设计框架-六维状态.md`（管线 P2 状态）
+- `code/src/YouAreNotTheFish.Core.Tests/Data/GameDataLoaderTests.cs` + `code/src/YouAreNotTheFish.Core/Data/FunctionProfile.cs`（镜像契约测试更新 + 注释同步——commit d2c76db）
+- `code/tools/validate_tripartite_annotations.py`（新增）+ `code/tools/build_tripartite_model.py`（防再犯警告——commit 373c2a0）
+- `design/decisions/`（本文）、`design/framework/six-dimensions.md`（管线 P2 状态）
 - `../设计归档/grilling/csharp-console/impl/issues/01-console-implementation.md`（关闭记录）
 - GitHub：#91（总结评论 + 关闭，解锁 #105）
 - memory（`console实现-grilling-91.md`）⚠️ 因环境只读未写入，完整记录在本条目
@@ -460,7 +460,7 @@ E2（#102）PASS 产出成立区间下界 ε_adiab* ≤ 0.63（下界未解析�
 
 ## Grilling #106 — 引擎 fail-fast（EdgeRole 缺失默认 Active(0) 静默失败）（2026-09-02 闭合）
 
-> Issue: [#106](https://github.com/verystrongdog/game/issues/106)（2026-09-02 开题，2026-09-02 闭合）| 维度: 管线 | 形态: #91 Q5 后置项 ③ 的独立决策——EdgeRole 缺失时 C# 反序列化静默回退 `Active(0)` 的引擎层防御。校验脚本 `tools/validate_tripartite_annotations.py`（管线侧只读 fail-fast）已实现（#91 Q5 ①/②），本 grilling 补齐引擎侧防御（③）。
+> Issue: [#106](https://github.com/verystrongdog/game/issues/106)（2026-09-02 开题，2026-09-02 闭合）| 维度: 管线 | 形态: #91 Q5 后置项 ③ 的独立决策——EdgeRole 缺失时 C# 反序列化静默回退 `Active(0)` 的引擎层防御。校验脚本 `code/tools/validate_tripartite_annotations.py`（管线侧只读 fail-fast）已实现（#91 Q5 ①/②），本 grilling 补齐引擎侧防御（③）。
 
 ### 背景
 
@@ -484,13 +484,13 @@ E2（#102）PASS 产出成立区间下界 ε_adiab* ≤ 0.63（下界未解析�
 
 ### 受影响文件
 
-- `src/YouAreNotTheFish.Core/Data/TripartiteEdges.cs`（4 类边 Role 加 `[JsonRequired]`——#107 实施）
-- `src/YouAreNotTheFish.Core.Tests/Data/GameDataLoaderTests.cs`（四类缺 role/null/active 测试——#107）
-- `src/YouAreNotTheFish.Console/Program.cs`（catch JsonException → exit 1——#107）
-- `src/YouAreNotTheFish.Core.Tests/ConsoleApp/ConsoleAppTests.cs`（缺 role 进程测试——#107）
+- `code/src/YouAreNotTheFish.Core/Data/TripartiteEdges.cs`（4 类边 Role 加 `[JsonRequired]`——#107 实施）
+- `code/src/YouAreNotTheFish.Core.Tests/Data/GameDataLoaderTests.cs`（四类缺 role/null/active 测试——#107）
+- `code/src/YouAreNotTheFish.Console/Program.cs`（catch JsonException → exit 1——#107）
+- `code/src/YouAreNotTheFish.Core.Tests/ConsoleApp/ConsoleAppTests.cs`（缺 role 进程测试——#107）
 - `../规格/引擎/csharp-data-layer.md`（§四 EdgeRole 行注明 JsonRequired——#107）
 - `../规格/引擎/csharp-console.md`（AC-12 增 JsonException → exit 1——#107）
-- `docs/决策树/`（本文）、`docs/设计框架-六维状态.md`（管线维度）
+- `design/decisions/`（本文）、`design/framework/six-dimensions.md`（管线维度）
 - GitHub：#106（本 grilling）+ #107（implementation）
 - memory（`引擎fail-fast-grilling-106.md`）
 
@@ -523,7 +523,7 @@ E2（#102）PASS 产出成立区间下界 ε_adiab* ≤ 0.63（下界未解析�
 - **Q10（B3-⑩ moonState(D) C# 骨架）**：`static class MoonState` + `Query(int day)` 纯函数 → `MoonStateResult(Phase=λ(D), Shell={E_c(λ),E_th(λ)}, QhatBaseline[69], CalibrationStatus, Version)`；E_c/E_th 按 #102 E2 锁定形式结构实现（常量挂 CalibrationConfig 为 PLACEHOLDER）；**QhatBaseline N=69 是占位契约**（≠「graph identity 已证明 N=69」，闭合后升级 + 硬维度校验）；D 推进机制与 MOON_PHASE_CHANGED 广播**不实现**（demo 固定 D；无 P2 消费者）。
 - **Q11（B3-⑪ 门禁机制）**：`CalibrationGate.EnsureCalibrated(status, version)` 挂载于 **m_field 合成注入点**（PLACEHOLDER/版本不匹配 → fail-fast，Data/Engine 层抛 → Console 转 stderr+exit 1，接 #106 Q5 分层）；**门禁范围 = moonlight→m_field 正式消费链路，s_env/α_env/情境原型注入不挂**（不消费 moonlight calibration artifact，#101 Q3 三通道正交）；demo 例外 = `CalibrationConfig.AllowPlaceholderDemo`（默认 false）+ Console `--mfield-demo` + 每回合醒目警告；三数据文件（alpha_patterns/env_tones/moonlight_landing）schema major 加载期统一校验（major 不匹配 fail-fast，minor 兼容演进）；MoonState.Query 运行时防御断言（0≤λ≤1 / E_c>0 / 0<E_th<E_c / 有限性）。
 - **Q12（B3-⑫ s_total 合成时序）**：三通道 **Phase 1 注入点合成**——`s_total_i = SPending_i + s_env + m_field_i`；SPending 保持事件累加语义不变（现有 accumulate-then-inject-then-clear 零改动）；`s_env[69]` 存 CombatState（情境刷新重算，Q8 下一回合生效）；`m_field_i[j] = QhatBaseline[j] × g(SAN_i) × R[j]`，**g ≡ 1.0 占位**（E7/#35 定正式形式，不动架构）、q̂ 取 QhatBaseline 无空间差异（延迟）；默认（无 `--mfield-demo`）PLACEHOLDER 下 m_field 消费 fail-fast、`s_total = s_事件+s_env` 正常运行；**WcDynamics.Step 签名零改动**。
-- **Q13（B4-⑬ fid 校验器）**：两层防线——① `tools/validate_situation_fids.py` 管线侧只读校验器（名称 ∈ region_name_map.regions 且 name == functional_id；27 原型 37 去重名 100% 命中报告；失败 exit 非零；新增原型自动纳入；**不建立 dk→fid 翻译映射表**——翻译需求=0）② SituationSelector 构造时引擎侧全量断言 fid ∈ 已知集（未知 → 加载期异常，防绕过管线校验器直接换数据文件）；**情境 fid 不要求 ⊆ W_sensory/W_active**（心理情境非感官，与 moonlight 落点约束不混用）；与 moonlight_landing 校验分文件。
+- **Q13（B4-⑬ fid 校验器）**：两层防线——① `code/tools/validate_situation_fids.py` 管线侧只读校验器（名称 ∈ region_name_map.regions 且 name == functional_id；27 原型 37 去重名 100% 命中报告；失败 exit 非零；新增原型自动纳入；**不建立 dk→fid 翻译映射表**——翻译需求=0）② SituationSelector 构造时引擎侧全量断言 fid ∈ 已知集（未知 → 加载期异常，防绕过管线校验器直接换数据文件）；**情境 fid 不要求 ⊆ W_sensory/W_active**（心理情境非感官，与 moonlight 落点约束不混用）；与 moonlight_landing 校验分文件。
 - **Q14（B5-⑭ Console demo 形态）**：新增 **`--demo-situation` 非交互 trace 模式**（`--env`/`--day`/`--rounds`/`--seed`/`--mfield-demo`）——对齐 #105 验收（情境/λ(D)/s 注入/a(t) 变化一次确定性运行可见），不污染 RunBattle，与 RunResting trace 惯例一致；输出 = 初始环境/情境/strength + 每回合 λ(D) + WC a(t) 摘要 + 首回合 s_env 注入前后对比 + mfield-demo 时 PLACEHOLDER 警告；`CombatState.Create(environment)` 默认 ward，非法 id → CliUsageException → exit 1；同 seed 同输出。
 - **Q15（B5-⑮ 测试矩阵）**：G1-G9 矩阵（G1 数据契约 fail-fast / G2 迁移回归（309 全绿=门槛） / G3 EventProcessor 数据驱动 / G4 SituationSelector / G5 MoonState / G6 门禁 / G7 三通道合成 / G8 fid 校验 / G9 Console 进程级）；**p_panic 契约断言不做频率统计**——恐慌假 → 必 primary；恐慌真 → 必 ∈ {G ∪ primary}；同 seed 同选择（无预注册样本量，不制造「跑 n 次接近 50%」验收）。
 
@@ -539,9 +539,9 @@ E2（#102）PASS 产出成立区间下界 ε_adiab* ≤ 0.63（下界未解析�
 
 - `../设计归档/grilling/grilling-75-p2-situation/task-plan.md`（Q1-Q15 执行契约注入——§二 决策清单 + §三 数据文件 + §四 选择器 + §五 三通道 + §七 任务 + §九/§十 校验与验收）
 - `../设计归档/grilling/grilling-108-p2-impl-review`（14 份外部评审存档）
-- `docs/决策树/`（本文）
-- `docs/设计框架-六维状态.md`（管线维度 P2 状态更新）
-- `项目总览.md`（5.0 P2 行更新）
+- `design/decisions/`（本文）
+- `design/framework/six-dimensions.md`（管线维度 P2 状态更新）
+- `design/README.md`（5.0 P2 行更新）
 - `data/term_registry.json`（G/t_neg/s_neg/p_panic/m_delta/环境 id 入库）
 - memory（`情境系统引擎-grilling-108.md`）
 - GitHub：#108（总结评论 + 关闭）；#105（实施 issue，可启动）
@@ -563,7 +563,7 @@ E2（#102）PASS 产出成立区间下界 ε_adiab* ≤ 0.63（下界未解析�
 - **Q1（分支策略）**：开 `feat/p2-situation` 分支（实施完成后合回 main）。用户选保守方案——与近期 #91/#106 的 main 直改惯例不同，本次改动面大（4 数据 + 8 代码 + 测试 + 校验器）走分支隔离。
 - **Q2（提交分批）**：按 T1-T7 分批，每批「数据+代码+该批测试」自包含、测试全绿后提交；G1-G9 测试矩阵就近落位，G2 回归门槛（309 绿）全程保持。
 - **Q3（问题处置）**：沿用 #96「实现说明」先例——冻结设计未明示处机械实现自主决策并记录；数值不匹配如实呈现不偷改；设计越界标记另开轮。产出 `../设计归档/grilling/grilling-105-p2-impl/实现说明.md`。
-- **Q4（数据生成）**：W_sensory 扩列用一次性 Python 脚本生成 + 逐位断言（防 69×8 手改错位，脚本进 tools/ 留存）；其余 3 个新 JSON 按契约手写 + 引擎测试断言。
+- **Q4（数据生成）**：W_sensory 扩列用一次性 Python 脚本生成 + 逐位断言（防 69×8 手改错位，脚本进 code/tools/ 留存）；其余 3 个新 JSON 按契约手写 + 引擎测试断言。
 - **Q5（验收关闭）**：逐项核验 8 项验收标准（G1-G9 全绿 + 309 回归 + fid 校验 37/37 + Console demo 输出存档）+ 验收记录后关闭 #105 + 总结评论；不做外部 AI 评审（#108 已做过实施前审查，本批纯执行）。
 - **Q6（执行形态）**：共识后本会话直接实施（Q1-Q5 决策 + Q1-Q15 契约足够，不另开会话）。
 
@@ -587,11 +587,11 @@ E2（#102）PASS 产出成立区间下界 ε_adiab* ≤ 0.63（下界未解析�
 
 - `../设计归档/grilling/grilling-105-p2-impl/实现说明.md`（新建）
 - `data/connectivity/`：W_sensory.json（改写）/ alpha_patterns.json / env_tones.json / moonlight_landing.json（新建）
-- `src/YouAreNotTheFish.Core/`：Data（AlphaPatterns/EnvTones/MoonlightLanding/GameDataLoader/GameData）、Engine（EventProcessor/SituationSelector/SituationEnv/MoonState/CalibrationGate/MFieldComposer）、Entity/CombatState、Flow/TurnManager、Types（CalibrationConfig/SituationState）
-- `src/YouAreNotTheFish.Console/`（CliArgs/Program）
-- `tools/extend_wsensory_69x8.py`、`tools/validate_situation_fids.py`（新建）
-- `src/YouAreNotTheFish.Core.Tests/`（+37 测试：SituationSelectorTests/MoonStateTests/NewDataContractTests/DemoSituationTests + 既有测试同步）
-- `docs/决策树/`（本文）、`docs/设计框架-六维状态.md`（管线 P2）、`项目总览.md`（5.0 P2）
+- `code/src/YouAreNotTheFish.Core/`：Data（AlphaPatterns/EnvTones/MoonlightLanding/GameDataLoader/GameData）、Engine（EventProcessor/SituationSelector/SituationEnv/MoonState/CalibrationGate/MFieldComposer）、Entity/CombatState、Flow/TurnManager、Types（CalibrationConfig/SituationState）
+- `code/src/YouAreNotTheFish.Console/`（CliArgs/Program）
+- `code/tools/extend_wsensory_69x8.py`、`code/tools/validate_situation_fids.py`（新建）
+- `code/src/YouAreNotTheFish.Core.Tests/`（+37 测试：SituationSelectorTests/MoonStateTests/NewDataContractTests/DemoSituationTests + 既有测试同步）
+- `design/decisions/`（本文）、`design/framework/six-dimensions.md`（管线 P2）、`design/README.md`（5.0 P2）
 - GitHub：#109（本条目 + 关闭）；#105（实施 issue 关闭）
 
 ### 推迟
@@ -624,12 +624,12 @@ E2（#102）PASS 产出成立区间下界 ε_adiab* ≤ 0.63（下界未解析�
 
 ### 受影响文件
 
-- `src/YouAreNotTheFish.Core/Data/TripartiteEdges.cs`（4 类边 Role 加 `[JsonRequired]`）
-- `src/YouAreNotTheFish.Console/Program.cs`（FindDataDir 首查 `YANTF_DATA_DIR`）
-- `src/YouAreNotTheFish.Core.Tests/Data/GameDataLoaderTests.cs`（+6 引擎测试）
-- `src/YouAreNotTheFish.Core.Tests/ConsoleApp/ConsoleAppTests.cs`（+1 Console 进程测试）
+- `code/src/YouAreNotTheFish.Core/Data/TripartiteEdges.cs`（4 类边 Role 加 `[JsonRequired]`）
+- `code/src/YouAreNotTheFish.Console/Program.cs`（FindDataDir 首查 `YANTF_DATA_DIR`）
+- `code/src/YouAreNotTheFish.Core.Tests/Data/GameDataLoaderTests.cs`（+6 引擎测试）
+- `code/src/YouAreNotTheFish.Core.Tests/ConsoleApp/ConsoleAppTests.cs`（+1 Console 进程测试）
 - `../设计归档/grilling/grilling-107-fail-fast-impl/实现说明.md`（新建）+ `../设计归档/grilling/grilling-110-issue107-impl`（3 份外审存档）
-- `docs/决策树/`（本文 + #106 注记）、`docs/设计框架-六维状态.md`（管线）、`项目总览.md`（5.0）
+- `design/decisions/`（本文 + #106 注记）、`design/framework/six-dimensions.md`（管线）、`design/README.md`（5.0）
 - GitHub：#110（本 grilling，关闭）+ #107（implementation，关闭）
 
 ### 推迟
@@ -663,12 +663,12 @@ issue #111 两个触发点：①#35 启动时发现跨 14 个 grilling 推迟聚
 ### 试点结果
 
 - 六维机械验收：**PASS / PASS / PASS / N/A / PASS / PASS**——既有 seam `IActionProvider` 已满足 Module 最小契约，零源码改动。
-- 验收产物：[../设计归档/grilling/grilling-111-plugin/试点审查报告.md](../../%E8%AE%BE%E8%AE%A1%E5%BD%92%E6%A1%A3/grilling/grilling-111-plugin/%E8%AF%95%E7%82%B9%E5%AE%A1%E6%9F%A5%E6%8A%A5%E5%91%8A.md)（证据位置逐条 + 外审存档 10 份）。
+- 验收产物：[../设计归档/grilling/grilling-111-plugin/试点审查报告.md](../archive/grilling/grilling-111-plugin/%E8%AF%95%E7%82%B9%E5%AE%A1%E6%9F%A5%E6%8A%A5%E5%91%8A.md)（证据位置逐条 + 外审存档 10 份）。
 
 ### 受影响文件
 
-- `docs/决策树/`（本文）
-- `docs/设计框架-六维状态.md`（管线维度）
+- `design/decisions/`（本文）
+- `design/framework/six-dimensions.md`（管线维度）
 - `data/term_registry.json`（+2 术语：插件化/静态契约式模块化架构；calibration_status 注记；_pending_candidates 更新）
 - `data/term_registry_candidates.md`（新建——补齐悬空引用，登记降级协议/单一事实源等推迟项）
 - `../设计归档/grilling/grilling-111-plugin/试点审查报告.md`（新建）
@@ -702,17 +702,17 @@ issue #111 两个触发点：①#35 启动时发现跨 14 个 grilling 推迟聚
 
 - **Q1 人际层**：从"可选土壤"升级为**必需土壤**——**环境资格判定概念族废弃（2026-09-01 第九/十/十一份评审）**：环境 = 人生叙事中建模为持续性生活场域的结构性经历（Event Generator 结构输出，非分类器结果）；T_min/环境资格/is_fixed_environment() 不存在；三维度分离（存在性≠暴露量T≠塑造结果）；环境内容维度（家庭结构/亲密关系/代际冲突/关系损伤 + 家庭外场域）保留为关系结构内容
 - **Q3 因果链强度**：定位明确——创伤 = 必要触发，遗传 = 调制，非独立路径
-- **Q2 参数选择规则（2026-09-01）**：宏观确定锚定 + 微观随机采样分层——宏观社会事件由出生年×地域确定性投影（矩阵），微观人际事件从「事件类型×场所」池随机采样（M5 多样性）；落点 Event Generator；确定性复用 #71 DeterministicRng。详见 [grilling-87.md](../../%E8%AE%BE%E8%AE%A1%E5%BD%92%E6%A1%A3/grilling/grilling-87-npc-life-generation/grilling-87.md) Q2 决策
-- **Q4 模板化边界（2026-09-01）**：类型学与生成规则允许复用；具体人生实例必须独立生成（M5 澄清）；"同构≠模板复制"防回归；素材池=生成参考非人生模板。详见 [grilling-87.md](../../%E8%AE%BE%E8%AE%A1%E5%BD%92%E6%A1%A3/grilling/grilling-87-npc-life-generation/grilling-87.md) Q4 决策
-- **Q5 审阅流程（2026-09-01）**：交付 C（结构化骨架+简版叙事，同一事实源两视图）+ 锚点依赖传播局部迭代 + 用户修改优先于 AI 生成规则 + 定稿入 M2 双轨；M2 澄清（AI 起草阶段可为作者，定稿后不改写）。详见 [grilling-87.md](../../%E8%AE%BE%E8%AE%A1%E5%BD%92%E6%A1%A3/grilling/grilling-87-npc-life-generation/grilling-87.md) Q5 决策
-- **Q6 生成质量校验（2026-09-01，终题）**：三层门禁——①个体合法性硬校验（矩阵/年龄/地域，违反→FAIL）②批次多样性诊断（防异常集中/塌缩，不要求服从预设分布）③素材形态软对照（五本病案=参考非规范，偏离→WARNING）。质量校验=生成后诊断系统非分类器；质量阈值允许但第一版不拍数值（待批次可观测后标定）。**#87 六问（Q1-Q6）全部闭合**。详见 [grilling-87.md](../../%E8%AE%BE%E8%AE%A1%E5%BD%92%E6%A1%A3/grilling/grilling-87-npc-life-generation/grilling-87.md) Q6 决策
-- **生成器架构（2026-09-01 第八份评审）**：A′-Generator 静态模块契约架构——5 阶段职责隔离/静态 seam/失败语义三层/fallback=生成策略非模块状态/错误在最近契约边界识别。详见 [grilling-87.md](../../%E8%AE%BE%E8%AE%A1%E5%BD%92%E6%A1%A3/grilling/grilling-87-npc-life-generation/grilling-87.md) 架构决策段
+- **Q2 参数选择规则（2026-09-01）**：宏观确定锚定 + 微观随机采样分层——宏观社会事件由出生年×地域确定性投影（矩阵），微观人际事件从「事件类型×场所」池随机采样（M5 多样性）；落点 Event Generator；确定性复用 #71 DeterministicRng。详见 [grilling-87.md](../archive/grilling/grilling-87-npc-life-generation/grilling-87.md) Q2 决策
+- **Q4 模板化边界（2026-09-01）**：类型学与生成规则允许复用；具体人生实例必须独立生成（M5 澄清）；"同构≠模板复制"防回归；素材池=生成参考非人生模板。详见 [grilling-87.md](../archive/grilling/grilling-87-npc-life-generation/grilling-87.md) Q4 决策
+- **Q5 审阅流程（2026-09-01）**：交付 C（结构化骨架+简版叙事，同一事实源两视图）+ 锚点依赖传播局部迭代 + 用户修改优先于 AI 生成规则 + 定稿入 M2 双轨；M2 澄清（AI 起草阶段可为作者，定稿后不改写）。详见 [grilling-87.md](../archive/grilling/grilling-87-npc-life-generation/grilling-87.md) Q5 决策
+- **Q6 生成质量校验（2026-09-01，终题）**：三层门禁——①个体合法性硬校验（矩阵/年龄/地域，违反→FAIL）②批次多样性诊断（防异常集中/塌缩，不要求服从预设分布）③素材形态软对照（五本病案=参考非规范，偏离→WARNING）。质量校验=生成后诊断系统非分类器；质量阈值允许但第一版不拍数值（待批次可观测后标定）。**#87 六问（Q1-Q6）全部闭合**。详见 [grilling-87.md](../archive/grilling/grilling-87-npc-life-generation/grilling-87.md) Q6 决策
+- **生成器架构（2026-09-01 第八份评审）**：A′-Generator 静态模块契约架构——5 阶段职责隔离/静态 seam/失败语义三层/fallback=生成策略非模块状态/错误在最近契约边界识别。详见 [grilling-87.md](../archive/grilling/grilling-87-npc-life-generation/grilling-87.md) 架构决策段
 - 原推迟项「素质-应激兜底规则 → #87 生成功能」（:3187）**废弃**
 
 ### 受影响文件
 
-- `规则/技能树系统/创伤记忆转化接口.md`（§一 世界观裁决 / §二 β 参数 / §3.1 双阈值个体化 / §3.2.1 立场 B 修正 / §四 参数表 / §六 结构清单）
-- `docs/决策树/`（本文；:3173 D9 与 :3187 推迟项经本文修正，历史记录保留）
+- `design/rules/skill-tree/创伤记忆转化接口.md`（§一 世界观裁决 / §二 β 参数 / §3.1 双阈值个体化 / §3.2.1 立场 B 修正 / §四 参数表 / §六 结构清单）
+- `design/decisions/`（本文；:3173 D9 与 :3187 推迟项经本文修正，历史记录保留）
 - `data/term_registry.json`（新术语：β 个体易感性接口 / 代际创伤链；创伤记忆条目数值位置同步）
 - `../设计归档/grilling/grilling-87-npc-life-generation/grilling-87.md`（恢复记录）
 
@@ -720,7 +720,7 @@ issue #111 两个触发点：①#35 启动时发现跨 14 个 grilling 推迟聚
 
 - β 数值 / g 环境映射规则（童年环境 → g 的量化）→ #87 生成功能设计（Q1 人际层结构落地时）
 - 24 经历型疾病文件中「遗传度」类引用的清扫标注 → 一致性清扫批次
-- 收养研究详细证据入库（Tienari/Kety/GWAS 综述）→ 参考/文献 批次
+- 收养研究详细证据入库（Tienari/Kety/GWAS 综述）→ reference/文献 批次
 
 **🔧 修正 (2026-09-01):** D1 原表述「家庭环境是创伤事件核心来源」过窄——创伤来源 = 各类固定生活环境（家庭/学校/职场/部队/社区等），事件类型层环境无关（§3.2.1 十类事件本就覆盖：社会伤害/公开羞辱/控制剥夺/慢性冲突等）。家庭环境的特殊地位仅限解释"遗传度"家族聚集（代际创伤链）。同步修正：转化接口.md §一/:113、本条目 D1、Q1 影响段（"必需土壤"扩展为固定生活环境层）、grilling-87.md 恢复记录。commit 见 `c6e5515` 后续修正提交。
 
@@ -731,5 +731,5 @@ issue #111 两个触发点：①#35 启动时发现跨 14 个 grilling 推迟聚
 ---
 
 ---
-*创建: 2026-09-12（由 docs/决策树/ 拆分）| 更新: 2026-09-12*
-*关联: [决策树总索引](README.md), [设计框架-六维状态](../设计框架-六维状态.md)*
+*创建: 2026-09-12（由 design/decisions/ 拆分）| 更新: 2026-09-12*
+*关联: [决策树总索引](README.md), [设计框架-六维状态](../framework/six-dimensions.md)*

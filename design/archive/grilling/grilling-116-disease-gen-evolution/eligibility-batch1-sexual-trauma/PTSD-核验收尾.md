@@ -58,4 +58,4 @@ Eligibility(PTSD) =
 ---
 
 *创建: 2026-09-06 | 状态: 草案待裁决*
-*关联: [PTSD-F资格阈值-证据基础](../../../../.scratch/grilling-89-npc-material/PTSD-F%E8%B5%84%E6%A0%BC%E9%98%88%E5%80%BC-%E8%AF%81%E6%8D%AE%E5%9F%BA%E7%A1%80.md), [C阶段诊断-PTSD-SSD资格门](../../../../%E8%A7%84%E6%A0%BC/%E7%B4%A0%E6%9D%90/C%E9%98%B6%E6%AE%B5%E8%AF%8A%E6%96%AD-PTSD-SSD%E8%B5%84%E6%A0%BC%E9%97%A8.md), [转化接口 §3.2.2](../../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E5%88%9B%E4%BC%A4%E8%AE%B0%E5%BF%86%E8%BD%AC%E5%8C%96%E6%8E%A5%E5%8F%A3.md)*
+*关联: [PTSD-F资格阈值-证据基础](../../../../../.scratch/grilling-89-npc-material/PTSD-F%E8%B5%84%E6%A0%BC%E9%98%88%E5%80%BC-%E8%AF%81%E6%8D%AE%E5%9F%BA%E7%A1%80.md), [C阶段诊断-PTSD-SSD资格门](../../../../spec/material/C%E9%98%B6%E6%AE%B5%E8%AF%8A%E6%96%AD-PTSD-SSD%E8%B5%84%E6%A0%BC%E9%97%A8.md), [转化接口 §3.2.2](../../../../rules/skill-tree/%E5%88%9B%E4%BC%A4%E8%AE%B0%E5%BF%86%E8%BD%AC%E5%8C%96%E6%8E%A5%E5%8F%A3.md)*

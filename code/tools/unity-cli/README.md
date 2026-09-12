@@ -1,6 +1,6 @@
 # Unity CLI 直驱工具
 
-> 在 WSL 侧驱动 Windows 上的 Unity Editor（`com.unity.pipeline`）做编译 / 生成 / 测试 / 截图验证的封装脚本。首次使用见 [Grilling #126 决策记录](../../设计归档/grilling/grilling-126-rosefield/决策记录.md) §本机实测。
+> 在 WSL 侧驱动 Windows 上的 Unity Editor（`com.unity.pipeline`）做编译 / 生成 / 测试 / 截图验证的封装脚本。首次使用见 [Grilling #126 决策记录](../../../design/archive/grilling/grilling-126-rosefield/%E5%86%B3%E7%AD%96%E8%AE%B0%E5%BD%95.md) §本机实测。
 
 ## 一、前置
 
@@ -43,4 +43,4 @@
 
 ---
 *创建: 2026-09-12 | 更新: 2026-09-12*
-*关联: [Grilling #126 决策记录](../../设计归档/grilling/grilling-126-rosefield/决策记录.md), [unity/README.md](../../unity/README.md)*
+*关联: [Grilling #126 决策记录](../../../design/archive/grilling/grilling-126-rosefield/%E5%86%B3%E7%AD%96%E8%AE%B0%E5%BD%95.md), [code/unity/README.md](../../unity/README.md)*

@@ -43,8 +43,8 @@ https://s3.us-east-2.amazonaws.com/brainder/software/brain4blender/pial_Full_obj
 
 运行数据管线确保坐标文件最新:
 ```bash
-python tools/brain_atlas_to_blender.py
-python tools/map_skills_to_regions.py
+python code/tools/brain_atlas_to_blender.py
+python code/tools/map_skills_to_regions.py
 ```
 
 ---
@@ -153,10 +153,10 @@ Wireframe Modifier:
 
 ### 4.1 自动化放置脚本
 
-运行 `tools/place_skill_nodes_blender.py`:
+运行 `code/tools/place_skill_nodes_blender.py`:
 
 ```bash
-blender --background --python tools/place_skill_nodes_blender.py
+blender --background --python code/tools/place_skill_nodes_blender.py
 ```
 
 或在 Blender Scripting 面板中加载运行。
@@ -250,7 +250,7 @@ File → Export → FBX (.fbx)
 3. 调整玻璃材质: Surface Type → Transparent, Alpha ≈ 0.15
 4. 节点和连线设为独立 GameObject，挂 SkillNode.cs 脚本
 
-Unity 端的详细设置见 [3D可视化设计规范](./3D可视化设计规范.md)。
+Unity 端的详细设置见 [3D可视化设计规范](3D%E5%8F%AF%E8%A7%86%E5%8C%96%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83.md)。
 
 ---
 
@@ -264,4 +264,4 @@ Unity 端的详细设置见 [3D可视化设计规范](./3D可视化设计规范.
 ---
 
 *创建: 2026-07-11*
-*关联: [脑图谱数据管线](./脑图谱数据管线.md), [大脑形态技能树-设计](../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E5%B7%B2%E5%BA%9F%E5%BC%83/%E5%A4%A7%E8%84%91%E5%BD%A2%E6%80%81%E6%8A%80%E8%83%BD%E6%A0%91-%E8%AE%BE%E8%AE%A1.md), [3D可视化设计规范](./3D可视化设计规范.md)*
+*关联: [脑图谱数据管线](%E8%84%91%E5%9B%BE%E8%B0%B1%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%BA%BF.md), [大脑形态技能树-设计](../../rules/skill-tree/deprecated/%E5%A4%A7%E8%84%91%E5%BD%A2%E6%80%81%E6%8A%80%E8%83%BD%E6%A0%91-%E8%AE%BE%E8%AE%A1.md), [3D可视化设计规范](3D%E5%8F%AF%E8%A7%86%E5%8C%96%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83.md)*

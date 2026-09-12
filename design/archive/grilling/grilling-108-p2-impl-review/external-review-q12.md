@@ -34,7 +34,7 @@ WcDynamics.Step(...)
 因此：
 
 - `SPending` **继续只承担事件累加**；
-- `s_env[69]` 作为 CombatState 的稳定态缓存，空间/情境刷新时重算；
+- `s_env[69]` 作为 CombatState 的稳定态缓存，design/space/情境刷新时重算；
 - Q8 的情境重选在下一回合 Phase 1 才体现；
 - `m_field` 每回合重新计算，因为它依赖参与者的 SAN；
 - `WcDynamics.Step` **签名不改**。

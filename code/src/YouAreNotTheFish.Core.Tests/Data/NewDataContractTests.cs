@@ -11,9 +11,9 @@ public class AlphaPatternsContractTests
 {
     private static readonly string[] DataDirCandidates =
     [
-        Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "..", "data"),
+        Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "..", "..", "data"),
         Path.GetFullPath(Path.Combine(AppContext.BaseDirectory,
-            "..", "..", "..", "..", "..", "..", "data")),
+            "..", "..", "..", "..", "..", "..", "..", "data")),
         "/home/dog/game/data",
     ];
 
@@ -136,9 +136,9 @@ public class EnvTonesContractTests
 {
     private static readonly string[] DataDirCandidates =
     [
-        Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "..", "data"),
+        Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "..", "..", "data"),
         Path.GetFullPath(Path.Combine(AppContext.BaseDirectory,
-            "..", "..", "..", "..", "..", "..", "data")),
+            "..", "..", "..", "..", "..", "..", "..", "data")),
         "/home/dog/game/data",
     ];
 
@@ -216,9 +216,9 @@ public class MoonlightLandingContractTests
 {
     private static readonly string[] DataDirCandidates =
     [
-        Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "..", "data"),
+        Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "..", "..", "data"),
         Path.GetFullPath(Path.Combine(AppContext.BaseDirectory,
-            "..", "..", "..", "..", "..", "..", "data")),
+            "..", "..", "..", "..", "..", "..", "..", "data")),
         "/home/dog/game/data",
     ];
 

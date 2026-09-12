@@ -8,7 +8,7 @@ CGI-S范围: 3-7（建议；人格障碍亦可 4-7 起步——项目定案时�
 
 # 边缘型人格障碍（BPD）重映射试点
 
-> 26 病重映射第二批（Grilling #88 Q0.6；**新增病**，Q0.2 P1 必加）。纯文献驱动，无旧文件。本文件把 BPD 重映射为三体模型上的 **13 条病理边**（全部命中 `tripartite_model.json` 现有边，0 条"病理新增"）。核心病理 = **情绪失调**（杏仁核→PAG 高反应「太多驱动」+ vlPFC→杏仁核 抑制↓「太少控制」——Schulze 2016 "too much drive, too little control"）+ **海马高反应**（人际创伤史→情绪记忆）+ **内侧前额叶自我参照异常**（身份紊乱）。7 参数推导（NE +0.2 / 5HT −0.2 / bias_somatic +0.15 / bias_limbic +0.15）与 NPC AI §4.2 标签组合「敏化-威胁 + 抑制不足」完全一致。输出格式照 [ptsd-pilot.md](ptsd-pilot.md) §六 字段规范。
+> 26 病重映射第二批（Grilling #88 Q0.6；**新增病**，Q0.2 P1 必加）。纯文献驱动，无旧文件。本文件把 BPD 重映射为三体模型上的 **13 条病理边**（全部命中 `tripartite_model.json` 现有边，0 条"病理新增"）。核心病理 = **情绪失调**（杏仁核→PAG 高反应「太多驱动」+ vlPFC→杏仁核 抑制↓「太少控制」——Schulze 2016 "too much drive, too little control"）+ **海马高反应**（人际创伤史→情绪记忆）+ **内侧前额叶自我参照异常**（身份紊乱）。7 参数推导（NE +0.2 / 5HT −0.2 / bias_somatic +0.15 / bias_limbic +0.15）与 NPC AI §4.2 标签组合「敏化-威胁 + 抑制不足」完全一致。输出格式照 [ptsd-pilot.md](../disease-pilots/ptsd-pilot.md) §六 字段规范。
 
 ## 目录
 
@@ -176,4 +176,4 @@ CGI-S范围: 3-7（建议；人格障碍亦可 4-7 起步——项目定案时�
 ---
 
 *创建: 2026-08-21 | 更新: 2026-08-21*
-*关联: [grilling-88.md](grilling-88.md), [ptsd-pilot.md](ptsd-pilot.md), [反社会型人格障碍](aspd-pilot.md), [NPC AI 行为模型](../../../规则/技能树系统/NPC AI 行为模型.md) §4/§5.2, [偏侧化架构](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E5%81%8F%E4%BE%A7%E5%8C%96%E6%9E%B6%E6%9E%84.md) §四/§八, [脑功能层级模型](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E8%84%91%E5%8A%9F%E8%83%BD%E5%B1%82%E7%BA%A7%E6%A8%A1%E5%9E%8B.md), [疾病-脑区链路映射-文献数据源](../../../%E5%8F%82%E8%80%83/%E6%96%87%E7%8C%AE/%E7%96%BE%E7%97%85-%E8%84%91%E5%8C%BA%E9%93%BE%E8%B7%AF%E6%98%A0%E5%B0%84-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md) §七, [角色与面具](../../../%E5%AE%9E%E4%BD%93/%E8%A7%92%E8%89%B2%E4%B8%8E%E9%9D%A2%E5%85%B7.md) §8.8, [tripartite_model.json](../../../data/connectivity/tripartite_model.json)*
+*关联: [grilling-88.md](../disease-pilots/grilling-88.md), [ptsd-pilot.md](../disease-pilots/ptsd-pilot.md), [反社会型人格障碍](../disease-pilots/aspd-pilot.md), [NPC AI 行为模型](../../../rules/skill-tree/NPC%20AI%20%E8%A1%8C%E4%B8%BA%E6%A8%A1%E5%9E%8B.md) §4/§5.2, [偏侧化架构](../../../rules/skill-tree/%E5%81%8F%E4%BE%A7%E5%8C%96%E6%9E%B6%E6%9E%84.md) §四/§八, [脑功能层级模型](../../../rules/skill-tree/%E8%84%91%E5%8A%9F%E8%83%BD%E5%B1%82%E7%BA%A7%E6%A8%A1%E5%9E%8B.md), [疾病-脑区链路映射-文献数据源](../../../../reference/literature/%E7%96%BE%E7%97%85-%E8%84%91%E5%8C%BA%E9%93%BE%E8%B7%AF%E6%98%A0%E5%B0%84-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md) §七, [角色与面具](../../../entities/%E8%A7%92%E8%89%B2%E4%B8%8E%E9%9D%A2%E5%85%B7.md) §8.8, [tripartite_model.json](../../../../data/connectivity/tripartite_model.json)*

@@ -195,7 +195,7 @@ Grilling #96（实现 issue）的实现规划——把冻结设计（#95 Q1-Q19 
 
 | 决策 | 摘要 | 写入文件 | 位置 | 状态 |
 |---|---|---|---|---|
-| Q0-Q14 | 脚本 4 实现合同全量 | docs/决策树/ | #98 条目「决策（Q0-Q14）」 | ✅ 已验证 |
+| Q0-Q14 | 脚本 4 实现合同全量 | design/decisions/ | #98 条目「决策（Q0-Q14）」 | ✅ 已验证 |
 | Q0-Q14 | 决策日志 + 验证表 | grilling-96.md | 全文 | ✅ 已验证 |
 | 实现合同 | #96 issue body 更新 + 标签转换 | GitHub issue #96 | body + needs-triage→ready-for-agent | ✅ 已验证 |
 | 关闭 | #98 关闭 + 总结评论 | GitHub issue #98 | 评论 + close | ✅ 已验证 |

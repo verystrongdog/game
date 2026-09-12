@@ -11,9 +11,9 @@ validate_cross_refs.py — 跨文件引用完整性校验
 输出符合 review-plan --pre-check 格式（对齐 grilling-质量保障体系-v2.md §5.4）。
 
 用法:
-  python3 tools/validate_cross_refs.py                  # 扫描全部
-  python3 tools/validate_cross_refs.py --format json     # JSON 输出
-  python3 tools/validate_cross_refs.py --output report.json
+  python3 code/tools/validate_cross_refs.py                  # 扫描全部
+  python3 code/tools/validate_cross_refs.py --format json     # JSON 输出
+  python3 code/tools/validate_cross_refs.py --output report.json
 """
 
 import json
@@ -98,7 +98,7 @@ def extract_links(filepath: Path) -> list[dict]:
             parent_name = fm_match.group(1).strip()
             # 剥离括号注释——源材料常写「人格障碍（Q0.5 新建父类；原 社会认知障碍 迁出）」
             parent_name = re.sub(r'[（(][^）)]*[）)]', '', parent_name).strip()
-            parent_path = f"实体/疾病目录/_父类/{parent_name}.md"
+            parent_path = f"design/entities/diseases/_parent-classes/{parent_name}.md"
             links.append({
                 "type": "frontmatter_parent",
                 "target": parent_path,

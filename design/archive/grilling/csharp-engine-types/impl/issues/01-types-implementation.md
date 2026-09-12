@@ -26,7 +26,7 @@ spec v1.1 已批准的 20 个新文件（17 个 Types/ + 2 个 Data/ 补充 + �
 
 本 issue 独占修改（grep 已确认无其他进行中 work issue 冲突）：
 
-新建 `src/YouAreNotTheFish.Core/Types/`：
+新建 `code/src/YouAreNotTheFish.Core/Types/`：
 - `WcState.cs` — float[69] A，构造防御性拷贝
 - `ToneState.cs` — Ne/DaVta/DaSnc/Ht5
 - `GurneyState.cs` — Somatic/Cognitive/Limbic float[5]（GurneyPopulation 索引序）
@@ -43,13 +43,13 @@ spec v1.1 已批准的 20 个新文件（17 个 Types/ + 2 个 Data/ 补充 + �
 - `DeterministicRng.cs` — splitmix64 [NEW]
 - `CalibrationConfig.cs` — instance record + static Default（plan §七 全表）
 
-新建 `src/YouAreNotTheFish.Core/Data/`：
+新建 `code/src/YouAreNotTheFish.Core/Data/`：
 - `GameData.cs` — 5 字段聚合（§2.12 表）
 
-修改 `src/YouAreNotTheFish.Core/Data/`：
+修改 `code/src/YouAreNotTheFish.Core/Data/`：
 - `GameDataLoader.cs` — 新增 `LoadAll(string dataDir)`（不改动现有 5 方法）
 
-新建 `src/YouAreNotTheFish.Core.Tests/`：
+新建 `code/src/YouAreNotTheFish.Core.Tests/`：
 - `Types/ParticipantStateTests.cs` — AC-3/AC-5
 - `Types/DeterministicRngTests.cs` — AC-6
 - `Types/CombatActionTests.cs` — AC-8
@@ -58,7 +58,7 @@ spec v1.1 已批准的 20 个新文件（17 个 Types/ + 2 个 Data/ 补充 + �
 - `Types/CombatEventsTests.cs` — AC-4（事件构造 + 字段完整性）
 - `Data/GameDataLoadAllTests.cs` — AC-7
 
-不碰：`src/YouAreNotTheFish.Core/Types/SpeedComponents.cs`（0 字节占位，step 7）、`src/YouAreNotTheFish.Core.Tests/Data/GameDataLoaderTests.cs`（数据层已交付测试）、任何 csproj（无需新依赖）。
+不碰：`code/src/YouAreNotTheFish.Core/Types/SpeedComponents.cs`（0 字节占位，step 7）、`code/src/YouAreNotTheFish.Core.Tests/Data/GameDataLoaderTests.cs`（数据层已交付测试）、任何 csproj（无需新依赖）。
 
 ## 完成标准
 
@@ -115,7 +115,7 @@ spec@v1.1 §六 AC-1~AC-10 逐条对照。
 ### 发现的问题
 | # | 问题 | 处置 |
 |----|------|------|
-| 1 | .gitignore 缺陷：Unity 时代规则 `*.csproj`/`*.sln` 误忽略 src/ 下 .NET 源项目文件（csproj/sln 从未入库，fresh clone 无法构建）；`bin/` 未忽略致构建产物被误提交 | 已修复（`2d74f2f`）：规则收窄为根目录 `/*.csproj` `/*.sln` + `[Bb]in/` 入库；csproj/sln 强制入库。流水线建议：提交前 `git status --short` 确认无意外文件 |
+| 1 | .gitignore 缺陷：Unity 时代规则 `*.csproj`/`*.sln` 误忽略 code/src/ 下 .NET 源项目文件（csproj/sln 从未入库，fresh clone 无法构建）；`bin/` 未忽略致构建产物被误提交 | 已修复（`2d74f2f`）：规则收窄为根目录 `/*.csproj` `/*.sln` + `[Bb]in/` 入库；csproj/sln 强制入库。流水线建议：提交前 `git status --short` 确认无意外文件 |
 | 2 | 上次 session 遗留 10 个 Data 层源文件（BrainEnums.cs 等）未提交 | 已随 `07c729b` 一并入库。教训：写代码后立即 add（CLAUDE.md 已规定） |
 | 3 | sync_issues.py 幂等性缺陷：手写 meta 行 `GitHub: #46（…）` 裸 `#` 形式不被解析正则识别（只认 `[#46](link)` 规范形式）→ 每次 sync 都当作新 issue 创建，产生重复 GitHub issue #47/#48/#49 | 已修复：脚本解析/写回正则容忍裸 `#N` 形式；重复 #47/#48/#49 已删除；本 issue 保留 #46 为唯一镜像。meta 行今后一律用 `[#N](url)` 规范形式 |
 
@@ -130,7 +130,7 @@ spec@v1.1 §六 AC-1~AC-10 逐条对照。
 **结转回填**: #4（gates=1.0 初值落地+时序约束声明）✅、#5（行序 canonical 源锁定）✅；#1-3 归 step 9，事件字段已预留。
 
 **发现的问题（3 项，均已处置）**:
-1. .gitignore 误忽略 src/ 下 csproj/sln + 未忽略 bin/ → `2d74f2f` 修复（实现阶段提交纪律：add 前 `git status --short`）
+1. .gitignore 误忽略 code/src/ 下 csproj/sln + 未忽略 bin/ → `2d74f2f` 修复（实现阶段提交纪律：add 前 `git status --short`）
 2. 上次 session 遗留 10 个 Data 层源文件未提交 → 随 `07c729b` 入库
 3. sync_issues.py 对裸 `#N` meta 形式不识别 → 重复 issue #47/#48/#49 已删 + 脚本正则修复（本 issue 唯一镜像 = #46）
 

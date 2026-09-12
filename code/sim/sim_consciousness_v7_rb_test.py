@@ -3,7 +3,7 @@ sim_consciousness_v7_rb_test.py — R-B 内部因果穿透判别三角（模拟�
 =============================================================================================
 研讨论文产物（纯学术，不入游戏正典）。Grilling #94（issue #94）D1-D7 定案落地。
 
-验证 v7 §六（来源：参考/意识结构侧-下一阶段路线-v7.md）：
+验证 v7 §六（来源：reference/意识结构侧-下一阶段路线-v7.md）：
   SM′ = SelfRep ∧ SelfUse ∧ AgencyUse = RB_I ∧ RB_A（D3/D5/D6 冻结的判定器）
   RB_I（SelfRep，R-B 内部因果穿透）= ∃m≠m′, k∈I: P_F(X′_k|do(M=m)) ≠ P_F(X′_k|do(M=m′))
   RB_A（SelfUse∧AgencyUse 合一）= 同上 k∈A，Δ_A(M)>0 结构性条件（边际 do 检验）

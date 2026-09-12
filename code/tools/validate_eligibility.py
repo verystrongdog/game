@@ -1,7 +1,7 @@
 """
 资格签名校验器 — 24 经历型资格门可执行化（回放门 + 反样本测试）
 
-正典依据：规则/技能树系统/创伤记忆转化接口.md §3.2.1（事件→候选集）+
+正典依据：design/rules/skill-tree/创伤记忆转化接口.md §3.2.1（事件→候选集）+
 §3.2.2（批次 1-2 资格签名表，2026-09-06 定案：24/24 经历型全量）。
 
 用途：
@@ -16,8 +16,8 @@
   - 延迟项：[NEW 初值可调] θ_F/θ_N/θ_Dseg（边界样本测试后校准）
 
 用法：
-  python3 tools/validate_eligibility.py --self-test   # 反样本自测
-  python3 tools/validate_eligibility.py patient.json  # 回放单患者
+  python3 code/tools/validate_eligibility.py --self-test   # 反样本自测
+  python3 code/tools/validate_eligibility.py patient.json  # 回放单患者
 """
 
 import json

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """生成 data/cognition_cards.json — 25 张认知卡的完整数据。
 
-用法: python3 tools/gen_cognition_cards.py
+用法: python3 code/tools/gen_cognition_cards.py
 来源: 卡牌系统/认知卡模板.md, data/drives.json
 """
 
@@ -1206,7 +1206,7 @@ def validate_cards(cards: list[dict]) -> list[str]:
 
 
 def main():
-    root = Path(__file__).parent.parent
+    root = Path(__file__).parent.parent.parent
     output_path = root / "data" / "cognition_cards.json"
 
     # 构建

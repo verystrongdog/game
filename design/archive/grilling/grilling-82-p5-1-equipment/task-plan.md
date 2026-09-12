@@ -117,15 +117,15 @@ HP_max  = HP_base + equipment_HP
 | 文件 | 操作 | 类型 |
 |------|------|------|
 | `data/equipment.json` | 新建 | 数据 |
-| `src/YouAreNotTheFish.Core/Types/Equipment.cs` + `EquipmentSet.cs` | 新建 | 代码 |
-| `src/YouAreNotTheFish.Core/Engine/DamageCalculator.cs` | 改写（数值接入） | 代码 |
-| `src/YouAreNotTheFish.Core/Engine/StatusEffects.cs` | 新建（简单状态） | 代码 |
-| `src/YouAreNotTheFish.Core/Engine/MentalWeaponResolver.cs` | 新建 | 代码 |
-| `src/YouAreNotTheFish.Core/Types/Enums.cs`（EquipmentSlot/EffectKind/StatusKind） | 改写 | 代码 |
-| `src/YouAreNotTheFish.Core/Entity/CombatState.cs` | 改写（EquipmentSet/SAN_max/HP_max） | 代码 |
-| `src/YouAreNotTheFish.Core.Tests/` | 新增 | 测试 |
-| `src/YouAreNotTheFish.Console/` | 改写 | 代码 |
-| `docs/决策树/` / `docs/设计框架-六维状态.md` / memory | 追加 | 文档 |
+| `code/src/YouAreNotTheFish.Core/Types/Equipment.cs` + `EquipmentSet.cs` | 新建 | 代码 |
+| `code/src/YouAreNotTheFish.Core/Engine/DamageCalculator.cs` | 改写（数值接入） | 代码 |
+| `code/src/YouAreNotTheFish.Core/Engine/StatusEffects.cs` | 新建（简单状态） | 代码 |
+| `code/src/YouAreNotTheFish.Core/Engine/MentalWeaponResolver.cs` | 新建 | 代码 |
+| `code/src/YouAreNotTheFish.Core/Types/Enums.cs`（EquipmentSlot/EffectKind/StatusKind） | 改写 | 代码 |
+| `code/src/YouAreNotTheFish.Core/Entity/CombatState.cs` | 改写（EquipmentSet/SAN_max/HP_max） | 代码 |
+| `code/src/YouAreNotTheFish.Core.Tests/` | 新增 | 测试 |
+| `code/src/YouAreNotTheFish.Console/` | 改写 | 代码 |
+| `design/decisions/` / `design/framework/six-dimensions.md` / memory | 追加 | 文档 |
 
 ## 九、数据契约与校验
 
@@ -141,12 +141,12 @@ HP_max  = HP_base + equipment_HP
 
 | 校验 | 命令 |
 |------|------|
-| 引擎测试绿 | `dotnet test src/YouAreNotTheFish.Core.Tests` |
+| 引擎测试绿 | `dotnet test code/src/YouAreNotTheFish.Core.Tests` |
 | 槽位冲突 | 双主手/副手冲突 单测 |
 | 数值公式 | weapon_bonus/减伤累加/阈值偏移 单测 |
 | 简单状态 | 流血回合结算/暴击+10%/反伤/debuff 单测 |
 | 精神武器 | m 阈值边界/M1 占用/冷却 单测 |
-| 交叉引用 | `python3 tools/validate_cross_refs.py` |
+| 交叉引用 | `python3 code/tools/validate_cross_refs.py` |
 
 ## 十、验收标准
 
@@ -170,4 +170,4 @@ HP_max  = HP_base + equipment_HP
 ---
 
 *创建: 2026-08-16 | 更新: 2026-08-16*
-*关联: [Grilling #70 路线图 task-plan](./../grilling-70-engine-roadmap/task-plan.md), [武器与装备](../../../%E5%AE%9E%E4%BD%93/%E6%AD%A6%E5%99%A8%E4%B8%8E%E8%A3%85%E5%A4%87.md), [核心机制](../../../%E8%A7%84%E5%88%99/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md), [Grilling #73 P1b task-plan](./../grilling-73-p1b-linkstate/task-plan.md), [Grilling #77 P4d task-plan](./../grilling-77-p4d-crit/task-plan.md), [数学语言书写规范](../../../docs/agents/math-language-writing.md)*
+*关联: [Grilling #70 路线图 task-plan](../grilling-70-engine-roadmap/task-plan.md), [武器与装备](../../../entities/%E6%AD%A6%E5%99%A8%E4%B8%8E%E8%A3%85%E5%A4%87.md), [核心机制](../../../rules/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md), [Grilling #73 P1b task-plan](../grilling-73-p1b-linkstate/task-plan.md), [Grilling #77 P4d task-plan](../grilling-77-p4d-crit/task-plan.md), [数学语言书写规范](../../../conventions/agents/math-language-writing.md)*

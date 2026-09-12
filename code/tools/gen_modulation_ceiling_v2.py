@@ -38,7 +38,7 @@ import numpy as np
 from pathlib import Path
 from collections import defaultdict
 
-ROOT = Path(__file__).parent.parent
+ROOT = Path(__file__).parent.parent.parent
 
 # ═══════════════════════════════════════════════════
 # A. Momi 2025 兴奋性梯度 — modulation ceiling
@@ -739,7 +739,7 @@ def gen_markdown(results):
     lines.append('')
     lines.append('*生成: 2026-07-27 | 三因子模型 v2.0*')
     lines.append('*文献: Momi et al. (2025) Nat Commun, Hansen et al. (2024) Nat Neurosci, Pajevic et al. (2023) eLife*')
-    lines.append('*JSON: [link_modulation_ceiling_v2.json](../data/connectivity/link_modulation_ceiling_v2.json)*')
+    lines.append('*JSON: [link_modulation_ceiling_v2.json](../../data/connectivity/link_modulation_ceiling_v2.json)*')
 
     output_md = ROOT / '技能树系统/链路调制上限参考表-v2.md'
     with open(output_md, 'w') as f:

@@ -78,7 +78,7 @@ ActionResolver 兑换结算（ConvertHpToSan/ConvertSanToHp dispatch）:
 
 | # | 任务 | 类型 | 产出 | 依赖 |
 |---|------|------|------|------|
-| T1 | 正典注：核心机制 §5.3 补边界注（花费后 ≥1、per-participant 累计、不产事件） | 文档 | `规则/核心机制.md` | D3/D4 |
+| T1 | 正典注：核心机制 §5.3 补边界注（花费后 ≥1、per-participant 累计、不产事件） | 文档 | `design/rules/核心机制.md` | D3/D4 |
 | T2 | `ActionKind` 扩展 + payload 花费量 + M1 通道校验 | 代码 | `Types/Enums.cs` + `Types/CombatAction.cs` | D1 |
 | T3 | `CombatState` 累计字段（ConvertHpToSanTotal/ConvertSanToHpTotal） | 代码 | `Entity/CombatState.cs` | D3 |
 | T4 | 兑换结算器（校验链 → 分段公式 → 应用+累计） | 代码 | `Flow/ActionResolver.cs` | T2/T3 |
@@ -89,13 +89,13 @@ ActionResolver 兑换结算（ConvertHpToSan/ConvertSanToHp dispatch）:
 
 | 文件 | 操作 | 类型 |
 |------|------|------|
-| `规则/核心机制.md`（§5.3 边界注） | 改写 | 文档 |
-| `src/YouAreNotTheFish.Core/Types/Enums.cs` + `CombatAction.cs` | 改写 | 代码 |
-| `src/YouAreNotTheFish.Core/Entity/CombatState.cs` | 改写（累计字段） | 代码 |
-| `src/YouAreNotTheFish.Core/Flow/ActionResolver.cs` | 改写（兑换结算） | 代码 |
-| `src/YouAreNotTheFish.Core.Tests/` | 新增 | 测试 |
-| `src/YouAreNotTheFish.Console/` | 改写 | 代码 |
-| `docs/决策树/` / `docs/设计框架-六维状态.md` / memory | 追加 | 文档 |
+| `design/rules/核心机制.md`（§5.3 边界注） | 改写 | 文档 |
+| `code/src/YouAreNotTheFish.Core/Types/Enums.cs` + `CombatAction.cs` | 改写 | 代码 |
+| `code/src/YouAreNotTheFish.Core/Entity/CombatState.cs` | 改写（累计字段） | 代码 |
+| `code/src/YouAreNotTheFish.Core/Flow/ActionResolver.cs` | 改写（兑换结算） | 代码 |
+| `code/src/YouAreNotTheFish.Core.Tests/` | 新增 | 测试 |
+| `code/src/YouAreNotTheFish.Console/` | 改写 | 代码 |
+| `design/decisions/` / `design/framework/six-dimensions.md` / memory | 追加 | 文档 |
 
 ## 八、数据契约与校验
 
@@ -111,12 +111,12 @@ ActionResolver 兑换结算（ConvertHpToSan/ConvertSanToHp dispatch）:
 
 | 校验 | 命令 |
 |------|------|
-| 引擎测试绿 | `dotnet test src/YouAreNotTheFish.Core.Tests` |
+| 引擎测试绿 | `dotnet test code/src/YouAreNotTheFish.Core.Tests` |
 | 分段公式 | 满额/半额/边界（10 HP、15 HP、20 SAN 等）单测 |
 | 上限 | 单次超限拒绝；累计超限拒绝 单测 |
 | 边界 | 花费后 =0 拒绝 单测 |
 | 通道互斥 | Convert + PhysicalAttack 同回合非法 单测 |
-| 交叉引用 | `python3 tools/validate_cross_refs.py` |
+| 交叉引用 | `python3 code/tools/validate_cross_refs.py` |
 
 ## 九、验收标准
 
@@ -138,4 +138,4 @@ ActionResolver 兑换结算（ConvertHpToSan/ConvertSanToHp dispatch）:
 ---
 
 *创建: 2026-08-16 | 更新: 2026-08-16*
-*关联: [Grilling #70 路线图 task-plan](./../grilling-70-engine-roadmap/task-plan.md), [核心机制](../../../%E8%A7%84%E5%88%99/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md), [回合战斗流程](../../../%E8%A7%84%E5%88%99/%E5%9B%9E%E5%90%88%E6%88%98%E6%96%97%E6%B5%81%E7%A8%8B.md), [数学语言书写规范](../../../docs/agents/math-language-writing.md)*
+*关联: [Grilling #70 路线图 task-plan](../grilling-70-engine-roadmap/task-plan.md), [核心机制](../../../rules/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md), [回合战斗流程](../../../rules/%E5%9B%9E%E5%90%88%E6%88%98%E6%96%97%E6%B5%81%E7%A8%8B.md), [数学语言书写规范](../../../conventions/agents/math-language-writing.md)*

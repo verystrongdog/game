@@ -7,7 +7,7 @@
   3. CGI-S 域扩展表 → 链路分组表（保留结构，域→链路分组语义，2026-08-03）
   4. 父类 frontmatter: 去功能域定性方向（保留默认病理类型/默认标签）
 
-输入: 实体/疾病目录/*.md + link_name_lookup.json + link_registry.json
+输入: design/entities/diseases/*.md + link_name_lookup.json + link_registry.json
 输出: 同文件（就地迁移）
 """
 import json
@@ -15,7 +15,7 @@ import re
 import sys
 from pathlib import Path
 
-DISEASE_DIR = Path('实体/疾病目录')
+DISEASE_DIR = Path('design/entities/疾病目录')
 
 
 def main():

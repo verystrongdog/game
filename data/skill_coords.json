@@ -1,6 +1,6 @@
 {
   "_description": "74技能节点坐标映射: PAD推导(旧) → MNI解剖(新)",
-  "_source": "Phase 2: tools/map_skills_to_regions.py",
+  "_source": "Phase 2: code/tools/map_skills_to_regions.py",
   "_created": "2026-07-11",
   "_stats": {
     "total_skills": 74,

@@ -46,11 +46,11 @@ spec v1.2 已获批，但三个加载器代码尚不存在——运行时拿不�
 
 ## 文件所有权声明
 
-- `src/YouAreNotTheFish.Core/Data/WsensoryMatrix.cs` — 新建
-- `src/YouAreNotTheFish.Core/Data/SituationPrimitives.cs` — 新建（SituationArchetype/RdocProfile/AppraisalProfile/SituationPrimitives 四类型）
-- `src/YouAreNotTheFish.Core/Data/SignalTypesCatalog.cs` — 新建（SignalTypesCatalog/SignalCategory/SignalSubtype 三类型）
-- `src/YouAreNotTheFish.Core/Data/GameDataLoader.cs` — 扩展（3 新方法 + LoadWsensory 的 RegionIds 后处理）
-- `src/YouAreNotTheFish.Core.Tests/Data/GameDataLoaderTests.cs` — 扩展（新测试 + 现有 2 测试的 membership 断言扩展）
+- `code/src/YouAreNotTheFish.Core/Data/WsensoryMatrix.cs` — 新建
+- `code/src/YouAreNotTheFish.Core/Data/SituationPrimitives.cs` — 新建（SituationArchetype/RdocProfile/AppraisalProfile/SituationPrimitives 四类型）
+- `code/src/YouAreNotTheFish.Core/Data/SignalTypesCatalog.cs` — 新建（SignalTypesCatalog/SignalCategory/SignalSubtype 三类型）
+- `code/src/YouAreNotTheFish.Core/Data/GameDataLoader.cs` — 扩展（3 新方法 + LoadWsensory 的 RegionIds 后处理）
+- `code/src/YouAreNotTheFish.Core.Tests/Data/GameDataLoaderTests.cs` — 扩展（新测试 + 现有 2 测试的 membership 断言扩展）
 
 ## 完成标准
 

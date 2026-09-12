@@ -17,7 +17,7 @@
 | # | 文献 | 类型 | 关键数据点（→ 病理边用途） |
 |---|------|------|--------------------------|
 | 1 | **Boeckle et al. (2016)** *NeuroImage: Clinical*（躯体形式障碍神经影像 meta 分析, PMID [27182487](https://pubmed.ncbi.nlm.nih.gov/27182487/)） | 功能影像 meta | 躯体形式障碍**高激活：前扣带（ACC）、前脑岛、感觉运动区**；前额叶低激活 → 内感受域核心边（e01/e02/e03）+ 调控域抑制↓（e10）的方向/范围锚 |
-| 2 | **RDoC v4（NIMH）** | 回路矩阵 | **内感受域（Interoception）**：前脑岛（初级内感受皮层）+ ACC 内感受过敏——躯体症状=内感受信号异常放大（[疾病-脑区链路映射-文献数据源.md](../../../%E5%8F%82%E8%80%83/%E6%96%87%E7%8C%AE/%E7%96%BE%E7%97%85-%E8%84%91%E5%8C%BA%E9%93%BE%E8%B7%AF%E6%98%A0%E5%B0%84-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md) §四.2 岛叶跨 4 RDoC 域）；急性威胁回路杏仁核→ACC/岛叶 → e07/e08 焦虑放大锚 |
+| 2 | **RDoC v4（NIMH）** | 回路矩阵 | **内感受域（Interoception）**：前脑岛（初级内感受皮层）+ ACC 内感受过敏——躯体症状=内感受信号异常放大（[疾病-脑区链路映射-文献数据源.md](../../../../reference/literature/%E7%96%BE%E7%97%85-%E8%84%91%E5%8C%BA%E9%93%BE%E8%B7%AF%E6%98%A0%E5%B0%84-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md) §四.2 岛叶跨 4 RDoC 域）；急性威胁回路杏仁核→ACC/岛叶 → e07/e08 焦虑放大锚 |
 | 3 | **Boeckle et al. (2016)** *BMC Psychiatry*（转换障碍神经影像 meta 分析, PMID [27283002](https://pubmed.ncbi.nlm.nih.gov/27283002/)） | 功能影像 meta | 转换/躯体症状：**边缘系统（杏仁核/岛叶/ACC）高激活 + 感觉运动/前额叶低激活** → 转化接口边（e08）+ 体感放大边（e12）+ 抑制不足边（e10） |
 
 **辅助锚（方向/范围补充）**：
@@ -150,4 +150,4 @@
 ---
 
 *创建: 2026-08-21 | 更新: 2026-08-21*
-*关联: [grilling-88.md](grilling-88.md), [躯体症状障碍](../../../%E5%AE%9E%E4%BD%93/%E7%96%BE%E7%97%85%E7%9B%AE%E5%BD%95/%E8%BA%AF%E4%BD%93%E7%97%87%E7%8A%B6%E9%9A%9C%E7%A2%8D.md)（Q0.2 新增待建）, [NPC AI 行为模型](../../../规则/技能树系统/NPC AI 行为模型.md) §4/§5.2, [偏侧化架构](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E5%81%8F%E4%BE%A7%E5%8C%96%E6%9E%B6%E6%9E%84.md) §四/§八, [脑功能层级模型](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E8%84%91%E5%8A%9F%E8%83%BD%E5%B1%82%E7%BA%A7%E6%A8%A1%E5%9E%8B.md) §十八, [疾病-脑区链路映射-文献数据源](../../../%E5%8F%82%E8%80%83/%E6%96%87%E7%8C%AE/%E7%96%BE%E7%97%85-%E8%84%91%E5%8C%BA%E9%93%BE%E8%B7%AF%E6%98%A0%E5%B0%84-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md) §二/§四, [tripartite_model.json](../../../data/connectivity/tripartite_model.json)*
+*关联: [grilling-88.md](../disease-pilots/grilling-88.md), [躯体症状障碍](../../../entities/diseases/%E8%BA%AF%E4%BD%93%E7%97%87%E7%8A%B6%E9%9A%9C%E7%A2%8D.md)（Q0.2 新增待建）, [NPC AI 行为模型](../../../rules/skill-tree/NPC%20AI%20%E8%A1%8C%E4%B8%BA%E6%A8%A1%E5%9E%8B.md) §4/§5.2, [偏侧化架构](../../../rules/skill-tree/%E5%81%8F%E4%BE%A7%E5%8C%96%E6%9E%B6%E6%9E%84.md) §四/§八, [脑功能层级模型](../../../rules/skill-tree/%E8%84%91%E5%8A%9F%E8%83%BD%E5%B1%82%E7%BA%A7%E6%A8%A1%E5%9E%8B.md) §十八, [疾病-脑区链路映射-文献数据源](../../../../reference/literature/%E7%96%BE%E7%97%85-%E8%84%91%E5%8C%BA%E9%93%BE%E8%B7%AF%E6%98%A0%E5%B0%84-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md) §二/§四, [tripartite_model.json](../../../../data/connectivity/tripartite_model.json)*

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """综合验证脚本：检查 emotion_cards.json 和 cognition_cards.json 的完整性、一致性和数值范围。
 
-用法: python3 tools/validate_cards.py
+用法: python3 code/tools/validate_cards.py
 """
 
 import json
@@ -22,7 +22,7 @@ def validate_emotion_cards(data: dict) -> list[str]:
         errors.append(f"情绪卡数量: {len(cards)} ≠ 15")
 
     # 加载参考数据
-    root = Path(__file__).parent.parent
+    root = Path(__file__).parent.parent.parent
     with open(root / "data" / "emotions.json", encoding="utf-8") as f:
         ref = json.load(f)
     ref_emos = {e["id"]: e for e in ref.get("emotions", [])}
@@ -298,7 +298,7 @@ def validate_cognition_cards(data: dict) -> list[str]:
 
 
 def main():
-    root = Path(__file__).parent.parent
+    root = Path(__file__).parent.parent.parent
     all_errors = []
 
     # ── 加载文件 ──

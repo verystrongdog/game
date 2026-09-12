@@ -2,7 +2,7 @@
   "_description": "Grilling #26 follow-up — curated cross-level pathways bypassing |Δlevel|≤1 (R5) and brainstem eligibility (R9) constraints. Each entry is an anatomically documented connection blocked by the tripartite model's structural rules but verified in the neuroanatomical literature.",
   "_created": "2026-08-07",
   "_generated_by": "manual curation (Explore agent analysis of 390 EDR-passing blocked pairs)",
-  "_design_doc": "规则/技能树系统/脑功能层级模型.md §二十.4",
+  "_design_doc": "design/rules/skill-tree/脑功能层级模型.md §二十.4",
   "_usage": "Loaded by build_tripartite_model.py → generate_privileged_pathways(). Bypasses |Δlevel|≤1 and R9 brainstem eligibility. EDR p≥0.10 still enforced.",
   "_total_pathways": 61,
 

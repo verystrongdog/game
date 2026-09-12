@@ -5,7 +5,7 @@
 输入: 目标文件列表 + region_name_map.json
 输出: 迁移报告（每个文件改了多少处、未命中清单）
 
-用法: python3 tools/rename_regions.py <文件或目录...>
+用法: python3 code/tools/rename_regions.py <文件或目录...>
 """
 import json
 import re
@@ -27,7 +27,7 @@ def main():
     )
 
     if len(sys.argv) < 2:
-        print("用法: python3 tools/rename_regions.py <文件或目录...>")
+        print("用法: python3 code/tools/rename_regions.py <文件或目录...>")
         sys.exit(1)
 
     total = {'changed': 0, 'files': 0, 'misses': {}}

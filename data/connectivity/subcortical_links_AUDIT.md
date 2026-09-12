@@ -1,6 +1,6 @@
 # subcortical_links.json 对抗性审核报告
 
-> 逐条验证 `data/connectivity/subcortical_links.json` 中 11 条皮下-皮下连接的文献引用。交叉引用 `参考/文献/疾病-脑区链路映射-文献数据源.md` 作为区域级佐证，PubMed 摘要为逐引用验证依据。
+> 逐条验证 `data/connectivity/subcortical_links.json` 中 11 条皮下-皮下连接的文献引用。交叉引用 `reference/literature/疾病-脑区链路映射-文献数据源.md` 作为区域级佐证，PubMed 摘要为逐引用验证依据。
 
 ## 目录
 
@@ -334,4 +334,4 @@ JSON `_method` 声明标准：「每条连接需有至少一篇同行评审文�
 ---
 
 *创建: 2026-08-01 | 审核: 14 条引用中 5 条为 DTI 原始研究，3 条存在事实性错误*
-*关联: [subcortical_links.json](subcortical_links.json), [疾病-脑区链路映射-文献数据源.md](../../参考/文献/疾病-脑区链路映射-文献数据源.md)*
+*关联: [subcortical_links.json](subcortical_links.json), [疾病-脑区链路映射-文献数据源.md](../../reference/literature/%E7%96%BE%E7%97%85-%E8%84%91%E5%8C%BA%E9%93%BE%E8%B7%AF%E6%98%A0%E5%B0%84-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md)*

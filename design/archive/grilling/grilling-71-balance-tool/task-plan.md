@@ -21,9 +21,9 @@
 
 ## 一、背景与动机
 
-引擎核心已交付（294/294 绿，确定性 RNG 注入，同种子同输出），但 E-5 校准常量群（[引擎数据关系规格 §七](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E5%BC%95%E6%93%8E%E6%95%B0%E6%8D%AE%E5%85%B3%E7%B3%BB%E8%A7%84%E6%A0%BC.md)）全部为 `[NEW]` 占位：`δ_scale=0.3`、`M1SustainPenalty=-0.1`、`PerceptionThreshold=0.15`、`ScaleMental=1.0(禁用)`、`MaxRounds=50`、4 静息常量（`SpeedScoreCalculator` 硬编码）。#35（战斗输出权重校准）因"缺少实现反馈"暂停（#35 body）——本工具正是该反馈的提供者。战斗长度目标（杂兵 4-6 / 精英 8-10 / Boss 16-20 回合，[核心机制 §10.2](../../../%E8%A7%84%E5%88%99/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md)）是"引擎产生合理战斗结果"的第一门禁。
+引擎核心已交付（294/294 绿，确定性 RNG 注入，同种子同输出），但 E-5 校准常量群（[引擎数据关系规格 §七](../../../rules/skill-tree/%E5%BC%95%E6%93%8E%E6%95%B0%E6%8D%AE%E5%85%B3%E7%B3%BB%E8%A7%84%E6%A0%BC.md)）全部为 `[NEW]` 占位：`δ_scale=0.3`、`M1SustainPenalty=-0.1`、`PerceptionThreshold=0.15`、`ScaleMental=1.0(禁用)`、`MaxRounds=50`、4 静息常量（`SpeedScoreCalculator` 硬编码）。#35（战斗输出权重校准）因"缺少实现反馈"暂停（#35 body）——本工具正是该反馈的提供者。战斗长度目标（杂兵 4-6 / 精英 8-10 / Boss 16-20 回合，[核心机制 §10.2](../../../rules/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md)）是"引擎产生合理战斗结果"的第一门禁。
 
-承接 [Grilling #70 P0 并行校准轨](./../grilling-70-engine-roadmap/task-plan.md) §四。
+承接 [Grilling #70 P0 并行校准轨](../grilling-70-engine-roadmap/task-plan.md) §四。
 
 ## 二、决策清单
 
@@ -45,7 +45,7 @@
 │  产出: 每场摘要 JSON（五组指标原始值 + 事件日志指针）                               │
 └──────────────────────────┬──────────────────────────────────────────────────────┘
                            │ data/calibration/raw/<run>.json
-┌─ Python 侧：tools/balance_report.py（分析壳，零公式复刻）────────────────────────┐
+┌─ Python 侧：code/tools/balance_report.py（分析壳，零公式复刻）────────────────────────┐
 │  读 raw → 聚合（中位数/分位数/直方图/分布）→ data/calibration/reports/<run>.md     │
 │  + 可选图表（matplotlib: 回合数直方图/tone 动态范围热力图）                          │
 └──────────────────────────────────────────────────────────────────────────────────┘
@@ -56,7 +56,7 @@
 ## 四、CLI 规格
 
 ```
-dotnet run --project src/YouAreNotTheFish.Balance -- \
+dotnet run --project code/src/YouAreNotTheFish.Balance -- \
   --battles 1000          # 每配置场次数
   --seed 42               # 全局种子（确定性可复现；per-battle 种子 = hash(seed, battleIndex, config)）
   --scan <param>:<min>:<max>:<steps>   # 参数矩阵扫描（可重复指定多参数；参数 ∈ CalibrationConfig 字段）
@@ -95,9 +95,9 @@ dotnet run --project src/YouAreNotTheFish.Balance -- \
 | 项 | 状态 | 说明 |
 |----|------|------|
 | CalibrationConfig 注入 | ✅ 已就位 | instance record + static Default（`CalibrationConfig.cs` 注释：sign-off 结转 #4 蒙特卡洛参数 sweep 需要实例化注入）；经 `CombatContext.Calibration` 传递 |
-| E-3 前置（T1） | ⚠️ 需做 | 4 静息常量硬编码于 `SpeedScoreCalculator.cs:21-30` → 迁入 CalibrationConfig（[#70 已归 P0](./../grilling-70-engine-roadmap/task-plan.md)） |
+| E-3 前置（T1） | ⚠️ 需做 | 4 静息常量硬编码于 `SpeedScoreCalculator.cs:21-30` → 迁入 CalibrationConfig（[#70 已归 P0](../grilling-70-engine-roadmap/task-plan.md)） |
 | m_default 注入 | ⚠️ 小改 | `WMatrixBuilder.cs:63` 读 `CalibrationConfig.Default.MDefault`（static）→ 如需 m 扫描需将 config 传入 Build 签名 |
-| T3 Δm | ⚠️ 不在引擎 | Δm 属 P1b LinkState——本次用 Python 公式验证（`tools/validate_dm_curve.py`），引擎内验证延后 P1b |
+| T3 Δm | ⚠️ 不在引擎 | Δm 属 P1b LinkState——本次用 Python 公式验证（`code/tools/validate_dm_curve.py`），引擎内验证延后 P1b |
 | 校准决策归属 | ✅ 已定 | 工具只产报告；常量值由 #35 grilling 裁决后回填 CalibrationConfig |
 
 ## 八、任务分解
@@ -105,32 +105,32 @@ dotnet run --project src/YouAreNotTheFish.Balance -- \
 | # | 任务 | 类型 | 产出 | 依赖 |
 |---|------|------|------|------|
 | T1 | E-3 前置：4 静息常量迁入 CalibrationConfig，SpeedScoreCalculator 去硬编码 | 代码 | `CalibrationConfig.cs` + `SpeedScoreCalculator.cs` + 测试 | — |
-| T2 | 新建 `YouAreNotTheFish.Balance` 工程（CLI 解析 + 场景模板加载 + 输出框架） | 代码 | `src/YouAreNotTheFish.Balance/` | T1 |
+| T2 | 新建 `YouAreNotTheFish.Balance` 工程（CLI 解析 + 场景模板加载 + 输出框架） | 代码 | `code/src/YouAreNotTheFish.Balance/` | T1 |
 | T3 | 场景模板库：demo + 敌人与事件 §4.1 全敌人类型（取中值）→ JSON | 数据 | `data/calibration/scenarios.json` | D5 |
 | T4 | 批量模拟器核心：N 场循环 + 参数矩阵扫描 + 每场五组指标原始值 + 确定性 JSON 输出 | 代码 | `data/calibration/raw/<run>.json` | T2/T3 |
-| T5 | Python 分析壳 `tools/balance_report.py`：五组指标聚合 + 报告 md + 图表 | 代码 | `data/calibration/reports/<run>.md` | T4 |
+| T5 | Python 分析壳 `code/tools/balance_report.py`：五组指标聚合 + 报告 md + 图表 | 代码 | `data/calibration/reports/<run>.md` | T4 |
 | T6 | T0 校准执行：demo/全敌人模板 × 默认常量 → 回合数分布报告 | 执行 | 首份校准报告 | T4/T5 |
 | T7 | F-5 修表：核心机制 §10.1 + 敌人与事件 §十二 敌人 HP 旧值 → 新值（§4.1 权威表） | 文档 | 两处表格 | D5 |
 | T8 | 文档同步：决策树 #71 / 六维状态管线队列 / memory | 文档 | — | 全部 |
 
-> T3（校准目标组）执行于 T6 之后或与 #35 并行：`tools/validate_dm_curve.py` 独立公式验证。
+> T3（校准目标组）执行于 T6 之后或与 #35 并行：`code/tools/validate_dm_curve.py` 独立公式验证。
 
 ## 九、文件清单
 
 | 文件 | 操作 | 类型 |
 |------|------|------|
-| `src/YouAreNotTheFish.Balance/`（Program/CLI/Simulator/ScenarioLoader） | 新建 | 代码 |
-| `src/YouAreNotTheFish.Core/Types/CalibrationConfig.cs` | 改写（+4 静息常量） | 代码 |
-| `src/YouAreNotTheFish.Core/Engine/SpeedScoreCalculator.cs` | 改写（去硬编码） | 代码 |
-| `src/YouAreNotTheFish.Core.Tests/`（E-3 常量注入测试） | 新增 | 测试 |
+| `code/src/YouAreNotTheFish.Balance/`（Program/CLI/Simulator/ScenarioLoader） | 新建 | 代码 |
+| `code/src/YouAreNotTheFish.Core/Types/CalibrationConfig.cs` | 改写（+4 静息常量） | 代码 |
+| `code/src/YouAreNotTheFish.Core/Engine/SpeedScoreCalculator.cs` | 改写（去硬编码） | 代码 |
+| `code/src/YouAreNotTheFish.Core.Tests/`（E-3 常量注入测试） | 新增 | 测试 |
 | `data/calibration/scenarios.json` | 新建 | 数据 |
 | `data/calibration/raw/`（运行时产物） | 新建目录 | 产物 |
 | `data/calibration/reports/`（运行时产物） | 新建目录 | 产物 |
-| `tools/balance_report.py` | 新建 | 代码 |
-| `tools/validate_dm_curve.py` | 新建 | 代码 |
-| `规则/核心机制.md`（§10.1 敌人 HP 表） | 改写（F-5） | 文档 |
-| `实体/敌人与事件.md`（§十二 参数速查） | 改写（F-5） | 文档 |
-| `docs/决策树/` / `docs/设计框架-六维状态.md` / memory | 追加 | 文档 |
+| `code/tools/balance_report.py` | 新建 | 代码 |
+| `code/tools/validate_dm_curve.py` | 新建 | 代码 |
+| `design/rules/核心机制.md`（§10.1 敌人 HP 表） | 改写（F-5） | 文档 |
+| `design/entities/敌人与事件.md`（§十二 参数速查） | 改写（F-5） | 文档 |
+| `design/decisions/` / `design/framework/six-dimensions.md` / memory | 追加 | 文档 |
 
 ## 十、数据契约与校验
 
@@ -145,10 +145,10 @@ dotnet run --project src/YouAreNotTheFish.Balance -- \
 
 | 校验 | 命令 |
 |------|------|
-| 引擎测试绿 | `dotnet test src/YouAreNotTheFish.Core.Tests`（T1 后仍 294+ 绿） |
-| 平衡工具 smoke | `dotnet run --project src/YouAreNotTheFish.Balance -- --battles 10 --seed 1` |
+| 引擎测试绿 | `dotnet test code/src/YouAreNotTheFish.Core.Tests`（T1 后仍 294+ 绿） |
+| 平衡工具 smoke | `dotnet run --project code/src/YouAreNotTheFish.Balance -- --battles 10 --seed 1` |
 | 确定性复现 | 同 seed 跑两次 diff raw JSON |
-| 交叉引用 | `python3 tools/validate_cross_refs.py` |
+| 交叉引用 | `python3 code/tools/validate_cross_refs.py` |
 | F-5 表一致 | grep 敌人 HP 值三处比对 |
 
 ## 十一、验收标准
@@ -174,4 +174,4 @@ dotnet run --project src/YouAreNotTheFish.Balance -- \
 ---
 
 *创建: 2026-08-16 | 更新: 2026-08-16*
-*关联: [csharp-engine plan](../../../规格/引擎/csharp-engine-roadmap.md), [引擎数据关系规格](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E5%BC%95%E6%93%8E%E6%95%B0%E6%8D%AE%E5%85%B3%E7%B3%BB%E8%A7%84%E6%A0%BC.md), [核心机制](../../../%E8%A7%84%E5%88%99/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md), [Grilling #70 路线图 task-plan](./../grilling-70-engine-roadmap/task-plan.md), [数学语言书写规范](../../../docs/agents/math-language-writing.md)*
+*关联: [csharp-engine plan](../../../spec/engine/csharp-engine-roadmap.md), [引擎数据关系规格](../../../rules/skill-tree/%E5%BC%95%E6%93%8E%E6%95%B0%E6%8D%AE%E5%85%B3%E7%B3%BB%E8%A7%84%E6%A0%BC.md), [核心机制](../../../rules/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md), [Grilling #70 路线图 task-plan](../grilling-70-engine-roadmap/task-plan.md), [数学语言书写规范](../../../conventions/agents/math-language-writing.md)*

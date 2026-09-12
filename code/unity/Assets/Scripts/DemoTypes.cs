@@ -1,5 +1,5 @@
 // YANTF 呈现沙盘 — 公共类型（Grilling #122，2026-09-06）
-// 呈现验证载体，非正典实体模板。数值口径对齐 规则/核心机制.md + CalibrationConfig.Default。
+// 呈现验证载体，非正典实体模板。数值口径对齐 design/rules/核心机制.md + CalibrationConfig.Default。
 using System;
 
 namespace YANTF.Demo

@@ -5,8 +5,8 @@ import json
 from pathlib import Path
 from collections import defaultdict
 
-DATA_DIR = Path(__file__).parent.parent / "data"
-OUT_PATH = Path(__file__).parent.parent / "卡牌系统" / "态度效果速查表.md"
+DATA_DIR = Path(__file__).parent.parent.parent / "data"
+OUT_PATH = Path(__file__).parent.parent.parent / "卡牌系统" / "态度效果速查表.md"
 
 data = json.loads((DATA_DIR / "attitudes.json").read_text(encoding='utf-8'))
 
@@ -187,7 +187,7 @@ lines.append('')
 lines.append('---')
 lines.append('')
 lines.append('*生成: 2026-07-10 | 数据源: data/attitudes.json*')
-lines.append('*关联: [卡牌组合逻辑](./卡牌组合逻辑.md), [态度系统](../态度系统/态度系统.md), [attitudes.json](../data/attitudes.json)*')
+lines.append('*关联: [卡牌组合逻辑](%E5%8D%A1%E7%89%8C%E7%BB%84%E5%90%88%E9%80%BB%E8%BE%91.md), [态度系统](../态度系统/态度系统.md), [attitudes.json](../../data/attitudes.json)*')
 
 OUT_PATH.write_text('\n'.join(lines), encoding='utf-8')
 print(f'✓ 写入 {OUT_PATH}')

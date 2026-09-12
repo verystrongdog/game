@@ -99,4 +99,4 @@ public class SmokeTests
 
 ---
 *创建: 2026-08-14 | 更新: 2026-08-14 | 版本: v1.2*
-*关联: [任务issue 01](../../设计归档/grilling/csharp-smoke/design/issues/01-smoke-spec.md), [plan §八/§十](csharp-engine-roadmap.md)*
+*关联: [任务issue 01](../../archive/grilling/csharp-smoke/design/issues/01-smoke-spec.md), [plan §八/§十](csharp-engine-roadmap.md)*

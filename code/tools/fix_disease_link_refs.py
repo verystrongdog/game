@@ -3,14 +3,14 @@
 
 功能: 非线性跳变表/行为覆盖表/组件掉落池表中的链路引用
       从中文链路名转换为新数字主键
-输入: 实体/疾病目录/*.md + link_name_lookup.json + link_registry.json
+输入: design/entities/diseases/*.md + link_name_lookup.json + link_registry.json
 输出: 同文件（就地迁移）
 """
 import json
 import re
 from pathlib import Path
 
-DISEASE_DIR = Path('实体/疾病目录')
+DISEASE_DIR = Path('design/entities/疾病目录')
 
 
 def main():

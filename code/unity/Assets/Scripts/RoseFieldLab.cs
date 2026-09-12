@@ -100,7 +100,7 @@ namespace YANTF.RoseField
             var asset = Resources.Load<TextAsset>(heightmapResource);
             if (asset == null)
                 throw new System.InvalidOperationException(
-                    "找不到高度图资源：Resources/" + heightmapResource + ".bytes（应在 unity/Assets/Resources/YANTF/ 下）");
+                    "找不到高度图资源：Resources/" + heightmapResource + ".bytes（应在 code/unity/Assets/Resources/YANTF/ 下）");
 
             Field = HeightField.FromTextAsset(asset, heightmapSamples, fieldSize, heightmapReliefMeters);
             RoseMesh = RoseMeshFactory.Build(roseCanopyDiameter, roseHeight);

@@ -2,14 +2,14 @@
 """
 run_all_checks.py — Layer 1 预检查编排器
 
-运行 tools/validate_*.py 全部脚本，汇总输出。
+运行 code/tools/validate_*.py 全部脚本，汇总输出。
 检测文件变更，标注需要人类审核的项。
 
 用法:
-  python3 tools/run_all_checks.py                  # 运行全部校验
-  python3 tools/run_all_checks.py --format json     # JSON 输出（供 review-plan --pre-check）
-  python3 tools/run_all_checks.py --changed         # 检测变更文件（不运行校验）
-  python3 tools/run_all_checks.py --output report.json
+  python3 code/tools/run_all_checks.py                  # 运行全部校验
+  python3 code/tools/run_all_checks.py --format json     # JSON 输出（供 review-plan --pre-check）
+  python3 code/tools/run_all_checks.py --changed         # 检测变更文件（不运行校验）
+  python3 code/tools/run_all_checks.py --output report.json
 """
 
 import json

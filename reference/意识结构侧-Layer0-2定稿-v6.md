@@ -2,7 +2,7 @@
 
 > 纯学术研讨产物——**不进游戏设计正典**。结论：结构侧可定义到「复杂自适应自我建模信息处理结构」（四要件合取），但无法推出第一人称主体性——那是 Layer 3 的桥接问题（F4，公设层）。哥德尔定理在本研讨中**不构成**"主体性不可数学化"的证明。
 >
-> **下一阶段（检验框架）见 [意识结构侧-下一阶段路线-v7.md](意识结构侧-下一阶段路线-v7.md)**（Grilling #93：分量级判定/Replication Invariance/跨系统 benchmark/SM 重建/L4 收束/L5 边界）。本文件仍是 Layer 0-2 定义基准。
+> **下一阶段（检验框架）见 [意识结构侧-下一阶段路线-v7.md](%E6%84%8F%E8%AF%86%E7%BB%93%E6%9E%84%E4%BE%A7-%E4%B8%8B%E4%B8%80%E9%98%B6%E6%AE%B5%E8%B7%AF%E7%BA%BF-v7.md)**（Grilling #93：分量级判定/Replication Invariance/跨系统 benchmark/SM 重建/L4 收束/L5 边界）。本文件仍是 Layer 0-2 定义基准。
 
 ## 目录
 
@@ -121,4 +121,4 @@ C_struct ≢ C_phenomenal            —— 未证明相等
 
 ---
 *创建: 2026-08-26 | 更新: 2026-08-27 (开放问题对照 → 见 v7)*
-*关联: [意识结构侧-下一阶段路线-v7.md](意识结构侧-下一阶段路线-v7.md), [sim_consciousness_int_test.py](../sim/sim_consciousness_int_test.py), [sim_consciousness_diff_test.py](../sim/sim_consciousness_diff_test.py), [sim_consciousness_broadcast_test.py](../sim/sim_consciousness_broadcast_test.py), [sim_consciousness_sm_test.py](../sim/sim_consciousness_sm_test.py), [sim_consciousness_cs_attack.py](../sim/sim_consciousness_cs_attack.py), [sim_consciousness_cs4_test.py](../sim/sim_consciousness_cs4_test.py)*
+*关联: [意识结构侧-下一阶段路线-v7.md](%E6%84%8F%E8%AF%86%E7%BB%93%E6%9E%84%E4%BE%A7-%E4%B8%8B%E4%B8%80%E9%98%B6%E6%AE%B5%E8%B7%AF%E7%BA%BF-v7.md), [sim_consciousness_int_test.py](../code/sim/sim_consciousness_int_test.py), [sim_consciousness_diff_test.py](../code/sim/sim_consciousness_diff_test.py), [sim_consciousness_broadcast_test.py](../code/sim/sim_consciousness_broadcast_test.py), [sim_consciousness_sm_test.py](../code/sim/sim_consciousness_sm_test.py), [sim_consciousness_cs_attack.py](../code/sim/sim_consciousness_cs_attack.py), [sim_consciousness_cs4_test.py](../code/sim/sim_consciousness_cs4_test.py)*

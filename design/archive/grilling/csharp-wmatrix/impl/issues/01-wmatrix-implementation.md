@@ -24,10 +24,10 @@ spec v1.1 已批准的 WMatrixBuilder（6 步构建算法）落地为可编译 C
 
 ## 文件所有权声明
 
-本 issue 独占修改（grep 已确认无其他进行中 work issue 冲突；src/YouAreNotTheFish.Core/Engine/ 目录存在且为空）：
+本 issue 独占修改（grep 已确认无其他进行中 work issue 冲突；code/src/YouAreNotTheFish.Core/Engine/ 目录存在且为空）：
 
-- `src/YouAreNotTheFish.Core/Engine/WMatrixBuilder.cs` — 新建
-- `src/YouAreNotTheFish.Core.Tests/Engine/WMatrixBuilderTests.cs` — 新建
+- `code/src/YouAreNotTheFish.Core/Engine/WMatrixBuilder.cs` — 新建
+- `code/src/YouAreNotTheFish.Core.Tests/Engine/WMatrixBuilderTests.cs` — 新建
 
 不碰 csproj（Engine/ 与 Engine tests/ 目录随文件自动纳入，无新依赖）。
 
@@ -42,7 +42,7 @@ spec@v1.1 §六 AC-1 ~ AC-12 逐条对照（见「代码自审」段）。
 ## 代码自审（证据式）
 
 ### 门禁证据
-- [x] `dotnet build` 零错误 —— `Build succeeded. 0 Warning(s) 0 Error(s)`（`src/YouAreNotTheFish.Core.csproj`）
+- [x] `dotnet build` 零错误 —— `Build succeeded. 0 Warning(s) 0 Error(s)`（`code/src/YouAreNotTheFish.Core.csproj`）
 - [x] `dotnet test` 全绿 —— `Passed! - Failed: 0, Passed: 62, Skipped: 0, Total: 62`（其中 WMatrixBuilderTests 12/12）
 
 ### 验收标准逐条对照

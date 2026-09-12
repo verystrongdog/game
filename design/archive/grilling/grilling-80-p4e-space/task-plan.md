@@ -183,17 +183,17 @@ AOE 结算器（范围命中）:
 | 文件 | 操作 | 类型 |
 |------|------|------|
 | `data/battlefields.json` | 新建 | 数据 |
-| `src/YouAreNotTheFish.Core/Types/Position.cs` | 新建 | 代码 |
-| `src/YouAreNotTheFish.Core/Engine/BattlefieldMath.cs` | 新建 | 代码 |
-| `src/YouAreNotTheFish.Core/Engine/ZoneAttack.cs` / `Flanking.cs` / `AoeResolver.cs` | 新建 | 代码 |
-| `src/YouAreNotTheFish.Core/Types/SkillDefinition.cs` | 改写（+Range/Aoe） | 代码 |
-| `src/YouAreNotTheFish.Core/Types/CombatAction.cs` | 改写（+Movement） | 代码 |
-| `src/YouAreNotTheFish.Core/Entity/CombatState.cs` | 改写（+Positions/战场） | 代码 |
-| `src/YouAreNotTheFish.Core/Flow/ActionResolver.cs` | 改写（移动/射程/借机） | 代码 |
-| `src/YouAreNotTheFish.Core/Engine/NpcSalience.cs` | 改写（目标=攻最近） | 代码 |
-| `src/YouAreNotTheFish.Core.Tests/` | 新增 | 测试 |
-| `src/YouAreNotTheFish.Console/` | 改写（多敌方战场演示） | 代码 |
-| `docs/决策树/` / `docs/设计框架-六维状态.md` / memory | 追加 | 文档 |
+| `code/src/YouAreNotTheFish.Core/Types/Position.cs` | 新建 | 代码 |
+| `code/src/YouAreNotTheFish.Core/Engine/BattlefieldMath.cs` | 新建 | 代码 |
+| `code/src/YouAreNotTheFish.Core/Engine/ZoneAttack.cs` / `Flanking.cs` / `AoeResolver.cs` | 新建 | 代码 |
+| `code/src/YouAreNotTheFish.Core/Types/SkillDefinition.cs` | 改写（+Range/Aoe） | 代码 |
+| `code/src/YouAreNotTheFish.Core/Types/CombatAction.cs` | 改写（+Movement） | 代码 |
+| `code/src/YouAreNotTheFish.Core/Entity/CombatState.cs` | 改写（+Positions/战场） | 代码 |
+| `code/src/YouAreNotTheFish.Core/Flow/ActionResolver.cs` | 改写（移动/射程/借机） | 代码 |
+| `code/src/YouAreNotTheFish.Core/Engine/NpcSalience.cs` | 改写（目标=攻最近） | 代码 |
+| `code/src/YouAreNotTheFish.Core.Tests/` | 新增 | 测试 |
+| `code/src/YouAreNotTheFish.Console/` | 改写（多敌方战场演示） | 代码 |
+| `design/decisions/` / `design/framework/six-dimensions.md` / memory | 追加 | 文档 |
 
 ## 十一、数据契约与校验
 
@@ -209,13 +209,13 @@ AOE 结算器（范围命中）:
 
 | 校验 | 命令 |
 |------|------|
-| 引擎测试绿 | `dotnet test src/YouAreNotTheFish.Core.Tests` |
+| 引擎测试绿 | `dotnet test code/src/YouAreNotTheFish.Core.Tests` |
 | 距离 | 网格对角 1.5 / 欧几里得 单测 |
 | LOS | 全高阻断/半高修正/生物挡路 单测 |
 | 移动 | 配额边界/穿越拒绝/软边界逃跑 单测 |
 | 夹击 | 2 敌/3+敌/135° 单测 |
 | 友伤 | 三级难度 AOE 伤害 单测 |
-| 交叉引用 | `python3 tools/validate_cross_refs.py` |
+| 交叉引用 | `python3 code/tools/validate_cross_refs.py` |
 
 ## 十二、验收标准
 
@@ -241,4 +241,4 @@ AOE 结算器（范围命中）:
 ---
 
 *创建: 2026-08-16 | 更新: 2026-08-16*
-*关联: [Grilling #70 路线图 task-plan](./../grilling-70-engine-roadmap/task-plan.md), [回合战斗流程](../../../%E8%A7%84%E5%88%99/%E5%9B%9E%E5%90%88%E6%88%98%E6%96%97%E6%B5%81%E7%A8%8B.md), [Grilling #73 P1b task-plan](./../grilling-73-p1b-linkstate/task-plan.md), [Grilling #76 P3 task-plan](./../grilling-76-p3-npc-affordance/task-plan.md), [Grilling #78 P4a task-plan](./../grilling-78-p4a-flee-surrender/task-plan.md), [数学语言书写规范](../../../docs/agents/math-language-writing.md)*
+*关联: [Grilling #70 路线图 task-plan](../grilling-70-engine-roadmap/task-plan.md), [回合战斗流程](../../../rules/%E5%9B%9E%E5%90%88%E6%88%98%E6%96%97%E6%B5%81%E7%A8%8B.md), [Grilling #73 P1b task-plan](../grilling-73-p1b-linkstate/task-plan.md), [Grilling #76 P3 task-plan](../grilling-76-p3-npc-affordance/task-plan.md), [Grilling #78 P4a task-plan](../grilling-78-p4a-flee-surrender/task-plan.md), [数学语言书写规范](../../../conventions/agents/math-language-writing.md)*

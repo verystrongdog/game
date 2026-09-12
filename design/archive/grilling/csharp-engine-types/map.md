@@ -13,7 +13,7 @@
 ## Decisions-so-far
 
 - [任务issue 01](design/issues/01-types-spec.md) → 4 决策（D1-D4）+ 4 取舍记录 → resolved（2026-08-13）
-- [spec.md v1.0 → v1.1](../../../规格/引擎/csharp-engine-types.md) → 审计退回 → 修复 → Δ审计 pass → L1 修正 ×4
+- [spec.md v1.0 → v1.1](../../../spec/engine/csharp-engine-types.md) → 审计退回 → 修复 → Δ审计 pass → L1 修正 ×4
 - [sign-off](design/audit/sign-off.md) → 批准（2026-08-13）；5 项结转清单随实现验证
 - [工作issue 01](impl/issues/01-types-implementation.md) → 20 文件实现 + 26 测试 → 证据式自审 → resolved（2026-08-13）
 

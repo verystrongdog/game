@@ -11,28 +11,46 @@ import re
 from pathlib import Path
 from collections import namedtuple
 
-ROOT = Path(__file__).parent.parent
+def _find_repo_root() -> Path:
+    """向上查找仓库根（含 .git 的目录）。
+
+    2026-09-12 仓库重构 Phase 3：tools/ 迁至 code/tools/，原 `parent.parent`
+    会被解析成 code/ 而非仓库根。改为按标记向上查找，目录再移动也不会失效。
+    """
+    here = Path(__file__).resolve()
+    for p in [here.parent, *here.parents]:
+        if (p / ".git").exists():
+            return p
+    return here.parent.parent.parent          # 兜底：code/tools/ → 仓库根
+
+
+ROOT = _find_repo_root()
 
 # ============================================================
 # 扫描范围常量 — 单一定义（不再在三个脚本中各自复制）
 # ============================================================
 
 # 活跃文档根目录
-# 2026-09-12 仓库重构 Phase 2：新增「规格」（从 .scratch 迁入的承重资产，需被校验）
-SCAN_ROOTS = ["规则", "实体", "空间", "事件", "呈现", "管线", "docs", "参考", "规格"]
+# 2026-09-12 仓库重构 Phase 3：中文顶层目录改英文，扫描根同步为 design/ 与 reference/。
+# 具体排除项在 EXCLUDE_DIRS（归档、废弃、备份、代码目录等）。
+SCAN_ROOTS = ["design", "reference"]
 
-# 排除目录
+# 排除目录（仓库相对路径前缀或路径片段）
 EXCLUDE_DIRS = {
-    "垃圾桶", ".trash", "参考/废弃", "参考/书籍",
-    ".git", ".claude", ".scratch", "__pycache__",
-    "data", "tools",
-    "设计归档",           # grilling 源记录归档——非活跃正典（同 垃圾桶 的隔离语义）
-    "docs/决策树",        # 决策树历史档案——2026-09-12 拆为目录，等价于原 EXCLUDE_FILE_KEYWORDS "决策树.md"
-    ".refactor-backup",   # 仓库重构期的本地安全备份（非项目内容，重构完成后删除）
+    # 归档 / 废弃 / 备份
+    "design/archive",                 # grilling 源记录 + 垃圾桶（非活跃正典）
+    "design/decisions",               # 决策树历史档案（等价于原 EXCLUDE_FILE_KEYWORDS "决策树.md"）
+    "reference/deprecated",           # 已废弃子系统（保留为参考数据源）
+    "reference/books",                # 外部书籍正文
+    ".refactor-backup",               # 重构期本地安全备份（重构完成后删除）
+    # 非文档目录
+    ".git", ".claude", ".agents", ".github", ".scratch",
+    "__pycache__", "data", "code",
+    "node_modules", "obj", "bin", "Library", "Temp", "Logs",
 }
 
-# 排除文件名关键词
-EXCLUDE_FILE_KEYWORDS = ["已废弃", ".gitkeep"]
+# 排除文件名关键词（中英并置：目录改英文后原名关键词仍可能出现在文件名中）
+EXCLUDE_FILE_KEYWORDS = ["已废弃", "deprecated", ".gitkeep"]
 
 
 def is_active_md(filepath: Path) -> bool:

@@ -1,6 +1,6 @@
 # 暴食障碍（BED）重映射试点
 
-> 26 病重映射第 5 份试点（照 [PTSD 试点](ptsd-pilot.md) §六 字段规范复制）。**BED 为新增病（Q0.2 P2 扩种，无旧疾病文件/旧链路）**——本文件纯文献驱动，全部 11 条病理边为 ⭐新增（均命中 `tripartite_model.json` 现有边，0 条"病理新增"，从严规则：新增病优先语义转移，禁凭空加边）。核心病理 = **奖赏超敏**（VTA→NAcc / mOFC→NAcc 过度耦合）+ **冲动控制↓**（认知 CSTC 环路 dlPFC→Caudate 解耦）+ **暴食发作回路**（insula→NAcc 触发 + Amygdala→NAcc 情绪性暴食 + Putamen 习惯化）。**BED ≈ BN 无清除行为**：共享奖赏超敏+冲动控制↓ 核心，但无清除期（§三.5 与 BN 对照）。7 参数推导与 NPC AI §4.2/§5.2 标签组合「敏化-奖励 + 抑制不足」交叉验证：DA_VTA/5HT/bias_somatic/bias_limbic 一致，DA_SNc +0.1 与 bias_cognitive −0.15 为**标签缺口裁决**（[NEW]）。
+> 26 病重映射第 5 份试点（照 [PTSD 试点](../disease-pilots/ptsd-pilot.md) §六 字段规范复制）。**BED 为新增病（Q0.2 P2 扩种，无旧疾病文件/旧链路）**——本文件纯文献驱动，全部 11 条病理边为 ⭐新增（均命中 `tripartite_model.json` 现有边，0 条"病理新增"，从严规则：新增病优先语义转移，禁凭空加边）。核心病理 = **奖赏超敏**（VTA→NAcc / mOFC→NAcc 过度耦合）+ **冲动控制↓**（认知 CSTC 环路 dlPFC→Caudate 解耦）+ **暴食发作回路**（insula→NAcc 触发 + Amygdala→NAcc 情绪性暴食 + Putamen 习惯化）。**BED ≈ BN 无清除行为**：共享奖赏超敏+冲动控制↓ 核心，但无清除期（§三.5 与 BN 对照）。7 参数推导与 NPC AI §4.2/§5.2 标签组合「敏化-奖励 + 抑制不足」交叉验证：DA_VTA/5HT/bias_somatic/bias_limbic 一致，DA_SNc +0.1 与 bias_cognitive −0.15 为**标签缺口裁决**（[NEW]）。
 
 ## 目录
 
@@ -20,12 +20,12 @@
 | 1 | **Schag et al. (2013)** *Obes Rev* 14(6):477-495（PMID [23331770](https://pubmed.ncbi.nlm.nih.gov/23331770/)） | 系统综述 | BED = **食物相关冲动性**：奖赏超敏（奖赏线索→纹状体过度反应）+ 冲动控制↓ → e01/e02 奖赏超敏 + e03/e04 认知↓ 方向锚 |
 | 2 | **Kessler et al. (2016)** *Neurosci Biobehav Rev* 63:223-238（PMID [26850211](https://pubmed.ncbi.nlm.nih.gov/26850211/)） | 综述 | BED 神经生物学基础：**纹状体奖赏**、**前额叶控制**、**岛叶内感受**、**背侧纹状体习惯** + 情绪失调 → 暴食发作回路（e05/e06/e07/e08/e09）的结构锚 |
 | 3 | **Balodis et al. (2013)** *Int J Eat Disord* | 纵向 fMRI | 奖赏处理中 **fronto-striatal 招募↓** → 持续暴食（治疗抵抗预测）→ e03（dlPFC→Caudate 解耦）的额-纹状体失衡锚 |
-| 4 | **Schulte et al. (2016)** 成瘾共享机制 | 综述 | BED 与成瘾障碍共享**奖赏超敏 + 冲动控制↓ + 习惯化**机制（"food addiction" 框架）→ 与 [SUD 试点](substance-use-disorder-pilot.md) 敌我同构对照（同核心边群 VTA→NAcc / dlPFC→Caudate / Putamen 习惯） |
+| 4 | **Schulte et al. (2016)** 成瘾共享机制 | 综述 | BED 与成瘾障碍共享**奖赏超敏 + 冲动控制↓ + 习惯化**机制（"food addiction" 框架）→ 与 [SUD 试点](../disease-pilots/substance-use-disorder-pilot.md) 敌我同构对照（同核心边群 VTA→NAcc / dlPFC→Caudate / Putamen 习惯） |
 
 **辅助锚（方向/范围补充）**：
 
 - **暴食-清除循环差异**——BED 无清除行为（DSM-5 排除标准）：暴食期后无呕吐/过度运动 → 无 BN 的清除期 SAN −3 惩罚与清除习惯锁定（§三.5/§五.2）。
-- **NPC AI §4.2**——标签「敏化-奖励」（DA_VTA +0.2, 5HT −0.2, bias_limbic +0.15）与「抑制不足」（5HT −0.2, bias_somatic +0.15）——与 [BN 试点](bulimia-nervosa-pilot.md) 同组合。
+- **NPC AI §4.2**——标签「敏化-奖励」（DA_VTA +0.2, 5HT −0.2, bias_limbic +0.15）与「抑制不足」（5HT −0.2, bias_somatic +0.15）——与 [BN 试点](../disease-pilots/bulimia-nervosa-pilot.md) 同组合。
 - **三体模型**——BED 全部边复用现有 1049 边集合（0 病理新增）：本文件为"新增病从严"示范（无旧链路可继承，逐边文献核验）。
 
 > **转换规则声明**：文献给出脑区/网络层结论，三体边层映射为设计师翻译（文献数据源 §八）；m 偏移量级为 **`[NEW]` 设计校准**（参照 PTSD e13 / SUD e05 同类 limbic GO 边幅值 0.1~0.4；无旧文件可沿用，全部数值标记 `[NEW]`）。laterality_delta 全部 0（Schag/Kessler/Balodis 均未报告稳健偏侧效应，§6.5 规则 2）。
@@ -181,4 +181,4 @@ NPC AI §4.2「敏化-奖励」+「抑制不足」双标签（多标签叠加取
 ---
 
 *创建: 2026-08-21 | 更新: 2026-08-21*
-*关联: [grilling-88.md](grilling-88.md)（Q0.2 P2 扩种）, [PTSD 重映射试点](ptsd-pilot.md), [神经性贪食症试点](bulimia-nervosa-pilot.md)（无清除对照）, [物质使用障碍试点](substance-use-disorder-pilot.md)（成瘾共享机制对照）, [NPC AI 行为模型](../../../规则/技能树系统/NPC AI 行为模型.md) §4.2/§5.2, [疾病-脑区链路映射-文献数据源](../../../%E5%8F%82%E8%80%83/%E6%96%87%E7%8C%AE/%E7%96%BE%E7%97%85-%E8%84%91%E5%8C%BA%E9%93%BE%E8%B7%AF%E6%98%A0%E5%B0%84-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md) §七, [tripartite_model.json](../../../data/connectivity/tripartite_model.json), [角色与面具](../../../%E5%AE%9E%E4%BD%93/%E8%A7%92%E8%89%B2%E4%B8%8E%E9%9D%A2%E5%85%B7.md) §8.8*
+*关联: [grilling-88.md](../disease-pilots/grilling-88.md)（Q0.2 P2 扩种）, [PTSD 重映射试点](../disease-pilots/ptsd-pilot.md), [神经性贪食症试点](../disease-pilots/bulimia-nervosa-pilot.md)（无清除对照）, [物质使用障碍试点](../disease-pilots/substance-use-disorder-pilot.md)（成瘾共享机制对照）, [NPC AI 行为模型](../../../rules/skill-tree/NPC%20AI%20%E8%A1%8C%E4%B8%BA%E6%A8%A1%E5%9E%8B.md) §4.2/§5.2, [疾病-脑区链路映射-文献数据源](../../../../reference/literature/%E7%96%BE%E7%97%85-%E8%84%91%E5%8C%BA%E9%93%BE%E8%B7%AF%E6%98%A0%E5%B0%84-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md) §七, [tripartite_model.json](../../../../data/connectivity/tripartite_model.json), [角色与面具](../../../entities/%E8%A7%92%E8%89%B2%E4%B8%8E%E9%9D%A2%E5%85%B7.md) §8.8*
