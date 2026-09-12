@@ -1,10 +1,12 @@
 // 动作播放驱动 — 契约 A（动作库规格.md §四）：纯状态集 + 运行时 CrossFade
 // - 状态名 = 词表 id = 代码字符串（三面对一，由 ActionLabBuilder 按 ActionCatalog 构造成立）
-// - 衔接优先级：Down(4) > HitReaction(3) > 一次性动作(2) > Defend(1) > locomotion(0)
-// - 一次性动作播完（clip.length + 0.05s）→ 回退 locomotion 目标（规格 §七 计时口径）
+// - 衔接优先级：Down(4) > HitReaction(3) > 一次性动作(2) > 持续态(1) > locomotion(0)
+// - 一次性动作播完（clip.length + 0.05s）→ ① 若词条声明了 NextState 就切它（Sit → SitIdle「坐住」）；
+//   ② 否则回退 locomotion 目标（规格 §七 计时口径）
 // - 空中 Jump → 落地：显式补发一次回切（Jump 这次切态不进 _locomotionTarget 的账，
 //   否则落地目标与起跳前同档时守卫判"无变化"→ 状态机停在 Jump，身体平移而腿不动）
-// - Defend 循环持续态：TickLocomotion 收到移动意图(speed>0) 即退出；或更高优先级动作打断
+// - 循环持续态（Loop=true 的动作词条：Defend / SitIdle）：TickLocomotion 收到移动意图(speed>0)
+//   即退出；或更高优先级动作打断。**不硬编码具体 id**——新增持续态只改词表即可。
 // - Down 终态停留末帧：不自动回退，须 Reset()（演示 R 键）
 // - 位移全走 CharacterController（本组件不移动物体），applyRootMotion=false 由场景侧保证
 using UnityEngine;
@@ -78,21 +80,25 @@ namespace YANTF.ActionLab
 
             if (IsLocked) return; // 一次性动作/终态播放期间锁移动切态（契约 A）
 
-            string target;
-            if (_activeEntry != null && _activeEntry.Id == ActionIds.Defend && speed01 <= 0.001f)
+            // 持续态（Loop=true 的动作词条：Defend / SitIdle）：无移动意图 → 原地保持
+            if (_activeEntry != null && _activeEntry.Loop && speed01 <= 0.001f)
             {
-                return; // Defend 持续态：原地保持
+                return;
             }
 
-            // locomotion 目标（Defend 会被移动意图退出）
-            _activeEntry = null;
-            CurrentActionId = null; // Defend 退出 / 常规 locomotion 路径清动作显示
-            target = speed01 < 0.05f ? ActionIds.Idle
-                   : speed01 < 0.55f ? ActionIds.Walk
-                   : ActionIds.Run;
+            // 离开持续态时记名：下面要清 _activeEntry，但守卫需要知道"刚从哪个持续态出来"
+            string sustainedExited = (_activeEntry != null && _activeEntry.Loop) ? _activeEntry.Id : null;
 
-            // 守卫：档位变化 || 刚从空中落地（补发）|| 当前停在 Defend（移动意图退出防御）
-            if (target != _locomotionTarget || _returnFromJumpPending || IsCurrentState(ActionIds.Defend))
+            // locomotion 目标（持续态被移动意图退出）
+            _activeEntry = null;
+            CurrentActionId = null; // 持续态退出 / 常规 locomotion 路径清动作显示
+            string target = speed01 < 0.05f ? ActionIds.Idle
+                          : speed01 < 0.55f ? ActionIds.Walk
+                          : ActionIds.Run;
+
+            // 守卫：档位变化 || 刚从空中落地（补发）|| 刚从持续态退出（需显式切出去）
+            if (target != _locomotionTarget || _returnFromJumpPending
+                || (sustainedExited != null && IsCurrentState(sustainedExited)))
             {
                 _locomotionTarget = target;
                 _returnFromJumpPending = false;
@@ -142,6 +148,11 @@ namespace YANTF.ActionLab
             _activeEntry = null;
             IsLocked = false;
             _activeTime = 0f;
+            _plannedDuration = 0f;
+            // 必须清 CurrentActionId：否则重置后它仍留旧值，凡依赖它做输入守卫的路径都会被误导
+            // （例：7 起身的守卫要求"当前是 SitIdle"——重置后不干净就会被误判为仍在坐姿）。
+            // 这也是既有常红断言 ActionPlayer_Play_PriorityAndLevelRules 的第二处真因（2026-09-12 定位）。
+            CurrentActionId = null;
             _returnFromJumpPending = false; // 显式重置：不留待补发的落地回切
             _locomotionTarget = ActionIds.Idle;
             if (animator != null && animator.runtimeAnimatorController != null)
@@ -165,8 +176,11 @@ namespace YANTF.ActionLab
             }
             else
             {
-                float clipLen = ReadTargetClipLength();
-                _plannedDuration = clipLen > 0f ? clipLen + OneShotTailSeconds : _fallbackDuration;
+                // 长度**延到下一帧**再读：CrossFade 当帧 GetNextAnimatorStateInfo 尚未填充，
+                // 此处读会拿到**上一个状态**的 clip 长度（实测 2026-09-12：从 Idle(2.7s) 坐
+                // →锁 2.75s 而非 1.85s；从 SitIdle(4.3s) 起身 →锁 4.35s 而非 1.85s，
+                // 人已站起却多锁 2.5s）。负值 = 待定，Update 里补读。
+                _plannedDuration = -1f;
             }
 
             if (animator != null && animator.runtimeAnimatorController != null)
@@ -186,6 +200,15 @@ namespace YANTF.ActionLab
             if (!_activeEntry.Loop && IsLocked)
             {
                 _activeTime += Time.deltaTime;
+                if (_plannedDuration < 0f)
+                {
+                    // 目标 clip 长度未定 → 逐帧重试，读到为止（不阻塞计时，_activeTime 一直在走）。
+                    // 超过 0.5 s 还读不到才用兜底时长，避免永久卡在"未定"。
+                    float clipLen = ReadTargetClipLength();
+                    if (clipLen > 0f) _plannedDuration = clipLen + OneShotTailSeconds;
+                    else if (_activeTime > 0.5f) _plannedDuration = _fallbackDuration;
+                    else return;
+                }
                 if (_activeTime >= _plannedDuration)
                 {
                     if (_activeEntry.Id == ActionIds.Down)
@@ -201,9 +224,23 @@ namespace YANTF.ActionLab
 
         private void FinishOneShot()
         {
+            _activeTime = 0f;
+
+            // 一次性动作可声明播完后切到哪（Sit → SitIdle：坐下播完要"坐住"，不回站姿）。
+            // 未声明 → 回退 locomotion 目标态（原口径）。
+            string next = _activeEntry != null ? _activeEntry.NextState : null;
+            if (next != null && ActionCatalog.TryGet(next, out var nextEntry))
+            {
+                _activeEntry = nextEntry;
+                _plannedDuration = 0f;
+                CurrentActionId = nextEntry.Id;
+                IsLocked = !nextEntry.Loop;   // 续接的若是循环持续态（SitIdle），则不锁移动切态
+                CrossFadeState(nextEntry.Id, nextEntry.Fade);
+                return;
+            }
+
             _activeEntry = null;
             IsLocked = false;
-            _activeTime = 0f;
             CurrentActionId = null;
             if (animator != null && animator.runtimeAnimatorController != null)
             {
@@ -211,14 +248,23 @@ namespace YANTF.ActionLab
             }
         }
 
-        /// <summary>一次性动作目标态 clip 长度（CrossFade 目标态在 GetNext 中可读；兜底 0 → 用 fallback）。</summary>
+        /// <summary>
+        /// 一次性动作**目标态**的 clip 长度（未定则返回 0，调用方下一帧再试）。
+        /// 关键：**只接受 shortNameHash 与目标状态一致的读数**——不能回退去读"当前状态"的长度。
+        /// 实测 2026-09-12：`CrossFade` 发起的当帧过渡尚未注册，此时 `GetNext.length == 0`（无过渡）
+        /// 且 `GetCurrent` 仍是**源状态**，若回退读它就会得到源 clip 长度
+        /// （从 Idle(2.7s) 坐 → 锁 2.75s 而非 1.85s；从 SitIdle(4.3s) 起身 → 锁 4.35s 而非 1.85s，
+        /// 人已站起却多锁 2.5s）。
+        /// </summary>
         private float ReadTargetClipLength()
         {
             if (animator == null || animator.runtimeAnimatorController == null) return 0f;
+            int want = Animator.StringToHash(_activeEntry.Id);   // 三面对一：状态名 = 词表 id
             var next = animator.GetNextAnimatorStateInfo(0);
-            if (next.length > 0f) return next.length;
+            if (next.shortNameHash == want && next.length > 0f) return next.length;
             var cur = animator.GetCurrentAnimatorStateInfo(0);
-            return cur.length;
+            if (cur.shortNameHash == want && cur.length > 0f) return cur.length;
+            return 0f;
         }
 
         private void CrossFadeState(string stateName, float fade)
@@ -227,7 +273,15 @@ namespace YANTF.ActionLab
             LastRequestedState = stateName;
             StateRequestCount++;
             if (animator == null || animator.runtimeAnimatorController == null) return;
-            animator.CrossFade(stateName, fade);
+            // ⚠️ 必须用**秒制**变体。`Animator.CrossFade(name, fade)` 的第二参是
+            //    「**源状态归一化时长的比例**」，不是秒（官方参数名 normalizedTransitionDuration；
+            //    Manual「Fixed Duration」条：不勾选时过渡时长按"源状态归一化时长的比例"解释）。
+            //    实测（2026-09-12，确定性 5 ms 步进量 IsInTransition 持续时长，fade 一律传 0.10）：
+            //      Defend(0.8s)→0.085s / Jump(1.533s)→0.155s / Sit(1.8s)→0.180s
+            //      / Idle(2.7s)→0.275s / SitIdle(4.3s)→0.430s   —— 逐行 = 0.10 × 源 clip 长度
+            //    改用 CrossFadeInFixedTime 后，五种源一律 0.100 s。
+            //    规格 §七 的 fade 口径是**秒**，故以秒制为准（AGENTS.md：设计与代码冲突以 design/ 为准并修代码）。
+            animator.CrossFadeInFixedTime(stateName, fade);
         }
 
         /// <summary>Animator 当前是否停在该状态（无 Animator/controller → false）。</summary>
@@ -240,7 +294,13 @@ namespace YANTF.ActionLab
         /// <summary>纯逻辑：一次性动作是否到点回退（规格 §七：elapsed >= clipLength + 0.05）。测试直接断言。</summary>
         public static bool OneShotElapsed(float elapsed, float clipLength)
         {
-            return elapsed >= clipLength + OneShotTailSeconds;
+            // 显式落回 float 再比较。C# 允许浮点运算使用高于结果类型的精度：若直接写
+            //   elapsed >= clipLength + OneShotTailSeconds
+            // 右侧可能以 double 中间值参与比较，与外部按 float 算出的同一个和相差 1 ulp
+            // → 恰好到点被判为"未到点"。这就是既有常红断言
+            // ActionLabSmokeTests.ActionPlayer_OneShotElapsed_Threshold 的真因（2026-09-12 定位）。
+            float threshold = (float)((double)clipLength + (double)OneShotTailSeconds);
+            return elapsed >= threshold;
         }
     }
 }
