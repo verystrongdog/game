@@ -15,14 +15,13 @@
   "_stats": {
     "total": 100,
     "runtime": 8,
-    "generator_input": 1,
+    "generator_input": 0,
     "shipping_true": 8,
     "deprecated": 17,
     "archived": 0,
     "by_lifecycle_role": {
       "active/evidence": 54,
-      "active/generator-input": 1,
-      "active/reference": 20,
+      "active/reference": 21,
       "active/runtime": 8,
       "deprecated/reference": 17
     }
@@ -76,11 +75,13 @@
       "owner": "引擎组（code/src 消费方）",
       "consumed_by": [
         "code/src/YouAreNotTheFish.Console/Program.cs",
+        "code/src/YouAreNotTheFish.Core.Tests/Data/RuntimeFixtureTests.cs",
         "code/tools/brain_atlas_to_blender.py",
         "code/tools/build_brain_skill_tree.py",
         "code/tools/build_brain_skill_tree_windows.py",
         "code/tools/build_data_manifest.py",
         "code/tools/build_region_name_map.py",
+        "code/tools/build_runtime_data_fixtures.py",
         "code/tools/build_tripartite_model.py",
         "code/tools/expand_brain_regions.py",
         "code/tools/gen_modulation_ceiling.py",
@@ -88,6 +89,7 @@
         "code/tools/normalize_region_names.py",
         "code/tools/rebuild_brain_regions.py",
         "code/tools/refine_coords_from_objs.py",
+        "code/tools/validate_runtime_fixtures.py",
         "code/tools/validate_spatial.py"
       ],
       "generators": [
@@ -132,9 +134,12 @@
       "shipping": true,
       "owner": "引擎组（code/src 消费方）",
       "consumed_by": [
+        "code/src/YouAreNotTheFish.Core.Tests/Data/RuntimeFixtureTests.cs",
         "code/src/YouAreNotTheFish.Core.Tests/Engine/ThreatJudgeTests.cs",
         "code/src/YouAreNotTheFish.Core/Data/WsensoryMatrix.cs",
-        "code/tools/build_data_manifest.py"
+        "code/tools/build_data_manifest.py",
+        "code/tools/build_runtime_data_fixtures.py",
+        "code/tools/validate_runtime_fixtures.py"
       ],
       "generators": [],
       "runtime_consumers": [
@@ -156,8 +161,11 @@
       "shipping": true,
       "owner": "引擎组（code/src 消费方）",
       "consumed_by": [
+        "code/src/YouAreNotTheFish.Core.Tests/Data/RuntimeFixtureTests.cs",
         "code/src/YouAreNotTheFish.Core/Data/AlphaPatterns.cs",
-        "code/tools/build_data_manifest.py"
+        "code/tools/build_data_manifest.py",
+        "code/tools/build_runtime_data_fixtures.py",
+        "code/tools/validate_runtime_fixtures.py"
       ],
       "generators": [],
       "runtime_consumers": [
@@ -184,7 +192,7 @@
       "runtime_consumers": [],
       "provenance": "本仓作者维护",
       "refs": {
-        "active_docs": 0,
+        "active_docs": 1,
         "deprecated_docs": 0
       }
     },
@@ -192,9 +200,9 @@
       "logical_id": "domain_role_map",
       "origin": "authored",
       "lifecycle": "active",
-      "role": "generator-input",
+      "role": "reference",
       "shipping": false,
-      "owner": "工具组（code/tools 生成链）",
+      "owner": "设计组（design/ 引用方）",
       "consumed_by": [
         "code/tools/build_contexts_tripartite.py"
       ],
@@ -202,7 +210,7 @@
       "runtime_consumers": [],
       "provenance": "本仓作者维护",
       "refs": {
-        "active_docs": 0,
+        "active_docs": 1,
         "deprecated_docs": 4
       }
     },
@@ -220,7 +228,7 @@
       "runtime_consumers": [],
       "provenance": "本仓作者维护",
       "refs": {
-        "active_docs": 2,
+        "active_docs": 3,
         "deprecated_docs": 0
       }
     },
@@ -339,8 +347,11 @@
       "shipping": true,
       "owner": "引擎组（code/src 消费方）",
       "consumed_by": [
+        "code/src/YouAreNotTheFish.Core.Tests/Data/RuntimeFixtureTests.cs",
         "code/src/YouAreNotTheFish.Core/Data/EnvTones.cs",
-        "code/tools/build_data_manifest.py"
+        "code/tools/build_data_manifest.py",
+        "code/tools/build_runtime_data_fixtures.py",
+        "code/tools/validate_runtime_fixtures.py"
       ],
       "generators": [],
       "runtime_consumers": [
@@ -578,8 +589,11 @@
       "shipping": true,
       "owner": "引擎组（code/src 消费方）",
       "consumed_by": [
+        "code/src/YouAreNotTheFish.Core.Tests/Data/RuntimeFixtureTests.cs",
         "code/src/YouAreNotTheFish.Core/Data/MoonlightLanding.cs",
-        "code/tools/build_data_manifest.py"
+        "code/tools/build_data_manifest.py",
+        "code/tools/build_runtime_data_fixtures.py",
+        "code/tools/validate_runtime_fixtures.py"
       ],
       "generators": [],
       "runtime_consumers": [
@@ -606,7 +620,7 @@
       "runtime_consumers": [],
       "provenance": "本仓作者维护",
       "refs": {
-        "active_docs": 46,
+        "active_docs": 47,
         "deprecated_docs": 5
       }
     },
@@ -682,10 +696,13 @@
       "shipping": true,
       "owner": "引擎组（code/src 消费方）",
       "consumed_by": [
+        "code/src/YouAreNotTheFish.Core.Tests/Data/RuntimeFixtureTests.cs",
         "code/src/YouAreNotTheFish.Core/Data/SituationPrimitives.cs",
         "code/tools/build_data_manifest.py",
+        "code/tools/build_runtime_data_fixtures.py",
         "code/tools/migrate_zh_to_functional.py",
-        "code/tools/normalize_region_names.py"
+        "code/tools/normalize_region_names.py",
+        "code/tools/validate_runtime_fixtures.py"
       ],
       "generators": [
         "code/tools/migrate_zh_to_functional.py"
@@ -726,11 +743,14 @@
       "shipping": true,
       "owner": "引擎组（code/src 消费方）",
       "consumed_by": [
+        "code/src/YouAreNotTheFish.Core.Tests/Data/RuntimeFixtureTests.cs",
         "code/tools/build_contexts_tripartite.py",
         "code/tools/build_data_manifest.py",
         "code/tools/build_function_labels.py",
+        "code/tools/build_runtime_data_fixtures.py",
         "code/tools/build_tripartite_model.py",
-        "code/tools/validate_disease.py"
+        "code/tools/validate_disease.py",
+        "code/tools/validate_runtime_fixtures.py"
       ],
       "generators": [
         "code/tools/build_function_labels.py",
@@ -1348,12 +1368,14 @@
       "role": "evidence",
       "shipping": false,
       "owner": "归档（无活跃消费方）",
-      "consumed_by": [],
+      "consumed_by": [
+        "code/tools/validate_runtime_fixtures.py"
+      ],
       "generators": [],
       "runtime_consumers": [],
       "provenance": "本仓作者维护",
       "refs": {
-        "active_docs": 1,
+        "active_docs": 2,
         "deprecated_docs": 0
       }
     },
@@ -1749,10 +1771,13 @@
       "shipping": true,
       "owner": "引擎组（code/src 消费方）",
       "consumed_by": [
+        "code/src/YouAreNotTheFish.Core.Tests/Data/RuntimeFixtureTests.cs",
         "code/src/YouAreNotTheFish.Core/Data/SignalTypesCatalog.cs",
         "code/tools/build_data_manifest.py",
         "code/tools/build_function_labels.py",
-        "code/tools/build_tripartite_model.py"
+        "code/tools/build_runtime_data_fixtures.py",
+        "code/tools/build_tripartite_model.py",
+        "code/tools/validate_runtime_fixtures.py"
       ],
       "generators": [],
       "runtime_consumers": [

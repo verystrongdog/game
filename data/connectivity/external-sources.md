@@ -90,9 +90,9 @@ abagen 基因表达数据当前无任何 runtime 或生成链消费者。
 ## 二、已知缺口
 
 > 按 [WORKFLOW.md §五](../../WORKFLOW.md)：「本阶段产生的新问题不得事后倒填为『已知债务』」。
-> 以下两项是 **P4c 数据契约建立过程中发现并如实登记的缺口**，不是"已经解决了"。
+> 以下条目是 **P4c 数据契约建立过程中发现并如实登记的缺口**。
 
-### 缺口 1 — `hansen2024/` 的 5 个数据文件**零消费者**
+### 缺口 1 — `hansen2024/` 的 5 个数据文件**零消费者**（标注已修，读取仍未接入）
 
 实测（2026-09-12，`git grep` 全受控文件）：
 
@@ -104,17 +104,26 @@ abagen 基因表达数据当前无任何 runtime 或生成链消费者。
 | `subcortex_coords.csv` | 0 |
 | `voneconomo_schaefer400.csv` | 0 |
 
-而 [`gen_modulation_ceiling.py`](../../code/tools/gen_modulation_ceiling.py) 的
-`load_hansen_brainstem()` 头部自述：
+而 [`gen_modulation_ceiling.py`](../../code/tools/gen_modulation_ceiling.py) 当时用硬编码数值
+冒充该数据集的结果，来源标注写 `Hansen2024_brainstem` / `Hansen2024:PAG↔M1`。
 
-> 「由于我们没有原始 FC 矩阵，使用基于 Hansen 社区分类的估计值。」
+**已处置（2026-09-12，owner 裁定「把估计值如实标注」）**：
 
-即：**数据文件在仓库里，生成器却不读它，改用硬编码估计值**。
-后果是「Hansen 2024」作为参数来源的标注与代码实际行为不一致。
+| 位置 | 处置 |
+|---|---|
+| `gen_modulation_ceiling.py` | `load_hansen_brainstem()` → `load_brainstem_strength_estimates()`；来源标注 `Hansen2024:*` → `brainstem_estimate:*`；归一化基准 `hansen_max` → `brainstem_estimate_max` |
+| `gen_modulation_ceiling_v2.py` | `HANSON_COMMUNITY_GAIN`（且为拼写错误）→ `BRAINSTEM_COMMUNITY_GAIN_ESTIMATE`；头部与产出 `_metadata` 如实区分「文献依据」与「本仓估计」 |
+| 两个产出 JSON | `data_source` / `_metadata` 标注如实化 + `provenance_note`。**数值一个未动**（836 个数值逐个比对相同） |
+| 规范与设计文档 | [链路调制上限参考表-v2.md](../../design/rules/skill-tree/modulation/%E9%93%BE%E8%B7%AF%E8%B0%83%E5%88%B6%E4%B8%8A%E9%99%90%E5%8F%82%E8%80%83%E8%A1%A8-v2.md) 的「文献」列、[design/README.md](../../design/README.md)、[six-dimensions.md](../../design/framework/six-dimensions.md)、19 份 disease-pilot 的 `Hansen fc=…` 全部改为「脑干强度估计」 |
+| [Hansen2024 数据留存](../../design/rules/skill-tree/references/Hansen2024_%E8%84%91%E5%B9%B2%E7%9A%AE%E5%B1%82%E5%8A%9F%E8%83%BD%E5%B1%82%E7%BA%A7_%E6%95%B0%E6%8D%AE.md) | 明确为**社区划分的权威依据**，并声明本文不覆盖连接强度数值与复合结构 |
 
-**处置**：这是一项需要裁定的事项，不由数据契约阶段单方面决定——
-要么改为真读 `brainstemfc_Schaefer400.npy`，要么在生成器与设计文档中
-把"估计值"标注为估计值。两个选项都改设计/代码行为，超出「只动结构与引用」的范围。
+**顺带修正一处真实错误**：`中缝正中核` 的社区原标 `YELLOW`，论文 Table 1 列其为
+**GREEN**（与 PAG / VTA / 上丘同组）。两处生成器俱已修正，依据见上述留存文档 §五。
+
+**仍未闭合**：生成器**依然不读** `hansen2024/` 的数据集——只是不再谎称读过。
+要真正接入需改数值行为（涉及全部链路 ceiling 重算），留待另行裁定。
+另：两个产出 JSON 是 2026-07-27 的快照，与当前生成器重算结果不一致
+（生成器还会写入已废弃的中文路径 `技能树系统/`），重算属独立事项。
 
 ### 缺口 2 — 三项外部数据的**许可未登记**
 
