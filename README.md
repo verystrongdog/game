@@ -42,13 +42,16 @@
 
 | 你想知道 | 去哪 |
 |---|---|
+| **AI 助手要读什么** | [AGENTS.md](AGENTS.md)（唯一的通用 Agent 约束入口） |
+| **现在能玩到什么** | [PLAYABLE.md](PLAYABLE.md) |
+| **怎么干活 / 什么算做完** | [WORKFLOW.md](WORKFLOW.md) |
+| 代码和设计之间的边界 | [ARCHITECTURE.md](ARCHITECTURE.md) |
 | 这个游戏现在设计到哪一步了 | [设计框架-六维状态](design/framework/six-dimensions.md) |
 | 某个机制怎么结算 | [design/rules/核心机制.md](design/rules) |
 | 某个设计为什么这么定 | [决策树](design/decisions/README.md) → 对应轮的[源记录](design/archive/grilling/) |
 | 某个名词在这个项目里是什么意思 | [`data/term_registry.json`](data/term_registry.json)（看 `status` 字段——很多常规词汇在本项目里是**已废弃**的旧模型） |
 | 写文档/改设计要守什么规矩 | [项目规约](design/conventions/README.md) · [写作与引用规范](design/conventions/writing-and-references.md) |
 | 怎么提交 | [协作指南](CONTRIBUTING.md) |
-| 代码和设计之间的边界在哪 | [架构声明](ARCHITECTURE.md) |
 
 ## 维护约定
 
@@ -59,4 +62,4 @@
 
 ---
 *创建: 2026-09-06 | 更新: 2026-09-12（仓库重构后重写导航）*
-*关联: [设计总览](design/README.md), [项目规约](design/conventions/README.md), [协作指南](CONTRIBUTING.md), [六维状态](design/framework/six-dimensions.md)*
+*关联: [AGENTS.md](AGENTS.md), [PLAYABLE.md](PLAYABLE.md), [WORKFLOW.md](WORKFLOW.md), [架构](ARCHITECTURE.md), [设计总览](design/README.md), [项目规约](design/conventions/README.md)*

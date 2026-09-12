@@ -6,6 +6,34 @@
 >
 > 设计与代码的边界声明见 [ARCHITECTURE.md](../ARCHITECTURE.md)。
 
+## 当前设计权威地图
+
+> **只记路径、角色与状态**。改设计前先在这里确认"这件事的权威在哪"。
+
+| 位置 | 角色 | 状态 |
+|---|---|---|
+| [rules/](rules) [entities/](entities) [space/](space) [events/](events) [presentation/](presentation) [pipeline/](pipeline) | **六维设计正典**——规则的唯一权威 | 活跃 |
+| [framework/six-dimensions.md](framework/six-dimensions.md) | 六维定义、分拣标准与实时完成度的**唯一来源** | 活跃 |
+| [framework/dimensions/](framework/dimensions/) | 按维度的**文档索引** | 活跃 |
+| [spec/](spec) | 实现规格与输入素材（被代码或正典消费） | 活跃 |
+| [conventions/](conventions) | 项目规约、写作与引用规范 | 活跃 |
+| [slices/](slices/README.md) | **当前可玩目标**（四轴状态 + 试玩证据） | 见 [PLAYABLE.md](../PLAYABLE.md) |
+| [engineering/](engineering) | 工程文档与阶段证据 | 活跃 |
+| [decisions/](decisions/README.md) | 决策分叉记录（"怎么走到这里的"） | **已冻结，只读** |
+| [archive/](archive) | `grilling/` 各轮源记录 · `trash/` 垃圾箱 | **归档，不作依据** |
+| [`data/term_registry.json`](../data/term_registry.json) | 术语状态（`status` 字段） | 活跃 |
+| [ARCHITECTURE.md](../ARCHITECTURE.md) | 设计与代码的边界声明 | 活跃 |
+| [WORKFLOW.md](../WORKFLOW.md) | 执行顺序、状态定义、阶段闭合的唯一权威 | 活跃 |
+
+**已冻结的旧机制**（不再执行，只作历史）：
+
+- **六维完成百分比**——冻结于 2026-09-12 的重构；此后完成度以**切片四轴状态**为准（见 [WORKFLOW.md §二](../WORKFLOW.md)），不再维护百分比
+- **追加式大决策树**——冻结为只读索引（93 条目）
+- **`.scratch/`**——**不作正式权威**；已移出版本控制，其承重内容迁入 [spec/](spec) 与 [archive/grilling/](archive/grilling/)
+- **grilling 十步流程**——已停用（2026-09-12）
+
+---
+
 ## 项目
 
 - 正式名：《子非鱼》（英文暂定：You Are Not the Fish）——「面具」降级为游戏内部子功能（面具系统），不再是项目总名
