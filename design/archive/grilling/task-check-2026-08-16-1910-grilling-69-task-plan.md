@@ -66,4 +66,4 @@
 ---
 
 *创建: 2026-08-16 | 检查: grilling-69 task-plan*
-*关联: [task-checker skill](../../../.claude/skills/task-checker/SKILL.md), [数学语言书写规范](../../conventions/agents/math-language-writing.md)*
+*关联: [数学语言书写规范](../../conventions/agents/math-language-writing.md)*

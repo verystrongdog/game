@@ -149,4 +149,4 @@
 ---
 
 *创建: 2026-08-16 | 更新: 2026-08-16（Grilling #85：新增 §七 对话交互规范——人类输入方向，打断-重述-验证机制）*
-*关联: [term_registry.json](../../../data/term_registry.json), [review-plan skill](../../../.claude/skills/review-plan/SKILL.md), [task-checker skill](../../../.claude/skills/task-checker/SKILL.md), [[项目规约](../README.md))*
+*关联: [term_registry.json](../../../data/term_registry.json), [项目规约](../README.md)*
