@@ -114,6 +114,30 @@ unity command editor_play  # 进 Play 模式（验证用）
    - 连不上先查 Safe Mode：有 C# 编译错误时 Editor 会进 Safe Mode，Pipeline 包不加载，`unity status` / `unity command` 全部连不上。先修编译错误再重启。
 3. **资产区单机所有权**：`code/unity/Assets/**` 的资产（`.meta` / `.controller` / `.asset` / 场景）**只由本工作区生成与手调**（见 [ARCHITECTURE.md §五](../../ARCHITECTURE.md)）。手调成果要入库，两侧的 `.meta` GUID 必须一致。
 
+### 会话启动清单（本工作区开 DSH 会话时按序做）
+
+本工作区是**唯一**的 Unity 机——agent 与 Editor 同机，`unity-cli` 才连得上（它是本机通道，不是远程访问）。Linux 侧会话写不了也验不了 `code/unity/`，故实现与验证都在这里做。
+
+1. **对齐**（一次性）：
+   ```powershell
+   cd C:\Users\9527\game
+   git branch --show-current          # 确认在 main
+   git status                         # 先看清有无别的本地改动
+   git fetch origin && git pull --ff-only origin main
+   git log --oneline -1               # 期望 e38b8e5 或更新
+   ```
+   ⚠️ 若报 `untracked working tree files would be overwritten by merge`：本地那两份 `CameraOrbit.cs` / `SitPoint.cs`（+`.meta`）是**未跟踪**文件，已随 `main` 归位到 `code/unity/Assets/Scripts/`（GUID 原样保留、内容逐字节一致）。删除本地那 4 个后再拉，无损失。
+2. **确认 Editor 可直驱**：`unity pipeline install` → `unity status`，期望 `state: ready`。
+   - 连不上先查 **Safe Mode**：有 C# 编译错误时 Pipeline 包不加载，`unity status` / `unity command` 全连不上。先修编译错误再重启 Editor，不要退化成盲改文件。
+3. **认准起点**：先读 [AGENTS.md](../../AGENTS.md)（全仓约束入口，含提交前必跑的校验器）→ 本 README §二·G → [动作库规格.md §四·乙/§六](../../design/presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md) → [动作系统分解](../../design/engineering/%E5%8A%A8%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%88%86%E8%A7%A3-2026-09-12.md)。
+4. **开工顺序**：**#137 → #138 → #139 → #140**（严格串行，工作面相交）。每条的门禁、验收标准、预期差分、明确排除都在 issue 正文里，照做即可。
+5. **门禁可用性口径（易错）**：`unity` 门禁在**本工作区可跑**，但 [`gates.json`](../../design/engineering/gates.json) 的 `available` **保持 `false` 不动**——它的语义锚点是 CI（ubuntu，无 Unity）。第二环境以 `available_in` 与 `_other_environments` 表达。**把 `available` 翻成 true 会让 CI 误判可闭合**（I6）。本工作区产出的 issue 在该环境可标 `state:ready-for-agent`；在 Linux/CI 侧只能 `state:ready-for-human`。
+6. **资产区所有权**：`code/unity/Assets/**` 的资产（`.meta` / `.controller` / `.asset` / 场景）**只由本工作区生成与手调**（[ARCHITECTURE.md §五](../../ARCHITECTURE.md)）。手调成果要入库，GUID 必须稳定——这与 #136（资产身份）是同一件事的两面。
+
+
+
+| 序 | issue | 做什么 | 状态 |
+|---|---|---|---|
 ### 四条 issue（严格串行，工作面相交所致）
 
 | 序 | issue | 做什么 | 状态 |
