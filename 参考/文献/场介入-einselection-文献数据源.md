@@ -193,4 +193,4 @@ H_MB^eff = H_MB + H_field−meter + H_field−observer
 ---
 
 *创建: 2026-08-04 | 更新: 2026-08-04*
-*关联: 月光场-标量场模型 ⚠️ 已废弃→垃圾桶（`垃圾桶/月光场-标量场模型.md`）, [方案C-退相干抑制-文献数据源](方案C-退相干抑制-文献数据源.md), [Kofman & Kurizki 2022](Kofman-Kurizki-2022-pointer-basis.pdf), [Zurek 2022](0707.2832.pdf), [Polychronakos 2024](2202.04203.pdf)*
+*关联: 月光场-标量场模型 ⚠️ 已废弃（`参考/废弃/月光场/月光场-标量场模型.md`）, [方案C-退相干抑制-文献数据源](方案C-退相干抑制-文献数据源.md), Kofman & Kurizki 2022（PDF 未入库，正文 §2.2 有摘录）, [Zurek 2022](0707.2832.pdf), [Polychronakos 2024](2202.04203.pdf)*

@@ -106,11 +106,14 @@ EXEMPT_PREFIX = [
     "垃圾桶/",
     ".trash/",
     "参考/废弃/",
+    # 仓库重构期的本地安全备份（非项目内容，重构完成后删除）
+    ".refactor-backup/",
     # 已标注 ⚠️ 废弃的前置系统 (保留为参考数据源, CLAUDE.md §文档层面)
-    "规则/技能树系统/激活系统/链路槽位与激活系统.md",
+    # 2026-09-12 仓库重构：该文件已从 垃圾桶/ 迁至 规则/技能树系统/已废弃/（与 10 个同门文件同处）
+    "规则/技能树系统/已废弃/链路槽位与激活系统.md",
 ]
 
-EXEMPT_DIRS = {"垃圾桶", ".trash", "已废弃", ".scratch"}
+EXEMPT_DIRS = {"垃圾桶", ".trash", "已废弃", ".scratch", ".refactor-backup"}
 
 
 def is_exempt(rel_path: str) -> bool:

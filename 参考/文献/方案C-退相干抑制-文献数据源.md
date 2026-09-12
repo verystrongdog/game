@@ -236,4 +236,4 @@ Step 3: 场维持 Zeno 切割
 ---
 
 *创建: 2026-08-04 | 更新: 2026-08-04*
-*关联: 月光场-标量场模型 ⚠️ 已废弃→垃圾桶（`垃圾桶/月光场-标量场模型.md`）, [DD/QZE统一](quant-ph-0303132.pdf), [DFS定义](quant-ph-9807004.pdf), [Subdecoherence](quant-ph-9702001.pdf), [Einselection](quant-ph-0105127.pdf), [Zeno子空间](quant-ph-0403205.pdf), [DFS综述](quant-ph-0301032.pdf)*
+*关联: 月光场-标量场模型 ⚠️ 已废弃→垃圾桶（`参考/废弃/月光场/月光场-标量场模型.md`）, [DD/QZE统一](quant-ph-0303132.pdf), [DFS定义](quant-ph-9807004.pdf), [Subdecoherence](quant-ph-9702001.pdf), [Einselection](quant-ph-0105127.pdf), [Zeno子空间](quant-ph-0403205.pdf), [DFS综述](quant-ph-0301032.pdf)*
