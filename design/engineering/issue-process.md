@@ -129,6 +129,7 @@ frontier = { i ∈ 开放 issue | 所有 blocked-by 已关闭 且 所有 require
 
 - 若**同一条通道**上出现多条同时可开工 → 说明切分没找到真实依赖，回 Step 2 找漏掉的边
 - 若**不同通道**各有一条 → 合法。单线程约束管的是"同一时刻只推进一个主要成果"（[WORKFLOW.md §一](../../WORKFLOW.md)），不是"全仓只能有一件可做的事"
+- **但语义独立 ≠ 可以并行**：还要过一道**文件相交检查**——两条就绪 issue 的「预期差分」文件集合若有交集，它们就不是真并行（改同一个文件，谁先落地都会让另一条的 diff 变成冲突），必须**串行**并在 frontier 里写明顺序。判据由 I13 机械给出
 
 [backlog 分解示范](backlog-decomposition-2026-09-12.md) §四 就是后一种情形：5 条就绪项分属 4 条互不相干的通道。
 
@@ -170,7 +171,7 @@ gh issue create --title "..." --body-file <临时草稿> --label type:task --lab
 | **能力增量** | 表格：能力 · 轴 · 从 → 到 | 关闭时据此更新 `slice.md` 的四轴表；下一次分解时据此判断前置是否满足 | ✅ 枚举 + 设计状态 |
 | **依赖** | `key: value` 逐行：`blocked-by` · `consumed-by` · `requires` | 分解时拓扑排序；开工前算 frontier；CI 快照校验。不填 → 单线程约束失效 | ✅ 引用存在性 |
 | **门禁** | 将跑的 gate id 或脚本命令，一行一条；`RFC`/`Experiment` 可写 `none`（它们的判据是决策/结论，不是机器门禁） | 开工前确认本机可跑；关闭时逐条执行并把退出码写进证据 | ✅ 查 `gates.json` |
-| **预期差分** | 允许发生什么变化（文件/行为/计数），以及**预期不变**的是什么 | 阶段开始时登记；退出时算 `new_finding = after − mapped(before) − expected_delta`。事后补登 → 该阶段判据失效 | ⚠️ 形状可判，内容人工 |
+| **预期差分** | 允许发生什么变化，以及**预期不变**的是什么。允许变化的文件必须**逐条写出仓库相对路径**（不写「相关文档」这类指代）——并行就绪时校验器按这份文件集合判相交（I13） | 阶段开始时登记；退出时算 `new_finding = after − mapped(before) − expected_delta`。事后补登 → 该阶段判据失效 | ✅ 文件集合（I13） |
 | **验收标准** | checklist，2–8 条，每条独立可判并写明改动前的状态 | 关闭时逐条对照；[WORKFLOW.md §六](../../WORKFLOW.md) 明令"代码写完/文档写完/CI 表面绿色"都不能单独作为关闭证据 | ⚠️ 条数可判，质量人工 |
 | **明确排除** | 本 issue 不做的事（含推迟清单里相关的条目） | triage 与评审时防 scope 膨胀 | ⚠️ 非空可判 |
 | **回滚** | 回滚方式；不可回滚者写明为何 | 阶段退出时做回滚演练 | ⚠️ 非空可判 |
@@ -243,6 +244,7 @@ gh issue create --title "..." --body-file <临时草稿> --label type:task --lab
 | I10 | 正文不得引用 `design/archive/trash/`、不得使用 `term_registry.json` 中 `deprecated` 的术语 | 复用既有判据 | ✅ |
 | I11 | 全仓同时 `in-progress` 的 issue ≤ 1（[WORKFLOW.md §一](../../WORKFLOW.md)） | 快照统计 | ✅ |
 | I12 | 验收标准 2–8 条；能力增量 ≤ 3 行；门禁 ≥ 1 条（`门禁: none` 仅限 `RFC`/`Experiment`） | 计数 | ✅ |
+| I13 | 并行就绪（`blocked-by` 全部已关闭或为空）的多条 issue，其「预期差分」声明的文件路径集合不得相交；相交 → 警告并指出共享文件（须串行） | 集合相交 | ✅（警告） |
 
 **机器判不了的部分老实标出来**（模板只能改变形状，不能改变判断）：验收标准是否**充分**、依赖影响评估是否**诚实**、预期差分是否**真的**覆盖了变化、"单能力"是否切得**合理**。这些由 owner 在 triage 时判断。
 
@@ -320,6 +322,8 @@ gh issue create --title "..." --body-file <临时草稿> --label type:task --lab
 | `design_axioms`（可判定的设计约束） | rust-project-goals | 正典级禁令在 [项目规约 §二](../conventions/README.md) 与 `term_registry.json`；issue 级禁令由「明确排除」承担。它们已各有唯一权威，issue 不该是第二处 |
 | `ownership_and_team_asks`（Task / Owner / Notes） | rust-project-goals | 单人仓库，owner 即唯一负责人；需要多人时再加 |
 | `user_stories` / `backwards_compat_policy` / `source·abi_compatibility` | KEP / PEP 387 / swift-evolution | 无外部 API 消费者、无兼容性承诺。`Slice` 类型的「玩家路径」承担了"具体使用场景"那一项 |
+| `Timebox`（spike 的时间盒） | INVEST `Estimable`；Cockburn 的 spike | **暂缓，不是否决**——本仓尚无 `Experiment` 类型的 issue在跑，此刻加字段没有消费时刻。触发条件：**第一条 `Experiment` issue 创建时**，由它决定时间盒是进模板字段、还是留在正文里 |
+| `ready-for-human` 的委派判据（不该交给 agent 的清单） | GitHub Copilot 最佳实践的反向清单 | 暂缓：本仓的"不能交给 agent"已被更硬的机制覆盖——需 owner 决策的走 `RFC`，需 Unity Editor 的按 `gate:unity` 判 `state:blocked`（I6）。人工清单会与这两者重复且更难维护 |
 
 ---
 *创建: 2026-09-12 | 更新: 2026-09-12*

@@ -987,7 +987,91 @@ def rule_i12(subjects, ctx):
     return out
 
 
-# 单一规则表——照 issue-process.md §5.2 的 I1–I12 逐条对应，不增删含义。
+def rule_i13(subjects, ctx):
+    """I13 并行就绪的多条 issue，其「预期差分」声明的文件集合不得相交。
+
+    语义独立 ≠ 可以并行：两条就绪 issue 改同一个文件时，谁先落地都会让另一条
+    的 diff 变成冲突，故必须串行（issue-process.md §三 Step 4）。
+    「就绪」= blocked-by 为空或全部已关闭（无快照时按"无 blocked-by"近似）。
+    """
+    if ctx.snapshot is None:
+        return [Finding(SKIP, "并行就绪判定需要 issue 快照 —— 已跳过（需 --from-github）")]
+    global BASENAME_INDEX
+    if BASENAME_INDEX is None:
+        BASENAME_INDEX = build_basename_index()
+    ready = []
+    blocked_labels = {"state:blocked", "status:blocked"}
+    for s in subjects:
+        if s.number in ctx.snapshot.get("closed_numbers", set()):
+            continue
+        if blocked_labels & set(s.labels):
+            continue        # 自身已标 blocked（如被环境阻塞）→ 不进并行就绪集合
+        deps = parse_dependencies(s)
+        blockers = deps.get("blocked-by", (None, []))[1]
+        if all(n in ctx.snapshot.get("closed_numbers", set()) for n in blockers):
+            ready.append(s)
+    if len(ready) < 2:
+        return []
+    owners = {}
+    for s in ready:
+        for path in expected_delta_paths(s.content("预期差分")):
+            owners.setdefault(path, []).append(s.tag)
+    out = []
+    for path, tags in sorted(owners.items()):
+        if len(tags) > 1:
+            out.append(Finding(WARN, f"{path} 被多条并行就绪 issue 同时声明改动: "
+                                     f"{' '.join(tags)}——须串行（I13）"))
+    return out
+
+
+def expected_delta_paths(content: str):
+    """从「预期差分」抽出**允许变化**部分的文件路径集合（I13 的判定输入）。
+
+    三条约束，都是被真实 issue 逼出来的：
+    1. 只看「允许变化」那一半——「预期不变」里出现的路径恰恰是**不许改**的，
+       把它算进来会造出假相交（第一版实现就踩了这个坑）
+    2. 只认文件（带扩展名或真实存在于磁盘），不认目录——`code/` / `data/`
+       这类指代太粗，会把任何两条 issue 都判成相交
+    3. 裸文件名（如 `build-and-test.md`）按唯一基名解析到仓库路径；不唯一则忽略
+    """
+    changed = re.split(r"预期不变", content)[0]
+    out = set()
+    for _, line, in_fence in strip_code_fences(changed):
+        if in_fence:
+            continue
+        spans = re.findall(r"`([^`]+)`", line) + re.findall(
+            r"((?:design|code|data|reference|\.github)/[^\s`)，,；;：:、]+)", line)
+        for span in spans:
+            tok = clean_path_token(span.split("§")[0])
+            if is_repo_path(tok):
+                full = tok.rstrip("/")
+                if (ROOT / full).is_file():
+                    out.add(full)
+                continue
+            if re.fullmatch(r"[A-Za-z0-9_./-]+\.[A-Za-z0-9]+", tok):
+                matches = BASENAME_INDEX.get(Path(tok).name) or []
+                if len(matches) == 1:
+                    out.add(matches[0])
+    return out
+
+
+def build_basename_index():
+    """仓库受控文件按基名建索引（供裸文件名解析）。只扫已知顶层目录，避免全盘遍历。"""
+    index = {}
+    for top in ("design", "code", "data", "reference"):
+        base = ROOT / top
+        if not base.is_dir():
+            continue
+        for f in base.rglob("*"):
+            if f.is_file() and ".git" not in f.parts:
+                index.setdefault(f.name, []).append(str(f.relative_to(ROOT)))
+    return index
+
+
+BASENAME_INDEX = None   # 惰性构建
+
+
+# 单一规则表——照 issue-process.md §5.2 的 I1–I13 逐条对应，不增删含义。
 RULES = [
     Rule("I1", "必填章节齐全（§4.1 九个 + §4.2 按类型追加）且非空", rule_i1),
     Rule("I2", "类型 ∈ 六种枚举；标签与正文类型一致", rule_i2),
@@ -1001,6 +1085,7 @@ RULES = [
     Rule("I10", "禁止引用 design/archive/trash/；禁止已废弃术语", rule_i10),
     Rule("I11", "全仓同时 in-progress 的 issue ≤ 1", rule_i11),
     Rule("I12", "验收标准 2–8 条；能力增量 ≤ 3 行；门禁 ≥ 1 条", rule_i12),
+    Rule("I13", "并行就绪的 issue 预期差分文件集合不得相交（警告）", rule_i13),
 ]
 
 
