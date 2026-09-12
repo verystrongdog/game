@@ -183,7 +183,7 @@ python3 code/tools/validate_issues.py --from-github
 | **`abagen/` 入库策略** | 同上，零消费者，不阻塞 |
 | **Blender 工具纳入 CI** | 已在 [build-and-test.md §5.1](build-and-test.md) 登记为未验证项，不在切片关键路径 |
 | **处置 Kevin Iglesias 资产包缺失** | 需 `gate:unity` 才能确认失败范围（PlayMode 失败项**未确认**） |
-| **`.refactor-backup/` 清理** · **sim `--outdir` 落仓库外** | 工程卫生，不阻塞任何门禁；编排器自身的副作用已随 §7.2 的缺陷修复处理 |
+| **`.refactor-backup/` 清理** · **sim `--outdir` 落仓库外** · **`run_all_checks.py` 去副作用**（它仍会写 `.checks-state.json`——§7.2 修的是**路径 bug 与注册表**，不是副作用；两件事不许混为一谈） | 工程卫生，不阻塞任何门禁。`build-and-test.md` §2.1 的副作用警告仍然有效、不要照抄成"已解决" |
 
 ## 七、本次分解暴露的问题（诚实清单）
 
@@ -217,6 +217,8 @@ python3 code/tools/validate_issues.py --from-github
 - **CI 是否真跑过**：`build-and-test.md §5.1` 说"未在 GitHub 上真实跑过"，而 P4a 证据记录了四连 `success`。**两处口径不一致，本次未处置**（需 `gh run list` 实测才能定性）
 - **`GameData` 消费者数量**：`data/README.md` §一 说 5 record 聚合，实测 8 字段——本次未处置
 - **PlayMode 失败项计数**（2 项 / 共 16 项）**未确认**（无 Editor）
+- **P4a 证据的自述内部不一致**：正文写「登记为 P4a 的未闭合项」（回滚演练），但同文「仍未闭合项」4 条清单里没有它（`evidence/README.md` 的未闭合项列又含它）。**不另开 issue**——I1 #128 完成的当次就会让这条口径归零（该项由"未闭合"变"已闭合"），现在动它是白改
+- **决策树里仍列着已删除的桥接工程草稿**（`design/decisions/06-numbered-disease-and-presentation.md` 记 `code/src/YouAreNotTheFish.Core.Unity/`「Q6b 定案后启用」，而 [ARCHITECTURE.md §四](../../ARCHITECTURE.md) 记该目录已于 2026-09-12 删除）。**这不是缺陷**：决策树按 [项目规约 §六](../conventions/README.md) 是**冻结的历史层**，它记录的是当时的决定（"定案后启用"），不是当下的状态声明。真实状态以 `ARCHITECTURE.md` §四 与实测为准。**这条要写下来**——否则下一个人会照着"一致性"的直觉去改一份只读历史
 
 ---
 *创建: 2026-09-12 | 更新: 2026-09-12*
