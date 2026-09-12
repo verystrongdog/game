@@ -111,14 +111,30 @@ unity command editor_play  # 进 Play 模式（验证用）
 | 地块 | 100×100 m，101×101 采样 @ 1.0 m；**高差 3.1075 m**，最大 1 m 高差 0.1145 m（6.53°） |
 | 地形源 | USGS 3DEP **1 m lidar** DEM（Konza Prairie 高草草原，公有领域）——见 [地块数据-Konza草原.md](地块数据-Konza草原.md) |
 | 株丛 | **4563 株**，六角错行 s = 1.602 m，蓬径 D = 1.85 m → 覆盖率 1.0；密度 **304 株/亩**（文献区间 180–330）——见 [玫瑰株丛密度.md](玫瑰株丛密度.md) |
-| 渲染 | 程序化低模株丛（106 tri）+ `Graphics.DrawMeshInstanced`（≈5 draw call），株丛无碰撞体 |
+| 渲染 | 程序化低模株丛（106 tri），**每株一个 GameObject**（MeshFilter + MeshRenderer 共享网格与材质，开 GPU Instancing 自动合批 —— 运行时生成 4563 个）；株丛无碰撞体 |
 | 小人 | `WalkerController`（几何体白盒 + 程序化步态，**零外部资产**） |
 | HUD | IMGUI：地块/采样/高差/株数/密度/间距/蓬径/全覆盖判据/小人坐标 |
 | 测试 | `RoseFieldSmokeTests`（4 个 PlayMode）：高度图解码 / 地面网格法线朝上 / 六角格间距与密度判据 / 小人落在实际地形上 |
 
 **生成/运行**：菜单 **YANTF → 玫瑰实验 → 创建玫瑰花海场景**（`Assets/Editor/RoseFieldLabBuilder.cs`）→ 打开 `Assets/Scenes/RoseFieldLab.unity` → 按 **Play**。
 
-> ⚠️ 已知简化：① 株丛叶/瓣为单面几何 + `Cull Off`，背面在 Lambert 下偏暗；② 阴影投射关闭（4500+ 实例）；③ 逐株仅有偏航与缩放差异（无异形变）；④ 地块为真实地形的一块切片，与游戏正典空间**无关**（本实验不入正典）。
+### 本机实测结论（2026-09-12，Unity 6000.5.2f1）
+
+用 Unity CLI（`com.unity.pipeline`）直驱编辑器跑通全链路：编译 0 error → 菜单生成场景 → PlayMode 测试 4/4 绿 → Play → 截图回读像素统计。
+
+| 实测项 | 结果 |
+|--------|------|
+| 构建日志 | 株数 **4563** / 密度 **304 株/亩** / 间距 1.602 m / 蓬径 1.85 m = 判据 1.850 m → **覆盖率 1.0** / 地块高差 3.1075 m |
+| 运行时层级 | `RoseField(玫瑰花海)/Roses` 下 **4563 个 MeshRenderer**；地面 MeshCollider 正常 |
+| 渲染画面 | 红色（玫瑰）像素占比 **8.04%**，草地 68.4% —— 地平线以上为天，以下整片红绿交错，远处透视压缩成实心红带 |
+| PlayMode 测试 | `RoseFieldSmokeTests` **4/4 通过**（全项目 16 项：14 过 / 2 败；败项为 ActionLab 既有问题，与本次无关） |
+
+### ⚠️ 两个踩过的坑（都已修复并写进代码注释）
+
+1. **失焦冻结玩家循环**：`Project Settings → Player → Run In Background` 默认关闭时，编辑器窗口失去焦点会**停止 Update 循环**（`Time.frameCount` 不再增长），场景照常渲染但所有动态内容静止 —— 表现为「玫瑰一株都不渲染」。`RoseFieldLabBuilder` 现在显式设 `PlayerSettings.runInBackground = true`。
+2. **即时模式绘制不进抓帧路径**：`Graphics.DrawMesh / DrawMeshInstanced / RenderMeshInstanced` 在 `capture_game_view --source camera` 抓到的帧里**不存在**（`source=screen` 的差异经比对确认是编辑器 UI 红色，非场景内容）。故株丛改用真实 GameObject 渲染 —— 顺带在编辑器 Scene View 里不按 Play 也能直接看层级。
+
+> ⚠️ 已知简化：① 株丛叶/瓣为单面几何 + `Cull Off`，背面在 Lambert 下偏暗；② 阴影投射关闭（4563 株）；③ 逐株仅有偏航与缩放差异（无异形变）；④ 地块为真实地形的一块切片，与游戏正典空间**无关**（本实验不入正典）；⑤ 株丛对象运行时生成（不烘焙进场景，避免 .unity 膨胀到数 MB）。
 
 ## 三、工程结构
 
