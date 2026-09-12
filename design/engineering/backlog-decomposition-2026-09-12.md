@@ -13,6 +13,7 @@
 5. [五、Step 5–7：绑定、过反例、创建](#五step-57绑定过反例创建)
 6. [六、候选队列（不建 issue 的项及其理由）](#六候选队列不建-issue-的项及其理由)
 7. [七、本次分解暴露的问题（诚实清单）](#七本次分解暴露的问题诚实清单)
+8. [八、存量 issue 清理记录（2026-09-12）](#八存量-issue-清理记录2026-09-12)
 
 ---
 
@@ -221,6 +222,40 @@ python3 code/tools/validate_issues.py --from-github
 - **PlayMode 失败项计数**（2 项 / 共 16 项）**未确认**（无 Editor）
 - **P4a 证据的自述内部不一致**：正文写「登记为 P4a 的未闭合项」（回滚演练），但同文「仍未闭合项」4 条清单里没有它（`evidence/README.md` 的未闭合项列又含它）。**不另开 issue**——I1 #128 完成的当次就会让这条口径归零（该项由"未闭合"变"已闭合"），现在动它是白改
 - **决策树里仍列着已删除的桥接工程草稿**（`design/decisions/06-numbered-disease-and-presentation.md` 记 `code/src/YouAreNotTheFish.Core.Unity/`「Q6b 定案后启用」，而 [ARCHITECTURE.md §四](../../ARCHITECTURE.md) 记该目录已于 2026-09-12 删除）。**这不是缺陷**：决策树按 [项目规约 §六](../conventions/README.md) 是**冻结的历史层**，它记录的是当时的决定（"定案后启用"），不是当下的状态声明。真实状态以 `ARCHITECTURE.md` §四 与实测为准。**这条要写下来**——否则下一个人会照着"一致性"的直觉去改一份只读历史
+
+## 八、存量 issue 清理记录（2026-09-12）
+
+本文 §二 记着「16 个存量 issue 按 §7.4 不追溯，故不进本次依赖图」。**当日晚些时候，owner 裁定逐条清理**——因为不清理的真实代价已经显形：**7 条带 `ready-for-agent` 标签的存量 issue 指向的是早已实现并有测试覆盖的交付物**，谁按标签筛选任务就会拿到做完的活。
+
+逐条取证后**全部关闭：14 条 `completed` · 2 条 `duplicate` · 2 条 `not planned`；12 条已完成、0 条需要新工作。**
+
+| # | 标题 | 处置 | 取证 |
+|---|---|---|---|
+| 1 | [Grilling] 物理医院层可走区域 | `completed` | `design/space/空间与关卡设计.md` §三 / §七 / §九 |
+| 9 | [待讨论] 战斗失败/被击败后的代价与回报 | `completed` | `design/rules/回合战斗流程.md` §八（含 Grilling #78 结论） |
+| 26 | [链路] 链路生成脚本与 #25 脱节 | `not planned` | 问题所在的旧 364 链路系统已整体作废：脚本已不在 `code/tools/`，被三体模型替代（`six-dimensions.md` / `dimensions/pipeline.md` 均标废弃） |
+| 28 | [迁移] 技能遴选 | `completed` | `design/rules/skill-tree/技能生成机制.md`「✅ 2026-09-01 P1a 完成：888 边 → 71 候选技能」 |
+| 29 | [迁移] NPC AI 预烘焙管线 | `not planned` | `design/pipeline/预烘焙管线脚本设计.md` 头部「架构已过时…改用 Affordance Competition 实时 salience」 |
+| 30 | [迁移] 疾病/消耗品 link ID 重映射 | `completed` | `grep -rln "link_[0-9]" design/entities/` → **0 命中**（原报 19 文件） |
+| 50 | WMatrixBuilder 规格 | `completed` | `Engine/WMatrixBuilder.cs` |
+| 58 | 速度排序规格 | `completed` | `Engine/SpeedScoreCalculator.cs` + `TurnOrderBuilder.cs` |
+| 59 | 速度排序规格（重复） | `duplicate` | 同 #58 |
+| 62 | 伤害结算规格 | `completed` | `Engine/DamageCalculator.cs` |
+| 64 | csharp-events 规格 | `completed` | `Engine/EventProcessor.cs` |
+| 65 | csharp-events 规格（重复） | `duplicate` | 同 #64 |
+| 66 | csharp-flow 规格 | `completed` | `Entity/CombatState.cs` + `Flow/TurnManager.cs` + `Flow/ActionResolver.cs` |
+| 67 | csharp-console 规格 | `completed` | `code/src/YouAreNotTheFish.Console/`（载体状态见 `PLAYABLE.md`） |
+| 68 | csharp-smoke 规格 | `completed` | `Core.Tests/Smoke/SmokeTests.cs` |
+| 96 | 脚本 4：estimator-validity | `completed` | `code/sim/sim_consciousness_v7_estimator_validity.py` |
+
+### 8.1 三条边界（记住，别越界）
+
+1. **正文与历史评论未改写**。它们是历史记录；改写历史会让"当时怎么想的"永久丢失。
+2. **未补 `type:*` 标签**（owner 裁定）：补了就不满足 §7.4 存量豁免，必须先在正文补齐九个必填章节——为 15 条已完成的 issue 补写字段，成本远大于收益。
+3. **关闭评论没有回填 `design/archive/grilling/issues/`**。那份归档是重构 Phase 4.5（2026-09-12 白天）的**时点快照**；本次关闭发生在其后。所以**关闭记录的权威位置是 GitHub issue 本身**，归档只保留到导出那一刻。
+
+> 清理后开放队列 = 9 条新契约 issue（#128–#136），校验器的存量豁免清单随之清空（14 rules · 8 passed · 0 failed · 6 warnings）。
+
 
 ---
 *创建: 2026-09-12 | 更新: 2026-09-12*

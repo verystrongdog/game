@@ -314,9 +314,16 @@ gh issue edit <新编号> --add-blocked-by <前置编号>
 | ~~本机 `gh` 为 2.4.0（2022-03），无 `--blocked-by` / `--parent`~~ → **2026-09-12 已升级到 2.100.0** | 原生依赖边现可用：`gh issue create --blocked-by` · `gh issue edit --add-blocked-by` / `--parent` / `--type` · `gh issue view --json blockedBy,blocking,parent` 可读 | **权威仍是正文 `依赖:` 字段**——创建前门禁在 issue 还不存在时就要判，且 `requires:`（gate / PLAYABLE / 能力 / owner）没有原生对应物。原生边是**投影**（价值在 UI 的阻塞图标与反向可见性），两侧不一致由 **I14** 报出 |
 | GitHub tasklist `- [ ] #123` 已退役（官方文档原文 "Tasklist blocks are retired"，见 [2025-02-18 changelog](https://github.blog/changelog/2025-02-18-github-issues-projects-february-18th-update/)） | 旧式勾选依赖不再有语义保证 | 不用 tasklist 表达依赖 |
 
-### 7.4 存量异常（不追溯）
+### 7.4 存量异常（不追溯，但已清理）
 
-仓库现存 16 个开放 issue 属于 grilling 时代，与本文不兼容：标签为 `维度:*` / `ready-for-agent`（与 [WORKFLOW.md §三](../../WORKFLOW.md) 的类型词汇不符），正文引用 `.scratch/` 下的路径（该目录已在重构中移出仓库）。**本文只约束新建 issue，不追溯处置存量。** 是否关闭/重写由 owner 逐条决定。
+**规则**：本文只约束新建 issue，**不追溯处置**存量——创建于本约束生效前、且不带 `type:*` 标签的 issue 不进 I1–I14 的判罚（校验器显式打印跳过清单，不算通过、也不静默忽略）。
+
+**已发生的事（2026-09-12，owner 裁定）**：仓库原有 16 个 grilling 时代开放 issue（标签为 `维度:*` / `ready-for-agent`，正文引用已移出仓库的 `.scratch/` 路径），经逐条取证后**全部关闭**：14 条 `completed`、2 条 `duplicate`、2 条 `not planned`（已被替代）。**12 条已完成、0 条需要新工作**——其中 7 条还挂着 `ready-for-agent`，指向的是早已实现并有测试覆盖的交付物，这正是"存量不清理"的真实代价。
+
+- 逐条证据与处置结论：[backlog 分解示范 §八](backlog-decomposition-2026-09-12.md)
+- 正文与历史评论**未改写**（它们是历史记录）；归档副本在 `design/archive/grilling/issues/`，**关闭评论未回填该归档**（归档是 2026-09-12 重构 Phase 4.5 的时点快照），故关闭记录的权威位置是 GitHub issue 本身
+
+**规则保留的理由**：将来仍可能出现"无 `type:*` 标签"的历史 issue；豁免规则让校验器不把它们误判为违规，同时把它们**显式列出来**而不是装作不存在。
 
 ## 八、来源与借鉴
 
