@@ -2,6 +2,8 @@
 // - 状态名 = 词表 id = 代码字符串（三面对一，由 ActionLabBuilder 按 ActionCatalog 构造成立）
 // - 衔接优先级：Down(4) > HitReaction(3) > 一次性动作(2) > Defend(1) > locomotion(0)
 // - 一次性动作播完（clip.length + 0.05s）→ 回退 locomotion 目标（规格 §七 计时口径）
+// - 空中 Jump → 落地：显式补发一次回切（Jump 这次切态不进 _locomotionTarget 的账，
+//   否则落地目标与起跳前同档时守卫判"无变化"→ 状态机停在 Jump，身体平移而腿不动）
 // - Defend 循环持续态：TickLocomotion 收到移动意图(speed>0) 即退出；或更高优先级动作打断
 // - Down 终态停留末帧：不自动回退，须 Reset()（演示 R 键）
 // - 位移全走 CharacterController（本组件不移动物体），applyRootMotion=false 由场景侧保证
@@ -28,7 +30,13 @@ namespace YANTF.ActionLab
         public bool IsAirborne { get; private set; }
         public float HorizontalSpeed01 { get; private set; } // 0..1（0=静止, 1=满速跑）
 
+        /// <summary>最近一次切态请求的目标态名（决策层留痕：无 Animator 时同样记录 → 断言与排障面）。</summary>
+        public string LastRequestedState { get; private set; }
+        /// <summary>切态请求累计次数（守卫应只在"档位变化/落地/退出防御"边沿请求，不逐帧刷）。</summary>
+        public int StateRequestCount { get; private set; }
+
         private ActionEntry _activeEntry;   // 当前动作（一次性/Defend/Down）；null = locomotion 控制
+        private bool _returnFromJumpPending; // 空中发过 Jump（缓存 _locomotionTarget 未跟账）→ 落地必须补发一次回切
         private float _activeTime;
         private float _plannedDuration;     // 一次性动作：clip.length + 0.05（未知时按 1.05 兜底）
         private string _locomotionTarget = ActionIds.Idle;
@@ -50,7 +58,8 @@ namespace YANTF.ActionLab
         {
             IsAirborne = !grounded;
             HorizontalSpeed01 = speed01;
-            if (animator == null || animator.runtimeAnimatorController == null) return;
+            // 注意：无 Animator/controller 时**不提前 return**——状态选择是决策层，须始终成立并留痕
+            // （CrossFade 的落地由 CrossFadeState 自行判空）。否则整段逻辑在无资产时不可测（见 ActionLabLocomotionTests）。
 
             if (!grounded)
             {
@@ -59,6 +68,7 @@ namespace YANTF.ActionLab
                 if (!_jumpFired)
                 {
                     _jumpFired = true;
+                    _returnFromJumpPending = true; // Jump 不进 _locomotionTarget 的账 → 落地须补发回切
                     CrossFadeState(ActionIds.Jump, ActionCatalog.Get(ActionIds.Jump).Fade);
                 }
                 return; // 空中不再改写状态
@@ -81,9 +91,11 @@ namespace YANTF.ActionLab
                    : speed01 < 0.55f ? ActionIds.Walk
                    : ActionIds.Run;
 
-            if (target != _locomotionTarget || animator.GetCurrentAnimatorStateInfo(0).IsName(ActionIds.Defend))
+            // 守卫：档位变化 || 刚从空中落地（补发）|| 当前停在 Defend（移动意图退出防御）
+            if (target != _locomotionTarget || _returnFromJumpPending || IsCurrentState(ActionIds.Defend))
             {
                 _locomotionTarget = target;
+                _returnFromJumpPending = false;
                 CrossFadeState(target, ActionCatalog.Get(target).Fade);
             }
         }
@@ -130,6 +142,7 @@ namespace YANTF.ActionLab
             _activeEntry = null;
             IsLocked = false;
             _activeTime = 0f;
+            _returnFromJumpPending = false; // 显式重置：不留待补发的落地回切
             _locomotionTarget = ActionIds.Idle;
             if (animator != null && animator.runtimeAnimatorController != null)
             {
@@ -210,8 +223,18 @@ namespace YANTF.ActionLab
 
         private void CrossFadeState(string stateName, float fade)
         {
+            // 决策先记账（无 controller 也留痕）→ 断言/排障不依赖资产存在
+            LastRequestedState = stateName;
+            StateRequestCount++;
             if (animator == null || animator.runtimeAnimatorController == null) return;
             animator.CrossFade(stateName, fade);
+        }
+
+        /// <summary>Animator 当前是否停在该状态（无 Animator/controller → false）。</summary>
+        private bool IsCurrentState(string stateName)
+        {
+            if (animator == null || animator.runtimeAnimatorController == null) return false;
+            return animator.GetCurrentAnimatorStateInfo(0).IsName(stateName);
         }
 
         /// <summary>纯逻辑：一次性动作是否到点回退（规格 §七：elapsed >= clipLength + 0.05）。测试直接断言。</summary>
