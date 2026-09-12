@@ -1,7 +1,7 @@
 // ActionLab 场景驱动 — CharacterController 物理 + 输入 → ActionPlayer（动作词表 12 词条演示场）
 // 位移口径同 KiWalkerLab（AnimatorWalker）：CC 移动（无 RootMotion），动画状态由 ActionPlayer 决定。
 // 按键：WASD/方向键 走位（相机相对）、Shift 跑、Space 跳（locomotion 空中态）；
-//       1物攻 2精攻 3防御(再按退出) 4受击 5倒下（动作键）、R 重置（Down 终态后）。
+//       1物攻 2精攻 3防御(再按退出) 4受击 5倒下 6坐 7起身（动作键）、R 重置（Down 终态后）。
 // HUD：IMGUI 顶部显示当前动作名（目视清单 ② 验收项）。
 using UnityEngine;
 
@@ -93,7 +93,7 @@ namespace YANTF.ActionLab
 
         private void HandleActionKeys()
         {
-            // 演示键位：1物攻 2精攻 3防御 4受击 5倒下 R重置（对齐 DemoSandbox 1/2/3 肌肉记忆）
+            // 演示键位：1物攻 2精攻 3防御 4受击 5倒下 6坐 7起身 R重置（对齐 DemoSandbox 1/2/3 肌肉记忆）
             if (Input.GetKeyDown(KeyCode.Alpha1)) player.Play(ActionIds.PhysicalAttack);
             if (Input.GetKeyDown(KeyCode.Alpha2)) player.Play(ActionIds.MentalAttack);
             if (Input.GetKeyDown(KeyCode.Alpha3))
@@ -103,6 +103,12 @@ namespace YANTF.ActionLab
             }
             if (Input.GetKeyDown(KeyCode.Alpha4)) player.Play(ActionIds.HitReaction);
             if (Input.GetKeyDown(KeyCode.Alpha5)) player.Play(ActionIds.Down);
+            // 坐立三段（同源）：6 坐下 → 由 NextState 自动续切 SitIdle 坐住；7 起身 → 回 locomotion
+            // 7 加输入层守卫：起身 clip 首帧就是坐姿，站姿下硬播会看到"瞬蹲再起"。
+            // 动作层 ActionPlayer.Play() 不设该守卫——那层保持"按键即播"的宽松口径（规格 §四·甲）。
+            if (Input.GetKeyDown(KeyCode.Alpha6)) player.Play(ActionIds.Sit);
+            if (Input.GetKeyDown(KeyCode.Alpha7) && player.CurrentActionId == ActionIds.SitIdle)
+                player.Play(ActionIds.Stand);
             if (Input.GetKeyDown(KeyCode.R)) player.ResetToIdle();
         }
 
@@ -189,7 +195,7 @@ namespace YANTF.ActionLab
         private void OnGUI()
         {
             string actionName = player != null ? player.CurrentActionDisplay : "—";
-            string hint = "WASD 移动 / Shift 跑 / Space 跳 / 1物攻 2精攻 3防御 4受击 5倒下 / R 重置";
+            string hint = "WASD 移动 / Shift 跑 / Space 跳 / 1物攻 2精攻 3防御 4受击 5倒下 6坐 7起身 / R 重置";
             GUILayout.BeginArea(new Rect(12f, 12f, 420f, 80f));
             GUILayout.Label("动作: " + actionName);
             GUILayout.Label(hint);
