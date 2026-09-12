@@ -65,6 +65,9 @@ namespace YANTF.EditorTools
             camGo.transform.rotation = Quaternion.Euler(14f, 0f, 0f);
 
             if (!Directory.Exists("Assets/Scenes")) Directory.CreateDirectory("Assets/Scenes");
+            // 关掉「失焦暂停」：编辑器窗口失去焦点时若不后台运行，玩家循环会冻结（Update 不再执行），
+            // 场景看起来正常但动态内容全停 —— 现场排查过一次，代价很大。
+            PlayerSettings.runInBackground = true;
             EditorSceneManager.SaveScene(scene, ScenePath);
             Debug.Log($"[YANTF] 玫瑰花海场景已保存: {ScenePath}\n" +
                       $"  株数 {lab.RosePositions.Length} / 密度 {lab.PlantsPerMu:F0} 株/亩 / 错行间距 {lab.latticeSpacing:F3} m\n" +

@@ -1,25 +1,28 @@
-// 玫瑰花海实验场 — 地块高度场 + 商业化密度玫瑰株丛实例化（Grilling #126）
+// 玫瑰花海实验场 — 地块高度场 + 商业化密度玫瑰株丛（Grilling #126）
 //
 // 口径来源（逐项可核）：
 //   地块    100×100 m，USGS 3DEP 1 m lidar DEM（Konza Prairie 高草草原，公有领域）
 //           relief 3.1075 m / std 0.5665 m / 最大 1 m 高差 0.1145 m（6.53°）
 //   密度    平阴玫瑰密植园 180–330 株/亩（平阴县人民政府栽培技术 + 农博数据中心，两源互印），取 300 株/亩
-//   布置    六角错行间距 s = 1.602 m → 单株占地 (√3/2)s² = 2.2222 m² → N ≈ 4560 株 / 10⁴ m²
+//   布置    六角错行间距 s = 1.602 m → 单株占地 (√3/2)s² = 2.2222 m² → N = 4563 株 / 10⁴ m²
 //   覆盖率  三角格覆盖半径 = s/√3 → 几何全覆盖判据 D ≥ 2s/√3 = 1.850 m（本实验 D = 1.85 m → 覆盖率 1.0）
 //
-// 渲染：Graphics.DrawMeshInstanced（每批 1023）→ 全部株丛约 5 个 draw call；株丛不设碰撞体（「穿行」语义）。
+// 渲染：每株一个 GameObject（MeshFilter + MeshRenderer，共享同一网格与材质）。
+//   共享材质开了 GPU Instancing → Unity 自动合批。**不用** Graphics.DrawMesh* 即时模式：
+//   即时模式绘制不进 Camera.Render() 抓帧路径（#126 实测：source=camera 抓到 0% 玫瑰像素，
+//   而 MeshRenderer 对象正常可见），且无法在编辑器的 Scene View 里直接看到。
+// 株丛不设碰撞体（「穿行」语义）。
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 namespace YANTF.RoseField
 {
-    /// <summary>玫瑰花海实验场：程序化地面 + 六角错行玫瑰株丛实例化。挂在场景内一个空物体上即可。</summary>
+    /// <summary>玫瑰花海实验场：程序化地面 + 六角错行玫瑰株丛。挂在场景内一个空物体上即可。</summary>
     [DisallowMultipleComponent]
     public sealed class RoseFieldLab : MonoBehaviour
     {
         public const string GroundName = "Ground";
-        public const int InstancesPerBatch = 1023; // Graphics.DrawMeshInstanced 单批上限
+        public const string RosesName = "Roses";
 
         [Header("地块（USGS 3DEP 1m lidar · Konza Prairie 高草草原 · 公有领域）")]
         [Tooltip("Resources 下的高度图（.bytes，LE uint16，行 0 = 北）")]
@@ -44,6 +47,12 @@ namespace YANTF.RoseField
         public bool buildGround = true;
         public Color groundColor = new Color(0.42f, 0.47f, 0.33f);
 
+        [Header("渲染")]
+        [Tooltip("玫瑰朝向随机种子（确定性）")]
+        public uint roseSeed = 20260912u;
+        [Tooltip("关闭逐株阴影投射（4500+ 株，开销大）")]
+        public bool disableRoseShadows = true;
+
         [Header("引用（可选，仅供 HUD 显示小人坐标）")]
         public Transform walkerView;
 
@@ -51,6 +60,7 @@ namespace YANTF.RoseField
         public HeightField Field { get; private set; }
         public Vector3[] RosePositions { get; private set; }
         public Mesh RoseMesh { get; private set; }
+        public Material RoseMaterial { get; private set; }
         public int LatticeRows { get; private set; }
         public int LatticeCols { get; private set; }
 
@@ -74,8 +84,7 @@ namespace YANTF.RoseField
         /// <summary>是否满足几何全覆盖（地面无裸露）。</summary>
         public bool IsFullCoverage => roseCanopyDiameter >= MinCanopyForFullCoverage - 1e-4f;
 
-        private Material _roseMat;
-        private Matrix4x4[] _matrices;
+        private Transform _rosesRoot;
         private bool _built;
 
         private void Awake()
@@ -83,7 +92,7 @@ namespace YANTF.RoseField
             Build();
         }
 
-        /// <summary>幂等构建：高度场 → 株丛网格 → 六角错行株位 → 地面。失败 fail-fast。</summary>
+        /// <summary>幂等构建：高度场 → 株丛网格 → 六角错行株位 → 地面 → 玫瑰对象。失败 fail-fast。</summary>
         public void Build()
         {
             if (_built) return;
@@ -99,18 +108,11 @@ namespace YANTF.RoseField
             LatticeRows = rows;
             LatticeCols = cols;
 
-            _matrices = new Matrix4x4[RosePositions.Length];
-            for (int i = 0; i < RosePositions.Length; i++)
-            {
-                // 确定性伪随机：偏航与 1.00–1.15 缩放（缩放 ≥ 1 保证蓬径不小于判据 D）
-                uint h = unchecked((uint)i * 2654435761u);
-                float yaw = (h % 3600u) * 0.1f;
-                float scale = 1f + ((h >> 12) % 1000u) * 0.00015f;
-                _matrices[i] = Matrix4x4.TRS(RosePositions[i], Quaternion.Euler(0f, yaw, 0f), Vector3.one * scale);
-            }
-
-            _roseMat = MakeRoseMaterial();
+            RoseMaterial = MakeRoseMaterial();
             EnsureGround();
+            // 株丛对象只在运行时生成：4563 个 GameObject 烘焙进场景会让 .unity 膨胀到数 MB、
+            // 层级面板卡顿；运行时生成还能保证布局始终跟随 Inspector 当前参数。
+            if (Application.isPlaying) BuildRoseObjects();
 
             _built = true;
         }
@@ -142,23 +144,49 @@ namespace YANTF.RoseField
             return list.ToArray();
         }
 
-        private void Update()
+        /// <summary>逐株生成确定性偏航（0–360°）与 1.00–1.15 缩放（缩放 ≥ 1 保证蓬径不低于判据 D）。</summary>
+        public void GetInstanceTransform(int index, out Quaternion rotation, out float scale)
         {
-            if (!_built || _roseMat == null || RoseMesh == null || _matrices == null) return;
-
-            Camera cam = Camera.main;
-            for (int i = 0; i < _matrices.Length; i += InstancesPerBatch)
-            {
-                int n = Mathf.Min(InstancesPerBatch, _matrices.Length - i);
-                Graphics.DrawMeshInstanced(
-                    RoseMesh, 0, _roseMat, _matrices, n,
-                    (MaterialPropertyBlock)null,
-                    ShadowCastingMode.Off, true, gameObject.layer, cam,
-                    LightProbeUsage.Off, (LightProbeProxyVolume)null);
-            }
+            uint h = unchecked(roseSeed + (uint)index * 2654435761u);
+            rotation = Quaternion.Euler(0f, (h % 3600u) * 0.1f, 0f);
+            scale = 1f + ((h >> 12) % 1000u) * 0.00015f;
         }
 
         // ---- 构建辅助 ----
+
+        private void BuildRoseObjects()
+        {
+            var existing = transform.Find(RosesName);
+            if (existing != null)
+            {
+                if (Application.isPlaying) Destroy(existing.gameObject);
+                else DestroyImmediate(existing.gameObject);
+            }
+
+            var root = new GameObject(RosesName);
+            root.transform.SetParent(transform, false);
+            _rosesRoot = root.transform;
+
+            var shadow = disableRoseShadows
+                ? UnityEngine.Rendering.ShadowCastingMode.Off
+                : UnityEngine.Rendering.ShadowCastingMode.On;
+
+            for (int i = 0; i < RosePositions.Length; i++)
+            {
+                var go = new GameObject("Rose");
+                go.transform.SetParent(_rosesRoot, false);
+                GetInstanceTransform(i, out Quaternion rot, out float scale);
+                go.transform.SetPositionAndRotation(RosePositions[i], rot);
+                go.transform.localScale = Vector3.one * scale;
+
+                var mf = go.AddComponent<MeshFilter>();
+                mf.sharedMesh = RoseMesh;
+                var mr = go.AddComponent<MeshRenderer>();
+                mr.sharedMaterial = RoseMaterial;
+                mr.shadowCastingMode = shadow;
+                mr.receiveShadows = true;
+            }
+        }
 
         private void EnsureGround()
         {
@@ -185,7 +213,7 @@ namespace YANTF.RoseField
             if (shader == null) shader = Shader.Find("Diffuse");
 
             var mat = new Material(shader) { name = "RoseInstanced" };
-            mat.enableInstancing = true;
+            mat.enableInstancing = true; // 4563 个共享材质的 Renderer → 自动实例化合批
             if (mat.HasProperty("_Tint")) mat.SetColor("_Tint", Color.white);
             if (fallback && mat.HasProperty("_Color")) mat.color = new Color(0.72f, 0.15f, 0.22f);
             return mat;
@@ -208,7 +236,7 @@ namespace YANTF.RoseField
             if (!_built || Field == null) return;
             Vector3 wp = walkerView != null ? walkerView.position : Vector3.zero;
 
-            GUILayout.BeginArea(new Rect(12f, 12f, 460f, 200f));
+            GUILayout.BeginArea(new Rect(12f, 12f, 470f, 200f));
             GUILayout.Label("玫瑰花海实验场 (Grilling #126)");
             GUILayout.Label($"地块 {fieldSize:F0}×{fieldSize:F0} m  高度图 {Field.Samples}×{Field.Samples} @ {fieldSize / (Field.Samples - 1):F1} m");
             GUILayout.Label($"地块高差 {Field.Relief:F4} m   最大 1m 高差 {Field.MaxSlopePerMeter():F4} m ({Mathf.Atan(Field.MaxSlopePerMeter()) * Mathf.Rad2Deg:F2}°)");
