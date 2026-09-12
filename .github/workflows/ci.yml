@@ -4,7 +4,7 @@ name: CI
 #
 # 三个 job，对应切片三轴：
 #   docs-integrity  设计正典与数据契约的完整性（11 个校验器 + fixture 契约）
-#   engine          C# 逻辑引擎：构建 + 415 个测试 + 跨语言 fixture 判定比对
+#   engine          C# 逻辑引擎：构建 + 416 个测试 + 跨语言 fixture 判定比对
 #   unity           呈现层：本 job **显式报告 NOT_AVAILABLE**，不静默跳过
 #
 # 判据见 WORKFLOW.md §六：**未运行、超时、工具异常和零测试不是通过**。

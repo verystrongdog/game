@@ -134,7 +134,7 @@ sim 脚本用**扁平 import**（`from sim_consciousness_cs4_test import ...`）
 |---|---|
 | 校验器 | 11/11 退出码 0 |
 | `validate_cross_refs` | **0 死链 / 0 段引用警告** |
-| 引擎测试 | **415 passed / 0 failed** |
+| 引擎测试 | **416 passed / 0 failed** |
 | 跨语言 fixture 判定 | `compare_fixture_verdicts.py` 逐条比对 Python 与 C# 的接受/拒绝，**差异为空**（53 条） |
 | 干净检出 | 无本地缓存（`.nuget-pkgs`）也能 restore + 构建 + 测试 |
 | SDK 版本 | 与 `global.json` 一致，不一致即失败（CI 有显式断言） |
