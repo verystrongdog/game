@@ -116,6 +116,87 @@ FIELD_ALIASES = {
 # ── §4.1 依赖章节的三个 key ────────────────────────────────
 DEP_KEYS = ["blocked-by", "consumed-by", "requires"]
 
+# ── issue-process.md §4.1.1 三个受控取值域 ──────────────────
+
+def check_requires_domain(value: str, gates: dict):
+    """校验 `requires:` 的取值域（§4.1.1）。返回问题描述列表。"""
+    problems = []
+    if value in ("无", ""):
+        return problems
+    for tok in re.split(r"[、,，;；]+", value):
+        tok = tok.strip()
+        if not tok:
+            continue
+        if tok.startswith("gate:"):
+            gid = tok[len("gate:"):].strip()
+            if gid not in gates:
+                problems.append(f"requires: gate:{gid} 不在 gates.json 中")
+        elif tok.startswith("PLAYABLE:"):
+            rest = tok[len("PLAYABLE:"):].strip()
+            if rest != "NO_AUTHORIZED_PLAYABLE" and not rest.startswith("AUTHORIZED_PLAYABLE:"):
+                problems.append(f"requires: PLAYABLE:{rest} 不是合法状态"
+                                f"（应为 NO_AUTHORIZED_PLAYABLE 或 AUTHORIZED_PLAYABLE: <slice-id>）")
+        elif tok.startswith("能力:"):
+            m = re.match(r"^能力:(.+?)\s*=\s*(\w+)\s*:\s*(\w+)$", tok)
+            if not m:
+                problems.append(f"requires: {tok} 不符合 `能力:<能力名>=<轴>:<状态>`")
+            else:
+                _, axis, state = m.groups()
+                if axis not in AXIS_STATES:
+                    problems.append(f"requires: {tok} 的轴 {axis} ∉ 四轴")
+                elif state not in AXIS_STATES[axis]:
+                    problems.append(f"requires: {tok} 的状态 {state} ∉ {axis} 的合法值")
+        elif tok.startswith("owner:"):
+            if not tok[len("owner:"):].strip():
+                problems.append("requires: owner: 后必须写明决策项")
+        else:
+            problems.append(f"requires: {tok} 不在受控取值域"
+                            f"（gate: / PLAYABLE: / 能力: / owner: / 无）")
+    return problems
+
+
+def check_consumed_domain(value: str, gates: dict):
+    """校验 `consumed-by:` 的取值域（§4.1.1）。返回 (问题列表, 警告列表)。"""
+    problems, warns = [], []
+    if value in ("无", ""):
+        return problems, warns
+    # `待建:<描述>` 与 `终态`（须写明为何）**按定义携带自由文本**，其中的
+    # 顿号/逗号属于描述本身，不能当分隔符——否则 `终态（…，由…消费）` 会被
+    # 切成两半，把合法写法误报成非法。实测：第一版实现就误报了 #133 与 #135。
+    if value.startswith("待建:") or value.startswith("终态"):
+        rest = value[len("待建:"):].strip() if value.startswith("待建:") else ""
+        if value.startswith("待建:") and not rest:
+            problems.append("consumed-by: 待建: 后必须写明下游是什么")
+        elif value.startswith("待建:"):
+            warns.append(f"consumed-by: {value}（下游尚未创建——A3 的弱化形态，triage 时确认）")
+        return problems, warns
+    for tok in re.split(r"[、,，;；]+", value):
+        tok = tok.strip()
+        if not tok or re.match(r"^#\d+$", tok):
+            continue                    # 编号存在性由 I5 主体判定
+        if tok.startswith("证据:"):
+            path = clean_path_token(tok[len("证据:"):].strip())
+            if not (ROOT / path).exists():
+                problems.append(f"consumed-by: 证据:{path} 指向的证据文件不存在")
+        elif tok.startswith("门禁:"):
+            gid = tok[len("门禁:"):].strip()
+            if gid not in gates:
+                problems.append(f"consumed-by: 门禁:{gid} 不在 gates.json 中")
+        elif tok.startswith("待建:"):
+            if not tok[len("待建:"):].strip():
+                problems.append("consumed-by: 待建: 后必须写明下游是什么")
+            else:
+                warns.append(f"consumed-by: {tok}（下游尚未创建——A3 的弱化形态，triage 时确认）")
+        elif tok == "终态":
+            continue
+        elif (ROOT / "design" / "slices" / tok).is_dir():
+            continue                    # 切片 id
+        else:
+            problems.append(f"consumed-by: {tok} 不在受控取值域"
+                            f"（#NN / <切片 id> / 证据:<路径> / 门禁:<gate id> / 待建:<描述> / 终态）")
+    return problems, warns
+
+
 # 四轴表中「无设计面」的写法（I4 按不适用处理，不判轴序边违反）
 NOT_APPLICABLE = {"—", "-", "–", "n/a", "N/A", "无", "不适用"}
 
@@ -675,11 +756,12 @@ def rule_i4(subjects, ctx):
 
 
 def rule_i5(subjects, ctx):
-    """I5 blocked-by / consumed-by / requires 引用的 issue 编号存在。"""
-    if ctx.snapshot is None:
-        return [Finding(SKIP, "依赖引用存在性需要 issue 快照 —— 已跳过（需 --from-github）")]
-    known = ctx.snapshot["numbers"]
+    """I5 依赖三 key：取值域合法（§4.1.1，两种模式都判）+ 引用的编号存在（需快照）。"""
+    known = ctx.snapshot["numbers"] if ctx.snapshot else None
     out = []
+    if known is None:
+        out.append(Finding(SKIP, "依赖**引用存在性**需要 issue 快照 —— 已跳过（需 --from-github）；"
+                                 "本节其余判据（取值域合法）已执行"))
     for s in subjects:
         if not s.sections.get("依赖"):
             continue
@@ -688,14 +770,14 @@ def rule_i5(subjects, ctx):
             if key not in deps:
                 out.append(Finding(FAIL, f"{s.tag} `### 依赖` 缺 key `{key}:`（§4.1 要求三个 key 逐行）"))
         for key, (value, nums) in deps.items():
-            if key == "consumed-by" and value.startswith("待建:"):
-                # §4.1.1 例外 3：下游尚未创建。出警告而非失败——"产物暂无具名
-                # 消费者"正是 triage 需要看到的信号，但不该阻塞创建。
-                if not value[len("待建:"):].strip():
-                    out.append(Finding(FAIL, f"{s.tag} consumed-by: 待建: 后必须写明下游是什么"))
-                else:
-                    out.append(Finding(WARN, f"{s.tag} consumed-by: {value}"
-                                             f"（下游尚未创建——A3 的弱化形态，triage 时确认）"))
+            if key == "requires":
+                for msg in check_requires_domain(value, ctx.gates):
+                    out.append(Finding(FAIL, f"{s.tag} {msg}"))
+            elif key == "consumed-by":
+                problems, warns = check_consumed_domain(value, ctx.gates)
+                out += [Finding(FAIL, f"{s.tag} {m}") for m in problems]
+                out += [Finding(WARN, f"{s.tag} {m}") for m in warns]
+            if known is None:
                 continue
             for n in nums:
                 if n not in known:
