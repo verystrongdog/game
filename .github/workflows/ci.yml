@@ -3,8 +3,8 @@ name: CI
 # 最小 CI——只覆盖当前切片（CP-01）的关键路径（P4a，2026-09-12）。
 #
 # 三个 job，对应切片三轴：
-#   docs-integrity  设计正典与数据契约的完整性（9 个校验器）
-#   engine          C# 逻辑引擎：构建 + 353 个测试
+#   docs-integrity  设计正典与数据契约的完整性（11 个校验器 + fixture 契约）
+#   engine          C# 逻辑引擎：构建 + 415 个测试 + 跨语言 fixture 判定比对
 #   unity           呈现层：本 job **显式报告 NOT_AVAILABLE**，不静默跳过
 #
 # 判据见 WORKFLOW.md §六：**未运行、超时、工具异常和零测试不是通过**。
@@ -35,14 +35,15 @@ jobs:
         run: pip install -r code/tools/requirements.txt
       - name: 干净检出可解析性检查
         run: python3 code/tools/check_clean_checkout.py
-      - name: 跑 9 个校验器
+      - name: 跑 11 个校验器
         run: |
           set -o pipefail
           fail=0
           for v in validate_cross_refs validate_trash_isolation validate_params \
                    validate_spatial validate_disease validate_cards \
                    validate_eligibility validate_situation_fids \
-                   validate_tripartite_annotations validate_data_manifest; do
+                   validate_tripartite_annotations validate_data_manifest \
+                   validate_runtime_fixtures; do
             printf '%-38s' "$v"
             if python3 "code/tools/$v.py" > "/tmp/$v.log" 2>&1; then
               echo "✅"
@@ -53,6 +54,8 @@ jobs:
             fi
           done
           exit $fail
+      - name: fixture 索引与磁盘一致（P4c 数据契约）
+        run: python3 code/tools/build_runtime_data_fixtures.py --check
 
   # ── C# 逻辑引擎 ────────────────────────────────────────────
   engine:
@@ -79,6 +82,10 @@ jobs:
         run: |
           dotnet test code/src/YouAreNotTheFish.sln --no-build -c Release \
             --logger "trx;LogFileName=engine.trx" --results-directory artifacts
+      - name: 跨语言接受/拒绝集合比对（P4c §9.3 判据）
+        # 共用 fixture 本身不构成判据；只有两侧判定被逐条比对、差异为空才算成立。
+        # 放在本 job 是因为它需要 dotnet（Python 侧 runner 由本脚本自己调用）。
+        run: python3 code/tools/compare_fixture_verdicts.py
       - name: 上传测试报告
         if: always()
         uses: actions/upload-artifact@v4

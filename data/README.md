@@ -99,6 +99,29 @@ md 文档（设计层）          JSON 文件（数据层）          C# 引擎 
 | `emotions.json` / `drives.json` / `attitudes.json` | 旧态度引擎 PAD/驱动/态度 | ⚠️ 态度引擎已废弃（2026-07-26），保留为参考 |
 | `emotion_cards.json` / `cognition_cards.json` / `behavior_cards.json` | 旧卡牌系统 | ⚠️ 卡牌体系已废弃（2026-07-11），保留为参数参考 |
 
+### 契约 fixture（`runtime-fixtures/`）
+
+> 8 个 runtime 文件的**合法与非法样例**，供 Python 与 C# **共用**（owner 方案 §9.3）。
+
+| 内容 | 说明 |
+|---|---|
+| `runtime-fixtures/index.json` | 53 条用例的索引：`file` / `logical_id` / `expect` / `rule` / `mutation` / `depends_on` |
+| `runtime-fixtures/<logical_id>/valid.json` | 真实文件的副本——**必须被两侧接受** |
+| `runtime-fixtures/<logical_id>/*.json` | **单点变异**样例——**必须被两侧拒绝** |
+
+**为何是单点变异**：每个非法样例与合法版本的差异**恰好一处**，
+因此"该被拒绝"的归因是确定的（`rule` 字段），不会出现"它失败了但不知道因为哪条规则"。
+手写 JSON 会与真实数据脱节——真实数据加字段，手写样例不知道。
+
+生成与校验：
+
+```bash
+python3 code/tools/build_runtime_data_fixtures.py --refresh   # 重建
+python3 code/tools/build_runtime_data_fixtures.py --check     # 索引与磁盘一致
+python3 code/tools/validate_runtime_fixtures.py               # Python 侧判定
+python3 code/tools/compare_fixture_verdicts.py                # 跨语言逐条比对（需 dotnet）
+```
+
 ---
 
 ## 四、数据关系图

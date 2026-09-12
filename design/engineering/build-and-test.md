@@ -21,7 +21,7 @@
 | .NET SDK | **10.0.400** | [`global.json`](../../global.json)（`rollForward: latestFeature`） | 工程目标框架是 **net8.0**；SDK 10 可编译。**本机无 net8.0 runtime**，跑测试需 `DOTNET_ROLL_FORWARD=Major` |
 | NuGet 源 | nuget.org | [`NuGet.config`](../../NuGet.config) | 此前包路径被烘焙进 `obj/*.nuget.g.props` 指向开发机（`/home/dog/game/.nuget-pkgs`），**干净检出无法复现**——本文件修掉该问题 |
 | Python | **3.10.12** | CI 的 `setup-python` | 校验器与 sim 脚本 |
-| 校验器依赖 | `PyYAML==6.0.3` | [`code/tools/requirements.txt`](../../code/tools/requirements.txt) | 9 个校验器里**只有 `validate_disease.py`** 需要第三方库 |
+| 校验器依赖 | `PyYAML==6.0.3` | [`code/tools/requirements.txt`](../../code/tools/requirements.txt) | 11 个校验器里**只有 `validate_disease.py`** 需要第三方库 |
 | 数值实验依赖 | `numpy==2.2.6` · `scipy==1.15.3` · `numba==0.67.0` | [`code/sim/requirements.txt`](../../code/sim/requirements.txt) | 15 个 sim 脚本里只有 3 个需要 |
 | Unity Editor | **6000.5.2f1** | [`code/unity/ProjectSettings/ProjectVersion.txt`](../../code/unity/ProjectSettings/ProjectVersion.txt) | ⚠️ 见 §五 |
 
@@ -55,6 +55,8 @@ python3 code/tools/validate_eligibility.py       # 疾病资格门
 python3 code/tools/validate_situation_fids.py    # 情境原型 fid
 python3 code/tools/validate_tripartite_annotations.py  # 三体模型注释
 python3 code/tools/validate_data_manifest.py     # 数据契约（runtime allowlist / 属性正交 / 清单一致）
+python3 code/tools/validate_runtime_fixtures.py  # runtime 数据结构契约 + 53 条 fixture 判定（Python 侧）
+python3 code/tools/build_runtime_data_fixtures.py --check   # fixture 索引与磁盘一致
 ```
 
 **干净检出检查**（CI 已纳入）：
@@ -83,6 +85,28 @@ dotnet test    code/src/YouAreNotTheFish.sln --no-build  -c Release
 
 **离线环境**：设 `NUGET_PACKAGES=<repo>/.nuget-pkgs` 复用仓库内缓存（该目录被 gitignore，非干净检出可依赖）。
 
+### 2.2.1 跨语言数据契约（P4c）
+
+```bash
+python3 code/tools/compare_fixture_verdicts.py
+```
+
+对 `data/runtime-fixtures/` 的 53 条 fixture，分别用 **Python 规则表**与 **C# 真实加载器**
+判定「接受/拒绝」，再逐条比对。
+
+**为何不能只"共用 fixture"**：两侧读同一批输入 ≠ 两侧给出同一判定。
+owner 方案 §9.3 的判据是「跨语言**接受/拒绝集合一致**」——只有把判定逐条比对、
+且差异为空，判据才成立。本脚本就是那条比对，CI 的 `engine` job 会跑它。
+
+**两侧的分工**（不是分叉）：
+
+| 侧 | 走什么 | 覆盖 |
+|---|---|---|
+| Python | `validate_runtime_fixtures.py` 的规则表 | 结构 / 枚举 / 长度 / 值域 |
+| C# | `GameDataLoader` 真实加载器 | 同上 **+** 跨文件语义（moonlight 的 supp ⊆ W_active）+ 反序列化层契约（`[JsonRequired]`、枚举 converter） |
+
+C# 的语义部分**只在引擎里实现一次**——Python 侧不重复实现，重复就是第二个真相源。
+
 ### 2.3 数值实验（**不在切片关键路径**，按需跑）
 
 ```bash
@@ -98,8 +122,8 @@ sim 脚本用**扁平 import**（`from sim_consciousness_cs4_test import ...`）
 
 | job | 覆盖 | 本机可复现 |
 |---|---|---|
-| `docs-integrity` | 9 个校验器（与 §2.1 同一循环） | ✅ |
-| `engine` | SDK 版本核对 → restore → Release build → Release test → trx artifact | ✅ |
+| `docs-integrity` | 11 个校验器（与 §2.1 同一循环）+ fixture 索引契约 | ✅ |
+| `engine` | SDK 版本核对 → restore → Release build → Release test → **跨语言 fixture 判定比对** → trx artifact | ✅ |
 | `unity` | **显式报告 `NOT_AVAILABLE`** | ❌ 需 Editor |
 
 **为何 `unity` job 是一个"什么也不做"的 job**：按 [WORKFLOW.md §五](../../WORKFLOW.md)，**未运行不是通过**。若直接省略该 job，整个 workflow 会全绿，而 Unity 门禁（P4b/P4d/P5）实际未执行——那是静默跳过。因此它存在、具名标注 `NOT_AVAILABLE`、并在作业摘要里列出受影响的门禁。
@@ -108,9 +132,10 @@ sim 脚本用**扁平 import**（`from sim_consciousness_cs4_test import ...`）
 
 | 判据 | 要求 |
 |---|---|
-| 校验器 | 9/9 退出码 0 |
+| 校验器 | 11/11 退出码 0 |
 | `validate_cross_refs` | **0 死链 / 0 段引用警告** |
-| 引擎测试 | **353 passed / 0 failed** |
+| 引擎测试 | **415 passed / 0 failed** |
+| 跨语言 fixture 判定 | `compare_fixture_verdicts.py` 逐条比对 Python 与 C# 的接受/拒绝，**差异为空**（53 条） |
 | 干净检出 | 无本地缓存（`.nuget-pkgs`）也能 restore + 构建 + 测试 |
 | SDK 版本 | 与 `global.json` 一致，不一致即失败（CI 有显式断言） |
 | 工作树 | 跑完检查后**无非预期变化**（校验器不写工作树） |
