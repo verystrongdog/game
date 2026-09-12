@@ -134,7 +134,7 @@ ActionKind.UseItem（M1 通道——杂项动作，与环境交互同款 §10.13
 | `src/YouAreNotTheFish.Core/Types/Enums.cs`（UseItem/钳制） | 改写 | 代码 |
 | `src/YouAreNotTheFish.Core.Tests/` | 新增 | 测试 |
 | `src/YouAreNotTheFish.Console/` | 改写 | 代码 |
-| `docs/决策树.md` / `docs/设计框架-六维状态.md` / memory | 追加 | 文档 |
+| `docs/决策树/` / `docs/设计框架-六维状态.md` / memory | 追加 | 文档 |
 
 ## 九、数据契约与校验
 

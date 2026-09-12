@@ -106,4 +106,4 @@ PY
 
 ---
 *创建: 2026-09-12 | 更新: 2026-09-12*
-*关联: [unity/README.md](README.md), [玫瑰株丛密度](./玫瑰株丛密度.md), [决策记录 #126](../设计归档/grilling/grilling-126-rosefield/决策记录.md)*
+*关联: [unity/README.md](../unity/README.md), [玫瑰株丛密度](./玫瑰株丛密度.md), [决策记录 #126](../设计归档/grilling/grilling-126-rosefield/决策记录.md)*

@@ -27,11 +27,12 @@ EXCLUDE_DIRS = {
     ".git", ".claude", ".scratch", "__pycache__",
     "data", "tools",
     "设计归档",           # grilling 源记录归档——非活跃正典（同 垃圾桶 的隔离语义）
+    "docs/决策树",        # 决策树历史档案——2026-09-12 拆为目录，等价于原 EXCLUDE_FILE_KEYWORDS "决策树.md"
     ".refactor-backup",   # 仓库重构期的本地安全备份（非项目内容，重构完成后删除）
 }
 
 # 排除文件名关键词
-EXCLUDE_FILE_KEYWORDS = ["已废弃", ".gitkeep", "决策树.md"]
+EXCLUDE_FILE_KEYWORDS = ["已废弃", ".gitkeep"]
 
 
 def is_active_md(filepath: Path) -> bool:

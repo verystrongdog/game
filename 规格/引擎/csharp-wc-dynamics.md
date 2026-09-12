@@ -161,4 +161,4 @@ public static class WcDynamics
 
 ---
 *创建: 2026-08-13 | 更新: 2026-08-13 | 版本: v1.1*
-*关联: [csharp-engine plan](../csharp-engine/design/plan.md), [运行时状态模型](../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E8%BF%90%E8%A1%8C%E6%97%B6%E7%8A%B6%E6%80%81%E6%A8%A1%E5%9E%8B.md), [皮层动力学-通用层](../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E7%9A%AE%E5%B1%82%E5%8A%A8%E5%8A%9B%E5%AD%A6-%E9%80%9A%E7%94%A8%E5%B1%82.md), [任务issue 01](../../.scratch/csharp-wc-dynamics/design/issues/01-wc-dynamics-spec.md)*
+*关联: [csharp-engine plan](csharp-engine-roadmap.md), [运行时状态模型](../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E8%BF%90%E8%A1%8C%E6%97%B6%E7%8A%B6%E6%80%81%E6%A8%A1%E5%9E%8B.md), [皮层动力学-通用层](../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E7%9A%AE%E5%B1%82%E5%8A%A8%E5%8A%9B%E5%AD%A6-%E9%80%9A%E7%94%A8%E5%B1%82.md), [任务issue 01](../../设计归档/grilling/csharp-wc-dynamics/design/issues/01-wc-dynamics-spec.md)*

@@ -20,7 +20,7 @@
 |----|------|
 | 覆盖 | `YouAreNotTheFish.Core/Types/` 全部新文件（状态 record ×8 + 声明/上下文 ×2 + 事件 ×6（1 抽象基类 CombatEvent + 5 具体子类）+ 接口 IRng + RNG 实现 ×1（DeterministicRng）+ 常量 ×1（CalibrationConfig）+ 枚举 ×4）；`Data/` 补充 GameData 聚合 + LoadAll |
 | 不覆盖 | SpeedWeights/SpeedComponents（plan §4.5 → step 7）；s_pending、CombatState、TurnManager（step 10）；14 事件 kind 枚举与 δ 派生逻辑（step 9，本 spec §五仅列映射约束） |
-| 前置依赖 | csharp-data-layer ✅（24/24 绿）；[csharp-engine plan v1.1](../csharp-engine/design/plan.md) sign-off ✅ 2026-08-13 |
+| 前置依赖 | csharp-data-layer ✅（24/24 绿）；[csharp-engine plan v1.1](csharp-engine-roadmap.md) sign-off ✅ 2026-08-13 |
 | 阻塞 | step 3-9 全部引擎模块（类型契约未落地则无法编译） |
 | 引用源 | [运行时状态模型](../../规则/技能树系统/运行时状态模型.md)、[回合战斗流程](../../规则/回合战斗流程.md)、[核心机制](../../规则/核心机制.md)、[基础行动设计](../../规则/技能树系统/操作层/基础行动设计.md)、框架 memory `code-framework-plan-2026-08-06` §3.5 |
 
@@ -330,4 +330,4 @@ instance record + `static CalibrationConfig Default`（决策 D3——plan §七
 ---
 
 *创建: 2026-08-13 | 更新: 2026-08-13 | 版本: v1.1*
-*关联: [csharp-engine plan v1.1](../csharp-engine/design/plan.md), [任务issue 01](../../.scratch/csharp-engine-types/design/issues/01-types-spec.md), [运行时状态模型](../../规则/技能树系统/运行时状态模型.md), [回合战斗流程](../../规则/回合战斗流程.md), [核心机制](../../规则/核心机制.md)*
+*关联: [csharp-engine plan v1.1](csharp-engine-roadmap.md), [任务issue 01](../../设计归档/grilling/csharp-engine-types/design/issues/01-types-spec.md), [运行时状态模型](../../规则/技能树系统/运行时状态模型.md), [回合战斗流程](../../规则/回合战斗流程.md), [核心机制](../../规则/核心机制.md)*

@@ -61,7 +61,7 @@
 | GitHub issue | 122（106 关闭 / 16 开放），89 个带 `grilling` 标签 |
 | 提交历史 | 616 commits，184 条（30%）提交信息含 grilling |
 | `term_registry.json` | 311 条（`_metadata` 写 310，`data/README.md:54` 写 134） |
-| `docs/决策树.md` | 4519 行 / 93 个 H2 / 502 个 H3 |
+| `docs/决策树/` | 4519 行 / 93 个 H2 / 502 个 H3 |
 | `CLAUDE.md` | 379 行 / 13,301 字符 / 87 条规则 |
 | 未推送 | `main` 领先 `origin/main` **6 个提交**（远端 `a48b3b8`） |
 
@@ -79,7 +79,7 @@
 | **D2** | 7驱动/5模块/态度/CPM 的对立 → 用户要求先分析。**结论见 §四** | 用户指示分析 |
 | **D3** | **全部改英文路径** | 用户 |
 | **D4** | `.agents/skills/` 40 个 skill **全部保留** | 用户 |
-| **D5** | `docs/决策树.md` **拆成目录** | 用户 |
+| **D5** | `docs/决策树/` **拆成目录** | 用户 |
 | **D6** | 先产出本计划文档，确认后执行 | 用户 |
 | **D7** | `docs/agents/issue-tracker.md` 与 `domain.md` 的**死规范保留原样**，不改写不删除 | 用户裁定 |
 | **D8** | **意志力以正典为准 → 标为 deprecated**。需改 `term_registry.json` 的 `意志力` 状态，并作废 CLAUDE.md 的「意志力 ≠ SAN」条款 | 用户裁定 |
@@ -171,7 +171,7 @@ CLAUDE.md 的错误是**具体成员**，不是**结构**。旧结构与现结�
 │   ├── presentation/            ← 呈现/ + unity/ 与 3D可视化/ 的呈现文档迁入
 │   ├── pipeline/                ← 管线/
 │   ├── framework/               ← docs/设计框架-六维状态.md + docs/维度/
-│   ├── decisions/               ← docs/决策树.md 拆分后（含 README 索引）
+│   ├── decisions/               ← docs/决策树/ 拆分后（含 README 索引）
 │   ├── spec/                    ← 新建：从 .scratch/ 迁入的承重规格
 │   └── archive/
 │       ├── trash/               ← 垃圾桶/
@@ -206,7 +206,7 @@ CLAUDE.md 的错误是**具体成员**，不是**结构**。旧结构与现结�
 | `管线/` | `design/pipeline/` | 1 |
 | `docs/设计框架-六维状态.md` | `design/framework/six-dimensions.md` | 1 |
 | `docs/维度/` | `design/framework/dimensions/` | 6 |
-| `docs/决策树.md` | `design/decisions/`（拆分 + README） | 1 → ~4 |
+| `docs/决策树/` | `design/decisions/`（拆分 + README） | 1 → ~4 |
 | `docs/grilling-质量保障体系-v2*.md` | `design/archive/grilling/methodology/` | 4 |
 | `docs/agents/` | `code/tools/agents/` | 5 |
 | `参考/` | `reference/` | 220 |
@@ -319,7 +319,7 @@ design/decisions/
 | # | 动作 | 位置 |
 |---|---|---|
 | 1.1 | `NpcHp = 15f` → 25（对齐 §4.1 权威表 20-30 中值），同步修正注释 | `src/YouAreNotTheFish.Core/Engine/CalibrationConfig.cs:49-50` |
-| 1.2 | 69×6 → 69×8 文档与注释同步（T6b，已挂账） | `WsensoryMatrix.cs:6,13,17`、`GameDataLoader.cs:33`、`data/README.md:43,72`、`引擎数据关系规格.md:30`、`GameDataLoaderTests.cs:343`、`docs/决策树.md:2611` |
+| 1.2 | 69×6 → 69×8 文档与注释同步（T6b，已挂账） | `WsensoryMatrix.cs:6,13,17`、`GameDataLoader.cs:33`、`data/README.md:43,72`、`引擎数据关系规格.md:30`、`GameDataLoaderTests.cs:343`、`docs/决策树/:2611` |
 | 1.3 | 修 ≥21 处垃圾桶隔离违规 | 见下方明细 |
 | 1.4 | 修 142 处死链（16.0%）——先批量修 `../` 层级 bug | 见 §7 |
 | 1.5 | `data/README.md` 计数修正（134→311、引擎消费 5→8 文件） | `data/README.md:37,54` |
@@ -350,7 +350,7 @@ design/decisions/
 | 2.1 | 新建 `规格/`，从 `.scratch/` 迁入 §5.3③ 的四类承重内容 | ~90 处 src 注释 + 60 处文档引用 |
 | 2.2 | 呈现在文档归位到 `呈现/`（`unity/*.md` × 3 + `3D可视化/` × 3） | 呈现维度真实内容错位 |
 | 2.3 | `docs/` 三分：设计留 `docs/`；流程方法论（4 份 1171 行 + `math-language-writing.md`）→ `流程/`；agent 工作流（4 份）→ `.agents/docs/` | 8 个文件与游戏设计无关却占 `docs/` |
-| 2.4 | `docs/决策树.md` 拆分为目录（含 README 索引） | 4519 行 / 93 H2 |
+| 2.4 | `docs/决策树/` 拆分为目录（含 README 索引） | 4519 行 / 93 H2 |
 | 2.5 | 合并三份重复的六维分类（`设计框架-六维状态.md:24-32` + `docs/维度/*.md` 头部 + `项目总览.md:16`） | 三份重复维护、已不同步 |
 | 2.6 | 重写 `CLAUDE.md` 文件地图 → 迁入 `design/CONVENTIONS.md` | **17 项失配**（见下） |
 | 2.7 | `.scratch/` 收缩：18 个零外部引用目录归档出仓；`设计框架-六维状态.md:283,331,339` 与 `项目总览.md:174-175` 的「位置」列改指 `规格/` | `README.md:35` 称其「过程物不入库」，实际被当正式位置 |
@@ -362,7 +362,7 @@ design/decisions/
 |---|---|
 | 标"待建设"但已有内容 | `呈现/`（有 425 行）、`管线/`（有 397 行，自身已标废弃） |
 | 描述与现状不符 | `操作层/` 只列 L0-L5（实际 L6 已进垃圾桶）、`激活系统/` 描述存在但**目录完全为空**、`技能树系统/` 列 6 项（实际 17 项） |
-| 存在但未列 | `规则/时空结构数学框架.md`、`实体/` 4 项、`事件/` 4 项、`参考/` 8 项、`docs/决策树.md`、`垃圾桶/`、`.scratch/`、`src/`、`unity/`、`README.md`、`CONTRIBUTING.md` |
+| 存在但未列 | `规则/时空结构数学框架.md`、`实体/` 4 项、`事件/` 4 项、`参考/` 8 项、`docs/决策树/`、`垃圾桶/`、`.scratch/`、`src/`、`unity/`、`README.md`、`CONTRIBUTING.md` |
 | 路径写错（Glob 恒空） | `行为系统/待解决问题.md`、`情绪系统/*.md`、`态度系统/*.md` —— 实际均在 `参考/废弃/` 下 |
 
 **验收**：`tools/validate_cross_refs.py` 0 死链；`设计框架-六维状态.md` 的「位置」列无 `.scratch/` 引用。
@@ -470,7 +470,7 @@ all_obj/                          278M  ← 中间网格
 | **数值参数必须有来源注释** | 硬约束，可机械核验 |
 | **设计与代码边界声明** | 新增，解决痛点① |
 
-**必须迁出后才能归档的**：`docs/grilling-质量保障体系-v2.md` §四（L251-326）是现行「项目级引用规范」的实际正文——`CLAUDE.md` 的引用格式、参数来源注释、交叉引用格式、决策引用格式四条规则均指向它。**先迁内容，再归档文件**，否则指针断裂。
+**必须迁出后才能归档的**：`设计归档/grilling/方法论/grilling-质量保障体系-v2.md` §四（L251-326）是现行「项目级引用规范」的实际正文——`CLAUDE.md` 的引用格式、参数来源注释、交叉引用格式、决策引用格式四条规则均指向它。**先迁内容，再归档文件**，否则指针断裂。
 
 ---
 

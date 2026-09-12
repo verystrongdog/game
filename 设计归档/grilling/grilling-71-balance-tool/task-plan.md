@@ -130,7 +130,7 @@ dotnet run --project src/YouAreNotTheFish.Balance -- \
 | `tools/validate_dm_curve.py` | 新建 | 代码 |
 | `规则/核心机制.md`（§10.1 敌人 HP 表） | 改写（F-5） | 文档 |
 | `实体/敌人与事件.md`（§十二 参数速查） | 改写（F-5） | 文档 |
-| `docs/决策树.md` / `docs/设计框架-六维状态.md` / memory | 追加 | 文档 |
+| `docs/决策树/` / `docs/设计框架-六维状态.md` / memory | 追加 | 文档 |
 
 ## 十、数据契约与校验
 
@@ -174,4 +174,4 @@ dotnet run --project src/YouAreNotTheFish.Balance -- \
 ---
 
 *创建: 2026-08-16 | 更新: 2026-08-16*
-*关联: [csharp-engine plan](./../csharp-engine/design/plan.md), [引擎数据关系规格](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E5%BC%95%E6%93%8E%E6%95%B0%E6%8D%AE%E5%85%B3%E7%B3%BB%E8%A7%84%E6%A0%BC.md), [核心机制](../../../%E8%A7%84%E5%88%99/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md), [Grilling #70 路线图 task-plan](./../grilling-70-engine-roadmap/task-plan.md), [数学语言书写规范](../../../docs/agents/math-language-writing.md)*
+*关联: [csharp-engine plan](../../../规格/引擎/csharp-engine-roadmap.md), [引擎数据关系规格](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E5%BC%95%E6%93%8E%E6%95%B0%E6%8D%AE%E5%85%B3%E7%B3%BB%E8%A7%84%E6%A0%BC.md), [核心机制](../../../%E8%A7%84%E5%88%99/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md), [Grilling #70 路线图 task-plan](./../grilling-70-engine-roadmap/task-plan.md), [数学语言书写规范](../../../docs/agents/math-language-writing.md)*

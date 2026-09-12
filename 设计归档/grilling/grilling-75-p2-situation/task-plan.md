@@ -281,7 +281,7 @@ public sealed record SituationState(string ArchetypeId, float Strength, string E
 | `tools/validate_situation_fids.py` | **新建（Q13 管线校验器）** | 代码 |
 | `src/YouAreNotTheFish.Core.Tests/` | 新增（G1-G9 矩阵，Q15） | 测试 |
 | `src/YouAreNotTheFish.Console/` | 改写（`--demo-situation` + `--mfield-demo` + `--env`，Q14） | 代码 |
-| `docs/决策树.md` / `docs/设计框架-六维状态.md` / `项目总览.md` / memory | 追加（Grilling #108） | 文档 |
+| `docs/决策树/` / `docs/设计框架-六维状态.md` / `项目总览.md` / memory | 追加（Grilling #108） | 文档 |
 
 ## 九、数据契约与校验
 

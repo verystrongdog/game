@@ -24,7 +24,7 @@
 
 ## 一、背景与动机
 
-引擎核心已交付（[csharp-engine plan](./../csharp-engine/design/plan.md) §十一 v1.2：step 1-12 全部 ✅，294/294 绿），覆盖 WC 69 节点动力学 / 4 tone + b_j / CSTC 3 环路 Gurney / 速度排序 / 物理·精神伤害 / 14 事件 δ/s（10 落地）/ NPC demo salience / 5 Phase 回合编排 / 1v1 Console。
+引擎核心已交付（[csharp-engine plan](../../../规格/引擎/csharp-engine-roadmap.md) §十一 v1.2：step 1-12 全部 ✅，294/294 绿），覆盖 WC 69 节点动力学 / 4 tone + b_j / CSTC 3 环路 Gurney / 速度排序 / 物理·精神伤害 / 14 事件 δ/s（10 落地）/ NPC demo salience / 5 Phase 回合编排 / 1v1 Console。
 
 Grilling #24 盘点确认引擎与正典**结构性偏差≈0**（[引擎数据层偏差清单](./../grilling-24-engine-data-relations/引擎数据层偏差清单.md) §六），遗留 E-2/3/4/5 四类引擎内缺口 + 5 类结构性系统缺口（技能/情境/NPC/战斗扩展/实体系统）未进引擎。本次 grilling 承接 #24 延迟项，产出全量补全路线图。
 
@@ -189,7 +189,7 @@ P6 管线收尾（Unity/测试/校验/review-plan）  依赖: P1-P5 引擎完整
 | `src/YouAreNotTheFish.Core/Engine/EventProcessor.cs` | 重构（配置驱动） | P2 |
 | `data/connectivity/situation_primitives.json` | 消费（不改写） | P2 |
 | `src/YouAreNotTheFish.Core/Types/CalibrationConfig.cs` | 常量回填 | P0 |
-| `docs/决策树.md` | 追加 #70 | 本文档 |
+| `docs/决策树/` | 追加 #70 | 本文档 |
 | `docs/设计框架-六维状态.md` | 管线维度队列更新 | 本文档 |
 | `data/term_registry.json` | Δ_skill 等入库（用户确认后） | 本文档 |
 | `.claude/projects/-home-dog-game/memory/grill-engine-roadmap-70.md` | 新建 | 本文档 |
@@ -248,4 +248,4 @@ P6 管线收尾（Unity/测试/校验/review-plan）  依赖: P1-P5 引擎完整
 ---
 
 *创建: 2026-08-16 | 更新: 2026-08-16*
-*关联: [csharp-engine plan](./../csharp-engine/design/plan.md), [引擎数据层偏差清单](./../grilling-24-engine-data-relations/引擎数据层偏差清单.md), [引擎数据关系规格](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E5%BC%95%E6%93%8E%E6%95%B0%E6%8D%AE%E5%85%B3%E7%B3%BB%E8%A7%84%E6%A0%BC.md), [运行时状态模型](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E8%BF%90%E8%A1%8C%E6%97%B6%E7%8A%B6%E6%80%81%E6%A8%A1%E5%9E%8B.md), [grilling-69 task-plan](./../grilling-69-external-stimulus/task-plan.md), [数学语言书写规范](../../../docs/agents/math-language-writing.md)*
+*关联: [csharp-engine plan](../../../规格/引擎/csharp-engine-roadmap.md), [引擎数据层偏差清单](./../grilling-24-engine-data-relations/引擎数据层偏差清单.md), [引擎数据关系规格](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E5%BC%95%E6%93%8E%E6%95%B0%E6%8D%AE%E5%85%B3%E7%B3%BB%E8%A7%84%E6%A0%BC.md), [运行时状态模型](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E8%BF%90%E8%A1%8C%E6%97%B6%E7%8A%B6%E6%80%81%E6%A8%A1%E5%9E%8B.md), [grilling-69 task-plan](./../grilling-69-external-stimulus/task-plan.md), [数学语言书写规范](../../../docs/agents/math-language-writing.md)*

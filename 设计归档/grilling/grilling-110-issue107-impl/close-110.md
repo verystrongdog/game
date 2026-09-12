@@ -21,8 +21,8 @@
 
 | 决策 | 写入文件 | 位置 | 验证 |
 |------|----------|------|------|
-| Q1-Q6 | `docs/决策树.md` | §Grilling #110 | ✅ 已验证 |
-| #106 注记 | `docs/决策树.md` | §Grilling #106 推迟段「→ 见」 | ✅ 已验证 |
+| Q1-Q6 | `docs/决策树/` | §Grilling #110 | ✅ 已验证 |
+| #106 注记 | `docs/决策树/` | §Grilling #106 推迟段「→ 见」 | ✅ 已验证 |
 | 实施（4 处 [JsonRequired] + 7 测试） | `TripartiteEdges.cs` / `GameDataLoaderTests.cs` / `ConsoleAppTests.cs` | 353/353 绿 | ✅ 已验证 |
 | 六维状态 | `docs/设计框架-六维状态.md` | #106 行 + 完成度 25→26 + footer | ✅ 已验证 |
 | 项目总览 | `项目总览.md` | 5.0 行 #107 注记 | ✅ 已验证 |

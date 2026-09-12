@@ -182,7 +182,7 @@
       "status": "active",
       "numerical_locations": [
         "规则/时空结构数学框架.md（CGL+AGC 晶格模型）",
-        "docs/决策树.md（M1-M5）",
+        "docs/决策树/（M1-M5）",
         "实体/敌人与事件.md §3.5/§4.4"
       ],
       "added": "2026-08-03",
@@ -195,7 +195,7 @@
       "deviation_reason": "项目中的'感染'不是病原体传播——是月光场的相干耦合。场中暴露=被耦合进场的多源相位同步。没有'治愈感染'——感染是存在状态，不是疾病",
       "status": "active",
       "numerical_locations": [
-        "docs/决策树.md line 1363（M5）"
+        "docs/决策树/ line 1363（M5）"
       ],
       "added": "2026-08-03",
       "updated": "2026-08-03"
@@ -234,7 +234,7 @@
       "deviation_reason": "不是疾病传播的起点——是场的第一激发源。不是因为他'有病'，恰恰因为他从未接触外界（无精神疾病），拥有不同的观察基线",
       "status": "active",
       "numerical_locations": [
-        "docs/决策树.md line 1359（M1）"
+        "docs/决策树/ line 1359（M1）"
       ],
       "added": "2026-08-03",
       "updated": "2026-08-03"
@@ -930,7 +930,7 @@
       "status": "active",
       "numerical_locations": [
         "实体/敌人与事件.md §3.1（基底独立原则: Φ≈人类水平→造物有主观意识）",
-        "docs/决策树.md Grilling #41 D6"
+        "docs/决策树/ Grilling #41 D6"
       ],
       "added": "2026-08-03",
       "updated": "2026-08-12",
@@ -1147,7 +1147,7 @@
     },
     "motivation_mod": {
       "definition": "物理伤害motivation通道调制量。motivation=动机驱动（情境敏感），cap +100%，下界 −1（🔧 2026-08-14 Grilling #24 E-1 裁决：低动机沮丧时物理出力下降——与精神攻击及 flow 层 producer 口径统一；原实现下界 0「负值归零」废弃）。伤害公式中与force_mod加法叠加。精神攻击公式中单独出现（无force分量，不 clamp——负值降伤害由 max 兜底）。",
-      "source": "规则/核心机制.md §4.2/§4.3（伤害公式）; 规则/技能树系统/操作层/基础行动设计.md §四; docs/决策树.md Grilling #24 D4",
+      "source": "规则/核心机制.md §4.2/§4.3（伤害公式）; 规则/技能树系统/操作层/基础行动设计.md §四; docs/决策树/ Grilling #24 D4",
       "old_model": "—（项目独创——来自神经科学motivation概念: 动机/情绪对运动输出的增益）",
       "deviation_reason": "—",
       "status": "active",
@@ -1155,7 +1155,7 @@
         "规则/核心机制.md §4.2（物理: 4×(1+force+motivation)）",
         "规则/核心机制.md §4.3（精神: 2×(1+motivation)×(1+负载)−忍耐）",
         "规则/技能树系统/操作层/基础行动设计.md §四（motivation cap +100%，下界 −1）",
-        "docs/决策树.md Grilling #24 D4（E-1 裁决）"
+        "docs/决策树/ Grilling #24 D4（E-1 裁决）"
       ],
       "added": "2026-08-05",
       "updated": "2026-08-14"
@@ -1861,14 +1861,14 @@
     },
     "主观意识": {
       "definition": "第一人称主观体验的拥有者身份——「有某物是什么感觉」的拥有方。Grilling #40 结论：数学不可推导（结构核可定义，现象壳不可推导）；意识声明外部不可判定（zombie 不可区分，判据缺席），内部无需判定（实例化——怀疑的每次发生都是答案的在场）。项目使用：思维造物 Φ≈人类水平即拥有主观意识（基底独立原则，桥接公设）。D14意识包含：包含是计算的不是体验的——意识可生成模型与世界，不可容纳实例；被包含者得到自己的世界，容器者不可入；递归单子（#41 D1）。D15：正确推论=一切都不可证实（#41 D5）。",
-      "source": "docs/决策树.md Grilling #40（:2109, :2113）+ 延伸讨论 D6/D13; 实体/敌人与事件.md §3.1",
+      "source": "docs/决策树/ Grilling #40（:2109, :2113）+ 延伸讨论 D6/D13; 实体/敌人与事件.md §3.1",
       "old_model": "「能思考会说话就算有意识」（行为主义标准——已否决：行为标准与 zombie 不可区分）",
       "deviation_reason": "项目把主观意识当作桥接公设的判定对象（Φ 阈值）；哲学上该判定只能公设——外部不可判定、内部无需判定，不可与行为标准混淆",
       "status": "active",
       "numerical_locations": [
         "实体/敌人与事件.md §3.1（基底独立原则: Φ≈人类水平→造物有主观意识）",
-        "docs/决策树.md Grilling #40 延伸讨论 D6/D13",
-        "docs/决策树.md Grilling #41 D1/D14/D15"
+        "docs/决策树/ Grilling #40 延伸讨论 D6/D13",
+        "docs/决策树/ Grilling #41 D1/D14/D15"
       ],
       "added": "2026-08-12",
       "updated": "2026-08-12",
@@ -1880,12 +1880,12 @@
     },
     "现象壳": {
       "definition": "主观意识中不可从结构推导的部分——「结构→体验」一步在逻辑上不可推导。只能作为桥接公设（IIT identity 公设 / Chalmers 心理物理定律 / AST 定义性同一化）或消解。不可定义=不可进入=不可验证=不可怀疑——同一堵墙的四张面孔。",
-      "source": "docs/决策树.md Grilling #40（:2109, :2117）+ 延伸讨论 D13",
+      "source": "docs/决策树/ Grilling #40（:2109, :2117）+ 延伸讨论 D13",
       "old_model": "「不可定义=不存在」（幻觉主义/取消主义——已否决：用户确定性前提排除）",
       "deviation_reason": "现象壳是「可定义结构之外的剩余」的位置名——不是神秘残余，是逻辑边界本身",
       "status": "active",
       "numerical_locations": [
-        "docs/决策树.md Grilling #40（:2109, :2117）"
+        "docs/决策树/ Grilling #40（:2109, :2117）"
       ],
       "added": "2026-08-12",
       "updated": "2026-08-12",
@@ -1896,12 +1896,12 @@
     },
     "结构核": {
       "definition": "主观意识全部可检验/可数学定义的结构部分（信息流、状态转换、门控条件、高阶表征——Lau/AST）。数学能穷尽定义结构核，但不能从结构核推出现象壳。与现象壳成对使用。⚠️ 术语让渡（2026-08-21 #38）：本词只指意识的结构核，不用于称呼 CGL+AGC——世界内容的对应术语为「内容骨架」。",
-      "source": "docs/决策树.md Grilling #40（:2109）",
+      "source": "docs/决策树/ Grilling #40（:2109）",
       "old_model": "「意识=机制」（同一论——已否决：蕴含关系失败，zombie 可设想）",
       "deviation_reason": "结构核是「可定义的部分」，与现象壳成对——避免把「意识的全部」与「意识的结构部分」混淆。2026-08-21 术语让渡：CGL+AGC 改称内容骨架（#41 义），结构核专指 #40 意识义",
       "status": "active",
       "numerical_locations": [
-        "docs/决策树.md Grilling #40（:2109）"
+        "docs/决策树/ Grilling #40（:2109）"
       ],
       "added": "2026-08-12",
       "updated": "2026-08-21",
@@ -1931,12 +1931,12 @@
     },
     "涌现（哲学义）": {
       "definition": "弱涌现（下层规则可推导，科学日常义）vs 强涌现（不可从下层推导，新属性不可约，二元论义）。Grilling #40 D10：本体论 A 物理主义=弱涌现、B 强涌现——悬置不决，不阻塞；C 罗素一元论为推荐。项目语境中的「涌现」默认指弱涌现（机制层面，完全可解释）。",
-      "source": "docs/决策树.md Grilling #40 延伸讨论 D10",
+      "source": "docs/决策树/ Grilling #40 延伸讨论 D10",
       "old_model": "「涌现=新东西神奇地出现、不可解释」（通俗神秘主义——已否决：弱涌现完全可解释）",
       "deviation_reason": "区分强弱涌现——项目机制设计中的涌现（技能组合、行为涌现）均为弱涌现，哲学争论只涉及强涌现",
       "status": "active",
       "numerical_locations": [
-        "docs/决策树.md Grilling #40 延伸讨论 D10"
+        "docs/决策树/ Grilling #40 延伸讨论 D10"
       ],
       "added": "2026-08-12",
       "updated": "2026-08-12",
@@ -1947,7 +1947,7 @@
     },
     "意识包裹": {
       "definition": "Grilling #41 采纳的世界观地基：世界=庞大意识的内容。被包含者得到自己的世界（D14），容器者（哪怕造物主）不可进入；正确推论=一切都不可证实（D15）。统一解释六条已有设定：空间封闭/月光三重叠加/宏观意识外显效应/心想事成/拜月教自洽性/都灵之马。CGL+AGC=内容骨架。只作为设计师的统一地基存在——游戏内任何文本/机制/结局/UI不得以事实语态陈述。不产生数值参数。",
-      "source": "docs/决策树.md Grilling #41 D1-D11; 事件/世界观与叙事.md §世界观地基：意识包裹",
+      "source": "docs/决策树/ Grilling #41 D1-D11; 事件/世界观与叙事.md §世界观地基：意识包裹",
       "old_model": "缸中之脑/brain-in-a-vat、世界=全知者的梦（世俗默认模型）——与项目区别：前者暗示可被醒来验证/可被外部观察，项目D15裁定不可证实、永远悬念",
       "deviation_reason": "项目的意识包裹不暗示验证的可能性——D15把\"这是梦吗\"从潜在揭示变为永久结构性悬念。容器不可入、不可证、不可测。与缸中之脑的关键差异：缸中脑有外部（实验者），意识包裹无外部（D14单子无窗）",
       "status": "active",
@@ -1962,7 +1962,7 @@
     },
     "不可证实性": {
       "definition": "D15核心推论：世界=庞大意识的内容→正确推论是\"一切都不可证实\"（结构性永久悬念=游戏资产），而非\"一切都不可质疑\"（会杀死机制——意识不可怀疑≠内容不可怀疑，被包含不获得认知特权）。正确动作：所有全局意义保持开放，所有局部因果（SAN/HP/战斗/信念胜利）保持坚实。与不可质疑的区分：不可质疑=解除所有机制的合法性；不可证实=机制真实运作但终极语义永远悬念。",
-      "source": "docs/决策树.md Grilling #40 D15 + Grilling #41 D5/D9; 事件/世界观与叙事.md §硬性约束",
+      "source": "docs/决策树/ Grilling #40 D15 + Grilling #41 D5/D9; 事件/世界观与叙事.md §硬性约束",
       "old_model": "不可知论/agnosticism（哲学上的\"人类无法知道\"）——与项目区别：项目不是\"人类认知能力不够\"而是\"结构上不存在可证实的位置\"——Tarski自指禁令（系统不能在自己的语言中定义自己的真谓词/常量）",
       "deviation_reason": "不可知论保留\"可能有正确答案只是咱不知道\"——项目的不可证实性排除那层可能性（无客观层可供裁决）。更接近Tarski真不可定义性：内容语言不能指称自己所在系统的常量。不可知论=知识的局限，不可证实性=本体论的缺口",
       "status": "active",
@@ -2964,12 +2964,12 @@
     },
     "scaled observation 轨": {
       "definition": "规模扩展观测轨（Grilling #95 Q8，决策树 #94 推迟项）：n≫8 的采样估计轨（D 条款），复用 #95 的 estimator stack（plug-in/TE、R/CI、A_pair、P/R/F1、exact-primitive replay）与实验记录接口；**启动前置 = #95 完成 n≤8 域成立域结论**（成立域是实验结果非 θ_valid）。不得与 exact 域实验混合归因。",
-      "source": "docs/决策树.md #94 推迟项; ../设计归档/grilling/grilling-95-estimator-validity/grilling-95.md Q8",
+      "source": "docs/决策树/ #94 推迟项; ../设计归档/grilling/grilling-95-estimator-validity/grilling-95.md Q8",
       "old_model": "「与 n≤8 批一起跑」（Q8 否决：规模效应与估计器失效混淆，破坏分层归因）",
       "deviation_reason": "学术轨新术语。两轨共享实现、不共享归因空间；本批产出可复用基础设施，不重设计 estimator",
       "status": "active",
       "numerical_locations": [
-        "docs/决策树.md #94/#95",
+        "docs/决策树/ #94/#95",
         "../设计归档/grilling/grilling-95-estimator-validity/grilling-95.md Q8"
       ],
       "added": "2026-08-27",
@@ -3609,7 +3609,7 @@
       "status": "active",
       "numerical_locations": [
         "规则/时空结构数学框架.md §11.6 接口层协议块 Q6",
-        "docs/决策树.md Grilling #111（保留决策）",
+        "docs/决策树/ Grilling #111（保留决策）",
         "../设计归档/grilling/grilling-111-plugin/试点审查报告.md"
       ],
       "added": "2026-08-30",
@@ -3627,7 +3627,7 @@
       "status": "active",
       "numerical_locations": [
         "规则/时空结构数学框架.md §11.5",
-        "docs/决策树.md #101 条目"
+        "docs/决策树/ #101 条目"
       ],
       "added": "2026-09-02",
       "updated": "2026-09-02"
@@ -3711,7 +3711,7 @@
       "deviation_reason": "环境基调强度需要独立参数名（区别于 s_env 合成结果）；demo 3 环境示例值 [NEW]，全环境表值归空间内容填充",
       "status": "active",
       "numerical_locations": [
-        "docs/决策树.md §Grilling #108 Q3",
+        "docs/决策树/ §Grilling #108 Q3",
         "../设计归档/grilling/grilling-75-p2-situation/task-plan.md §3.2",
         "data/connectivity/env_tones.json"
       ],
@@ -3720,12 +3720,12 @@
     },
     "插件化": {
       "definition": "项目内采用语义 = 静态契约式模块化架构（见「静态契约式模块化架构」条目）：统一原则 = ①能力/Service seam ②明确接口边界 ③版本/契约信息 ④装配期有效性检查 ⑤正式装配失败 → fail-fast ⑥实现替换在装配层 ⑦开发期迭代机制与生产运行机制分离。active = 「项目内术语定义已确定」，非「全引擎已插件化改造」。",
-      "source": "docs/决策树.md Grilling #111（Q1-Q9）; issue #111",
+      "source": "docs/决策树/ Grilling #111（Q1-Q9）; issue #111",
       "old_model": "运行时热插拔组件（插件崩溃/热换不影响宿主、按版本协商、坏插件可替换/mock）——DSH harness 哲学 1:1 转移",
       "deviation_reason": "DSH 源码核查（/home/dog/deepseek-harness）证明其插件化 = 静态装配插件树 + 服务 seam 换实现 + Symbol 隔离 + 开发期 HMR 回滚，无运行时热插拔/版本协商/三态降级；项目只转移可转移部分，否决运行时机制。与学术轨「plug-in」（插件估计器，#95）同名不同域",
       "status": "active",
       "numerical_locations": [
-        "docs/决策树.md Grilling #111",
+        "docs/决策树/ Grilling #111",
         "../设计归档/grilling/grilling-111-plugin/试点审查报告.md"
       ],
       "added": "2026-09-03",
@@ -3737,12 +3737,12 @@
     },
     "静态契约式模块化架构": {
       "definition": "已采纳的引擎总体架构原则（Grilling #111）：模块 = 接口/能力边界 + 版本/契约信息 + 装配期有效性检查；正式装配失败 → fail-fast；实现替换在装配层；开发期迭代（HMR/回滚）与生产机制分离。不采纳：运行时 Ready/Degraded/Unavailable 通用三态、运行时热插拔、loader 版本协商、Symbol isolate 作故障隔离。Module 资格 = 三步资格审查流程（独立能力边界为本体判据；契约敏感性→版本声明；失败影响→fail-fast 门禁），非 A∧B∧C 机械充分必要。试点：IActionProvider（纯审查通过，六维验收 PASS×5+N/A）。",
-      "source": "docs/决策树.md Grilling #111（Q1-Q9）; ../设计归档/grilling/grilling-111-plugin/试点审查报告.md",
+      "source": "docs/决策树/ Grilling #111（Q1-Q9）; ../设计归档/grilling/grilling-111-plugin/试点审查报告.md",
       "old_model": "无（本术语由 Grilling #111 首次定义）",
       "deviation_reason": "替代 issue body 的「插件化」默认模型（运行时热插拔）；与 DSH 实践（静态装配 + seam + HMR 开发期）对齐；否决三态状态机避免凭空增加机制",
       "status": "active",
       "numerical_locations": [
-        "docs/决策树.md Grilling #111",
+        "docs/决策树/ Grilling #111",
         "../设计归档/grilling/grilling-111-plugin/试点审查报告.md"
       ],
       "added": "2026-09-03",
@@ -3754,7 +3754,7 @@
     },
     "代际创伤链": {
       "definition": "家族史 = 环境史（2026-09-01 世界观裁决 D1）：上一代发病 → 下一代创伤（目睹发病/照料者不稳定/被忽视）→ 下一代发病。「遗传度」现象（双相/SZ 谱高遗传度）的解释层立场（2026-09-01 三层分离：模型假说非事实等式）= 家庭环境跨代传递，非基因直接致病；β 定义层保持来源开放不裁决归因。高遗传度病患者仍必有创伤来源——出生在患者家庭本身就是创伤环境（忽视/遗弃事件类型）。",
-      "source": "docs/决策树.md [Grilling] 病因生成模型世界观裁决（2026-09-01 D1）; 规则/技能树系统/创伤记忆转化接口.md §3.2.1 立场 B 修正",
+      "source": "docs/决策树/ [Grilling] 病因生成模型世界观裁决（2026-09-01 D1）; 规则/技能树系统/创伤记忆转化接口.md §3.2.1 立场 B 修正",
       "old_model": "遗传宿命叙事（家族史 = 基因传递）——2026-09-01 否决",
       "deviation_reason": "用户立场：家庭环境是精神疾病遗传现象的真实原因；与凯博文「社会根源 = 社会结构 × 人际网络」一致",
       "status": "active",
@@ -3766,7 +3766,7 @@
     },
     "β 个体易感性接口": {
       "definition": "个体对相同环境/事件产生不同反应的易感性接口（2026-09-01 两轮修正后）：**β_i(t) = F(β₀,i, D_i(t))——基线易感性 β₀ × 发育阶段调制，慢变量**；既往经历和当前环境不直接修改 β（可塑变化走 g/k/L，防 β/g/k/L 概念堆积——模型职责分离，非经验事实断言）。进入病理化阈值 A_trauma_I(i) = 0.7×β(t)(i)、A_trauma_L(i) = 1.0×β(t)(i)。家族聚集的遗传/环境归因不在 β 定义层裁决——三层分离：经验层（家族聚集=观察到的现象）/ 解释层（本项目立场：跨代环境传递为候选解释，模型假说非事实等式）/ 参数层（β 接口）。防自激反馈环：β(t) 时变 ≠ 每次受创伤后 β 自动改变，事件即时负荷进 L 不反向改 β。依据：Tienari 芬兰收养研究（基因×环境交互，健康家庭显著降低高遗传风险儿童患病率，Br J Psychiatry 2004;184:216-22）。原「遗传=阈值调制」命名废弃（偷渡 β≡遗传 的未裁决因果判断）。",
-      "source": "docs/决策树.md [Grilling] 病因生成模型世界观裁决（2026-09-01 D2 + 🔧 修正 ×3）; 规则/技能树系统/创伤记忆转化接口.md §一/§3.1",
+      "source": "docs/决策树/ [Grilling] 病因生成模型世界观裁决（2026-09-01 D2 + 🔧 修正 ×3）; 规则/技能树系统/创伤记忆转化接口.md §一/§3.1",
       "old_model": "「遗传=阈值调制」（2026-09-01 首版命名，同日废弃）；「β=个体易感性接口 来源开放」（2026-09-01 第二版，同日升级为 β(t)）",
       "deviation_reason": [
         "外部评审（t_6a961e5824a48191a35d97c03d6edc04）：β 命名不应偷渡 β≡遗传 的未裁决因果判断——改为个体易感性接口，来源开放；家族聚集归因推迟到解释层（项目立场：跨代环境传递为候选解释）"
@@ -3780,7 +3780,7 @@
     },
     "β₀ 个体基线易感性": {
       "definition": "个体基线易感性（2026-09-01 定案）：β(t) 的稳定分量——来源开放 ∈ {遗传、早期发育、其他稳定个体差异}，不预先裁决权重；出生基本固定，不随经历变化。β_i(t) = F(β₀,i, D_i(t))，D(t) = 发育阶段调制（慢变量）。",
-      "source": "docs/决策树.md [Grilling] 病因生成模型世界观裁决（2026-09-01 第三修正）; 规则/技能树系统/创伤记忆转化接口.md §二",
+      "source": "docs/决策树/ [Grilling] 病因生成模型世界观裁决（2026-09-01 第三修正）; 规则/技能树系统/创伤记忆转化接口.md §二",
       "old_model": "—（2026-09-01 首次定义）",
       "deviation_reason": "β 语义两轮修正的产物：β 需区分稳定基线（β₀）与发育调制（D(t)），经历可塑变化不进 β（防概念堆积）",
       "status": "active",
@@ -3792,7 +3792,7 @@
     },
     "k 应对缓冲系数": {
       "definition": "事件烈度进入创伤负荷的应对/缓冲系数（2026-09-01 语义修正）：ΔI = k×A。负责病理化之前的输入缓冲（累积期抵抗/韧性侧）；保护因素（如社会支持）作为 k 的**输入**而非等价 k（防概念坍缩）。原「人物脆弱性调制」表述废弃。与 g（负荷放大）、L（累积）、β(t)（阈值）职责分离。",
-      "source": "docs/决策树.md [Grilling] 病因生成模型世界观裁决（2026-09-01 第三修正）; 规则/技能树系统/创伤记忆转化接口.md §二",
+      "source": "docs/决策树/ [Grilling] 病因生成模型世界观裁决（2026-09-01 第三修正）; 规则/技能树系统/创伤记忆转化接口.md §二",
       "old_model": "强度系数/人物脆弱性调制（#88 输入约定，[NEW] 后置）——2026-09-01 语义修正",
       "deviation_reason": "韧性双机制定案：累积期抵抗 = k（ΔI 缩放），恢复期 = #90 降档；k 不吞所有保护因素",
       "status": "active",
@@ -3804,13 +3804,13 @@
     },
     "Eligibility(d) 疾病资格层": {
       "definition": "疾病资格判定层（2026-09-03 Grilling #113）：候选疾病召回后、主病选择前的硬门——判定『人物有没有资格成为疾病 d』，与 L_agg（已经是 d 时负荷多大）⊥ 分离。创伤负荷 ≠ 疾病资格：L_agg(d) ⇏ Eligibility(d)（三反例：丧失聚合→BD-II 无轻躁狂史/事件负荷→环性无周期性/经济剥夺→SUD 幽灵候选无物质使用史）。链：Candidate(d) → Eligibility(d) → L_agg(d) → Severity(d)。ELIGIBLE 仅表示必要条件满足+排除未触发（准入），不表示诊断成立、不保证档位——Eligibility=必要条件的机械检查，Severity=充分性的量化，两者永不合流（防诊断器化）。",
-      "source": "docs/决策树.md Grilling #113（2026-09-03）；规则/技能树系统/创伤记忆转化接口.md §3.2.2",
+      "source": "docs/决策树/ Grilling #113（2026-09-03）；规则/技能树系统/创伤记忆转化接口.md §3.2.2",
       "old_model": "创伤负荷聚合 L_agg(d) 直接充当疾病资格（事件暴露强度被误当疾病资格——变量语义错误，非参数校准问题）",
       "deviation_reason": "修复 L_agg ⇏ Eligibility 结构缺陷：资格证据（临床史/表征事实）与负荷量化（严重度）是不同量纲，混用导致『十次丧失→BD-II』类荒谬输出",
       "status": "active",
       "numerical_locations": [
         "规则/技能树系统/创伤记忆转化接口.md §3.2.2",
-        "docs/决策树.md Grilling #113",
+        "docs/决策树/ Grilling #113",
         "../设计归档/grilling/grilling-113-disease-eligibility/grilling-113-disease-eligibility.md"
       ],
       "added": "2026-09-03",
@@ -3818,52 +3818,52 @@
     },
     "资格语义锚": {
       "definition": "资格证据核验的独立证据层（2026-09-03 #113，Q2-10）：DSM-5/ICD-11 权威诊断标准文本优先（回答 d⟹P 必要性/诊断语义/排除条件）；学术临床文献用于组合/边界/解释；流行病学/病因文献回答创伤→病关联、**不得单独证明资格必要性**。三类证据回答不同问题，不构成线性强弱序列。铁律：『有文献』≠『该文献证明了当前声称的逻辑命题』；DSM/ICD 是权威来源 ≠ Eligibility 是完整诊断器。",
-      "source": "docs/决策树.md Grilling #113 Q2-10（外审 t6a9707eb16 精确化）",
+      "source": "docs/决策树/ Grilling #113 Q2-10（外审 t6a9707eb16 精确化）",
       "old_model": "把所有证据类型放入单一线性证据等级（病因/病理关联证据与资格语义混级）",
       "deviation_reason": "§3.2.1 分级文献铁律的『病因映射层』回答『创伤→病』关联，与资格语义（d⟹P 蕴含）是不同问题，不能混入同一序列",
       "status": "active",
       "numerical_locations": [
         "规则/技能树系统/创伤记忆转化接口.md §3.2.2",
-        "docs/决策树.md Grilling #113 Q2-10"
+        "docs/决策树/ Grilling #113 Q2-10"
       ],
       "added": "2026-09-03",
       "updated": "2026-09-03"
     },
     "资格证据原子": {
       "definition": "Eligibility 的输入单元（2026-09-03 #113）：受控枚举的临床史/行为史事实声明（由 #87 A′-Generator 规范化产出，转化接口不解析叙事）。三值域 X_e ∈ {1（有规范化证据支持）, 0（明确否定）, MISSING（无足够资料判定）}；MISSING ≠ FALSE。原子语义 ≠ 原子成立依据（DSM 标准是 #87 声明依据，不进入资格门）。首批五原子：DEPRESSIVE_EPISODE_HISTORY / SUBSTANCE_USE_HISTORY / MANIA_HISTORY / HYPOMANIA_HISTORY / CYCLIC_MOOD_HISTORY（归位表见转化接口 §3.2.2）。",
-      "source": "docs/决策树.md Grilling #113（Q2-2/Q2-3/Q2-12）；规则/技能树系统/创伤记忆转化接口.md §3.2.2",
+      "source": "docs/决策树/ Grilling #113（Q2-2/Q2-3/Q2-12）；规则/技能树系统/创伤记忆转化接口.md §3.2.2",
       "old_model": "从叙事自由文本现场解析临床事实（NLP/规则解析）→ 引入『Narrative interpretation ⇏ Clinical fact』不可审查解释层",
       "deviation_reason": "受控枚举 + #87 规范化声明保证可审查可回放可确定复现；『轻躁狂样』等模糊标签不得直接作原子值（原子只认 #87 已完成临床语义判定的完整实体声明）",
       "status": "active",
       "numerical_locations": [
         "规则/技能树系统/创伤记忆转化接口.md §3.2.2",
-        "docs/决策树.md Grilling #113 Q2-12"
+        "docs/决策树/ Grilling #113 Q2-12"
       ],
       "added": "2026-09-03",
       "updated": "2026-09-03"
     },
     "资格状态三值": {
       "definition": "EligibilityStatus ∈ {ELIGIBLE, INELIGIBLE, UNDETERMINED}（2026-09-03 #113 Q2-6/Q2-7）：ELIGIBLE=必要正向全满足∧排除未触发；INELIGIBLE=∃必要=0 或 ∃排除=1（一票否决）；UNDETERMINED=∃必要或排除=MISSING（输入不足以执行判定）。UNDETERMINED ≠ INELIGIBLE（非第三种资格）。input_source ∈ {canonical, fallback} 只负责缺失输入工程处置（正式→FAIL/演示→fallback），不得把 MISSING 改造成医学 TRUE/FALSE。",
-      "source": "docs/决策树.md Grilling #113（Q2-6/Q2-7，外审 t6a97045717 两层分离）",
+      "source": "docs/决策树/ Grilling #113（Q2-6/Q2-7，外审 t6a97045717 两层分离）",
       "old_model": "Eligibility 直接三值 {0,1,MISSING} 混同证据状态与资格状态；或 MISSING→FALSE（知识缺失制成事实否定）/ MISSING→忽略（门空转）",
       "deviation_reason": "证据状态（原子三值）与资格状态（输出三值）两层分离：『不知道』≠『没有』，『无法判定』≠『不合格』",
       "status": "active",
       "numerical_locations": [
         "规则/技能树系统/创伤记忆转化接口.md §3.2.2",
-        "docs/决策树.md Grilling #113 Q2-6/Q2-7"
+        "docs/决策树/ Grilling #113 Q2-6/Q2-7"
       ],
       "added": "2026-09-03",
       "updated": "2026-09-03"
     },
     "资格核验全局不变量": {
       "definition": "资格证据核验的 G1-G4 全局不变量（2026-09-03 #113）：G1 原子语义≠原子成立依据（Eligibility 只消费 #87 规范化声明，DSM 是生成侧依据）；G2 DSM/ICD=资格语义锚≠Eligibility 输入清单；G3 暂不拆分≠无需拆分（工程范围决定不构成医学结论）；G4 逻辑地位≠临床存在性（『X 在 d 中是必要正向』描述 d⟹X，不等于只有 d 才可能出现 X）。所有资格原子核验共用，避免每核验一原子重开 P5 诊断器化争论。",
-      "source": "docs/决策树.md Grilling #113（G1-G4，外审 t6a970afa15/t6a970b8369）",
+      "source": "docs/决策树/ Grilling #113（G1-G4，外审 t6a970afa15/t6a970b8369）",
       "old_model": "—（资格核验无全局约束，逐原子口头约定）",
       "deviation_reason": "四不变量把『防诊断器化』从原则变成可执行纪律：防止分类地图/共享原子核验结果偷偷变成先验或自动继承",
       "status": "active",
       "numerical_locations": [
         "规则/技能树系统/创伤记忆转化接口.md §3.2.2",
-        "docs/决策树.md Grilling #113"
+        "docs/决策树/ Grilling #113"
       ],
       "added": "2026-09-03",
       "updated": "2026-09-03"

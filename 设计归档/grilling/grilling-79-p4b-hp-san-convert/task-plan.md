@@ -95,7 +95,7 @@ ActionResolver 兑换结算（ConvertHpToSan/ConvertSanToHp dispatch）:
 | `src/YouAreNotTheFish.Core/Flow/ActionResolver.cs` | 改写（兑换结算） | 代码 |
 | `src/YouAreNotTheFish.Core.Tests/` | 新增 | 测试 |
 | `src/YouAreNotTheFish.Console/` | 改写 | 代码 |
-| `docs/决策树.md` / `docs/设计框架-六维状态.md` / memory | 追加 | 文档 |
+| `docs/决策树/` / `docs/设计框架-六维状态.md` / memory | 追加 | 文档 |
 
 ## 八、数据契约与校验
 

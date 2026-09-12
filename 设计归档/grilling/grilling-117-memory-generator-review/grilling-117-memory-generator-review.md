@@ -52,12 +52,12 @@ GitHub: [#117](https://github.com/verystrongdog/game/issues/117)
 ## 受影响文件（预判）
 
 - `参考/记忆生成器理论评审-*.md`（若产出）
-- `docs/决策树.md`（本 issue）
+- `docs/决策树/`（本 issue）
 - `data/term_registry.json`（符号/术语候选——#40 先例学术轨术语已入库）
 
 ---
 *创建: 2026-09-06 | 状态: open*
-*输入: [chatX_transcript.txt](../../chatX_transcript.txt) | 关联: [#116](https://github.com/verystrongdog/game/issues/116)*
+*输入: [chatX_transcript.txt](../../../%E5%8F%82%E8%80%83/%E4%BC%9A%E8%AF%9D%E5%AD%98%E6%A1%A3/chatX_transcript.txt) | 关联: [#116](https://github.com/verystrongdog/game/issues/116)*
 
 ## 决策记录
 
@@ -83,7 +83,7 @@ GitHub: [#117](https://github.com/verystrongdog/game/issues/117)
 
 ## Step 4 落盘（2026-09-06）
 - 参考/记忆生成器理论-可行性评审-v1.md（新建）
-- docs/决策树.md（追加本 issue 条目）
+- docs/决策树/（追加本 issue 条目）
 - term_registry 候选清单 → 待用户确认
 - 一致性清扫 → 待执行
 - 六维状态/项目总览：学术轨不入正典，无同步项

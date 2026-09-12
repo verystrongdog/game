@@ -56,10 +56,10 @@
 
 | 文件 | 说明 |
 |------|------|
-| [brain_regions.json](../data/brain_regions.json) | 50 解剖实体 MNI/游戏坐标、层级 |
-| [tripartite_model.json](../data/connectivity/tripartite_model.json) | 三体神经模型（CSTC环路+皮层-皮层+脑干广播） |
-| [link_modulation_ceiling_v2.json](../data/connectivity/link_modulation_ceiling_v2.json) | 链路调制天花板 |
-| [situation_primitives.json](../data/connectivity/situation_primitives.json) | 27 情境原型 |
+| [brain_regions.json](../../data/brain_regions.json) | 50 解剖实体 MNI/游戏坐标、层级 |
+| [tripartite_model.json](../../data/connectivity/tripartite_model.json) | 三体神经模型（CSTC环路+皮层-皮层+脑干广播） |
+| [link_modulation_ceiling_v2.json](../../data/connectivity/link_modulation_ceiling_v2.json) | 链路调制天花板 |
+| [situation_primitives.json](../../data/connectivity/situation_primitives.json) | 27 情境原型 |
 
 ### 参考文献
 

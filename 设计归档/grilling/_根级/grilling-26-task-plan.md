@@ -556,7 +556,7 @@
 | `data/brain_regions.json` | +STN, +20 function_profile, +2 mirror_of, -2 聚合体 | 1 |
 | `data/term_registry.json` | +~14 术语 | 1 |
 | `规则/技能树系统/脑功能层级模型.md` | +§二十 三体模型, §十五 标废弃 | 3 |
-| `docs/决策树.md` | +Grilling #26 记录 | 3 |
+| `docs/决策树/` | +Grilling #26 记录 | 3 |
 | `docs/设计框架-六维状态.md` | 规则+管线维度更新 | 3 |
 
 ### 删除/迁移文件（→ 垃圾桶/）
@@ -597,4 +597,4 @@
 ---
 
 *创建: 2026-08-07 | 更新: 2026-08-07 (v2: review-plan 追加 4 决策 + signal_type 词表 + 剖面粒度调整 + cstc_loop 字段)*
-*关联: Grilling #26 (GitHub #27), [脑功能层级模型.md](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E8%84%91%E5%8A%9F%E8%83%BD%E5%B1%82%E7%BA%A7%E6%A8%A1%E5%9E%8B.md), [决策树.md](../../../docs/%E5%86%B3%E7%AD%96%E6%A0%91.md), [signal_types.json](../../../data/signal_types.json)*
+*关联: Grilling #26 (GitHub #27), [脑功能层级模型.md](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E8%84%91%E5%8A%9F%E8%83%BD%E5%B1%82%E7%BA%A7%E6%A8%A1%E5%9E%8B.md), [决策树.md](../../../docs/%E5%86%B3%E7%AD%96%E6%A0%91/README.md), [signal_types.json](../../../data/signal_types.json)*

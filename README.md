@@ -27,7 +27,7 @@
 | [事件/](事件/) | 维度文档：游戏循环、世界观与叙事、任务/剧情/奖励系统、NPC 人生生成器 |
 | [呈现/](呈现/) | 维度文档：战斗界面布局（其余待建设） |
 | [管线/](管线/) | 维度文档（预烘焙管线已废弃，引擎路线图见 .scratch） |
-| [data/](data/) | 结构化数据：脑区、三体神经模型、情境原型、病理边、调制参数（JSON） |
+| [data/](data/README.md) | 结构化数据：脑区、三体神经模型、情境原型、病理边、调制参数（JSON） |
 | [src/](src/) | C# 逻辑引擎：`YouAreNotTheFish.Core`（.NET 8 库）+ `.Console` harness + 测试 |
 | [sim/](sim/) | Python 数值模拟验证脚本 |
 | [tools/](tools/) | 数据生成/校验工具脚本（validate_*.py 等） |
@@ -38,13 +38,13 @@
 ## 入口文档
 
 - [docs/设计框架-六维状态.md](docs/设计框架-六维状态.md) — 六维路由表 + 全局 grilling 优先级（新设计先在此定位）
-- [docs/决策树.md](docs/决策树.md) — 所有 grilling 会话的决策分叉记录（查询历史决策）
+- [docs/决策树/](docs/%E5%86%B3%E7%AD%96%E6%A0%91/README.md) — 所有 grilling 会话的决策分叉记录（查询历史决策）
 - [CLAUDE.md](CLAUDE.md) — AI 协作规范（术语表/触发规则/引用铁律）
 - [项目总览.md](项目总览.md) — 项目总入口
 
 ## 维护约定
 
-- 设计讨论按六维定位，决策写入设计文档 + [docs/决策树.md](docs/决策树.md) + 注册表 `data/term_registry.json`
+- 设计讨论按六维定位，决策写入设计文档 + [docs/决策树/](docs/%E5%86%B3%E7%AD%96%E6%A0%91/README.md) + 注册表 `data/term_registry.json`
 - 仓库过程物（外部 AI 会话存档、书籍全文、运行日志）**不入库**：`.gitignore` 已排除，磁盘保留
 - Git 提交信息用中文，按主题小步提交
 

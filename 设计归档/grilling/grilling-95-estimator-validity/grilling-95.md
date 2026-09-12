@@ -122,7 +122,7 @@
 
 | 决策 | 摘要 | 写入文件 | 位置 | 状态 |
 |---|---|---|---|---|
-| Q1-Q19 | estimator-validity 实验设计全量 | docs/决策树.md | #95 条目「决策（Q1-Q19）」 | ✅ 已验证 |
+| Q1-Q19 | estimator-validity 实验设计全量 | docs/决策树/ | #95 条目「决策（Q1-Q19）」 | ✅ 已验证 |
 | 6 术语 | estimator-validity/Ĉ_obs/A_pair/synthetic observation 轨/not_testable/scaled observation 轨 | data/term_registry.json | terms（220 条） | ✅ 已验证 |
 | 衔接注记 | v7 §七 D10 H1 落地 + 参数速查表补充（R/α/选格阈值） | 参考/意识结构侧-下一阶段路线-v7.md | 头部 + §参数速查表 | ✅ 已验证 |
 | 决策日志 | 本文件 | grilling-95.md | 全文 | ✅ 已验证 |

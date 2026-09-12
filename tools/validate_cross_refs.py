@@ -129,15 +129,14 @@ def resolve_target(target: str, source_file: str) -> tuple[Path | None, bool]:
     except ValueError:
         pass
 
-    # 文件名模糊搜索
-    filename = Path(target).name
-    if filename and not target.endswith("/"):
-        search_name = filename if "." in filename else filename + ".md"
-        for f in ROOT.rglob(search_name):
-            rel = str(f.relative_to(ROOT))
-            if not any(kw in rel for kw in ["垃圾桶", ".trash", ".git", "__pycache__"]):
-                candidates.append(f)
-                break
+    # ⚠️ 2026-09-12 仓库重构 Phase 2：移除「按文件名模糊搜索」回退。
+    #
+    # 原实现会在相对路径解析失败时，用 ROOT.rglob(文件名) 找第一个同名文件充当候选，
+    # 因此**深层相对路径错误会被判为通过**——2026-09-12 实测：校验器报 0 死链，而严格
+    # 解析（不含此回退）实为 424 处失效。回退掩盖了真实问题，已删除。
+    #
+    # 如果你的引用确实只能按名定位（跨目录同名文件、模板占位），请改写为正确的相对路径；
+    # 模板文档里的占位符（`path`/`相对路径`）请在链接文本中避免使用 `](...)` 形式。
 
     for cand in list(candidates):
         if not cand.suffix and not str(cand).endswith("/"):

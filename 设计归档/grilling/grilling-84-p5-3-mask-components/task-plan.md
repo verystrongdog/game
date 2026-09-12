@@ -123,7 +123,7 @@ CombatState.EffectiveM[edge] = clamp(LinkState.M[edge] + Σ药物偏移 + Σ组�
 | `src/YouAreNotTheFish.Core/Entity/CombatState.cs` | 改写（EffectiveM 扩展） | 代码 |
 | `src/YouAreNotTheFish.Core.Tests/` | 新增 | 测试 |
 | `src/YouAreNotTheFish.Console/` | 改写 | 代码 |
-| `docs/决策树.md` / `docs/设计框架-六维状态.md` / memory | 追加 | 文档 |
+| `docs/决策树/` / `docs/设计框架-六维状态.md` / memory | 追加 | 文档 |
 
 ## 十、数据契约与校验
 

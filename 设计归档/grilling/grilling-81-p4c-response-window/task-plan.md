@@ -113,7 +113,7 @@ Resolve(declared, state, ctx):
 | `src/YouAreNotTheFish.Core/Types/CalibrationConfig.cs` | 改写（+2 [NEW]） | 代码 |
 | `src/YouAreNotTheFish.Core.Tests/` | 新增 | 测试 |
 | `src/YouAreNotTheFish.Console/` | 改写 | 代码 |
-| `docs/决策树.md` / `docs/设计框架-六维状态.md` / memory | 追加 | 文档 |
+| `docs/决策树/` / `docs/设计框架-六维状态.md` / memory | 追加 | 文档 |
 
 ## 十、数据契约与校验
 

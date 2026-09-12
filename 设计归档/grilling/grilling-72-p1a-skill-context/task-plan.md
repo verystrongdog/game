@@ -139,7 +139,7 @@ Grilling #70 盘点发现 F-1：`link_contexts.json`（364 条）与 `link_regis
 | `data/connectivity/link_contexts_tripartite.json` | 新建 | 数据 |
 | `rebuild-report.md` | 新建 | 报告 |
 | `规则/技能树系统/技能生成机制.md`（§二 ⚠️ 注更新） | 改写 | 文档 |
-| `docs/决策树.md` / `docs/设计框架-六维状态.md` / memory | 追加 | 文档 |
+| `docs/决策树/` / `docs/设计框架-六维状态.md` / memory | 追加 | 文档 |
 | `data/README.md`（引擎 5 文件索引外补 link_contexts_tripartite） | 改写（可选） | 文档 |
 
 ## 八、数据契约与校验

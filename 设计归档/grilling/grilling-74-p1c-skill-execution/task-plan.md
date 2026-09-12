@@ -145,7 +145,7 @@ m = 1.0（与 A7/C1/D1/D2 同类：事件固定最大）；经 EventProcessor δ
 | `src/YouAreNotTheFish.Core.Tests/` | 新增 | 测试 |
 | `src/YouAreNotTheFish.Console/` | 改写 | 代码 |
 | `data/connectivity/link_contexts_tripartite.json`（P1a 产物） | 依赖 | 数据 |
-| `docs/决策树.md` / `docs/设计框架-六维状态.md` / memory | 追加 | 文档 |
+| `docs/决策树/` / `docs/设计框架-六维状态.md` / memory | 追加 | 文档 |
 
 ## 九、数据契约与校验
 

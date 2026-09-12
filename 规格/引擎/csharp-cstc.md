@@ -24,7 +24,7 @@
 | 阻塞 | step 7 csharp-speed（决断分 mean(c_loop) 与执行分 a_SD1 数据源）、step 8 csharp-damage（gate_bonus）、step 10 csharp-flow（Phase 3 编排）、step 12 csharp-smoke |
 | 输入数据 | `data/brain_regions.json` function_profile（fid 级 cstc_loop/cstc_role）——经 GameDataLoader.LoadAll 加载 |
 
-本规格的决策依据 = [任务issue 01](../../.scratch/csharp-cstc/design/issues/01-cstc-spec.md) D1-D13 + Q1/Q2/Q3 裁决（其「数据实测」表为全部计数与锚点出处，2026-08-13 python 实测）。本 spec 的 Step 锚点另经第二轮实测复算（gate 时刻语义修正——见 B1），锚点数值以本 spec §六 为准。
+本规格的决策依据 = [任务issue 01](../../设计归档/grilling/csharp-cstc/design/issues/01-cstc-spec.md) D1-D13 + Q1/Q2/Q3 裁决（其「数据实测」表为全部计数与锚点出处，2026-08-13 python 实测）。本 spec 的 Step 锚点另经第二轮实测复算（gate 时刻语义修正——见 B1），锚点数值以本 spec §六 为准。
 
 ### 偏差声明（与设计文档/plan 的已知差异，实现必须照此执行）
 
@@ -252,7 +252,7 @@ public sealed class CstcGating
 
 ---
 *创建: 2026-08-13 | 更新: 2026-08-13 | 版本: v1.1*
-*关联: [csharp-engine plan](../../csharp-engine/design/plan.md) §4.4/§十/§十三-3, [任务issue 01](../../.scratch/csharp-cstc/design/issues/01-cstc-spec.md), [运行时状态模型](../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E8%BF%90%E8%A1%8C%E6%97%B6%E7%8A%B6%E6%80%81%E6%A8%A1%E5%9E%8B.md) §6/§三, [csharp-tone spec](../../csharp-tone/design/spec.md)（M1 链 + AC-15）, [csharp-wc-dynamics spec](../../csharp-wc-dynamics/design/spec.md) §四（Δ 先例）*
+*关联: [csharp-engine plan](csharp-engine-roadmap.md) §4.4/§十/§十三-3, [任务issue 01](../../设计归档/grilling/csharp-cstc/design/issues/01-cstc-spec.md), [运行时状态模型](../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E8%BF%90%E8%A1%8C%E6%97%B6%E7%8A%B6%E6%80%81%E6%A8%A1%E5%9E%8B.md) §6/§三, [csharp-tone spec](csharp-tone.md)（M1 链 + AC-15）, [csharp-wc-dynamics spec](csharp-wc-dynamics.md) §四（Δ 先例）*
 
 ## 参数速查表
 

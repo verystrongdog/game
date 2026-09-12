@@ -193,7 +193,7 @@ AOE 结算器（范围命中）:
 | `src/YouAreNotTheFish.Core/Engine/NpcSalience.cs` | 改写（目标=攻最近） | 代码 |
 | `src/YouAreNotTheFish.Core.Tests/` | 新增 | 测试 |
 | `src/YouAreNotTheFish.Console/` | 改写（多敌方战场演示） | 代码 |
-| `docs/决策树.md` / `docs/设计框架-六维状态.md` / memory | 追加 | 文档 |
+| `docs/决策树/` / `docs/设计框架-六维状态.md` / memory | 追加 | 文档 |
 
 ## 十一、数据契约与校验
 

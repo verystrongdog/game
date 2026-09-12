@@ -46,7 +46,7 @@ description: Grill the user relentlessly about a plan, decision, or idea. Use wh
 
 ## Step 1 — 话题验证
 
-`grep` `docs/决策树.md` 中是否已有同名话题的「决策」或「被否决」→ 有则告知用户。`gh issue list --label grilling --state open` 是否有重复 grilling issue → 有则链接已有 issue。不通过则不创建 issue。
+`grep` `docs/决策树/` 中是否已有同名话题的「决策」或「被否决」→ 有则告知用户。`gh issue list --label grilling --state open` 是否有重复 grilling issue → 有则链接已有 issue。不通过则不创建 issue。
 
 ---
 
@@ -264,7 +264,7 @@ If a *fact* can be found by exploring the environment (filesystem, tools, etc.),
 ## Step 4 — 写入（达成共识后）
 
 1. **写入设计文档**：将决策写入受影响的具体 md 文件
-2. **更新决策树**：追加到 `docs/决策树.md`。追加前 `grep` 与本次相关的「延迟」项 → 新记录标注来源，旧记录加注「→ 见」
+2. **更新决策树**：追加到 `docs/决策树/`。追加前 `grep` 与本次相关的「延迟」项 → 新记录标注来源，旧记录加注「→ 见」
 3. **更新六维状态**：修改 `docs/设计框架-六维状态.md` 对应维度的状态（✅/⚠️/❌）和 grilling 队列
 4. **检查项目总览**：确认 `项目总览.md` 的设计共识和待解决问题是否需要同步更新
 5. **写入 memory**：将关键决策摘要写入 `~/.claude/projects/-home-dog-game/memory/` 对应文件

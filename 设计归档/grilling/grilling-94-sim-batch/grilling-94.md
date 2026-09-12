@@ -123,7 +123,7 @@
 
 | 决策 | 摘要 | 写入文件 | 位置 | 状态 |
 |---|---|---|---|---|
-| D1 | 完整 CS′_local(C) + 分层验收 | docs/决策树.md + grilling-94.md | #94 条目「D1 范围」 | ✅ 已验证 |
+| D1 | 完整 CS′_local(C) + 分层验收 | docs/决策树/ + grilling-94.md | #94 条目「D1 范围」 | ✅ 已验证 |
 | D2 | exact_kernel 唯一派生 + System 接口 | 决策树 + sim_consciousness_v7_components.py §2 | 决策树 D2；脚本 exact_kernel/System | ✅ 已验证 |
 | D3 | 四要件局部化 + SM′=RB_I∧RB_A + cut 核语义 | 决策树 + 脚本 §5-8 | 决策树 D3 | ✅ 已验证 |
 | D4 | Diff T=64 + 数值冻结表 | 决策树 + 脚本 §0 | 决策树 D4 | ✅ 已验证 |

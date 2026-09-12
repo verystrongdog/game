@@ -1,6 +1,6 @@
 # Kaluza-Klein 理论与月光场 — 文献数据源
 
-> **⚠️ 已废弃（2026-08-11 [#38](../../../设计归档/grilling/grilling-38-moonlight-field)）**：KK 理论五维几何是 v2 静态标量场模型的理论基础，与 CGL+AGC 连续性破缺数学基础不兼容。保留完整内容作为文献参考。
+> **⚠️ 已废弃（2026-08-11 [#38](../../../%E8%AE%BE%E8%AE%A1%E5%BD%92%E6%A1%A3/grilling/grilling-38-moonlight-field/README.md)）**：KK 理论五维几何是 v2 静态标量场模型的理论基础，与 CGL+AGC 连续性破缺数学基础不兼容。保留完整内容作为文献参考。
 
 > 月光场量子擦除模型（已废弃→`参考/废弃/月光场/月光场-标量场模型.md`）的五维几何基础，引用了以下文献。每篇标注了与项目设计的具体关联点。
 
@@ -77,4 +77,4 @@
 ---
 
 *创建: 2026-08-03*
-*关联: [月光场-标量场模型](月光场-标量场模型.md), [决策树 M1-M5](../../../docs/决策树.md), [Grilling #19](https://github.com/verystrongdog/game/issues/19)*
+*关联: [月光场-标量场模型](月光场-标量场模型.md), [决策树 M1-M5](../../../docs/%E5%86%B3%E7%AD%96%E6%A0%91/README.md), [Grilling #19](https://github.com/verystrongdog/game/issues/19)*

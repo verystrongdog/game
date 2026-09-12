@@ -898,6 +898,6 @@ N = CGI-S 决定：中=2, 重=3-4。每个 Alter：
 ---
 
 *创建: 2026-08-01 | 更新: 2026-08-01 (Grilling #18 — 22 项决策 + 两轮 review-plan trace 31 行)*
-*关联: [敌人与事件](../../../%E5%AE%9E%E4%BD%93/%E6%95%8C%E4%BA%BA%E4%B8%8E%E4%BA%8B%E4%BB%B6.md), [核心机制](../../../%E8%A7%84%E5%88%99/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md), [NPC AI 行为模型](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/NPC%20AI%20%E8%A1%8C%E4%B8%BA%E6%A8%A1%E5%9E%8B.md), [决策树](../../../docs/%E5%86%B3%E7%AD%96%E6%A0%91.md), [疾病目录/](../../../%E5%AE%9E%E4%BD%93/%E7%96%BE%E7%97%85%E7%9B%AE%E5%BD%95)*
+*关联: [敌人与事件](../../../%E5%AE%9E%E4%BD%93/%E6%95%8C%E4%BA%BA%E4%B8%8E%E4%BA%8B%E4%BB%B6.md), [核心机制](../../../%E8%A7%84%E5%88%99/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md), [NPC AI 行为模型](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/NPC%20AI%20%E8%A1%8C%E4%B8%BA%E6%A8%A1%E5%9E%8B.md), [决策树](../../../docs/%E5%86%B3%E7%AD%96%E6%A0%91/README.md), [疾病目录/](../../../%E5%AE%9E%E4%BD%93/%E7%96%BE%E7%97%85%E7%9B%AE%E5%BD%95)*
 *依赖 grilling: [#18](https://github.com/verystrongdog/game/issues/18)*
-*审查: [review-trace-2026-08-01-2005-task-plan.md](review-trace-2026-08-01-2005-task-plan.md) (第一轮) / [review-trace-2026-08-01-2030-task-plan-v2.md](review-trace-2026-08-01-2030-task-plan-v2.md) (第二轮)*
+*审查: [review-trace-2026-08-01-2005-task-plan.md](../review-trace-2026-08-01-2005-task-plan.md) (第一轮) / [review-trace-2026-08-01-2030-task-plan-v2.md](../review-trace-2026-08-01-2030-task-plan-v2.md) (第二轮)*

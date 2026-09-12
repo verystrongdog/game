@@ -145,7 +145,7 @@ public static WMatrix Build(GameData data, LinkState linkState, FocusSet focus)
 | `src/YouAreNotTheFish.Core.Tests/`（LinkState/MyleinGrowth/WMatrix 测试） | 新增 | 测试 |
 | `src/YouAreNotTheFish.Console/`（接线） | 改写 | 代码 |
 | `data/connectivity/link_contexts_tripartite.json`（P1a 产物，T3 消费） | 依赖 | 数据 |
-| `docs/决策树.md` / `docs/设计框架-六维状态.md` / memory | 追加 | 文档 |
+| `docs/决策树/` / `docs/设计框架-六维状态.md` / memory | 追加 | 文档 |
 
 ## 十、数据契约与校验
 
@@ -188,4 +188,4 @@ public static WMatrix Build(GameData data, LinkState linkState, FocusSet focus)
 ---
 
 *创建: 2026-08-16 | 更新: 2026-08-16*
-*关联: [Grilling #70 路线图 task-plan](./../grilling-70-engine-roadmap/task-plan.md), [Grilling #72 P1a task-plan](./../grilling-72-p1a-skill-context/task-plan.md), [核心机制](../../../%E8%A7%84%E5%88%99/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md), [皮层动力学-通用层](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E7%9A%AE%E5%B1%82%E5%8A%A8%E5%8A%9B%E5%AD%A6-%E9%80%9A%E7%94%A8%E5%B1%82.md), [运行时状态模型](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E8%BF%90%E8%A1%8C%E6%97%B6%E7%8A%B6%E6%80%81%E6%A8%A1%E5%9E%8B.md), [csharp-engine plan](./../csharp-engine/design/plan.md), [数学语言书写规范](../../../docs/agents/math-language-writing.md)*
+*关联: [Grilling #70 路线图 task-plan](./../grilling-70-engine-roadmap/task-plan.md), [Grilling #72 P1a task-plan](./../grilling-72-p1a-skill-context/task-plan.md), [核心机制](../../../%E8%A7%84%E5%88%99/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md), [皮层动力学-通用层](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E7%9A%AE%E5%B1%82%E5%8A%A8%E5%8A%9B%E5%AD%A6-%E9%80%9A%E7%94%A8%E5%B1%82.md), [运行时状态模型](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E8%BF%90%E8%A1%8C%E6%97%B6%E7%8A%B6%E6%80%81%E6%A8%A1%E5%9E%8B.md), [csharp-engine plan](../../../规格/引擎/csharp-engine-roadmap.md), [数学语言书写规范](../../../docs/agents/math-language-writing.md)*

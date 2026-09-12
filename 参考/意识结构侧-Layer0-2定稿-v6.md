@@ -121,4 +121,4 @@ C_struct ≢ C_phenomenal            —— 未证明相等
 
 ---
 *创建: 2026-08-26 | 更新: 2026-08-27 (开放问题对照 → 见 v7)*
-*关联: [意识结构侧-下一阶段路线-v7.md](意识结构侧-下一阶段路线-v7.md), [sim_consciousness_int_test.py](../sim_consciousness_int_test.py), [sim_consciousness_diff_test.py](../sim_consciousness_diff_test.py), [sim_consciousness_broadcast_test.py](../sim_consciousness_broadcast_test.py), [sim_consciousness_sm_test.py](../sim_consciousness_sm_test.py), [sim_consciousness_cs_attack.py](../sim_consciousness_cs_attack.py), [sim_consciousness_cs4_test.py](../sim_consciousness_cs4_test.py)*
+*关联: [意识结构侧-下一阶段路线-v7.md](意识结构侧-下一阶段路线-v7.md), [sim_consciousness_int_test.py](../sim/sim_consciousness_int_test.py), [sim_consciousness_diff_test.py](../sim/sim_consciousness_diff_test.py), [sim_consciousness_broadcast_test.py](../sim/sim_consciousness_broadcast_test.py), [sim_consciousness_sm_test.py](../sim/sim_consciousness_sm_test.py), [sim_consciousness_cs_attack.py](../sim/sim_consciousness_cs_attack.py), [sim_consciousness_cs4_test.py](../sim/sim_consciousness_cs4_test.py)*

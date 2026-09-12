@@ -122,7 +122,7 @@ EventProcessor: A3/B3 与 A1/B1 同路径（δ 实时注入 + s 打包）——A
 | `src/YouAreNotTheFish.Core/Types/CalibrationConfig.cs` | 改写（+5 [NEW] 参数） | 代码 |
 | `src/YouAreNotTheFish.Core/Engine/SkillResolver.cs` | 改写（识别效果） | 代码 |
 | `src/YouAreNotTheFish.Core.Tests/` | 新增 | 测试 |
-| `docs/决策树.md` / `docs/设计框架-六维状态.md` / memory | 追加 | 文档 |
+| `docs/决策树/` / `docs/设计框架-六维状态.md` / memory | 追加 | 文档 |
 
 ## 十、数据契约与校验
 
