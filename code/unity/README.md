@@ -280,6 +280,78 @@ git reset --mixed origin/main
 
 `reset --mixed` 不动工作树，所以那两处既有分叉（`AnimatorWalker.cs` 的坐/起 vs main 的空中方向修正、`KiWalkerLabBuilder.cs`）作为"已修改"原样保留，留给 [#137](https://github.com/verystrongdog/game/issues/137)。**不要用 `git reset --hard` / `checkout -f`**——那会覆盖这两处未提交的分叉实现。
 
+## 二·I、ActionLab 落地回切修复（提交 `6bd8ddc`，2026-09-12）
+
+> 演示者可走/跑/跳，但**按住方向键起跳、按键不放，落地后角色沿该方向平移、腿部不走**。本段记录根因、修法与红/绿实测（含用户 Play 目视验证）。与 §二·H 的关系：#136 立的是"资产身份"，这条是它暴露出的第一个**行为**缺陷。
+
+### 症状 → 根因（四环，缺一不成立）
+
+| 环 | 事实（读源码/资产确认） |
+|---|---|
+| ① 决策层 | `ActionPlayer.TickLocomotion` 的**地面守卫**比较「本帧目标态 vs 缓存 `_locomotionTarget`」；而空中播 `Jump` 的那次 `CrossFade` **不进缓存**（空中分支赋值后直接 `return`） |
+| ② 触发条件 | 落地目标与起跳前**同档**（走的仍是 Walk、跑的仍是 Run）→ 守卫判「无变化」→ **一次切态都不发**。只按住同一个键、甚至只换方向都不改变这个量；只有换挡（走↔跑）或松手才改变它 |
+| ③ 状态机 | `ActionLab.controller` 零参数、零 transition（[动作库规格.md §四·甲](../../design/presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md)：切态只由 C# 发 `CrossFade`）→ Animator **无法自行离开 Jump**；`Jump` clip `loopTime: 0` → 状态时间继续走、**姿势定格末帧** |
+| ④ 位移层 | `ActionLabDriver` 落地帧即按 `dir * speed` 全速位移（`_cc.Move`） |
+
+①+②+③ 让状态停在 Jump，④ 让身体照走 → 呈现为"平移"。
+
+### 修法（`ActionPlayer.cs`，+25/−2）
+
+1. 空中发 `Jump` 时置 `_returnFromJumpPending`，**落地边沿强制补发一次回切**（补发后清零，不逐帧刷）。
+2. 决策层不再因缺 `Animator`/`runtimeAnimatorController` 提前 `return`——状态选择始终成立并留痕（新增只读面 `LastRequestedState` / `StateRequestCount`），使这条行为**无 controller 资产也能断言**。
+3. `ResetToIdle()` 清 `_returnFromJumpPending`；Defend 判定抽成判空的 `IsCurrentState`。
+
+设计侧无改动：行为与 [动作库规格.md §四·甲](../../design/presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md)（回退 locomotion 目标态）同向，属缺陷修复；批次 4 迁契约 B（§四·乙）之后，**这条"落地边沿补发"仍需保留**（§四·乙：一次性动作 ↔ locomotion 的切换仍走 A）。
+
+### 红 / 绿实测（Unity 6000.5.2f1 直驱 ActionLab 场景）
+
+脚本输入模拟"按住方向键 + 跳一次"，逐 0.1 s 采样：
+
+| 时刻 | 红（未修） | 绿（已修 `6bd8ddc`） |
+|---|---|---|
+| 起跳前 | `anim=Walk  spd01=0.50`（缓存 = Walk） | 同 |
+| 落地帧 | `anim=Jump  grounded=True  spd01=0.36` | `anim=Jump  grounded=True  lastReq=Walk`（补发请求，`reqs` 2→3） |
+| 落地 +0.2 s | `anim=Jump  nxt=0`（无过渡在途） | `anim=Jump  nxt=Walk`（过渡在途） |
+| 落地 +0.4 s | `anim=Jump` | `anim=Walk` |
+| 落地 +2.9 s | `anim=Jump`（仍在）· z 以 **3.05 m/s** 推进 · `y=0.08` 贴地 | `anim=Walk` · z 同速推进 · `reqs` 停在 3（不逐帧刷） |
+
+**用户 Play 目视验证（2026-09-12，绑 `6bd8ddc`）**：按住方向键起跳 → 落地即回到走/跑动画，问题消失。
+
+### 复现 / 复核方法（本机可直跑）
+
+```bash
+U="/mnt/c/Users/9527/AppData/Local/Unity/bin/unity.exe"; P="C:\Users\9527\game\code\unity"
+"$U" command editor_play  --project-path "$P" --json
+"$U" command eval --code '<取 ActionLabDriver → SetMoveInput(方向, 3f, false, true)；协程每 0.1 s Debug.Log 状态>' --project-path "$P" --json
+"$U" command get_console_logs --project-path "$P" --json   # 返回按时间倒序，读时 tac 过来
+"$U" command editor_stop  --project-path "$P" --json
+```
+
+- 读数量：`Animator.GetCurrentAnimatorStateInfo(0)`（`shortNameHash` / `loop` / `normalizedTime`）＋ `GetNextAnimatorStateInfo(0)`（`nxt=0` = 无过渡在途）＋ `CharacterController.isGrounded` ＋ `ActionPlayer.HorizontalSpeed01`。
+- ⚠️ **两个参照柱会毁掉复现**：起点 `(0,0,0)` 朝 `+z` 走，会在 `z≈2.41` 顶住 `(0,0,3)` 的参照柱 → `CharacterController.velocity≈0` → `spd01=0` → 动画选 Idle → **起跳前缓存变成 Idle**，落地目标 Walk 与之不同，守卫反而会正常发切态，**bug 不复现**。要复现就走 `-z`（柱子只在 `(0,0,3)` / `(3,0,0)`，起点后方空旷）。
+- 副产品读数（不算缺陷，但要知道）：顶住障碍时 `spd01=0` → 播 Idle，所以"被挡住"与"没输入"在动画上不可区分。
+
+### 机器断言与残留
+
+| 项 | 实测 |
+|---|---|
+| PlayMode | **21 项：19 过 / 2 红**；新增 `ActionLabLocomotionTests` **5 项全过**（同档落地必补发 / 原地跳落地回 Idle / 跑档落地回 Run / 补发只发一次 / 地面换挡仍发切态） |
+| 2 项红 | 仍是 §二·H 残留缺口 ② 那两条既有缺陷（`OneShotElapsed` 阈值 / `ResetToIdle` 不清 `CurrentActionId`），本次**未顺手修**（[WORKFLOW.md §一](../../WORKFLOW.md)） |
+| 编译 | Windows Editor **0 个 CS 错误**；Linux 侧用 Unity 6000.5.2f1 程序集单独编译 `ActionPlayer.cs` 也是 0 warning / 0 error |
+| 候选队列 | ① `AnimatorWalker.cs` 有**同源守卫缺陷**（`CurrentAnimState` 空中不更新 + KiWalkerLab controller 零 transition）→ **KiWalkerLab 存在同一现象**，归 [#137](https://github.com/verystrongdog/game/issues/137) 工作面；② 上述 2 项常红 |
+
+### 运维补充（修正 §二·G 的表述）
+
+驱动 Unity 时**经 pipeline 写工程内文件不需要提权**——写盘由 Editor 进程完成（§二·G 那句"改 `/mnt/c` 下的文件需要提权"只对 shell 直写成立）：
+
+| 命令 | 要点 |
+|---|---|
+| `write_text_file --path <工程相对路径> --contents "<文本>"` | 覆盖已有文件须加 `--confirm true`；支持多行 + 中文 + 引号 |
+| `read_text_file --path <工程相对路径>` | 回读核对字节（本次用它验了两侧 sha256 一致） |
+| `delete_asset --asset <路径> --confirm true` | 参数名是 `--asset`（不是 `--path`），删除须 `--confirm true` |
+| `test_status` / `run_tests --mode playmode --async_tests` | PlayMode 测试**只能异步跑**（同步会因进 Play 触发域重载而断连），再轮询 `test_status` |
+| 新增 `.cs` | Unity 导入时**自动生成 `.meta`**（GUID 由 Windows 侧决定）→ 仓库侧 `.meta` 必须采用该 GUID（[动作库规格.md §八](../../design/presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md) 资产区单机所有权） |
+
 ## 二·F、玫瑰花海场景（真实草原 DEM + 商业化密度株丛 + 小人穿行）
 
 > 独立实验场（Grilling #126）：把「100×100 m 草原地形 + 整片玫瑰覆盖 + 小人穿行」落成可跑场景。地形取自**真实 1 m lidar 高程数据**（非参数化描述），株距密度取自**商业化种植文献**——两者都把模糊描述换成了可机械核验的取值。维度：呈现 + 管线。
@@ -375,5 +447,5 @@ code/unity/
 
 ---
 
-*创建: 2026-09-06 | 更新: 2026-09-12（🔧 第三次修正：§二·H 资产身份与提交范围（#136）+ §二·G 的「场景不入库」加显式例外；🔧 第二次：§二·G 本轮工作 #137–#140 + KI 引用作废；§二·F 玫瑰花海场景 — Grilling #126）*
+*创建: 2026-09-06 | 更新: 2026-09-12（🔧 第四次修正：§二·I ActionLab 落地回切修复（`6bd8ddc`）红/绿实测 + 目视验证 + 运维补充；🔧 第三次修正：§二·H 资产身份与提交范围（#136）+ §二·G 的「场景不入库」加显式例外；🔧 第二次：§二·G 本轮工作 #137–#140 + KI 引用作废；§二·F 玫瑰花海场景 — Grilling #126）*
 *关联: [战斗界面布局](../../design/presentation/%E6%88%98%E6%96%97%E7%95%8C%E9%9D%A2%E5%B8%83%E5%B1%80.md), [核心机制](../../design/rules/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md), [回合战斗流程](../../design/rules/%E5%9B%9E%E5%90%88%E6%88%98%E6%96%97%E6%B5%81%E7%A8%8B.md), [关键突破](../../design/rules/skill-tree/%E5%85%B3%E9%94%AE%E7%AA%81%E7%A0%B4.md), [动作库规格](../../design/presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md), [动作系统分解](../../design/engineering/%E5%8A%A8%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%88%86%E8%A7%A3-2026-09-12.md), [地块数据-Konza草原](../../design/presentation/%E5%9C%B0%E5%9D%97%E6%95%B0%E6%8D%AE-Konza%E8%8D%89%E5%8E%9F.md), [玫瑰株丛密度](../../design/presentation/%E7%8E%AB%E7%91%B0%E6%A0%AA%E4%B8%9B%E5%AF%86%E5%BA%A6.md), [决策树](../../design/decisions/README.md)*
