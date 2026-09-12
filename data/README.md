@@ -37,17 +37,34 @@ md 文档（设计层）          JSON 文件（数据层）          C# 引擎 
 
 > **每个受控数据文件的权威属性见 [`manifest.json`](manifest.json)**——由
 > [`code/tools/build_data_manifest.py`](../code/tools/build_data_manifest.py) 从证据生成，
-> 含四轴正交属性（origin / lifecycle / role / shipping）+ owner + 生成器 + 消费方。
+> 含四轴正交属性（origin / lifecycle / role / shipping）+ owner + 生成链 + 消费方。
 
 | 轴 | 取值 | 含义 |
 |---|---|---|
 | `origin` | authored / generated / external | 手写 / 工具生成 / 外部下载 |
-| `lifecycle` | active / deprecated / archived | 设计仍引用 / 仅废弃文档引用 / 零引用 |
-| `role` | runtime / generator-input / reference / evidence | 运行时消费 / 生成器输入 / 参考 / 证据 |
+| `lifecycle` | active / deprecated / archived | 任一引用面活跃 / 仅废弃子系统引用 / 三类引用面全空 |
+| `role` | runtime / generator-input / reference / evidence | 运行时消费 / 生成链输入 / 参考或校验基准 / 归档 |
 | `shipping` | true / false | 是否进入运行时路径（**仅 runtime 为 true**） |
 
+**判据**（owner 方案 §9.3）：
+
+- **`archived` 不等于"零设计文档引用"**——还要看活跃代码与生成链。
+  实测教训（2026-09-12）：`enigma_sc_ctx_matrix.npy` 等 5 个文件零设计文档引用，
+  但被 [`gen_modulation_ceiling.py`](../code/tools/gen_modulation_ceiling.py) 实际读取；
+  按"零文档引用"判定就会把活着的生成链输入标成可清理的孤儿。
+  现在 `archived` 的含义是**活跃文档、活跃代码、活跃工具链三条引用面全空**。
+- **`origin=generated` 只认写出证据**（`json.dump` / `write_text` / `np.save` 等），
+  不认"文件里出现过这个名字"——读入也算出现。
+- **`--check` 不重新推导属性**：属性是声明式契约；`refs` 计数会因任意新增 `.md`
+  提到该文件名而漂移，若比对推导值，则写任何文档都要重生成 manifest。
+  属性更新是人工动作 `--refresh`。
+
 **runtime allowlist**：引擎只允许消费 `role=runtime` 的 8 个文件（由 `GameDataLoader.LoadAll` 实测确定，
-双向校验见 `validate_data_manifest.py`）。
+双向校验见 [`validate_data_manifest.py`](../code/tools/validate_data_manifest.py)）。
+
+**外部数据来源**：`data/connectivity/` 下的外部数据集（Yeo2011 / Hansen2024 / CAB-NP / ENIGMA / Kroell）
+的来源、许可、文件清单与消费方见 [connectivity/external-sources.md](connectivity/external-sources.md)。
+该表登记了两项**未闭合缺口**，不得当作通过。
 
 ## 三、文件索引
 
