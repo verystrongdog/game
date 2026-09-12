@@ -72,9 +72,9 @@ def main():
     dups = {k: v for k, v in seen.items() if v > 1}
     results.append(check('S3', not dups, f"非共享dk_name脑区重合 {len(dups)} 组（共享dk_name的同位是预期设计）"))
 
-    # S4: is_design_node 跳过解剖断言（统计）
+    # S4: is_design_node 跳过解剖断言（统计）——Grilling #25 删除 7 设计节点后预期为 0
     design = [fid for fid, r in regions.items() if r.get('is_design_node')]
-    results.append(check('S4', len(design) >= 6, f"is_design_node 标记 {len(design)} 个（≥6 预期，L0-L5 六层）"))
+    results.append(check('S4', len(design) == 0, f"is_design_node 标记 {len(design)} 个（预期 0——#25 已删除 7 设计节点，层级改由 level 字段承担）"))
 
     n_pass = sum(1 for r in results if r)
     print(f"\n## 汇总")

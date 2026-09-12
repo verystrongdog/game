@@ -32,7 +32,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from tools.md_utils import (
     ROOT, SCAN_ROOTS, EXCLUDE_DIRS,
     collect_md_files, is_active_md, is_deprecated_section,
-    find_deprecated_section_end, strip_annotations, CheckResult,
+    find_deprecated_section_end, strip_annotations, is_placeholder_symbol, CheckResult,
 )
 
 # 已废弃文件额外关键词（链路槽位与激活系统 仅 validate_params 需要额外排除）
@@ -282,7 +282,7 @@ def extract_table_params(filepath: Path) -> list[dict]:
                     value_str = row.get("value")
                     range_str = row.get("range")
 
-                    if symbol and value_str:
+                    if symbol and value_str and not is_placeholder_symbol(symbol):
                         # 分布表内的重复 symbol 加上行号消歧
                         if is_distribution and has_symbol_col and not has_name_col:
                             symbol = f"{symbol} (行{row_idx + 1})"

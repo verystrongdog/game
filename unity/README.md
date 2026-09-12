@@ -16,7 +16,7 @@
 
 ## 二、本地验证步骤（Windows/macOS/Linux 桌面）
 
-前置：Unity 6 Editor（6000.0.x；本工程 `ProjectVersion.txt` 锁 6000.0.83f1——版本不一致时 Unity 会提示升级/降级，接受即可，或改该文件为你的版本）。
+前置：Unity 6 Editor（6000.0.x；本工程 `ProjectVersion.txt` 锁 6000.5.2f1——版本不一致时 Unity 会提示升级/降级，接受即可，或改该文件为你的版本）。
 
 1. 用 Unity Hub/Editor 打开本目录（`unity/`）作为工程；首次导入会自动还原包（uGUI + Test Framework）。
 2. 菜单 **YANTF → 呈现沙盘 → 创建 Demo 场景** → 打开生成的 `Assets/Scenes/DemoSandbox.unity` → 按 **Play**。

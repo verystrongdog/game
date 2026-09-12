@@ -277,5 +277,5 @@ Skill 运行中监控，触发时提示用户：
 
 ---
 
-*基于: [方案-v2.md](../../.scratch/review-plan-design/方案-v2.md) | 创建: 2026-08-01*
+*基于: [方案-v2.md](../../../.scratch/review-plan-design/方案-v2.md) | 创建: 2026-08-01*
 *关联: [#17](https://github.com/verystrongdog/game/issues/17)*

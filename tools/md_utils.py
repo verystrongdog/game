@@ -25,6 +25,7 @@ EXCLUDE_DIRS = {
     "垃圾桶", ".trash", "参考/废弃", "参考/书籍",
     ".git", ".claude", ".scratch", "__pycache__",
     "data", "tools",
+    ".refactor-backup",   # 仓库重构期的本地安全备份（非项目内容，重构完成后删除）
 }
 
 # 排除文件名关键词
@@ -78,11 +79,39 @@ def find_deprecated_section_end(lines: list[str], start_idx: int, level: int) ->
 
 
 def strip_annotations(s: str) -> str:
-    """去掉注释性内容：[NEW ...] / (...) / （...）。来源: validate_params.py §strip_annotations"""
+    """去掉注释性内容以比较参数值是否等价。
+
+    处理: [NEW ...] / (...) / （...） / 赋值号 / 值域声明 / 孤立不等式前缀 /
+          「无上界」类措辞 / 前导与尾部标点 / 空白折叠。
+    例: "≥ 0 无上界，= Σ ΔI_i × g（剂量-反应，Kolassa 2010）" ≡ "Σ ΔI_i × g"。
+    来源: validate_params.py §strip_annotations（2026-09-12 重构 Phase 1 扩充）
+    """
     s = re.sub(r'\[NEW[^\]]*\]', '', s)
     s = re.sub(r'\([^)]*\)', '', s)
     s = re.sub(r'（[^）]*）', '', s)
+    # 赋值号——"= X" 与 "X" 描述同一公式，视作分隔符
+    s = s.replace('=', '')
+    # 值域声明——"∈ (0,1]" / "∈ [0,1]"
+    s = re.sub(r'∈\s*[\(\[]\s*[^\]\)]*[\]\)]', '', s)
+    # 孤立不等式前缀——"> 0" / "≥ 0"
+    s = re.sub(r'^[><≥≤]=?\s*[\d.]+\s*', '', s)
+    # 无界措辞
+    s = re.sub(r'无上界|无下界|无下限', '', s)
+    # 前导/尾部标点与空白折叠
+    s = re.sub(r'^[\s，,、;；:：]+', '', s)
+    s = re.sub(r'[\s，,、;；:：]+$', '', s)
+    s = re.sub(r'\s+', ' ', s)
     return s.strip()
+
+
+# 占位符符号——表格中无名列/空列的填充字符，不是参数名
+PLACEHOLDER_SYMBOLS = {"", "-", "—", "–", "―", "n/a", "N/A", "NA", "待定", "?", "??", "无"}
+
+
+def is_placeholder_symbol(sym: str) -> bool:
+    """判断符号是否为占位符（非真实参数名）。修复「—」被当成参数名导致跨表误报。"""
+    s = (sym or "").strip()
+    return s in PLACEHOLDER_SYMBOLS or (bool(s) and set(s) <= {"-", "—", "–", "―", " ", "·"})
 
 
 # ============================================================
