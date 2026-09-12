@@ -227,7 +227,7 @@ python3 code/tools/validate_issues.py --from-github
 
 本文 §二 记着「16 个存量 issue 按 §7.4 不追溯，故不进本次依赖图」。**当日晚些时候，owner 裁定逐条清理**——因为不清理的真实代价已经显形：**7 条带 `ready-for-agent` 标签的存量 issue 指向的是早已实现并有测试覆盖的交付物**，谁按标签筛选任务就会拿到做完的活。
 
-逐条取证后**全部关闭：14 条 `completed` · 2 条 `duplicate` · 2 条 `not planned`；12 条已完成、0 条需要新工作。**
+逐条取证后**全部关闭：12 条 `completed` · 2 条 `duplicate` · 2 条 `not planned`。**2 条 duplicate 指向同一份已完成的交付物，故**交付物实际已完成的共 14 条、需要新工作的 0 条**。
 
 | # | 标题 | 处置 | 取证 |
 |---|---|---|---|

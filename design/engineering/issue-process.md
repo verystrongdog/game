@@ -318,7 +318,7 @@ gh issue edit <新编号> --add-blocked-by <前置编号>
 
 **规则**：本文只约束新建 issue，**不追溯处置**存量——创建于本约束生效前、且不带 `type:*` 标签的 issue 不进 I1–I14 的判罚（校验器显式打印跳过清单，不算通过、也不静默忽略）。
 
-**已发生的事（2026-09-12，owner 裁定）**：仓库原有 16 个 grilling 时代开放 issue（标签为 `维度:*` / `ready-for-agent`，正文引用已移出仓库的 `.scratch/` 路径），经逐条取证后**全部关闭**：14 条 `completed`、2 条 `duplicate`、2 条 `not planned`（已被替代）。**12 条已完成、0 条需要新工作**——其中 7 条还挂着 `ready-for-agent`，指向的是早已实现并有测试覆盖的交付物，这正是"存量不清理"的真实代价。
+**已发生的事（2026-09-12，owner 裁定）**：仓库原有 16 个 grilling 时代开放 issue（标签为 `维度:*` / `ready-for-agent`，正文引用已移出仓库的 `.scratch/` 路径），经逐条取证后**全部关闭**：**12 条 `completed` · 2 条 `duplicate` · 2 条 `not planned`**（后者已被替代）。2 条 duplicate 指向的是同一份已完成的交付物，故**交付物实际已完成的共 14 条，需要新工作的 0 条**——其中 7 条还挂着 `ready-for-agent`，指向的是早已实现并有测试覆盖的交付物，这正是"存量不清理"的真实代价。
 
 - 逐条证据与处置结论：[backlog 分解示范 §八](backlog-decomposition-2026-09-12.md)
 - 正文与历史评论**未改写**（它们是历史记录）；归档副本在 `design/archive/grilling/issues/`，**关闭评论未回填该归档**（归档是 2026-09-12 重构 Phase 4.5 的时点快照），故关闭记录的权威位置是 GitHub issue 本身
