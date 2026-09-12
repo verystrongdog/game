@@ -15,9 +15,14 @@
 
 ## 处置
 
-- 本目录仅为**止损备份**，内容未并入 `code/unity/Assets/Scripts/` —— 归位方式由用户决定。
-- 归位时注意：`CameraOrbit.cs` / `SitPoint.cs` 属 `feat/unity-presentation-slice` 那条线的工作，与 `main` 上 #122–#126 的 Unity 沙盘不是同一条；直接并入 main 前建议先确认版本关系。
+**🔧 已归位（2026-09-12，owner 直接指令）**：四个文件（两个 `.cs` + 两个 `.meta`）已 `git mv` 至 `code/unity/Assets/Scripts/`，`.meta` 的 GUID 原样保留（`CameraOrbit.cs` = `7f53b3f6ab58810478fb72f683000283`；`SitPoint.cs` = `cde9f27400a41884eaedaf1a715cac90`）——保留 GUID 是刻意的：这两个 `.meta` 由 Windows 侧 Unity 生成，字节一致，换 GUID 会让 Inspector 里对它们的引用失效。
+
+- 版本关系已核：`feat/unity-presentation-slice` 是 `main` 的**祖先**（旧路径线），其内容已在 main 历史里；这两个文件是**唯一**未被任何分支收容的残留。故并入 main 不引入版本冲突。
+- 文件权限归一到 `100644`（与既有 `.cs` 一致；原件带 Windows 的 777）。
+- `SitPoint.cs` 的归位落在 issue [#137](https://github.com/verystrongdog/game/issues/137) 声明的「预期差分」内；`CameraOrbit.cs` 不属任何 issue，是 owner 直接指令的运维动作。
+- **本目录此后仅存本 README**（历史记录），不再持有文件副本。
 
 ---
-*创建: 2026-09-12*
+
+*创建: 2026-09-12 | 更新: 2026-09-12（归位完成）*
 *关联: [决策记录 #126](../grilling-126-rosefield/%E5%86%B3%E7%AD%96%E8%AE%B0%E5%BD%95.md)*
