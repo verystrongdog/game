@@ -128,6 +128,19 @@ unity command editor_play  # 进 Play 模式（验证用）
 1. **文件名 ≠ 动作语义**（#124 实证）：`Charge` 实为伸手指人、`Short Left Side Step` 实为循环格挡。每条新 clip 都要 Play 预览后归槽。
 2. **坐立两条连方向都判不出来**：`Sit To Stand.fbx` 与 `Stand To Sit.fbx` 的内部 take 名均为 `mixamo.com`、`Title`/`Subject` 为空（2026-09-12 逐字节核验）。**必须预览**，不得据文件名预设——两条是近似镜像动作，误配比战斗类更隐蔽。
 
+### 观察用移动视角（手动挂载，不入库）
+
+ActionLab 的 `Main Camera` 是**静止**的（builder 只给了固定位置与俯角，没有驱动；对比 WalkerLab 有 `WalkerController.followCamera`）。`CameraOrbit` 已归位进 `Assets/Scripts/`，手动挂三步即可自由观察：
+
+1. 生成场景：菜单 **YANTF → 动作演示 → 创建 ActionLab 场景** → 打开 `Assets/Scenes/ActionLab.unity`
+2. Hierarchy 选中 **`Main Camera`** → **Add Component** → `Camera Orbit`
+3. 把 Hierarchy 里的 **`ActionLab演示者(X Bot)`** 拖进该组件的 **`Target`** 字段 → **Play**
+
+操作：**按住右键拖拽** = 环绕旋转视角；**滚轮** = 缩放远近（1.5–14 m）；相机注视胸口高度并平滑跟随。移动输入仍走相机相对，转视角后 WASD 前进方向跟着变。
+
+> ⚠️ 两点必知：① **必须设 `Target`** —— 留空时组件的 `Start()` 会兜底把它设成自身 transform，结果是相机绕自己头顶打转（那是调试兜底，不是你要的效果）。② **重新生成场景会丢掉挂载**（场景不入库、由 builder 重建）——#139/#140 改 builder 后会重建一次，届时需重挂。
+
+> 裁定（owner，2026-09-12）：**走手动挂载，不建 issue、不改 builder**——它是观察工具、不是能力增量，且场景本就按单机所有权不入库。若日后需要重建场景时自动挂上，再折进 [#137](https://github.com/verystrongdog/game/issues/137)。
 ### 与既有文档的关系
 
 - 机器源 `data/action_set.json`：词条元数据 + blend 参数，每个数值带来源；`role=generator-input`（生成期输入，**运行时 Unity 不读它**）。
