@@ -5,12 +5,15 @@ gen_modulation_ceiling.py — 从文献数据推导链路调制上限
 数据来源:
   - ENIGMA 结构连接矩阵 (68×68 cortical + 14×68 subcortical-cortical)
   - Hansen et al. (2024) Nature Neuroscience — 脑干-皮层 FC 层级
+    ⚠️ 只取**社区划分**（GREEN/PINK/YELLOW/BLUE）；本脚本用的 0–1 强度数值是
+       **本仓人工估计**，不是从该数据集读取的（本仓从未读 hansen2024/ 下的文件）。
+       见 load_brainstem_strength_estimates() 的说明。
   - Kroell (2024) 14 功能网络
   - 白质纤维束解剖数据
 
 输出:
   - data/connectivity/link_modulation_ceiling.json — 每条合法链路的调制参数
-  - 技能树系统/链路调制上限参考表.md — 人类可读的参考文档
+  - design/rules/skill-tree/deprecated/链路调制上限参考表.md — 人类可读的参考文档（⚠️ 本脚本的 MD 输出尚未随 Phase 3 路径改名更新）
 
 公式:
   modulation_ceiling = sc_norm × layer_weight × direction_factor
@@ -111,18 +114,35 @@ def load_enigma_matrices():
     }
 
 
-def load_hansen_brainstem():
-    """Hansen 2024 脑干核团→皮层 FC 定性数据
+def load_brainstem_strength_estimates():
+    """脑干核团→皮层连接强度——**手工设定的估计值**（不是从数据集读出的测量值）
 
-    由于我们没有原始 FC 矩阵，使用基于 Hansen 社区分类的估计值。
-    GREEN社区(中脑)=跨模态皮层, PINK社区=扣带皮层(情绪调节),
-    YELLOW社区=单模态皮层(感觉运动), BLUE社区=外侧跨模态(工作记忆)
+    ## 为什么函数名、局部变量、来源标注都带 estimate
 
-    返回每个脑干核团的皮层连接强度估计值 (0-1 归一化)
+    此前它叫 `load_hansen_brainstem()`，来源标注写 `Hansen2024_brainstem`，
+    产出 JSON 里写 `data_source: "Hansen2024_brainstem"` / `"Hansen2024:PAG↔M1"`。
+    那些标注把**本仓的估计**说成了**论文的数据**：
+
+    本仓**没有读过** `data/connectivity/hansen2024/` 下的任何文件
+    （那 5 个数据文件当前零受控消费者），这些 0–1 数值是照论文的社区划分**人工定的**。
+
+    ## 归属（如实）
+
+    | 内容 | 归属 |
+    |---|---|
+    | 社区划分（GREEN/PINK/YELLOW/BLUE）、递质归属 | **文献**：Hansen JY, et al. (2024). *Integrating brainstem and cortical functional architectures.* Nature Neuroscience 27(12):2500-2511. doi:10.1038/s41593-024-01787-0 |
+    | `fc_strength` 的 0–1 数值 | **本仓估计**（依"全脑 hub 取高值、小核团取中低值"的人工规则） |
+
+    ## 社区含义（照抄论文）
+
+    GREEN = 内侧跨模态皮层（自传记忆、社会认知）· PINK = 扣带皮层（情绪调节、唤醒）
+    YELLOW = 单模态皮层（感觉运动）· BLUE = 外侧跨模态（工作记忆）
+
+    返回每个脑干核团的皮层连接强度**估计值** (0-1 归一化)。
     """
-    # 基于 Hansen 2024 Table 1 + Fig.5 的社区赋值
-    # 强度估计: 全脑最强hub(蓝斑,PAG) 用高值, 较小核团用中低值
-    hansen = {
+    # 强度赋值规则（人工）：全脑最强 hub（蓝斑、PAG）取高值，较小核团取中低值。
+    # 这不是从 FC 矩阵算出来的——本仓无该矩阵。
+    estimates = {
         # GREEN 社区 — 内侧跨模态皮层（自传记忆、社会认知）
         'PAG': {'community': 'GREEN', 'fc_strength': 0.85, 'note': '全脑最强hub之一, 皮层-脑干FC最高'},
         'VTA': {'community': 'GREEN', 'fc_strength': 0.80, 'note': 'GREEN社区核心, DA源头'},
@@ -136,20 +156,24 @@ def load_hansen_brainstem():
         '蓝斑_R': {'community': 'PINK', 'fc_strength': 0.90, 'note': '同蓝斑(右侧)'},
 
         # YELLOW 社区 — 单模态皮层（感觉/运动）
-        '中缝正中核': {'community': 'YELLOW', 'fc_strength': 0.50, 'note': 'YELLOW社区, 海马/隔区投射'},
         '脑桥网状核': {'community': 'YELLOW', 'fc_strength': 0.45, 'note': 'YELLOW社区, 自主神经'},
+        # ★ 2026-09-12 勘误：中缝正中核原写 YELLOW，与论文不符。
+        #   论文 Table 1 把它列在 GREEN（中缝正中核、中缝旁正中核与 PAG / VTA / 上丘同组）。
+        #   依据：design/rules/skill-tree/references/Hansen2024_脑干皮层功能层级_数据.md
+        #   §五大脑干功能社区。强度值未动（它本来就是估计）。
+        '中缝正中核': {'community': 'GREEN', 'fc_strength': 0.50, 'note': 'GREEN社区（依论文 Table 1）, 海马/隔区投射'},
 
-        # 通路和复合结构 — 使用其端点核团的平均值
-        'VTA-NAcc': {'community': 'GREEN', 'fc_strength': 0.78, 'note': 'VTA→NAcc DA通路'},
-        '杏仁核-PAG': {'community': 'GREEN', 'fc_strength': 0.72, 'note': '杏仁核→PAG恐惧通路'},
-        '反射环路·PAG→杏仁核': {'community': 'GREEN', 'fc_strength': 0.80, 'note': '防御环路'},
-        '反射环路·冻结反应': {'community': 'GREEN', 'fc_strength': 0.75, 'note': 'vlPAG通路'},
-        '反射环路·快速闪避': {'community': 'GREEN', 'fc_strength': 0.75, 'note': 'dlPAG→运动通路'},
+        # 通路和复合结构 — **论文不覆盖**，社区取自其端点核团（本仓推导）
+        'VTA-NAcc': {'community': 'GREEN(由端点推导)', 'fc_strength': 0.78, 'note': 'VTA→NAcc DA通路；论文无此条目'},
+        '杏仁核-PAG': {'community': 'GREEN(由端点推导)', 'fc_strength': 0.72, 'note': '杏仁核→PAG恐惧通路；论文无此条目'},
+        '反射环路·PAG→杏仁核': {'community': 'GREEN(由端点推导)', 'fc_strength': 0.80, 'note': '防御环路；论文无此条目'},
+        '反射环路·冻结反应': {'community': 'GREEN(由端点推导)', 'fc_strength': 0.75, 'note': 'vlPAG通路；论文无此条目'},
+        '反射环路·快速闪避': {'community': 'GREEN(由端点推导)', 'fc_strength': 0.75, 'note': 'dlPAG→运动通路；论文无此条目'},
 
-        # 无独立Hansen数据的结构
-        '小脑皮层': {'community': 'N/A', 'fc_strength': 0.55, 'note': '小脑-丘脑-皮层环路, 非Hansen数据, 估计值'},
+        # 论文不覆盖、且无法由端点推导的结构
+        '小脑皮层': {'community': 'N/A', 'fc_strength': 0.55, 'note': '小脑-丘脑-皮层环路, 论文不覆盖, 估计值'},
     }
-    return hansen
+    return estimates
 
 
 def load_white_matter_tracts():
@@ -238,16 +262,18 @@ def get_enigma_sc(region_a, region_b, regions, enigma_data):
     return None
 
 
-def get_brainstem_strength(region_name, hansen_data):
+def get_brainstem_strength(region_name, brainstem_estimates):
     """获取脑干核团的连接强度估计"""
-    if region_name in hansen_data:
-        return hansen_data[region_name]['fc_strength']
+    if region_name in brainstem_estimates:
+        return brainstem_estimates[region_name]['fc_strength']
     return None
 
 
 NORMALIZATION_REF = {
     'ENIGMA_p95': None,  # 运行时填充
-    'hansen_max': 0.90,  # 蓝斑 FC 强度
+    # 估计表的上界（蓝斑 fc_strength 估计值），用于把估计值缩放到 ENIGMA 尺度——
+    # 不是从数据集测得的最大值
+    'brainstem_estimate_max': 0.90,
 }
 
 
@@ -255,8 +281,8 @@ def normalize_sc(value, source):
     """将原始 SC 值归一化到 [0, 1]"""
     if source.startswith('ENIGMA'):
         return min(value / NORMALIZATION_REF['ENIGMA_p95'], 1.0)
-    elif source.startswith('Hansen'):
-        return min(value / NORMALIZATION_REF['hansen_max'], 1.0)
+    elif source.startswith('brainstem_estimate'):
+        return min(value / NORMALIZATION_REF['brainstem_estimate_max'], 1.0)
     elif source == 'tract_known':
         return 0.50  # 已知白质通路但无定量SC
     elif source == 'estimated':
@@ -351,7 +377,7 @@ L5_LINKS = [
 def compute_all_links():
     regions = load_brain_regions()
     enigma_data = load_enigma_matrices()
-    hansen_data = load_hansen_brainstem()
+    brainstem_estimates = load_brainstem_strength_estimates()
     tract_pairs = load_white_matter_tracts()
 
     NORMALIZATION_REF['ENIGMA_p95'] = enigma_data['sc_p95']
@@ -384,12 +410,14 @@ def compute_all_links():
                     sc_sources.append(f'ENIGMA:{sc["source"]}:{sc["pair"]}')
                 else:
                     # 尝试脑干数据
-                    bs_src = get_brainstem_strength(src, hansen_data)
-                    bs_tgt = get_brainstem_strength(tgt, hansen_data)
+                    bs_src = get_brainstem_strength(src, brainstem_estimates)
+                    bs_tgt = get_brainstem_strength(tgt, brainstem_estimates)
                     if bs_src or bs_tgt:
                         bs_val = max(bs_src or 0, bs_tgt or 0)
                         sc_values.append(bs_val * 3.0)  # 缩放到 ENIGMA 尺度
-                        sc_sources.append(f'Hansen2024:{src}↔{tgt}')
+                        # ★ 标注为 estimate：这不是从数据集读出的测量值，
+                        #   是 load_brainstem_strength_estimates() 的人工估计
+                        sc_sources.append(f'brainstem_estimate:{src}↔{tgt}')
                     else:
                         # 检查白质纤维束
                         pair = tuple(sorted([src, tgt]))
@@ -415,8 +443,8 @@ def compute_all_links():
             primary_source = 'ENIGMA_cortical'
         elif any('ENIGMA_sctx' in s for s in sc_sources):
             primary_source = 'ENIGMA_subcortical'
-        elif any('Hansen' in s for s in sc_sources):
-            primary_source = 'Hansen2024_brainstem'
+        elif any('brainstem_estimate' in s for s in sc_sources):
+            primary_source = 'brainstem_estimate'
         elif any('tract_known' in s for s in sc_sources):
             primary_source = 'white_matter_tract'
         else:
@@ -514,12 +542,12 @@ def main():
     # 添加元数据
     output_data = {
         '_metadata': {
-            'description': '链路调制上限 — 从 ENIGMA SC + Hansen 2024 推导',
+            'description': '链路调制上限 — 从 ENIGMA SC + 脑干强度估计 + 白质纤维束推导',
             'formula': 'modulation_ceiling = sc_norm × layer_weight × direction_factor',
             'sc_normalization': {
                 'enigma_p95': round(NORMALIZATION_REF['ENIGMA_p95'], 3),
                 'enigma_max': round(float(enigma_data['sc_max']), 3),
-                'hansen_max': NORMALIZATION_REF['hansen_max'],
+                'brainstem_estimate_max': NORMALIZATION_REF['brainstem_estimate_max'],
             },
             'layer_weights': {f'L{i}': round(0.50 + 0.10 * i, 2) for i in range(7)},
             'direction_factors': {'feedforward': 1.0, 'feedback': 0.7, 'broadcast': 1.0, 'modulation': 0.7, 'internal': 0.5, 'global': 1.0},
@@ -561,7 +589,7 @@ def gen_markdown(results, json_output):
     lines = []
     lines.append('# 链路调制上限参考表')
     lines.append('')
-    lines.append('> 每条链路的最大调制效果（modulation ceiling）由 ENIGMA 结构连接强度、Hansen 2024 脑干-皮层 FC、白质纤维束解剖数据推导而来。')
+    lines.append('> 每条链路的最大调制效果（modulation ceiling）由 ENIGMA 结构连接强度、脑干-皮层连接强度**估计值**、白质纤维束解剖数据推导而来。')
     lines.append('> ')
     lines.append('> **公式**: `调制上限 = SC_norm × 层级权重 × 方向因子`')
     lines.append('> ')
@@ -614,9 +642,12 @@ def gen_markdown(results, json_output):
     lines.append('')
     lines.append('---')
     lines.append('')
-    lines.append('*生成: 2026-07-27 | 数据来源: ENIGMA Toolbox HCP SC, Hansen et al. (2024) Nat Neurosci, Kroell (2024)*')
+    lines.append('*生成: 2026-07-27 | 数据来源: ENIGMA Toolbox HCP SC（实测）；脑干强度为本仓估计（社区划分依 Hansen et al. (2024) Nat Neurosci）；Kroell (2024)*')
     lines.append(f'*JSON: [link_modulation_ceiling.json](../../data/connectivity/link_modulation_ceiling.json)*')
 
+    # ⚠️ 2026-09-12 记录：路径仍是 Phase 3 改名前的「技能树系统/」，该目录已不存在，
+    #   故本脚本跑到 MD 生成一步必抛 FileNotFoundError（JSON 已先写出）。
+    #   未在本次「如实标注」改动中修路径——改它会同时触发数值重算，属独立事项。
     output_md = ROOT / '技能树系统/链路调制上限参考表.md'
     with open(output_md, 'w') as f:
         f.write('\n'.join(lines))

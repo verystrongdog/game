@@ -30,7 +30,7 @@ gen_modulation_ceiling_v2.py — 三因子链路调制模型
 
 输出:
   - data/connectivity/link_modulation_ceiling_v2.json
-  - 技能树系统/链路调制上限参考表-v2.md
+  - design/rules/skill-tree/modulation/链路调制上限参考表-v2.md（⚠️ 本脚本的 MD 输出尚未随 Phase 3 路径改名更新）
 """
 
 import json
@@ -165,34 +165,48 @@ def conduction_priority(category, level):
 
 
 # ═══════════════════════════════════════════════════
-# C. Hansen 2024 神经调质增益 — effect type specialization
+# C. 脑干社区 → 神经调质增益 — effect type specialization
 # ═══════════════════════════════════════════════════
 
-# Hansen et al. (2024) 五大脑干社区 + 9种递质系统:
+# 社区划分与递质归属的**文献依据**：Hansen JY, et al. (2024).
+#   *Integrating brainstem and cortical functional architectures.*
+#   Nature Neuroscience 27(12):2500-2511. doi:10.1038/s41593-024-01787-0
 #   GREEN:  DA (VTA/SN/PAG)      → 动机突显, 趋近/回避方向
 #   PINK:   NE (LC) + 5-HT (DRN) → 唤醒/精度/过滤
 #   YELLOW: 多种递质              → 感觉运动中继
+#   ⚠️ 复合/通路结构（VTA-NAcc、杏仁核-PAG、反射环路·*）**论文不覆盖**，
+#      其社区取自端点核团，属本仓推导。
 #   BLUE:   DA + ?               → 工作记忆/认知控制
 #
-# 增益类型: 不同递质系统增强不同类型的游戏效果
+# ★ 但下面的**增益系数是估计值，不是论文数据**。
+#   本仓没有读过 `data/connectivity/hansen2024/` 下的任何文件
+#   （那 5 个数据文件当前零受控消费者），这些 1.0–1.5 的倍数是照上述
+#   递质-功能对应关系**人工设定的**。
+#   变量名、文档字符串、产出 JSON 的 `_metadata` 三处都必须体现这一点，
+#   否则"从 Nature Neuroscience 推导"会被误读成"从该数据集算出来"。
+#
+# 增益类型的**设计意图**（这部分是本仓的设计，不是文献）：
 #   DA → damage (动机放大: "你想要, 所以你打得更用力")
 #   NE → precision/hit_rate (信噪比提升: "你看得更清楚")
 #   5-HT → defense/SAN (感觉门控: "不重要的事被过滤掉了")
 #   ACh → info_gather (注意力: "你注意到更多细节")
 
-HANSON_COMMUNITY_GAIN = {
+BRAINSTEM_COMMUNITY_GAIN_ESTIMATE = {
     # 脑干核团 → (社区, 增益类型, 增益系数)
     'PAG':      ('GREEN', 'defense', 1.3),
     'VTA':      ('GREEN', 'motivation', 1.5),
     '上丘':      ('GREEN', 'detection', 1.2),
     '中缝背核':   ('PINK', 'defense', 1.4),
-    '中缝正中核':  ('YELLOW', 'defense', 1.1),
+    # ★ 2026-09-12 勘误：原写 YELLOW，与论文不符——论文 Table 1 把它列在 GREEN
+    #   （与 PAG / VTA / 上丘同组）。依据 references/Hansen2024_脑干皮层功能层级_数据.md §五。
+    '中缝正中核':  ('GREEN', 'defense', 1.1),
     '蓝斑':      ('PINK', 'force', 1.5),        # NE → 脊髓: 交感放大, 运动神经元增益
     '蓝斑_R':    ('PINK', 'force', 1.5),
     '黑质致密部':  ('GREEN', 'force', 1.4),      # DA → 背侧纹状体: 运动 vigor
     '黑质致密部_R': ('GREEN', 'force', 1.4),
     '脑桥网状核':  ('YELLOW', 'force', 1.2),     # 网状脊髓易化: 基础肌张力
-    '小脑皮层':    ('N/A', 'force', 1.3),         # 内部模型: 力量预测校准
+    '小脑皮层':    ('N/A', 'force', 1.3),         # 内部模型: 力量预测校准；论文不覆盖
+
 
     # 复合/通路结构
     'VTA-NAcc':  ('GREEN', 'motivation', 1.5),
@@ -272,8 +286,8 @@ NON_BRAINSTEM_GAIN = {
 def neuromodulator_gain(region_name, category, level):
     """Hansen 2024 → 神经调质增益系数 + 增益类型"""
     # 先查脑干核团
-    if region_name in HANSON_COMMUNITY_GAIN:
-        comm, gain_type, coeff = HANSON_COMMUNITY_GAIN[region_name]
+    if region_name in BRAINSTEM_COMMUNITY_GAIN_ESTIMATE:
+        comm, gain_type, coeff = BRAINSTEM_COMMUNITY_GAIN_ESTIMATE[region_name]
         return gain_type, coeff
 
     # 再查已知的皮层/皮下增益
@@ -626,14 +640,16 @@ def main():
     output_json = ROOT / 'data/connectivity/link_modulation_ceiling_v2.json'
     output_data = {
         '_metadata': {
-            'description': '三因子链路调制模型 — Momi2025 excitability × Hansen2024 neuromodulator × Pajevic2023 myelination sync',
+            'description': '三因子链路调制模型 — Momi2025 excitability × 脑干调质增益（估计）× Pajevic2023 myelination sync',
             'version': '2.0',
             'generated': '2026-07-27',
             'formula': 'ceiling = excitability × gain_coeff; actual = ceiling × sigmoid(myelination, shift=0.4, steep=8)',
             'factors': {
                 'excitability': 'Momi et al. (2025) Nat Commun — cortical hierarchy of evoked response strength',
-                'conduction_priority': 'TMS-fMRI effective connectivity + Hansen 2024 temporal hierarchy — link resolution order',
-                'neuromodulator_gain': 'Hansen et al. (2024) Nat Neurosci — neurotransmitter community → effect type specialization',
+                'conduction_priority': 'TMS-fMRI effective connectivity + Hansen 2024 时间层级（文献依据）— link resolution order',
+                'neuromodulator_gain': '脑干社区 → 效果类型专精。**增益系数为本仓人工估计**；'
+                                   '社区划分与递质归属依 Hansen et al. (2024) Nat Neurosci '
+                                   '（该数据集未被本脚本读取）',
                 'myelination_sync': 'Pajevic et al. (2023) eLife — oligodendrocyte-mediated conduction delay synchronization',
             },
             'gain_type_mechanics': GAIN_TYPE_MECHANICS,
@@ -662,7 +678,7 @@ def gen_markdown(results):
     lines = []
     lines.append('# 链路调制上限参考表 v2 — 三因子模型')
     lines.append('')
-    lines.append('> **核心变更**: 不再使用 SC/FC 相关性。改用 Momi 2025 皮层兴奋性梯度 + Hansen 2024 神经调质增益 + Pajevic 2023 髓鞘化同步模型。')
+    lines.append('> **核心变更**: 不再使用 SC/FC 相关性。改用 Momi 2025 皮层兴奋性梯度 + 脑干调质增益（系数为本仓估计，社区划分依 Hansen 2024）+ Pajevic 2023 髓鞘化同步模型。')
     lines.append('>')
     lines.append('> **公式**: `调制天花板 = 兴奋性 × 增益系数`；`实际调制 = 天花板 × sigmoid髓鞘化(shift=0.4)`')
     lines.append('')
@@ -672,7 +688,7 @@ def gen_markdown(results):
     lines.append('|------|------|---------|---------|')
     lines.append('| **兴奋性** | Momi et al. (2025) *Nature Comms* | 颅内电刺激诱发电位强度 — 高阶网络~3×低阶网络 | 调制天花板: L5>L4>L3>L2>L1>L0 |')
     lines.append('| **传导速度** | TMS-fMRI 有效连接 + Hansen 2024 时间层级 | 刺激→下游响应延迟 (ms) | 结算优先级: 脑干(1) → 边缘(2) → 旁边缘(3) → 单模态(4) → 跨模态(5) |')
-    lines.append('| **神经调质增益** | Hansen et al. (2024) *Nature Neurosci* | 5大社区 × 9种递质系统 | 效果类型专精: DA=伤害, NE=精度, 5-HT=防御, ACh=信息 |')
+    lines.append('| **神经调质增益** | 社区划分依 Hansen et al. (2024) *Nature Neurosci*；**系数为本仓估计** | 5大社区 × 9种递质系统 | 效果类型专精: DA=伤害, NE=精度, 5-HT=防御, ACh=信息 |')
     lines.append('| **髓鞘化同步** | Pajevic et al. (2023) *eLife* | 少突胶质细胞 10-40ms 窗口传导同步 | 前30%几乎无效, 40-60%快速增长, 80%+满效(sigmoid) |')
     lines.append('')
     lines.append('## 增益类型 → 战斗公式')
@@ -738,9 +754,12 @@ def gen_markdown(results):
     lines.append('---')
     lines.append('')
     lines.append('*生成: 2026-07-27 | 三因子模型 v2.0*')
-    lines.append('*文献: Momi et al. (2025) Nat Commun, Hansen et al. (2024) Nat Neurosci, Pajevic et al. (2023) eLife*')
+    lines.append('*文献: Momi et al. (2025) Nat Commun, Hansen et al. (2024) Nat Neurosci（社区划分）, Pajevic et al. (2023) eLife；增益系数为本仓估计*')
     lines.append('*JSON: [link_modulation_ceiling_v2.json](../../data/connectivity/link_modulation_ceiling_v2.json)*')
 
+    # ⚠️ 2026-09-12 记录：路径仍是 Phase 3 改名前的「技能树系统/」，该目录已不存在，
+    #   故本脚本跑到 MD 生成一步必抛 FileNotFoundError（JSON 已先写出）。
+    #   现行正典是 design/rules/skill-tree/modulation/链路调制上限参考表-v2.md。
     output_md = ROOT / '技能树系统/链路调制上限参考表-v2.md'
     with open(output_md, 'w') as f:
         f.write('\n'.join(lines))
