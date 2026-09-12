@@ -260,9 +260,28 @@ NOTE = {
 #   （删掉就等于删掉跨语言判据）。把规则写在明处，好过让分类看起来"干净"。
 FIXTURE_PREFIX = 'data/runtime-fixtures/'
 
+# 声明式生成期输入：**被生成链读取**（不是被生成器写出）的数据契约。
+#
+# ★ 为什么需要这张表，而不是靠 `gens` 推导：
+#   `gens` 的判据是「被 `code/tools/` 下名字匹配 gen_/build_/... 的脚本**读到**」。
+#   这个启发式会把「恰好被某个 build_* 脚本读到」误判成生成链输入——实测把全局
+#   优先级改成 gens 先于 active 时，13 个文件被改名（含 `data/term_registry.json`：
+#   它被 build_data_manifest.py 读到，但它是**术语权威表**，不是任何生成链的输入）。
+#   因此顺序不动，改用显式登记：确属生成期输入的，在此逐条写出。
+#
+#   同时这也解掉一处文档与代码的不一致：manifest 的 _rules 声明的优先级是
+#   runtime > generator-input > reference，而代码里 `active`（文档引用）判在 `gens`
+#   之前——意味着任何被设计文档提到的文件都不可能成为 generator-input。本表让
+#   **被登记的**文件按声明生效；未登记文件的推导顺序保持原样（不动 13 个）。
+GENERATOR_INPUT = {
+    # Unity 动作集机器源：Editor 侧 builder（code/unity/Assets/Editor/）在**生成期**
+    # 读它产出 controller 与 C# 静态表；运行时 Unity 不读 data/（ARCHITECTURE.md §二）。
+    'data/action_set.json',
+}
+
 OWNER = {
     'runtime': '引擎组（code/src 消费方）',
-    'generator-input': '工具组（code/tools 生成链）',
+    'generator-input': '工具组（生成链消费方：code/tools 或 code/unity Editor 侧）',
     'reference': '设计组（design/ 引用方）',
     'evidence': '归档（无活跃消费方）',
 }
@@ -294,6 +313,11 @@ def build():
         elif f in LEGACY:
             origin = 'generated' if generated else 'authored'
             role, life, ship = 'reference', 'deprecated', False
+        elif f in GENERATOR_INPUT:
+            # 声明式：生成期输入。优先于文档引用计数——设计文档提到它，恰恰是它
+            # 作为契约存在的证据，不改变它的角色（见 GENERATOR_INPUT 的注释）。
+            origin = 'external' if ext else ('generated' if generated else 'authored')
+            role, life, ship = 'generator-input', 'active', False
         elif active:
             origin = 'external' if ext else ('generated' if generated else 'authored')
             role, life, ship = 'reference', 'active', False

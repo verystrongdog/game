@@ -13,20 +13,39 @@
     "`--check` 校验文件集与属性合法性，**不重新推导属性**（refs 计数会随任意新增 .md 漂移）；属性更新是人工动作 `--refresh`"
   ],
   "_stats": {
-    "total": 100,
+    "total": 101,
     "runtime": 8,
-    "generator_input": 0,
+    "generator_input": 1,
     "shipping_true": 8,
     "deprecated": 17,
     "archived": 0,
     "by_lifecycle_role": {
       "active/evidence": 54,
+      "active/generator-input": 1,
       "active/reference": 21,
       "active/runtime": 8,
       "deprecated/reference": 17
     }
   },
   "files": {
+    "data/action_set.json": {
+      "logical_id": "action_set",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "generator-input",
+      "shipping": false,
+      "owner": "工具组（生成链消费方：code/tools 或 code/unity Editor 侧）",
+      "consumed_by": [
+        "code/tools/build_data_manifest.py"
+      ],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 2,
+        "deprecated_docs": 0
+      }
+    },
     "data/attitudes.json": {
       "logical_id": "attitudes",
       "origin": "generated",
@@ -174,7 +193,7 @@
       ],
       "provenance": "本仓作者维护",
       "refs": {
-        "active_docs": 3,
+        "active_docs": 2,
         "deprecated_docs": 7
       }
     },
@@ -601,7 +620,7 @@
       ],
       "provenance": "本仓作者维护",
       "refs": {
-        "active_docs": 3,
+        "active_docs": 2,
         "deprecated_docs": 3
       },
       "note": "calibration_status = PLACEHOLDER（version 0），数值待标定。"
@@ -1786,7 +1805,7 @@
       ],
       "provenance": "本仓作者维护",
       "refs": {
-        "active_docs": 7,
+        "active_docs": 6,
         "deprecated_docs": 3
       }
     },
@@ -1819,14 +1838,15 @@
       "owner": "设计组（design/ 引用方）",
       "consumed_by": [
         "code/tools/build_data_manifest.py",
-        "code/tools/list_deprecated_terms.py"
+        "code/tools/list_deprecated_terms.py",
+        "code/tools/validate_issues.py"
       ],
       "generators": [],
       "runtime_consumers": [],
       "provenance": "本仓作者维护",
       "refs": {
-        "active_docs": 17,
-        "deprecated_docs": 26
+        "active_docs": 15,
+        "deprecated_docs": 27
       },
       "note": "设计期参考，非运行时数据。status 字段是术语唯一权威状态。"
     }
