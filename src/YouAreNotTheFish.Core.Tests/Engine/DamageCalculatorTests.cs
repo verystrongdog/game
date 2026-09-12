@@ -348,7 +348,7 @@ public class DamageCalculatorTests
         Assert.True(IsFloat(Cal.NpcSan));
         Assert.Equal(50f, Cal.PlayerHp);
         Assert.Equal(80f, Cal.PlayerSan);
-        Assert.Equal(15f, Cal.NpcHp);
+        Assert.Equal(25f, Cal.NpcHp);
         Assert.Equal(60f, Cal.NpcSan);
     }
 

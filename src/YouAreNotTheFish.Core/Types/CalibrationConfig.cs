@@ -46,8 +46,8 @@ public sealed record CalibrationConfig
     /// <summary>demo 玩家 SAN [NEW]。来源：核心机制 §10.1 玩家基线值默认。float（B5）。</summary>
     public float PlayerSan { get; init; } = 80f;
 
-    /// <summary>demo NPC 杂兵 HP [NEW]。来源：核心机制 §10.1 轻度病人区间取中值（HP 12-18→15）。float（B5）。</summary>
-    public float NpcHp { get; init; } = 15f;
+    /// <summary>demo NPC 杂兵 HP [NEW]。来源：敌人与事件 §4.1 权威表 / 核心机制 §10.1（轻度病人 HP 20-30 取中值 25；2026-07-31 #10 数值校准上调后值）。float（B5）。</summary>
+    public float NpcHp { get; init; } = 25f;
 
     /// <summary>demo NPC 杂兵 SAN [NEW]。来源：核心机制 §10.1 轻度病人区间取中值（SAN 50-70→60）。float（B5）。</summary>
     public float NpcSan { get; init; } = 60f;

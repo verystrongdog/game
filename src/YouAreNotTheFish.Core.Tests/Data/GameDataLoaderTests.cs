@@ -340,7 +340,7 @@ public class GameDataLoaderTests
         }
     }
 
-    /// <summary>AC-8: matrix_2d 行序与 rows 逐行逐模态值一致（69×6 全比对）+ Matrix 行序 == Rows.Keys 序。</summary>
+    /// <summary>AC-8: matrix_2d 行序与 rows 逐行逐模态值一致（69×8 全比对）+ Matrix 行序 == Rows.Keys 序。</summary>
     [Fact]
     public void LoadWsensory_MatrixRowsMatchRowsCellByCell()
     {

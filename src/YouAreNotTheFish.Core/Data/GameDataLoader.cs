@@ -30,7 +30,7 @@ public static class GameDataLoader
                ?? throw new InvalidOperationException($"Failed to deserialize {jsonPath}");
     }
 
-    /// <summary>从 W_sensory.json 加载 69×6 感觉模态矩阵，并按 Rows.Keys 顺序填充 RegionIds。</summary>
+    /// <summary>从 W_sensory.json 加载 69×8 感觉模态矩阵，并按 Rows.Keys 顺序填充 RegionIds。</summary>
     public static WsensoryMatrix LoadWsensory(string jsonPath)
     {
         var json = File.ReadAllText(jsonPath);

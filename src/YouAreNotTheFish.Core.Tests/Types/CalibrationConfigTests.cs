@@ -23,7 +23,7 @@ public class CalibrationConfigTests
         Assert.Equal(0.15f, c.PerceptionThreshold);   // [NEW] 待校准
         Assert.Equal(50, c.PlayerHp);                 // [NEW]
         Assert.Equal(80, c.PlayerSan);                // [NEW]
-        Assert.Equal(15, c.NpcHp);                    // [NEW]
+        Assert.Equal(25, c.NpcHp);                    // [NEW]
         Assert.Equal(60, c.NpcSan);                   // [NEW]
     }
 }

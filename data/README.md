@@ -34,15 +34,20 @@ md 文档（设计层）          JSON 文件（数据层）          C# 引擎 
 
 ## 二、文件索引
 
-### 引擎消费（5 文件，正典）
+### 引擎消费（8 文件，正典）
+
+> 文件清单以 `GameDataLoader.LoadAll` 为准（spec@v1.1 §三 3.3 + #105 T2/T3/T6）。
 
 | 文件 | 内容 | 规模 | 来源 | 消费方 |
 |------|------|------|------|--------|
 | `brain_regions.json` | 50 解剖实体 + 19 细分 = **69 functional_id**（44 皮层 + 14 皮下 + 11 脑干；67 剖面 + 2 mirror_of 展开），每区 16 字段含 function_profile；带 dk_name 条目含 lateralization（Grilling #92） | 69 regions | `规则/技能树系统/脑功能层级模型.md` | 全部引擎层（行序锚/τ/CSTC CI/坐标） |
 | `connectivity/tripartite_model.json` | 三体神经模型：51 图节点 + 4 种边（皮层-皮层 776 / 脑干广播 114 / CSTC 环路 47 / 特权通路 112）；graph_nodes 含 lateralization 字段（Grilling #92） | 51 / 1049 边 | 脑功能层级模型 §二十（Grilling #26） | WMatrixBuilder / CorticalBias / CstcGating |
-| `connectivity/W_sensory.json` | 感官模态→解剖节点映射矩阵（6 模态 × 69 节点，二值） | 69×6 | `规则/技能树系统/运行时状态模型.md` §4.5（Grilling #34） | EventProcessor（s 打包）+ canonical 行序锚 |
+| `connectivity/W_sensory.json` | 感官模态→解剖节点映射矩阵（8 模态 × 69 节点，二值） | 69×8 | `规则/技能树系统/运行时状态模型.md` §4.5（Grilling #34；#108 Q2 扩列嗅觉/热觉） | EventProcessor（s 打包）+ canonical 行序锚 |
 | `connectivity/situation_primitives.json` | 27 情境原型（RDoC 剖面 + 评估剖面 + 关键脑区） | 27 archetypes | `规则/核心机制.md` §六 | 正式情境系统（demo 未消费） |
 | `signal_types.json` | 信号类型受控词表（4 大类 × 18 子类） | 18 subtypes | 脑功能层级模型 §二十.8 | function_label / function_profile membership 校验 |
+| `connectivity/alpha_patterns.json` | α 模式表：8 模态 × 事件字典 | 8 模态 / 6+ 事件 | #105 T2 | EventProcessor |
+| `connectivity/env_tones.json` | 环境 tone 向量表 | 3 环境（ward/corridor/nurse_station） | #105 T3 | EventProcessor（tone 通道） |
+| `connectivity/moonlight_landing.json` | 月光落点语义（s_core 等） | PLACEHOLDER（calibration_version 0） | #105 T6 | MoonlightLanding |
 
 ### 支持文件
 
@@ -51,7 +56,7 @@ md 文档（设计层）          JSON 文件（数据层）          C# 引擎 
 | `connectivity/region_name_map.json` | 69 functional_id 三层 ID 映射（fid → dk_name → zh_name） | 69 条目 | 🔧 2026-08-14 对齐 69（删 2 聚合体 + 补 STN） |
 | `connectivity/kroell14_networks.json` | Kroell 14 网络集合 | 14 | 技能生成/上下文判定 |
 | `connectivity/link_modulation_ceiling_v2.json` | 链路调制天花板 | — | 参考（旧链路体系） |
-| `term_registry.json` | 术语注册表（Grilling §3.0 基线数据源） | 134 条 | 设计期参考，非运行时数据 |
+| `term_registry.json` | 术语注册表 | 311 条 | 设计期参考，非运行时数据 |
 
 ### 参考数据（⚠️ 已废弃系统，保留为参数参考）
 
@@ -69,7 +74,7 @@ md 文档（设计层）          JSON 文件（数据层）          C# 引擎 
   │
   ├─ brain_regions.json (69 fid) ──→ τ 查表 / CSTC CI 解析 / game_xyz
   ├─ tripartite_model.json (51节点+1049边) ──→ W 矩阵（皮层-皮层×特权通路） / b_j（脑干广播）
-  ├─ W_sensory.json (69×6) ──→ s(t) 打包（W_sensory × α）
+  ├─ W_sensory.json (69×8) ──→ s(t) 打包（W_sensory × α）
   ├─ situation_primitives.json (27) ──→ （正式情境选择，demo 未消费）
   └─ signal_types.json (4×18) ──→ 词表校验
 
