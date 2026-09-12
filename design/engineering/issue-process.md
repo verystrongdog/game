@@ -304,6 +304,23 @@ gh issue create --title "..." --body-file <临时草稿> --label type:task --lab
 
 详细调研记录（含逐条英文原文摘录与出处 URL）：[需求分解与 Agent-Issue 规范文献综述](../../reference/literature/需求分解与Agent-Issue规范-文献综述.md)。
 
+### 8.1 未采纳的候选字段（以及为什么）
+
+调研整理出 36 个可借用的字段。**不采纳的也要记下来**——否则下一个人会把它们重新加回来，而每次加都要过一次 [§1.1](#11-本文不得变成仪式) 的两条判据。
+
+| 候选字段 | 出处 | 为什么不采纳 |
+|---|---|---|
+| `dependency_impact`（依赖挂掉/降级对本特性的影响） | KEP PRR `### Dependencies` | 本仓的依赖不是常驻服务，"挂掉"对应的是前置 issue 未关闭或门禁不可用——已由 `blocked-by` + 门禁可用性（I6/I7）**机械**表达。再加一段自由文本，没有具名消费时刻 |
+| `steps`（一个 issue 内多步 checklist） | Rust tracking issue | 未采纳为**字段**，改为**分解算法**：Rust 把多步放进一个 tracking issue，本仓要求每条 issue 独立闭合、独立证据（[WORKFLOW.md §六](../../WORKFLOW.md)），故步骤**外化**为带 `blocked-by` 边的多条 issue（[§三 Step 3–4](#三分解算法)） |
+| `feature_gates{name,components}` / `disable_supported` / `milestone{alpha,beta,stable}` | `kep.yaml` | 那套是灰度发布与版本火车的产物；本仓无发布路径、无 feature flag、无 N-1 升级。成熟度由四轴状态 + must-prove 表达 |
+| `monitoring_requirements`（metrics / SLI / SLO） | KEP PRR | 无线上服务，无可观测性要求 |
+| `upgrade_downgrade_strategy` / `version_skew_strategy` | KEP / nova | 单人游戏原型不存在滚动升级与混版本运行 |
+| `implementation_history`（日期-事件时间线） | KEP | 不采纳为字段：GitHub issue 自身的创建/评论/关闭时间线就是它，另写一份是第二个真相源 |
+| `tracking_issue`（设计→实现→稳定的枢纽链接） | rust-project-goals | 本仓的枢纽已是 `slice.md` 的四轴表 + `consumed-by` 边；再加索引会形成两条互相追不上的线 |
+| `design_axioms`（可判定的设计约束） | rust-project-goals | 正典级禁令在 [项目规约 §二](../conventions/README.md) 与 `term_registry.json`；issue 级禁令由「明确排除」承担。它们已各有唯一权威，issue 不该是第二处 |
+| `ownership_and_team_asks`（Task / Owner / Notes） | rust-project-goals | 单人仓库，owner 即唯一负责人；需要多人时再加 |
+| `user_stories` / `backwards_compat_policy` / `source·abi_compatibility` | KEP / PEP 387 / swift-evolution | 无外部 API 消费者、无兼容性承诺。`Slice` 类型的「玩家路径」承担了"具体使用场景"那一项 |
+
 ---
 *创建: 2026-09-12 | 更新: 2026-09-12*
 *关联: [WORKFLOW.md](../../WORKFLOW.md), [ARCHITECTURE.md](../../ARCHITECTURE.md), [构建与测试](build-and-test.md), [门禁能力表](gates.json), [工程文档索引](README.md), [项目规约](../conventions/README.md)*
