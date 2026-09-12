@@ -44,7 +44,7 @@ data/sim_results/
 # .NET 沙箱内本地 NuGet 缓存（build 产物，不进版本控制）
 .nuget-pkgs/
 
-# 子代理临时抓取
+# 子代理/工具临时抓取（含 compare_fixture_verdicts.py 的中间判定文件）
 .evtmp_*/
 
 # 外部 AI 会话转写存档（过程物，仅本地；chatX 为 #117 输入已跟踪例外）

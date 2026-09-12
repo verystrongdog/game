@@ -251,6 +251,15 @@ NOTE = {
     'data/hospital_ref/manifest.json': '医院建模参考的 provenance 记录（来源 PDF 路径为 Windows 绝对路径，跨机不可复现）。',
 }
 
+# 契约 fixture 目录：这些文件**是被 runner 按索引批量消费的**。
+# 它们自身的文件名不会出现在任何文档或代码里——逐个登记路径字面量不可能，
+# 也不是它们的用途。位置 + index.json 就是它们的注册方式。
+#
+# ★ 这是**位置即注册**的显式声明。若不写这一条，45 条非法 fixture 会被判成
+#   "零引用孤儿 → archived"，而它们恰恰是数据契约里最不能删的东西
+#   （删掉就等于删掉跨语言判据）。把规则写在明处，好过让分类看起来"干净"。
+FIXTURE_PREFIX = 'data/runtime-fixtures/'
+
 OWNER = {
     'runtime': '引擎组（code/src 消费方）',
     'generator-input': '工具组（code/tools 生成链）',
@@ -280,6 +289,8 @@ def build():
         if f in RUNTIME:
             origin = 'generated' if generated else 'authored'
             role, life, ship = 'runtime', 'active', True
+        elif f.startswith(FIXTURE_PREFIX):
+            origin, role, life, ship = 'authored', 'evidence', 'active', False
         elif f in LEGACY:
             origin = 'generated' if generated else 'authored'
             role, life, ship = 'reference', 'deprecated', False
