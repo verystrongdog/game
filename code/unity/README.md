@@ -179,22 +179,28 @@ P="C:\Users\9527\game\code\unity"
 
 1. **文件名 ≠ 动作语义**（#124 实证）：`Charge` 实为伸手指人、`Short Left Side Step` 实为循环格挡。每条新 clip 都要 Play 预览后归槽。
 2. **坐立两条连方向都判不出来**：`Sit To Stand.fbx` 与 `Stand To Sit.fbx` 的内部 take 名均为 `mixamo.com`、`Title`/`Subject` 为空（2026-09-12 逐字节核验）。**必须预览**，不得据文件名预设——两条是近似镜像动作，误配比战斗类更隐蔽。
+3. **新拖进来的 FBX 不会自动是 Humanoid**（🔧 2026-09-12 实测，代价很大）：Unity 默认导成 **`Generic` + `NoAvatar`**——既**挂不上** Humanoid 载体（X Bot 的 Animator 要 Humanoid clip），也**读不到 `RootT` 根曲线**（Generic 没有根位移抽象，你会以为这条 clip「没有根位」）。
+   - **判据**：`ModelImporter.animationType == Human`、`avatarSetup == CreateFromThisModel`，且 `AssetDatabase.LoadAllAssetsAtPath` 里**有 Avatar 子资产**、`clip.humanMotion == true`。
+   - **解**：Inspector → Rig → Animation Type = **Humanoid** → Apply；或用 `ModelImporter` API 设 `animationType = ModelImporterAnimationType.Human`（⚠️ 枚举成员叫 `Human`，UI 上叫 Humanoid）+ `avatarSetup = CreateFromThisModel` 再 `SaveAndReimport()`。
+4. **`.meta` 的 `clipAnimations` 读回值不代表写盘值，且烘焙策略没有 `lockRoot*` 字段**：`AnimationClipSettings` 根本不暴露"Bake Into Pose"，`ModelImporterClipAnimation.lockRootHeightY` 的读回也不可信。**只有 Play 实测能验**（详见 [动作库规格.md](../../design/presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md) §二 修正块）。
 
-### 观察用移动视角（手动挂载，不入库）
+### 观察用移动视角（🔧 已折进 builder，重建即有）
 
-ActionLab 的 `Main Camera` 是**静止**的（builder 只给了固定位置与俯角，没有驱动；对比 WalkerLab 有 `WalkerController.followCamera`）。`CameraOrbit` 已归位进 `Assets/Scripts/`，手动挂三步即可自由观察：
+ActionLab 的 `Main Camera` **自带环绕跟随**：`ActionLabBuilder.CreateScene()` 直接挂 `CameraOrbit` 并设好 `target`。对比 WalkerLab 的 `WalkerController.followCamera`，两者都是"可自由观察"的相机，只是载体不同。自由观察三步：
 
 1. 生成场景：菜单 **YANTF → 动作演示 → 创建 ActionLab 场景** → 打开 `Assets/Scenes/ActionLab.unity`
-2. Hierarchy 选中 **`Main Camera`** → **Add Component** → `Camera Orbit`
-3. 把 Hierarchy 里的 **`ActionLab演示者(X Bot)`** 拖进该组件的 **`Target`** 字段 → **Play**
+2. **不需要做任何手工挂载**——builder 已把 `CameraOrbit` 挂好、`target` 也设好了（2026-09-12 修订，见下）
+3. 直接 **Play**，按住右键拖拽即可自由观察
 
 操作：**按住右键拖拽** = 环绕旋转视角；**滚轮** = 缩放远近（1.5–14 m）；相机注视胸口高度并平滑跟随。移动输入仍走相机相对，转视角后 WASD 前进方向跟着变。
 
-> ⚠️ 两点必知：① **必须设 `Target`** —— 留空时组件的 `Start()` 会兜底把它设成自身 transform，结果是相机绕自己头顶打转（那是调试兜底，不是你要的效果）。② **重新生成场景会丢掉挂载**（场景不入库、由 builder 重建）——#139/#140 改 builder 后会重建一次，届时需重挂。
+> 🔧 **2026-09-12 修订：改为「折进 builder，自动挂载」。** 触发条件正是原裁定预留的那条（「若日后需要重建场景时自动挂上」）——而它**当天就发生了**：场景自 #136 起已入库，本 builder 每次都是**新建场景**，于是重建把手工挂载冲掉（实测踩到：重建后自由视角消失）。
+>
+> 现在 `ActionLabBuilder.CreateScene()` 直接给 `Main Camera` 挂 `CameraOrbit` 并设 `target = 演示者`、调 `Snap()` 定初位（`orbit.target` 必须显式设——留空时 `CameraOrbit.Start()` 会兜底成自身 transform，相机会绕自己头顶打转）。**重建即有，无需手工挂。** 原「不建 issue、不改 builder」的裁定就此作废（就地记修正，不进 #137）。
 
-> 裁定（owner，2026-09-12）：**走手动挂载，不建 issue、不改 builder**——它是观察工具、不是能力增量，且场景本就按单机所有权不入库。若日后需要重建场景时自动挂上，再折进 [#137](https://github.com/verystrongdog/game/issues/137)。
+> ⚠️ **仍然必知**：`CameraOrbit` 是 `YANTF.WalkerLab` 命名空间下的组件，与 `ActionLab` 同属 `YANTF.Demo` 程序集——若日后拆 asmdef 需注意跨命名空间引用。
 
-> 🔧 **2026-09-12（#136）：「场景不入库」有一条显式例外。** 基准场景 `Assets/Scenes/ActionLab.unity`（连同 `Assets/ActionLab/ActionLab.controller`）**已入库**——[#136](https://github.com/verystrongdog/game/issues/136) 的交付物 2 要求「至少一个可打开的基准场景，替代靠 Editor 菜单运行时生成」，owner 裁定取 ActionLab（早期白盒 `DemoSandbox` 太简陋，不用）。因此上一条的「重新生成会丢掉挂载」对 ActionLab 改为：**菜单重建会覆盖已入库的场景，差异必须显式提交**（不要再把 `CameraOrbit` 挂载当成一次性手调）。其余 lab 场景仍不入库，见 §二·H。
+> 🔧 **2026-09-12（#136）：「场景不入库」有一条显式例外。** 基准场景 `Assets/Scenes/ActionLab.unity`（连同 `Assets/ActionLab/ActionLab.controller`）**已入库**——[#136](https://github.com/verystrongdog/game/issues/136) 的交付物 2 要求「至少一个可打开的基准场景，替代靠 Editor 菜单运行时生成」，owner 裁定取 ActionLab（早期白盒 `DemoSandbox` 太简陋，不用）。因此对 ActionLab：**菜单重建会覆盖已入库的场景，差异必须显式提交**。其余 lab 场景仍不入库，见 §二·H。
 
 ### 与既有文档的关系
 
@@ -256,6 +262,10 @@ ActionLab 的 `Main Camera` 是**静止**的（builder 只给了固定位置与�
 
 1. **4 条 locomotion 态仍引用不入库的 KI 包**：`ActionLab.controller` 的 Idle/Walk/Run/Jump 指向 `Assets/Kevin Iglesias/...`。干净检出下这 4 态是「状态存在 + clip 空（Missing）」——正是 [#139](https://github.com/verystrongdog/game/issues/139) 的工作面（整条切 Mixamo 并落库）。入库的是**工程当前的真实状态**，不是伪造的完整态。
 2. **2 项常红 PlayMode 断言的真因与 #139 的归因不符**（实测见上表）：那两条是 `ActionPlayer` 的纯逻辑缺陷，落 5 条 clip **不会**让它们转绿；而 `ActionPlayer.cs` / 断言文件都不在 #139 的「允许变化」里 → #139 按现文写达不到自己的验收标准。按 [WORKFLOW.md §一](../../WORKFLOW.md) 非阻塞发现进候选队列，**不在 #136 里顺手修**。
+   - **🔧 2026-09-12 已修（随坐立三段那一批，非顺手牵羊——两条都在坐立路径上）**：
+     - ① `OneShotElapsed`——C# 允许浮点运算使用**高于结果类型的精度**：`elapsed >= clipLength + OneShotTailSeconds` 的右侧可能以 **double 中间值**参与比较，与外部按 float 落回的同一个和**差 1 ulp**，恰好到点被判"未到点"（实测：`a = clipLen + 0.05f` 与函数内的和同为 bits `1065772646`，函数却返回 `False`）。改为显式落回 float 再比。此计时正是 `Sit` 播完切 `SitIdle` 的依据。
+     - ② `ResetToIdle` 不清 `CurrentActionId`——重置后仍留旧值，凡靠它做输入守卫的路径被误导（例：7 起身的守卫要求"当前是 `SitIdle`"）。
+   - **证据**：PlayMode **23 项 23 过 / 0 红**（此前 21 项中 2 项常红，见 §二·I）。
 3. **干净检出的首次导入 / 编译 / Play 未实测**：Editor 只跑在 Windows 拷贝上（Linux 侧无 Editor，且 WSL 对 `/mnt/c` 只读）。正确性由三条间接证据支撑：① 84/84 逐文件字节一致；② 场景与 controller 的 GUID 引用全部可解析到已跟踪资产（含 X Bot.fbx、5 条 combat clip）；③ 来源工程（就是提交的那批字节）内 Editor 0 错误、16 项测试跑通。
 4. **资产身份还没有常驻机械校验器**：`.meta` 齐全性、GUID 唯一性、场景/controller 引用可解析性本次是用一次性脚本核的（294 个 `.meta` → 294 个唯一 GUID，0 冲突）。建议进候选队列，别让它退回成人工步骤。
 
