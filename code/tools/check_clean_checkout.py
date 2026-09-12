@@ -7,6 +7,9 @@
 本脚本把「干净检出可以复现结果」这条判据（WORKFLOW.md §六）变成可执行检查：
   1. 受控 .md 的链接目标，若磁盘存在但**未被 git 跟踪** → 报错
   2. 受控文件里的绝对路径若指向开发机（/home/<user>、/Users/<user>）→ 报错
+  3. **悬空 gitlink**（索引里的 160000 条目没有 .gitmodules 登记）→ 报错
+
+第 3 条是 2026-09-12 从 CI 日志里发现后补的（见下）。
 
 用法: python3 code/tools/check_clean_checkout.py
 退出码: 0 = 通过, 1 = 有未受控引用
@@ -31,6 +34,36 @@ def tracked_files():
     out = subprocess.run(['git', '-c', 'core.quotePath=false', 'ls-files'],
                          capture_output=True, text=True).stdout
     return {l for l in out.split('\n') if l}
+
+
+def dangling_gitlinks():
+    """索引里的 gitlink（mode 160000）中，**没有 .gitmodules 登记**的那些。
+
+    ## 为什么要查这个（2026-09-12 实测发现）
+
+    `reference/books/a-philosophy-of-software-design-zh` 自 `b74ff98` 起以 gitlink
+    入库（160000 → `ca89b238…`），但**本仓从未有过 `.gitmodules`**
+    （`git log --all --diff-filter=AD -- .gitmodules` 为空）。
+
+    后果不是"本地坏了"，而是**本地永远看不出问题**：
+      - 干净检出/CI：该路径**不进任何内容**（checkout 只创建 gitlink，不 clone 内容），
+        且 `git submodule foreach` 因缺 URL 报 `fatal: No url found for submodule path`
+        → exit 128。该报错出现在 checkout 的 post 步骤，**不影响 job 结论**，
+        所以只在 annotation 里以 warning 形式出现——极易被当噪声略过
+      - 作者本机：嵌套仓库 `.git` 还在，目录非空 → 一切正常
+
+    这正是「干净检出可以复现结果」要防的那类缺陷：**本地有、远端没有、且不报错**。
+    故补为一条硬检查，而不是只修那一处。
+    """
+    out = subprocess.run(['git', 'ls-files', '-s'], capture_output=True, text=True).stdout
+    gitlinks = [l.split('\t', 1)[1] for l in out.split('\n')
+                if l.startswith('160000') and '\t' in l]
+    if not gitlinks:
+        return []
+    mod = ''
+    if os.path.exists('.gitmodules'):
+        mod = open('.gitmodules', encoding='utf-8').read()
+    return [g for g in gitlinks if f'path = {g}' not in mod and f'"{g}"' not in mod]
 
 
 def main():
@@ -78,19 +111,30 @@ def main():
             else:
                 warns.append((f, i, f'文档/数据中的出处引用: {line.strip()[:80]}'))
 
+    # 3) 悬空 gitlink
+    dangling = dangling_gitlinks()
+
     print(f"检查 {len(tracked)} 个受控文件")
     print(f"  未受控引用: {n_link} 处")
     print(f"  代码中的开发机绝对路径: {n_abs} 处")
+    print(f"  悬空 gitlink（无 .gitmodules 登记）: {len(dangling)} 处")
     print(f"  文档/数据中的出处引用（提示，不算失败）: {len(warns)} 处")
     if warns:
         print()
         for f, i, why in warns[:20]:
             print(f"  ⚠️  {f}:{i} — {why}")
-    if bad:
+    if dangling:
+        print()
+        for g in dangling:
+            print(f"  ❌ 悬空 gitlink: {g} — 干净检出该路径为空，"
+                  f"且 git submodule 操作会报 'No url found'")
+        print("     修法：要么登记 .gitmodules（真子模块），"
+              "要么 `git rm --cached <path>` 改为普通文件或忽略")
+    if bad or dangling:
         print()
         for f, i, why in bad[:40]:
             print(f"  ❌ {f}:{i} — {why}")
-        print(f"\n❌ 干净检出会失败（共 {len(bad)} 处）")
+        print(f"\n❌ 干净检出会失败（未受控引用 {len(bad)} 处 · 悬空 gitlink {len(dangling)} 处）")
         return 1
     print("\n✅ 干净检出可完全解析")
     return 0
