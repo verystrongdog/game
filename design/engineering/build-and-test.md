@@ -157,9 +157,9 @@ sim 脚本用**扁平 import**（`from sim_consciousness_cs4_test import ...`）
 
 | 缺口 | 影响 | 解除条件 |
 |---|---|---|
-| **Unity 门禁未执行** | 阻塞 P4b（资产身份）、P4d（Core→Unity 接缝）、P5（实现并试玩） | 有 Editor + 许可证的机器 |
+| **Unity 门禁未执行** | 阻塞 P4b（资产身份）、P4d（Core→Unity 接缝）、P5（实现并试玩） | ✏️ 2026-09-12：**已定位执行环境**——Windows 工作区 `C:\Users\9527\game`（Editor 与 agent 同机，unity-cli 可直驱）。本机与 CI 侧仍不可用；详见 [gates.json](gates.json) `_other_environments`。声明 `门禁: unity` 的 issue 标 `state:ready-for-human`，不得标 `state:ready-for-agent`（I6 / R8） |
 | `code/unity/Packages/packages-lock.json` 缺失 | 包版本不可复现 | P4b |
-| `.meta` 0 个 / 场景 0 个 | Unity 工程不完整，场景靠 Editor 菜单运行时生成 | P4b |
+| `.meta` 0 个 / 场景 0 个 | Unity 工程不完整，场景靠 Editor 菜单运行时生成；**Blend Tree 阈值 / transition 参数 / Avatar Mask 无处安放**——手调动画成果无法入库 | P4b（[#136](https://github.com/verystrongdog/game/issues/136)） |
 | 无 `NuGet.lock`（packages.lock.json） | 传递依赖版本可漂移 | 待定：需在 `dotnet restore --use-lock-file` 后提交 |
 
 ### 5.1 未验证项（诚实清单）

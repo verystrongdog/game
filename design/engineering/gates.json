@@ -11,6 +11,20 @@
     "dotnet_roll_forward_required": true,
     "python": "3.10.12"
   },
+  "_other_environments": {
+    "_why": "2026-09-12 起呈现侧工作在第二个环境上进行。上面的 environment 仍是 CI 与本机校验器判定用的环境（available 字段的语义锚点），此处只登记另一环境的存在与范围，不改 available。",
+    "windows-unity": {
+      "as_of": "2026-09-12",
+      "host": "Windows 工作区 C:\\Users\\9527\\game（Unity 打开的那份仓库拷贝；DSH 会话在同一台机上，故 unity-cli 可直驱）",
+      "has_unity_editor": true,
+      "notes": [
+        "unity-cli 只能连同一台机器上开着的 Editor——它不是远程通道（Unity 官方 unity-cli 文档：\"This runs entirely on your local machine … it is not remote access\"）。",
+        "该环境的 unity 门禁可用；CI 与本机（无 Editor）侧的 unity 门禁仍不可用。",
+        "本环境产出的 issue 若声明 门禁: unity，其验证只能在该工作区完成 → 标 state:ready-for-human，不得标 state:ready-for-agent（I6 / R8）。",
+        "资产区（code/unity/Assets/**）的生成与手调由该工作区独占，见 ARCHITECTURE.md §五 资产区单机所有权。"
+      ]
+    }
+  },
   "gates": [
     {
       "id": "docs-integrity",
@@ -79,7 +93,9 @@
       "unavailable_reason": "本环境无 Unity Editor 与许可证；CI 的 unity job 显式报告 NOT_AVAILABLE，不静默跳过。",
       "covers": "Unity 资产身份、Core→Unity 接缝、切片试玩",
       "criterion": "无法在本环境判定（未运行不是通过）",
-      "blocks": ["P4b Unity 资产身份", "P4d Core→Unity 接缝", "P5 实现并试玩 CP-01"]
+      "blocks": ["P4b Unity 资产身份", "P4d Core→Unity 接缝", "P5 实现并试玩 CP-01"],
+      "available_in": ["windows-unity"],
+      "note": "见 _other_environments.windows-unity：该门禁在 Windows 工作区（Editor 与 agent 同机）可用。本环境产出的 issue 若声明本门禁，验证只能在那个工作区做 → 标 state:ready-for-human（I6 只在 ready-for-agent 时 FAIL）。"
     }
   ]
 }

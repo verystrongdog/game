@@ -52,7 +52,7 @@ body:
     id: gates
     attributes:
       label: 门禁
-      description: "实验的判据是结论而不是机器门禁，无门禁时写 `none`（仅 RFC / Experiment 允许，I12）；但验收标准必须写明谁在何处记录该结论。若有可跑的既有 gate，一行一条地列出，gate id 必须存在于 design/engineering/gates.json（docs-integrity / engine / cross-language / clean-checkout / fixture-index / issues / unity；`unity` 当前 `available: false`）。"
+      description: "实验的判据是结论而不是机器门禁，无门禁时写 `none`（仅 RFC / Experiment 允许，I12）；但验收标准必须写明谁在何处记录该结论。若有可跑的既有 gate，一行一条地列出，gate id 必须存在于 design/engineering/gates.json（docs-integrity / engine / cross-language / clean-checkout / fixture-index / issues / unity；`unity` 在本环境 `available: false`，在 Windows 工作区可用）。"
       placeholder: |
         docs-integrity
     validations:
