@@ -157,9 +157,9 @@ sim 脚本用**扁平 import**（`from sim_consciousness_cs4_test import ...`）
 
 | 缺口 | 影响 | 解除条件 |
 |---|---|---|
-| **Unity 门禁未执行** | 阻塞 P4b（资产身份）、P4d（Core→Unity 接缝）、P5（实现并试玩） | ✏️ 2026-09-12：**已定位执行环境**——Windows 工作区 `C:\Users\9527\game`（Editor 与 agent 同机，unity-cli 可直驱）。本机与 CI 侧仍不可用；详见 [gates.json](gates.json) `_other_environments`。声明 `门禁: unity` 的 issue 标 `state:ready-for-human`，不得标 `state:ready-for-agent`（I6 / R8） |
-| `code/unity/Packages/packages-lock.json` 缺失 | 包版本不可复现 | P4b |
-| `.meta` 0 个 / 场景 0 个 | Unity 工程不完整，场景靠 Editor 菜单运行时生成；**Blend Tree 阈值 / transition 参数 / Avatar Mask 无处安放**——手调动画成果无法入库 | P4b（[#136](https://github.com/verystrongdog/game/issues/136)） |
+| **Unity 门禁** | ✏️ 2026-09-12：**本机已可跑**——Linux 侧是同一台 Windows 上的 WSL2，`unity.exe` 经 interop 直驱 Windows Editor（实测 `unity status` → `state: ready`、`unity open` 工程 → 编译 0 错误）。**CI（ubuntu）侧仍不可用**，其 `unity` job 继续显式报告 `NOT_AVAILABLE`。判据按 [gates.json](gates.json) 的 `environment` 判定 | — |
+| `code/unity/Packages/packages-lock.json` 缺失 | 包版本不可复现 | ✅ 2026-09-12 已随迁移补齐（`code/unity/Packages/packages-lock.json`） |
+| `.meta` 0 个 / 场景 0 个 | Unity 工程不完整，场景靠 Editor 菜单运行时生成；**Blend Tree 阈值 / transition 参数 / Avatar Mask 无处安放**——手调动画成果无法入库 | ✏️ 2026-09-12：**已随迁移落地**（294 个 `.meta` + 5 个场景 + 5 个 controller + `ProjectSettings/` 23 个文件）。**尚未提交进 git**——提交范围（尤其 68M 的 `Kevin Iglesias/`）由 [#136](https://github.com/verystrongdog/game/issues/136) 裁定 |
 | 无 `NuGet.lock`（packages.lock.json） | 传递依赖版本可漂移 | 待定：需在 `dotnet restore --use-lock-file` 后提交 |
 
 ### 5.1 未验证项（诚实清单）

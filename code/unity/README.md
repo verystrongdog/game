@@ -106,46 +106,74 @@ unity command editor_play  # 进 Play 模式（验证用）
 
 > 目标：把动作集从「演示够用」推到「**足够多完整动作 + 姿态切换自然**」的工程底子。范围裁定为**结构升级 + 站↔坐探针**，动作内容仍限 L1 九条（决策记录见 [动作库规格.md](../../design/presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md) 第二次 🔧 修正；分解见 [动作系统分解](../../design/engineering/%E5%8A%A8%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%88%86%E8%A7%A3-2026-09-12.md)）。
 
-### 前置（在 Windows 工作区，本目录 `C:\Users\9527\game`）
+### 怎么驱动 Unity（2026-09-12 全部实测）
 
-1. **先与 `main` 对齐**：这份拷贝历史上与 Linux 侧分叉过（`CameraOrbit.cs` / `SitPoint.cs` 曾只存在于本地盘）。四条 issue 都以此为真实前提。
-2. **确认 unity CLI 可直驱**：`unity --version` → `unity pipeline install`（装入 `com.unity.pipeline`）→ `unity status` 应显示 `state: ready`。
-   - ⚠️ **unity-cli 是**本机**通道，不是远程访问**——它只能连**同一台机器**上开着的 Editor。故 Unity 工作必须在本工作区做，Linux 侧写不了也验不了 `code/unity/`。
-   - 连不上先查 Safe Mode：有 C# 编译错误时 Editor 会进 Safe Mode，Pipeline 包不加载，`unity status` / `unity command` 全部连不上。先修编译错误再重启。
-3. **资产区单机所有权**：`code/unity/Assets/**` 的资产（`.meta` / `.controller` / `.asset` / 场景）**只由本工作区生成与手调**（见 [ARCHITECTURE.md §五](../../ARCHITECTURE.md)）。手调成果要入库，两侧的 `.meta` GUID 必须一致。
+**🔧 关键事实：本机就是那台 Windows 机。** 这个仓库所在的 Linux 是**同一台 Windows 上的 WSL2**，`unity.exe` 经 WSL interop 可直接执行并连上 Windows 侧的 Editor。故**不需要另开一个"Windows 会话"**——本会话即可驱动、验证、跑测试。
 
-### 会话启动清单（本工作区开 DSH 会话时按序做）
+| 项 | 实际值（实测） |
+|---|---|
+| 工程路径 | `C:\Users\9527\game\code\unity`（= `/mnt/c/Users/9527/game/code/unity`） |
+| unity CLI | `C:\Users\9527\AppData\Local\Unity\bin\unity.exe` |
+| Editor 本体 | `C:\Totall\unity\install\6000.5.2f1\Editor\Unity.exe`（版本 6000.5.2f1，与 `ProjectVersion.txt` 一致） |
+| 许可证 | `C:\Users\9527\AppData\Local\Unity\licenses\UnityEntitlementLicense.xml`（已激活） |
 
-本工作区是**唯一**的 Unity 机——agent 与 Editor 同机，`unity-cli` 才连得上（它是本机通道，不是远程访问）。Linux 侧会话写不了也验不了 `code/unity/`，故实现与验证都在这里做。
+驱动方式（**不需要提权**——命令本身不改文件；Editor 侧写盘由 Editor 进程完成）：
 
-1. **对齐**（一次性）：
-   ```powershell
-   cd C:\Users\9527\game
-   git branch --show-current          # 确认在 main
-   git status                         # 先看清有无别的本地改动
-   git fetch origin && git pull --ff-only origin main
-   git log --oneline -1               # 期望 e38b8e5 或更新
-   ```
-   ⚠️ 若报 `untracked working tree files would be overwritten by merge`：本地那两份 `CameraOrbit.cs` / `SitPoint.cs`（+`.meta`）是**未跟踪**文件，已随 `main` 归位到 `code/unity/Assets/Scripts/`（GUID 原样保留、内容逐字节一致）。删除本地那 4 个后再拉，无损失。
-2. **确认 Editor 可直驱**：`unity pipeline install` → `unity status`，期望 `state: ready`。
-   - 连不上先查 **Safe Mode**：有 C# 编译错误时 Pipeline 包不加载，`unity status` / `unity command` 全连不上。先修编译错误再重启 Editor，不要退化成盲改文件。
-3. **认准起点**：先读 [AGENTS.md](../../AGENTS.md)（全仓约束入口，含提交前必跑的校验器）→ 本 README §二·G → [动作库规格.md §四·乙/§六](../../design/presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md) → [动作系统分解](../../design/engineering/%E5%8A%A8%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%88%86%E8%A7%A3-2026-09-12.md)。
-4. **开工顺序**：**#137 → #138 → #139 → #140**（严格串行，工作面相交）。每条的门禁、验收标准、预期差分、明确排除都在 issue 正文里，照做即可。
-5. **门禁可用性口径（易错）**：`unity` 门禁在**本工作区可跑**，但 [`gates.json`](../../design/engineering/gates.json) 的 `available` **保持 `false` 不动**——它的语义锚点是 CI（ubuntu，无 Unity）。第二环境以 `available_in` 与 `_other_environments` 表达。**把 `available` 翻成 true 会让 CI 误判可闭合**（I6）。本工作区产出的 issue 在该环境可标 `state:ready-for-agent`；在 Linux/CI 侧只能 `state:ready-for-human`。
-6. **资产区所有权**：`code/unity/Assets/**` 的资产（`.meta` / `.controller` / `.asset` / 场景）**只由本工作区生成与手调**（[ARCHITECTURE.md §五](../../ARCHITECTURE.md)）。手调成果要入库，GUID 必须稳定——这与 #136（资产身份）是同一件事的两面。
+```bash
+U="/mnt/c/Users/9527/AppData/Local/Unity/bin/unity.exe"
+P="C:\Users\9527\game\code\unity"
+"$U" status                                   # 期望 state: ready
+"$U" command --project-path "$P"              # 列出 Editor 暴露的全部命令
+"$U" command get_scene_hierarchy --project-path "$P" --json
+"$U" command editor_focus   --project-path "$P"   # 把 Unity 窗口切到前台
+"$U" command editor_play    --project-path "$P"
+"$U" command capture_game_view --project-path "$P" --json   # 返回 base64 PNG
+"$U" open "C:\Users\9527\game\code\unity"     # 用正确 Editor 版本打开工程
+```
 
+- ⚠️ **改 `/mnt/c` 下的文件本身需要提权**（沙箱把 workspace 之外设为只读）——`git`、`cp` 等写操作要申请 `danger-full-access`。
+- 连不上先查 **Safe Mode**：有 C# 编译错误时 Pipeline 包不加载，`unity status` / `unity command` 全连不上。先修编译错误再重启 Editor。
+- 多于一个 Editor 在跑时必须传 `--project-path`，否则报 `AMBIGUOUS_EDITOR`。
+- **资产区单机所有权**：`code/unity/Assets/**` 的资产只由**这一台机**生成与手调（[ARCHITECTURE.md §五](../../ARCHITECTURE.md)）。GUID 必须稳定——这与 #136 是同一件事的两面。
 
+### 🔧 2026-09-12 迁移：Windows 那份拷贝已并入 main
 
-| 序 | issue | 做什么 | 状态 |
-|---|---|---|---|
+原先存在**两份分叉的拷贝**，现已合并为一份：
+
+| 之前 | 现在 |
+|---|---|
+| `C:\Users\9527\game` 在分支 `feat/unity-presentation-slice`（旧目录结构 `unity/`），整个 Unity 工程**从未入 git**（100 个未跟踪项） | 同一路径 **已在 `main`**，工程位于 `code/unity`（main 布局） |
+| 294 个 `.meta`、5 个场景、5 个 controller、`Kevin Iglesias/`(68M)、23 个 `ProjectSettings`、`packages-lock.json` 只存在于 Windows 侧 | 全部已移植进 `code/unity/`（`cp -rn` 不覆盖策略，main 既有文件优先） |
+| `remote.origin.fetch` 只配了单条分支（单分支克隆，看不到 main） | 已修为标准 glob `+refs/heads/*:refs/remotes/origin/*` |
+
+**迁移的验证**：新工程已由 Unity 6000.5.2f1 打开并完成首次导入 → `compiling: false`、`status: ready`、**Console 0 错误**（仅 2 条与迁移无关的弃用警告）。旧 `unity/` 目录**保留未删**（含 `Library/`），仅作回退；其跟踪的 `.cs` 已被分支切换删除，**不要再打开它**。迁移前的完整备份在 Linux 侧 `.scratch/win-backup/unity-project-2026-09-12.tar.gz`（22 MB，含 Assets/ProjectSettings/Packages）。
+
+**⚠️ 遗留一处需要合的分叉**（不要盲目覆盖）：`AnimatorWalker.cs` 是**双向发散**，两侧各有对方没有的功能——
+
+| 侧 | 独有内容 |
+|---|---|
+| 原 Windows 拷贝 | 整套坐/起：`SitPhase` 状态机、`E` 键、`OnAnimatorMove` 接管 root motion、`_standLift` 过程性起身 |
+| `main` | 空中方向修正参数化：`airControl` 0.15 / `airDrag` 0.5 与 `_airVelocity` 衰减逻辑 |
+
+迁移时**保留了 Windows 侧版本**（先保住能跑的坐/起功能；main 的 25 行仍在 git 历史里，未丢失）。两者的合并是 #137 范围内的实作工作。`KiWalkerLabBuilder.cs` 同理（Windows 侧多 `StandToSit` 第五状态与 `StandUpTrigger`）。
+
+### 会话启动清单
+
+1. **确认 Editor 可直驱**：上表的 `unity status`，期望 `state: ready`（Editor 已开则直接连；未开则 `unity open`）。
+2. **认准起点**：先读 [AGENTS.md](../../AGENTS.md)（全仓约束入口，含提交前必跑的校验器）→ 本 README §二·G → [动作库规格.md §四·乙/§六](../../design/presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md) → [动作系统分解](../../design/engineering/%E5%8A%A8%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%88%86%E8%A7%A3-2026-09-12.md)。
+3. **开工顺序**：**#137 → #138 → #139 → #140**（严格串行，工作面相交）。每条的门禁、验收标准、预期差分、明确排除都在 issue 正文里，照做即可。
+4. **本侧对 `code/unity/Assets/**` 可写**（经提权），实现与验证能在同一侧闭环——**不再需要跨机交接**。
+
 ### 四条 issue（严格串行，工作面相交所致）
 
 | 序 | issue | 做什么 | 状态 |
 |---|---|---|---|
-| 1 | [#137](https://github.com/verystrongdog/game/issues/137) | **站↔坐探针**：裁定动作位移口径（root motion vs CharacterController）。归位 `SitPoint.cs`，在 X Bot 上跑通 Sit↔Stand，产出落点偏差读数 | `ready-for-human` |
+| 1 | [#137](https://github.com/verystrongdog/game/issues/137) | **站↔坐**。**注意：原假设已被既有实现否定**——本 issue 的实际内容已变为「核对落点读数 + 合并 `AnimatorWalker.cs` 的双向分叉」，见上一节的遗留项 | `ready-for-human` |
 | 2 | [#138](https://github.com/verystrongdog/game/issues/138) | **数据契约消费**：生成器读 `data/action_set.json` 产出 controller 与 C# 静态表，且**非破坏**（不覆盖已手调值） | `ready-for-human` |
 | 3 | [#139](https://github.com/verystrongdog/game/issues/139) | **五条 clip 到库**：Idle/Walk/Run/Jump/Talk 下载 + Humanoid 导入 + **Play 预览实证归槽**（文件名不作依据），PlayMode 断言转绿 | `blocked`（by #138） |
 | 4 | [#140](https://github.com/verystrongdog/game/issues/140) | **locomotion 迁契约 B**：1D blend tree（`speed01`，采样点 0 / 3.0 / 6.0）取代三态硬切 | `blocked`（by #139） |
+
+> 门禁可用性：`unity` 在**本机可跑**（WSL 经 interop 直驱 Windows Editor），故 [`gates.json`](../../design/engineering/gates.json) 的 `available` 为 `true`。CI（ubuntu，无 Unity）侧仍不可跑，其 `unity` job 继续显式报告 `NOT_AVAILABLE`。
 
 ### 两条必须先懂的陷阱
 

@@ -105,7 +105,7 @@ code/src/YouAreNotTheFish.Console（harness）/ Tests（353 个）
 | `code/tools/validate_disease.py` / `validate_eligibility.py` / `validate_situation_fids.py` / `validate_tripartite_annotations.py` | `data/` 与 `design/entities/` 的契约 |
 | `dotnet test code/src/YouAreNotTheFish.sln` | 引擎行为（353 个测试） |
 | `data/term_registry.json` | 术语边界——哪些词在本项目里是**已废弃**的旧模型 |
-| **资产区单机所有权**（✏️ 2026-09-12，人工约定，**尚无机械校验**） | `code/unity/Assets/**` 的资产（`.meta` / `.controller` / `.asset` / 场景）**只由 Windows 工作区生成与手调**。理由：手调成果入库要求 `.meta` GUID 两侧一致，两台机器都改资产区则合并必然 GUID 冲突。文本（`design/` `data/` C# 源码与断言）不受此限，可在任一侧写 |
+| **资产区单机所有权**（✏️ 2026-09-12，人工约定，**尚无机械校验**） | `code/unity/Assets/**` 的资产（`.meta` / `.controller` / `.asset` / 场景）**只由这一台机生成与手调**。理由：手调成果入库要求 `.meta` GUID 稳定，多台机器各自手调资产则合并必然 GUID 冲突。**2026-09-12 补充**：原先的两份分叉拷贝已合并为一份（Linux 侧 WSL2 + Windows 侧 Editor 属同一台物理机，unity-cli 经 interop 直驱），该约束现在是"一台机一份拷贝"，不再有跨机面。文本（`design/` `data/` C# 源码与断言）不受此限 |
 
 **提交前的底线**：`validate_cross_refs.py` 报 0 死链 + `dotnet test` 全绿。
 

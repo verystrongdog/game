@@ -3,25 +3,23 @@
   "_created": "2026-09-12",
   "_source": "design/engineering/build-and-test.md §一/§三/§四/§五 + .github/workflows/ci.yml（实测）",
   "environment": {
-    "id": "local-bootstrap",
+    "id": "local-wsl-bridge",
     "as_of": "2026-09-12",
-    "description": "本机 = 无 Unity Editor + 无 net8.0 runtime。可用门禁按此环境判定；换个环境（如有 Unity 的机器）时只改 available 字段，不动 gate id。",
+    "description": "本机 = 同一台 Windows 上的 WSL2 + 无 net8.0 runtime。**Unity Editor 在 Windows 侧、经 WSL interop 由本机直驱**（unity.exe status → state ready），故 unity 门禁在本环境可用。可用门禁按此环境判定；换个环境（如 CI 的 ubuntu runner）时只改 available 字段，不动 gate id。",
     "dotnet_sdk": "10.0.400",
     "dotnet_target_framework": "net8.0",
     "dotnet_roll_forward_required": true,
     "python": "3.10.12"
   },
   "_other_environments": {
-    "_why": "2026-09-12 起呈现侧工作在第二个环境上进行。上面的 environment 仍是 CI 与本机校验器判定用的环境（available 字段的语义锚点），此处只登记另一环境的存在与范围，不改 available。",
-    "windows-unity": {
+    "_why": "登记另一个执行环境的存在与范围，不改本环境的 available。",
+    "ci-ubuntu": {
       "as_of": "2026-09-12",
-      "host": "Windows 工作区 C:\\Users\\9527\\game（Unity 打开的那份仓库拷贝；DSH 会话在同一台机上，故 unity-cli 可直驱）",
-      "has_unity_editor": true,
+      "host": "GitHub Actions ubuntu-latest",
+      "has_unity_editor": false,
       "notes": [
-        "unity-cli 只能连同一台机器上开着的 Editor——它不是远程通道（Unity 官方 unity-cli 文档：\"This runs entirely on your local machine … it is not remote access\"）。",
-        "该环境的 unity 门禁可用；CI 与本机（无 Editor）侧的 unity 门禁仍不可用。",
-        "本环境产出的 issue 若声明 门禁: unity，其验证只能在该工作区完成 → 标 state:ready-for-human，不得标 state:ready-for-agent（I6 / R8）。",
-        "资产区（code/unity/Assets/**）的生成与手调由该工作区独占，见 ARCHITECTURE.md §五 资产区单机所有权。"
+        "CI 的 unity job 显式报告 NOT_AVAILABLE（runner 无 Editor 与许可证），不静默跳过。",
+        "故 unity 门禁在 CI 上不可用、在本机（WSL 桥接）可用——这正是 environment 字段存在的意义。"
       ]
     }
   },
@@ -88,14 +86,12 @@
       "id": "unity",
       "kind": "ci-job",
       "ci_job": "unity",
-      "command": "Unity Editor 6000.5.2f1 的批处理构建 + PlayMode 测试",
-      "available": false,
-      "unavailable_reason": "本环境无 Unity Editor 与许可证；CI 的 unity job 显式报告 NOT_AVAILABLE，不静默跳过。",
+      "command": "Unity Editor 6000.5.2f1 的批处理构建 + PlayMode 测试（本机经 WSL interop 直驱；CI 侧仍不可跑）",
+      "available": true,
       "covers": "Unity 资产身份、Core→Unity 接缝、切片试玩",
-      "criterion": "无法在本环境判定（未运行不是通过）",
+      "criterion": "本机：unity status → state ready；Console 0 错误；run_tests 退出码 0。CI（ubuntu）：显式报告 NOT_AVAILABLE，不静默跳过",
       "blocks": ["P4b Unity 资产身份", "P4d Core→Unity 接缝", "P5 实现并试玩 CP-01"],
-      "available_in": ["windows-unity"],
-      "note": "见 _other_environments.windows-unity：该门禁在 Windows 工作区（Editor 与 agent 同机）可用。本环境产出的 issue 若声明本门禁，验证只能在那个工作区做 → 标 state:ready-for-human（I6 只在 ready-for-agent 时 FAIL）。"
+      "note": "2026-09-12 起本机可跑：Linux 侧是同一台 Windows 上的 WSL2，unity.exe 经 interop 直连 Windows Editor（实测 status→ready、open 工程→编译 0 错误）。CI 的 unity job 依旧报告 NOT_AVAILABLE（runner 无 Editor），故本门禁在 CI 上不可用、在本机可用——判据按 environment 判定。**实测教训**：驱动 Unity 本身不需要提权；但写 /mnt/c 下的文件需要（沙箱把 workspace 之外设为只读）。"
     }
   ]
 }

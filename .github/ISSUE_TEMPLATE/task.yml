@@ -53,7 +53,7 @@ body:
     id: gates
     attributes:
       label: 门禁
-      description: "将跑的 gate id 或脚本命令，一行一条；gate id 必须存在于 design/engineering/gates.json，可选 docs-integrity / engine / cross-language / clean-checkout / fixture-index / issues / unity。注意 `unity` 在本环境（无 Unity Editor）`available: false`，但在 Windows 工作区可用（见 gates.json `_other_environments`）——声明它即不得标 state:ready-for-agent（I6 / R8）。"
+      description: "将跑的 gate id 或脚本命令，一行一条；gate id 必须存在于 design/engineering/gates.json，可选 docs-integrity / engine / cross-language / clean-checkout / fixture-index / issues / unity。注意 `unity` 在本机可用（WSL 经 interop 直驱 Windows Editor，见 gates.json），但 CI 侧不可用——声明它时须写明验证环境，未运行不是通过（I6 / R8）。"
       placeholder: |
         docs-integrity
         engine
