@@ -26,7 +26,7 @@
 ```text
 hospital-level-design/
   README.md
-  design/framework/
+  docs/
   references/
     raw/
     processed/
@@ -36,9 +36,11 @@ hospital-level-design/
   plans/
 ```
 
-### `design/framework/`
+### `docs/`
 
 项目说明、交接文档、资产清单、规则约定和阶段计划。
+
+**编号约定**：`00-` 项目背景/交接 · `01-09` 长期有效规则与资产清单 · `10-49` 分阶段计划 · `50-99` 临时记录与变更说明。
 
 当前文档：
 
@@ -66,6 +68,8 @@ hospital-level-design/
 - 标注过的参考图
 - 供 Blender 背景导入使用的图片
 
+**规则**：`raw/` 只放原始文件，`processed/` 只放已裁切/旋转/校正/标注过的文件。临时参考若要长期使用，应尽快整理进 `processed/`；**不要把 Blender 导出的截图回放进这里**。
+
 ### `blend/`
 
 Blender 工程文件目录。
@@ -75,6 +79,8 @@ Blender 工程文件目录。
 - 主场景文件
 - 资产测试文件
 - 备份版本
+
+命名区分：主工程文件单独命名，**模块测试与实验文件不要与主文件混名**，版本号递增、不覆盖关键里程碑。
 
 推荐命名：
 
@@ -94,6 +100,9 @@ hospital_blockout_v001.blend
 - 外部模型资源
 - 门窗族参考
 - 家具和道具来源文件
+- 医疗道具 / 通用装饰件
+
+**来源记录**：某类资产若来自第三方，必须在同目录或文档中记录出处。
 
 ### `exports/`
 
@@ -105,6 +114,8 @@ hospital_blockout_v001.blend
 - GLTF
 - 引擎导入包
 - 预览截图
+
+**规则**：这里只放导出的中间件与交付件，**不要把源工程文件放进来**。
 
 ### `plans/`
 

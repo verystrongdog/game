@@ -1,8 +1,6 @@
 # 规则
 
-> 定义"能发生什么、怎么发生"。删除所有角色和地点后，这个逻辑仍然成立。
-
-**分拣标准**：删除所有角色和地点后，这个逻辑仍然成立吗？成立 → 规则。
+> 本维度的**文档索引**。维度定义与分拣标准见 [六维框架 §六维定义与分拣标准](../six-dimensions.md#六维定义与分拣标准)。
 
 ## 索引
 
@@ -30,10 +28,12 @@
 - [situation_primitives.json](../../../data/connectivity/situation_primitives.json) — 27情境原型
 
 ### 参考（已废弃，保留为数据源）
-- 态度系统/ — ⚠️ 态度引擎（已废弃，参考数据源）
-- 情绪系统/ — ⚠️ PAD情绪空间（已废弃，参考数据源）
-- 行为系统/ — ⚠️ 7驱动模型（已废弃，参考数据源）
-- 认知系统/ — ⚠️ 5模块模型（已废弃，参考数据源）
+- [态度系统](../../../reference/deprecated/attitude-system/) — ⚠️ 态度引擎（已废弃，参考数据源）
+- [情绪系统](../../../reference/deprecated/emotion-system/) — ⚠️ PAD 情绪空间（已废弃，参考数据源）
+- [行为系统](../../../reference/deprecated/behavior-system/) — ⚠️ 7 驱动模型（已废弃，参考数据源）
+- [认知系统](../../../reference/deprecated/cognitive-system/) — ⚠️ 5 模块模型（已废弃，参考数据源）
+- [卡牌系统](../../../reference/deprecated/card-system/) — ⚠️ 卡牌设计（已废弃，参考数据源）
+- [月光场 v2](../../../reference/deprecated/moonlight-field/) — ⚠️ 静态标量场模型（2026-08-11 #38 废弃）
 
 ---
 
