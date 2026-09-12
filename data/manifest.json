@@ -1,0 +1,812 @@
+{
+  "_description": "data/ 数据清单（P4c 数据契约）。每个受控数据文件的正交属性 + 所有权 + 生成链 + 消费方。由 code/tools/build_data_manifest.py 生成。",
+  "_schema_version": "1.0",
+  "_created": "2026-09-12",
+  "_generated_by": "code/tools/build_data_manifest.py",
+  "_rules": [
+    "origin ∈ {authored, generated, external}；lifecycle ∈ {active, deprecated, archived}；role ∈ {runtime, generator-input, reference, evidence}；shipping ∈ {true, false}",
+    "四轴正交：一个文件可以是 external + active + reference + shipping=false",
+    "runtime allowlist = GameDataLoader.LoadAll 实际加载的 8 个文件；运行时只允许消费 role=runtime 的文件",
+    "shipping=true 仅限 role=runtime（进入运行时路径者）",
+    "lifecycle=archived 表示零引用（活跃与废弃文档均不引用）→ 候选清理",
+    "判据：连续两次生成结果一致（--check 比对磁盘实测与已提交内容）"
+  ],
+  "_stats": {
+    "total": 47,
+    "runtime": 8,
+    "shipping_true": 8,
+    "deprecated": 17,
+    "archived": 6,
+    "by_lifecycle_role": {
+      "active/reference": 16,
+      "active/runtime": 8,
+      "archived/reference": 6,
+      "deprecated/reference": 17
+    }
+  },
+  "files": {
+    "data/attitudes.json": {
+      "logical_id": "attitudes",
+      "origin": "generated",
+      "lifecycle": "deprecated",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "generator": [
+        "add_attitude_effects.py",
+        "add_attitude_names.py",
+        "gen_attitude_table.py"
+      ],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 5,
+        "deprecated_docs": 2
+      }
+    },
+    "data/behavior_cards.json": {
+      "logical_id": "behavior_cards",
+      "origin": "generated",
+      "lifecycle": "deprecated",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "generator": [
+        "gen_battle_html.py"
+      ],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 2,
+        "deprecated_docs": 1
+      }
+    },
+    "data/brain_regions.json": {
+      "logical_id": "brain_regions",
+      "origin": "generated",
+      "lifecycle": "active",
+      "role": "runtime",
+      "shipping": true,
+      "owner": "引擎组（code/src 消费方）",
+      "generator": [
+        "brain_atlas_to_blender.py",
+        "build_brain_skill_tree.py",
+        "build_brain_skill_tree_windows.py",
+        "map_skills_to_regions.py",
+        "refine_coords_from_objs.py",
+        "validate_data_manifest.py"
+      ],
+      "runtime_consumers": [
+        "GameDataLoader.LoadBrainRegions",
+        "WMatrixBuilder(行序锚)",
+        "CstcGating(CI 解析)",
+        "MoonlightLanding"
+      ],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 22,
+        "deprecated_docs": 31
+      }
+    },
+    "data/cognition_cards.json": {
+      "logical_id": "cognition_cards",
+      "origin": "generated",
+      "lifecycle": "deprecated",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "generator": [
+        "gen_battle_html.py",
+        "gen_cognition_cards.py",
+        "validate_cards.py"
+      ],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 3,
+        "deprecated_docs": 2
+      }
+    },
+    "data/connectivity/W_sensory.json": {
+      "logical_id": "W_sensory",
+      "origin": "generated",
+      "lifecycle": "active",
+      "role": "runtime",
+      "shipping": true,
+      "owner": "引擎组（code/src 消费方）",
+      "generator": [
+        "extend_wsensory_69x8.py"
+      ],
+      "runtime_consumers": [
+        "GameDataLoader.LoadWsensory",
+        "EventProcessor(s 打包)",
+        "canonical 行序锚"
+      ],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 6,
+        "deprecated_docs": 13
+      }
+    },
+    "data/connectivity/alpha_patterns.json": {
+      "logical_id": "alpha_patterns",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "runtime",
+      "shipping": true,
+      "owner": "引擎组（code/src 消费方）",
+      "generator": [],
+      "runtime_consumers": [
+        "GameDataLoader.LoadAlphaPatterns",
+        "EventProcessor(α pattern)"
+      ],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 2,
+        "deprecated_docs": 11
+      }
+    },
+    "data/connectivity/brainstem_cortical_fc.json": {
+      "logical_id": "brainstem_cortical_fc",
+      "origin": "authored",
+      "lifecycle": "deprecated",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "generator": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 1
+      }
+    },
+    "data/connectivity/domain_role_map.json": {
+      "logical_id": "domain_role_map",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "generator": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 6
+      }
+    },
+    "data/connectivity/enigma_all_connections.csv": {
+      "logical_id": "enigma_all_connections",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "generator": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 1,
+        "deprecated_docs": 0
+      }
+    },
+    "data/connectivity/enigma_sc_ctx_labels.npy": {
+      "logical_id": "enigma_sc_ctx_labels",
+      "origin": "authored",
+      "lifecycle": "archived",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "generator": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/connectivity/enigma_sc_ctx_matrix.npy": {
+      "logical_id": "enigma_sc_ctx_matrix",
+      "origin": "authored",
+      "lifecycle": "archived",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "generator": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/connectivity/enigma_sc_sctx_labels.npy": {
+      "logical_id": "enigma_sc_sctx_labels",
+      "origin": "authored",
+      "lifecycle": "archived",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "generator": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/connectivity/enigma_sc_sctx_matrix.npy": {
+      "logical_id": "enigma_sc_sctx_matrix",
+      "origin": "authored",
+      "lifecycle": "archived",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "generator": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/connectivity/enigma_sc_summary.json": {
+      "logical_id": "enigma_sc_summary",
+      "origin": "external",
+      "lifecycle": "active",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "generator": [],
+      "runtime_consumers": [],
+      "provenance": "external（见 connectivity/sources.md 或子目录 README）",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/connectivity/enigma_top200_connections.csv": {
+      "logical_id": "enigma_top200_connections",
+      "origin": "authored",
+      "lifecycle": "archived",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "generator": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/connectivity/env_tones.json": {
+      "logical_id": "env_tones",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "runtime",
+      "shipping": true,
+      "owner": "引擎组（code/src 消费方）",
+      "generator": [],
+      "runtime_consumers": [
+        "GameDataLoader.LoadEnvTones",
+        "EventProcessor(tone 通道)"
+      ],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 1,
+        "deprecated_docs": 10
+      }
+    },
+    "data/connectivity/hansen2024/brainstemfc_Schaefer400.npy": {
+      "logical_id": "brainstemfc_Schaefer400",
+      "origin": "external",
+      "lifecycle": "active",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "generator": [],
+      "runtime_consumers": [],
+      "provenance": "external（见 connectivity/sources.md 或子目录 README）",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/connectivity/hansen2024/mesulam_schaefer400.csv": {
+      "logical_id": "mesulam_schaefer400",
+      "origin": "external",
+      "lifecycle": "active",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "generator": [],
+      "runtime_consumers": [],
+      "provenance": "external（见 connectivity/sources.md 或子目录 README）",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/connectivity/hansen2024/region_info_Schaefer400.csv": {
+      "logical_id": "region_info_Schaefer400",
+      "origin": "external",
+      "lifecycle": "active",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "generator": [],
+      "runtime_consumers": [],
+      "provenance": "external（见 connectivity/sources.md 或子目录 README）",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/connectivity/hansen2024/subcortex_coords.csv": {
+      "logical_id": "subcortex_coords",
+      "origin": "external",
+      "lifecycle": "active",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "generator": [],
+      "runtime_consumers": [],
+      "provenance": "external（见 connectivity/sources.md 或子目录 README）",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/connectivity/hansen2024/voneconomo_schaefer400.csv": {
+      "logical_id": "voneconomo_schaefer400",
+      "origin": "external",
+      "lifecycle": "active",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "generator": [],
+      "runtime_consumers": [],
+      "provenance": "external（见 connectivity/sources.md 或子目录 README）",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/connectivity/kroell14_networks.json": {
+      "logical_id": "kroell14_networks",
+      "origin": "external",
+      "lifecycle": "active",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "generator": [],
+      "runtime_consumers": [],
+      "provenance": "external（见 connectivity/sources.md 或子目录 README）",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 7
+      }
+    },
+    "data/connectivity/link_contexts.json": {
+      "logical_id": "link_contexts",
+      "origin": "authored",
+      "lifecycle": "deprecated",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "generator": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 3,
+        "deprecated_docs": 8
+      }
+    },
+    "data/connectivity/link_contexts_tripartite.json": {
+      "logical_id": "link_contexts_tripartite",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "generator": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 1,
+        "deprecated_docs": 10
+      }
+    },
+    "data/connectivity/link_modulation_ceiling.json": {
+      "logical_id": "link_modulation_ceiling",
+      "origin": "authored",
+      "lifecycle": "deprecated",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "generator": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 1,
+        "deprecated_docs": 1
+      }
+    },
+    "data/connectivity/link_modulation_ceiling_v2.json": {
+      "logical_id": "link_modulation_ceiling_v2",
+      "origin": "authored",
+      "lifecycle": "deprecated",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "generator": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 6,
+        "deprecated_docs": 1
+      },
+      "note": "参考（旧链路体系）。当前调制正典见 design/rules/skill-tree/modulation/。"
+    },
+    "data/connectivity/link_name_lookup.json": {
+      "logical_id": "link_name_lookup",
+      "origin": "authored",
+      "lifecycle": "deprecated",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "generator": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 1,
+        "deprecated_docs": 1
+      }
+    },
+    "data/connectivity/link_registry.json": {
+      "logical_id": "link_registry",
+      "origin": "authored",
+      "lifecycle": "deprecated",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "generator": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 25,
+        "deprecated_docs": 14
+      }
+    },
+    "data/connectivity/moonlight_landing.json": {
+      "logical_id": "moonlight_landing",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "runtime",
+      "shipping": true,
+      "owner": "引擎组（code/src 消费方）",
+      "generator": [],
+      "runtime_consumers": [
+        "GameDataLoader.LoadMoonlightLanding"
+      ],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 2,
+        "deprecated_docs": 6
+      },
+      "note": "calibration_status = PLACEHOLDER（version 0），数值待标定。"
+    },
+    "data/connectivity/pathology_edges.json": {
+      "logical_id": "pathology_edges",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "generator": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 46,
+        "deprecated_docs": 8
+      }
+    },
+    "data/connectivity/personality_tag_links.json": {
+      "logical_id": "personality_tag_links",
+      "origin": "authored",
+      "lifecycle": "deprecated",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "generator": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 4,
+        "deprecated_docs": 8
+      }
+    },
+    "data/connectivity/privileged_pathways.json": {
+      "logical_id": "privileged_pathways",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "generator": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 2,
+        "deprecated_docs": 2
+      }
+    },
+    "data/connectivity/region_name_map.json": {
+      "logical_id": "region_name_map",
+      "origin": "generated",
+      "lifecycle": "active",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "generator": [
+        "validate_situation_fids.py"
+      ],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 2,
+        "deprecated_docs": 9
+      }
+    },
+    "data/connectivity/situation_primitives.json": {
+      "logical_id": "situation_primitives",
+      "origin": "generated",
+      "lifecycle": "active",
+      "role": "runtime",
+      "shipping": true,
+      "owner": "引擎组（code/src 消费方）",
+      "generator": [
+        "validate_situation_fids.py"
+      ],
+      "runtime_consumers": [
+        "GameDataLoader.LoadSituationPrimitives",
+        "SituationSelector"
+      ],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 10,
+        "deprecated_docs": 12
+      }
+    },
+    "data/connectivity/subcortical_links.json": {
+      "logical_id": "subcortical_links",
+      "origin": "authored",
+      "lifecycle": "deprecated",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "generator": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 3
+      }
+    },
+    "data/connectivity/tripartite_model.json": {
+      "logical_id": "tripartite_model",
+      "origin": "generated",
+      "lifecycle": "active",
+      "role": "runtime",
+      "shipping": true,
+      "owner": "引擎组（code/src 消费方）",
+      "generator": [
+        "validate_tripartite_annotations.py"
+      ],
+      "runtime_consumers": [
+        "GameDataLoader.LoadTripartiteModel",
+        "WMatrixBuilder",
+        "CorticalBias",
+        "CstcGating"
+      ],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 50,
+        "deprecated_docs": 24
+      }
+    },
+    "data/connectivity/white_matter_tracts.json": {
+      "logical_id": "white_matter_tracts",
+      "origin": "authored",
+      "lifecycle": "deprecated",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "generator": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/connectivity/yeo2011/dk_yeo7_mapping.json": {
+      "logical_id": "dk_yeo7_mapping",
+      "origin": "external",
+      "lifecycle": "active",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "generator": [],
+      "runtime_consumers": [],
+      "provenance": "external（见 connectivity/sources.md 或子目录 README）",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/connectivity/yeo7_dk_network_map.json": {
+      "logical_id": "yeo7_dk_network_map",
+      "origin": "authored",
+      "lifecycle": "deprecated",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "generator": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/drives.json": {
+      "logical_id": "drives",
+      "origin": "generated",
+      "lifecycle": "deprecated",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "generator": [
+        "gen_battle_html.py"
+      ],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 2,
+        "deprecated_docs": 2
+      }
+    },
+    "data/emotion_cards.json": {
+      "logical_id": "emotion_cards",
+      "origin": "generated",
+      "lifecycle": "deprecated",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "generator": [
+        "gen_battle_html.py",
+        "gen_emotion_cards.py",
+        "validate_cards.py"
+      ],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 2,
+        "deprecated_docs": 2
+      }
+    },
+    "data/emotions.json": {
+      "logical_id": "emotions",
+      "origin": "generated",
+      "lifecycle": "deprecated",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "generator": [
+        "gen_emotion_cards.py",
+        "validate_cards.py"
+      ],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 3,
+        "deprecated_docs": 2
+      }
+    },
+    "data/hospital_ref/manifest.json": {
+      "logical_id": "manifest",
+      "origin": "external",
+      "lifecycle": "active",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "generator": [
+        "process_hospital_atlas.py"
+      ],
+      "runtime_consumers": [],
+      "provenance": "external（见 connectivity/sources.md 或子目录 README）",
+      "refs": {
+        "active_docs": 2,
+        "deprecated_docs": 4
+      },
+      "note": "医院建模参考的 provenance 记录（含来源 PDF 路径）。"
+    },
+    "data/signal_types.json": {
+      "logical_id": "signal_types",
+      "origin": "generated",
+      "lifecycle": "active",
+      "role": "runtime",
+      "shipping": true,
+      "owner": "引擎组（code/src 消费方）",
+      "generator": [
+        "validate_data_manifest.py"
+      ],
+      "runtime_consumers": [
+        "GameDataLoader.LoadSignalTypes",
+        "function_label membership 校验"
+      ],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 6,
+        "deprecated_docs": 5
+      }
+    },
+    "data/skill_coords.json": {
+      "logical_id": "skill_coords",
+      "origin": "generated",
+      "lifecycle": "deprecated",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "generator": [
+        "build_brain_skill_tree.py",
+        "build_brain_skill_tree_windows.py",
+        "map_skills_to_regions.py",
+        "refine_coords_from_objs.py"
+      ],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 2,
+        "deprecated_docs": 0
+      }
+    },
+    "data/skills-lock.json": {
+      "logical_id": "skills-lock",
+      "origin": "external",
+      "lifecycle": "archived",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "generator": [],
+      "runtime_consumers": [],
+      "provenance": "external（见 connectivity/sources.md 或子目录 README）",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      },
+      "note": "★ 非游戏数据：AI agent 的 skill 锁文件（41 项），误放于 data/。零设计文档引用。建议迁至 .agents/ 或移出版本控制。"
+    },
+    "data/term_registry.json": {
+      "logical_id": "term_registry",
+      "origin": "generated",
+      "lifecycle": "active",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "generator": [
+        "list_deprecated_terms.py"
+      ],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 15,
+        "deprecated_docs": 59
+      },
+      "note": "设计期参考，非运行时数据。status 字段是术语唯一权威状态。"
+    }
+  }
+}

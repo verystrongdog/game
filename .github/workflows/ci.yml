@@ -42,7 +42,7 @@ jobs:
           for v in validate_cross_refs validate_trash_isolation validate_params \
                    validate_spatial validate_disease validate_cards \
                    validate_eligibility validate_situation_fids \
-                   validate_tripartite_annotations; do
+                   validate_tripartite_annotations validate_data_manifest; do
             printf '%-38s' "$v"
             if python3 "code/tools/$v.py" > "/tmp/$v.log" 2>&1; then
               echo "✅"

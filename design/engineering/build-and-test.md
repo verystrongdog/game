@@ -54,6 +54,7 @@ python3 code/tools/validate_cards.py             # 卡牌参数（已废弃系�
 python3 code/tools/validate_eligibility.py       # 疾病资格门
 python3 code/tools/validate_situation_fids.py    # 情境原型 fid
 python3 code/tools/validate_tripartite_annotations.py  # 三体模型注释
+python3 code/tools/validate_data_manifest.py     # 数据契约（runtime allowlist / 属性正交 / 清单一致）
 ```
 
 **干净检出检查**（CI 已纳入）：

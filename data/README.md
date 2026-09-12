@@ -7,10 +7,11 @@
 ## 目录
 
 1. [架构原则](#一架构原则)
-2. [文件索引](#二文件索引)
-3. [数据关系图](#三数据关系图)
-4. [使用方式](#四使用方式)
-5. [维护规则](#五维护规则)
+2. [数据契约清单](#二数据契约清单)
+3. [文件索引](#三文件索引)
+4. [数据关系图](#四数据关系图)
+5. [使用方式](#五使用方式)
+6. [维护规则](#六维护规则)
 
 ---
 
@@ -32,7 +33,23 @@ md 文档（设计层）          JSON 文件（数据层）          C# 引擎 
 
 ---
 
-## 二、文件索引
+## 二、数据契约清单
+
+> **每个受控数据文件的权威属性见 [`manifest.json`](manifest.json)**——由
+> [`code/tools/build_data_manifest.py`](../code/tools/build_data_manifest.py) 从证据生成，
+> 含四轴正交属性（origin / lifecycle / role / shipping）+ owner + 生成器 + 消费方。
+
+| 轴 | 取值 | 含义 |
+|---|---|---|
+| `origin` | authored / generated / external | 手写 / 工具生成 / 外部下载 |
+| `lifecycle` | active / deprecated / archived | 设计仍引用 / 仅废弃文档引用 / 零引用 |
+| `role` | runtime / generator-input / reference / evidence | 运行时消费 / 生成器输入 / 参考 / 证据 |
+| `shipping` | true / false | 是否进入运行时路径（**仅 runtime 为 true**） |
+
+**runtime allowlist**：引擎只允许消费 `role=runtime` 的 8 个文件（由 `GameDataLoader.LoadAll` 实测确定，
+双向校验见 `validate_data_manifest.py`）。
+
+## 三、文件索引
 
 ### 引擎消费（8 文件，正典）
 
@@ -67,7 +84,7 @@ md 文档（设计层）          JSON 文件（数据层）          C# 引擎 
 
 ---
 
-## 三、数据关系图
+## 四、数据关系图
 
 ```
 数据文件 ──GameDataLoader.LoadAll──→ GameData（5 record 聚合）
@@ -86,7 +103,7 @@ md 文档（设计层）          JSON 文件（数据层）          C# 引擎 
 
 ---
 
-## 四、使用方式
+## 五、使用方式
 
 ### C# 引擎（正典路径）
 
@@ -112,7 +129,7 @@ print(len(tri['graph_nodes']))  # 51
 
 ---
 
-## 五、维护规则
+## 六、维护规则
 
 1. **JSON 是 md 的导出格式**：修改参数时，先改 md 文档中的推导和依据，再同步更新 JSON
 2. **JSON 字段只增不删**：加字段可以，删字段需要确认没有脚本/引擎依赖
