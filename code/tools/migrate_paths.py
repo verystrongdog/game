@@ -76,6 +76,11 @@ NESTED = [
     ("docs/agents/",                           "design/conventions/agents/"),
 ]
 
+# 顺序约束（2026-09-12 实测踩过）：NESTED 必须**父目录在前**。
+# 若子目录排在前，父目录整棵搬走后子目录路径即失效；
+# 若父目录的【目标】已被子目录的移动创建，git mv 会把父目录塞进目标内部。
+NESTED.sort(key=lambda kv: (kv[0].count('/'), kv[0]))
+
 # ── 单文件映射（同样用【原始】路径书写）────────────────────────
 FILES = [
     ("项目总览.md",                      "design/README.md"),
