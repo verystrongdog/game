@@ -59,6 +59,15 @@ python3 code/tools/validate_runtime_fixtures.py  # runtime 数据结构契约 + 
 python3 code/tools/build_runtime_data_fixtures.py --check   # fixture 索引与磁盘一致
 ```
 
+**issue 契约**（新建或修改 issue 后跑；需要 `gh` 已认证或 `GH_TOKEN`）：
+
+```bash
+python3 code/tools/validate_issues.py --from-github        # 校验开放 issue 的字段/依赖/门禁/单线程
+python3 code/tools/validate_issues.py --file <草稿.md>      # 创建前的门禁（草稿为临时文件，不入库）
+```
+
+规则表 I1–I12 与字段定义见 [issue-process.md §5.2](issue-process.md)。
+
 **干净检出检查**（CI 已纳入）：
 
 ```bash
@@ -71,6 +80,8 @@ python3 code/tools/check_clean_checkout.py
 > 为何需要它：2026-09-12 CI 首跑失败的三类缺陷，**全部**是这一类——本地有残留产物与残留文件，模拟测试无法发现。
 
 编排器：`python3 code/tools/run_all_checks.py`（⚠️ **有副作用**——写 `.checks-state.json`，CI 里不要用）
+
+> 2026-09-12 修：编排器此前把校验器目录写成 `ROOT / "tools"`（Phase 3 之后该目录已不存在），于是 `get_active_validators()` 返回空列表——**跑了 0 个校验器却退出码 0**，是静默全绿。现已改为 `code/tools/`，注册表与 CI 的 11 个循环逐项对齐，并加「找不到校验器即退出 2」的断言。判据：编排器读数必须与 §三 的 `docs-integrity` job 一致。
 
 ### 2.2 引擎（改代码后必跑）
 
@@ -118,12 +129,13 @@ sim 脚本用**扁平 import**（`from sim_consciousness_cs4_test import ...`）
 
 ## 三、CI
 
-[`.github/workflows/ci.yml`](../../.github/workflows/ci.yml) — 三个 job，对应切片三轴：
+[`.github/workflows/ci.yml`](../../.github/workflows/ci.yml) — 四个 job，对应切片三轴 + issue 契约：
 
 | job | 覆盖 | 本机可复现 |
 |---|---|---|
 | `docs-integrity` | 11 个校验器（与 §2.1 同一循环）+ fixture 索引契约 | ✅ |
 | `engine` | SDK 版本核对 → restore → Release build → Release test → **跨语言 fixture 判定比对** → trx artifact | ✅ |
+| `issues-snapshot` | 开放 issue 的契约校验（`validate_issues.py --from-github`，需 `issues: read`） | ✅ |
 | `unity` | **显式报告 `NOT_AVAILABLE`** | ❌ 需 Editor |
 
 **为何 `unity` job 是一个"什么也不做"的 job**：按 [WORKFLOW.md §五](../../WORKFLOW.md)，**未运行不是通过**。若直接省略该 job，整个 workflow 会全绿，而 Unity 门禁（P4b/P4d/P5）实际未执行——那是静默跳过。因此它存在、具名标注 `NOT_AVAILABLE`、并在作业摘要里列出受影响的门禁。
@@ -138,6 +150,7 @@ sim 脚本用**扁平 import**（`from sim_consciousness_cs4_test import ...`）
 | 跨语言 fixture 判定 | `compare_fixture_verdicts.py` 逐条比对 Python 与 C# 的接受/拒绝，**差异为空**（53 条） |
 | 干净检出 | 无本地缓存（`.nuget-pkgs`）也能 restore + 构建 + 测试 |
 | SDK 版本 | 与 `global.json` 一致，不一致即失败（CI 有显式断言） |
+| issue 契约 | `validate_issues.py --from-github` 退出码 0（存量 issue 按 [issue-process.md §7.4](issue-process.md) 显式跳过，不算通过） |
 | 工作树 | 跑完检查后**无非预期变化**（校验器不写工作树） |
 
 ## 五、已知缺口

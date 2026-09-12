@@ -36,6 +36,8 @@ data/       结构化数据契约
 
 **这些是历史，不是流程。** 新的设计讨论用你顺手的方式（对话、笔记、issue 都行），只要求一件事：**结论要落进 `design/`，并在此处或决策树留一条索引**。
 
+**讨论收敛之后**，需要动手做的部分按 [issue 创建约束与需求分解](design/engineering/issue-process.md) 导入 issue 流程：讨论阶段**不建 issue**（讨论的产物是决策），收敛后过导入门，把结论分解成依赖有序、可逐步实现、带门禁与验收标准的 issue。新建 issue 须先过 `code/tools/validate_issues.py` 的门禁。
+
 ## 三、Git 约定
 
 ### 提交
@@ -81,6 +83,7 @@ data/       结构化数据契约
 python3 code/tools/validate_cross_refs.py        # 死链 / 段引用
 python3 code/tools/validate_trash_isolation.py   # 归档隔离 + 废弃术语残留
 python3 code/tools/validate_params.py            # 跨文件参数一致性
+python3 code/tools/validate_issues.py --from-github  # issue 契约（新建/改 issue 后）
 dotnet test code/src/YouAreNotTheFish.sln        # 引擎测试（改代码时）
 ```
 

@@ -13,7 +13,7 @@ code/        src(C#逻辑) unity(呈现) sim(实验) tools(校验)
 data/        结构化数据契约
 ```
 
-**当前可玩状态见 [PLAYABLE.md](PLAYABLE.md)**。工作与 Issue 流程见 [WORKFLOW.md](WORKFLOW.md)。
+**当前可玩状态见 [PLAYABLE.md](PLAYABLE.md)**。工作与 Issue 流程见 [WORKFLOW.md](WORKFLOW.md)；**issue 的创建约束与需求分解**见 [design/engineering/issue-process.md](design/engineering/issue-process.md)——讨论阶段不建 issue，收敛后过导入门再分解。
 
 ## 二、硬约束
 
@@ -51,10 +51,11 @@ data/        结构化数据契约
 python3 code/tools/validate_cross_refs.py        # 跨文件引用：必须 0 死链 / 0 段引用警告
 python3 code/tools/validate_trash_isolation.py   # 归档隔离 + 废弃术语残留
 python3 code/tools/validate_params.py            # 跨文件参数一致性
+python3 code/tools/validate_issues.py --from-github  # issue 契约（字段/依赖/门禁/单线程）
 dotnet test code/src/YouAreNotTheFish.sln        # 引擎测试（改代码时）
 ```
 
-改设计文档或数据后跑前三条；改代码后跑第四条。**报 0 死链 + 测试全绿是底线**，不是"锦上添花"。
+改设计文档或数据后跑前三条；改代码后跑第四条；**新建或修改 issue 后跑第四条**（issue 是准入载体，其字段与依赖边同样受机械校验）。**报 0 死链 + 测试全绿是底线**，不是"锦上添花"。
 
 ## 四、Git
 

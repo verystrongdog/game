@@ -2,6 +2,8 @@
 
 > 本仓库**本地工作与 Issue 流程的唯一权威**。执行顺序、状态定义、阶段闭合与问题判定以本文为准。
 >
+> **issue 的创建约束与需求分解**（字段、依赖、门禁绑定、分解算法、创建通道）见 [design/engineering/issue-process.md](design/engineering/issue-process.md)。本文定义**类型与判据**，那份文档定义**怎么把需求变成 issue**；两者冲突时以本文为准。
+>
 > **来源**：2026-09-12 从 owner 的《仓库重构方案》§三/§四/§十三/§十四 迁入并适配本仓目录结构。原方案存于 [design/archive/](design/archive/)。
 
 ## 目录
@@ -20,12 +22,12 @@
 
 - 同一时刻只有**一个 current playable**（见 [PLAYABLE.md](PLAYABLE.md)）
 - 同一时刻只推进**一个主要成果或变更集**
-- 若使用 Issue，同一时刻只有一个主要叶子 Issue 处于 `status:in-progress`
+- 若使用 Issue，同一时刻只有一个主要叶子 Issue 处于 `state:in-progress`
 - 一个**阻塞当前成果**的 Bug / Experiment / RFC 可以抢占；原工作必须先标记 `blocked`
 - **非阻塞发现进入候选队列**，不在当前变更中顺手解决
 - **上一阶段未达到退出门禁，下一阶段不得开始**
 
-> Issue 是记录与准入载体，**不是本地工作的目的**。外部标签同步、Issue 编辑与自动化不属于本流程的隐式权限。
+> Issue 是记录与准入载体，**不是本地工作的目的**。外部标签同步、Issue 编辑与自动化不属于本流程的隐式权限——如需 agent 直接创建或编辑 issue，须按 [issue-process.md §7.2](design/engineering/issue-process.md) 显式授权一次并记录授权范围。
 
 ## 二、状态模型
 
@@ -64,6 +66,8 @@
 | 跨系统、**难回滚**的决定 | `RFC` |
 
 **实质修改 Issue 的范围、行为、证据标准或依赖后，必须返回 triage 重新准入。**
+
+**创建一条 issue 需要哪些字段、依赖怎么写、门禁怎么绑、需求怎么分解成有序的多条**——见 [design/engineering/issue-process.md](design/engineering/issue-process.md)。该文档还规定了两件事：讨论阶段**不建 issue**（讨论的产物是决策，落 `design/`），以及新建 issue 必须过 `code/tools/validate_issues.py` 的门禁。
 
 ## 四、阶段的两次闭合
 
