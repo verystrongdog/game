@@ -1,0 +1,5 @@
+# 校验器依赖（P4a 环境锁定）
+#
+# 9 个 validate_*.py 中只有 validate_disease.py 需要第三方库（读疾病目录的
+# YAML frontmatter），其余 8 个 + run_all_checks.py + md_utils.py 纯标准库。
+PyYAML==6.0.3

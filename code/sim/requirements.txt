@@ -1,0 +1,13 @@
+# 数值实验依赖（P4a 环境锁定）
+#
+# 15 个 sim 脚本中：
+#   sim_consciousness_v7_estimator_validity.py  → numpy
+#   sim_moonlight_e1.py                         → numpy, scipy
+#   sim_moonlight_e2.py                         → numpy, numba
+# 其余 12 个纯标准库。
+#
+# 注意：这些脚本属**数值实验**，不在当前切片（CP-01）的关键路径上，
+# 因此 CI 不默认运行它们——见 .github/workflows/ci.yml。
+numpy==2.2.6
+scipy==1.15.3
+numba==0.67.0

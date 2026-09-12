@@ -1,0 +1,112 @@
+name: CI
+
+# 最小 CI——只覆盖当前切片（CP-01）的关键路径（P4a，2026-09-12）。
+#
+# 三个 job，对应切片三轴：
+#   docs-integrity  设计正典与数据契约的完整性（9 个校验器）
+#   engine          C# 逻辑引擎：构建 + 353 个测试
+#   unity           呈现层：本 job **显式报告 NOT_AVAILABLE**，不静默跳过
+#
+# 判据见 WORKFLOW.md §六：**未运行、超时、工具异常和零测试不是通过**。
+# 因此 unity job 用具名 + 作业摘要把"不可用"暴露在 CI 界面上，
+# 而不是让整个 workflow 看起来全绿。
+
+on:
+  push:
+    branches: ['main', 'refactor/**', 'feat/**']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  # ── 设计正典与数据契约 ──────────────────────────────────────
+  docs-integrity:
+    name: docs-integrity (校验器)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10.12'
+          cache: pip
+      - name: 安装校验器依赖
+        run: pip install -r code/tools/requirements.txt
+      - name: 跑 9 个校验器
+        run: |
+          set -o pipefail
+          fail=0
+          for v in validate_cross_refs validate_trash_isolation validate_params \
+                   validate_spatial validate_disease validate_cards \
+                   validate_eligibility validate_situation_fids \
+                   validate_tripartite_annotations; do
+            printf '%-38s' "$v"
+            if python3 "code/tools/$v.py" > "/tmp/$v.log" 2>&1; then
+              echo "✅"
+            else
+              echo "❌"
+              tail -20 "/tmp/$v.log"
+              fail=1
+            fi
+          done
+          exit $fail
+
+  # ── C# 逻辑引擎 ────────────────────────────────────────────
+  engine:
+    name: engine (build + test)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.400'
+          # 工程目标框架是 net8.0；只装 SDK 即可（SDK 10 能编译 net8.0）
+      - name: 确认 SDK 版本与 global.json 一致
+        run: |
+          dotnet --version
+          test "$(dotnet --version)" = "10.0.400" || {
+            echo "::error::SDK 版本与 global.json 不符"
+            exit 1
+          }
+      - name: restore（验证锁文件可用，不依赖开发机缓存）
+        run: dotnet restore code/src/YouAreNotTheFish.sln
+      - name: build
+        run: dotnet build code/src/YouAreNotTheFish.sln --no-restore -c Release
+      - name: test
+        run: |
+          dotnet test code/src/YouAreNotTheFish.sln --no-build -c Release \
+            --logger "trx;LogFileName=engine.trx" --results-directory artifacts
+      - name: 上传测试报告
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: engine-test-results
+          path: artifacts/engine.trx
+          if-no-files-found: error
+
+  # ── 呈现层（Unity）────────────────────────────────────────
+  unity:
+    name: unity (NOT_AVAILABLE — 需有 Editor + 许可证的机器)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: 报告 Unity 门禁不可用
+        run: |
+          {
+            echo "## Unity 门禁：NOT_AVAILABLE"
+            echo
+            echo "本 job **未执行任何 Unity 验证**。它存在是为了让不可用状态"
+            echo "在 CI 界面上可见，而不是让 workflow 静默全绿。"
+            echo
+            echo "受影响的门禁（按 WORKFLOW.md §一，阻塞不扩散）："
+            echo "- P4b Unity 资产身份（.meta / ProjectSettings / packages-lock.json）"
+            echo "- P4d Core→Unity 接缝"
+            echo "- P5 实现并试玩 CP-01"
+            echo
+            echo "不阻塞：P4a 环境锁定、P4c 数据契约、P7 归档瘦身。"
+            echo
+            echo "当前缺口实测：\`.meta\` 0 个 · 场景/Prefab 0 个 · \`Packages/packages-lock.json\` 缺失。"
+          } >> "$GITHUB_STEP_SUMMARY"
+          echo "::warning title=Unity NOT_AVAILABLE::Unity 门禁未执行（需 Editor + 许可证）。见 job summary。"

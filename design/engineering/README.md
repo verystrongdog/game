@@ -7,6 +7,7 @@
 | 位置 | 作用 |
 |---|---|
 | [ARCHITECTURE.md](../../ARCHITECTURE.md)（根目录） | 设计与代码的边界声明、已知越界点 |
+| [build-and-test.md](build-and-test.md) | **构建与测试权威**：环境锁定版本、命令、CI、判据、已知缺口 |
 | [evidence/](evidence/README.md) | 阶段证据摘要（base/head SHA · 工具版本 · 命令与退出码 · 问题差分 · 回滚结论） |
 | `code/tools/` | 校验器与生成器（可执行的那部分） |
 
