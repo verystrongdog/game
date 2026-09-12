@@ -11,9 +11,22 @@ namespace YouAreNotTheFish.Core.Tests.ConsoleApp;
 /// </summary>
 public class DemoSituationTests
 {
-    private static string ConsoleDll() =>
-        Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..",
-            "YouAreNotTheFish.Console", "bin", "Debug", "net8.0", "YouAreNotTheFish.Console.dll");
+    /// <summary>
+    /// Console 程序集路径。配置名从本测试程序集自身路径推导，不硬编码 Debug
+    /// （否则 Release 构建下 CI 失败、本机因残留产物误通过，2026-09-12 实测）。
+    /// </summary>
+    private static string ConsoleDll()
+    {
+        // BaseDirectory = <proj>/bin/<Config>/net8.0/ → 一层上溯即 <proj>/bin/<Config>
+        var config = Path.GetFileName(Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..")));
+        var srcDir = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", ".."));
+        var dll = Path.Combine(srcDir, "YouAreNotTheFish.Console", "bin", config, "net8.0",
+                               "YouAreNotTheFish.Console.dll");
+        if (!File.Exists(dll))
+            throw new FileNotFoundException(
+                $"Console 程序集不存在：{dll}\n（先构建 Console 工程，且配置需与测试一致）", dll);
+        return dll;
+    }
 
     private static (int ExitCode, string Stdout, string Stderr) Run(string args)
     {

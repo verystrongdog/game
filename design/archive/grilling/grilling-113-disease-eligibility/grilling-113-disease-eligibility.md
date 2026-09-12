@@ -124,4 +124,4 @@ L_agg(d) ⇏ Eligibility(d)
 
 ---
 *创建: 2026-09-03 | 闭合: 2026-09-03*
-*关联: [grilling-89](../grilling-89-npc-material/grilling-89-npc-material.md), [评审-顾维扬草稿-外部AI审查-t6a96e985](../../../../.scratch/grilling-89-npc-material/%E8%AF%84%E5%AE%A1-%E9%A1%BE%E7%BB%B4%E6%89%AC%E8%8D%89%E7%A8%BF-%E5%A4%96%E9%83%A8AI%E5%AE%A1%E6%9F%A5-t6a96e985.md), [评审-资格层解耦-外部AI审查-t6a96ecd6](../../../../.scratch/grilling-89-npc-material/%E8%AF%84%E5%AE%A1-%E8%B5%84%E6%A0%BC%E5%B1%82%E8%A7%A3%E8%80%A6-%E5%A4%96%E9%83%A8AI%E5%AE%A1%E6%9F%A5-t6a96ecd6.md), [创伤记忆转化接口](../../../rules/skill-tree/%E5%88%9B%E4%BC%A4%E8%AE%B0%E5%BF%86%E8%BD%AC%E5%8C%96%E6%8E%A5%E5%8F%A3.md)*
+*关联: [grilling-89](../grilling-89-npc-material/grilling-89-npc-material.md), [评审-顾维扬草稿-外部AI审查-t6a96e985](../../../spec/material/评审-顾维扬草稿-外部AI审查-t6a96e985.md), [评审-资格层解耦-外部AI审查-t6a96ecd6](../../../spec/material/评审-资格层解耦-外部AI审查-t6a96ecd6.md), [创伤记忆转化接口](../../../rules/skill-tree/%E5%88%9B%E4%BC%A4%E8%AE%B0%E5%BF%86%E8%BD%AC%E5%8C%96%E6%8E%A5%E5%8F%A3.md)*

@@ -232,8 +232,9 @@ public class ConsoleAppTests
     {
         string Run()
         {
-            var exe = Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "..",
-                "YouAreNotTheFish.Console", "bin", "Debug", "net8.0", "YouAreNotTheFish.Console.dll");
+            // 复用 ConsoleDll()：原先此处硬编码 "Debug" 且上溯 5 层（多一层，指向仓库根的
+            // 同名目录），2026-09-12 随 Release 构建的 CI 失败一并修正。
+            var exe = ConsoleDll();
             var psi = new System.Diagnostics.ProcessStartInfo("dotnet", $"\"{exe}\" --seed 42")
             {
                 RedirectStandardInput = true,
@@ -321,7 +322,21 @@ public class ConsoleAppTests
 
     private static CombatContext Ctx() => new(new DeterministicRng(42), Data(), CalibrationConfig.Default);
 
-    /// <summary>Console exe 路径（测试 bin → src → YouAreNotTheFish.Console/bin/Debug/net8.0）。</summary>
-    private static string ConsoleDll() => Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..",
-        "YouAreNotTheFish.Console", "bin", "Debug", "net8.0", "YouAreNotTheFish.Console.dll");
+    /// <summary>
+    /// Console 程序集路径。
+    /// 配置名从**本测试程序集自身**的路径推导（`bin/&lt;Config&gt;/net8.0/`），不硬编码 Debug——
+    /// 否则在 Release 构建下 CI 会失败，而本机因残留 Debug 产物而误通过（2026-09-12 实测）。
+    /// </summary>
+    private static string ConsoleDll()
+    {
+        // BaseDirectory = <proj>/bin/<Config>/net8.0/ → 一层上溯即 <proj>/bin/<Config>
+        var config = Path.GetFileName(Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..")));
+        var srcDir = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", ".."));
+        var dll = Path.Combine(srcDir, "YouAreNotTheFish.Console", "bin", config, "net8.0",
+                               "YouAreNotTheFish.Console.dll");
+        if (!File.Exists(dll))
+            throw new FileNotFoundException(
+                $"Console 程序集不存在：{dll}\n（先构建 Console 工程，且配置需与测试一致）", dll);
+        return dll;
+    }
 }
