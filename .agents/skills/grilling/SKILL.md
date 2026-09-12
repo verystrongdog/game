@@ -3,9 +3,20 @@ name: grilling
 description: Grill the user relentlessly about a plan, decision, or idea. Use when the user wants to stress-test their thinking, or uses any 'grill' trigger phrases.
 ---
 
+> ## ⚠️ 本项目已停用此流程（2026-09-12）
+>
+> 这个 skill 是**通用工具**：需要就某个决策被逐题追问时，仍可手动调用。但它**不再是本项目的默认流程**——
+>
+> - 原先承载它的 `CLAUDE.md`（十步强制流程）**已删除**
+> - 停用理由：它产出了本仓库 **47% 的 markdown 行数**，却只贡献 **31% 的硬约束**（其余是过程纪律与格式规范），投入产出比不成立；而且它**没防住 5 个真实正确性断裂**（敌人 HP 静默漂移、模态迁移只做一半、21 处归档隔离违规等），那些是机械校验发现的
+> - 历史记录保留在：[决策树](../../../design/decisions/README.md)（93 条目）· [各轮源记录](../../../design/archive/grilling/) · [122 个 issue 存档](../../../design/archive/grilling/issues/README.md)
+> - 现行规约见：[项目规约](../../../design/conventions/README.md) · [协作指南](../../../CONTRIBUTING.md)
+>
+> 下文 Step 0-6 中引用 `CLAUDE.md` 的地方均已失效；`design/decisions/` 与 `design/archive/grilling/` 的路径已更新为重构后的位置。若你确实要跑一轮 grilling，把它当作**可选的自律工具**，不是必须走完的仪式。
+
 ## 核心原则
 
-**引用即读取**：任何事实性引用（参数、公式、已有决策、文件路径、数据结构、交叉引用），必须先 `Read` 源文件确认。不得凭记忆引用。详见项目 CLAUDE.md §引用即读取铁律。
+**引用即读取**：任何事实性引用（参数、公式、已有决策、文件路径、数据结构、交叉引用），必须先 `Read` 源文件确认。不得凭记忆引用。规范正文见 [写作与引用规范](../../../design/conventions/writing-and-references.md) 与 [项目规约](../../../design/conventions/README.md) §四。
 
 ---
 

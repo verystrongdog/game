@@ -29,7 +29,7 @@
 
 ### 基础设施
 - [design/conventions/agents/](../../conventions/agents) — Agent定义/issue-tracker/triage
-- [CLAUDE.md](../../../CLAUDE.md) — AI行为规范
+- [项目规约](../../conventions/README.md) — AI行为规范
 - [时空结构数学框架.md](../../rules/%E6%97%B6%E7%A9%BA%E7%BB%93%E6%9E%84%E6%95%B0%E5%AD%A6%E6%A1%86%E6%9E%B6.md) — 时空分布量数学框架/CGL+AGC身份/五框架构建
 - [记忆内容层.md](../../rules/skill-tree/%E8%AE%B0%E5%BF%86%E5%86%85%E5%AE%B9%E5%B1%82.md) — 记忆内容层存储（运行时基础设施），2026-08-20 grilling #90
 

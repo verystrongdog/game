@@ -1,6 +1,8 @@
 # 设计框架 — 六维状态
 
-> 游戏设计的六维分类框架与实时状态。这是 grilling 的路由表和项目全局检查点。每次 grilling 前后必读此文件，决策后必须更新对应维度的状态。
+> 游戏设计的六维分类框架与实时状态。**设计讨论的导航入口与全局检查点**：改动设计前读本文件确认维度归属与已有设计，改动后更新对应维度的状态。
+>
+> 表格中 `Grilling #NN` 是历史溯源标注（指向 [决策树](../decisions/README.md) 对应条目），不是流程要求。
 
 ---
 
@@ -109,7 +111,7 @@
 | 月光场数值校准 | ⚠️ v2 已废弃（2026-08-11 [#38](../archive/grilling/grilling-38-moonlight-field/README.md)）——η/g_0/c(SAN)/κ/η_crit/ρ_off全部废弃。CGL+AGC 保留为内容骨架（#41 D2，术语让渡 2026-08-21 #38），方程不改 | → Grilling #38 观察者理论 |
 | 时空结构数学框架 | ✅ 2026-08-11 — CGL+AGC 晶格模型，h 双零点族+(A)/(B)族，边界/范围声明。2026-08-12 #41：定位改为内容骨架（容器内一致性约束骨架），方程不改，加元声明 | [时空结构数学框架.md](../rules/%E6%97%B6%E7%A9%BA%E7%BB%93%E6%9E%84%E6%95%B0%E5%AD%A6%E6%A1%86%E6%9E%B6.md) |
 
-### Grilling 队列（按依赖排序）
+### 待决队列（按依赖排序）
 
 1. (无 — 规则维度全部参数已锚定)
 
@@ -157,7 +159,7 @@
 | 装备/武器 | ✅ 物理武器+护甲+精神武器+Boss专属 (2026-08-05 grilling #21) | [design/entities/武器与装备](../entities/%E6%AD%A6%E5%99%A8%E4%B8%8E%E8%A3%85%E5%A4%87.md) |
 | Boss 详细战斗设计 | 📝 三 Boss 叙事/极化/数值基线/共性机制已完成。逐 Boss 战斗细节单开讨论 | 数值校准+剧情设计 |
 
-### Grilling 队列（按依赖排序）
+### 待决队列（按依赖排序）
 
 1. Boss A 详细设计（战斗/剧情/数值）
 3. Boss B 详细设计（战斗/剧情/数值 + 思维实体讨论）
@@ -210,7 +212,7 @@
 |----|------|--------|
 | 空间状态变化 | 月光分布在空间中的变化（v2 η 已废弃，#38 新模型待定）→ 消费者接口已预留（#103 Q5 第六类），数值机制归本维度队列项 | 月相周期（λ(D) 契约，#103） |
 
-### Grilling 队列（按依赖排序）
+### 待决队列（按依赖排序）
 
 1. 空间状态变化（月光分布）
 
@@ -260,7 +262,7 @@
 | 多结局条件 | 结局分支逻辑 | 故事主线 ✅ |
 | 角色解锁事件 | 打败敌人→解锁角色的具体流程 | 游戏循环 |
 
-### Grilling 队列（按依赖排序）
+### 待决队列（按依赖排序）
 
 1. ~~关键突破触发条件~~ ✅ 2026-09-06 grilling #120（依赖 #121 角色发展轴 + #119 m 语义）
 2. ~~故事主线框架~~ ✅ 2026-08-16 grilling #86
@@ -298,7 +300,7 @@
 | 输入映射完整方案 | 键盘/鼠标/手柄的完整操作分配 | 战斗界面 |
 | Unity集成 | 无可运行场景 — ✅ 2026-09-06 Grilling #122：呈现沙盘工程骨架已交付（`code/unity/`，白盒角色+基础行动+状态 HUD），待本机验证 | [code/unity/README.md](../../code/unity/README.md) + #122 |
 
-### Grilling 队列（按依赖排序）
+### 待决队列（按依赖排序）
 
 0. ~~可控角色载体~~ ✅ 2026-09-06 Grilling #122 — Unity 呈现沙盘（指令→动作→UI 反馈闭环），状态面板细部规格的调试底子
 1. 状态面板细部规格（挂起恢复：以沙盘 HUD 雏形为底）
@@ -337,7 +339,7 @@
 | 引擎数据关系规格 | ✅ 2026-08-14 — 盘点确认引擎与正典结构性偏差≈0；产出数据流图+模块接口规格（Grilling #24 恢复） | [引擎数据关系规格.md](../rules/skill-tree/%E5%BC%95%E6%93%8E%E6%95%B0%E6%8D%AE%E5%85%B3%E7%B3%BB%E8%A7%84%E6%A0%BC.md) |
 | 引擎补全路线图 | ✅ 2026-08-16 — P0-P6 批次表 + 依赖图 + 里程碑（Grilling #70）：P1 技能系统（三体上下文重建/LinkState+m/技能执行）→ P2 情境 → P3 NPC 全量 → P4 战斗扩展 → P5 实体 → P6 收尾；P0 校准并行轨对接 #35；**P2 实施启动 ✅（2026-09-02 #104：m_field 阻塞解除，实施 issue #105 排队中）** | [task-plan](../archive/grilling/grilling-70-engine-roadmap/task-plan.md) |
 | 记忆内容层存储 | ✅ 2026-08-20 Grilling #90 — 内容层 schema/存储位置（构建层持久+战斗层快照）/写入管线（四来源+双通道）/检索接口（P_trigger/P_success 分家）/生命周期（八状态）——运行时基础设施，服务创伤记忆/NPC 跨战斗/DID/健忘症/玩家叙事 | [记忆内容层.md](../rules/skill-tree/%E8%AE%B0%E5%BF%86%E5%86%85%E5%AE%B9%E5%B1%82.md) |
-| 对话数学语言规范 | ✅ 2026-08-16 — Grilling #85：全程触发/论文标准/打断-重述-验证/零容忍/分层固化（CLAUDE.md 条目 + 书写规范 §七 + 注册表入库） | [数学语言书写规范](../conventions/agents/math-language-writing.md) §七 + [CLAUDE.md](../../CLAUDE.md) §对话数学语言规范 |
+| 对话数学语言规范 | ✅ 2026-08-16 — Grilling #85：全程触发/论文标准/打断-重述-验证/零容忍/分层固化（design/conventions/README.md 条目 + 书写规范 §七 + 注册表入库） | [数学语言书写规范](../conventions/agents/math-language-writing.md) §七 + [项目规约](../conventions/README.md) §四 |
 | 偏侧化数据字段 | ✅ 2026-08-20 Grilling #92 — tripartite graph_nodes（49 节点）+ brain_regions（58 条目）lateralization 字段，镜像（LC_R/SNc_R）10 字段展开 + mirror_of，T8 一致性校验升级 | [偏侧化架构.md](../rules/skill-tree/%E5%81%8F%E4%BE%A7%E5%8C%96%E6%9E%B6%E6%9E%84.md) |
 | 引擎 fail-fast 防御 | ✅ 2026-09-02 Grilling #106 + **✅ 已实施（2026-09-03 Grilling #110）** — 四类三体边 `Role` 加 `[JsonRequired]`（缺失 → JsonException，禁止静默回退 Active(0)）；Console 层 catch JsonException → stderr + exit 1；其余枚举字段缺失风险列延迟项（触发标准 ①引擎消费者 ②静默错误语义 ③校验未覆盖）。实施：`YANTF_DATA_DIR` env 注入 + 7 项回归（353/353 绿、门禁 PASS） | [决策树 §Grilling #106](../decisions/README.md) + [§Grilling #110](../decisions/README.md) + `TripartiteEdges.cs` |
 | 静态契约式模块化架构 | ✅ 2026-09-03 Grilling #111 — 架构方向定案：模块 = 接口/能力边界 + 版本/契约信息 + 装配期有效性检查；正式装配失败 → fail-fast；实现替换在装配层；开发期迭代（HMR/回滚）与生产机制分离。**不采纳**运行时 Ready/Degraded/Unavailable 通用三态 / 运行时热插拔 / loader 版本协商。`calibration_status` 保留为数据产物契约字段+消费门禁（模块状态≠数据产物状态）。Module 资格 = 三步资格审查流程（独立能力边界为核心）。试点 `IActionProvider` 纯审查通过（六维验收 PASS×5+N/A，零源码改动）。方向 1（单一事实源）推迟 | [决策树 §Grilling #111](../decisions/README.md) + [试点审查报告](../archive/grilling/grilling-111-plugin/%E8%AF%95%E7%82%B9%E5%AE%A1%E6%9F%A5%E6%8A%A5%E5%91%8A.md) |
@@ -355,7 +357,7 @@
 | 测试策略 | 单元/集成/玩法测试的方法和范围 | Unity项目 |
 | 校验脚本实现 | ✅ validate_link_data/validate_spatial/validate_disease 已实现(2026-08-03 #20) | Grilling 质量保障体系 ✅ |
 
-### Grilling 队列（按依赖排序）
+### 待决队列（按依赖排序）
 
 1. ✅ 引擎补全路线图（2026-08-16 #70）— P0-P6 批次已定，逐批开 feature issue
 2. P0 并行校准轨 — ✅ 数值平衡工具方案（2026-08-16 #71：C# Balance 工程 + Python 分析壳，T1-T8 任务已定） + #35 校准 grilling（已开放，消费工具）
@@ -422,5 +424,5 @@
 
 ---
 
-*创建: 2026-07-28 | 更新: 2026-09-12 (Grilling #126 玫瑰花海实验 lab ✅ 呈现 +1 → 7、管线 +1 → 28——真实 1 m lidar 草原地形（Konza Prairie，100×100 m，relief 3.1075 m）+ 商业化密度六角错行株丛（4563 株 / s 1.602 m / 304 株/亩 / 覆盖率几何判据 `D ≥ 2s/√3`）+ `WalkerController` 小人穿行；口径文档 [地块数据](../presentation/%E5%9C%B0%E5%9D%97%E6%95%B0%E6%8D%AE-Konza%E8%8D%89%E5%8E%9F.md) / [玫瑰株丛密度](../presentation/%E7%8E%AB%E7%91%B0%E6%A0%AA%E4%B8%9B%E5%AF%86%E5%BA%A6.md)；载体 `RoseFieldLab.unity` 待本机验证；**不入正典**（用户裁定交付边界 = 纯技术验证 lab）；本次会话经用户显式豁免 CLAUDE.md §对话数学语言规范（CLAUDE.md 本体未改动）；Grilling #114 生成器生态问题闭合 ✅ 规则——两问题归宿：负荷×声明 = 生产侧消解（声明=目标规格证据）/ 池结构 = 配额设计接管 + 扩池 backlog；Grilling #116 疾病生成模型演化化改造暂停 ✅ + 平凡实例化范式裁定——病种优先目标实例化、#87 涌现立场边界化、两层隔离、配额表驱动核验批次；Grilling #115 人群点模型研究闭合；#117/#118 学术轨闭合（不入游戏正典）；Grilling #113 疾病资格层 Eligibility(d) 解耦 ✅ 规则——转化接口条目补充资格层：创伤负荷 ≠ 疾病资格、§3.2.2 资格硬门、三值两层、G1-G4、五基础原子核验闭合、顾维扬回放裁决 BD-II→MDD；Grilling #35 战斗输出权重校准 ✅ 规则 +1 → 39——精神攻击 a(t) 派生轨迁移定案（S_mental 7 fid/scale_mental≈3/motivation 删除）+ θ_mem 0.5 + 事件上限不设 + B 组 8 项裁决 + T0 降级诊断指标 + 引用链过时治理发现 6 项；Grilling #111 项目总体插件化 ✅ 管线 +1——静态契约式模块化架构定案：A′ 七原则/否决通用三态/calibration_status 保留（模块状态≠数据产物状态）/Module 三步资格审查流程/试点 IActionProvider 纯审查通过（六维验收 PASS×5+N/A，零源码改动）；方向 1 单一事实源推迟；Grilling #110 #107 实施执行层 ✅ 管线 +1——引擎 fail-fast 实施完成：四类边 Role [JsonRequired]、YANTF_DATA_DIR 注入、353/353 绿、门禁 PASS；Grilling #109 #105 实施执行层 ✅ 管线 +1——P2 情境系统实施完成：346/346 绿、验收 8 项全过；2026-09-02 (Grilling #108 P2 情境系统实施前审查 ✅ 管线 +1——Q1-Q15 执行契约落盘，#105 可执行；Grilling #106 引擎 fail-fast 防御 ✅ 管线 +1——四类边 Role 加 [JsonRequired]、Console JsonException → exit 1、其余枚举字段延迟项；Grilling #104 P2 情境系统实施启动 ✅ 管线 P2 状态更新——m_field 阻塞解除、实施 issue #105 排队中；Grilling #101 R_i 神经落点 ✅ 规则 +1 → 38、5.1 更新：R 落点结构闭合，m_field_vec[69] 占位解除；Grilling #38 月光场重建+机制桥接 ✅ 规则 +1 → 36、❌ → 0；Grilling #100 E1 壳态保持性 ✅ 管线 +1；2026-08-30 (Grilling #103 游戏日↔模拟时间接口层 ✅ 规则 +1 → 37、事件 月相周期 更新；Grilling #102 E2 月相调制标定协议锁定 ✅ 规则 5.1 + 管线 ⚠️ 1)；Grilling #121 角色发展轴 ✅ 实体 +1（2026-09-06 闭合——"角色设定"演化载体 = 引用-组装式设计，无新存储/无新核心机制/无新增数值；交付 #120 里程碑输入接口；IN-4 创伤反向挂起、自问层详细设计待承接；Grilling #123 Unity 沙盘动作集规格 ✅ 呈现 +1（2026-09-07 闭合——12 动作受控词表/引用契约 A/来源矩阵/扩展协议，载体 ActionLab 待实施，见 [动作库规格.md](../presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md)；Grilling #124 ActionLab 实施执行层 ✅ 呈现 +1（2026-09-08 闭合——载体锚定 Mixamo X Bot/Y Bot（🔧 #123 修正）、Batch0 执行契约：ActionIds+ActionCatalog+ActionPlayer+幂等 builder+防漂移分档断言、5 条 Mixamo clip 实证映射，Batch0 代码交付中））)*
-*关联: [项目总览](../../README.md), [CLAUDE.md](../../CLAUDE.md), [六维度索引](dimensions), [决策树](../decisions/README.md)*
+*创建: 2026-07-28 | 更新: 2026-09-12 (Grilling #126 玫瑰花海实验 lab ✅ 呈现 +1 → 7、管线 +1 → 28——真实 1 m lidar 草原地形（Konza Prairie，100×100 m，relief 3.1075 m）+ 商业化密度六角错行株丛（4563 株 / s 1.602 m / 304 株/亩 / 覆盖率几何判据 `D ≥ 2s/√3`）+ `WalkerController` 小人穿行；口径文档 [地块数据](../presentation/%E5%9C%B0%E5%9D%97%E6%95%B0%E6%8D%AE-Konza%E8%8D%89%E5%8E%9F.md) / [玫瑰株丛密度](../presentation/%E7%8E%AB%E7%91%B0%E6%A0%AA%E4%B8%9B%E5%AF%86%E5%BA%A6.md)；载体 `RoseFieldLab.unity` 待本机验证；**不入正典**（用户裁定交付边界 = 纯技术验证 lab）；本次会话经用户显式豁免 项目规约 §四 对话数学语言规范（该规约本体当时未改动））；Grilling #114 生成器生态问题闭合 ✅ 规则——两问题归宿：负荷×声明 = 生产侧消解（声明=目标规格证据）/ 池结构 = 配额设计接管 + 扩池 backlog；Grilling #116 疾病生成模型演化化改造暂停 ✅ + 平凡实例化范式裁定——病种优先目标实例化、#87 涌现立场边界化、两层隔离、配额表驱动核验批次；Grilling #115 人群点模型研究闭合；#117/#118 学术轨闭合（不入游戏正典）；Grilling #113 疾病资格层 Eligibility(d) 解耦 ✅ 规则——转化接口条目补充资格层：创伤负荷 ≠ 疾病资格、§3.2.2 资格硬门、三值两层、G1-G4、五基础原子核验闭合、顾维扬回放裁决 BD-II→MDD；Grilling #35 战斗输出权重校准 ✅ 规则 +1 → 39——精神攻击 a(t) 派生轨迁移定案（S_mental 7 fid/scale_mental≈3/motivation 删除）+ θ_mem 0.5 + 事件上限不设 + B 组 8 项裁决 + T0 降级诊断指标 + 引用链过时治理发现 6 项；Grilling #111 项目总体插件化 ✅ 管线 +1——静态契约式模块化架构定案：A′ 七原则/否决通用三态/calibration_status 保留（模块状态≠数据产物状态）/Module 三步资格审查流程/试点 IActionProvider 纯审查通过（六维验收 PASS×5+N/A，零源码改动）；方向 1 单一事实源推迟；Grilling #110 #107 实施执行层 ✅ 管线 +1——引擎 fail-fast 实施完成：四类边 Role [JsonRequired]、YANTF_DATA_DIR 注入、353/353 绿、门禁 PASS；Grilling #109 #105 实施执行层 ✅ 管线 +1——P2 情境系统实施完成：346/346 绿、验收 8 项全过；2026-09-02 (Grilling #108 P2 情境系统实施前审查 ✅ 管线 +1——Q1-Q15 执行契约落盘，#105 可执行；Grilling #106 引擎 fail-fast 防御 ✅ 管线 +1——四类边 Role 加 [JsonRequired]、Console JsonException → exit 1、其余枚举字段延迟项；Grilling #104 P2 情境系统实施启动 ✅ 管线 P2 状态更新——m_field 阻塞解除、实施 issue #105 排队中；Grilling #101 R_i 神经落点 ✅ 规则 +1 → 38、5.1 更新：R 落点结构闭合，m_field_vec[69] 占位解除；Grilling #38 月光场重建+机制桥接 ✅ 规则 +1 → 36、❌ → 0；Grilling #100 E1 壳态保持性 ✅ 管线 +1；2026-08-30 (Grilling #103 游戏日↔模拟时间接口层 ✅ 规则 +1 → 37、事件 月相周期 更新；Grilling #102 E2 月相调制标定协议锁定 ✅ 规则 5.1 + 管线 ⚠️ 1)；Grilling #121 角色发展轴 ✅ 实体 +1（2026-09-06 闭合——"角色设定"演化载体 = 引用-组装式设计，无新存储/无新核心机制/无新增数值；交付 #120 里程碑输入接口；IN-4 创伤反向挂起、自问层详细设计待承接；Grilling #123 Unity 沙盘动作集规格 ✅ 呈现 +1（2026-09-07 闭合——12 动作受控词表/引用契约 A/来源矩阵/扩展协议，载体 ActionLab 待实施，见 [动作库规格.md](../presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md)；Grilling #124 ActionLab 实施执行层 ✅ 呈现 +1（2026-09-08 闭合——载体锚定 Mixamo X Bot/Y Bot（🔧 #123 修正）、Batch0 执行契约：ActionIds+ActionCatalog+ActionPlayer+幂等 builder+防漂移分档断言、5 条 Mixamo clip 实证映射，Batch0 代码交付中））)*
+*关联: [项目总览](../../README.md), [项目规约](../conventions/README.md), [六维度索引](dimensions), [决策树](../decisions/README.md)*

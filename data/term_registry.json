@@ -1,6 +1,6 @@
 {
-  "_description": "术语注册表 — Grilling §3.0 定义基线声明的唯一数据源。术语定义/旧模型/偏离原因集中管理，避免 AI 在生成时被术语的旧现实世界模型劫持。",
-  "_maintenance": "入库触发: 新核心术语 | 定义被修改 | Step 4 清扫发现未注册高频术语。numerical_locations 更新: 注册时填充 + grilling 新增引用时追加 + 定义变更时遍历复查。 | #87 创伤记忆/疾病三分类入库 + 苦痛记忆废弃 (2026-08-19) | #108 P2 情境系统实施前审查入库：G/t_neg/s_neg/p_panic/m_delta/环境 id (2026-09-02) | #113 疾病资格层入库：Eligibility(d) 疾病资格层/资格语义锚/资格证据原子/资格状态三值/资格核验全局不变量 (2026-09-03) | #116 批次1 性创伤通道资格核验入库：BPD_PATTERN_HISTORY/IDENTITY_STATE_HISTORY/PTSD 表征资格签名（2026-09-06） | #116 批次2 SSD 先行定案入库：SOMATIC_SYMPTOM_HISTORY/SYMPTOM_PSYCHOLOGICAL_OVERINVESTMENT/SYMPTOM_DURATION_6M（2026-09-06） | #116 批次2 SZ 谱定案入库：SZ_POSITIVE_COURSE_HISTORY/STPD_PATTERN_HISTORY/SZAFFECTIVE_COURSE_HISTORY（2026-09-06） | #116 批次2 进食障碍族定案入库：6 域原子（2026-09-06） | #116 批次2 PDD 定案入库：PDD_PERSISTENT_DEPRESSION_PATTERN（2026-09-06） | #116 批次2 焦虑谱定案入库：4 模式原子（2026-09-06） | #116 批次2 ASPD 定案入库：ASPD_PATTERN_HISTORY/CONDUCT_DISORDER_HISTORY（2026-09-06） | #116 批次2 拖延定案入库：PROCRASTINATION_PATTERN_HISTORY（2026-09-06，自锚特殊项） | #116 批次2 OCD 定案入库：OCD_PATTERN_HISTORY（2026-09-06）——批次2 完成，24/24 经历型全部可生成",
+  "_description": "术语注册表 — 术语定义 / 旧模型 / 偏离原因集中管理，避免在撰写设计内容时被术语的现实世界默认含义劫持（例：项目内的「态度」不是社会心理学的 attitude）。status 字段区分活跃与已废弃术语，是本表唯一权威状态。",
+  "_maintenance": "入库触发: (a) 新核心术语且项目内有自定义含义 (b) definition/old_model/deviation_reason 被实质修改 (c) 两个术语边界被重新划分。numerical_locations 在入库时填充、定义变更时遍历复查。覆盖范围: 设计文档表格列头与参数名中 ≤4 ASCII 字符短标识符。",
   "_created": "2026-08-03",
   "_updated": "2026-09-06",
   "_batch": "grilling-113-disease-eligibility-2026-09-03",
@@ -8,7 +8,7 @@
   "terms": {
     "态度": {
       "definition": "⚠️ 已废弃（2026-07-26）。认知 + 情绪 + 行为 = 态度，是三种成分的组合结算结果，不是独立实体。",
-      "source": "CLAUDE.md §核心术语表",
+      "source": "[项目规约](../design/conventions/README.md) §二（原 CLAUDE.md §核心术语表，该文件已删除）",
       "old_model": "一个人的评价倾向（社会心理学中的 attitude）",
       "deviation_reason": "项目中态度是结算结果而非独立实体——从卡牌类型降级为认知/情绪/行为的涌现产物",
       "status": "deprecated",
@@ -18,7 +18,7 @@
     },
     "PAD": {
       "definition": "Pleasure-Arousal-Dominance 三维情绪空间模型。情绪用 PAD 向量表示，不用离散标签。活跃于 data/ 文件中（emotions.json 15 情绪锚点, drives.json 7 驱动读 PAD）。",
-      "source": "CLAUDE.md §核心术语表",
+      "source": "[项目规约](../design/conventions/README.md) §二（原 CLAUDE.md §核心术语表，该文件已删除）",
       "old_model": "—（与项目定义一致，无偏离）",
       "deviation_reason": "—",
       "status": "active",
@@ -37,7 +37,7 @@
         "data/drives.json",
         "data/attitudes.json"
       ],
-      "source": "CLAUDE.md §核心术语表",
+      "source": "[项目规约](../design/conventions/README.md) §二（原 CLAUDE.md §核心术语表，该文件已删除）",
       "old_model": "Panksepp 七大情感系统",
       "deviation_reason": "行为系统整体废弃——NPC 行为从驱动模型迁移至脑区链路预烘焙查表",
       "added": "2026-08-03",
@@ -49,7 +49,7 @@
       "numerical_locations": [
         "data/cognition_cards.json"
       ],
-      "source": "CLAUDE.md §核心术语表",
+      "source": "[项目规约](../design/conventions/README.md) §二（原 CLAUDE.md §核心术语表，该文件已删除）",
       "old_model": "认知心理学经典模块划分",
       "deviation_reason": "认知系统整体废弃——随 37 AI 操作技能移入垃圾桶（D20，2026-08-03）",
       "added": "2026-08-03",
@@ -62,7 +62,7 @@
         "data/cognition_cards.json",
         "data/emotion_cards.json"
       ],
-      "source": "CLAUDE.md §核心术语表",
+      "source": "[项目规约](../design/conventions/README.md) §二（原 CLAUDE.md §核心术语表，该文件已删除）",
       "old_model": "—（项目独创框架）",
       "deviation_reason": "随态度引擎一同废弃",
       "added": "2026-08-03",
@@ -70,7 +70,7 @@
     },
     "SAN": {
       "definition": "精神护盾，不是血条。SAN≥60%稳定，<30%恐慌，<15%崩溃边缘（可能触发幻觉），=0 完全随机行为（从所有合法链路中随机激活，不受情境和性格约束）。玩家基线 80（±10），NPC 默认 50。结算值一位小数（2026-08-13 裁决，round1 量化）。",
-      "source": "CLAUDE.md §核心术语表; design/rules/核心机制.md §五",
+      "source": "design/conventions/README.md §二（原 CLAUDE.md §核心术语表，该文件已于 2026-09-12 删除）; design/rules/核心机制.md §五",
       "old_model": "—（项目独创——源自 CoC 桌游 Sanity 概念，但项目 SAN 是多阶段精神护盾系统）",
       "deviation_reason": "SAN 不是线性疯狂条——是多阶段精神状态系统，与 HP 可互转，受月光调制",
       "status": "active",
@@ -86,7 +86,7 @@
     },
     "意志力": {
       "definition": "⚠️ 已废弃（2026-09-12）。原为消耗性精神能量，用于硬解锁灰色行为型技能。",
-      "source": "CLAUDE.md §核心术语表",
+      "source": "[项目规约](../design/conventions/README.md) §二（原 CLAUDE.md §核心术语表，该文件已删除）",
       "old_model": "Baumeister ego depletion 模型（2016 多中心复制失败——Hagger et al., 23实验室/2141被试, 效应量≈0）",
       "deviation_reason": "脑功能层级模型 §十三 定案：意志力(WP)已废弃，替换为认知负荷模型。硬解锁由认知负荷与聚焦容量承担",
       "status": "deprecated",
@@ -100,7 +100,7 @@
     },
     "意识外显效应": {
       "definition": "世界观核心（原名「观察者效应」，2026-08-24 #38 改名）——意识内容在月光下外显为物理效力。内容以多版本基态存在（#41 D3：宏观叠加态是基态的直接表达，月光=容器注意力的可见痕迹，不再需要物理退相干抑制解释）；不同单子（内容内意识个体）从共享基质取出不同版本（物理场/神明/催化媒介），三者同时为真。观察=单子对共享基质取版本（#41 D14）。",
-      "source": "CLAUDE.md §核心术语表; design/events/世界观与叙事.md; design/rules/核心机制.md §七",
+      "source": "design/conventions/README.md §二（原 CLAUDE.md §核心术语表，该文件已于 2026-09-12 删除）; design/events/世界观与叙事.md; design/rules/核心机制.md §七",
       "old_model": "量子力学 Observer Effect——测量行为影响被测量系统（微观粒子波函数坍缩）",
       "deviation_reason": "项目宏观化——不是比喻，是 game mechanic。原名「观察者效应」携带量子测量因果（叠加态/坍缩/退相干），与意识包裹地基冲突（#41 D3 无坍缩因果，观察=单子取版本）；2026-08-24 #38 改名为「意识外显效应」消除旧因果暗示",
       "status": "active",
@@ -121,7 +121,7 @@
     },
     "随身镜子": {
       "definition": "自我观察 UI 界面，非物理房间。用于面对自己和编排技能。死亡后都灵之马以此找到你的锚点。",
-      "source": "CLAUDE.md §核心术语表; design/events/游戏循环.md §十",
+      "source": "design/conventions/README.md §二（原 CLAUDE.md §核心术语表，该文件已于 2026-09-12 删除）; design/events/游戏循环.md §十",
       "old_model": "物理镜子——反射光线的光学设备",
       "deviation_reason": "镜子不是空间物体而是 UI 隐喻——反射内在状态（技能编排/链路聚焦/自我观察）",
       "status": "active",
@@ -2075,7 +2075,7 @@
       "status": "active",
       "numerical_locations": [
         "design/conventions/agents/math-language-writing.md §七",
-        "CLAUDE.md §对话数学语言规范"
+        "[项目规约](../design/conventions/README.md) §四"
       ],
       "added": "2026-08-16",
       "updated": "2026-08-16"
@@ -2088,7 +2088,7 @@
       "status": "active",
       "numerical_locations": [
         "design/conventions/agents/math-language-writing.md §7.3",
-        "CLAUDE.md §对话数学语言规范"
+        "[项目规约](../design/conventions/README.md) §四"
       ],
       "added": "2026-08-16",
       "updated": "2026-08-16"
@@ -2243,13 +2243,13 @@
     },
     "子非鱼": {
       "definition": "游戏项目正式名（2026-08-19 用户定名）。中文《子非鱼》，英文暂定 You Are Not the Fish（代码工程名 code/src/YouAreNotTheFish.* 已一致）。「面具」降级为游戏内部子功能（面具系统），不再是项目总名。",
-      "source": "用户定名（2026-08-19）；design/README.md；CLAUDE.md 标题",
+      "source": "用户定名（2026-08-19）；README.md 标题；design/README.md",
       "old_model": "暂定名「面具 (The Mask)」",
       "deviation_reason": "用户（2026-08-19）：项目总名称变更为《子非鱼》；面具降级为游戏内子功能。",
       "status": "active",
       "numerical_locations": [
         "design/README.md（项目名）",
-        "CLAUDE.md 标题",
+        "README.md 标题（项目名）",
         "code/src/YouAreNotTheFish.*（代码工程）"
       ],
       "added": "2026-08-19",

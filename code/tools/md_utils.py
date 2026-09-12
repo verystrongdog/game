@@ -2,7 +2,7 @@
 """md_utils.py — 校验脚本共享工具
 
 提取 validate_*.py 和 run_all_checks.py 中重复的常量和函数，
-作为 Layer 1 管线共享模块。CLAUDE.md §代码层面 要求复用已有代码。
+作为 Layer 1 管线共享模块。[项目规约](../../design/conventions/README.md) §一 要求复用已有代码。
 
 来源: validate_params.py + validate_cross_refs.py + run_all_checks.py 原有重复逻辑。
 """

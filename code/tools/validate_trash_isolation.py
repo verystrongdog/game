@@ -110,7 +110,7 @@ EXEMPT_PREFIX = [
     "design/archive/",
     # 仓库重构期的本地安全备份（非项目内容，重构完成后删除）
     ".refactor-backup/",
-    # 已标注 ⚠️ 废弃的前置系统 (保留为参考数据源, CLAUDE.md §文档层面)
+    # 已标注 ⚠️ 废弃的前置系统 (保留为参考数据源, [项目规约](../../design/conventions/README.md) §六)
     # 2026-09-12 仓库重构：该文件已从 design/archive/trash/ 迁至 design/rules/skill-tree/deprecated/（与 10 个同门文件同处）
     "design/rules/skill-tree/deprecated/链路槽位与激活系统.md",
 ]

@@ -130,7 +130,7 @@
 
 ### 7.7 与 AI 产出方向的关系
 
-两条方向共享同一套论文标准内核（§7.4 六条），仅在**执行对象**上区分：§一至§六约束 AI 写文档，§七约束用户说需求。总纲入口：[CLAUDE.md §对话数学语言规范](../../../CLAUDE.md)。
+两条方向共享同一套论文标准内核（§7.4 六条），仅在**执行对象**上区分：§一至§六约束 AI 写文档，§七约束用户说需求。总纲入口：[[项目规约](../README.md))。
 
 ---
 
@@ -149,4 +149,4 @@
 ---
 
 *创建: 2026-08-16 | 更新: 2026-08-16（Grilling #85：新增 §七 对话交互规范——人类输入方向，打断-重述-验证机制）*
-*关联: [term_registry.json](../../../data/term_registry.json), [review-plan skill](../../../.claude/skills/review-plan/SKILL.md), [task-checker skill](../../../.claude/skills/task-checker/SKILL.md), [CLAUDE.md §对话数学语言规范](../../../CLAUDE.md)*
+*关联: [term_registry.json](../../../data/term_registry.json), [review-plan skill](../../../.claude/skills/review-plan/SKILL.md), [task-checker skill](../../../.claude/skills/task-checker/SKILL.md), [[项目规约](../README.md))*

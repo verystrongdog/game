@@ -33,13 +33,13 @@ description: 任务 md 四维质检。检测 AI 生成的决策总结/任务规�
 
 - [ ] 完整读取目标 md（超长文件分段读）
 - [ ] 顺带读取其**文末 `*关联:*` 列表**指向的文件（用于 Step 3 引用核验）
-- [ ] 按需读取 `CLAUDE.md §md 文件格式规范`、`data/term_registry.json`（术语检查数据源）
+- [ ] 按需读取 [项目规约](../../../design/conventions/README.md) §三 md 文件格式规范、`data/term_registry.json`（术语检查数据源）
 
 ### Step 2 — 四维扫描
 
 #### 维度① 格式规范符合性
 
-对照 `CLAUDE.md §md 文件格式规范` 逐条检查：
+对照 [项目规约](../../../design/conventions/README.md) §三 md 文件格式规范 逐条检查：
 
 | 检查项 | 标准 | 违规示例 |
 |--------|------|---------|
@@ -55,7 +55,7 @@ description: 任务 md 四维质检。检测 AI 生成的决策总结/任务规�
 
 #### 维度② 术语与正典一致性
 
-数据源：`data/term_registry.json`（`terms` 下每条含 `status`），以及 `CLAUDE.md §核心术语表`、`design/decisions/` 的已否决方向。
+数据源：`data/term_registry.json`（`terms` 下每条含 `status`），以及 [项目规约](../../../design/conventions/README.md) §二、`design/decisions/` 的已否决方向。
 
 | 检查项 | 判定 |
 |--------|------|
@@ -138,7 +138,7 @@ description: 任务 md 四维质检。检测 AI 生成的决策总结/任务规�
 ## 阻断规则
 
 - 维度② T1/T2/T5（术语违规/与决策树冲突）→ **阻断**：任务 md 不得传播已废弃概念
-- 维度③ 垃圾桶引用 → **阻断**：违反「垃圾桶隔离原则」（CLAUDE.md 2026-08-03）
+- 维度③ 垃圾桶引用 → **阻断**：违反「垃圾桶隔离原则」（design/conventions/README.md 2026-08-03）
 - 维度① F1/F2（无头无尾）→ **阻断**：不符合文档规范，不能作为正式任务依据
 - 其余 → 提示
 
@@ -163,4 +163,4 @@ description: 任务 md 四维质检。检测 AI 生成的决策总结/任务规�
 ---
 
 *基于: [数学语言书写规范](../../../design/conventions/agents/math-language-writing.md), [term_registry.json](../../../data/term_registry.json) | 创建: 2026-08-16*
-*关联: [review-plan skill](../review-plan/SKILL.md), [CLAUDE.md](../../../CLAUDE.md)*
+*关联: [review-plan skill](../review-plan/SKILL.md), [项目规约](../../../design/conventions/README.md)*
