@@ -242,8 +242,8 @@ document.addEventListener('keydown', e => {{ if (e.key==='Escape') document.getE
 
 def main():
     parser = argparse.ArgumentParser(description="精神专科医院参考图集处理脚本")
-    parser.add_argument("--pdf", default="/mnt/c/Users/9527/Downloads/doc7497.pdf",
-                        help="PDF 文件路径")
+    parser.add_argument("--pdf", required=True,
+                        help="输入 PDF 路径（2026-09-12：去掉开发机默认值——原值只在作者机器上存在，属掩盖）")
     parser.add_argument("--out", default="data/hospital_ref",
                         help="输出目录（相对于项目根目录）")
     parser.add_argument("--dpi", type=int, default=300,

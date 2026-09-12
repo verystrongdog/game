@@ -101,3 +101,9 @@ artifacts/
 .ci-probe-pkgs/
 *.trx
 TestResults/
+
+# Agent 本机文件（P4a：不得入库——含机器绝对路径；.claude/ 已整体忽略，
+# 以下为曾被强制入库者，显式列出防复发）
+.claude/settings.local.json
+.claude/scheduled_tasks.lock
+.claude/projects/

@@ -56,6 +56,17 @@ python3 code/tools/validate_situation_fids.py    # 情境原型 fid
 python3 code/tools/validate_tripartite_annotations.py  # 三体模型注释
 ```
 
+**干净检出检查**（CI 已纳入）：
+
+```bash
+python3 code/tools/check_clean_checkout.py
+```
+
+查两件事：① 受控文件是否引用了**未受控**路径（本地因残留文件而通过、干净检出必然断）② **代码**里是否有开发机绝对路径。
+文档/数据中的机器路径只报提示——那是出处引用（某文献来自某下载目录、某结论据某路径核查），不参与运行。
+
+> 为何需要它：2026-09-12 CI 首跑失败的三类缺陷，**全部**是这一类——本地有残留产物与残留文件，模拟测试无法发现。
+
 编排器：`python3 code/tools/run_all_checks.py`（⚠️ **有副作用**——写 `.checks-state.json`，CI 里不要用）
 
 ### 2.2 引擎（改代码后必跑）
