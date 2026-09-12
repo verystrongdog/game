@@ -78,20 +78,10 @@ code/unity/[Uu]serSettings/
 code/unity/*.csproj
 code/unity/*.sln
 code/unity/Assets/Plugins/*.pdb
-# 兼容：若仍有人把 Unity 工程放在旧位置
-unity/[Ll]ibrary/
-unity/[Tt]emp/
-unity/[Oo]bj/
-unity/[Ll]ogs/
-unity/[Uu]serSettings/
-unity/*.csproj
-unity/*.sln
-unity/Assets/Plugins/*.pdb
 
 # Unity CLI local install / licensing (sandbox, Grilling #122)
 .unity-home/
 code/unity/*.log
-unity/*.log
 
 # 仓库重构前的本地安全备份（bundle + 工作区快照，仅本地，重构完成后删除）
 .refactor-backup/
