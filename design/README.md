@@ -197,7 +197,6 @@
 ### 管线
 - [NPC AI 行为模型](rules/skill-tree/NPC%20AI%20%E8%A1%8C%E4%B8%BA%E6%A8%A1%E5%9E%8B.md) — Affordance Competition 实时 salience（替代旧预烘焙）
 - [Grilling 质量保障体系](archive/grilling/methodology/grilling-%E8%B4%A8%E9%87%8F%E4%BF%9D%E9%9A%9C%E4%BD%93%E7%B3%BB-v2.md) — 引用即读取铁律/强化流程/项目级引用规范/校验脚本体系 — 12项决策 (2026-08-01)
-- [数学语言书写规范](conventions/agents/math-language-writing.md) — 双向规范：AI 写文档 + 对话交互（打断-重述-验证），6项决策 (2026-08-16 grilling #85)
 - [data/](../data/README.md) — 结构化数据（JSON/NPY）
 - [code/tools/](../code/tools) — Blender自动化/数据生成/命名规范化/链路分类/标签映射
 - sim_*.py — 数值模拟验证

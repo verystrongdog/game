@@ -3,8 +3,8 @@
 list_deprecated_terms.py — deprecated 术语清单查询脚本（单一正典来源）
 
 从 data/term_registry.json 动态读取所有 status=deprecated 的术语。
-供 task-checker / review-plan / 数学语言书写规范 等 AI 检查流程引用，
-避免在任何 skill/规范文档中硬编码术语清单（硬编码会随注册表更新而漂移）。
+供 AI 检查流程引用，避免在任何 skill/规范文档中硬编码术语清单
+（硬编码会随注册表更新而漂移）。
 
 用法:
   python3 code/tools/list_deprecated_terms.py                 # text：每行一个术语

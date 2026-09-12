@@ -2030,7 +2030,7 @@
     },
     "α_env": {
       "definition": "环境基调模态强度向量——α_env ∈ [0,1]⁸。s_env = W_sensory × α_env。环境切换节点刷新为本环境的稳定值，本环境内恒定。与事件 α 同用 W_sensory，区别在 α 来源（环境持续 vs 事件一次性）。",
-      "source": "Grilling #69 D3/数学语言书写规范",
+      "source": "Grilling #69 D3",
       "old_model": "无",
       "deviation_reason": "环境基调需独立强度向量承载『此房间暗/臭/热』的持续分量，区别于事件 α",
       "status": "active",
@@ -2063,32 +2063,6 @@
       "numerical_locations": [
         "P1b LinkState+m 成长进引擎",
         "WMatrixBuilder.m_mean"
-      ],
-      "added": "2026-08-16",
-      "updated": "2026-08-16"
-    },
-    "数学语言": {
-      "definition": "项目规范定义的表达方式：凡能用数学（公式、表格、受控词表、符号）表达的内容，优先用数学语言。标准锚定数学专业论文表述规范（Grilling #85）：符号先定义后使用、量词显式、条件完整、阈值/区间/分布精确、枚举受控、断言可机械核验。",
-      "source": "design/conventions/agents/math-language-writing.md（Grilling #85）",
-      "old_model": "自然语言中的日常表达（'较大''少量''视情况'等模糊量词可接受）",
-      "deviation_reason": "项目要求双向严谨：AI 产出文档（§一至§六）与人类对话输入（§七）均须数学语言，模糊量词会被 AI 打断并要求重述",
-      "status": "active",
-      "numerical_locations": [
-        "design/conventions/agents/math-language-writing.md §七",
-        "[项目规约](../design/conventions/README.md) §四"
-      ],
-      "added": "2026-08-16",
-      "updated": "2026-08-16"
-    },
-    "模糊量词": {
-      "definition": "对话规范中的判定触发词：较大/较小/若干/一些/适量/适度/偶尔/经常/通常/大概率/小概率/取决于/视情况/根据条件/成比例/延迟/立即/短暂/持续一段时间/从…到…/比较强/比较高/一段距离/某种/某类 等。出现即触发 AI 打断。",
-      "source": "design/conventions/agents/math-language-writing.md §7.3（Grilling #85）",
-      "old_model": "—（通用语言学术语，无旧项目定义）",
-      "deviation_reason": "—",
-      "status": "active",
-      "numerical_locations": [
-        "design/conventions/agents/math-language-writing.md §7.3",
-        "[项目规约](../design/conventions/README.md) §四"
       ],
       "added": "2026-08-16",
       "updated": "2026-08-16"
@@ -4196,9 +4170,9 @@
   },
   "_metadata": {
     "last_updated": "2026-09-12",
-    "last_batch": "仓库重构 Phase 1 — 意志力 改判 deprecated（D8：以脑功能层级模型 §十三 正典为准，替换为认知负荷模型）；计数修正 total 310→311、deprecated 22→23",
-    "total_terms": 311,
-    "active_terms": 288,
+    "last_batch": "2026-09-12 删除「数学语言」「模糊量词」两条——owner 裁定停用数学语言约束，其规范 design/conventions/agents/math-language-writing.md 一并删除；重算计数 total → 309、active → 286",
+    "total_terms": 309,
+    "active_terms": 286,
     "deprecated_terms": 23
   }
 }
