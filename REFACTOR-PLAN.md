@@ -274,9 +274,53 @@ design/decisions/
 | Phase 0 — 冻结与止血 | ✅ **完成** | `6832a78` |
 | Phase 1 — 正确性修复（12 项） | ✅ **完成** | `dd5516a` `61b2d69` `77750aa` |
 | Phase 2 — 内容归位 | ✅ **完成**（2.2–2.4） | `688629c` `7ecd2bb` `aff588a` |
-| Phase 3 — 英文改名 | ⬜ 未开始 | — |
+| Phase 3 — 英文改名 | ✅ **完成** | `ed8d400` `cb5bcb3` `040bb5f` |
 | Phase 4 — 约束拆除 | ⬜ 未开始 | — |
 | Phase 5 — 终验与文档化 | ⬜ 未开始 | — |
+
+### Phase 3 实际结果
+
+**结构**（顶层仅 4 个目录 + 3 个入口文档 + 计划文档）：
+
+```
+design/                        设计文档 = primary artifact
+  rules/ entities/ space/ events/ presentation/ pipeline/ spec/
+  framework/（six-dimensions.md + dimensions/）
+  decisions/（决策树 6 片段 + README）
+  conventions/（writing-and-references.md + agents/）
+  archive/（grilling/ + trash/）
+reference/  books/ deprecated/ literature/ session-archive/
+code/       src/ unity/ sim/ tools/
+data/       原地不动
+```
+
+**命名口径**：目录名改英文，**文件名保留中文**（设计文档为中文，文件名承载语义）。
+例外：框架维度索引（`rules.md`/`entities.md`/…）与决策树片段——文件名镜像新英文目录名。
+
+| 项 | 结果 |
+|---|---|
+| 目录/文件映射 | 62 项 · 928 个文件级 rename |
+| markdown 链接重算 | 1981 处 |
+| 裸文本路径替换 | 2839 处 |
+| 深度重算（未搬家目标） | 191 处 |
+| 中文目录残留 | **0** |
+| 9 个校验器 | 全部 exit=0（`1326 refs / 1325 passed / 0 dead / 0 section warnings`） |
+| `dotnet test` | 353 passed / 0 failed |
+| 严格链接检查 | 2604 链接 / 失效 85 = 31 归档内历史 + 26 模板占位符 + 28 外部 vendored 示例 |
+
+**搬迁暴露的三个真问题（均已修）**
+
+1. **`.gitignore` 失效**：`unity/[Ll]ibrary/`、`unity/[Tt]emp/`、`unity/*.csproj` 等**带路径前缀**的模式，在 `unity/` → `code/unity/` 后不再匹配 —— Unity 工程产物会重新进入版本控制范围（本机 Library/ 不存在所以未立刻暴露，但会随 Unity 打开工程而出现）。已同步为 `code/unity/…` 并保留旧路径模式兼容。
+2. **校验器 ROOT 全线失效**：多数脚本**各自**定义 `Path(__file__).parent.parent`（`tools/` → `code/tools/` 后解析成 `code/` 而非仓库根），`code/data/…` 找不到。25 个脚本 27 处统一 +1 层；`md_utils.py` 改为向上查找 `.git` 的 `find_repo_root()`，目录再移动也不会失效。
+   ⚠️ 但 `validate_params.py` / `validate_cross_refs.py` / `run_all_checks.py` 的 `sys.path.insert(0, parent.parent.parent)` **改错了**——那行需要的是 `code/`（供 `from tools.md_utils` 导入），不是仓库根。已回退为 `parent.parent`。
+3. **`src/` 测试数据路径深度**：`bin/Debug/net8.0` 上溯层数 +1，19 个文件 42 处修正。`ConsoleDll()` 的 4 层上溯因 `src/` **整体**搬迁、内部相对结构不变而仍然正确，未动。
+
+**顺带修出的正典缺陷**（链接校验器发现）：`design/framework/six-dimensions.md` 自身目录列了 `3. [实体](#实体)`，但**正文没有 `## 实体` 标题**——规则维度下叠了两组「已完成/部分完成/空缺」区块。实体维度的内容一直在，只是标题丢了。已补 `## 实体`。
+
+**我造成的过度替换（已回滚）**：`reference/books/` 下某本书**自带 `docs/` 目录**，被全局 `docs/` → `design/framework/` 替换污染了它的 README 与 CI 配置。已在 `rewrite_refs.py` 加 `SKIP_PREFIX` 排除 vendored 内容。
+
+**脚本踩过的坑（已记录在脚本注释中）**：词边界守卫（否则 `Blender管线/`、`医院建筑参考/` 被当路径）、链接目标打桩保护（否则裸替换二次污染成 `code/code/unity/…`）、脚本自我排除（否则把映射表从 old→new 改成 new→new）、正则预编译（2776 文件超时 400s）、`lstrip('./')` 吃前导点（`.claude/` → `claude/` 致静默跳过）、`NESTED` 父目录优先（否则子树搬走后子目录失效，或父目录被塞进子目录已建的目标内）。
+
 
 ### ⚠️ 勘误：Phase 1 的「死链 142 → 0」读数不可信
 
