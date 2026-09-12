@@ -152,6 +152,9 @@ frontier = { i ∈ 开放 issue | 所有 blocked-by 已关闭 且 所有 require
 ```bash
 python3 code/tools/validate_issues.py --file <临时草稿>   # 必须 exit 0
 gh issue create --title "..." --body-file <临时草稿> --label type:task --label state:needs-triage
+
+# 若草稿的 `blocked-by:` 指向已存在的 issue，顺手补上原生投影（UI 可见，I14 会核对两侧一致）
+gh issue edit <新编号> --add-blocked-by <前置编号>
 ```
 
 校验器规则见 [§五](#五依赖与门禁如何被机械判定)。创建通道见 [§七](#七创建通道)。
@@ -249,6 +252,7 @@ gh issue create --title "..." --body-file <临时草稿> --label type:task --lab
 | I11 | 全仓同时 `in-progress` 的 issue ≤ 1（[WORKFLOW.md §一](../../WORKFLOW.md)） | 快照统计 | ✅ |
 | I12 | 验收标准 2–8 条；能力增量 ≤ 3 行；门禁 ≥ 1 条（`门禁: none` 仅限 `RFC`/`Experiment`） | 计数 | ✅ |
 | I13 | 并行就绪（`blocked-by` 全部已关闭或为空）的多条 issue，其「预期差分」声明的文件路径集合不得相交；相交 → 警告并指出共享文件（须串行） | 集合相交 | ✅（警告） |
+| I14 | 正文 `blocked-by` 与 GitHub 原生依赖边（`blockedBy`）一致；正文是权威，原生边是投影，任一侧多出即警告 | 集合比对 | ✅（警告） |
 
 **机器判不了的部分老实标出来**（模板只能改变形状，不能改变判断）：验收标准是否**充分**、依赖影响评估是否**诚实**、预期差分是否**真的**覆盖了变化、"单能力"是否切得**合理**。这些由 owner 在 triage 时判断。
 
@@ -266,7 +270,8 @@ gh issue create --title "..." --body-file <临时草稿> --label type:task --lab
 | I6 | 无法解析成 gate id 或命令的**散文化**门禁行给警告而非失败（否则"本机不可用，替代验证见…"会误报） |
 | I4 | 只在 `design/slices/*/slice.md` 的四轴表里匹配能力名；匹配不到只出警告（工程侧能力本就不在切片表里） |
 | I13 | 依赖「预期差分」写出显式文件路径；只认文件不认目录；裸文件名按唯一基名解析 |
-| — | `--from-github` 默认 `--limit 200`，触顶时告警但**不自动翻页**；未使用 gh 原生依赖边（本机 2.4.0 限制，见 [§7.3](#73-本机工具限制实测)）；无 `--format json` |
+| I14 | 读 `gh issue list --json blockedBy` 拿原生投影，与正文声明比对；快照未含该字段时整体跳过并说明（旧版 `gh` 会这样）|
+| — | `--from-github` 默认 `--limit 200`，触顶时告警但**不自动翻页**；无 `--format json` |
 
 **这些边界不是"以后再说"**：它们决定了哪些契约条款实际上只靠人工把关。改动校验器时必须同步改本表。
 
@@ -306,7 +311,7 @@ gh issue create --title "..." --body-file <临时草稿> --label type:task --lab
 
 | 限制 | 影响 | 处置 |
 |---|---|---|
-| 本机 `gh` 为 **2.4.0（2022-03）**，`issue create` 无 `--blocked-by` / `--parent` | GitHub 原生依赖边无法用 CLI 建立 | 依赖写在正文 `依赖:` 字段，由校验器解析（I5/I7）。**升级 `gh` 后可迁移到原生依赖边**，字段格式保持不变 |
+| ~~本机 `gh` 为 2.4.0（2022-03），无 `--blocked-by` / `--parent`~~ → **2026-09-12 已升级到 2.100.0** | 原生依赖边现可用：`gh issue create --blocked-by` · `gh issue edit --add-blocked-by` / `--parent` / `--type` · `gh issue view --json blockedBy,blocking,parent` 可读 | **权威仍是正文 `依赖:` 字段**——创建前门禁在 issue 还不存在时就要判，且 `requires:`（gate / PLAYABLE / 能力 / owner）没有原生对应物。原生边是**投影**（价值在 UI 的阻塞图标与反向可见性），两侧不一致由 **I14** 报出 |
 | GitHub tasklist `- [ ] #123` 已退役（官方文档原文 "Tasklist blocks are retired"，见 [2025-02-18 changelog](https://github.blog/changelog/2025-02-18-github-issues-projects-february-18th-update/)） | 旧式勾选依赖不再有语义保证 | 不用 tasklist 表达依赖 |
 
 ### 7.4 存量异常（不追溯）

@@ -75,7 +75,7 @@ LEGACY_CUTOFF = "2026-09-12"
 # §7.3：本机 gh 2.4.0 的 `gh issue list --json` 可用字段（实测：
 # assignees author body closed closedAt comments createdAt id labels milestone
 # number projectCards reactionGroups state title updatedAt url）——没有原生依赖边字段。
-GH_JSON_FIELDS = "number,title,body,labels,createdAt,state,url"
+GH_JSON_FIELDS = "number,title,body,labels,createdAt,state,url,blockedBy"
 
 # ── WORKFLOW.md §三 类型枚举 ───────────────────────────────
 ISSUE_TYPES = ["Task", "Implementation", "Bug", "Experiment", "RFC", "Slice"]
@@ -1153,7 +1153,34 @@ def build_basename_index():
 BASENAME_INDEX = None   # 惰性构建
 
 
-# 单一规则表——照 issue-process.md §5.2 的 I1–I13 逐条对应，不增删含义。
+def rule_i14(subjects, ctx):
+    """I14 正文 `blocked-by` 与 GitHub 原生依赖边（`blockedBy`）必须一致。
+
+    权威是**正文**：创建前门禁（--file）在 issue 还不存在时就要判，且
+    `requires:`（gate/PLAYABLE/能力/owner）没有原生对应物。原生边是**投影**，
+    价值在于 GitHub UI 上的阻塞图标与反向可见性。两者不一致 → 警告。
+    """
+    if ctx.snapshot is None:
+        return [Finding(SKIP, "原生依赖边比对需要 issue 快照 —— 已跳过（需 --from-github）")]
+    native = ctx.snapshot.get("native_blocked_by")
+    if native is None:
+        return [Finding(SKIP, "快照未包含 blockedBy 字段（gh 版本过旧？）——已跳过")]
+    out = []
+    for s in subjects:
+        if s.number is None:
+            continue
+        declared = set(parse_dependencies(s).get("blocked-by", (None, []))[1])
+        actual = set(native.get(s.number) or set())
+        for n in sorted(declared - actual):
+            out.append(Finding(WARN, f"{s.tag} 正文声明 blocked-by: #{n}，但没有对应的原生依赖边"
+                                     f"（UI 上看不到阻塞；可 `gh issue edit {s.number} --add-blocked-by {n}`）"))
+        for n in sorted(actual - declared):
+            out.append(Finding(WARN, f"{s.tag} 有原生依赖边 blocked-by #{n}，但正文 `依赖:` 未声明"
+                                     f"——正文是权威，投影无声明即为不一致"))
+    return out
+
+
+# 单一规则表——照 issue-process.md §5.2 的 I1–I14 逐条对应，不增删含义。
 RULES = [
     Rule("I1", "必填章节齐全（§4.1 九个 + §4.2 按类型追加）且非空", rule_i1),
     Rule("I2", "类型 ∈ 六种枚举；标签与正文类型一致", rule_i2),
@@ -1168,6 +1195,7 @@ RULES = [
     Rule("I11", "全仓同时 in-progress 的 issue ≤ 1", rule_i11),
     Rule("I12", "验收标准 2–8 条；能力增量 ≤ 3 行；门禁 ≥ 1 条", rule_i12),
     Rule("I13", "并行就绪的 issue 预期差分文件集合不得相交（警告）", rule_i13),
+    Rule("I14", "正文 blocked-by 与原生依赖边一致（警告）", rule_i14),
 ]
 
 
@@ -1202,16 +1230,19 @@ def fetch_snapshot(repo, limit):
         raise InputUnavailable(f"`gh issue list` 输出不是 JSON: {e}")
 
     truncated = len(items) >= limit
-    numbers, states, open_items = set(), {}, []
+    numbers, states, open_items, native_blocked = set(), {}, [], {}
     for it in items:
         n = it.get("number")
         if n is None:
             continue
         numbers.add(n)
         states[n] = (it.get("state") or "").upper()
+        nodes = ((it.get("blockedBy") or {}).get("nodes")) or []
+        native_blocked[n] = {x.get("number") for x in nodes if x.get("number")}
         if states[n] == "OPEN":
             open_items.append(it)
     return {"numbers": numbers, "states": states, "open": open_items,
+            "native_blocked_by": native_blocked,
             "total": len(items), "truncated": truncated}
 
 
