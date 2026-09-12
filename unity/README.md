@@ -72,7 +72,7 @@ unity command editor_play  # 进 Play 模式（验证用）
 ## 二·D、动作集规格与 ActionLab（Grilling #123 ✅ + #124 实施执行层）
 
 > 动作受控词表（12 词条：L1 落地 9 = 待机/走/跑/跳/物攻/精攻/防御/受击/倒下；L2 登记 3 = 坐/站/对话）+ 引用契约 A（纯状态 + 脚本 CrossFade）+ 来源矩阵 + 扩展协议——见 [动作库规格.md](动作库规格.md)。
-> 载体 = 新建 `ActionLab` 演示场（**Mixamo X Bot 真人模型** 🔧（#124 锚定，Y Bot 备用）+ 词表 controller + 按键触发 + HUD 当前动作名），实施分 Batch0（AI 产码：词表/`ActionIds`/`ActionPlayer`/幂等 builder/PlayMode 断言）→ Batch1（用户手动：Mixamo 导入 + 9 状态手摆）→ Batch2（手感收尾）。执行层契约见 [决策记录 #124](../../.scratch/grilling-124-actionlab/决策记录.md)。
+> 载体 = 新建 `ActionLab` 演示场（**Mixamo X Bot 真人模型** 🔧（#124 锚定，Y Bot 备用）+ 词表 controller + 按键触发 + HUD 当前动作名），实施分 Batch0（AI 产码：词表/`ActionIds`/`ActionPlayer`/幂等 builder/PlayMode 断言）→ Batch1（用户手动：Mixamo 导入 + 9 状态手摆）→ Batch2（手感收尾）。执行层契约见 [决策记录 #124](../.scratch/grilling-124-actionlab/决策记录.md)。
 
 ## 二·E、ActionLab 实施手册（Batch0 交付）
 
@@ -100,6 +100,26 @@ unity command editor_play  # 进 Play 模式（验证用）
 
 > ⚠️ 已知：X Bot 上 KI Walk/Run retarget 质量为首验点（载体锚定 #124 决策依据）；Jab Cross 为组合拳，若直拳单次语义不合 → 换 Punch 类 clip 或走程序化兜底。
 
+## 二·F、玫瑰花海场景（真实草原 DEM + 商业化密度株丛 + 小人穿行）
+
+> 独立实验场（Grilling #126）：把「100×100 m 草原地形 + 整片玫瑰覆盖 + 小人穿行」落成可跑场景。地形取自**真实 1 m lidar 高程数据**（非参数化描述），株距密度取自**商业化种植文献**——两者都把模糊描述换成了可机械核验的取值。维度：呈现 + 管线。
+
+| 项 | 内容 |
+|----|------|
+| 场景 | `RoseFieldLab.unity`（新）：真实地形地面 + 4563 株玫瑰株丛 + 几何体小人 |
+| 操作 | **WASD/方向键** 移动（相对相机）、**Shift** 奔跑、**Space** 跳跃（复用 `WalkerController`） |
+| 地块 | 100×100 m，101×101 采样 @ 1.0 m；**高差 3.1075 m**，最大 1 m 高差 0.1145 m（6.53°） |
+| 地形源 | USGS 3DEP **1 m lidar** DEM（Konza Prairie 高草草原，公有领域）——见 [地块数据-Konza草原.md](地块数据-Konza草原.md) |
+| 株丛 | **4563 株**，六角错行 s = 1.602 m，蓬径 D = 1.85 m → 覆盖率 1.0；密度 **304 株/亩**（文献区间 180–330）——见 [玫瑰株丛密度.md](玫瑰株丛密度.md) |
+| 渲染 | 程序化低模株丛（106 tri）+ `Graphics.DrawMeshInstanced`（≈5 draw call），株丛无碰撞体 |
+| 小人 | `WalkerController`（几何体白盒 + 程序化步态，**零外部资产**） |
+| HUD | IMGUI：地块/采样/高差/株数/密度/间距/蓬径/全覆盖判据/小人坐标 |
+| 测试 | `RoseFieldSmokeTests`（4 个 PlayMode）：高度图解码 / 地面网格法线朝上 / 六角格间距与密度判据 / 小人落在实际地形上 |
+
+**生成/运行**：菜单 **YANTF → 玫瑰实验 → 创建玫瑰花海场景**（`Assets/Editor/RoseFieldLabBuilder.cs`）→ 打开 `Assets/Scenes/RoseFieldLab.unity` → 按 **Play**。
+
+> ⚠️ 已知简化：① 株丛叶/瓣为单面几何 + `Cull Off`，背面在 Lambert 下偏暗；② 阴影投射关闭（4500+ 实例）；③ 逐株仅有偏航与缩放差异（无异形变）；④ 地块为真实地形的一块切片，与游戏正典空间**无关**（本实验不入正典）。
+
 ## 三、工程结构
 
 ```
@@ -110,7 +130,12 @@ unity/
 │   │   ├── WalkerLabBuilder.cs    # 菜单/headless 生成 Walker 移动实验场景
 │   │   ├── KiWalkerLabBuilder.cs  # 菜单/headless 生成 Ki 动画角色场景（含 controller）
 │   │   ├── ActionLabBuilder.cs    # 菜单/headless 生成 ActionLab（12 态 controller + X Bot 场景）
-│   │   └── MixamoSetup.cs         # 一键导入 Mixamo 资产（复制/改名/Rig Humanoid）+ 生成 ActionLab
+│   │   ├── MixamoSetup.cs         # 一键导入 Mixamo 资产（复制/改名/Rig Humanoid）+ 生成 ActionLab
+│   │   └── RoseFieldLabBuilder.cs # 菜单/headless 生成玫瑰花海场景（Grilling #126）
+│   ├── Shaders/
+│   │   └── RoseInstanced.shader   # 实例化玫瑰材质（顶点色 + multi_compile_instancing + Cull Off）
+│   ├── Resources/YANTF/
+│   │   └── konza_plot_101x101_r16.bytes  # 地块高度图（LE uint16，行 0 = 北，20 402 B）
 │   ├── Scripts/                      # 运行时（asmdef: YANTF.Demo）
 │   │   ├── DemoTypes.cs              # 动作/阶段枚举、结算请求/结果
 │   │   ├── DemoActor.cs              # 实体运行时状态（HP/SAN/防御/CD，事件）
@@ -124,10 +149,14 @@ unity/
 │   │   ├── ActionCatalog.cs          # 只读元数据（id → category/loop/priority/fade/clipFbxPath）
 │   │   ├── ActionPlayer.cs           # 契约 A 驱动（CrossFade 优先级 + 计时回退 + locomotion 通道）
 │   │   ├── ActionLabDriver.cs        # ActionLab 场景驱动（CC 物理 + 输入 + HUD 动作名）
+│   │   ├── HeightField.cs            # 地块高度图解码/双线性采样/地面网格（玫瑰实验）
+│   │   ├── RoseMeshFactory.cs        # 程序化低模玫瑰株丛网格（106 tri，零外部资产）
+│   │   ├── RoseFieldLab.cs           # 玫瑰花海实例化驱动（六角错行 + DrawMeshInstanced + HUD）
 │   │   └── DemoBootstrapper.cs       # 运行时构建整个世界
 │   └── Tests/PlayMode/               # asmdef: YANTF.Demo.Tests（冒烟测试）
 │       ├── DemoSmokeTests.cs
 │       ├── WalkerLabSmokeTests.cs
+│       ├── RoseFieldSmokeTests.cs    # 高度图/地面网格/六角格密度判据/小人贴合地形
 │       └── ActionLabSmokeTests.cs    # 防漂移分档断言 + ActionPlayer 优先级冒烟
 ├── Packages/manifest.json            # uGUI 2.0.0 + Test Framework 1.4.5
 └── ProjectSettings/ProjectVersion.txt
@@ -147,5 +176,5 @@ unity/
 
 ---
 
-*创建: 2026-09-06*
-*关联: [战斗界面布局](../../呈现/战斗界面布局.md), [核心机制](../../规则/核心机制.md), [回合战斗流程](../../规则/回合战斗流程.md), [关键突破](../../规则/技能树系统/关键突破.md), [决策树 #122](../../docs/决策树.md)*
+*创建: 2026-09-06 | 更新: 2026-09-12（§二·F 玫瑰花海场景 — Grilling #126）*
+*关联: [战斗界面布局](../呈现/战斗界面布局.md), [核心机制](../规则/核心机制.md), [回合战斗流程](../规则/回合战斗流程.md), [关键突破](../规则/技能树系统/关键突破.md), [动作库规格](动作库规格.md), [地块数据-Konza草原](地块数据-Konza草原.md), [玫瑰株丛密度](玫瑰株丛密度.md), [决策树](../docs/决策树.md)*
