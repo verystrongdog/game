@@ -2,14 +2,18 @@ name: CI
 
 # 最小 CI——只覆盖当前切片（CP-01）的关键路径（P4a，2026-09-12）。
 #
-# 三个 job，对应切片三轴：
-#   docs-integrity  设计正典与数据契约的完整性（11 个校验器 + fixture 契约）
-#   engine          C# 逻辑引擎：构建 + 416 个测试 + 跨语言 fixture 判定比对
-#   unity           呈现层：本 job **显式报告 NOT_AVAILABLE**，不静默跳过
+# 四个 job：
+#   docs-integrity   设计正典与数据契约的完整性（11 个校验器 + fixture 契约）
+#   engine           C# 逻辑引擎：构建 + 416 个测试 + 跨语言 fixture 判定比对
+#   issues-snapshot  开放 issue 的契约（字段/依赖/门禁/单线程，2026-09-12 新增）
+#   unity            呈现层：本 job **显式报告 NOT_AVAILABLE**，不静默跳过
 #
 # 判据见 WORKFLOW.md §六：**未运行、超时、工具异常和零测试不是通过**。
 # 因此 unity job 用具名 + 作业摘要把"不可用"暴露在 CI 界面上，
 # 而不是让整个 workflow 看起来全绿。
+#
+# issue 契约判据见 design/engineering/issue-process.md §5.2（规则 I1–I12）：
+# 真相源是 GitHub issue 本身，所以校验也必须落在真相源上，而不是本地草稿。
 
 on:
   push:
@@ -93,6 +97,26 @@ jobs:
           name: engine-test-results
           path: artifacts/engine.trx
           if-no-files-found: error
+
+  # ── issue 契约（真相源快照）────────────────────────────────
+  #
+  # 为什么校验 GitHub 上的 issue 而不是仓库内文件：按
+  # design/engineering/issue-process.md §7.1，issue 的真相源就是 GitHub issue
+  # 本身，仓库内只留草稿（临时文件，不入库）。要机械强制，就必须校验真相源。
+  issues-snapshot:
+    name: issues-snapshot (issue 契约)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: read          # 只读拉取开放 issue；不需要 write
+    steps:
+      - uses: actions/checkout@v4
+      - name: 校验开放 issue 的字段/依赖/门禁/单线程（规则 I1–I12）
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 code/tools/validate_issues.py --from-github
+      # 存量 issue（2026-09-12 之前创建且无 type:* 标签）由脚本显式跳过并打印清单，
+      # 不算通过、也不静默忽略——见 issue-process.md §7.4。
 
   # ── 呈现层（Unity）────────────────────────────────────────
   unity:
