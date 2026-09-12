@@ -2,7 +2,7 @@
 // 数据来源：USGS 3DEP 1 m lidar DEM（Konza Prairie 高草草原，美国公有领域）
 //   raw 口径：little-endian uint16，行主序，行 0 = 北边缘，[0,65535] 线性映射到 [0, reliefMeters]
 //   世界口径：x ∈ [0, Size] 向东，z ∈ [0, Size] 向北（raw 行 0 ↔ z = Size）
-// 该口径由 tools 侧一次性导出脚本产出，见 unity/地块数据-Konza草原.md 的复现命令。
+// 该口径由 tools 侧一次性导出脚本产出，见 呈现/地块数据-Konza草原.md 的复现命令。
 using System;
 using UnityEngine;
 

@@ -28,7 +28,7 @@
 | 痛点 | 根因（已核验） |
 |---|---|
 | 设计与代码该分开 | 边界客观存在（Unity `asmdef references: []`、`sim/` 零读 `data/`），但**无一处文档声明它**。反向污染点只有 `unity/Assets/Scripts/DemoSolver.cs:30-44` 手抄 `CalibrationConfig` 常量 |
-| 文档结构没反映真实设计 | **六维是标签体系，却被当成分区体系用**。23 个文件带 `维度: X` 标签、4 个是双维度。后果：`呈现/` 只有 1 个文件（425 行 / 2026-08-09），而 20 天内全部呈现工作（Unity 沙盘 / ActionLab / 玫瑰实验 / 3D 可视化）落在 `unity/` 与 `规则/技能树系统/3D可视化/`；`管线/` 唯一内容自身标 ⚠️ 已废弃 |
+| 文档结构没反映真实设计 | **六维是标签体系，却被当成分区体系用**。23 个文件带 `维度: X` 标签、4 个是双维度。后果：`呈现/` 只有 1 个文件（425 行 / 2026-08-09），而 20 天内全部呈现工作（Unity 沙盘 / ActionLab / 玫瑰实验 / 3D 可视化）落在 `unity/` 与 `呈现/3D可视化/`；`管线/` 唯一内容自身标 ⚠️ 已废弃 |
 | 仓库太脏太大找不到东西 | `.scratch/` 长成**第二文档层**：314 个 md / 45,076 行 = 全仓受控 md 行数 **47.4%**，被 **94 个仓内文件**引用（含 18 个 `src/` 文件约 90 处 XML 注释）。同时 `.git` 385M 从未 gc |
 | 流程仪式太重 | `CLAUDE.md` 87 条规则中硬约束仅 27 条（31%），流程纪律 29 条（33%）、格式 31 条（36%）。**且仪式未防住 5 个真实正确性断裂**（见 §3 D2 与 §6 Phase 1） |
 
@@ -65,7 +65,7 @@
 | `CLAUDE.md` | 379 行 / 13,301 字符 / 87 条规则 |
 | 未推送 | `main` 领先 `origin/main` **6 个提交**（远端 `a48b3b8`） |
 
-**未受控 4.2G 明细**：`data/sim_results/` 2.6G（1804 JSON，可再生）· `规则/技能树系统/3D可视化/blender_assets/` 743M（.obj/.blend/.glb，部分可重建）· `data/connectivity/` 406M（abagen 可重下）· `.nuget-pkgs/` 461M。
+**未受控 4.2G 明细**：`data/sim_results/` 2.6G（1804 JSON，可再生）· `呈现/3D可视化/blender_assets/` 743M（.obj/.blend/.glb，部分可重建）· `data/connectivity/` 406M（abagen 可重下）· `.nuget-pkgs/` 461M。
 
 **`.git` 385M 成因**：历史中已删除但未回收的巨型 blob —— `治疗中心建模/svg/page.svg` 34.3MB、`CAD参考图/01-心脏病医院.svg` 33.7MB、`_废弃-旧AI项目/hospital_phase2.blend` 32.9MB + `.blend1` 31.4MB。已用 `git cat-file -e HEAD:<path>` 逐个确认**均不在 HEAD**；HEAD 最大受控文件仅 8.4MB。
 
@@ -226,7 +226,7 @@ CLAUDE.md 的错误是**具体成员**，不是**结构**。旧结构与现结�
 `docs/设计框架-六维状态.md` 只维护「维度 → 文档列表」映射表；不再要求目录与维度一致。依据：23 个文件带 `维度: X` 标签、4 个双维度、`3D可视化设计规范.md:3` 声明「呈现」却住 `规则/` 下。
 
 **② `design/presentation/` 承接错位的呈现文档**
-迁入 `code/unity/动作库规格.md`、`地块数据-Konza草原.md`、`玫瑰株丛密度.md` + `design/rules/skill-tree/3d-visualization/`（3 份 / 831 行）。理由：这 20 天的呈现工作量大且活跃，却是 `呈现/` 维度的真实内容。
+迁入 `code/呈现/动作库规格.md`、`地块数据-Konza草原.md`、`玫瑰株丛密度.md` + `design/rules/skill-tree/3d-visualization/`（3 份 / 831 行）。理由：这 20 天的呈现工作量大且活跃，却是 `呈现/` 维度的真实内容。
 
 **③ `design/spec/` 承接 `.scratch/` 的承重部分**
 它们**不是过程物**：
@@ -439,7 +439,7 @@ design/decisions/
 
 ### 7.3 不可复现资产（备份优先，对应 Phase 0.3）
 
-`规则/技能树系统/3D可视化/blender_assets/` 743M 全部被 `.gitignore` 忽略，且**无生成脚本能完整重建当前状态**：
+`呈现/3D可视化/blender_assets/` 743M 全部被 `.gitignore` 忽略，且**无生成脚本能完整重建当前状态**：
 
 ```
 brain_skill_tree.glb              187M  ← 构建产物

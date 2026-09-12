@@ -28,7 +28,7 @@
         -0.1619
       ],
       "fs_xyz": null,
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.transversetemporal.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.transversetemporal.obj",
       "notes": "听觉输入的第一站皮层. 音调/频率处理. 颞横回(Heschl回)",
       "function_profile": {
         "primary_function": "Primary auditory processing: frequency, pitch, sound localization",
@@ -73,7 +73,7 @@
         21.212,
         2.739
       ],
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.caudalanteriorcingulate.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.caudalanteriorcingulate.obj",
       "notes": null,
       "function_profile": {
         "primary_function": "Salience detection and conflict monitoring; dorsal ACC (dACC/MCC) for error detection and cognitive control engagement",
@@ -121,7 +121,7 @@
         29.591,
         -19.945
       ],
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.rostralanteriorcingulate.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.rostralanteriorcingulate.obj",
       "notes": null,
       "function_profile": {
         "primary_function": "Rostral/pregenual ACC: emotion regulation and affective appraisal; top-down modulation of amygdala and autonomic responses",
@@ -169,7 +169,7 @@
         21.212,
         2.739
       ],
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.caudalanteriorcingulate.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.caudalanteriorcingulate.obj",
       "notes": null,
       "function_profile": {
         "primary_function": "Dorsal ACC: cognitive control, effort-based decision making, pain processing; mid-cingulate for action-outcome monitoring",
@@ -217,7 +217,7 @@
         20.936,
         -1.841
       ],
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.parsopercularis.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.parsopercularis.obj",
       "notes": null,
       "function_profile": {
         "primary_function": "Broca's area (pars opercularis): language production — phonological encoding, syntactic processing, and speech motor planning",
@@ -265,7 +265,7 @@
         25.251,
         -31.18
       ],
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.medialorbitofrontal.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.medialorbitofrontal.obj",
       "notes": null,
       "function_profile": {
         "primary_function": "Medial OFC (DMN): self-referential value — personal preference, introspective valuation, and self-related reward processing",
@@ -309,7 +309,7 @@
         -0.1484
       ],
       "fs_xyz": null,
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.precentral.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.precentral.obj",
       "notes": "运动输出的最终皮层端. 控制对侧身体运动. 皮质脊髓束起源",
       "function_profile": {
         "primary_function": "Voluntary motor command execution; final cortical output for skeletal movement",
@@ -356,7 +356,7 @@
         6.459,
         -19.934
       ],
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/subcortical/Left-Accumbens-area.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/subcortical/Left-Accumbens-area.obj",
       "notes": null,
       "function_profile": {
         "primary_function": "Emotional reward processing; limbic striatal gate for affective value → approach motivation",
@@ -404,7 +404,7 @@
         6.459,
         -19.934
       ],
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/subcortical/Left-Accumbens-area.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/subcortical/Left-Accumbens-area.obj",
       "notes": null,
       "function_profile": {
         "primary_function": "Motor interface for reward-driven action; translates limbic motivation to motor output via VP→MD→ACC",
@@ -452,7 +452,7 @@
         28.528,
         -31.949
       ],
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.lateralorbitofrontal.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.lateralorbitofrontal.obj",
       "notes": null,
       "function_profile": {
         "primary_function": "Lateral OFC: value-based decision making, reversal learning, and punishment prediction; updates stimulus-outcome associations",
@@ -538,7 +538,7 @@
         -0.1754
       ],
       "fs_xyz": null,
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.postcentral.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.postcentral.obj",
       "notes": "触觉/本体感觉的初级皮层. 身体图式. 内感受的上游输入",
       "function_profile": {
         "primary_function": "Somatosensory processing: touch, proprioception, pain, temperature",
@@ -584,7 +584,7 @@
         -32.254,
         20.481
       ],
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.supramarginal.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.supramarginal.obj",
       "notes": null,
       "function_profile": {
         "primary_function": "Temporo-parietal junction (TPJ): theory of mind and attention reorienting — mental state attribution, perspective-taking, and ventral attention network hub for stimulus-driven reorienting",
@@ -673,7 +673,7 @@
         -15.297,
         -14.654
       ],
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.superiortemporal.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.superiortemporal.obj",
       "notes": null,
       "function_profile": {
         "primary_function": "Wernicke's area: language comprehension — phonological decoding, semantic access, and auditory-motor speech interface",
@@ -720,7 +720,7 @@
         46.689,
         -8.23
       ],
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.rostralmiddlefrontal.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.rostralmiddlefrontal.obj",
       "notes": null,
       "function_profile": {
         "primary_function": "Dorsolateral PFC: executive control hub — working memory maintenance, cognitive flexibility, planning, and top-down attention regulation. Cognitive CSTC loop cortical input",
@@ -770,7 +770,7 @@
         30.315,
         16.771
       ],
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.superiorfrontal.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.superiorfrontal.obj",
       "notes": null,
       "function_profile": {
         "primary_function": "Medial prefrontal cortex (mPFC): social cognition and DMN — mentalizing, self-other distinction, person perception, and social value integration",
@@ -819,7 +819,7 @@
         25.251,
         -31.18
       ],
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.medialorbitofrontal.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.medialorbitofrontal.obj",
       "notes": null,
       "function_profile": {
         "primary_function": "Ventromedial PFC: value integration and emotion regulation — integrates reward value with affective context; top-down amygdala inhibition for fear extinction",
@@ -907,7 +907,7 @@
         -0.1214
       ],
       "fs_xyz": null,
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/subcortical/Left-Thalamus-Proper.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/subcortical/Left-Thalamus-Proper.obj",
       "notes": "感觉中继/皮层间通信/CSTC环路中继. MD核=前额叶中继, 前核=海马中继",
       "function_profile": {
         "primary_function": "Sensory-motor relay and CSTC loop closure; thalamocortical gating via VA/VL (motor) and MD (prefrontal). Closes all 3 CSTC loops",
@@ -955,7 +955,7 @@
         -18.337,
         -6.004
       ],
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/subcortical/Left-Thalamus-Proper.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/subcortical/Left-Thalamus-Proper.obj",
       "notes": null,
       "function_profile": {
         "primary_function": "Visual attention routing; dynamically gates cortico-cortical visual information flow based on attentional demand",
@@ -1083,7 +1083,7 @@
         6.459,
         -19.934
       ],
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/subcortical/Left-Accumbens-area.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/subcortical/Left-Accumbens-area.obj",
       "notes": null,
       "function_profile": {
         "primary_function": "NAcc general reward-approach interface; integrates VTA DA, amygdala affect, and PFC goal signals",
@@ -1131,7 +1131,7 @@
         -10.032,
         -41.316
       ],
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.entorhinal.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.entorhinal.obj",
       "notes": null,
       "function_profile": {
         "primary_function": "Entorhinal cortex: hippocampal gateway — grid cell spatial coding, sensory-mnemonic translation, and cortical-hippocampal information bridge",
@@ -1180,7 +1180,7 @@
         -2.272,
         -12.175
       ],
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.insula.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.insula.obj",
       "notes": null,
       "function_profile": {
         "primary_function": "Anterior insula: interoceptive awareness and salience network hub; integrates visceral signals with emotional context for subjective feeling states",
@@ -1228,7 +1228,7 @@
         46.689,
         -8.23
       ],
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.rostralmiddlefrontal.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.rostralmiddlefrontal.obj",
       "notes": null,
       "function_profile": {
         "primary_function": "Frontal pole (BA10): cognitive branching — multi-tasking, subgoal monitoring, prospective memory, and exploratory decision making",
@@ -1275,7 +1275,7 @@
         25.251,
         -31.18
       ],
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.medialorbitofrontal.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.medialorbitofrontal.obj",
       "notes": null,
       "function_profile": {
         "primary_function": "Frontal pole (DMN): self-projection and mental time travel — future thinking, autobiographical planning, and introspective evaluation",
@@ -1323,7 +1323,7 @@
         46.689,
         -8.23
       ],
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.rostralmiddlefrontal.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.rostralmiddlefrontal.obj",
       "notes": null,
       "function_profile": {
         "primary_function": "Frontal pole (FPN): frontoparietal control — task set maintenance, cognitive flexibility, and adaptive goal-directed processing",
@@ -1370,7 +1370,7 @@
         21.212,
         2.739
       ],
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.caudalanteriorcingulate.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.caudalanteriorcingulate.obj",
       "notes": null,
       "function_profile": {
         "primary_function": "Frontal pole (salience network): salience-driven cognitive engagement — detects behaviorally relevant stimuli and recruits cognitive control",
@@ -1418,7 +1418,7 @@
         -14.686,
         20.494
       ],
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.posteriorcingulate.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.posteriorcingulate.obj",
       "notes": null,
       "function_profile": {
         "primary_function": "Posterior cingulate cortex: DMN core hub for self-referential processing, autobiographical memory retrieval, and internal attention",
@@ -1462,7 +1462,7 @@
         0.0
       ],
       "fs_xyz": null,
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/subcortical/Left-Putamen.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/subcortical/Left-Putamen.obj",
       "notes": "感觉运动环路的纹状体区(dlStr). 习惯形成/自动执行",
       "function_profile": {
         "primary_function": "Sensorimotor action selection and habit execution; somatic CSTC gate for motor programs",
@@ -1506,7 +1506,7 @@
         -0.5532
       ],
       "fs_xyz": null,
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.lateraloccipital.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.lateraloccipital.obj",
       "notes": "物体识别的关键区(LO). 腹侧视觉通路",
       "function_profile": {
         "primary_function": "Lateral occipital cortex: object shape processing (LOC), visual object recognition, and figure-ground segregation",
@@ -1547,7 +1547,7 @@
         -0.3913
       ],
       "fs_xyz": null,
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/subcortical/Left-Cerebellum-Cortex.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/subcortical/Left-Cerebellum-Cortex.obj",
       "notes": "预测/时序/自动化. 内部模型. 技能熟练化→习惯形成的关键结构",
       "function_profile": {
         "primary_function": "Cerebellar cortex: internal model for motor learning and timing — predictive feedforward control, error correction, and procedural skill automation",
@@ -1590,7 +1590,7 @@
         0.054
       ],
       "fs_xyz": null,
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/subcortical/Left-Caudate.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/subcortical/Left-Caudate.obj",
       "notes": "目标导向行为的纹状体区. 联合环路(dmStr)的皮层输入区",
       "function_profile": {
         "primary_function": "Cognitive action selection and goal-directed behavior; cognitive CSTC gate for prefrontal decisions",
@@ -1634,7 +1634,7 @@
         -0.3103
       ],
       "fs_xyz": null,
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.isthmuscingulate.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.isthmuscingulate.obj",
       "notes": "海马-默认网络接口. 空间记忆/场景构建. Alzheimer早期萎缩区",
       "function_profile": {
         "primary_function": "Retrosplenial cortex: spatial navigation, scene construction, and episodic memory retrieval; hub between hippocampus and default mode network",
@@ -1678,7 +1678,7 @@
         -0.2024
       ],
       "fs_xyz": null,
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.paracentral.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.paracentral.obj",
       "notes": "下肢运动/感觉代表区. 连接M1和S1的内侧延伸",
       "function_profile": {
         "primary_function": "Paracentral lobule: primary motor (leg/foot M1) and somatosensory (leg/foot S1) cortex for lower limb execution",
@@ -1725,7 +1725,7 @@
         -10.398,
         -29.247
       ],
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/subcortical/Left-Amygdala.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/subcortical/Left-Amygdala.obj",
       "notes": null,
       "function_profile": {
         "primary_function": "Emotional salience detection and fear conditioning; subcortical shortcut (~50ms) + cortical route. Dual role: (a) limbic CSTC cortical_input (Amygdala→NAcc→Pallidum→Thalamus→Amygdala); (b) subcortical shortcut (Amygdala→PAG/LC/hypothalamus, ~50ms) as independent modulator bypassing CSTC",
@@ -1773,7 +1773,7 @@
         -76.489,
         0.472
       ],
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.pericalcarine.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.pericalcarine.obj",
       "notes": null,
       "function_profile": {
         "primary_function": "Primary visual processing: edge detection, orientation, spatial frequency",
@@ -1818,7 +1818,7 @@
         -82.762,
         -6.044
       ],
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.lateraloccipital.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.lateraloccipital.obj",
       "notes": null,
       "function_profile": {
         "primary_function": "Occipito-parietal junction: visuospatial transformation — dorsal stream linking visual input to parietal spatial attention maps",
@@ -1864,7 +1864,7 @@
         -49.852,
         24.55
       ],
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.precuneus.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.precuneus.obj",
       "notes": null,
       "function_profile": {
         "primary_function": "Precuneus: DMN core — self-referential processing, visuospatial imagery, episodic memory retrieval, and consciousness; highest resting metabolic rate in cortex",
@@ -1908,7 +1908,7 @@
         -0.5397
       ],
       "fs_xyz": null,
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.cuneus.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.cuneus.obj",
       "notes": "背侧视觉通路的一部分. 空间视觉/运动检测",
       "function_profile": {
         "primary_function": "Cuneus: dorsal visual stream — visuospatial processing, motion detection, and visual attention allocation",
@@ -1954,7 +1954,7 @@
         -26.473,
         -21.672
       ],
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/subcortical/Left-Hippocampus.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/subcortical/Left-Hippocampus.obj",
       "notes": null,
       "function_profile": {
         "primary_function": "Episodic memory consolidation and pattern completion; NMDA-dependent LTP for long-term storage",
@@ -2002,7 +2002,7 @@
         -26.473,
         -21.672
       ],
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/subcortical/Left-Hippocampus.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/subcortical/Left-Hippocampus.obj",
       "notes": null,
       "function_profile": {
         "primary_function": "Pattern separation and rapid encoding; auto-associative network for novel context detection",
@@ -2045,7 +2045,7 @@
         -0.2429
       ],
       "fs_xyz": null,
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.parahippocampal.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.parahippocampal.obj",
       "notes": "空间导航/场景识别(PPA). 海马体的主要皮层输入. 内嗅皮层-海马的中继",
       "function_profile": {
         "primary_function": "Spatial/scene processing and memory encoding gateway; parahippocampal place area (PPA) for scene recognition",
@@ -2093,7 +2093,7 @@
         5.482,
         -5.453
       ],
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/subcortical/Left-Caudate.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/subcortical/Left-Caudate.obj",
       "notes": null,
       "function_profile": {
         "primary_function": "Automated habit execution and chunked action sequences; striosome/matrix compartment for skill automaticity",
@@ -2137,7 +2137,7 @@
         -0.3373
       ],
       "fs_xyz": null,
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.fusiform.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.fusiform.obj",
       "notes": "面孔识别(FFA)/物体精细分类. 视觉词形区(VWFA)也在附近",
       "function_profile": {
         "primary_function": "Fusiform gyrus: high-level visual object recognition — fusiform face area (FFA), visual word form area, and object category representation",
@@ -2179,7 +2179,7 @@
         -0.2968
       ],
       "fs_xyz": null,
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.supramarginal.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.supramarginal.obj",
       "notes": "语音处理/工作记忆/模仿. TPJ的组成部分. 与角回一起构成感觉-语言界面",
       "function_profile": {
         "primary_function": "Supramarginal gyrus: phonological processing and somatosensory association — phonological loop, attention reorienting, and tactile-motor integration",
@@ -2268,7 +2268,7 @@
         6.459,
         -19.934
       ],
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/subcortical/Left-Accumbens-area.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/subcortical/Left-Accumbens-area.obj",
       "notes": null,
       "function_profile": {
         "primary_function": "Ventral striatal reward-motor interface; incentive salience attribution",
@@ -2312,7 +2312,7 @@
         -0.5262
       ],
       "fs_xyz": null,
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.lingual.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.lingual.obj",
       "notes": "腹侧视觉通路. 颜色/文字处理. 连接V1与纺锤体回",
       "function_profile": {
         "primary_function": "Lingual gyrus: ventral visual stream — visual word form area, color processing, and ventral occipital visual integration",
@@ -2353,7 +2353,7 @@
         -0.027
       ],
       "fs_xyz": null,
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/subcortical/Left-Pallidum.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/subcortical/Left-Pallidum.obj",
       "notes": "基底节间接通路输出核. 抑制丘脑→抑制运动. CSTC环路关键节点",
       "function_profile": {
         "primary_function": "Basal ganglia output gate: tonic thalamic inhibition; striatal GABA disinhibits → GO release. Serves all 3 CSTC loops (cstc_loop=none, wildcard match)",
@@ -2484,7 +2484,7 @@
         -60.668,
         21.375
       ],
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.inferiorparietal.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.inferiorparietal.obj",
       "notes": null,
       "function_profile": {
         "primary_function": "Angular gyrus: semantic processing, number cognition, and default mode network hub; cross-modal conceptual integration",
@@ -2532,7 +2532,7 @@
         -54.056,
         32.762
       ],
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.superiorparietal.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.superiorparietal.obj",
       "notes": null,
       "function_profile": {
         "primary_function": "Superior parietal lobule: dorsal attention network — spatial attention, visuomotor transformation, and reaching/grasping coordination",
@@ -2578,7 +2578,7 @@
         -60.668,
         21.375
       ],
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.inferiorparietal.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.inferiorparietal.obj",
       "notes": null,
       "function_profile": {
         "primary_function": "Inferior parietal lobule: multimodal sensory integration, spatial attention, and body schema; ventral attention network component",
@@ -2621,7 +2621,7 @@
         0.2563
       ],
       "fs_xyz": null,
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.superiorfrontal.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.superiorfrontal.obj",
       "notes": "高级认知/自我意识/工作记忆. 包含SMA前区(pre-SMA)",
       "function_profile": {
         "primary_function": "Superior frontal gyrus: supplementary motor area (SMA) and pre-SMA — motor planning, action sequencing, and response inhibition",
@@ -2665,7 +2665,7 @@
         0.0944
       ],
       "fs_xyz": null,
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.caudalmiddlefrontal.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.caudalmiddlefrontal.obj",
       "notes": "dlPFC后部. 工作记忆/执行控制的运动端",
       "function_profile": {
         "primary_function": "Caudal middle frontal gyrus: dorsal premotor cortex — motor planning, spatial working memory, and action sequence organization",
@@ -2713,7 +2713,7 @@
         60.177,
         -31.229
       ],
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.frontalpole.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.frontalpole.obj",
       "notes": null,
       "function_profile": {
         "primary_function": "Extreme frontal pole: highest-order abstraction — meta-cognition, counterfactual reasoning, and complex relational integration",
@@ -2756,7 +2756,7 @@
         -0.2159
       ],
       "fs_xyz": null,
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.superiortemporal.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.superiortemporal.obj",
       "notes": "含Wernicke区后部. 听觉联合皮层. 语言理解",
       "function_profile": {
         "primary_function": "Superior temporal gyrus: auditory association — spectrotemporal analysis, voice identity, and auditory object recognition",
@@ -2802,7 +2802,7 @@
         -15.297,
         -14.654
       ],
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.superiortemporal.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.superiortemporal.obj",
       "notes": null,
       "function_profile": {
         "primary_function": "Superior temporal sulcus: social cognition hub — biological motion, face/voice integration, theory of mind, and social perception",
@@ -2844,7 +2844,7 @@
         -0.2968
       ],
       "fs_xyz": null,
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.bankssts.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.bankssts.obj",
       "notes": "社会知觉/生物运动检测. 意图感知/心理理论的前体",
       "function_profile": {
         "primary_function": "Banks of superior temporal sulcus: social perception — biological motion, gaze direction, face/voice integration for social cognition",
@@ -2890,7 +2890,7 @@
         -38.584,
         -27.54
       ],
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.inferiortemporal.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.inferiortemporal.obj",
       "notes": null,
       "function_profile": {
         "primary_function": "Inferior temporal cortex: ventral visual stream — complex object recognition, color perception, and visual memory",
@@ -2931,7 +2931,7 @@
         -0.2833
       ],
       "fs_xyz": null,
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.middletemporal.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.middletemporal.obj",
       "notes": "运动处理(MT/MST). 语义记忆. 背侧听觉通路",
       "function_profile": {
         "primary_function": "Middle temporal gyrus: motion processing (MT/V5), semantic language, and multimodal association; dorsal visual stream motion hub",
@@ -2978,7 +2978,7 @@
         5.25,
         -45.329
       ],
-      "obj_file": "规则/技能树系统/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.temporalpole.obj",
+      "obj_file": "呈现/3D可视化/blender_assets/all_obj/pial_DK/lh.pial.DK.temporalpole.obj",
       "notes": null,
       "function_profile": {
         "primary_function": "Temporal pole: semantic hub for person knowledge, social concepts, and cross-modal semantic integration; anterior temporal lobe semantic hub",

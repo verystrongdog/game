@@ -60,7 +60,7 @@ NPC / 病种起草的输入材料与实例化产物。`规则/技能树系统/�
 | `konza_plot_101x101_r16.raw` | 高度图原始副本（16 bit，101×101） |
 | `3dep_info.json` 等 | USGS 3DEP ImageServer / TNM API 响应存档（证明 1 m 源可用） |
 
-消费方：[unity/地块数据-Konza草原.md](../unity/地块数据-Konza草原.md)、[unity/玫瑰株丛密度.md](../unity/玫瑰株丛密度.md)。入库状态为 `unity/Assets/Resources/YANTF/konza_plot_101x101_r16.bytes`。
+消费方：[呈现/地块数据-Konza草原.md](../%E5%91%88%E7%8E%B0/%E5%9C%B0%E5%9D%97%E6%95%B0%E6%8D%AE-Konza%E8%8D%89%E5%8E%9F.md)、[呈现/玫瑰株丛密度.md](../%E5%91%88%E7%8E%B0/%E7%8E%AB%E7%91%B0%E6%A0%AA%E4%B8%9B%E5%AF%86%E5%BA%A6.md)。入库状态为 `unity/Assets/Resources/YANTF/konza_plot_101x101_r16.bytes`。
 
 ---
 *创建: 2026-09-12 | 更新: 2026-09-12*

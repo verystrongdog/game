@@ -12,7 +12,7 @@ using YANTF.WalkerLab;
 
 public class RoseFieldSmokeTests
 {
-    // 地块规格（与 RoseFieldLab 默认值一致；来源见 unity/地块数据-Konza草原.md）
+    // 地块规格（与 RoseFieldLab 默认值一致；来源见 呈现/地块数据-Konza草原.md）
     private const int Samples = 101;
     private const float FieldSize = 100f;
     private const float Relief = 3.1075f;
