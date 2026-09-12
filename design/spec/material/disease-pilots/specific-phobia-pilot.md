@@ -19,7 +19,7 @@
 |---|------|------|--------------------------|
 | 1 | **Etkin & Wager (2007)** *Am J Psychiatry* | ALE meta（PTSD/SAD/SP 对比） | **SP 杏仁核 + 岛叶过度激活 > PTSD**；且 SP **无** PTSD 特有的 ACC 背侧/喙侧 + vmPFC 低激活 → 防御/内感受边群方向（specific-phobia_e01/e06）+ **抑制域缺位**（无 vmPFC 解耦边——机制表达） |
 | 2 | **RDoC v4（NIMH）** | 回路矩阵 | 急性威胁回路：杏仁核→vmPFC/dmPFC/ACC + **dPAG**；dPAG 快速防御 → PAG→杏仁核 上行 + 上丘快速通路（e01/e02） |
-| 3 | **旧链路注册表（link_registry.json，⚠️ 已废弃 2026-08-07）** | 数据源 | 5 条旧链路（link_312/317/332/326/003_L）的方向/量级（LeDoux 2000 / Paxinos 2004 / Hansen 2024）作为语义继承源，见 §四 |
+| 3 | **旧链路注册表（link_registry.json，⚠️ 已废弃 2026-08-07）** | 数据源 | 5 条旧链路（link_312/317/332/326/003_L）的方向/量级（LeDoux 2000 / Paxinos 2004 / 脑干强度估计）作为语义继承源，见 §四 |
 | 4 | **Guo et al. (2026)** *Transl Psychiatry* | 跨诊断 ALFF meta | 焦虑障碍 ALFF↑ 双侧岛叶/ACC-mPFC/杏仁核/纹状体（共享模式）→ e06/e09 方向补充 |
 
 **辅助锚（方向/范围补充）**：
@@ -48,8 +48,8 @@
 
 | 病理边ID | source | target | 边类型 | 三体核验（命中详情） | 病理类型 | m偏移(轻/中) | laterality_delta | 文献依据 | 挂接 |
 |---|---|---|---|---|---|---|---|---|---|
-| **specific-phobia_e03** | LocusCoeruleus | Amygdala | privileged_pathway | ✅ 命中：`brainstem_subcortical`, dir=feedforward, level_diff=+1 | 过度耦合 | 0/+0.2 | 0 | 旧 link_332（蓝斑→杏仁核 NE，Hansen 2024 fc=0.7）；[特定恐惧症.md](../../../entities/diseases/%E7%89%B9%E5%AE%9A%E6%81%90%E6%83%A7%E7%97%87.md) 唤醒域（刺激触发） | 行为覆盖①（恐惧刺激→NE 唤醒） |
-| **specific-phobia_e04** | LocusCoeruleus | insula | brainstem | ✅ 命中：`LC_NE` diffuse_broadcast | 过度耦合 | 0/+0.1 | 0 | 旧 link_326（蓝斑→前脑岛 NE，Hansen PINK fc=0.85） | 行为覆盖①（躯体恐惧反应） |
+| **specific-phobia_e03** | LocusCoeruleus | Amygdala | privileged_pathway | ✅ 命中：`brainstem_subcortical`, dir=feedforward, level_diff=+1 | 过度耦合 | 0/+0.2 | 0 | 旧 link_332（蓝斑→杏仁核 NE，脑干强度估计 fc=0.7）；[特定恐惧症.md](../../../entities/diseases/%E7%89%B9%E5%AE%9A%E6%81%90%E6%83%A7%E7%97%87.md) 唤醒域（刺激触发） | 行为覆盖①（恐惧刺激→NE 唤醒） |
+| **specific-phobia_e04** | LocusCoeruleus | insula | brainstem | ✅ 命中：`LC_NE` diffuse_broadcast | 过度耦合 | 0/+0.1 | 0 | 旧 link_326（蓝斑→前脑岛 NE，脑干强度估计 fc=0.85） | 行为覆盖①（躯体恐惧反应） |
 
 ### 2.3 记忆域（1 条）——「恐惧条件化」
 

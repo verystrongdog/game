@@ -25,7 +25,7 @@
 **辅助锚（方向/范围补充）**：
 
 - **Gordon, Palmer & Cooper (2010)** *Clin EEG Neurosci*——六病同测 EEG alpha 偏侧：MDD 右偏仅趋势水平；[左右脑偏侧化-文献数据源.md](../../../../reference/literature/%E5%B7%A6%E5%8F%B3%E8%84%91%E5%81%8F%E4%BE%A7%E5%8C%96-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md) §八：**MDD 偏侧证据弱，谨慎不作核心机制** → 环性心境全边 laterality_delta = 0。
-- **旧链路注册表（link_registry.json，⚠️ 已废弃 2026-08-07）**——6 条旧链路的方向/量级/通路描述（Hansen 2024 / Paxinos 2004 / ENIGMA / Alexander 1986 CSTC）作为语义继承源，见 §四。
+- **旧链路注册表（link_registry.json，⚠️ 已废弃 2026-08-07）**——6 条旧链路的方向/量级/通路描述（本仓脑干强度估计 / Paxinos 2004 / ENIGMA / Alexander 1986 CSTC）作为语义继承源，见 §四。
 - **MDD 试点（[mdd-pilot.md](../disease-pilots/mdd-pilot.md)）**——抑郁谱系共享边（VTA→NAcc 解耦、DMN 反刍）在此降档复用，保证谱系内量级梯度（MDD > 环性）。
 
 > **转换规则声明**：文献给出脑区/网络层结论，三体边层映射为设计师翻译；m 偏移量级沿用旧文件设计校准值（环性 = MDD × 0.5~0.7 梯度 + BD-II × 0.5 推导），**全部数值有来源，新增数值标记 `[NEW]`**。
@@ -63,7 +63,7 @@
 
 | 病理边ID | source | target | 边类型 | 三体核验（命中详情） | 病理类型 | m偏移(轻/中/重) | laterality_delta | 文献依据 | 挂接 |
 |---|---|---|---|---|---|---|---|---|---|
-| **cyclothymia_e03** | LocusCoeruleus | Amygdala | privileged_pathway | ✅ 命中：`brainstem_subcortical`, dir=feedforward, level_diff=+1 | **过度耦合** | 0/+0.1/— | 0 | 旧 link_332（蓝斑→杏仁核 NE，Hansen 2024 fc=0.7）；唤醒域轻度↑（蓝斑不稳定，< GAD/BD，文献数据源 §七） | 3.1 节 NE tone 推导锚（振荡承载） |
+| **cyclothymia_e03** | LocusCoeruleus | Amygdala | privileged_pathway | ✅ 命中：`brainstem_subcortical`, dir=feedforward, level_diff=+1 | **过度耦合** | 0/+0.1/— | 0 | 旧 link_332（蓝斑→杏仁核 NE，脑干强度估计 fc=0.7）；唤醒域轻度↑（蓝斑不稳定，< GAD/BD，文献数据源 §七） | 3.1 节 NE tone 推导锚（振荡承载） |
 
 ### 2.5 认知控制域（1 条）——「dlPFC 轻度↓」
 

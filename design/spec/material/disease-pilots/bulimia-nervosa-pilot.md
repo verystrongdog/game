@@ -27,7 +27,7 @@
 - **豆状核→Putamen 映射**——Bronleigh 2022「奖赏区（豆状核）↑」：豆状核（lentiform）= 壳核（`Putamen`）+ 苍白球（`Pallidum`）；BN 奖赏超敏主载体取壳核侧（e01/e02/e09，纹状体 DA 通路），苍白球侧由 AN 的 Datta 2025 组分3 表达（set-shift，见 [AN 试点](../disease-pilots/anorexia-nervosa-pilot.md) an_e08）。
 - **AN 对标方向翻转**（旧 BN 思路链）——同一父类下与 AN 方向相反的表达；AN 的 e01/e05/e06 同边异号对照见 §三.4。
 - **NPC AI §4.2**——标签「抑制不足」（5HT −0.2, bias_somatic +0.15）与「敏化-奖励」（DA_VTA +0.2, 5HT −0.2, bias_limbic +0.15）。
-- **旧链路注册表（link_registry.json，⚠️ 已废弃）**——6 条旧链路的方向/量级（Schultz1997 / Paxinos2004 / Hansen2024 / Alexander1986_CSTC / ENIGMA）作为语义继承源，见 §四。
+- **旧链路注册表（link_registry.json，⚠️ 已废弃）**——6 条旧链路的方向/量级（Schultz1997 / Paxinos2004 / 本仓脑干强度估计 / Alexander1986_CSTC / ENIGMA）作为语义继承源，见 §四。
 
 > **转换规则声明**：文献给出脑区/网络层结论，三体边层映射为设计师翻译（文献数据源 §八）；m 偏移量级沿用旧文件设计校准，**旧 BN 文件的非单调 m（link_336: 0/+0.3/−0.1；link_344: 0/+0.2/0）修正为严重度单调**（相位入行为覆盖，见 §五）；新增数值标记 `[NEW]`。
 
@@ -51,7 +51,7 @@
 
 | 病理边ID | source | target | 边类型 | 三体核验（命中详情） | 病理类型 | m偏移(轻/中/重) | laterality_delta | 文献依据 | 挂接 |
 |---|---|---|---|---|---|---|---|---|---|
-| **bn_e04** | LocusCoeruleus | insula | brainstem | ✅ 命中：`LC_NE` diffuse_broadcast | 过度耦合 | 0/+0.2/+0.3 | 0 | 旧 link_326（LC→前脑岛 NE，fc=0.85，Hansen2024 PINK 最强 hub）；Bronleigh 2022 内感受区↑ | 行为覆盖①（食物线索内感受警觉） |
+| **bn_e04** | LocusCoeruleus | insula | brainstem | ✅ 命中：`LC_NE` diffuse_broadcast | 过度耦合 | 0/+0.2/+0.3 | 0 | 旧 link_326（LC→前脑岛 NE，fc=0.85，脑干强度估计·PINK 最强 hub）；Bronleigh 2022 内感受区↑ | 行为覆盖①（食物线索内感受警觉） |
 | **bn_e05** | rostralanteriorcingulate | insula | corticocortical | ✅ 命中：CC, dir=lateral, level_diff=0, edr=0.4246 | 解耦沉默 | −0.1/−0.2/−0.3 | 0 | 旧 link_155_L（ACC吻侧→前脑岛）；饱腹感信号不可靠 + 清除后身体信号被忽略 | 行为覆盖②（清除后内感受忽略） |
 
 ### 2.3 认知控制域（2 条）——「dlPFC↓ 抑制失败」

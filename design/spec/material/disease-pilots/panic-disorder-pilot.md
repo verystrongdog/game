@@ -51,7 +51,7 @@
 | 病理边ID | source | target | 边类型 | 三体核验（命中详情） | 病理类型 | m偏移(轻/中/重) | laterality_delta | 文献依据 | 挂接 |
 |---|---|---|---|---|---|---|---|---|---|
 | **panic-disorder_e03** | LocusCoeruleus | Amygdala | privileged_pathway | ✅ 命中：`brainstem_subcortical`, dir=feedforward, level_diff=+1 | 过度耦合 | +0.1/+0.3/+0.5 | 0 | RDoC 唤醒域；发作时 NE 风暴（心悸/出汗/震颤）；GAD 试点 e02 量级对标 | 非线性跳变①（NE 瞬时冲击，NPC AI §3.5 反射级） |
-| **panic-disorder_e04** | LocusCoeruleus | insula | brainstem | ✅ 命中：`LC_NE` diffuse_broadcast | 过度耦合 | +0.1/+0.2/+0.4 | 0 | 发作躯体症状（心悸/气促/胸闷）NE 驱动；Hansen PINK fc=0.85 | 非线性跳变①（躯体症状端） |
+| **panic-disorder_e04** | LocusCoeruleus | insula | brainstem | ✅ 命中：`LC_NE` diffuse_broadcast | 过度耦合 | +0.1/+0.2/+0.4 | 0 | 发作躯体症状（心悸/气促/胸闷）NE 驱动；脑干强度估计 fc=0.85 | 非线性跳变①（躯体症状端） |
 
 ### 2.3 内感受域（3 条）——「内感受误报反馈环」（发作诱因核心）
 

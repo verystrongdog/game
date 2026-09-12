@@ -47,7 +47,7 @@
 |---|---|---|---|---|---|---|---|---|---|
 | **bipolari_e01** ⭐核心 | VentralTegmentalArea | Accumbens-area | brainstem | ✅ 命中：`VTA_DA` targeted_broadcast | **双向振荡**（躁狂:过度耦合/抑郁:解耦沉默） | +0.3/−0.3, +0.5/−0.5, **+0.6**/−0.5 | 0 | 旧 link_336（VTA→NAcc，Schultz 1997）；NPC AI §5.2 躁狂（VTA→NAcc↑）；奖赏超敏模型；MDD 快感缺失 VTA→NAcc 解耦（文献 §七） | 行为覆盖①（躁狂/抑郁姿态切换）；非线性跳变①（\|m\|>0.5 SAN −2/回合）；3.1 DA_VTA 推导锚（主） |
 | **bipolari_e02** | SubstantiaNigraParsCompacta | Putamen | brainstem | ✅ 命中：`SNc_DA` targeted_broadcast | **双向振荡** | +0.1/−0.1, +0.3/−0.3, +0.3/−0.3 | 0 | 旧 link_344（SNc→壳核，Paxinos 2004）；壳核 ALFF↑ Guo 2026（纹状体） | 行为覆盖①；非线性跳变①（作用域成员）；3.1 DA_SNc 推导锚 |
-| **bipolari_e03** | VentralTegmentalArea | superiorfrontal | brainstem | ✅ 命中：`VTA_DA` targeted_broadcast | **双向振荡** | +0.1/−0.1, +0.2/−0.2, +0.3/−0.3 | 0 | 旧 link_338（VTA→mPFC，Hansen 2024）；奖赏超敏→目标驱动过度（躁狂） | 行为覆盖①（目标驱动）；3.1 DA_VTA 推导锚（次） |
+| **bipolari_e03** | VentralTegmentalArea | superiorfrontal | brainstem | ✅ 命中：`VTA_DA` targeted_broadcast | **双向振荡** | +0.1/−0.1, +0.2/−0.2, +0.3/−0.3 | 0 | 旧 link_338（VTA→mPFC，脑干强度估计）；奖赏超敏→目标驱动过度（躁狂） | 行为覆盖①（目标驱动）；3.1 DA_VTA 推导锚（次） |
 | **bipolari_e16** ⭐新增 | medialorbitofrontal | Accumbens-area | cstc | ✅ 命中：limbic 环路 `go_direct`，cortical_input→striatal_gate | **双向振荡** | +0.2/−0.2, +0.4/−0.3, +0.5/−0.4 | 0 | 奖赏超敏模型（Robinson & Berridge 1993）；Damme 2022（mOFC/NAcc 体积↑，BSD 谱系）；CSTC limbic 奖赏门控 | 行为覆盖①（冲动趋近/快感缺失）；3.1 bias_limbic 推导锚（相位） |
 | **bipolari_e15** ⭐新增 | superiorfrontal | Putamen | cstc | ✅ 命中：somatic 环路 `go_direct`，cortical_input→striatal_gate | **双向振荡** | +0.2/−0.1, +0.3/−0.2, +0.4/−0.3 | 0 | 壳核 ALFF↑ Guo 2026（纹状体）；躁狂期精神运动性兴奋/抑郁期精神运动迟滞（临床）；NPC AI §5.2 躁狂（dlPFC 抑制↓） | 行为覆盖①（物理攻击姿态）；3.1 bias_somatic 推导锚（相位） |
 
@@ -55,8 +55,8 @@
 
 | 病理边ID | source | target | 边类型 | 三体核验（命中详情） | 病理类型 | m偏移(轻/中/重)（躁狂极/抑郁极） | laterality_delta | 文献依据 | 挂接 |
 |---|---|---|---|---|---|---|---|---|---|
-| **bipolari_e05** | LocusCoeruleus | Amygdala | privileged_pathway | ✅ 命中：`brainstem_subcortical`, dir=feedforward, level_diff=+1 | 过度耦合（相位无关，两相均↑） | 0/+0.2/+0.4 | 0 | 旧 link_332（蓝斑→杏仁核 NE，Hansen 2024）；蓝斑振荡——躁狂期↑（睡眠需求↓）/抑郁期也可↑（激越性抑郁，旧思路链） | 3.1 NE 推导锚（主）；非线性跳变②（睡眠恢复 SAN −50%） |
-| **bipolari_e06** | LocusCoeruleus | caudalanteriorcingulate | brainstem | ✅ 命中：`LC_NE` diffuse_broadcast | 过度耦合（相位无关） | 0/+0.1/+0.3 | 0 | 旧 link_327（蓝斑→ACC，Hansen 2024 Fig5）；NE→警觉/冲动 | 3.1 NE 推导锚（次）；行为覆盖③（相位翻转触发器：唤醒域 m_max>0.3） |
+| **bipolari_e05** | LocusCoeruleus | Amygdala | privileged_pathway | ✅ 命中：`brainstem_subcortical`, dir=feedforward, level_diff=+1 | 过度耦合（相位无关，两相均↑） | 0/+0.2/+0.4 | 0 | 旧 link_332（蓝斑→杏仁核 NE，脑干强度估计）；蓝斑振荡——躁狂期↑（睡眠需求↓）/抑郁期也可↑（激越性抑郁，旧思路链） | 3.1 NE 推导锚（主）；非线性跳变②（睡眠恢复 SAN −50%） |
+| **bipolari_e06** | LocusCoeruleus | caudalanteriorcingulate | brainstem | ✅ 命中：`LC_NE` diffuse_broadcast | 过度耦合（相位无关） | 0/+0.1/+0.3 | 0 | 旧 link_327（蓝斑→ACC，脑干强度估计 Fig5 对应社区）；NE→警觉/冲动 | 3.1 NE 推导锚（次）；行为覆盖③（相位翻转触发器：唤醒域 m_max>0.3） |
 | **bipolari_e07** ⭐新增 | DorsalRapheNucleus | Amygdala | brainstem | ✅ 命中：`Raphe_5HT` targeted_broadcast（privileged `brainstem_subcortical` 有孪生边） | **双向振荡**（5-HT 相位调制） | −0.1/+0.1, −0.2/+0.2, −0.3/+0.3 | 0 | NPC AI §4.2 敏化-奖励/抑制不足（5HT −0.2）↔ 过度抑制（5HT +0.2）；5HT 行为抑制假说（Soubrié 1986）；锂盐 5-HT 机制 | 3.1 5HT 推导锚（双向）；躁狂相去抑制/抑郁相过度抑制 |
 
 ### 2.3 认知控制/整合域（4 条）——「dlPFC 抑制↓ + 丘脑/尾状核环路异常」

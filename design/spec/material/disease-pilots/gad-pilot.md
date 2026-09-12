@@ -50,8 +50,8 @@
 
 | 病理边ID | source | target | 边类型 | 三体核验（命中详情） | 病理类型 | m偏移(轻/中) | laterality_delta | 文献依据 | 挂接 |
 |---|---|---|---|---|---|---|---|---|---|
-| **gad_e02** | LocusCoeruleus | Amygdala | privileged_pathway | ✅ 命中：`brainstem_subcortical`, dir=feedforward, level_diff=+1 | 过度耦合 | +0.1/+0.3 | 0 | 旧 link_332（蓝斑→杏仁核 NE，Hansen 2024 fc=0.7）；RDoC 唤醒域；[GAD 思路链](../../../entities/diseases/%E5%B9%BF%E6%B3%9B%E6%80%A7%E7%84%A6%E8%99%91%E9%9A%9C%E7%A2%8D.md) 蓝斑 NE 持续激活 | 非线性跳变①（持续警觉锁定） |
-| **gad_e03** | LocusCoeruleus | insula | brainstem | ✅ 命中：`LC_NE` diffuse_broadcast | 过度耦合 | +0.1/+0.2 | 0 | 旧 link_326（蓝斑→前脑岛 NE，Hansen PINK fc=0.85） | 行为覆盖①（内感受过度警觉） |
+| **gad_e02** | LocusCoeruleus | Amygdala | privileged_pathway | ✅ 命中：`brainstem_subcortical`, dir=feedforward, level_diff=+1 | 过度耦合 | +0.1/+0.3 | 0 | 旧 link_332（蓝斑→杏仁核 NE，脑干强度估计 fc=0.7）；RDoC 唤醒域；[GAD 思路链](../../../entities/diseases/%E5%B9%BF%E6%B3%9B%E6%80%A7%E7%84%A6%E8%99%91%E9%9A%9C%E7%A2%8D.md) 蓝斑 NE 持续激活 | 非线性跳变①（持续警觉锁定） |
+| **gad_e03** | LocusCoeruleus | insula | brainstem | ✅ 命中：`LC_NE` diffuse_broadcast | 过度耦合 | +0.1/+0.2 | 0 | 旧 link_326（蓝斑→前脑岛 NE，脑干强度估计 fc=0.85） | 行为覆盖①（内感受过度警觉） |
 
 > BNST（终纹床核）无三体节点：旧文件「BNST 维持长时间警觉」语义由 LC 广播边群（gad_e02/e03）承载——持续警觉 = LC 全局 NE 上调，不新增节点（§四处置规则：语义转移优先）。
 
@@ -66,7 +66,7 @@
 
 | 病理边ID | source | target | 边类型 | 三体核验（命中详情） | 病理类型 | m偏移(轻/中) | laterality_delta | 文献依据 | 挂接 |
 |---|---|---|---|---|---|---|---|---|---|
-| **gad_e04** | DorsalRapheNucleus | Amygdala | brainstem | ✅ 命中：`Raphe_5HT` targeted_broadcast（privileged `brainstem_subcortical` 有孪生边） | 过度耦合 | 0/+0.2 | 0 | 旧 link_320（中缝背核→杏仁核 5-HT，Hansen PINK fc=0.7） | 3.1 节 5HT tone 推导锚 |
+| **gad_e04** | DorsalRapheNucleus | Amygdala | brainstem | ✅ 命中：`Raphe_5HT` targeted_broadcast（privileged `brainstem_subcortical` 有孪生边） | 过度耦合 | 0/+0.2 | 0 | 旧 link_320（中缝背核→杏仁核 5-HT，脑干强度估计 fc=0.7） | 3.1 节 5HT tone 推导锚 |
 
 ### 2.5 DMN 内连接域（4 条）——「持续性担忧引擎」（Pierce & Black 2023）
 

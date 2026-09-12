@@ -26,7 +26,7 @@
 
 - **AN-OCD 强迫特征**（文献数据源 §七 OCD 对照）——强迫/僵化 → e09（SNc→Caudate 过度耦合，策略锁定）+ e08（苍白球 set-shift 僵硬）。
 - **NPC AI §4.2**——标签「过度抑制」（5HT +0.2, bias_somatic −0.15）与「反刍」（NE −0.1, bias_cognitive +0.15）；§5.2「抑郁（快感缺失）」行 = 奖赏↓+认知↑先例（VTA→NAcc ↓, dlPFC 控制 ↑）。
-- **旧链路注册表（link_registry.json，⚠️ 已废弃）**——10 条旧链路的方向/量级（Hansen2024 / ENIGMA 连接强度）作为语义继承源，见 §四。
+- **旧链路注册表（link_registry.json，⚠️ 已废弃）**——10 条旧链路的方向/量级（本仓脑干强度估计 / ENIGMA 连接强度）作为语义继承源，见 §四。
 - **暴食-清除亚型（AN-BP）**——DSM-5 AN 含限制型与暴食-清除亚型；AN-BP 的循环跳变见 §五.2 [NEW]。
 
 > **转换规则声明**：文献给出脑区/网络层结论，三体边层映射为设计师翻译（文献数据源 §八）；m 偏移量级沿用旧文件设计校准，新增数值标记 `[NEW]`。AN 内感受域为**混合方向**（ACC-岛叶解耦 + LC-岛叶过度警觉，旧思路链"方向混合"）→ 两条独立边表达。
@@ -44,14 +44,14 @@
 | 病理边ID | source | target | 边类型 | 三体核验（命中详情） | 病理类型 | m偏移(轻/中/重) | laterality_delta | 文献依据 | 挂接 |
 |---|---|---|---|---|---|---|---|---|---|
 | **an_e01** ⭐核心 | VentralTegmentalArea | Accumbens-area | brainstem | ✅ 命中：`VTA_DA` targeted_broadcast（中脑边缘 DA 通路） | **解耦沉默** | −0.1/−0.3/−0.5 | 0 | 旧 link_336（VTA→NAcc，fc=0.9）；Bronleigh 2022 AN 奖赏− | 行为覆盖②（食物/奖赏趋近不可用） |
-| **an_e02** | VentralTegmentalArea | superiorfrontal | brainstem | ✅ 命中：`VTA_DA` targeted_broadcast（→mPFC 奖赏价值整合） | 解耦沉默 | 0/−0.1/−0.3 | 0 | 旧 link_338（VTA→mPFC，fc=0.6，Hansen2024）；食物奖赏价值被认知抑制 | 3.1 节 DA_VTA 推导锚 |
+| **an_e02** | VentralTegmentalArea | superiorfrontal | brainstem | ✅ 命中：`VTA_DA` targeted_broadcast（→mPFC 奖赏价值整合） | 解耦沉默 | 0/−0.1/−0.3 | 0 | 旧 link_338（VTA→mPFC，fc=0.6，本仓脑干强度估计）；食物奖赏价值被认知抑制 | 3.1 节 DA_VTA 推导锚 |
 
 ### 2.2 内感受域（2 条）——「岛叶异常（混合方向）」
 
 | 病理边ID | source | target | 边类型 | 三体核验（命中详情） | 病理类型 | m偏移(轻/中/重) | laterality_delta | 文献依据 | 挂接 |
 |---|---|---|---|---|---|---|---|---|---|
 | **an_e03** ⭐核心 | rostralanteriorcingulate | insula | corticocortical | ✅ 命中：CC, dir=lateral, level_diff=0, edr=0.4246 | **解耦沉默** | −0.1/−0.2/−0.4 | 0 | 旧 link_155_L + **并吞 link_160**（rACC→前脑岛，ENIGMA 6.29/3.66）；Panarello 2025 岛叶 trait | 行为覆盖① + 非线性跳变②（饥饿=控制成功） |
-| **an_e04** | LocusCoeruleus | insula | brainstem | ✅ 命中：`LC_NE` diffuse_broadcast | 过度耦合 | 0/+0.1/+0.2 | 0 | 旧 link_326（LC→前脑岛 NE，fc=0.85，Hansen2024 PINK 最强 hub）；身体信号被过度警觉放大 | 行为覆盖①（内感受过度警觉侧） |
+| **an_e04** | LocusCoeruleus | insula | brainstem | ✅ 命中：`LC_NE` diffuse_broadcast | 过度耦合 | 0/+0.1/+0.2 | 0 | 旧 link_326（LC→前脑岛 NE，fc=0.85，脑干强度估计·PINK 最强 hub）；身体信号被过度警觉放大 | 行为覆盖①（内感受过度警觉侧） |
 
 ### 2.3 认知控制域（2 条）——「认知控制↑ 过度耦合」
 
@@ -66,7 +66,7 @@
 |---|---|---|---|---|---|---|---|---|---|
 | **an_e07** | precuneus | superiorfrontal | corticocortical | ✅ 命中：CC, dir=feedforward, level_diff=+1, edr=0.242 | 过度耦合 | +0.1/+0.2/+0.3 | 0 | 旧 link_147_L（楔前叶→mPFC，ENIGMA 9.97）；Datta 2025 组分1 楔前叶身体意象自我参照 | 行为覆盖①（身体意象偏差侧翼） |
 | **an_e08** ⭐新增 | Pallidum | Thalamus-Proper | cstc | ✅ 命中：cognitive 环路 `disinhibition`, pallidal_output→thalamic_relay（somatic/limbic 孪生存在；CC 孪生 edr=0.6395 存在） | 过度耦合 | 0/+0.1/+0.2 | 0 | Datta 2025 组分3 苍白球（奖赏/转换）——set-shift 僵硬 | 3.1 节认知僵硬锚 |
-| **an_e10** | LocusCoeruleus | pericalcarine | brainstem | ✅ 命中：`LC_NE` diffuse_broadcast | 过度耦合 | 0/+0.1/+0.2 | 0 | 旧 link_331（LC→V1 NE，fc=0.6，Hansen2024）；身体意象视觉监控警觉 | 行为覆盖①（视觉侧翼） |
+| **an_e10** | LocusCoeruleus | pericalcarine | brainstem | ✅ 命中：`LC_NE` diffuse_broadcast | 过度耦合 | 0/+0.1/+0.2 | 0 | 旧 link_331（LC→V1 NE，fc=0.6，本仓脑干强度估计）；身体意象视觉监控警觉 | 行为覆盖①（视觉侧翼） |
 
 ### 2.5 行动门控/调制域（2 条）——「策略僵化 + 5HT↑ 过度抑制」
 

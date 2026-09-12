@@ -46,7 +46,7 @@
 | **ssd_e01** ⭐核心 | insula | caudalanteriorcingulate | corticocortical | ✅ 命中：dir=lateral, level_diff=0, edr=0.3951（前脑岛↔dACC 内感受-显著网络） | **过度耦合** | +0.1/+0.2/+0.3 | 0 | Boeckle 2016（ACC+前岛叶高激活）；RDoC 内感受域；Guo 2026 岛叶+ACC ALFF↑ | 行为覆盖①（症状波动）+ 非线性跳变① |
 | **ssd_e02** | insula | rostralanteriorcingulate | corticocortical | ✅ 命中：dir=lateral, level_diff=0, edr=0.4246（前脑岛↔rACC 内感受-情绪） | 过度耦合 | 0/+0.1/+0.2 | 0 | Boeckle 2016（ACC 高激活）；RDoC 内感受域情绪分量 | 行为覆盖①（症状情绪化） |
 | **ssd_e03** | Thalamus-Proper | insula | cstc | ✅ 命中：limbic 环路 `thalamocortical`, thalamic_relay→cortical_input（丘脑皮层闭合）+ 同对 CC 边 edr=0.5042 | 过度耦合 | 0/+0.1/+0.2 | 0 | 内脏/躯体感觉丘脑中继放大（伤害性信号→前脑岛）；Boeckle 2016 感觉运动高激活 | 行为覆盖①（内脏感觉增益） |
-| **ssd_e04** | LocusCoeruleus | insula | brainstem | ✅ 命中：`LC_NE` diffuse_broadcast | 过度耦合 | 0/+0.1/+0.2 | 0 | RDoC 唤醒域：LC→前脑岛 NE 内感受警觉（旧 link_326 语义，Hansen PINK 最强 hub fc=0.85） | 3.1 节 NE tone 推导锚 |
+| **ssd_e04** | LocusCoeruleus | insula | brainstem | ✅ 命中：`LC_NE` diffuse_broadcast | 过度耦合 | 0/+0.1/+0.2 | 0 | RDoC 唤醒域：LC→前脑岛 NE 内感受警觉（旧 link_326 语义，脑干强度估计 fc=0.85（PINK 最强 hub）） | 3.1 节 NE tone 推导锚 |
 | **ssd_e05** | LocusCoeruleus | caudalanteriorcingulate | brainstem | ✅ 命中：`LC_NE` diffuse_broadcast | 过度耦合 | 0/+0.1/+0.2 | 0 | RDoC 唤醒域：LC→ACC 持续警觉（躯体症状监控）；Guo 2026 ACC ALFF↑ | 3.1 节 NE tone 推导锚 |
 | **ssd_e06** | DorsalRapheNucleus | insula | brainstem | ✅ 命中：`Raphe_5HT` diffuse_broadcast | 过度耦合 | 0/+0.1/+0.2 | 0 | 5-HT 内感受调制异常（焦虑共病 5HT 通路）；RDoC 唤醒/情绪调制 | 3.1 节 5HT tone 推导锚 |
 

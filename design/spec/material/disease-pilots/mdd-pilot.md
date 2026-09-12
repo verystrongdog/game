@@ -27,7 +27,7 @@
 - **Hamilton et al. (2015)**——抑郁 DMN 过度连接（NPC AI §4.2「反刍」标签的文献依据）→ e05/e06 DMN 过度耦合。
 - **Ma et al. (2019)**——DMN-FPN 反相关减弱为 MDD trait marker → e07（mOFC↔dlPFC 边界边）「边界崩溃」语义转移源。
 - **文献数据源 §七 MDD**——核心回路「↓NAcc-丘脑, ↓NAcc-海马; VTA→NAcc 解耦」+ 对应功能域「奖赏域/自我社会域/行动门控域(苍白球↓)/认知控制域」→ e09（Pallidum→Thalamus）新增依据。
-- **旧链路注册表（link_registry.json，⚠️ 已废弃 2026-08-07）**——11 条旧链路的方向/量级/通路描述（Schultz 1997 / Paxinos 2004 / Hansen 2024 / ENIGMA）作为语义继承源，见 §四。
+- **旧链路注册表（link_registry.json，⚠️ 已废弃 2026-08-07）**——11 条旧链路的方向/量级/通路描述（Schultz 1997 / Paxinos 2004 / 本仓脑干强度估计 / ENIGMA）作为语义继承源，见 §四。
 
 > **转换规则声明**：文献给出脑区/网络层结论，三体边层映射为设计师翻译（文献数据源 §八"需设计师翻译"）；m 偏移量级沿用旧文件设计校准值，**全部数值有来源，新增数值标记 `[NEW]`**。
 
@@ -44,7 +44,7 @@
 | 病理边ID | source | target | 边类型 | 三体核验（命中详情） | 病理类型 | m偏移(轻/中/重) | laterality_delta | 文献依据 | 挂接 |
 |---|---|---|---|---|---|---|---|---|---|
 | **mdd_e01** ⭐核心 | VentralTegmentalArea | Accumbens-area | brainstem | ✅ 命中：`VTA_DA` targeted_broadcast | **解耦沉默** | −0.1/−0.3/−0.5 | 0 | 旧 link_336（VTA→NAcc 中脑边缘 DA，Schultz 1997 fc=0.9）；文献数据源 §七 MDD「VTA→NAcc 解耦」；RDoC 正性效价 | 行为覆盖①（趋近·主动 不可用）+ 非线性跳变①（作用域核心） |
-| **mdd_e02** | VentralTegmentalArea | superiorfrontal | brainstem | ✅ 命中：`VTA_DA` targeted_broadcast | 解耦沉默 | 0/−0.1/−0.3 | 0 | 旧 link_338（VTA→mPFC DA，Hansen 2024 fc=0.6）；VTA→mPFC 奖赏价值整合通路解耦（思路链） | 非线性跳变①（作用域成员） |
+| **mdd_e02** | VentralTegmentalArea | superiorfrontal | brainstem | ✅ 命中：`VTA_DA` targeted_broadcast | 解耦沉默 | 0/−0.1/−0.3 | 0 | 旧 link_338（VTA→mPFC DA，脑干强度估计 fc=0.6）；VTA→mPFC 奖赏价值整合通路解耦（思路链） | 非线性跳变①（作用域成员） |
 | **mdd_e03** ⭐新增 | medialorbitofrontal | Accumbens-area | cstc | ✅ 命中：limbic 环路 `go_direct`, cortical_input→striatal_gate（privileged 孪生边 `prefrontal_limbic` feedback, level_diff=−4） | 解耦沉默 | 0/−0.1/−0.3 | 0 | RDoC 正性效价（奖赏评估/预期）：OFC→腹侧纹状体；MDD 奖赏评估减弱（文献数据源 §四.1） | 3.1 节 bias_limbic 推导锚（负向） |
 | **mdd_e04** | SubstantiaNigraParsCompacta | Putamen | brainstem | ✅ 命中：`SNc_DA` targeted_broadcast | 解耦沉默 | 0/−0.1/−0.3 | 0 | 旧 link_344（黑质→壳核 DA，Paxinos 2004 fc=0.85）；精神运动迟滞（DSM-5 精神运动性激越/迟滞） | 非线性跳变①（作用域成员，物理攻击 −20% 运动端） |
 
@@ -68,15 +68,15 @@
 | 病理边ID | source | target | 边类型 | 三体核验（命中详情） | 病理类型 | m偏移(轻/中/重) | laterality_delta | 文献依据 | 挂接 |
 |---|---|---|---|---|---|---|---|---|---|
 | **mdd_e10** | rostralanteriorcingulate | insula | corticocortical | ✅ 命中：dir=lateral, level_diff=0, edr=0.4246 | **过度耦合** | +0.1/+0.2/+0.3 | 0 | 旧 link_155_L（rACC→insula，ENIGMA 6.29 共情网络）；Guo 2026 岛叶/ACC ALFF↑ | 行为覆盖②（内感受耦合） |
-| **mdd_e11** | LocusCoeruleus | insula | brainstem | ✅ 命中：`LC_NE` diffuse_broadcast | 过度耦合 | 0/+0.2/+0.3 | 0 | 旧 link_326（蓝斑→前脑岛 NE，Hansen PINK 最强 hub fc=0.85）；Guo 2026 共享岛叶 ALFF↑ | 3.1 节 NE tone 推导锚（内感受超敏） |
-| **mdd_e12** | LocusCoeruleus | caudalanteriorcingulate | brainstem | ✅ 命中：`LC_NE` diffuse_broadcast | 过度耦合 | 0/+0.1/+0.2 | 0 | 旧 link_327（蓝斑→ACC NE，Hansen 2024 Fig5 fc=0.85）；Guo 2026 ACC/mPFC ALFF↑ | 3.1 节 NE tone 推导锚（作用域成员） |
+| **mdd_e11** | LocusCoeruleus | insula | brainstem | ✅ 命中：`LC_NE` diffuse_broadcast | 过度耦合 | 0/+0.2/+0.3 | 0 | 旧 link_326（蓝斑→前脑岛 NE，脑干强度估计 fc=0.85（PINK 最强 hub））；Guo 2026 共享岛叶 ALFF↑ | 3.1 节 NE tone 推导锚（内感受超敏） |
+| **mdd_e12** | LocusCoeruleus | caudalanteriorcingulate | brainstem | ✅ 命中：`LC_NE` diffuse_broadcast | 过度耦合 | 0/+0.1/+0.2 | 0 | 旧 link_327（蓝斑→ACC NE，脑干强度估计 fc=0.85）；Guo 2026 ACC/mPFC ALFF↑ | 3.1 节 NE tone 推导锚（作用域成员） |
 | **mdd_e13** ⭐新增 | caudalanteriorcingulate | insula | corticocortical | ✅ 命中：dir=lateral, level_diff=0, edr=0.3951 | 过度耦合 | 0/+0.1/+0.2 | 0 | Guo 2026 MDD 特异性 ACC/mPFC + 岛叶 ALFF↑（§2.3）；情绪-内感受耦合（躯体化症状支持） | 行为覆盖②（作用域成员） |
 
 ### 2.5 记忆/5HT 域（2 条）——「海马 5-HT 传递 + 记忆提取」
 
 | 病理边ID | source | target | 边类型 | 三体核验（命中详情） | 病理类型 | m偏移(轻/中/重) | laterality_delta | 文献依据 | 挂接 |
 |---|---|---|---|---|---|---|---|---|---|
-| **mdd_e14** | DorsalRapheNucleus | Hippocampus | brainstem | ✅ 命中：`Raphe_5HT` targeted_broadcast（privileged `brainstem_subcortical` 孪生边存在） | 过度耦合（旧「结构异常」） | 0/+0.1/+0.2 | 0 | 旧 link_319（中缝背核→海马 5-HT，Hansen PINK fc=0.75）；ENIGMA MDD 海马↓（复发型）——5-HT 传递聚焦于记忆回路 | 3.1 节 5HT tone 推导锚；负性记忆提取支持 |
+| **mdd_e14** | DorsalRapheNucleus | Hippocampus | brainstem | ✅ 命中：`Raphe_5HT` targeted_broadcast（privileged `brainstem_subcortical` 孪生边存在） | 过度耦合（旧「结构异常」） | 0/+0.1/+0.2 | 0 | 旧 link_319（中缝背核→海马 5-HT，脑干强度估计 fc=0.75）；ENIGMA MDD 海马↓（复发型）——5-HT 传递聚焦于记忆回路 | 3.1 节 5HT tone 推导锚；负性记忆提取支持 |
 | **mdd_e15** | caudalanteriorcingulate | parahippocampal | corticocortical | ✅ 命中：dir=feedback, level_diff=−1, edr=0.2939 | 过度耦合 | 0/+0.1/+0.2 | 0 | 旧 link_003_L（ACC→海马旁回，ENIGMA 4.89）；Guo 2026 共享 ACC ALFF↑ | 行为覆盖②（作用域成员，负性记忆提取） |
 
 **图例**：⭐核心/⭐新增 = 旧链路表无对应、本次新增（均命中现有三体边，非「病理新增」）；Δ 全 0 = MDD 无偏侧证据（de Kovel 2019 ENIGMA null，§6.5 规则 2；旧 `_L` 后缀为旧 ENIGMA 单侧数据点，新模型统一入 0，见 §四）。

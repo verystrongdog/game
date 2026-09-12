@@ -87,7 +87,7 @@
 | 病理边ID | source | target | 边类型 | 三体核验（命中详情） | 病理类型 | m偏移(轻/中/重) | laterality_delta | 文献依据 | 挂接 |
 |---|---|---|---|---|---|---|---|---|---|
 | **asd_e13** | Thalamus-Proper | cuneus | privileged_pathway | ✅ 命中：`thalamocortical_relay`, dir=feedforward, level_diff=+2, edr=0.3163（Pulvinar→视觉联合皮层中继） | **过度耦合**（结构性过度连接） | +0.1/+0.2/+0.3 | 0 | 旧 link_318 语义转移（上丘→丘脑枕→皮层 感觉中继过度 → 丘脑枕→视觉联合皮层 relay 过度） | 行为覆盖④（感官过载）+ 非线性跳变①（感官过载锁定） |
-| **asd_e14** | LocusCoeruleus | pericalcarine | brainstem | ✅ 命中：`LC_NE` diffuse_broadcast（LC→V1 感觉信噪比） | **过度耦合**（结构性过度连接） | 0/+0.1/+0.2 | 0 | 旧 link_331（LC→V1 感觉信噪比异常，Hansen PINK fc=0.6）；RDoC 唤醒域 | 行为覆盖④（感官过载） |
+| **asd_e14** | LocusCoeruleus | pericalcarine | brainstem | ✅ 命中：`LC_NE` diffuse_broadcast（LC→V1 感觉信噪比） | **过度耦合**（结构性过度连接） | 0/+0.1/+0.2 | 0 | 旧 link_331（LC→V1 感觉信噪比异常，脑干强度估计 fc=0.6）；RDoC 唤醒域 | 行为覆盖④（感官过载） |
 
 ### 2.7 社会奖赏域（1 条）——「affiliative 社交动机」
 

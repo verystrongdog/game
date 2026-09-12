@@ -28,7 +28,7 @@
 - **Cao et al. (2025)** *Mol Psychiatry*（杏仁核 FC meta，96 研究, 8,730 人）——杏仁核亚区连接跨诊断异常 → 杏仁核相关边群（e04/e09/e11/e13）的覆盖范围。
 - **Shin & Liberzon (2010)**——PTSD 杏仁核过度反应 + NE 高唤醒（NPC AI §4.2 标签「敏化-威胁」文献锚）。
 - **左右脑偏侧化-文献数据源.md §八**——ENIGMA PTSD：胼胝体（连接两海马节段）微结构完整性↓ → **海马间跨半球连接异常** → 记忆域边（e06/e08）左偏 Δ 的来源；Gordon (2010)：PTSD 无显著 EEG alpha 偏侧 → 偏侧仅作装饰层、不作核心机制（#92 原则）。
-- **旧链路注册表（link_registry.json，⚠️ 已废弃 2026-08-07）**——9 条旧链路的方向/量级/通路描述（LeDoux 2000 / Paxinos 2004 / Hansen 2024 / Craig 2009）作为语义继承源，见 §四。
+- **旧链路注册表（link_registry.json，⚠️ 已废弃 2026-08-07）**——9 条旧链路的方向/量级/通路描述（LeDoux 2000 / Paxinos 2004 / 本仓脑干强度估计 / Craig 2009）作为语义继承源，见 §四。
 
 > **转换规则声明**：文献给出脑区/网络层结论，三体边层映射为设计师翻译（文献数据源 §八"需设计师翻译"）；m 偏移量级沿用旧文件设计校准值，**全部数值有来源，新增数值标记 `[NEW]`**。
 
@@ -53,9 +53,9 @@
 
 | 病理边ID | source | target | 边类型 | 三体核验（命中详情） | 病理类型 | m偏移(轻/中/重) | laterality_delta | 文献依据 | 挂接 |
 |---|---|---|---|---|---|---|---|---|---|
-| **ptsd_e04** | LocusCoeruleus | Amygdala | privileged_pathway | ✅ 命中：`brainstem_subcortical`, dir=feedforward, level_diff=+1 | 过度耦合 | 0/+0.2/+0.4 | 0 | 旧 link_332（蓝斑→杏仁核 NE，Hansen 2024）；RDoC 唤醒域 | 3.1 节 NE tone 推导锚 |
-| **ptsd_e05** | LocusCoeruleus | insula | brainstem | ✅ 命中：`LC_NE` diffuse_broadcast | 过度耦合 | 0/+0.2/+0.3 | 0 | 旧 link_326（蓝斑→前脑岛 NE，Hansen PINK 最强 hub fc=0.85）+ **吞并 link_315 语义**（见 §四） | 行为覆盖①（内感受过度警觉） |
-| **ptsd_e10** | LocusCoeruleus | rostralmiddlefrontal | brainstem | ✅ 命中：`LC_NE` diffuse_broadcast | **结构异常** | −0.1/−0.2/−0.3 | 0 | 旧 link_328（蓝斑→dlPFC NE，Hansen 2024）；慢性应激→前额叶萎缩（思路链） | 行为覆盖③ + 非线性跳变③（dlPFC 压制失效） |
+| **ptsd_e04** | LocusCoeruleus | Amygdala | privileged_pathway | ✅ 命中：`brainstem_subcortical`, dir=feedforward, level_diff=+1 | 过度耦合 | 0/+0.2/+0.4 | 0 | 旧 link_332（蓝斑→杏仁核 NE，脑干强度估计）；RDoC 唤醒域 | 3.1 节 NE tone 推导锚 |
+| **ptsd_e05** | LocusCoeruleus | insula | brainstem | ✅ 命中：`LC_NE` diffuse_broadcast | 过度耦合 | 0/+0.2/+0.3 | 0 | 旧 link_326（蓝斑→前脑岛 NE，脑干强度估计 fc=0.85（PINK 最强 hub））+ **吞并 link_315 语义**（见 §四） | 行为覆盖①（内感受过度警觉） |
+| **ptsd_e10** | LocusCoeruleus | rostralmiddlefrontal | brainstem | ✅ 命中：`LC_NE` diffuse_broadcast | **结构异常** | −0.1/−0.2/−0.3 | 0 | 旧 link_328（蓝斑→dlPFC NE，脑干强度估计）；慢性应激→前额叶萎缩（思路链） | 行为覆盖③ + 非线性跳变③（dlPFC 压制失效） |
 
 ### 2.3 记忆域（3 条）——「海马旁回闪回」
 
@@ -63,14 +63,14 @@
 |---|---|---|---|---|---|---|---|---|---|
 | **ptsd_e06** | caudalanteriorcingulate | parahippocampal | corticocortical | ✅ 命中：dir=feedback, level_diff=−1, edr=0.2939；**注**：dk 节点 L2，但含 L5 fid（FrontalPoleSN，脑功能层级模型 §L5）→ L5 叙事监控↔L1 记忆提取直连 = 跨层短路语义 | **跨层短路** | +0.2/+0.4/+0.6 | **−0.3**（旧 link_003_L 即为 L 半球） | 旧 link_003_L（ACC→海马旁回，ENIGMA 4.89 L）；Guo 2026 左偏 | 行为覆盖② + 非线性跳变②（闪回） |
 | **ptsd_e07** ⭐新增 | Amygdala | parahippocampal | corticocortical | ✅ 命中：dir=lateral, level_diff=0, edr=0.3496 | 过度耦合 | +0.1/+0.2/+0.3 | −0.3 | Guo 2026（左杏仁核+海马 ALFF↑）；情景记忆被恐惧条件化劫持（思路链） | 行为覆盖①（情境匹配×2 记忆端） |
-| **ptsd_e08** | DorsalRapheNucleus | Hippocampus | brainstem | ✅ 命中：`Raphe_5HT` targeted_broadcast（privileged `brainstem_subcortical` 有孪生边） | 过度耦合 | +0.1/+0.2/+0.3 | −0.2 | 旧 link_319（中缝背核→海马 5-HT，Hansen PINK fc=0.75）；左海马 ALFF↑ Guo 2026 | 3.1 节 5HT tone 推导锚；创伤记忆固化 |
+| **ptsd_e08** | DorsalRapheNucleus | Hippocampus | brainstem | ✅ 命中：`Raphe_5HT` targeted_broadcast（privileged `brainstem_subcortical` 有孪生边） | 过度耦合 | +0.1/+0.2/+0.3 | −0.2 | 旧 link_319（中缝背核→海马 5-HT，脑干强度估计 fc=0.75）；左海马 ALFF↑ Guo 2026 | 3.1 节 5HT tone 推导锚；创伤记忆固化 |
 
 ### 2.4 抑制/调制域（3 条）——「vmPFC→杏仁核抑制 ↓」
 
 | 病理边ID | source | target | 边类型 | 三体核验（命中详情） | 病理类型 | m偏移(轻/中/重) | laterality_delta | 文献依据 | 挂接 |
 |---|---|---|---|---|---|---|---|---|---|
 | **ptsd_e03** ⭐新增 | medialorbitofrontal | Amygdala | privileged_pathway | ✅ 命中：`prefrontal_limbic`, dir=feedback, **level_diff=−4**（L5→L1 真跨层） | **解耦沉默** | −0.2/−0.4/−0.6 | 0 | NPC AI §5.2（vmPFC→杏仁核抑制↓）；Koch 2016（PMID:26918313）；Shin & Liberzon 2010 | 行为覆盖③（L5 压制效力−50% 的结构基础） |
-| **ptsd_e11** | DorsalRapheNucleus | Amygdala | brainstem | ✅ 命中：`Raphe_5HT` targeted_broadcast（privileged 孪生边存在） | 过度耦合 | 0/+0.2/+0.3 | 0 | 旧 link_320（中缝背核→杏仁核 5-HT，Hansen PINK fc=0.7） | 3.1 节 5HT tone 推导锚 |
+| **ptsd_e11** | DorsalRapheNucleus | Amygdala | brainstem | ✅ 命中：`Raphe_5HT` targeted_broadcast（privileged 孪生边存在） | 过度耦合 | 0/+0.2/+0.3 | 0 | 旧 link_320（中缝背核→杏仁核 5-HT，脑干强度估计 fc=0.7） | 3.1 节 5HT tone 推导锚 |
 | **ptsd_e12** ⭐新增 | Amygdala | lateralorbitofrontal | corticocortical | ✅ 命中：dir=feedforward, level_diff=+1, edr=0.3391 | 解耦沉默 | −0.1/−0.2/−0.3 | 0 | 文献数据源 §七 PTSD（↓BLA-OFC 恐惧加工） | 恐惧加工缺陷（回避行为支持） |
 
 **图例**：⭐新增 = 旧链路表无对应、本次新增（均命中现有三体边，非"病理新增"）；Δ 负 = 左偏（Guo 2026 左杏仁核/海马 ALFF↑ + ENIGMA PTSD 左偏），0 = 无偏侧证据（脑干核团双侧合并，Gordon 2010 无显著 alpha 偏侧）。
@@ -116,7 +116,7 @@ NPC AI §4.2「敏化-威胁」+「抑制不足」双标签（多标签叠加取
 |--------|--------------------------------|---------|---------|------|
 | link_312 | PAG→Amygdala | 过度耦合 +0.2/+0.3/+0.5 | **ptsd_e02**（PeriaqueductalGray→Amygdala） | ✅ 保留语义（端点/类型/量级不变） |
 | link_317 | SuperiorColliculus→Amygdala | 过度耦合 +0.1/+0.3/+0.5 | **ptsd_e09** | ✅ 保留语义 |
-| link_315 | PAG→Insula（经丘脑中继） | 跨层短路 0/+0.2/+0.3 | **无直连边**（三体图无 PAG→insula，Hansen 数据为经丘脑中继） | ⚠️ **废弃直连**；语义转移至 e05（LC→insula NE 内感受唤醒）+ e01 作用域；「跨层短路锁定」跳变挂 e01（见 §五） |
+| link_315 | PAG→Insula（经丘脑中继） | 跨层短路 0/+0.2/+0.3 | **无直连边**（三体图无 PAG→insula，旧链路 registry 数据为经丘脑中继） | ⚠️ **废弃直连**；语义转移至 e05（LC→insula NE 内感受唤醒）+ e01 作用域；「跨层短路锁定」跳变挂 e01（见 §五） |
 | link_332 | LocusCoeruleus→Amygdala | 过度耦合 0/+0.2/+0.4 | **ptsd_e04** | ✅ 保留语义 |
 | link_320 | DorsalRapheNucleus→Amygdala | 过度耦合 0/+0.2/+0.3 | **ptsd_e11** | ✅ 保留语义（5-HT 广播表达） |
 | link_326 | LocusCoeruleus→Insula | 过度耦合 0/+0.2/+0.3 | **ptsd_e05** | ✅ 保留语义（并吞 link_315） |

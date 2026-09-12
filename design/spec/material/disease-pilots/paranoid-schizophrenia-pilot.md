@@ -84,7 +84,7 @@ CGI-S范围: 3-7
 |---|---|---|---|---|---|---|---|---|---|
 | **paranoid-schizophrenia_e09** | caudalanteriorcingulate | parahippocampal | corticocortical | ✅ 命中：dir=feedback, level_diff=−1, edr=0.2939；**注**：dk 节点 L2，但含 L5 fid（FrontalPoleSN）→ L5 叙事监控↔L1 记忆提取直连 | **跨层短路** | 0/+0.2/+0.3 | 0 | 旧 link_003_L（ACC→海马旁回，ENIGMA 4.89 L）；Guo 2026 ACC-mPFC ALFF↑（旧「过度耦合」→ §6.3 规则 b 机械重分类） | 妄想记忆绑定（叙事层） |
 | **paranoid-schizophrenia_e10** ⭐新增 | Amygdala | Hippocampus | corticocortical | ✅ 命中：dir=lateral, level_diff=0, edr=0.6506 | 过度耦合 | +0.1/+0.2/+0.3 | **+0.05** | Guo 2026 共享杏仁核 ALFF↑；Gutman 2022 海马/杏仁核偏侧夸大（右偏方向，Okada 2016 基线）→ 被害妄想记忆条件化 | 行为覆盖侧翼（威胁记忆） |
-| **paranoid-schizophrenia_e11** | DorsalRapheNucleus | Hippocampus | brainstem | ✅ 命中：`Raphe_5HT` targeted_broadcast（privileged `brainstem_subcortical` 孪生边存在） | 过度耦合 | 0/+0.1/+0.2 | **+0.05** | 旧 link_319（中缝背核→海马 5-HT，Hansen PINK fc=0.75，旧「结构异常」→ 正 m 广播边机械重分类）；Gutman 2022 海马偏侧夸大 | 5HT tone 推导锚（聚焦腿） |
+| **paranoid-schizophrenia_e11** | DorsalRapheNucleus | Hippocampus | brainstem | ✅ 命中：`Raphe_5HT` targeted_broadcast（privileged `brainstem_subcortical` 孪生边存在） | 过度耦合 | 0/+0.1/+0.2 | **+0.05** | 旧 link_319（中缝背核→海马 5-HT，脑干强度估计 fc=0.75，旧「结构异常」→ 正 m 广播边机械重分类）；Gutman 2022 海马偏侧夸大 | 5HT tone 推导锚（聚焦腿） |
 | **paranoid-schizophrenia_e12** | PeriaqueductalGray | Amygdala | privileged_pathway | ✅ 命中：`brainstem_subcortical`, dir=feedforward, level_diff=+1 | 过度耦合 | 0/0/+0.3 | **+0.05** | 旧 link_312（PAG→杏仁核中央核，LeDoux 2000 / Paxinos 2004）；Gutman 2022 杏仁核偏侧夸大 | 威胁超敏侧翼（重档才激活） |
 
 ### 2.5 内感受/唤醒域（3 条）——「岛叶-ACC 显著网络（SZ 最强）+ LC NE 广播」
@@ -92,8 +92,8 @@ CGI-S范围: 3-7
 | 病理边ID | source | target | 边类型 | 三体核验（命中详情） | 病理类型 | m偏移(轻/中/重) | laterality_delta | 文献依据 | 挂接 |
 |---|---|---|---|---|---|---|---|---|---|
 | **paranoid-schizophrenia_e13** | rostralanteriorcingulate | insula | corticocortical | ✅ 命中：dir=lateral, level_diff=0, edr=0.4246 | 过度耦合 | +0.2/+0.3/+0.5 | **−0.05** | 旧 link_155_L + link_160（rACC↔前脑岛，**L/R 合并**）；Guo 2026 岛叶 ALFF↑（跨六病共享，**精分效应最强**，旧思路链）；Schijven 2023 rACC 反转 | 行为覆盖侧翼（内感受警觉）+ bias_limbic 锚 |
-| **paranoid-schizophrenia_e14** | LocusCoeruleus | caudalanteriorcingulate | brainstem | ✅ 命中：`LC_NE` diffuse_broadcast | 过度耦合 | +0.1/+0.2/+0.3 | 0 | 旧 link_327（蓝斑→ACC NE，Hansen 2024 Fig5） | NE tone 推导锚 + 行为覆盖① |
-| **paranoid-schizophrenia_e15** | LocusCoeruleus | insula | brainstem | ✅ 命中：`LC_NE` diffuse_broadcast | 过度耦合 | 0/+0.2/+0.3 | 0 | 旧 link_326（蓝斑→前脑岛 NE，Hansen PINK 最强 hub fc=0.85） | NE tone 推导锚（次项） |
+| **paranoid-schizophrenia_e14** | LocusCoeruleus | caudalanteriorcingulate | brainstem | ✅ 命中：`LC_NE` diffuse_broadcast | 过度耦合 | +0.1/+0.2/+0.3 | 0 | 旧 link_327（蓝斑→ACC NE，脑干强度估计 Fig5 对应社区） | NE tone 推导锚 + 行为覆盖① |
+| **paranoid-schizophrenia_e15** | LocusCoeruleus | insula | brainstem | ✅ 命中：`LC_NE` diffuse_broadcast | 过度耦合 | 0/+0.2/+0.3 | 0 | 旧 link_326（蓝斑→前脑岛 NE，脑干强度估计 fc=0.85（PINK 最强 hub）） | NE tone 推导锚（次项） |
 
 ### 2.6 语言社会域/整合（2 条）——「ToM 网络 + 反刍自我参照」
 
@@ -159,7 +159,7 @@ NPC AI §4.2「敏化-威胁」+「反刍」双标签（多标签叠加取最大
 | link_155_L | RostralAnteriorCingulateCortex→Insula | 过度耦合 +0.2/+0.3/+0.5 | **paranoid-schizophrenia_e13**（rACC↔insula） | ✅ 保留语义（**与 link_160 合并**，L/R 后缀入 Δ=−0.05） |
 | link_160 | RostralAnteriorCingulateCortex→Insula | 过度耦合 +0.2/+0.3/+0.5 | 并入 **paranoid-schizophrenia_e13** | ⚠️ 合并（三体图无 L/R 分边，同对端点合一） |
 | link_326 | LocusCoeruleus→Insula | 过度耦合 0/+0.2/+0.3 | **paranoid-schizophrenia_e15** | ✅ 保留语义 |
-| link_318 | SuperiorColliculus→Thalamus | 过度耦合 +0.1/+0.2/+0.4 | **无直连边**（三体图无 SC→Thalamus-Proper，Hansen 数据为经丘脑枕中继） | ⚠️ **废弃直连**；语义转移至 **e03**（Thalamus-Proper→transversetemporal 丘脑听觉中继过度耦合 = P50 门控失败） |
+| link_318 | SuperiorColliculus→Thalamus | 过度耦合 +0.1/+0.2/+0.4 | **无直连边**（三体图无 SC→Thalamus-Proper，旧链路 registry 数据为经丘脑枕中继） | ⚠️ **废弃直连**；语义转移至 **e03**（Thalamus-Proper→transversetemporal 丘脑听觉中继过度耦合 = P50 门控失败） |
 | link_084_L | MedialOrbitalPrefrontalDMN→SuperiorTemporalWernicke | 过度耦合 +0.1/+0.2/+0.4 | **paranoid-schizophrenia_e16**（medialorbitofrontal↔superiortemporal） | ✅ 保留语义 + 偏侧显式化（Δ=−0.05） |
 | link_116_L | ParsOpercularis→SuperiorTemporalWernicke | 结构异常 0/−0.2/−0.4 | **paranoid-schizophrenia_e01**（parsopercularis↔superiortemporal） | ⚠️ **类型重分类**：CC 合法边 m 负偏移 → 解耦沉默（§6.3）；偏侧显式化（Δ=−0.05） |
 | link_047_L | InferiorParietalAngular→SuperiorFrontalMPFC | 解耦沉默 0/−0.2/−0.3 | **paranoid-schizophrenia_e17**（inferiorparietal↔superiorfrontal） | ✅ 保留语义（fid 合并） |

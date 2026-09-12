@@ -55,9 +55,9 @@
 
 | 病理边ID | source | target | 边类型 | 三体核验（命中详情） | 病理类型 | m偏移(轻/中/重) | laterality_delta | 文献依据 | 挂接 |
 |---|---|---|---|---|---|---|---|---|---|
-| **adhd_e06** | LocusCoeruleus | rostralmiddlefrontal | brainstem | ✅ 命中：`LC_NE` diffuse_broadcast | 解耦沉默 | 0/−0.1/−0.1 | 0 | 旧 link_328（蓝斑→dlPFC NE，Hansen fc=0.75）——NE 过低期（认知资源不足） | 行为覆盖②（NE 低值期成员） |
-| **adhd_e07** | LocusCoeruleus | pericalcarine | brainstem | ✅ 命中：`LC_NE` diffuse_broadcast | 过度耦合 | 0/+0.1/+0.2 | 0 | 旧 link_331（蓝斑→V1 NE，Hansen fc=0.6）——NE 过高期（感觉信噪比↑→注意力分散） | 行为覆盖①（NE 高值期成员） |
-| **adhd_e08** | LocusCoeruleus | Amygdala | privileged_pathway | ✅ 命中：`brainstem_subcortical`, dir=feedforward, level_diff=1, edr=0.4612 | 过度耦合 | 0/+0.1/+0.2 | 0 | 旧 link_332 波动拆分（蓝斑→杏仁核 NE，Hansen fc=0.7）冲动腿 | 行为覆盖①（情绪冲动期成员） |
+| **adhd_e06** | LocusCoeruleus | rostralmiddlefrontal | brainstem | ✅ 命中：`LC_NE` diffuse_broadcast | 解耦沉默 | 0/−0.1/−0.1 | 0 | 旧 link_328（蓝斑→dlPFC NE，脑干强度估计 fc=0.75）——NE 过低期（认知资源不足） | 行为覆盖②（NE 低值期成员） |
+| **adhd_e07** | LocusCoeruleus | pericalcarine | brainstem | ✅ 命中：`LC_NE` diffuse_broadcast | 过度耦合 | 0/+0.1/+0.2 | 0 | 旧 link_331（蓝斑→V1 NE，脑干强度估计 fc=0.6）——NE 过高期（感觉信噪比↑→注意力分散） | 行为覆盖①（NE 高值期成员） |
+| **adhd_e08** | LocusCoeruleus | Amygdala | privileged_pathway | ✅ 命中：`brainstem_subcortical`, dir=feedforward, level_diff=1, edr=0.4612 | 过度耦合 | 0/+0.1/+0.2 | 0 | 旧 link_332 波动拆分（蓝斑→杏仁核 NE，脑干强度估计 fc=0.7）冲动腿 | 行为覆盖①（情绪冲动期成员） |
 
 ### 2.3 行动门控域（2 条）——「行动门控资源↓ + 反应抑制失败」
 

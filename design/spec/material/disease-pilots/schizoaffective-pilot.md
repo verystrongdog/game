@@ -67,7 +67,7 @@ CGI-S范围: 3-7
 
 | 病理边ID | source | target | 边类型 | 三体核验（命中详情） | 病理类型 | m偏移(轻/中/重) | laterality_delta | 文献依据 | 挂接 |
 |---|---|---|---|---|---|---|---|---|---|
-| **schizoaffective_e07** | LocusCoeruleus | Amygdala | privileged_pathway | ✅ 命中：`brainstem_subcortical`, dir=feedforward, level_diff=+1 | 过度耦合 | 0/+0.2/+0.4 `[NEW 校准]` | 0 | 旧 link_332（蓝斑→杏仁核 NE，Hansen 2024）；BD 唤醒域振荡（×0.5）；重档 0.4 > 0.3 触发心境翻转 | **行为覆盖①（心境相位翻转）** + NE tone 推导锚 |
+| **schizoaffective_e07** | LocusCoeruleus | Amygdala | privileged_pathway | ✅ 命中：`brainstem_subcortical`, dir=feedforward, level_diff=+1 | 过度耦合 | 0/+0.2/+0.4 `[NEW 校准]` | 0 | 旧 link_332（蓝斑→杏仁核 NE，脑干强度估计）；BD 唤醒域振荡（×0.5）；重档 0.4 > 0.3 触发心境翻转 | **行为覆盖①（心境相位翻转）** + NE tone 推导锚 |
 | **schizoaffective_e14** ⭐新增 | VentralTegmentalArea | rostralmiddlefrontal | brainstem | ✅ 命中：`VTA_DA` targeted_broadcast | **结构异常** | −0.1/−0.2/−0.3 | 0 | 中脑皮层 DA 腿受损（精分共享模式 ×0.8，Davis 1991）；§6.3 subtype (b) | 认知缺陷侧翼 |
 
 ### 2.4 感觉/语言域（3 条）——「精分阳性残留（×0.8）+ 感官过载（×0.5）」

@@ -26,7 +26,7 @@
 
 - **Everitt & Robbins (2005)**——奖赏从腹侧纹状体（目标导向）→ 背侧纹状体（习惯）迁移 → e04 壳核习惯化 + e13 precentral→Putamen 动作自动化的环路级锚。
 - **Koob & Le Moal（负强化/"dark side"）**——戒断期负性情绪状态经**杏仁核-纹状体**回路驱动渴求 → e11（Amygdala→Accumbens-area）戒断期跳变作用域锚。
-- **旧链路注册表（link_registry.json，⚠️ 已废弃 2026-08-07）**——8 条旧链路的方向/量级/通路描述（Schultz1997 / Paxinos2004 / Hansen2024 / Alexander1986_CSTC / ENIGMA 连接强度）作为语义继承源，见 §四。
+- **旧链路注册表（link_registry.json，⚠️ 已废弃 2026-08-07）**——8 条旧链路的方向/量级/通路描述（Schultz1997 / Paxinos2004 / 本仓脑干强度估计 / Alexander1986_CSTC / ENIGMA 连接强度）作为语义继承源，见 §四。
 - **NPC AI §4.2**——标签「敏化-奖励」（DA_VTA +0.2, 5HT −0.2, bias_limbic +0.15）与「抑制不足」（5HT −0.2, bias_somatic +0.15）；§5.2「躁狂」行 = 同标签组合先例（VTA→NAcc ↑, dlPFC 抑制 ↓）。
 
 > **转换规则声明**：文献给出脑区/网络层结论，三体边层映射为设计师翻译（文献数据源 §八"需设计师翻译"）；m 偏移量级沿用旧文件设计校准（link_336 等），新增数值标记 `[NEW]`。SUD 的「急性↑/戒断↓」双相状态由**边 net 方向（戒断耗竭侧）+ 行为覆盖跳变（中毒期侧）**双通道表达（§5.1）。
@@ -66,7 +66,7 @@
 
 | 病理边ID | source | target | 边类型 | 三体核验（命中详情） | 病理类型 | m偏移(轻/中/重) | laterality_delta | 文献依据 | 挂接 |
 |---|---|---|---|---|---|---|---|---|---|
-| **sud_e08** | LocusCoeruleus | rostralmiddlefrontal | brainstem | ✅ 命中：`LC_NE` diffuse_broadcast | **结构异常** | 0/−0.2/−0.3 | 0 | 旧 link_328（LC→dlPFC NE，fc=0.75，Hansen2024）；ENIGMA AUD 额上回/额叶皮质变薄（Navarri 2022） | 行为覆盖③ + 非线性跳变②（结构基础） |
+| **sud_e08** | LocusCoeruleus | rostralmiddlefrontal | brainstem | ✅ 命中：`LC_NE` diffuse_broadcast | **结构异常** | 0/−0.2/−0.3 | 0 | 旧 link_328（LC→dlPFC NE，fc=0.75，本仓脑干强度估计）；ENIGMA AUD 额上回/额叶皮质变薄（Navarri 2022） | 行为覆盖③ + 非线性跳变②（结构基础） |
 
 ### 2.5 内感受域（1 条）——「岛叶解耦」
 

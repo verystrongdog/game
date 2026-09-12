@@ -26,7 +26,7 @@
 
 - **ENIGMA 结构共享因子（Opel et al. 2020，文献数据源 §3.1）**——OCD 与 MDD/BD/SCZ 结构异常高度相关（r=.443–.782）→ OCD 常伴反刍/情绪成分 → §三 bias_cognitive 修正的第 3 标签「反刍」设计依据（旧文件默认标签即含反刍）。
 - **SSRI 一线治疗 OCD**（5-HT 系统参与）——DR→ACC 5-HT 腿负向偏移的机制锚（e17）；Soubrié (1986) 低 5HT→去抑制（NPC AI §4.2「抑制不足」标签文献锚）。
-- **旧链路注册表（link_registry.json，⚠️ 已废弃 2026-08-07）**——10 条旧链路的方向/量级（ENIGMA fc + Hansen 2024 + Paxinos 2004）作为语义继承源，见 §四。
+- **旧链路注册表（link_registry.json，⚠️ 已废弃 2026-08-07）**——10 条旧链路的方向/量级（ENIGMA fc + 本仓脑干强度估计 + Paxinos 2004）作为语义继承源，见 §四。
 
 > **转换规则声明**：文献给出脑区/网络层结论，三体边层映射为设计师翻译（文献数据源 §八「需设计师翻译」）；m 偏移量级沿用旧文件设计校准，**全部数值有来源，新增数值标记 `[NEW]`**。
 
@@ -54,8 +54,8 @@
 
 | 病理边ID | source | target | 边类型 | 三体核验（命中详情） | 病理类型 | m偏移(轻/中/重) | laterality_delta | 文献依据 | 挂接 |
 |---|---|---|---|---|---|---|---|---|---|
-| **ocd_e05** | SubstantiaNigraParsCompacta | Putamen | brainstem | ✅ 命中：`SNc_DA` targeted_broadcast | 过度耦合 | +0.1/+0.3/+0.4 | 0 | 旧 link_344（黑质→壳核 DA，Hansen fc=0.85, Paxinos 2004） | 非线性跳变③（行动门控失效成员） |
-| **ocd_e06** | SubstantiaNigraParsCompacta | Caudate | brainstem | ✅ 命中：`SNc_DA` targeted_broadcast | 过度耦合 | 0/+0.2/+0.3 | 0 | 旧 link_343（黑质→尾状核 DA，Hansen fc=0.9, Paxinos 2004） | 3.1 节 DA_SNc 推导锚 |
+| **ocd_e05** | SubstantiaNigraParsCompacta | Putamen | brainstem | ✅ 命中：`SNc_DA` targeted_broadcast | 过度耦合 | +0.1/+0.3/+0.4 | 0 | 旧 link_344（黑质→壳核 DA，脑干强度估计 fc=0.85, Paxinos 2004） | 非线性跳变③（行动门控失效成员） |
+| **ocd_e06** | SubstantiaNigraParsCompacta | Caudate | brainstem | ✅ 命中：`SNc_DA` targeted_broadcast | 过度耦合 | 0/+0.2/+0.3 | 0 | 旧 link_343（黑质→尾状核 DA，脑干强度估计 fc=0.9, Paxinos 2004） | 3.1 节 DA_SNc 推导锚 |
 | **ocd_e07** ⭐新增 | superiorfrontal | Putamen | cstc | ✅ 命中：somatic 环路 `go_direct`, cortical_input→striatal_gate | 过度耦合 | +0.1/+0.3/+0.5 | 0 | 文献数据源 §七 OCD「行动门控域 壳核↑」→ somatic GO 腿翻译（SMA 参与强迫行为重复执行） | 3.1 节 bias_somatic 推导锚 |
 | **ocd_e08** | Putamen | Pallidum | cstc | ✅ 命中：somatic 环路 `nogo_indirect`, striatal_gate→pallidal_output | 解耦沉默 | −0.1/−0.2/−0.3 | 0 | 旧 link_363（壳核↔丘脑解耦）语义转移 → NO-GO 腿解耦 = 动作无法被终止；文献数据源「↓壳核-OFC/IFG/岛叶」 | 非线性跳变③（行动门控失效成员） |
 | **ocd_e16** ⭐新增 | SubthalamicNucleus | Pallidum | cstc | ✅ 命中：global 环路 `stop_hyperdirect`, stn→pallidal_output（Nambu 2015） | 过度耦合 | +0.1/+0.3/+0.5 | 0 | 文献数据源「↑底丘脑核(STN)-壳核」→ STN 唯一出边语义转移（STOP 过度活跃 → 行动切换受阻/僵化） | 行为覆盖①（行动切换成本×2 结构基础） |
@@ -65,7 +65,7 @@
 | 病理边ID | source | target | 边类型 | 三体核验（命中详情） | 病理类型 | m偏移(轻/中/重) | laterality_delta | 文献依据 | 挂接 |
 |---|---|---|---|---|---|---|---|---|---|
 | **ocd_e09** | rostralanteriorcingulate | insula | corticocortical | ✅ 命中：dir=lateral, level_diff=0, edr=0.4246 | 过度耦合 | 0/+0.2/+0.3 | 0 | 旧 link_155_L（ACC吻侧→前脑岛 冲突不适，ENIGMA fc=6.29） | 行为覆盖②（内感受域 m_max 成员） |
-| **ocd_e10** | LocusCoeruleus | caudalanteriorcingulate | brainstem | ✅ 命中：`LC_NE` diffuse_broadcast | 过度耦合 | 0/+0.1/+0.2 | 0 | 旧 link_327（蓝斑→ACC NE，Hansen fc=0.85） | 3.1 节 NE tone 推导锚；行为覆盖② |
+| **ocd_e10** | LocusCoeruleus | caudalanteriorcingulate | brainstem | ✅ 命中：`LC_NE` diffuse_broadcast | 过度耦合 | 0/+0.1/+0.2 | 0 | 旧 link_327（蓝斑→ACC NE，脑干强度估计 fc=0.85） | 3.1 节 NE tone 推导锚；行为覆盖② |
 | **ocd_e17** ⭐新增 | DorsalRapheNucleus | caudalanteriorcingulate | brainstem | ✅ 命中：`Raphe_5HT` diffuse_broadcast | 解耦沉默 | 0/−0.1/−0.2 | 0 | 5-HT 投射至冲突监测环路不足 → 抑制不足（SSRI 一线治疗 OCD；Soubrié 1986 低 5HT 去抑制）[设计层：标签→tone 反向锚定] | 3.1 节 5HT tone 推导锚 |
 
 ### 2.4 识别域（1 条）——模式识别过度

@@ -24,7 +24,7 @@
 
 **辅助锚（方向/范围补充）**：
 
-- **旧链路注册表（link_registry.json，⚠️ 已废弃 2026-08-07）**——6 条旧链路的方向/量级（ENIGMA fc + Hansen 2024）作为语义继承源，见 §四。
+- **旧链路注册表（link_registry.json，⚠️ 已废弃 2026-08-07）**——6 条旧链路的方向/量级（ENIGMA fc + 脑干强度估计）作为语义继承源，见 §四。
 - **CGI-S 上限 3（跨诊断特征维度）**——拖延症本身不达临床严重度；作为特征维度可与 MDD/ADHD/OCD NPC 叠加（文献数据源 §七 拖延症「跨诊断特征」）。
 
 > **转换规则声明**：文献给出脑区/网络层结论，三体边层映射为设计师翻译；m 偏移量级沿用旧文件设计校准，**全部数值有来源，新增数值标记 `[NEW]`**。
@@ -52,7 +52,7 @@
 
 | 病理边ID | source | target | 边类型 | 三体核验（命中详情） | 病理类型 | m偏移(轻/中/重) | laterality_delta | 文献依据 | 挂接 |
 |---|---|---|---|---|---|---|---|---|---|
-| **pro_e05** | VentralTegmentalArea | Accumbens-area | brainstem | ✅ 命中：`VTA_DA` targeted_broadcast | 结构异常 | 0/−0.1/−0.1 | 0 | 旧 link_336（VTA→NAcc DA，Hansen fc=0.9, Schultz 1997）——远期目标 DA 响应↓（§6.3 结构异常 b 类：广播腿选择性负偏移） | 行为覆盖②（远期目标激活−50% 成员） |
+| **pro_e05** | VentralTegmentalArea | Accumbens-area | brainstem | ✅ 命中：`VTA_DA` targeted_broadcast | 结构异常 | 0/−0.1/−0.1 | 0 | 旧 link_336（VTA→NAcc DA，脑干强度估计 fc=0.9, Schultz 1997）——远期目标 DA 响应↓（§6.3 结构异常 b 类：广播腿选择性负偏移） | 行为覆盖②（远期目标激活−50% 成员） |
 | **pro_e06** ⭐新增 | rostralmiddlefrontal | Accumbens-area | privileged_pathway | ✅ 命中：`prefrontal_limbic`, dir=feedback, level_diff=−4（L5→L1）, edr=0.3593 | 解耦沉默 | 0/−0.1/−0.1 | 0 | dlPFC 对远期奖赏调控不足（延迟折扣率异常，文献数据源 §七 拖延症 奖赏域） | 行为覆盖②（远期目标激活−50% 成员） |
 | **pro_e07** ⭐新增 | superiorfrontal | Accumbens-area | cstc | ✅ 命中：limbic 环路 `go_direct`, cortical_input→striatal_gate | 过度耦合 | 0/+0.1/+0.1 | 0 | Le Bouc & Pessiglione 2022——dmPFC 努力折扣信号异常 → 奖赏-努力联合估值环路过度耦合（「以后做就不费力」估值偏差） | 3.1 节 bias_limbic 推导锚；行为覆盖②侧翼 |
 

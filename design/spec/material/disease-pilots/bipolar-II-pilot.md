@@ -62,7 +62,7 @@
 
 | 病理边ID | source | target | 边类型 | 三体核验（命中详情） | 病理类型 | m偏移(轻/中)（正极/负极） | laterality_delta | 文献依据 | 挂接 |
 |---|---|---|---|---|---|---|---|---|---|
-| **bipolarii_e05** | LocusCoeruleus | Amygdala | privileged_pathway | ✅ 命中：`brainstem_subcortical`, dir=feedforward, level_diff=+1 | 过度耦合（相位无关） | 0/+0.1 | 0 | 旧 link_332（蓝斑→杏仁核 NE，Hansen 2024）；蓝斑振荡（幅值<BD-I：轻躁狂非精神病性） | 3.1 NE 推导锚；轻躁狂相睡眠衰减（§五.1，相位行为） |
+| **bipolarii_e05** | LocusCoeruleus | Amygdala | privileged_pathway | ✅ 命中：`brainstem_subcortical`, dir=feedforward, level_diff=+1 | 过度耦合（相位无关） | 0/+0.1 | 0 | 旧 link_332（蓝斑→杏仁核 NE，脑干强度估计）；蓝斑振荡（幅值<BD-I：轻躁狂非精神病性） | 3.1 NE 推导锚；轻躁狂相睡眠衰减（§五.1，相位行为） |
 | **bipolarii_e13** | rostralanteriorcingulate | insula | corticocortical | ✅ 命中：dir=lateral, level_diff=0, edr=0.4246 | 过度耦合（相位无关） | 0/+0.2 | 0 | 旧 link_155_L（rACC→岛叶，ENIGMA 6.29 L）；内感受域异常（轻躁狂体感增强/抑郁躯体关注） | 行为覆盖③（**相位翻转触发器：内感受域 m_max > 0.2**） |
 | **bipolarii_e14** ⭐新增 | DorsalRapheNucleus | Amygdala | brainstem | ✅ 命中：`Raphe_5HT` targeted_broadcast（privileged `brainstem_subcortical` 有孪生边） | **双向振荡**（5-HT 相位调制） | −0.1/+0.1, −0.2/+0.2 | 0 | NPC AI §4.2 敏化-奖励（5HT −0.2）↔ 过度抑制（5HT +0.2）；5HT 行为抑制假说（Soubrié 1986） | 3.1 5HT 推导锚（双向）；轻躁狂相去抑制/抑郁相过度抑制 |
 
