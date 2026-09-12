@@ -7,7 +7,7 @@
     "manuscript_url": "https://juser.fz-juelich.de/record/1006698",
     "related_publication": "Dugré JR, Potvin S (2023). Towards a Neurobiologically-driven Ontology of Mental Functions. bioRxiv 2023.03.29.534795"
   },
-  "_usage": "链路上下文（link_context）中 dominant_network 字段的取值来源。与 Hansen 社区（data/connectivity/hansen_communities.json）联合构成 50 个网络集合（含混合+边缘）。",
+  "_usage": "链路上下文（link_context）中 dominant_network 字段的取值来源。与 Hansen 社区（社区划分依 Hansen et al. (2024) Table 1）联合构成 50 个网络集合（含混合+边缘）。⚠️ 此处的「50 个网络集合」目前无落库文件——hansen_communities.json 从未建立（Grilling #72 F-6 记录、决策树 #04 列为推迟项）。联合网络集合的落库形式见 data/connectivity/link_contexts.json。",
   "_created": "2026-08-07",
   "_grilling": "Grilling #26 (GitHub #27) — 三体神经模型",
   "networks": [

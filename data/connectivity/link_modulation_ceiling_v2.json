@@ -1,13 +1,13 @@
 {
   "_metadata": {
-    "description": "三因子链路调制模型 — Momi2025 excitability × Hansen2024 neuromodulator × Pajevic2023 myelination sync",
+    "description": "三因子链路调制模型 — Momi2025 excitability × 脑干调质增益（估计）× Pajevic2023 myelination sync",
     "version": "2.0",
     "generated": "2026-07-27",
     "formula": "ceiling = excitability × gain_coeff; actual = ceiling × sigmoid(myelination, shift=0.4, steep=8)",
     "factors": {
       "excitability": "Momi et al. (2025) Nat Commun — cortical hierarchy of evoked response strength",
-      "conduction_priority": "TMS-fMRI effective connectivity + Hansen 2024 temporal hierarchy — link resolution order",
-      "neuromodulator_gain": "Hansen et al. (2024) Nat Neurosci — neurotransmitter community → effect type specialization",
+      "conduction_priority": "TMS-fMRI effective connectivity + Hansen 2024 时间层级（文献依据）— link resolution order",
+      "neuromodulator_gain": "脑干社区 → 效果类型专精。**增益系数为本仓人工估计**；社区划分与递质归属依 Hansen et al. (2024) Nat Neurosci（该数据集未被本脚本读取）",
       "myelination_sync": "Pajevic et al. (2023) eLife — oligodendrocyte-mediated conduction delay synchronization"
     },
     "gain_type_mechanics": {
@@ -108,7 +108,8 @@
       "4": "高级单模态/白质通路 — 模式识别/分类",
       "5": "跨模态皮层 — 认知框架/计划/语言",
       "6": "全脑整合 — 最后结算, 叙事重构/裁决(改变全局规则)"
-    }
+    },
+    "provenance_note": "来源标注已如实化（2026-09-12）：**增益系数为本仓人工估计**；社区划分与递质归属依 Hansen et al. (2024) Nat Neurosci（该数据集未被本脚本读取）。本文件是 2026-07-27 快照（数值未重算）；代码随后修正了中缝正中核的社区归属（YELLOW→GREEN），重算会改变数值，故此处只改标注。"
   },
   "links": [
     {

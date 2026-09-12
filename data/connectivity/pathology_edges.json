@@ -108,7 +108,7 @@
    ],
    "laterality_delta": 0.0,
    "is_new": false,
-   "literature": "旧 link_328（蓝斑→dlPFC NE，Hansen fc=0.75）——NE 过低期（认知资源不足）",
+   "literature": "旧 link_328（蓝斑→dlPFC NE，脑干强度估计 fc=0.75）——NE 过低期（认知资源不足）",
    "hooks": "行为覆盖②（NE 低值期成员）"
   },
   {
@@ -125,7 +125,7 @@
    ],
    "laterality_delta": 0.0,
    "is_new": false,
-   "literature": "旧 link_331（蓝斑→V1 NE，Hansen fc=0.6）——NE 过高期（感觉信噪比↑→注意力分散）",
+   "literature": "旧 link_331（蓝斑→V1 NE，脑干强度估计 fc=0.6）——NE 过高期（感觉信噪比↑→注意力分散）",
    "hooks": "行为覆盖①（NE 高值期成员）"
   },
   {
@@ -142,7 +142,7 @@
    ],
    "laterality_delta": 0.0,
    "is_new": false,
-   "literature": "旧 link_332 波动拆分（蓝斑→杏仁核 NE，Hansen fc=0.7）冲动腿",
+   "literature": "旧 link_332 波动拆分（蓝斑→杏仁核 NE，脑干强度估计 fc=0.7）冲动腿",
    "hooks": "行为覆盖①（情绪冲动期成员）"
   },
   {
@@ -346,7 +346,7 @@
    ],
    "laterality_delta": 0.0,
    "is_new": false,
-   "literature": "旧 link_338（VTA→mPFC，fc=0.6，Hansen2024）；食物奖赏价值被认知抑制",
+   "literature": "旧 link_338（VTA→mPFC，fc=0.6，脑干强度估计）；食物奖赏价值被认知抑制",
    "hooks": "3.1 节 DA_VTA 推导锚"
   },
   {
@@ -380,7 +380,7 @@
    ],
    "laterality_delta": 0.0,
    "is_new": false,
-   "literature": "旧 link_326（LC→前脑岛 NE，fc=0.85，Hansen2024 PINK 最强 hub）；身体信号被过度警觉放大",
+   "literature": "旧 link_326（LC→前脑岛 NE，fc=0.85，脑干强度估计·PINK 最强 hub）；身体信号被过度警觉放大",
    "hooks": "行为覆盖①（内感受过度警觉侧）"
   },
   {
@@ -465,7 +465,7 @@
    ],
    "laterality_delta": 0.0,
    "is_new": false,
-   "literature": "旧 link_331（LC→V1 NE，fc=0.6，Hansen2024）；身体意象视觉监控警觉",
+   "literature": "旧 link_331（LC→V1 NE，fc=0.6，脑干强度估计）；身体意象视觉监控警觉",
    "hooks": "行为覆盖①（视觉侧翼）"
   },
   {
@@ -737,7 +737,7 @@
    ],
    "laterality_delta": 0.0,
    "is_new": false,
-   "literature": "旧 link_331（LC→V1 感觉信噪比异常，Hansen PINK fc=0.6）；RDoC 唤醒域",
+   "literature": "旧 link_331（LC→V1 感觉信噪比异常，脑干强度估计 fc=0.6）；RDoC 唤醒域",
    "hooks": "行为覆盖④（感官过载）"
   },
   {
@@ -1251,7 +1251,7 @@
    },
    "laterality_delta": 0.0,
    "is_new": false,
-   "literature": "旧 link_338（VTA→mPFC，Hansen 2024）；奖赏超敏→目标驱动过度（躁狂）",
+   "literature": "旧 link_338（VTA→mPFC，脑干强度估计）；奖赏超敏→目标驱动过度（躁狂）",
    "hooks": "行为覆盖①（目标驱动）；3.1 DA_VTA 推导锚（次）"
   },
   {
@@ -1316,7 +1316,7 @@
    ],
    "laterality_delta": 0.0,
    "is_new": false,
-   "literature": "旧 link_332（蓝斑→杏仁核 NE，Hansen 2024）；蓝斑振荡——躁狂期↑（睡眠需求↓）/抑郁期也可↑（激越性抑郁，旧思路链）",
+   "literature": "旧 link_332（蓝斑→杏仁核 NE，脑干强度估计）；蓝斑振荡——躁狂期↑（睡眠需求↓）/抑郁期也可↑（激越性抑郁，旧思路链）",
    "hooks": "3.1 NE 推导锚（主）；非线性跳变②（睡眠恢复 SAN −50%）"
   },
   {
@@ -1333,7 +1333,7 @@
    ],
    "laterality_delta": 0.0,
    "is_new": false,
-   "literature": "旧 link_327（蓝斑→ACC，Hansen 2024 Fig5）；NE→警觉/冲动",
+   "literature": "旧 link_327（蓝斑→ACC，脑干强度估计 Fig5 对应社区）；NE→警觉/冲动",
    "hooks": "3.1 NE 推导锚（次）；行为覆盖③（相位翻转触发器：唤醒域 m_max>0.3）"
   },
   {
@@ -1671,7 +1671,7 @@
    ],
    "laterality_delta": 0.0,
    "is_new": false,
-   "literature": "旧 link_332（蓝斑→杏仁核 NE，Hansen 2024）；蓝斑振荡（幅值<BD-I：轻躁狂非精神病性）",
+   "literature": "旧 link_332（蓝斑→杏仁核 NE，脑干强度估计）；蓝斑振荡（幅值<BD-I：轻躁狂非精神病性）",
    "hooks": "3.1 NE 推导锚；轻躁狂相睡眠衰减（§五.1，相位行为）"
   },
   {
@@ -2076,7 +2076,7 @@
    ],
    "laterality_delta": 0.0,
    "is_new": false,
-   "literature": "旧 link_326（LC→前脑岛 NE，fc=0.85，Hansen2024 PINK 最强 hub）；Bronleigh 2022 内感受区↑",
+   "literature": "旧 link_326（LC→前脑岛 NE，fc=0.85，脑干强度估计·PINK 最强 hub）；Bronleigh 2022 内感受区↑",
    "hooks": "行为覆盖①（食物线索内感受警觉）"
   },
   {
@@ -2297,7 +2297,7 @@
    ],
    "laterality_delta": 0.0,
    "is_new": false,
-   "literature": "旧 link_332（蓝斑→杏仁核 NE，Hansen 2024 fc=0.7）；唤醒域轻度↑（蓝斑不稳定，< GAD/BD，文献数据源 §七）",
+   "literature": "旧 link_332（蓝斑→杏仁核 NE，脑干强度估计 fc=0.7）；唤醒域轻度↑（蓝斑不稳定，< GAD/BD，文献数据源 §七）",
    "hooks": "3.1 节 NE tone 推导锚（振荡承载）"
   },
   {
@@ -2603,7 +2603,7 @@
    ],
    "laterality_delta": 0.0,
    "is_new": false,
-   "literature": "旧 link_332（蓝斑→杏仁核 NE，Hansen 2024 fc=0.7）；RDoC 唤醒域；[GAD 思路链](../../design/entities/diseases/%E5%B9%BF%E6%B3%9B%E6%80%A7%E7%84%A6%E8%99%91%E9%9A%9C%E7%A2%8D.md) 蓝斑 NE 持续激活",
+   "literature": "旧 link_332（蓝斑→杏仁核 NE，脑干强度估计 fc=0.7）；RDoC 唤醒域；[GAD 思路链](../../design/entities/diseases/%E5%B9%BF%E6%B3%9B%E6%80%A7%E7%84%A6%E8%99%91%E9%9A%9C%E7%A2%8D.md) 蓝斑 NE 持续激活",
    "hooks": "非线性跳变①（持续警觉锁定）"
   },
   {
@@ -2620,7 +2620,7 @@
    ],
    "laterality_delta": 0.0,
    "is_new": false,
-   "literature": "旧 link_326（蓝斑→前脑岛 NE，Hansen PINK fc=0.85）",
+   "literature": "旧 link_326（蓝斑→前脑岛 NE，脑干强度估计 fc=0.85）",
    "hooks": "行为覆盖①（内感受过度警觉）"
   },
   {
@@ -2671,7 +2671,7 @@
    ],
    "laterality_delta": 0.0,
    "is_new": false,
-   "literature": "旧 link_320（中缝背核→杏仁核 5-HT，Hansen PINK fc=0.7）",
+   "literature": "旧 link_320（中缝背核→杏仁核 5-HT，脑干强度估计 fc=0.7）",
    "hooks": "3.1 节 5HT tone 推导锚"
   },
   {
@@ -2807,7 +2807,7 @@
    ],
    "laterality_delta": 0.0,
    "is_new": false,
-   "literature": "旧 link_338（VTA→mPFC DA，Hansen 2024 fc=0.6）；VTA→mPFC 奖赏价值整合通路解耦（思路链）",
+   "literature": "旧 link_338（VTA→mPFC DA，脑干强度估计 fc=0.6）；VTA→mPFC 奖赏价值整合通路解耦（思路链）",
    "hooks": "非线性跳变①（作用域成员）"
   },
   {
@@ -2960,7 +2960,7 @@
    ],
    "laterality_delta": 0.0,
    "is_new": false,
-   "literature": "旧 link_326（蓝斑→前脑岛 NE，Hansen PINK 最强 hub fc=0.85）；Guo 2026 共享岛叶 ALFF↑",
+   "literature": "旧 link_326（蓝斑→前脑岛 NE，脑干强度估计 fc=（PINK 最强 hub）0.85）；Guo 2026 共享岛叶 ALFF↑",
    "hooks": "3.1 节 NE tone 推导锚（内感受超敏）"
   },
   {
@@ -2977,7 +2977,7 @@
    ],
    "laterality_delta": 0.0,
    "is_new": false,
-   "literature": "旧 link_327（蓝斑→ACC NE，Hansen 2024 Fig5 fc=0.85）；Guo 2026 ACC/mPFC ALFF↑",
+   "literature": "旧 link_327（蓝斑→ACC NE，脑干强度估计 fc=0.85）；Guo 2026 ACC/mPFC ALFF↑",
    "hooks": "3.1 节 NE tone 推导锚（作用域成员）"
   },
   {
@@ -3011,7 +3011,7 @@
    ],
    "laterality_delta": 0.0,
    "is_new": false,
-   "literature": "旧 link_319（中缝背核→海马 5-HT，Hansen PINK fc=0.75）；ENIGMA MDD 海马↓（复发型）——5-HT 传递聚焦于记忆回路",
+   "literature": "旧 link_319（中缝背核→海马 5-HT，脑干强度估计 fc=0.75）；ENIGMA MDD 海马↓（复发型）——5-HT 传递聚焦于记忆回路",
    "hooks": "3.1 节 5HT tone 推导锚；负性记忆提取支持"
   },
   {
@@ -3130,7 +3130,7 @@
    ],
    "laterality_delta": 0.0,
    "is_new": false,
-   "literature": "旧 link_344（黑质→壳核 DA，Hansen fc=0.85, Paxinos 2004）",
+   "literature": "旧 link_344（黑质→壳核 DA，脑干强度估计 fc=0.85, Paxinos 2004）",
    "hooks": "非线性跳变③（行动门控失效成员）"
   },
   {
@@ -3147,7 +3147,7 @@
    ],
    "laterality_delta": 0.0,
    "is_new": false,
-   "literature": "旧 link_343（黑质→尾状核 DA，Hansen fc=0.9, Paxinos 2004）",
+   "literature": "旧 link_343（黑质→尾状核 DA，脑干强度估计 fc=0.9, Paxinos 2004）",
    "hooks": "3.1 节 DA_SNc 推导锚"
   },
   {
@@ -3232,7 +3232,7 @@
    ],
    "laterality_delta": 0.0,
    "is_new": false,
-   "literature": "旧 link_327（蓝斑→ACC NE，Hansen fc=0.85）",
+   "literature": "旧 link_327（蓝斑→ACC NE，脑干强度估计 fc=0.85）",
    "hooks": "3.1 节 NE tone 推导锚；行为覆盖②"
   },
   {
@@ -3385,7 +3385,7 @@
    ],
    "laterality_delta": 0.0,
    "is_new": false,
-   "literature": "发作躯体症状（心悸/气促/胸闷）NE 驱动；Hansen PINK fc=0.85",
+   "literature": "发作躯体症状（心悸/气促/胸闷）NE 驱动；脑干强度估计 fc=0.85",
    "hooks": "非线性跳变①（躯体症状端）"
   },
   {
@@ -3725,7 +3725,7 @@
    ],
    "laterality_delta": 0.05,
    "is_new": false,
-   "literature": "旧 link_319（中缝背核→海马 5-HT，Hansen PINK fc=0.75，旧「结构异常」→ 正 m 广播边机械重分类）；Gutman 2022 海马偏侧夸大",
+   "literature": "旧 link_319（中缝背核→海马 5-HT，脑干强度估计 fc=0.75，旧「结构异常」→ 正 m 广播边机械重分类）；Gutman 2022 海马偏侧夸大",
    "hooks": "5HT tone 推导锚（聚焦腿）"
   },
   {
@@ -3776,7 +3776,7 @@
    ],
    "laterality_delta": 0.0,
    "is_new": false,
-   "literature": "旧 link_327（蓝斑→ACC NE，Hansen 2024 Fig5）",
+   "literature": "旧 link_327（蓝斑→ACC NE，脑干强度估计 Fig5 对应社区）",
    "hooks": "NE tone 推导锚 + 行为覆盖①"
   },
   {
@@ -3793,7 +3793,7 @@
    ],
    "laterality_delta": 0.0,
    "is_new": false,
-   "literature": "旧 link_326（蓝斑→前脑岛 NE，Hansen PINK 最强 hub fc=0.85）",
+   "literature": "旧 link_326（蓝斑→前脑岛 NE，脑干强度估计 fc=（PINK 最强 hub）0.85）",
    "hooks": "NE tone 推导锚（次项）"
   },
   {
@@ -4150,7 +4150,7 @@
    ],
    "laterality_delta": 0.0,
    "is_new": false,
-   "literature": "旧 link_336（VTA→NAcc DA，Hansen fc=0.9, Schultz 1997）——远期目标 DA 响应↓（§6.3 结构异常 b 类：广播腿选择性负偏移）",
+   "literature": "旧 link_336（VTA→NAcc DA，脑干强度估计 fc=0.9, Schultz 1997）——远期目标 DA 响应↓（§6.3 结构异常 b 类：广播腿选择性负偏移）",
    "hooks": "行为覆盖②（远期目标激活−50% 成员）"
   },
   {
@@ -4337,7 +4337,7 @@
    ],
    "laterality_delta": 0.0,
    "is_new": false,
-   "literature": "旧 link_332（蓝斑→杏仁核 NE，Hansen 2024）；RDoC 唤醒域",
+   "literature": "旧 link_332（蓝斑→杏仁核 NE，脑干强度估计）；RDoC 唤醒域",
    "hooks": "3.1 节 NE tone 推导锚"
   },
   {
@@ -4354,7 +4354,7 @@
    ],
    "laterality_delta": 0.0,
    "is_new": false,
-   "literature": "旧 link_326（蓝斑→前脑岛 NE，Hansen PINK 最强 hub fc=0.85）+ **吞并 link_315 语义**（见 §四）",
+   "literature": "旧 link_326（蓝斑→前脑岛 NE，脑干强度估计 fc=（PINK 最强 hub）0.85）+ **吞并 link_315 语义**（见 §四）",
    "hooks": "行为覆盖①（内感受过度警觉）"
   },
   {
@@ -4371,7 +4371,7 @@
    ],
    "laterality_delta": 0.0,
    "is_new": false,
-   "literature": "旧 link_328（蓝斑→dlPFC NE，Hansen 2024）；慢性应激→前额叶萎缩（思路链）",
+   "literature": "旧 link_328（蓝斑→dlPFC NE，脑干强度估计）；慢性应激→前额叶萎缩（思路链）",
    "hooks": "行为覆盖③ + 非线性跳变③（dlPFC 压制失效）"
   },
   {
@@ -4422,7 +4422,7 @@
    ],
    "laterality_delta": -0.2,
    "is_new": false,
-   "literature": "旧 link_319（中缝背核→海马 5-HT，Hansen PINK fc=0.75）；左海马 ALFF↑ Guo 2026",
+   "literature": "旧 link_319（中缝背核→海马 5-HT，脑干强度估计 fc=0.75）；左海马 ALFF↑ Guo 2026",
    "hooks": "3.1 节 5HT tone 推导锚；创伤记忆固化"
   },
   {
@@ -4456,7 +4456,7 @@
    ],
    "laterality_delta": 0.0,
    "is_new": false,
-   "literature": "旧 link_320（中缝背核→杏仁核 5-HT，Hansen PINK fc=0.7）",
+   "literature": "旧 link_320（中缝背核→杏仁核 5-HT，脑干强度估计 fc=0.7）",
    "hooks": "3.1 节 5HT tone 推导锚"
   },
   {
@@ -4592,7 +4592,7 @@
    ],
    "laterality_delta": 0.0,
    "is_new": false,
-   "literature": "旧 link_332（蓝斑→杏仁核 NE，Hansen 2024）；BD 唤醒域振荡（×0.5）；重档 0.4 > 0.3 触发心境翻转",
+   "literature": "旧 link_332（蓝斑→杏仁核 NE，脑干强度估计）；BD 唤醒域振荡（×0.5）；重档 0.4 > 0.3 触发心境翻转",
    "hooks": "**行为覆盖①（心境相位翻转）** + NE tone 推导锚"
   },
   {
@@ -5221,7 +5221,7 @@
    ],
    "laterality_delta": 0.0,
    "is_new": false,
-   "literature": "RDoC 唤醒域：LC→前脑岛 NE 内感受警觉（旧 link_326 语义，Hansen PINK 最强 hub fc=0.85）",
+   "literature": "RDoC 唤醒域：LC→前脑岛 NE 内感受警觉（旧 link_326 语义，脑干强度估计 fc=（PINK 最强 hub）0.85）",
    "hooks": "3.1 节 NE tone 推导锚"
   },
   {
@@ -5425,7 +5425,7 @@
    ],
    "laterality_delta": 0.0,
    "is_new": false,
-   "literature": "旧 link_332（蓝斑→杏仁核 NE，Hansen 2024 fc=0.7）；[特定恐惧症.md](../../design/entities/diseases/%E7%89%B9%E5%AE%9A%E6%81%90%E6%83%A7%E7%97%87.md) 唤醒域（刺激触发）",
+   "literature": "旧 link_332（蓝斑→杏仁核 NE，脑干强度估计 fc=0.7）；[特定恐惧症.md](../../design/entities/diseases/%E7%89%B9%E5%AE%9A%E6%81%90%E6%83%A7%E7%97%87.md) 唤醒域（刺激触发）",
    "hooks": "行为覆盖①（恐惧刺激→NE 唤醒）"
   },
   {
@@ -5442,7 +5442,7 @@
    ],
    "laterality_delta": 0.0,
    "is_new": false,
-   "literature": "旧 link_326（蓝斑→前脑岛 NE，Hansen PINK fc=0.85）",
+   "literature": "旧 link_326（蓝斑→前脑岛 NE，脑干强度估计 fc=0.85）",
    "hooks": "行为覆盖①（躯体恐惧反应）"
   },
   {
@@ -5680,7 +5680,7 @@
    ],
    "laterality_delta": 0.0,
    "is_new": false,
-   "literature": "旧 link_328（LC→dlPFC NE，fc=0.75，Hansen2024）；ENIGMA AUD 额上回/额叶皮质变薄（Navarri 2022）",
+   "literature": "旧 link_328（LC→dlPFC NE，fc=0.75，脑干强度估计）；ENIGMA AUD 额上回/额叶皮质变薄（Navarri 2022）",
    "hooks": "行为覆盖③ + 非线性跳变②（结构基础）"
   },
   {

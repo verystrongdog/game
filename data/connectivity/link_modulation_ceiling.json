@@ -1,11 +1,12 @@
 {
   "_metadata": {
-    "description": "链路调制上限 — 从 ENIGMA SC + Hansen 2024 推导",
+    "provenance_note": "来源标注已如实化（2026-09-12）：脑干连接强度为**本仓人工估计**（社区划分依 Hansen et al. (2024) Nat Neurosci Table 1）；本仓未读取 data/connectivity/hansen2024/ 下的数据集。本文件是 2026-07-27 快照（数值未重算）；代码随后修正了中缝正中核的社区归属（YELLOW→GREEN），重算会改变数值，故此处只改标注。",
+    "description": "链路调制上限 — 从 ENIGMA SC + 脑干强度估计 + 白质纤维束推导",
     "formula": "modulation_ceiling = sc_norm × layer_weight × direction_factor",
     "sc_normalization": {
       "enigma_p95": 10.48,
       "enigma_max": 12.615,
-      "hansen_max": 0.9
+      "brainstem_estimate_max": 0.9
     },
     "layer_weights": {
       "L0": 0.5,
@@ -45,11 +46,11 @@
         "moderate (0.6)": 0.3,
         "full (1.0)": 0.5
       },
-      "data_source": "Hansen2024_brainstem",
+      "data_source": "brainstem_estimate",
       "raw_sc_mean": 2.55,
       "raw_sc_max": 2.55,
       "sc_details": [
-        "Hansen2024:PAG↔M1"
+        "brainstem_estimate:PAG↔M1"
       ]
     },
     {
@@ -70,11 +71,11 @@
         "moderate (0.6)": 0.3,
         "full (1.0)": 0.5
       },
-      "data_source": "Hansen2024_brainstem",
+      "data_source": "brainstem_estimate",
       "raw_sc_mean": 2.55,
       "raw_sc_max": 2.55,
       "sc_details": [
-        "Hansen2024:杏仁核-PAG↔PAG"
+        "brainstem_estimate:杏仁核-PAG↔PAG"
       ]
     },
     {
@@ -95,11 +96,11 @@
         "moderate (0.6)": 0.3,
         "full (1.0)": 0.5
       },
-      "data_source": "Hansen2024_brainstem",
+      "data_source": "brainstem_estimate",
       "raw_sc_mean": 2.55,
       "raw_sc_max": 2.55,
       "sc_details": [
-        "Hansen2024:上丘↔PAG"
+        "brainstem_estimate:上丘↔PAG"
       ]
     },
     {
@@ -143,11 +144,11 @@
         "moderate (0.6)": 0.21,
         "full (1.0)": 0.35
       },
-      "data_source": "Hansen2024_brainstem",
+      "data_source": "brainstem_estimate",
       "raw_sc_mean": 2.25,
       "raw_sc_max": 2.25,
       "sc_details": [
-        "Hansen2024:中缝背核↔ACC"
+        "brainstem_estimate:中缝背核↔ACC"
       ]
     },
     {
@@ -191,11 +192,11 @@
         "moderate (0.6)": 0.3,
         "full (1.0)": 0.5
       },
-      "data_source": "Hansen2024_brainstem",
+      "data_source": "brainstem_estimate",
       "raw_sc_mean": 2.4,
       "raw_sc_max": 2.4,
       "sc_details": [
-        "Hansen2024:VTA↔NAcc壳"
+        "brainstem_estimate:VTA↔NAcc壳"
       ]
     },
     {
@@ -216,11 +217,11 @@
         "moderate (0.6)": 0.3,
         "full (1.0)": 0.5
       },
-      "data_source": "Hansen2024_brainstem",
+      "data_source": "brainstem_estimate",
       "raw_sc_mean": 1.65,
       "raw_sc_max": 1.65,
       "sc_details": [
-        "Hansen2024:小脑皮层↔壳核"
+        "brainstem_estimate:小脑皮层↔壳核"
       ]
     },
     {
@@ -241,11 +242,11 @@
         "moderate (0.6)": 0.252,
         "full (1.0)": 0.42
       },
-      "data_source": "Hansen2024_brainstem",
+      "data_source": "brainstem_estimate",
       "raw_sc_mean": 2.55,
       "raw_sc_max": 2.55,
       "sc_details": [
-        "Hansen2024:杏仁核↔PAG"
+        "brainstem_estimate:杏仁核↔PAG"
       ]
     },
     {
@@ -266,11 +267,11 @@
         "moderate (0.6)": 0.252,
         "full (1.0)": 0.42
       },
-      "data_source": "Hansen2024_brainstem",
+      "data_source": "brainstem_estimate",
       "raw_sc_mean": 2.7,
       "raw_sc_max": 2.7,
       "sc_details": [
-        "Hansen2024:BNST↔蓝斑"
+        "brainstem_estimate:BNST↔蓝斑"
       ]
     },
     {
@@ -291,11 +292,11 @@
         "moderate (0.6)": 0.252,
         "full (1.0)": 0.42
       },
-      "data_source": "Hansen2024_brainstem",
+      "data_source": "brainstem_estimate",
       "raw_sc_mean": 2.1,
       "raw_sc_max": 2.1,
       "sc_details": [
-        "Hansen2024:海马体 CA1↔上丘"
+        "brainstem_estimate:海马体 CA1↔上丘"
       ]
     },
     {
@@ -341,11 +342,11 @@
         "moderate (0.6)": 0.252,
         "full (1.0)": 0.42
       },
-      "data_source": "Hansen2024_brainstem",
+      "data_source": "brainstem_estimate",
       "raw_sc_mean": 2.55,
       "raw_sc_max": 2.55,
       "sc_details": [
-        "Hansen2024:海马旁回↔PAG"
+        "brainstem_estimate:海马旁回↔PAG"
       ]
     },
     {
@@ -367,12 +368,12 @@
         "moderate (0.6)": 0.252,
         "full (1.0)": 0.42
       },
-      "data_source": "Hansen2024_brainstem",
+      "data_source": "brainstem_estimate",
       "raw_sc_mean": 2.4,
       "raw_sc_max": 2.4,
       "sc_details": [
-        "Hansen2024:伏隔核/NAcc↔VTA",
-        "Hansen2024:腹侧纹状体↔VTA"
+        "brainstem_estimate:伏隔核/NAcc↔VTA",
+        "brainstem_estimate:腹侧纹状体↔VTA"
       ]
     },
     {
@@ -393,11 +394,11 @@
         "moderate (0.6)": 0.252,
         "full (1.0)": 0.42
       },
-      "data_source": "Hansen2024_brainstem",
+      "data_source": "brainstem_estimate",
       "raw_sc_mean": 2.4,
       "raw_sc_max": 2.4,
       "sc_details": [
-        "Hansen2024:缰核↔VTA"
+        "brainstem_estimate:缰核↔VTA"
       ]
     },
     {
@@ -418,11 +419,11 @@
         "moderate (0.6)": 0.252,
         "full (1.0)": 0.42
       },
-      "data_source": "Hansen2024_brainstem",
+      "data_source": "brainstem_estimate",
       "raw_sc_mean": 2.25,
       "raw_sc_max": 2.25,
       "sc_details": [
-        "Hansen2024:隔区↔中缝背核"
+        "brainstem_estimate:隔区↔中缝背核"
       ]
     },
     {
@@ -444,12 +445,12 @@
         "moderate (0.6)": 0.252,
         "full (1.0)": 0.42
       },
-      "data_source": "Hansen2024_brainstem",
+      "data_source": "brainstem_estimate",
       "raw_sc_mean": 1.65,
       "raw_sc_max": 1.65,
       "sc_details": [
-        "Hansen2024:壳核↔小脑皮层",
-        "Hansen2024:苍白球↔小脑皮层"
+        "brainstem_estimate:壳核↔小脑皮层",
+        "brainstem_estimate:苍白球↔小脑皮层"
       ]
     },
     {
@@ -625,13 +626,13 @@
         "moderate (0.6)": 0.48,
         "full (1.0)": 0.8
       },
-      "data_source": "Hansen2024_brainstem",
+      "data_source": "brainstem_estimate",
       "raw_sc_mean": 2.1,
       "raw_sc_max": 2.1,
       "sc_details": [
-        "Hansen2024:枕叶 V1↔上丘",
-        "Hansen2024:枕顶联合↔上丘",
-        "Hansen2024:楔叶↔上丘"
+        "brainstem_estimate:枕叶 V1↔上丘",
+        "brainstem_estimate:枕顶联合↔上丘",
+        "brainstem_estimate:楔叶↔上丘"
       ]
     },
     {
@@ -652,11 +653,11 @@
         "moderate (0.6)": 0.48,
         "full (1.0)": 0.8
       },
-      "data_source": "Hansen2024_brainstem",
+      "data_source": "brainstem_estimate",
       "raw_sc_mean": 2.1,
       "raw_sc_max": 2.1,
       "sc_details": [
-        "Hansen2024:A1↔上丘"
+        "brainstem_estimate:A1↔上丘"
       ]
     },
     {
@@ -764,12 +765,12 @@
         "moderate (0.6)": 0.54,
         "full (1.0)": 0.9
       },
-      "data_source": "Hansen2024_brainstem",
+      "data_source": "brainstem_estimate",
       "raw_sc_mean": 2.1,
       "raw_sc_max": 2.1,
       "sc_details": [
-        "Hansen2024:颞上沟岸↔上丘",
-        "Hansen2024:颞中回↔上丘"
+        "brainstem_estimate:颞上沟岸↔上丘",
+        "brainstem_estimate:颞中回↔上丘"
       ]
     },
     {
@@ -977,16 +978,16 @@
         "moderate (0.6)": 0.42,
         "full (1.0)": 0.7
       },
-      "data_source": "Hansen2024_brainstem",
+      "data_source": "brainstem_estimate",
       "raw_sc_mean": 2.061,
       "raw_sc_max": 2.55,
       "sc_details": [
         "estimated",
-        "Hansen2024:dlPFC↔PAG",
+        "brainstem_estimate:dlPFC↔PAG",
         "estimated",
-        "Hansen2024:额顶网络↔PAG",
+        "brainstem_estimate:额顶网络↔PAG",
         "estimated",
-        "Hansen2024:ACC背侧↔PAG"
+        "brainstem_estimate:ACC背侧↔PAG"
       ]
     },
     {
