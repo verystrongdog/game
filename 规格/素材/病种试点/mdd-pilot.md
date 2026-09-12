@@ -18,9 +18,9 @@
 | # | 文献 | 类型 | 关键数据点（→ 病理边用途） |
 |---|------|------|--------------------------|
 | 1 | **ENIGMA MDD（Schmaal et al. 2016）** *Mol Psychiatry* 21(6):806-812（MDD WG，10 队列） | 结构 meta | 亚皮层体积：**海马↓（复发型）**、杏仁核↓（早发型）、丘脑↓（自杀史）；MDD 效应量 < SCZ（Cheon 2022 梯度 SZ>BD>MDD）→ 奖赏/记忆域边的结构锚（e01/e04/e14/e15 量级克制） |
-| 2 | **Guo et al. (2026)** *Transl Psychiatry*（254 实验, 10,456 患者，跨诊断 ALFF meta） | 静息态 ALFF meta | MDD 特异性偏离 = **ALFF↑ IFG/岛叶/ACC-mPFC/顶下小叶/额中回，ALFF↓ 小脑/距状裂**（[疾病-脑区链路映射-文献数据源.md](../../参考/文献/疾病-脑区链路映射-文献数据源.md) §2.3）→ 内感受/反刍域边的方向（e05/e06/e10/e13）；岛叶 ALFF↑ 为六病共享（§2.1）→ e11/e12 内感受承载 |
+| 2 | **Guo et al. (2026)** *Transl Psychiatry*（254 实验, 10,456 患者，跨诊断 ALFF meta） | 静息态 ALFF meta | MDD 特异性偏离 = **ALFF↑ IFG/岛叶/ACC-mPFC/顶下小叶/额中回，ALFF↓ 小脑/距状裂**（[疾病-脑区链路映射-文献数据源.md](../../../%E5%8F%82%E8%80%83/%E6%96%87%E7%8C%AE/%E7%96%BE%E7%97%85-%E8%84%91%E5%8C%BA%E9%93%BE%E8%B7%AF%E6%98%A0%E5%B0%84-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md) §2.3）→ 内感受/反刍域边的方向（e05/e06/e10/e13）；岛叶 ALFF↑ 为六病共享（§2.1）→ e11/e12 内感受承载 |
 | 3 | **RDoC v4（NIMH）** | 回路矩阵 | 正性效价（奖赏评估/预期/学习）：OFC、腹侧纹状体、VTA/SN、外侧缰核 → MDD；负性效价（丧失）：DMN、海马、OFC、奖赏回路 → MDD（文献数据源 §四.1）→ 奖赏域边集（e01-e04）+ DMN 反刍边集（e05-e07）的回路级锚 |
-| 4 | **de Kovel et al. (2019)** *Am J Psychiatry*（ENIGMA MDD WG 二次分析） | 偏侧 null | **MDD 脑结构偏侧无显著改变（大样本 null）**——见 [ENIGMA偏侧化-精神疾病大样本meta-文献数据源.md](../../参考/文献/ENIGMA偏侧化-精神疾病大样本meta-文献数据源.md) → **全边 laterality_delta = 0，不引入偏侧机制**（§6.5 规则 2） |
+| 4 | **de Kovel et al. (2019)** *Am J Psychiatry*（ENIGMA MDD WG 二次分析） | 偏侧 null | **MDD 脑结构偏侧无显著改变（大样本 null）**——见 [ENIGMA偏侧化-精神疾病大样本meta-文献数据源.md](../../../%E5%8F%82%E8%80%83/%E6%96%87%E7%8C%AE/ENIGMA%E5%81%8F%E4%BE%A7%E5%8C%96-%E7%B2%BE%E7%A5%9E%E7%96%BE%E7%97%85%E5%A4%A7%E6%A0%B7%E6%9C%ACmeta-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md) → **全边 laterality_delta = 0，不引入偏侧机制**（§6.5 规则 2） |
 
 **辅助锚（方向/范围补充）**：
 
@@ -194,4 +194,4 @@ NPC AI §4.2/§5.2：MDD = 「过度抑制 + 反刍」双标签（默认）+ 快
 ---
 
 *创建: 2026-08-21 | 更新: 2026-08-21*
-*关联: [grilling-88.md](grilling-88.md), [重度抑郁症](../../实体/疾病目录/重度抑郁症.md), [NPC AI 行为模型](../../规则/技能树系统/NPC AI 行为模型.md) §4.2/§5.2, [偏侧化架构](../../规则/技能树系统/偏侧化架构.md) §四/§八, [疾病-脑区链路映射-文献数据源](../../参考/文献/疾病-脑区链路映射-文献数据源.md) §二/§三/§四/§七, [ENIGMA偏侧化-精神疾病大样本meta-文献数据源](../../参考/文献/ENIGMA偏侧化-精神疾病大样本meta-文献数据源.md), [tripartite_model.json](../../data/connectivity/tripartite_model.json)*
+*关联: [grilling-88.md](grilling-88.md), [重度抑郁症](../../../%E5%AE%9E%E4%BD%93/%E7%96%BE%E7%97%85%E7%9B%AE%E5%BD%95/%E9%87%8D%E5%BA%A6%E6%8A%91%E9%83%81%E7%97%87.md), [NPC AI 行为模型](../../规则/技能树系统/NPC AI 行为模型.md) §4.2/§5.2, [偏侧化架构](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E5%81%8F%E4%BE%A7%E5%8C%96%E6%9E%B6%E6%9E%84.md) §四/§八, [疾病-脑区链路映射-文献数据源](../../../%E5%8F%82%E8%80%83/%E6%96%87%E7%8C%AE/%E7%96%BE%E7%97%85-%E8%84%91%E5%8C%BA%E9%93%BE%E8%B7%AF%E6%98%A0%E5%B0%84-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md) §二/§三/§四/§七, [ENIGMA偏侧化-精神疾病大样本meta-文献数据源](../../../%E5%8F%82%E8%80%83/%E6%96%87%E7%8C%AE/ENIGMA%E5%81%8F%E4%BE%A7%E5%8C%96-%E7%B2%BE%E7%A5%9E%E7%96%BE%E7%97%85%E5%A4%A7%E6%A0%B7%E6%9C%ACmeta-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md), [tripartite_model.json](../../../data/connectivity/tripartite_model.json)*

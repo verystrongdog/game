@@ -76,4 +76,4 @@ CGI-S范围: 3-7
 
 ---
 *创建: 2026-08-01 | 更新: 2026-08-21*
-*关联: [双相障碍I型 pilot](../../.scratch/grilling-88-etiology-disease-neural/bipolar-I-pilot.md), [pathology_edges.json](../../data/connectivity/pathology_edges.json), [奖赏系统障碍](../_父类/奖赏系统障碍.md), [疾病-脑区链路映射-文献数据源](../../../参考/文献/疾病-脑区链路映射-文献数据源.md)*
+*关联: [双相障碍I型 pilot](../../规格/素材/病种试点/bipolar-I-pilot.md), [pathology_edges.json](../../data/connectivity/pathology_edges.json), [奖赏系统障碍](../_父类/奖赏系统障碍.md), [疾病-脑区链路映射-文献数据源](../../../参考/文献/疾病-脑区链路映射-文献数据源.md)*

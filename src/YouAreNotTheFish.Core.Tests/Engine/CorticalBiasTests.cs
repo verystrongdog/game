@@ -6,7 +6,7 @@ using YouAreNotTheFish.Core.Types;
 namespace YouAreNotTheFish.Core.Tests.Engine;
 
 /// <summary>
-/// CorticalBias spec@v1.1（.scratch/csharp-tone/design/spec.md）§六 AC-9~AC-14、AC-16。
+/// CorticalBias spec@v1.1（../../../规格/引擎/csharp-tone.md）§六 AC-9~AC-14、AC-16。
 /// 行序定位一律经 RegionIds 推导（wmatrix 结转 #1：不裸写 fid 名下标，防 dk/fid 命名陷阱）。
 /// 数据依赖断言（AC-10~14）兼作数据漂移哨兵。
 /// </summary>

@@ -4,7 +4,7 @@ using YouAreNotTheFish.Core.Types;
 namespace YouAreNotTheFish.Core.Tests.Engine;
 
 /// <summary>
-/// TurnOrderBuilder spec@v1.1（.scratch/csharp-speed/design/spec.md）§六 AC-9~AC-14。
+/// TurnOrderBuilder spec@v1.1（../../../规格/引擎/csharp-speed.md）§六 AC-9~AC-14。
 /// RNG 消费序契约（spec §三 3.2）：组内索引升序 → for i = m−1 downto 1: j = NextInt(i+1) → swap；
 /// m=1 不消费 rng；组间 = 分数降序。镜像实现（结转 #3）逐字复述算法，不复制引擎代码。
 /// </summary>

@@ -24,7 +24,7 @@
 
 **辅助锚（方向/范围补充）**：
 
-- **[特定恐惧症.md](../../实体/疾病目录/特定恐惧症.md) 思路链**——「[推导: PTSD 防御域对标 ×0.6，刺激特异性缩减]」：SP 防御域量级 = PTSD 防御域 × 0.6 且不泛化（CGI-S 上限 4——回避行为高度可控）。
+- **[特定恐惧症.md](../../../%E5%AE%9E%E4%BD%93/%E7%96%BE%E7%97%85%E7%9B%AE%E5%BD%95/%E7%89%B9%E5%AE%9A%E6%81%90%E6%83%A7%E7%97%87.md) 思路链**——「[推导: PTSD 防御域对标 ×0.6，刺激特异性缩减]」：SP 防御域量级 = PTSD 防御域 × 0.6 且不泛化（CGI-S 上限 4——回避行为高度可控）。
 - **左右脑偏侧化-文献数据源**——SP 无稳健左右偏侧证据 → **全部边 laterality_delta = 0**（§6.5 规则 2）。
 
 > **转换规则声明**：同 [ptsd-pilot.md](ptsd-pilot.md)——文献脑区/网络层结论 → 三体边层为设计师翻译；m 偏移量级沿用旧文件设计校准（重档量级按 B′ 过滤淘汰），**全部数值有来源，新增数值标记 `[NEW]`**。
@@ -42,20 +42,20 @@
 | **specific-phobia_e01** | PeriaqueductalGray | Amygdala | privileged_pathway | ✅ 命中：`brainstem_subcortical`, dir=feedforward, level_diff=+1（L0→L1） | 过度耦合 | +0.2/+0.4 | 0 | 旧 link_312（PAG→杏仁核，LeDoux 2000 / Paxinos 2004）；RDoC 急性威胁 dPAG；Etkin & Wager 2007 杏仁核超激活 | 行为覆盖①（刺激触发 +0.2 叠加） |
 | **specific-phobia_e02** | SuperiorColliculus | Amygdala | privileged_pathway | ✅ 命中：`brainstem_subcortical`, dir=feedforward, level_diff=+1（L0→L1） | 过度耦合 | +0.1/+0.2 | 0 | 旧 link_317（上丘→杏仁核经丘脑枕快速通路，Paxinos 2004）——刺激快速检测→恐惧 | 行为覆盖①（刺激出现瞬时触发） |
 
-> **方向说明**：核心病理写作「杏仁核→PAG 刺激特异性过度耦合」（[特定恐惧症.md](../../实体/疾病目录/特定恐惧症.md) 摘要），旧链路表实际以 PAG→杏仁核 上行表达（link_312）；SP **无** L1→L0 下行劫持（跨层短路）——这是与 PTSD/惊恐的机制分界（§6.3 判定 + PTSD 试点方向惯例）。「刺激特异性」由行为覆盖①（刺激在场才叠加、移除后 2 回合回落）落行为层。
+> **方向说明**：核心病理写作「杏仁核→PAG 刺激特异性过度耦合」（[特定恐惧症.md](../../../%E5%AE%9E%E4%BD%93/%E7%96%BE%E7%97%85%E7%9B%AE%E5%BD%95/%E7%89%B9%E5%AE%9A%E6%81%90%E6%83%A7%E7%97%87.md) 摘要），旧链路表实际以 PAG→杏仁核 上行表达（link_312）；SP **无** L1→L0 下行劫持（跨层短路）——这是与 PTSD/惊恐的机制分界（§6.3 判定 + PTSD 试点方向惯例）。「刺激特异性」由行为覆盖①（刺激在场才叠加、移除后 2 回合回落）落行为层。
 
 ### 2.2 唤醒域（2 条）——「刺激触发式唤醒」（非持续）
 
 | 病理边ID | source | target | 边类型 | 三体核验（命中详情） | 病理类型 | m偏移(轻/中) | laterality_delta | 文献依据 | 挂接 |
 |---|---|---|---|---|---|---|---|---|---|
-| **specific-phobia_e03** | LocusCoeruleus | Amygdala | privileged_pathway | ✅ 命中：`brainstem_subcortical`, dir=feedforward, level_diff=+1 | 过度耦合 | 0/+0.2 | 0 | 旧 link_332（蓝斑→杏仁核 NE，Hansen 2024 fc=0.7）；[特定恐惧症.md](../../实体/疾病目录/特定恐惧症.md) 唤醒域（刺激触发） | 行为覆盖①（恐惧刺激→NE 唤醒） |
+| **specific-phobia_e03** | LocusCoeruleus | Amygdala | privileged_pathway | ✅ 命中：`brainstem_subcortical`, dir=feedforward, level_diff=+1 | 过度耦合 | 0/+0.2 | 0 | 旧 link_332（蓝斑→杏仁核 NE，Hansen 2024 fc=0.7）；[特定恐惧症.md](../../../%E5%AE%9E%E4%BD%93/%E7%96%BE%E7%97%85%E7%9B%AE%E5%BD%95/%E7%89%B9%E5%AE%9A%E6%81%90%E6%83%A7%E7%97%87.md) 唤醒域（刺激触发） | 行为覆盖①（恐惧刺激→NE 唤醒） |
 | **specific-phobia_e04** | LocusCoeruleus | insula | brainstem | ✅ 命中：`LC_NE` diffuse_broadcast | 过度耦合 | 0/+0.1 | 0 | 旧 link_326（蓝斑→前脑岛 NE，Hansen PINK fc=0.85） | 行为覆盖①（躯体恐惧反应） |
 
 ### 2.3 记忆域（1 条）——「恐惧条件化」
 
 | 病理边ID | source | target | 边类型 | 三体核验（命中详情） | 病理类型 | m偏移(轻/中) | laterality_delta | 文献依据 | 挂接 |
 |---|---|---|---|---|---|---|---|---|---|
-| **specific-phobia_e05** | caudalanteriorcingulate | parahippocampal | corticocortical | ✅ 命中：dir=feedback, level_diff=−1, edr=0.2939 | 过度耦合 | 0/+0.1 | 0 | 旧 link_003_L（ACC→海马旁回，ENIGMA 4.89 L）；[特定恐惧症.md](../../实体/疾病目录/特定恐惧症.md) 记忆域恐惧条件化↑ | 行为覆盖①（情境匹配——刺激识别端） |
+| **specific-phobia_e05** | caudalanteriorcingulate | parahippocampal | corticocortical | ✅ 命中：dir=feedback, level_diff=−1, edr=0.2939 | 过度耦合 | 0/+0.1 | 0 | 旧 link_003_L（ACC→海马旁回，ENIGMA 4.89 L）；[特定恐惧症.md](../../../%E5%AE%9E%E4%BD%93/%E7%96%BE%E7%97%85%E7%9B%AE%E5%BD%95/%E7%89%B9%E5%AE%9A%E6%81%90%E6%83%A7%E7%97%87.md) 记忆域恐惧条件化↑ | 行为覆盖①（情境匹配——刺激识别端） |
 
 > **注意**：e05 端点 caudalanteriorcingulate 含 L5 fid（FrontalPoleSN），按 §6.3 规则 (b) 本可判「跨层短路」——但 SP 该边 **m 极低（0/+0.1）且非核心**，语义为条件化记忆检索而非叙事监控劫持（PTSD e06 判跨层短路的核心依据是 m 高 + 闪回挂接）；SP 以「无跨层短路」为设计不变式，此边按 过度耦合 处理并在核验列注明。
 
@@ -90,7 +90,7 @@
 
 | # | 参数 | 偏离值 | 推导边（命中） | 推导链 |
 |---|------|--------|---------------|--------|
-| 1 | NE_baseline | **+0.2** | e03（LC→Amygdala 0/+0.2）、e04（LC→insula 0/+0.1） | LC 出边群 2/2 命中正偏移 → 蓝斑 NE 上调（刺激触发式高唤醒；[特定恐惧症.md](../../实体/疾病目录/特定恐惧症.md) 唤醒域） |
+| 1 | NE_baseline | **+0.2** | e03（LC→Amygdala 0/+0.2）、e04（LC→insula 0/+0.1） | LC 出边群 2/2 命中正偏移 → 蓝斑 NE 上调（刺激触发式高唤醒；[特定恐惧症.md](../../../%E5%AE%9E%E4%BD%93/%E7%96%BE%E7%97%85%E7%9B%AE%E5%BD%95/%E7%89%B9%E5%AE%9A%E6%81%90%E6%83%A7%E7%97%87.md) 唤醒域） |
 | 2 | DA_VTA_baseline | **0** | 无 VTA 边群命中 | SP 不累及奖赏回路 |
 | 3 | DA_SNc_baseline | **0** | 无 SNc 边群命中 | 同上 |
 | 4 | 5HT_baseline | **−0.2** | e08（DR→Amygdala 0/+0.1 过度耦合） | 5-HT 传递聚焦恐惧回路 → 全局基线↓（去抑制，Soubrié 1986；同 PTSD/GAD 推导链） |
@@ -100,7 +100,7 @@
 
 ### 3.2 与标签组合交叉验证（敌我同构闭环）
 
-NPC AI §4.2「敏化-威胁」单标签（SP 默认标签，[特定恐惧症.md](../../实体/疾病目录/特定恐惧症.md) 默认标签）：
+NPC AI §4.2「敏化-威胁」单标签（SP 默认标签，[特定恐惧症.md](../../../%E5%AE%9E%E4%BD%93/%E7%96%BE%E7%97%85%E7%9B%AE%E5%BD%95/%E7%89%B9%E5%AE%9A%E6%81%90%E6%83%A7%E7%97%87.md) 默认标签）：
 
 | 参数 | 标签组合结果 | 本文边推导结果 | 一致？ |
 |------|------------|--------------|:---:|
@@ -177,4 +177,4 @@ NPC AI §4.2「敏化-威胁」单标签（SP 默认标签，[特定恐惧症.md
 ---
 
 *创建: 2026-08-21 | 更新: 2026-08-21*
-*关联: [grilling-88.md](grilling-88.md), [ptsd-pilot.md](ptsd-pilot.md), [特定恐惧症](../../实体/疾病目录/特定恐惧症.md), [广泛性焦虑障碍](../../实体/疾病目录/广泛性焦虑障碍.md), [NPC AI 行为模型](../../规则/技能树系统/NPC%20AI%20行为模型.md) §4.2/§5.2, [脑功能层级模型](../../规则/技能树系统/脑功能层级模型.md) §二十, [疾病-脑区链路映射-文献数据源](../../参考/文献/疾病-脑区链路映射-文献数据源.md) §七（特定恐惧症）, [tripartite_model.json](../../data/connectivity/tripartite_model.json), [link_registry.json](../../data/connectivity/link_registry.json)（⚠️ 已废弃）*
+*关联: [grilling-88.md](grilling-88.md), [ptsd-pilot.md](ptsd-pilot.md), [特定恐惧症](../../../%E5%AE%9E%E4%BD%93/%E7%96%BE%E7%97%85%E7%9B%AE%E5%BD%95/%E7%89%B9%E5%AE%9A%E6%81%90%E6%83%A7%E7%97%87.md), [广泛性焦虑障碍](../../../%E5%AE%9E%E4%BD%93/%E7%96%BE%E7%97%85%E7%9B%AE%E5%BD%95/%E5%B9%BF%E6%B3%9B%E6%80%A7%E7%84%A6%E8%99%91%E9%9A%9C%E7%A2%8D.md), [NPC AI 行为模型](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/NPC%20AI%20%E8%A1%8C%E4%B8%BA%E6%A8%A1%E5%9E%8B.md) §4.2/§5.2, [脑功能层级模型](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E8%84%91%E5%8A%9F%E8%83%BD%E5%B1%82%E7%BA%A7%E6%A8%A1%E5%9E%8B.md) §二十, [疾病-脑区链路映射-文献数据源](../../../%E5%8F%82%E8%80%83/%E6%96%87%E7%8C%AE/%E7%96%BE%E7%97%85-%E8%84%91%E5%8C%BA%E9%93%BE%E8%B7%AF%E6%98%A0%E5%B0%84-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md) §七（特定恐惧症）, [tripartite_model.json](../../../data/connectivity/tripartite_model.json), [link_registry.json](../../../data/connectivity/link_registry.json)（⚠️ 已废弃）*

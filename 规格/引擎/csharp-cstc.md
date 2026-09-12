@@ -19,12 +19,12 @@
 | 项 | 内容 |
 |----|------|
 | 覆盖 | `CstcGating` 类：构造函数（GameData → 三环路 CI 行索引）+ `Step(WcState, ToneState, GurneyState) → (GurneyState, GateState, LoopSalience)`（csharp-engine plan §4.4 签名） |
-| 不覆盖 | SpeedScoreCalculator/TurnOrderBuilder（step 7）、Phase 4 gate_bonus 结算（应用侧——[运行时状态模型](../../../规则/技能树系统/运行时状态模型.md) §6.5 公式由 step 8/10 消费）、Phase 编排与事件（step 9-11）、NPC salience 竞争（step 12） |
+| 不覆盖 | SpeedScoreCalculator/TurnOrderBuilder（step 7）、Phase 4 gate_bonus 结算（应用侧——[运行时状态模型](../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E8%BF%90%E8%A1%8C%E6%97%B6%E7%8A%B6%E6%80%81%E6%A8%A1%E5%9E%8B.md) §6.5 公式由 step 8/10 消费）、Phase 编排与事件（step 9-11）、NPC salience 竞争（step 12） |
 | 前置依赖 | csharp-data-layer ✅（GameData / BrainRegionsData.Regions fid→FunctionProfile **单数** cstc_loop/cstc_role）、csharp-engine-types ✅（WcState/ToneState/GurneyState/GateState/LoopSalience/LoopValue/GurneyPopulation/CstcLoop/CstcRole）、csharp-wmatrix ✅（canonical 行序契约 Step 1）、csharp-wc-dynamics ✅（WcState + Δ=1.0 常量先例）、csharp-tone ✅（ToneState.DaVta/DaSnc + M1 实测值表） |
 | 阻塞 | step 7 csharp-speed（决断分 mean(c_loop) 与执行分 a_SD1 数据源）、step 8 csharp-damage（gate_bonus）、step 10 csharp-flow（Phase 3 编排）、step 12 csharp-smoke |
 | 输入数据 | `data/brain_regions.json` function_profile（fid 级 cstc_loop/cstc_role）——经 GameDataLoader.LoadAll 加载 |
 
-本规格的决策依据 = [任务issue 01](issues/01-cstc-spec.md) D1-D13 + Q1/Q2/Q3 裁决（其「数据实测」表为全部计数与锚点出处，2026-08-13 python 实测）。本 spec 的 Step 锚点另经第二轮实测复算（gate 时刻语义修正——见 B1），锚点数值以本 spec §六 为准。
+本规格的决策依据 = [任务issue 01](../../.scratch/csharp-cstc/design/issues/01-cstc-spec.md) D1-D13 + Q1/Q2/Q3 裁决（其「数据实测」表为全部计数与锚点出处，2026-08-13 python 实测）。本 spec 的 Step 锚点另经第二轮实测复算（gate 时刻语义修正——见 B1），锚点数值以本 spec §六 为准。
 
 ### 偏差声明（与设计文档/plan 的已知差异，实现必须照此执行）
 
@@ -232,7 +232,7 @@ public sealed class CstcGating
 
 ## 七、本 spec 自检清单
 
-1. 数学公式逐项对照——u 五式/gate/DA 混合与 [运行时状态模型](../../../规则/技能树系统/运行时状态模型.md) §6.3/§6.4 及 plan §4.4 逐字一致（含 W_SEL_GPe=0.0 项保留、per-population e 表、无 clamp）；ramp 公式内联见 §四 4.5（含 B2 m≤0 分支）
+1. 数学公式逐项对照——u 五式/gate/DA 混合与 [运行时状态模型](../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E8%BF%90%E8%A1%8C%E6%97%B6%E7%8A%B6%E6%80%81%E6%A8%A1%E5%9E%8B.md) §6.3/§6.4 及 plan §4.4 逐字一致（含 W_SEL_GPe=0.0 项保留、per-population e 表、无 clamp）；ramp 公式内联见 §四 4.5（含 B2 m≤0 分支）
 2. 数值断言全部实测——AC 锚点全部来自 2026-08-13 python 实测（任务issue 数据实测表 + 本 spec 第二轮复算），无凭记忆数字
 3. 行序契约明确——CI fid→行解析镜像 WMatrixBuilder Step 1（canonical = Wsensory.RegionIds）；AC-6 静息 c 锚点锁定行序正确性
 4. 接口注释先行——构造 + Step XML doc 含职责/输入/输出/异常/未定义行为/来源/偏差（「设计两次」约束）
@@ -252,7 +252,7 @@ public sealed class CstcGating
 
 ---
 *创建: 2026-08-13 | 更新: 2026-08-13 | 版本: v1.1*
-*关联: [csharp-engine plan](../../csharp-engine/design/plan.md) §4.4/§十/§十三-3, [任务issue 01](issues/01-cstc-spec.md), [运行时状态模型](../../../规则/技能树系统/运行时状态模型.md) §6/§三, [csharp-tone spec](../../csharp-tone/design/spec.md)（M1 链 + AC-15）, [csharp-wc-dynamics spec](../../csharp-wc-dynamics/design/spec.md) §四（Δ 先例）*
+*关联: [csharp-engine plan](../../csharp-engine/design/plan.md) §4.4/§十/§十三-3, [任务issue 01](../../.scratch/csharp-cstc/design/issues/01-cstc-spec.md), [运行时状态模型](../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E8%BF%90%E8%A1%8C%E6%97%B6%E7%8A%B6%E6%80%81%E6%A8%A1%E5%9E%8B.md) §6/§三, [csharp-tone spec](../../csharp-tone/design/spec.md)（M1 链 + AC-15）, [csharp-wc-dynamics spec](../../csharp-wc-dynamics/design/spec.md) §四（Δ 先例）*
 
 ## 参数速查表
 

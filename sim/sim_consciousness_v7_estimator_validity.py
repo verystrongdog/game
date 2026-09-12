@@ -7,7 +7,7 @@ sim_consciousness_v7_estimator_validity.py — 脚本 4：estimator-validity 完
 实验管线（v7 §七 D10 H1）：F_known → 𝒞_exact → synthetic trajectory → Ĉ_obs，
 测 Ĉ_obs ≈ 𝒞_exact 的成立域（A_pair 主判，无 θ_valid；plug-in 主估计 + TE/cTE 对照）。
 
-实现合同铁律（Grilling #98，详见 .scratch/grilling-96-estimator-validity-implement/grilling-96.md）：
+实现合同铁律（Grilling #98，详见 ../设计归档/grilling/grilling-96-estimator-validity-implement/grilling-96.md）：
   - benchmark.py / components.py / cs4_test.py 零修改（依赖文件零修改验收）
   - estimator branch 只消费 observation branch；ground-truth branch 只用于 evaluation，
     二者不得在 estimator 计算阶段汇合（exact Reach 仅 coverage diagnostic）

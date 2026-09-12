@@ -6,7 +6,7 @@ using YouAreNotTheFish.Core.Types;
 namespace YouAreNotTheFish.Core.Tests.Engine;
 
 /// <summary>
-/// M1 静息 trace 里程碑——spec@v1.1（.scratch/csharp-tone/design/spec.md）§六 AC-15。
+/// M1 静息 trace 里程碑——spec@v1.1（../../../规格/引擎/csharp-tone.md）§六 AC-15。
 /// 组合 WMatrixBuilder.Build + CorticalBias.Compute(baseline) + WcDynamics.Step，tone=baseline、s=0、
 /// a(0)=0.10，30 回合实测静息不动点。ITestOutputHelper 输出 69 节点实测值表（供 M1 文档写回：
 /// plan §十三-8 清扫 + wc-dynamics 结转 #4）。

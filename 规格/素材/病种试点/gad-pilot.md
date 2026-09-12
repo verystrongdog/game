@@ -18,14 +18,14 @@
 | # | 文献 | 类型 | 关键数据点（→ 病理边用途） |
 |---|------|------|--------------------------|
 | 1 | **Pierce & Black (2023)** *J Affect Disord Rep* | ALE meta（30 研究） | **DMN 内部连接↑ 与焦虑严重度正相关** → DMN 内连接边群（gad_e07~e10）——持续性担忧的神经基础 |
-| 2 | **Guo et al. (2026)** *Transl Psychiatry*（254 实验, 10,456 患者） | 跨诊断 ALFF meta | 焦虑障碍 ALFF↑ = **双侧岛叶（尤其前岛叶）+ ACC/mPFC + 杏仁核 + 纹状体**（[疾病-脑区链路映射-文献数据源.md](../../参考/文献/疾病-脑区链路映射-文献数据源.md) §2.1 共享模式）→ 内感受/防御/行动门控边群方向（gad_e06/e12） |
+| 2 | **Guo et al. (2026)** *Transl Psychiatry*（254 实验, 10,456 患者） | 跨诊断 ALFF meta | 焦虑障碍 ALFF↑ = **双侧岛叶（尤其前岛叶）+ ACC/mPFC + 杏仁核 + 纹状体**（[疾病-脑区链路映射-文献数据源.md](../../../%E5%8F%82%E8%80%83/%E6%96%87%E7%8C%AE/%E7%96%BE%E7%97%85-%E8%84%91%E5%8C%BA%E9%93%BE%E8%B7%AF%E6%98%A0%E5%B0%84-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md) §2.1 共享模式）→ 内感受/防御/行动门控边群方向（gad_e06/e12） |
 | 3 | **2023 MKDA meta**（*Eur Psychiatry*） | 额边缘模型 meta | **前额叶-边缘系统过度耦合 + 前额叶对杏仁核自上而下调控减弱** → 认知控制轻度减弱（gad_e11 解耦，< PTSD 严重度） |
 | 4 | **RDoC v4（NIMH）** | 回路矩阵 | 急性威胁回路：杏仁核→vmPFC/dmPFC/ACC + **dPAG**（→ gad_e01 防御锚）；**唤醒/调节域：蓝斑 NE**（→ gad_e02/e03 唤醒锚） |
 
 **辅助锚（方向/范围补充）**：
 
 - **旧链路注册表（link_registry.json，⚠️ 已废弃 2026-08-07）**——7 条旧链路（link_312/332/320/326/155_L/008_L/131_L）的方向/量级作为语义继承源，见 §四。
-- **BNST 无三体节点**——旧文件「蓝斑↑↑ BNST 持续警觉」（[广泛性焦虑障碍.md](../../实体/疾病目录/广泛性焦虑障碍.md) 思路链）中 BNST 的持续警觉语义由 **LC 广播边群（gad_e02/e03）承载**（语义转移，见 §四处置规则）。
+- **BNST 无三体节点**——旧文件「蓝斑↑↑ BNST 持续警觉」（[广泛性焦虑障碍.md](../../../%E5%AE%9E%E4%BD%93/%E7%96%BE%E7%97%85%E7%9B%AE%E5%BD%95/%E5%B9%BF%E6%B3%9B%E6%80%A7%E7%84%A6%E8%99%91%E9%9A%9C%E7%A2%8D.md) 思路链）中 BNST 的持续警觉语义由 **LC 广播边群（gad_e02/e03）承载**（语义转移，见 §四处置规则）。
 - **左右脑偏侧化-文献数据源**——GAD 无稳健左右偏侧证据（Guo 2026 焦虑障碍仅落在共享模式，无 PTSD 式特异性左偏）→ **全部边 laterality_delta = 0**（§6.5 规则 2）。
 
 > **转换规则声明**：文献给出脑区/网络层结论，三体边层映射为设计师翻译（文献数据源 §八"需设计师翻译"）；m 偏移量级沿用旧文件设计校准值，**全部数值有来源，新增数值标记 `[NEW]`**；重档量级（旧值第三档）因 B′ 档位过滤（CGI-S 3-6 无重档）整体淘汰。
@@ -42,7 +42,7 @@
 
 | 病理边ID | source | target | 边类型 | 三体核验（命中详情） | 病理类型 | m偏移(轻/中) | laterality_delta | 文献依据 | 挂接 |
 |---|---|---|---|---|---|---|---|---|---|
-| **gad_e01** | PeriaqueductalGray | Amygdala | privileged_pathway | ✅ 命中：`brainstem_subcortical`, dir=feedforward, level_diff=+1（L0→L1） | 过度耦合 | +0.1/+0.2 | 0 | 旧 link_312（PAG→杏仁核，LeDoux 2000 / Paxinos 2004）；RDoC 急性威胁 dPAG；[广泛性焦虑障碍.md](../../实体/疾病目录/广泛性焦虑障碍.md) 防御域↑（日常刺激被解读为威胁） | 行为覆盖①（泛化威胁解读） |
+| **gad_e01** | PeriaqueductalGray | Amygdala | privileged_pathway | ✅ 命中：`brainstem_subcortical`, dir=feedforward, level_diff=+1（L0→L1） | 过度耦合 | +0.1/+0.2 | 0 | 旧 link_312（PAG→杏仁核，LeDoux 2000 / Paxinos 2004）；RDoC 急性威胁 dPAG；[广泛性焦虑障碍.md](../../../%E5%AE%9E%E4%BD%93/%E7%96%BE%E7%97%85%E7%9B%AE%E5%BD%95/%E5%B9%BF%E6%B3%9B%E6%80%A7%E7%84%A6%E8%99%91%E9%9A%9C%E7%A2%8D.md) 防御域↑（日常刺激被解读为威胁） | 行为覆盖①（泛化威胁解读） |
 
 > **方向说明**：旧文件核心病理写作「杏仁核→PAG↑」，但 GAD 的防御域 = **威胁解读上行放大**（L0→L1 正向耦合），非 PTSD/惊恐式的 L1→L0 下行反射劫持（跨层短路保留给 PTSD 与惊恐发作）——四病机制区分的第一道分界。
 
@@ -50,7 +50,7 @@
 
 | 病理边ID | source | target | 边类型 | 三体核验（命中详情） | 病理类型 | m偏移(轻/中) | laterality_delta | 文献依据 | 挂接 |
 |---|---|---|---|---|---|---|---|---|---|
-| **gad_e02** | LocusCoeruleus | Amygdala | privileged_pathway | ✅ 命中：`brainstem_subcortical`, dir=feedforward, level_diff=+1 | 过度耦合 | +0.1/+0.3 | 0 | 旧 link_332（蓝斑→杏仁核 NE，Hansen 2024 fc=0.7）；RDoC 唤醒域；[GAD 思路链](../../实体/疾病目录/广泛性焦虑障碍.md) 蓝斑 NE 持续激活 | 非线性跳变①（持续警觉锁定） |
+| **gad_e02** | LocusCoeruleus | Amygdala | privileged_pathway | ✅ 命中：`brainstem_subcortical`, dir=feedforward, level_diff=+1 | 过度耦合 | +0.1/+0.3 | 0 | 旧 link_332（蓝斑→杏仁核 NE，Hansen 2024 fc=0.7）；RDoC 唤醒域；[GAD 思路链](../../../%E5%AE%9E%E4%BD%93/%E7%96%BE%E7%97%85%E7%9B%AE%E5%BD%95/%E5%B9%BF%E6%B3%9B%E6%80%A7%E7%84%A6%E8%99%91%E9%9A%9C%E7%A2%8D.md) 蓝斑 NE 持续激活 | 非线性跳变①（持续警觉锁定） |
 | **gad_e03** | LocusCoeruleus | insula | brainstem | ✅ 命中：`LC_NE` diffuse_broadcast | 过度耦合 | +0.1/+0.2 | 0 | 旧 link_326（蓝斑→前脑岛 NE，Hansen PINK fc=0.85） | 行为覆盖①（内感受过度警觉） |
 
 > BNST（终纹床核）无三体节点：旧文件「BNST 维持长时间警觉」语义由 LC 广播边群（gad_e02/e03）承载——持续警觉 = LC 全局 NE 上调，不新增节点（§四处置规则：语义转移优先）。
@@ -60,7 +60,7 @@
 | 病理边ID | source | target | 边类型 | 三体核验（命中详情） | 病理类型 | m偏移(轻/中) | laterality_delta | 文献依据 | 挂接 |
 |---|---|---|---|---|---|---|---|---|---|
 | **gad_e05** | rostralanteriorcingulate | insula | corticocortical | ✅ 命中：dir=lateral, level_diff=0, edr=0.4246 | 过度耦合 | +0.1/+0.2 | 0 | 旧 link_155_L（rACC→前脑岛，ENIGMA 6.29 L） | 行为覆盖②（假阳性威胁检测） |
-| **gad_e06** ⭐新增 | Amygdala | insula | corticocortical | ✅ 命中：dir=feedforward, level_diff=+1, edr=0.3261 | 过度耦合 | 0/+0.1 | 0 | Guo 2026 岛叶 ALFF↑（共享模式）；[GAD 思路链](../../实体/疾病目录/广泛性焦虑障碍.md) 心跳/呼吸/肌肉紧张被过度解读为危险信号 | 行为覆盖②（内感受→威胁闭环） |
+| **gad_e06** ⭐新增 | Amygdala | insula | corticocortical | ✅ 命中：dir=feedforward, level_diff=+1, edr=0.3261 | 过度耦合 | 0/+0.1 | 0 | Guo 2026 岛叶 ALFF↑（共享模式）；[GAD 思路链](../../../%E5%AE%9E%E4%BD%93/%E7%96%BE%E7%97%85%E7%9B%AE%E5%BD%95/%E5%B9%BF%E6%B3%9B%E6%80%A7%E7%84%A6%E8%99%91%E9%9A%9C%E7%A2%8D.md) 心跳/呼吸/肌肉紧张被过度解读为危险信号 | 行为覆盖②（内感受→威胁闭环） |
 
 ### 2.4 调制域（1 条）——「5-HT 传递聚焦威胁回路」
 
@@ -81,7 +81,7 @@
 
 | 病理边ID | source | target | 边类型 | 三体核验（命中详情） | 病理类型 | m偏移(轻/中) | laterality_delta | 文献依据 | 挂接 |
 |---|---|---|---|---|---|---|---|---|---|
-| **gad_e11** | medialorbitofrontal | Amygdala | privileged_pathway | ✅ 命中：`prefrontal_limbic`, dir=feedback, **level_diff=−4**（L5→L1 真跨层） | **解耦沉默** | −0.1/−0.2 | 0 | 旧 link_008_L 语义转移（ACC→dlPFC 情绪调节，ENIGMA 5.23 L——无直连，见 §四）；2023 MKDA meta 前额叶对杏仁核调控减弱；[GAD 思路链](../../实体/疾病目录/广泛性焦虑障碍.md) 认知控制↓（< PTSD 严重度） | 行为覆盖④（L5 压制 −30%） |
+| **gad_e11** | medialorbitofrontal | Amygdala | privileged_pathway | ✅ 命中：`prefrontal_limbic`, dir=feedback, **level_diff=−4**（L5→L1 真跨层） | **解耦沉默** | −0.1/−0.2 | 0 | 旧 link_008_L 语义转移（ACC→dlPFC 情绪调节，ENIGMA 5.23 L——无直连，见 §四）；2023 MKDA meta 前额叶对杏仁核调控减弱；[GAD 思路链](../../../%E5%AE%9E%E4%BD%93/%E7%96%BE%E7%97%85%E7%9B%AE%E5%BD%95/%E5%B9%BF%E6%B3%9B%E6%80%A7%E7%84%A6%E8%99%91%E9%9A%9C%E7%A2%8D.md) 认知控制↓（< PTSD 严重度） | 行为覆盖④（L5 压制 −30%） |
 | **gad_e12** ⭐新增 | Amygdala | Accumbens-area | cstc | ✅ 命中：limbic 环路 `go_direct`, cortical_input→striatal_gate | 过度耦合 | 0/+0.1 | 0 | Guo 2026 共享纹状体 ALFF↑（§2.1）；CSTC limbic 门控被持续威胁信号偏置 | 3.1 节 bias_limbic 推导锚 |
 
 **图例**：⭐新增 = 旧链路表无对应、本次新增（均命中现有三体边，非"病理新增"）；Δ = 0 = 无偏侧证据（GAD 无稳健左右偏侧，§6.5 规则 2）；「轻/中」两档 = B′ 档位过滤（CGI-S 3-6 无重档）。
@@ -90,7 +90,7 @@
 
 ## 三、GAD → 7 参数映射建议（4 tone + 3 CSTC）
 
-> 规则（复制自 [ptsd-pilot.md](ptsd-pilot.md) §6.6）：**tone 从脑干广播边群推导，bias 从 CSTC 环路边推导**；量级沿用 NPC AI §4.2 标签校准（tone ±0.1~±0.2，bias ±0.15），方向有文献、幅值待数值校准。正常人基线：NE 0.3 / DA_VTA 0.4 / DA_SNc 0.5 / 5HT 0.5（[NPC AI 行为模型.md](../../规则/技能树系统/NPC%20AI%20行为模型.md) §4.1）。
+> 规则（复制自 [ptsd-pilot.md](ptsd-pilot.md) §6.6）：**tone 从脑干广播边群推导，bias 从 CSTC 环路边推导**；量级沿用 NPC AI §4.2 标签校准（tone ±0.1~±0.2，bias ±0.15），方向有文献、幅值待数值校准。正常人基线：NE 0.3 / DA_VTA 0.4 / DA_SNc 0.5 / 5HT 0.5（[NPC AI 行为模型.md](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/NPC%20AI%20%E8%A1%8C%E4%B8%BA%E6%A8%A1%E5%9E%8B.md) §4.1）。
 
 ### 3.1 从病理边推导
 
@@ -106,7 +106,7 @@
 
 ### 3.2 与标签组合交叉验证（敌我同构闭环）
 
-NPC AI §4.2「敏化-威胁」单标签（GAD 默认标签，[广泛性焦虑障碍.md](../../实体/疾病目录/广泛性焦虑障碍.md) 默认标签）：
+NPC AI §4.2「敏化-威胁」单标签（GAD 默认标签，[广泛性焦虑障碍.md](../../../%E5%AE%9E%E4%BD%93/%E7%96%BE%E7%97%85%E7%9B%AE%E5%BD%95/%E5%B9%BF%E6%B3%9B%E6%80%A7%E7%84%A6%E8%99%91%E9%9A%9C%E7%A2%8D.md) 默认标签）：
 
 | 参数 | 标签组合结果 | 本文边推导结果 | 一致？ |
 |------|------------|--------------|:---:|
@@ -186,4 +186,4 @@ NPC AI §4.2「敏化-威胁」单标签（GAD 默认标签，[广泛性焦虑�
 ---
 
 *创建: 2026-08-21 | 更新: 2026-08-21*
-*关联: [grilling-88.md](grilling-88.md), [ptsd-pilot.md](ptsd-pilot.md), [广泛性焦虑障碍](../../实体/疾病目录/广泛性焦虑障碍.md), [NPC AI 行为模型](../../规则/技能树系统/NPC%20AI%20行为模型.md) §4.2/§5.2, [脑功能层级模型](../../规则/技能树系统/脑功能层级模型.md) §二十, [疾病-脑区链路映射-文献数据源](../../参考/文献/疾病-脑区链路映射-文献数据源.md) §七（焦虑障碍/GAD）, [tripartite_model.json](../../data/connectivity/tripartite_model.json), [link_registry.json](../../data/connectivity/link_registry.json)（⚠️ 已废弃）*
+*关联: [grilling-88.md](grilling-88.md), [ptsd-pilot.md](ptsd-pilot.md), [广泛性焦虑障碍](../../../%E5%AE%9E%E4%BD%93/%E7%96%BE%E7%97%85%E7%9B%AE%E5%BD%95/%E5%B9%BF%E6%B3%9B%E6%80%A7%E7%84%A6%E8%99%91%E9%9A%9C%E7%A2%8D.md), [NPC AI 行为模型](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/NPC%20AI%20%E8%A1%8C%E4%B8%BA%E6%A8%A1%E5%9E%8B.md) §4.2/§5.2, [脑功能层级模型](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E8%84%91%E5%8A%9F%E8%83%BD%E5%B1%82%E7%BA%A7%E6%A8%A1%E5%9E%8B.md) §二十, [疾病-脑区链路映射-文献数据源](../../../%E5%8F%82%E8%80%83/%E6%96%87%E7%8C%AE/%E7%96%BE%E7%97%85-%E8%84%91%E5%8C%BA%E9%93%BE%E8%B7%AF%E6%98%A0%E5%B0%84-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md) §七（焦虑障碍/GAD）, [tripartite_model.json](../../../data/connectivity/tripartite_model.json), [link_registry.json](../../../data/connectivity/link_registry.json)（⚠️ 已废弃）*

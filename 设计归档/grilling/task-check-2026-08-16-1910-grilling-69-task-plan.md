@@ -1,6 +1,6 @@
 # Task Check: grilling-69-external-stimulus/task-plan.md
 
-> 检查日期: 2026-08-16 19:10 | 检查范围: `.scratch/grilling-69-external-stimulus/task-plan.md`
+> 检查日期: 2026-08-16 19:10 | 检查范围: `grilling-69-external-stimulus/task-plan.md`
 > 方法: 四维质检（格式/术语/引用/语言充分性） | 复用: `tools/validate_cross_refs.py`（项目级 522/532 有效，不含 .scratch）、`tools/list_deprecated_terms.py`、手动路径解析（.scratch 下脚本不扫）
 
 ## 维度① 格式规范

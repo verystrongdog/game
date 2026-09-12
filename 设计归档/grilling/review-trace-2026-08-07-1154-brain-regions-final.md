@@ -5,7 +5,7 @@
 
 ## 前置输入
 - [x] run_all_checks.py — 5/6 PASS（同上一轮）
-- [x] 上一轮 trace: `.scratch/review-trace-2026-08-07-1138-brain-regions-data-refactor.md`
+- [x] 上一轮 trace: `review-trace-2026-08-07-1138-brain-regions-data-refactor.md`
 - [x] 用户决策: L6 删除（"删掉L6可以"）
 
 ## 与上一轮 trace 的增量变化

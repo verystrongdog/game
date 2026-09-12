@@ -6,7 +6,7 @@ using YouAreNotTheFish.Core.Types;
 namespace YouAreNotTheFish.Core.Tests.Entity;
 
 /// <summary>
-/// CombatState spec@v1.2（.scratch/csharp-flow/design/spec.md）AC-1 部分 + 异常契约。
+/// CombatState spec@v1.2（../../../规格/引擎/csharp-flow.md）AC-1 部分 + 异常契约。
 /// 锚点来源：csharp-tone AC-15 M1 实测（active 48 ∈ [0.535174, 0.771229]；排除 21 = σ(b_j) 三组）。
 /// </summary>
 public class CombatStateTests

@@ -58,4 +58,4 @@ Eligibility(PTSD) =
 ---
 
 *创建: 2026-09-06 | 状态: 草案待裁决*
-*关联: [PTSD-F资格阈值-证据基础](../../grilling-89-npc-material/PTSD-F资格阈值-证据基础.md), [C阶段诊断-PTSD-SSD资格门](../../grilling-89-npc-material/C阶段诊断-PTSD-SSD资格门.md), [转化接口 §3.2.2](../../../规则/技能树系统/创伤记忆转化接口.md)*
+*关联: [PTSD-F资格阈值-证据基础](../../../.scratch/grilling-89-npc-material/PTSD-F%E8%B5%84%E6%A0%BC%E9%98%88%E5%80%BC-%E8%AF%81%E6%8D%AE%E5%9F%BA%E7%A1%80.md), [C阶段诊断-PTSD-SSD资格门](../../grilling-89-npc-material/C阶段诊断-PTSD-SSD资格门.md), [转化接口 §3.2.2](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E5%88%9B%E4%BC%A4%E8%AE%B0%E5%BF%86%E8%BD%AC%E5%8C%96%E6%8E%A5%E5%8F%A3.md)*

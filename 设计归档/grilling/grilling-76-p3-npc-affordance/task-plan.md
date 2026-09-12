@@ -197,4 +197,4 @@ SAN 特殊状态:
 ---
 
 *创建: 2026-08-16 | 更新: 2026-08-16*
-*关联: [Grilling #70 路线图 task-plan](./../grilling-70-engine-roadmap/task-plan.md), [NPC AI 行为模型](./../../规则/技能树系统/NPC%20AI%20行为模型.md), [运行时状态模型](./../../规则/技能树系统/运行时状态模型.md), [Grilling #74 P1c task-plan](./../grilling-74-p1c-skill-execution/task-plan.md), [数学语言书写规范](./../../docs/agents/math-language-writing.md)*
+*关联: [Grilling #70 路线图 task-plan](./../grilling-70-engine-roadmap/task-plan.md), [NPC AI 行为模型](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/NPC%20AI%20%E8%A1%8C%E4%B8%BA%E6%A8%A1%E5%9E%8B.md), [运行时状态模型](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E8%BF%90%E8%A1%8C%E6%97%B6%E7%8A%B6%E6%80%81%E6%A8%A1%E5%9E%8B.md), [Grilling #74 P1c task-plan](./../grilling-74-p1c-skill-execution/task-plan.md), [数学语言书写规范](../../../docs/agents/math-language-writing.md)*

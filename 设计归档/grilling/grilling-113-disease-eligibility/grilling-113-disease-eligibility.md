@@ -11,7 +11,7 @@ GitHub: [#113](https://github.com/verystrongdog/game/issues/113)
 
 ## 话题
 
-#89 顾维扬草稿外部评审（t6a96e985 + t6a96ecd6，两份评审均归档于 `.scratch/grilling-89-npc-material/`）暴露的生成器资格层结构问题：**创伤负荷聚合 L_agg(d) 被当作疾病资格**，导致"十次丧失→BD-II""事件负荷→环性障碍""经济剥夺→SUD 幽灵候选"等荒谬输出。
+#89 顾维扬草稿外部评审（t6a96e985 + t6a96ecd6，两份评审均归档于 `../../../规格/素材`）暴露的生成器资格层结构问题：**创伤负荷聚合 L_agg(d) 被当作疾病资格**，导致"十次丧失→BD-II""事件负荷→环性障碍""经济剥夺→SUD 幽灵候选"等荒谬输出。
 
 **本轮不审查**（已定案，不重开）：
 - 创伤 = 唯一触发路径（决策树 :3980 D1）
@@ -120,8 +120,8 @@ L_agg(d) ⇏ Eligibility(d)
 - `data/term_registry.json`（新术语：Eligibility(d) / 资格门 / 资格证据）→ ✅ 已写入（+5 术语）
 - `docs/决策树.md`（本议题）→ ✅ 已写入（Grilling #113 条目）
 - `docs/设计框架-六维状态.md`（规则维度状态）→ ✅ 已写入
-- `.scratch/grilling-89-npc-material/drafts/顾维扬.gen.json`（回放后定 BD-II 去留）→ ✅ 回放裁决：BD-II 降 MDD（gen.json 本体更新归 #89 后续）
+- `../../../规格/素材/drafts/顾维扬.gen.json`（回放后定 BD-II 去留）→ ✅ 回放裁决：BD-II 降 MDD（gen.json 本体更新归 #89 后续）
 
 ---
 *创建: 2026-09-03 | 闭合: 2026-09-03*
-*关联: [grilling-89](../grilling-89-npc-material/grilling-89-npc-material.md), [评审-顾维扬草稿-外部AI审查-t6a96e985](../grilling-89-npc-material/评审-顾维扬草稿-外部AI审查-t6a96e985.md), [评审-资格层解耦-外部AI审查-t6a96ecd6](../grilling-89-npc-material/评审-资格层解耦-外部AI审查-t6a96ecd6.md), [创伤记忆转化接口](../../规则/技能树系统/创伤记忆转化接口.md)*
+*关联: [grilling-89](../grilling-89-npc-material/grilling-89-npc-material.md), [评审-顾维扬草稿-外部AI审查-t6a96e985](../../../.scratch/grilling-89-npc-material/%E8%AF%84%E5%AE%A1-%E9%A1%BE%E7%BB%B4%E6%89%AC%E8%8D%89%E7%A8%BF-%E5%A4%96%E9%83%A8AI%E5%AE%A1%E6%9F%A5-t6a96e985.md), [评审-资格层解耦-外部AI审查-t6a96ecd6](../../../.scratch/grilling-89-npc-material/%E8%AF%84%E5%AE%A1-%E8%B5%84%E6%A0%BC%E5%B1%82%E8%A7%A3%E8%80%A6-%E5%A4%96%E9%83%A8AI%E5%AE%A1%E6%9F%A5-t6a96ecd6.md), [创伤记忆转化接口](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E5%88%9B%E4%BC%A4%E8%AE%B0%E5%BF%86%E8%BD%AC%E5%8C%96%E6%8E%A5%E5%8F%A3.md)*

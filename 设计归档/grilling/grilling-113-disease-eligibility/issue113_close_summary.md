@@ -26,7 +26,7 @@
 - `docs/决策树.md`（Grilling #113 条目）
 - `docs/设计框架-六维状态.md`（规则维度）
 - `data/term_registry.json`（+5 术语）
-- `.scratch/grilling-113-disease-eligibility/`（决策记录 + 外审存档 19 份）
+- `.`（决策记录 + 外审存档 19 份）
 - `参考/灵感收件箱.md`（2 条灵感，含资格门活例）
 - memory（`疾病资格层-grilling-113.md`）
 

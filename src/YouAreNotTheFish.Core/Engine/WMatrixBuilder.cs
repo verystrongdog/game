@@ -5,7 +5,7 @@ using YouAreNotTheFish.Core.Types;
 namespace YouAreNotTheFish.Core.Engine;
 
 /// <summary>
-/// W 矩阵构建器（csharp-engine plan §十一 step 3）——spec@v1.1（.scratch/csharp-wmatrix/design/spec.md）。
+/// W 矩阵构建器（csharp-engine plan §十一 step 3）——spec@v1.1（../../../规格/引擎/csharp-wmatrix.md）。
 /// 职责：边筛选（排除清单）→ 权重（w = edr × m_mean × focus）→ fan-out 广播
 /// → 行归一化（ε=0.01）→ τ 查表（含 mirror 继承）。
 /// 纯函数：无 static 可变状态、无 RNG、同输入同输出。

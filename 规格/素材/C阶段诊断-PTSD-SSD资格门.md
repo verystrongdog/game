@@ -93,4 +93,4 @@ E1-E4 事件类型 = 生理/疾病 → C = {躯体症状 主, 惊恐, MDD} → *
 
 ---
 *创建: 2026-09-03 | 状态: 诊断完成*
-*关联: [grilling-89](grilling-89-npc-material.md)，[评审-病种同质化-外部AI审查-t6a97a957](评审-病种同质化-外部AI审查-t6a97a957.md)，[创伤记忆转化接口](../../规则/技能树系统/创伤记忆转化接口.md)*
+*关联: [grilling-89](grilling-89-npc-material.md)，[评审-病种同质化-外部AI审查-t6a97a957](../../.scratch/grilling-89-npc-material/%E8%AF%84%E5%AE%A1-%E7%97%85%E7%A7%8D%E5%90%8C%E8%B4%A8%E5%8C%96-%E5%A4%96%E9%83%A8AI%E5%AE%A1%E6%9F%A5-t6a97a957.md)，[创伤记忆转化接口](../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E5%88%9B%E4%BC%A4%E8%AE%B0%E5%BF%86%E8%BD%AC%E5%8C%96%E6%8E%A5%E5%8F%A3.md)*

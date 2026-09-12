@@ -182,4 +182,4 @@ ActionKind.UseItem（M1 通道——杂项动作，与环境交互同款 §10.13
 ---
 
 *创建: 2026-08-16 | 更新: 2026-08-16*
-*关联: [Grilling #70 路线图 task-plan](./../grilling-70-engine-roadmap/task-plan.md), [消耗品系统](./../../实体/消耗品系统.md), [Grilling #72 P1a task-plan](./../grilling-72-p1a-skill-context/task-plan.md), [Grilling #73 P1b task-plan](./../grilling-73-p1b-linkstate/task-plan.md), [数学语言书写规范](./../../docs/agents/math-language-writing.md)*
+*关联: [Grilling #70 路线图 task-plan](./../grilling-70-engine-roadmap/task-plan.md), [消耗品系统](../../../%E5%AE%9E%E4%BD%93/%E6%B6%88%E8%80%97%E5%93%81%E7%B3%BB%E7%BB%9F.md), [Grilling #72 P1a task-plan](./../grilling-72-p1a-skill-context/task-plan.md), [Grilling #73 P1b task-plan](./../grilling-73-p1b-linkstate/task-plan.md), [数学语言书写规范](../../../docs/agents/math-language-writing.md)*

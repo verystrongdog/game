@@ -19,7 +19,7 @@
 |---|------|------|--------------------------|
 | 1 | **Wang et al. (2013)**（PMID [23389382](https://pubmed.ncbi.nlm.nih.gov/23389382/)，随机对照试验） | 静息态 DMN | **恶劣心境患者 DMN 过度连接，抗抑郁药（SSRI）治疗后正常化**——PDD 反刍的疾病特异性证据 → e04（PCC→precuneus DMN 核心）、e05（precuneus→mOFC 自我参照腿）的方向锚 |
 | 2 | **ENIGMA MDD（Schmaal et al. 2016）** *Mol Psychiatry* 21(6):806-812 | 结构 meta | PDD 属 MDD 谱系慢性型：**海马↓（复发/慢性病程）**；亚皮层体积效应量 SZ>BD>MDD 梯度 → e06（PCC→海马 负性自传记忆提取）、e11（5-HT→海马）的慢性结构锚（量级 < MDD） |
-| 3 | **Guo et al. (2026)** *Transl Psychiatry*（254 实验, 10,456 患者） | 静息态 ALFF meta | 抑郁谱系共享：**ALFF↑ 岛叶/ACC-mPFC**（[疾病-脑区链路映射-文献数据源.md](../../参考/文献/疾病-脑区链路映射-文献数据源.md) §2.1/§2.3）→ e10（rACC→insula）内感受/情绪耦合边 |
+| 3 | **Guo et al. (2026)** *Transl Psychiatry*（254 实验, 10,456 患者） | 静息态 ALFF meta | 抑郁谱系共享：**ALFF↑ 岛叶/ACC-mPFC**（[疾病-脑区链路映射-文献数据源.md](../../../%E5%8F%82%E8%80%83/%E6%96%87%E7%8C%AE/%E7%96%BE%E7%97%85-%E8%84%91%E5%8C%BA%E9%93%BE%E8%B7%AF%E6%98%A0%E5%B0%84-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md) §2.1/§2.3）→ e10（rACC→insula）内感受/情绪耦合边 |
 | 4 | **RDoC v4（NIMH）** | 回路矩阵 | 正性效价（奖赏评估/学习）：OFC、腹侧纹状体、VTA/SN → MDD/双相；负性效价（丧失）：DMN、海马、OFC、奖赏回路 → MDD（文献数据源 §四.1）→ 奖赏域（e01/e02）+ 反刍域（e04-e06）回路级锚 |
 
 **辅助锚（方向/范围补充）**：
@@ -191,4 +191,4 @@ NPC AI §4.2/§5.2：PDD 建议标签 = 「反刍 + 过度抑制」（多标签�
 ---
 
 *创建: 2026-08-21 | 更新: 2026-08-21*
-*关联: [grilling-88.md](grilling-88.md), [mdd-pilot.md](mdd-pilot.md), [cyclothymia-pilot.md](cyclothymia-pilot.md), [NPC AI 行为模型](../../规则/技能树系统/NPC AI 行为模型.md) §4.2/§5.2, [偏侧化架构](../../规则/技能树系统/偏侧化架构.md) §四/§八, [疾病-脑区链路映射-文献数据源](../../参考/文献/疾病-脑区链路映射-文献数据源.md) §二/§四/§七, [ENIGMA偏侧化-精神疾病大样本meta-文献数据源](../../参考/文献/ENIGMA偏侧化-精神疾病大样本meta-文献数据源.md), [tripartite_model.json](../../data/connectivity/tripartite_model.json), [Wang et al. 2013（PMID 23389382）](https://pubmed.ncbi.nlm.nih.gov/23389382/)*
+*关联: [grilling-88.md](grilling-88.md), [mdd-pilot.md](mdd-pilot.md), [cyclothymia-pilot.md](cyclothymia-pilot.md), [NPC AI 行为模型](../../规则/技能树系统/NPC AI 行为模型.md) §4.2/§5.2, [偏侧化架构](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E5%81%8F%E4%BE%A7%E5%8C%96%E6%9E%B6%E6%9E%84.md) §四/§八, [疾病-脑区链路映射-文献数据源](../../../%E5%8F%82%E8%80%83/%E6%96%87%E7%8C%AE/%E7%96%BE%E7%97%85-%E8%84%91%E5%8C%BA%E9%93%BE%E8%B7%AF%E6%98%A0%E5%B0%84-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md) §二/§四/§七, [ENIGMA偏侧化-精神疾病大样本meta-文献数据源](../../../%E5%8F%82%E8%80%83/%E6%96%87%E7%8C%AE/ENIGMA%E5%81%8F%E4%BE%A7%E5%8C%96-%E7%B2%BE%E7%A5%9E%E7%96%BE%E7%97%85%E5%A4%A7%E6%A0%B7%E6%9C%ACmeta-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md), [tripartite_model.json](../../../data/connectivity/tripartite_model.json), [Wang et al. 2013（PMID 23389382）](https://pubmed.ncbi.nlm.nih.gov/23389382/)*

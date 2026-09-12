@@ -64,4 +64,4 @@ flee: 0                disrupt: 0
 
 ---
 *创建: 2026-09-01 | 更新: 2026-09-01*
-*关联: [task-plan](./task-plan.md), [link_contexts_tripartite.json](../../data/connectivity/link_contexts_tripartite.json), [domain_role_map.json](../../data/connectivity/domain_role_map.json), [build_contexts_tripartite.py](../../tools/build_contexts_tripartite.py), [技能生成机制](../../规则/技能树系统/技能生成机制.md), [Grilling #112 issue](https://github.com/verystrongdog/game/issues/112)*
+*关联: [task-plan](./task-plan.md), [link_contexts_tripartite.json](../../../data/connectivity/link_contexts_tripartite.json), [domain_role_map.json](../../../data/connectivity/domain_role_map.json), [build_contexts_tripartite.py](../../../tools/build_contexts_tripartite.py), [技能生成机制](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E6%8A%80%E8%83%BD%E7%94%9F%E6%88%90%E6%9C%BA%E5%88%B6.md), [Grilling #112 issue](https://github.com/verystrongdog/game/issues/112)*

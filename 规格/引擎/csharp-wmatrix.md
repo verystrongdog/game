@@ -24,15 +24,15 @@
 | 阻塞 | step 4 csharp-wc-dynamics（其输入 h_j = W·a + b + s 依赖本 feature 的 W/Tau/行序） |
 | 输入数据 | `data/brain_regions.json`（Regions 69，function_profile.timescale）、`data/connectivity/tripartite_model.json`（graph_nodes 51 / corticocortical 776 / privileged_pathways 112）、`data/connectivity/W_sensory.json`（rows 69 键 = canonical 行序）——均经 GameDataLoader.LoadAll 加载 |
 
-本规格的决策依据 = [任务issue 01](issues/01-wmatrix-spec.md) D1-D8（其「数据实测」表为本 spec 全部计数与锚点的出处，2026-08-13 python 实测 JSON，非凭记忆）。
+本规格的决策依据 = [任务issue 01](../../.scratch/csharp-wmatrix/design/issues/01-wmatrix-spec.md) D1-D8（其「数据实测」表为本 spec 全部计数与锚点的出处，2026-08-13 python 实测 JSON，非凭记忆）。
 
 ### 偏差声明（与设计文档的已知差异，实现必须照此执行）
 
 | # | 偏差 | 依据 |
 |----|------|------|
-| B1 | [皮层动力学-通用层](../../../规则/技能树系统/皮层动力学-通用层.md) §5.3 备注「皮层-皮层 W 仅包含 ~34 个 dk_name（皮层节点）」与[运行时状态模型](../../../规则/技能树系统/运行时状态模型.md) §4.2 排除清单不一致——**按运行时状态模型 §4.2 执行**：W 活跃节点 = 48 fids（44 皮层 + Amygdala + Hippocampus×2 + Cerebellum-Cortex），排除 = CSTC 6 dk + brainstem（16 dk / 21 fids）。**延后文档修正清单（v1.1 审计补全）**：①皮层动力学-通用层 §5.1（「仅 category=cortical」措辞）、§5.3（「~34 dk_name」+「CC 独有 6 节点」清单含已排除 Pallidum）；②运行时状态模型 §4.1（方程作用域「category=cortical 且不在 CSTC 排除清单中」）、§4.5（「25 个 subcortical/brainstem 节点不参与 WC 皮层动力学」）、参数速查表（「CC 节点数（排除后）~34 dk」——实测 35）。全部延后至审计后执行（任务issue D1/Q1） |
+| B1 | [皮层动力学-通用层](../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E7%9A%AE%E5%B1%82%E5%8A%A8%E5%8A%9B%E5%AD%A6-%E9%80%9A%E7%94%A8%E5%B1%82.md) §5.3 备注「皮层-皮层 W 仅包含 ~34 个 dk_name（皮层节点）」与[运行时状态模型](../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E8%BF%90%E8%A1%8C%E6%97%B6%E7%8A%B6%E6%80%81%E6%A8%A1%E5%9E%8B.md) §4.2 排除清单不一致——**按运行时状态模型 §4.2 执行**：W 活跃节点 = 48 fids（44 皮层 + Amygdala + Hippocampus×2 + Cerebellum-Cortex），排除 = CSTC 6 dk + brainstem（16 dk / 21 fids）。**延后文档修正清单（v1.1 审计补全）**：①皮层动力学-通用层 §5.1（「仅 category=cortical」措辞）、§5.3（「~34 dk_name」+「CC 独有 6 节点」清单含已排除 Pallidum）；②运行时状态模型 §4.1（方程作用域「category=cortical 且不在 CSTC 排除清单中」）、§4.5（「25 个 subcortical/brainstem 节点不参与 WC 皮层动力学」）、参数速查表（「CC 节点数（排除后）~34 dk」——实测 35）。全部延后至审计后执行（任务issue D1/Q1） |
 | B2 | plan §4.1 第 3 条括注「brainstem dk_name=None 节点（PAG、上丘、脑桥网状核、小脑皮层）」中**「小脑皮层」归类有误**——实测 Cerebellum-Cortex category=subcortical 且不在 CSTC 清单，**不排除**，参与 W（幸存口径触边 CC 6 条 + PP 12 条；任务issue 表中「CC 40 + PP 51」为 {Amygdala, Hippocampus, Cerebellum-Cortex} 三 dk 并集口径——v1.1 修正）。plan 文档修正延后（任务issue D1） |
-| B3 | **方向契约**：[皮层动力学-通用层](../../../规则/技能树系统/皮层动力学-通用层.md) §5.1 `W[fid_A][fid_B] = w(dk(fid_A), dk(fid_B))` 是 [源][目标] 序；[运行时状态模型](../../../规则/技能树系统/运行时状态模型.md) §4.1 方程 `h_j = Σ_k W_jk·a_k` 要求 [行=接收者][列=发送者]。两者互为转置——demo 归一化前权重对称时数值无差，但归一化后行和不同会分叉。**本 spec 以运行时方程方向为准**：W[行=接收者][列=发送者]（任务issue D8） |
+| B3 | **方向契约**：[皮层动力学-通用层](../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E7%9A%AE%E5%B1%82%E5%8A%A8%E5%8A%9B%E5%AD%A6-%E9%80%9A%E7%94%A8%E5%B1%82.md) §5.1 `W[fid_A][fid_B] = w(dk(fid_A), dk(fid_B))` 是 [源][目标] 序；[运行时状态模型](../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E8%BF%90%E8%A1%8C%E6%97%B6%E7%8A%B6%E6%80%81%E6%A8%A1%E5%9E%8B.md) §4.1 方程 `h_j = Σ_k W_jk·a_k` 要求 [行=接收者][列=发送者]。两者互为转置——demo 归一化前权重对称时数值无差，但归一化后行和不同会分叉。**本 spec 以运行时方程方向为准**：W[行=接收者][列=发送者]（任务issue D8） |
 | B4 | m_mean 推导（§5.3 的 link_registry 映射）不落地——demo 无 LinkState，全部 m_mean ≡ CalibrationConfig.Default.MDefault = 0.3；focus_multiplier ≡ 1.0（§5.2 取值范围 1.0/2.0 中的基础档）。Build 签名无 focus 参数，接口注释预留（任务issue D2） |
 
 ## 二、构建算法
@@ -211,4 +211,4 @@ public static class WMatrixBuilder
 
 ---
 *创建: 2026-08-13 | 更新: 2026-08-13 | 版本: v1.1*
-*关联: [任务issue 01](issues/01-wmatrix-spec.md), [csharp-engine plan](../../csharp-engine/design/plan.md), [皮层动力学-通用层](../../../规则/技能树系统/皮层动力学-通用层.md), [运行时状态模型](../../../规则/技能树系统/运行时状态模型.md), [csharp-engine-types spec](../../csharp-engine-types/design/spec.md)*
+*关联: [任务issue 01](../../.scratch/csharp-wmatrix/design/issues/01-wmatrix-spec.md), [csharp-engine plan](../../csharp-engine/design/plan.md), [皮层动力学-通用层](../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E7%9A%AE%E5%B1%82%E5%8A%A8%E5%8A%9B%E5%AD%A6-%E9%80%9A%E7%94%A8%E5%B1%82.md), [运行时状态模型](../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E8%BF%90%E8%A1%8C%E6%97%B6%E7%8A%B6%E6%80%81%E6%A8%A1%E5%9E%8B.md), [csharp-engine-types spec](../../csharp-engine-types/design/spec.md)*

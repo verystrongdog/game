@@ -3,7 +3,7 @@ using YouAreNotTheFish.Core.Types;
 namespace YouAreNotTheFish.Core.Engine;
 
 /// <summary>
-/// 回合行动顺序构建——csharp-speed spec@v1.1（.scratch/csharp-speed/design/spec.md）§三 3.2。
+/// 回合行动顺序构建——csharp-speed spec@v1.1（../../../规格/引擎/csharp-speed.md）§三 3.2。
 /// 职责：speed 分数降序排序；同速（逐位相等 float ==）组内 Fisher-Yates 洗牌破平
 /// （回合战斗流程 §3.4「同速时掷硬币，每回合重新破平」——每次调用重新破平）。
 /// RNG 消费序契约（AC-10 镜像依赖，实现侧禁改动）：

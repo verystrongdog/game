@@ -5,7 +5,7 @@ using YouAreNotTheFish.Core.Types;
 namespace YouAreNotTheFish.Core.Tests.Engine;
 
 /// <summary>
-/// CstcGating spec@v1.1（.scratch/csharp-cstc/design/spec.md）§六 AC-1~AC-15。
+/// CstcGating spec@v1.1（../../../规格/引擎/csharp-cstc.md）§六 AC-1~AC-15。
 /// 测试侧约定（wmatrix 结转 #1）：锚点一律测试侧公式现算（1e-5 容差）或逐位比较，不裸写可推导字面量；
 /// 例外：迭代 300 回合固定点（0.8434211/0.8065790/1.0）无闭式解，按 spec §六 实测锚点（1e-5）。
 /// 迭代语义（spec §六 声明）：固定 300 回合，禁止 max|Δ| 终止判据（结转 #1 预防）。

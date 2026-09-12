@@ -181,4 +181,4 @@ NPC AI §4.2「敏化-奖励」+「抑制不足」双标签（多标签叠加取
 ---
 
 *创建: 2026-08-21 | 更新: 2026-08-21*
-*关联: [grilling-88.md](grilling-88.md)（Q0.2 P2 扩种）, [PTSD 重映射试点](ptsd-pilot.md), [神经性贪食症试点](bulimia-nervosa-pilot.md)（无清除对照）, [物质使用障碍试点](substance-use-disorder-pilot.md)（成瘾共享机制对照）, [NPC AI 行为模型](../../规则/技能树系统/NPC AI 行为模型.md) §4.2/§5.2, [疾病-脑区链路映射-文献数据源](../../参考/文献/疾病-脑区链路映射-文献数据源.md) §七, [tripartite_model.json](../../data/connectivity/tripartite_model.json), [角色与面具](../../实体/角色与面具.md) §8.8*
+*关联: [grilling-88.md](grilling-88.md)（Q0.2 P2 扩种）, [PTSD 重映射试点](ptsd-pilot.md), [神经性贪食症试点](bulimia-nervosa-pilot.md)（无清除对照）, [物质使用障碍试点](substance-use-disorder-pilot.md)（成瘾共享机制对照）, [NPC AI 行为模型](../../规则/技能树系统/NPC AI 行为模型.md) §4.2/§5.2, [疾病-脑区链路映射-文献数据源](../../../%E5%8F%82%E8%80%83/%E6%96%87%E7%8C%AE/%E7%96%BE%E7%97%85-%E8%84%91%E5%8C%BA%E9%93%BE%E8%B7%AF%E6%98%A0%E5%B0%84-%E6%96%87%E7%8C%AE%E6%95%B0%E6%8D%AE%E6%BA%90.md) §七, [tripartite_model.json](../../../data/connectivity/tripartite_model.json), [角色与面具](../../../%E5%AE%9E%E4%BD%93/%E8%A7%92%E8%89%B2%E4%B8%8E%E9%9D%A2%E5%85%B7.md) §8.8*

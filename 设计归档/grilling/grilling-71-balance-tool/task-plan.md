@@ -21,7 +21,7 @@
 
 ## 一、背景与动机
 
-引擎核心已交付（294/294 绿，确定性 RNG 注入，同种子同输出），但 E-5 校准常量群（[引擎数据关系规格 §七](./../../规则/技能树系统/引擎数据关系规格.md)）全部为 `[NEW]` 占位：`δ_scale=0.3`、`M1SustainPenalty=-0.1`、`PerceptionThreshold=0.15`、`ScaleMental=1.0(禁用)`、`MaxRounds=50`、4 静息常量（`SpeedScoreCalculator` 硬编码）。#35（战斗输出权重校准）因"缺少实现反馈"暂停（#35 body）——本工具正是该反馈的提供者。战斗长度目标（杂兵 4-6 / 精英 8-10 / Boss 16-20 回合，[核心机制 §10.2](./../../规则/核心机制.md)）是"引擎产生合理战斗结果"的第一门禁。
+引擎核心已交付（294/294 绿，确定性 RNG 注入，同种子同输出），但 E-5 校准常量群（[引擎数据关系规格 §七](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E5%BC%95%E6%93%8E%E6%95%B0%E6%8D%AE%E5%85%B3%E7%B3%BB%E8%A7%84%E6%A0%BC.md)）全部为 `[NEW]` 占位：`δ_scale=0.3`、`M1SustainPenalty=-0.1`、`PerceptionThreshold=0.15`、`ScaleMental=1.0(禁用)`、`MaxRounds=50`、4 静息常量（`SpeedScoreCalculator` 硬编码）。#35（战斗输出权重校准）因"缺少实现反馈"暂停（#35 body）——本工具正是该反馈的提供者。战斗长度目标（杂兵 4-6 / 精英 8-10 / Boss 16-20 回合，[核心机制 §10.2](../../../%E8%A7%84%E5%88%99/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md)）是"引擎产生合理战斗结果"的第一门禁。
 
 承接 [Grilling #70 P0 并行校准轨](./../grilling-70-engine-roadmap/task-plan.md) §四。
 
@@ -174,4 +174,4 @@ dotnet run --project src/YouAreNotTheFish.Balance -- \
 ---
 
 *创建: 2026-08-16 | 更新: 2026-08-16*
-*关联: [csharp-engine plan](./../csharp-engine/design/plan.md), [引擎数据关系规格](./../../规则/技能树系统/引擎数据关系规格.md), [核心机制](./../../规则/核心机制.md), [Grilling #70 路线图 task-plan](./../grilling-70-engine-roadmap/task-plan.md), [数学语言书写规范](./../../docs/agents/math-language-writing.md)*
+*关联: [csharp-engine plan](./../csharp-engine/design/plan.md), [引擎数据关系规格](../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E5%BC%95%E6%93%8E%E6%95%B0%E6%8D%AE%E5%85%B3%E7%B3%BB%E8%A7%84%E6%A0%BC.md), [核心机制](../../../%E8%A7%84%E5%88%99/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md), [Grilling #70 路线图 task-plan](./../grilling-70-engine-roadmap/task-plan.md), [数学语言书写规范](../../../docs/agents/math-language-writing.md)*

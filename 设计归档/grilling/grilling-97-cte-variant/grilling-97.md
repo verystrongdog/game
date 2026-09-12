@@ -76,7 +76,7 @@
 | #96 scope | estimator 集合 {plug-in, TE, cTE} | GitHub #96 评论 | — | ✅ 已验证 |
 | 4 术语 | TE/cTE/plug-in/E_S^(1) | data/term_registry.json | terms（224 条）| ✅ 已验证 |
 | 衔接注记 | cTE 变体设计冻结 + 参数速查表补充 | 参考/意识结构侧-下一阶段路线-v7.md | 头部 + §七 + §参数速查表 | ✅ 已验证 |
-| 决策日志 | 本文件 | .scratch/grilling-97-cte-variant/grilling-97.md | 全文 | ✅ 已验证 |
+| 决策日志 | 本文件 | grilling-97.md | 全文 | ✅ 已验证 |
 | memory | 决策摘要 | memory/意识结构侧推迟清单与cTE变体-grilling-97.md | — | ✅ 已验证 |
 
 ### 一致性清扫（Step 4 🔥）

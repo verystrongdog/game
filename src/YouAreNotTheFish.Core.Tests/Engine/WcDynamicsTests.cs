@@ -5,7 +5,7 @@ using YouAreNotTheFish.Core.Types;
 namespace YouAreNotTheFish.Core.Tests.Engine;
 
 /// <summary>
-/// WcDynamics spec@v1.1（.scratch/csharp-wc-dynamics/design/spec.md）§六 AC-1~AC-12。
+/// WcDynamics spec@v1.1（../../../规格/引擎/csharp-wc-dynamics.md）§六 AC-1~AC-12。
 /// 数据依赖断言（AC-5/6/9/12）兼作数据漂移哨兵——数据 JSON 变更时同步复核期望值。
 /// 测试侧约定（sign-off 结转 #1/#2）：RowFids 用 fid 名（'Pericalcarine' 大写）；
 /// 逐位断言与公式期望一律 MathF 自算，不写字面量。

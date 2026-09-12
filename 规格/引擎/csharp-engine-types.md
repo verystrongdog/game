@@ -330,4 +330,4 @@ instance record + `static CalibrationConfig Default`（决策 D3——plan §七
 ---
 
 *创建: 2026-08-13 | 更新: 2026-08-13 | 版本: v1.1*
-*关联: [csharp-engine plan v1.1](../csharp-engine/design/plan.md), [任务issue 01](issues/01-types-spec.md), [运行时状态模型](../../规则/技能树系统/运行时状态模型.md), [回合战斗流程](../../规则/回合战斗流程.md), [核心机制](../../规则/核心机制.md)*
+*关联: [csharp-engine plan v1.1](../csharp-engine/design/plan.md), [任务issue 01](../../.scratch/csharp-engine-types/design/issues/01-types-spec.md), [运行时状态模型](../../规则/技能树系统/运行时状态模型.md), [回合战斗流程](../../规则/回合战斗流程.md), [核心机制](../../规则/核心机制.md)*

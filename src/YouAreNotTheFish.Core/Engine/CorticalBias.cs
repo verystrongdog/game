@@ -5,7 +5,7 @@ using YouAreNotTheFish.Core.Types;
 namespace YouAreNotTheFish.Core.Engine;
 
 /// <summary>
-/// tone → 皮层 b_j 注入向量（csharp-engine plan §十一 step 5）——spec@v1.1（.scratch/csharp-tone/design/spec.md）。
+/// tone → 皮层 b_j 注入向量（csharp-engine plan §十一 step 5）——spec@v1.1（../../../规格/引擎/csharp-tone.md）。
 /// 职责：b_j = Σ_t tone_t × w_t(j)，w 从 brainstem 边的 role 字段取（active→1.0 / modulating→0.5——
 /// plan 修复 #8b，不是 projection 字段），per-target 唯一（同 system 同 target 多条边只取一次——
 /// 任务issue Q1 裁决，Raphe DR+MnR 不叠加），求和后逐分量 clamp [0,2]（运行时状态模型 §7.2）。

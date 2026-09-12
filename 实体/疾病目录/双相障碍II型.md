@@ -71,4 +71,4 @@ CGI-S范围: 3-6
 
 ---
 *创建: 2026-08-01 | 更新: 2026-08-21*
-*关联: [双相障碍II型 pilot](../../.scratch/grilling-88-etiology-disease-neural/bipolar-II-pilot.md), [pathology_edges.json](../../data/connectivity/pathology_edges.json), [奖赏系统障碍](../_父类/奖赏系统障碍.md), [双相障碍I型](双相障碍I型.md)*
+*关联: [双相障碍II型 pilot](../../规格/素材/病种试点/bipolar-II-pilot.md), [pathology_edges.json](../../data/connectivity/pathology_edges.json), [奖赏系统障碍](../_父类/奖赏系统障碍.md), [双相障碍I型](双相障碍I型.md)*

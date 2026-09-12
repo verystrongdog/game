@@ -346,4 +346,4 @@ enemySanRatio = target.San / target.SanMax
 
 ---
 *创建: 2026-08-14 | 更新: 2026-08-14 | 版本: v1.2*
-*关联: [任务issue 01](issues/01-flow-spec.md), [plan §五](../../../csharp-engine/design/plan.md), [回合战斗流程](../../../../规则/回合战斗流程.md), [NPC AI 行为模型](../../../../规则/技能树系统/NPC%20AI%20行为模型.md), [运行时状态模型](../../../../规则/技能树系统/运行时状态模型.md)*
+*关联: [任务issue 01](../../.scratch/csharp-flow/design/issues/01-flow-spec.md), [plan §五](../../../csharp-engine/design/plan.md), [回合战斗流程](../../../../规则/回合战斗流程.md), [NPC AI 行为模型](../../../../规则/技能树系统/NPC%20AI%20行为模型.md), [运行时状态模型](../../../../规则/技能树系统/运行时状态模型.md)*

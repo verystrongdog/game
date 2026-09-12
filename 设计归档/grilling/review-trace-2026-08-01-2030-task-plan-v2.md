@@ -1,6 +1,6 @@
 # Review Trace: task-plan.md — 第二轮
 
-> 审查日期: 2026-08-01 20:30 | 审查范围: `.scratch/enemy-stat-pipeline/task-plan.md`（v2 修订版）
+> 审查日期: 2026-08-01 20:30 | 审查范围: `enemy-stat-pipeline/task-plan.md`（v2 修订版）
 > 方法: 符号执行 + 限界验证 | 前置检查: 无
 > 对比基线: [review-trace-2026-08-01-2005-task-plan.md](review-trace-2026-08-01-2005-task-plan.md)（第一轮）
 

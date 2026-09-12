@@ -3,7 +3,7 @@ using YouAreNotTheFish.Core.Types;
 namespace YouAreNotTheFish.Core.Engine;
 
 /// <summary>
-/// WC 69 节点单步动力学（csharp-engine plan §十一 step 4）——spec@v1.1（.scratch/csharp-wc-dynamics/design/spec.md）。
+/// WC 69 节点单步动力学（csharp-engine plan §十一 step 4）——spec@v1.1（../../../规格/引擎/csharp-wc-dynamics.md）。
 /// 职责：运行时状态模型 Layer 1 每回合 Phase 1 步骤 3 的一轮（Δ=1.0 秒）动力学更新。
 /// 纯函数：无 static 可变状态、无 RNG、同输入同输出（契约 C6）。
 /// 来源：csharp-engine plan §4.2；运行时状态模型 §4.1/§7.1 步骤 3；皮层动力学-通用层 §4.2-4.4。

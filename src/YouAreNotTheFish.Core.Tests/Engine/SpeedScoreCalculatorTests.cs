@@ -5,7 +5,7 @@ using YouAreNotTheFish.Core.Types;
 namespace YouAreNotTheFish.Core.Tests.Engine;
 
 /// <summary>
-/// SpeedScoreCalculator spec@v1.1（.scratch/csharp-speed/design/spec.md）§六 AC-1~AC-14（AC-15 见 Types/SpeedComponentsTests）。
+/// SpeedScoreCalculator spec@v1.1（../../../规格/引擎/csharp-speed.md）§六 AC-1~AC-14（AC-15 见 Types/SpeedComponentsTests）。
 /// 测试侧约定（wmatrix 结转 #1）：锚点一律经行序解析（RowOf），不裸写下标——dk/fid 命名陷阱。
 /// 锚点来源：spec §六（任务issue 01 实测表 + Δ审计独立复算）；「逐位」标注者精确相等，其余 1e-5。
 /// 无首回合特判（B1）——静息锚点直算即静息值。

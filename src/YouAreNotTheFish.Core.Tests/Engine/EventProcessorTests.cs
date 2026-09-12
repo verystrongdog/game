@@ -5,7 +5,7 @@ using YouAreNotTheFish.Core.Types;
 namespace YouAreNotTheFish.Core.Tests.Engine;
 
 /// <summary>
-/// EventProcessor spec@v1.2.2（.scratch/csharp-events/design/spec.md）§六 AC-1~AC-15。
+/// EventProcessor spec@v1.2.2（../../../规格/引擎/csharp-events.md）§六 AC-1~AC-15。
 /// 锚点来源纪律：全部锚点来自任务issue 01 实测表 + 探针（probe-v1.1.md P1-P13 / probe-v1.2.md Q1-Q4）
 /// + 审计独立复现（numpy float32 镜像 ToneUpdater 结合序，audit report §四）；不凭记忆写任何锚点。
 /// 标注「逐位」者 Assert.Equal 精确相等；其余 1e-5f 容差。

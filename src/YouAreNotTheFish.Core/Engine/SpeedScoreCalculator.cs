@@ -4,7 +4,7 @@ using YouAreNotTheFish.Core.Types;
 namespace YouAreNotTheFish.Core.Engine;
 
 /// <summary>
-/// Layer 3 速度排序计算器（csharp-engine plan §十一 step 7）——csharp-speed spec@v1.1（.scratch/csharp-speed/design/spec.md）。
+/// Layer 3 速度排序计算器（csharp-engine plan §十一 step 7）——csharp-speed spec@v1.1（../../../规格/引擎/csharp-speed.md）。
 /// 职责：把 WC 激活 a(t)、三环路 salience（决断分 c_loop）、Gurney 状态（执行分 a_SD1）提取为三成分终值
 /// （察觉逐节点回落）→ 加权合成 speed 序数值（序数语义——绝对量无意义，回合战斗流程 §3.1）。
 /// 纯函数：无 static 可变状态、无 RNG、同输入同输出。

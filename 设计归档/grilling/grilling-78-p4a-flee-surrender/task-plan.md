@@ -157,4 +157,4 @@ IsOver(state):
 ---
 
 *创建: 2026-08-16 | 更新: 2026-08-16*
-*关联: [Grilling #70 路线图 task-plan](./../grilling-70-engine-roadmap/task-plan.md), [回合战斗流程](./../../规则/回合战斗流程.md), [核心机制](./../../规则/核心机制.md), [Grilling #73 P1b task-plan](./../grilling-73-p1b-linkstate/task-plan.md), [数学语言书写规范](./../../docs/agents/math-language-writing.md)*
+*关联: [Grilling #70 路线图 task-plan](./../grilling-70-engine-roadmap/task-plan.md), [回合战斗流程](../../../%E8%A7%84%E5%88%99/%E5%9B%9E%E5%90%88%E6%88%98%E6%96%97%E6%B5%81%E7%A8%8B.md), [核心机制](../../../%E8%A7%84%E5%88%99/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md), [Grilling #73 P1b task-plan](./../grilling-73-p1b-linkstate/task-plan.md), [数学语言书写规范](../../../docs/agents/math-language-writing.md)*

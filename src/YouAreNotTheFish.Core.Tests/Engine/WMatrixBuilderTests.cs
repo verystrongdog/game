@@ -5,7 +5,7 @@ using YouAreNotTheFish.Core.Types;
 namespace YouAreNotTheFish.Core.Tests.Engine;
 
 /// <summary>
-/// WMatrixBuilder spec@v1.1（.scratch/csharp-wmatrix/design/spec.md）§六 AC-1~AC-12。
+/// WMatrixBuilder spec@v1.1（../../../规格/引擎/csharp-wmatrix.md）§六 AC-1~AC-12。
 /// 数据依赖断言（AC-3/4/5/6/7/8/11/12）兼作数据漂移哨兵——数据 JSON 变更时同步复核期望值。
 /// </summary>
 public class WMatrixBuilderTests

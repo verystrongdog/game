@@ -99,4 +99,4 @@ public class SmokeTests
 
 ---
 *创建: 2026-08-14 | 更新: 2026-08-14 | 版本: v1.2*
-*关联: [任务issue 01](issues/01-smoke-spec.md), [plan §八/§十](../../../csharp-engine/design/plan.md)*
+*关联: [任务issue 01](../../.scratch/csharp-smoke/design/issues/01-smoke-spec.md), [plan §八/§十](../../../csharp-engine/design/plan.md)*

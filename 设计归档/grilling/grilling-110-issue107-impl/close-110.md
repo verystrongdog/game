@@ -26,8 +26,8 @@
 | 实施（4 处 [JsonRequired] + 7 测试） | `TripartiteEdges.cs` / `GameDataLoaderTests.cs` / `ConsoleAppTests.cs` | 353/353 绿 | ✅ 已验证 |
 | 六维状态 | `docs/设计框架-六维状态.md` | #106 行 + 完成度 25→26 + footer | ✅ 已验证 |
 | 项目总览 | `项目总览.md` | 5.0 行 #107 注记 | ✅ 已验证 |
-| 实现说明 | `.scratch/grilling-107-fail-fast-impl/实现说明.md` | 全文 | ✅ 已验证 |
-| 外审存档 | `.scratch/grilling-110-issue107-impl/` ×3 | — | ✅ 已验证 |
+| 实现说明 | `../../设计归档/grilling/grilling-107-fail-fast-impl/实现说明.md` | 全文 | ✅ 已验证 |
+| 外审存档 | `.` ×3 | — | ✅ 已验证 |
 
 ### 质量门禁（手动等效检查）
 

@@ -170,4 +170,4 @@ HP_max  = HP_base + equipment_HP
 ---
 
 *创建: 2026-08-16 | 更新: 2026-08-16*
-*关联: [Grilling #70 路线图 task-plan](./../grilling-70-engine-roadmap/task-plan.md), [武器与装备](./../../实体/武器与装备.md), [核心机制](./../../规则/核心机制.md), [Grilling #73 P1b task-plan](./../grilling-73-p1b-linkstate/task-plan.md), [Grilling #77 P4d task-plan](./../grilling-77-p4d-crit/task-plan.md), [数学语言书写规范](./../../docs/agents/math-language-writing.md)*
+*关联: [Grilling #70 路线图 task-plan](./../grilling-70-engine-roadmap/task-plan.md), [武器与装备](../../../%E5%AE%9E%E4%BD%93/%E6%AD%A6%E5%99%A8%E4%B8%8E%E8%A3%85%E5%A4%87.md), [核心机制](../../../%E8%A7%84%E5%88%99/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md), [Grilling #73 P1b task-plan](./../grilling-73-p1b-linkstate/task-plan.md), [Grilling #77 P4d task-plan](./../grilling-77-p4d-crit/task-plan.md), [数学语言书写规范](../../../docs/agents/math-language-writing.md)*

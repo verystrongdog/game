@@ -46,25 +46,23 @@ data/sim_results/
 
 # 子代理临时抓取
 .evtmp_*/
-.scratch/.dsh-tmp-*/
 
 # 外部 AI 会话转写存档（过程物，仅本地；chatX 为 #117 输入已跟踪例外）
 参考/会话存档/*
 !参考/会话存档/chatX_transcript.txt
 
-# .scratch 外审存档与运行日志（过程物，仅本地）
-.scratch/**/*.html
-.scratch/**/*.log
-.scratch/grilling-tmp/
-.scratch/grilling/
-.scratch/tmp-chatgpt/
-.scratch/**/.work/
+# .scratch——过程工作区，整体移出版本控制（2026-09-12 仓库重构 Phase 2 / D11）
+#
+# 迁出去向：
+#   · 被代码或设计正典消费的承重内容 → 规格/（引擎规格 / 素材 / 数据源）
+#   · 被决策树、六维状态或正典引用的各轮 grilling 源记录 → 设计归档/grilling/
+#
+# 保留在工作区、仅本地：外审存档 HTML、运行日志、运行状态、素材正文（版权内容）、
+# 子代理临时文件、以及未被任何活跃文档引用的过程残留。
+.scratch/
 
-# grilling-89 素材正文（书籍/自述全文——版权内容，仅本地；书目/检索索引 md 保留入库）
-.scratch/grilling-89-npc-material/ref/**/*.txt
-.scratch/grilling-89-npc-material/ref/**/*.html
-.scratch/grilling-89-npc-material/ref/**/*.epub
-.scratch/grilling-89-npc-material/ref/一手叙事/15-知乎-阿龙-三十多岁单亲爸爸的婚姻自述.md
+# 校验器运行状态（原 .scratch/.last_check_state.json）
+.checks-state.json
 
 # Unity editor install (local headless validation, Grilling #122)
 .unity-editor/

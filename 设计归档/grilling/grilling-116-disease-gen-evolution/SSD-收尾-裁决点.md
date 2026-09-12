@@ -2,7 +2,7 @@
 
 Type: 资格核验批次 2 记录（先行项）
 归属: [#116](https://github.com/verystrongdog/game/issues/116) 配额表驱动核验批次
-前置: [SSD资格核验-第1-2步](../../grilling-89-npc-material/SSD资格核验-第1-2步.md)（DSM 定位 + 原子候选 + 分类修正 A ✅）
+前置: [SSD资格核验-第1-2步](../../../.scratch/grilling-89-npc-material/SSD%E8%B5%84%E6%A0%BC%E6%A0%B8%E9%AA%8C-%E7%AC%AC1-2%E6%AD%A5.md)（DSM 定位 + 原子候选 + 分类修正 A ✅）
 状态: ✅ 已裁决（2026-09-06 用户照准五项）
 
 ## 〇、裁决结果（2026-09-06）
@@ -52,4 +52,4 @@ Type: 资格核验批次 2 记录（先行项）
 ---
 
 *创建: 2026-09-06 | 状态: 草案待裁决*
-*关联: [SSD资格核验-第1-2步](../../grilling-89-npc-material/SSD资格核验-第1-2步.md), [C阶段诊断-PTSD-SSD资格门](../../grilling-89-npc-material/C阶段诊断-PTSD-SSD资格门.md), [批次 2 总览](总览.md)*
+*关联: [SSD资格核验-第1-2步](../../../.scratch/grilling-89-npc-material/SSD%E8%B5%84%E6%A0%BC%E6%A0%B8%E9%AA%8C-%E7%AC%AC1-2%E6%AD%A5.md), [C阶段诊断-PTSD-SSD资格门](../../grilling-89-npc-material/C阶段诊断-PTSD-SSD资格门.md), [批次 2 总览](总览.md)*

@@ -4,7 +4,7 @@ using YouAreNotTheFish.Core.Types;
 namespace YouAreNotTheFish.Core.Tests.Engine;
 
 /// <summary>
-/// ToneUpdater spec@v1.1（.scratch/csharp-tone/design/spec.md）§六 AC-1~AC-8。
+/// ToneUpdater spec@v1.1（../../../规格/引擎/csharp-tone.md）§六 AC-1~AC-8。
 /// 测试侧约定（wmatrix 结转 #1）：锚点一律 MathF 现算（1e-5 容差）或逐位比较，不裸写字面量。
 /// </summary>
 public class ToneUpdaterTests

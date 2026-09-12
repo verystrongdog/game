@@ -1,0 +1,16 @@
+# 玫瑰花海地块高度图 (Grilling #126)
+source: USGS 3DEP 1 m lidar DEM (KS_Statewide_2018_A18 / S_Central_NE_NW_Kansas_Lidar)
+service: https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer (exportImage, EPSG:3857, F32)
+site: Konza Prairie Biological Station, tallgrass prairie, Kansas, USA
+center lon/lat: -96.578843, 39.095390
+NE 39.095839,-96.579421   SW 39.094941,-96.578264
+licence: USGS public domain
+---
+plot 100.0 x 100.0 m = 10000 m^2
+samples 101 x 101 @ 1.0 m
+elevation min 406.7568 m  max 409.8644 m  mean 409.2104 m
+relief 3.1075 m   std 0.5665 m
+max |dz| over 1 m = 0.1145 m/m -> 6.53 deg
+---
+raw: little-endian uint16, row-major, row 0 = NORTH edge, 101*101*2 = 20402 bytes
+decode: height_m = value/65535 * 3.1075

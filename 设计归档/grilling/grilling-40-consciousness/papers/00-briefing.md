@@ -59,7 +59,7 @@
 
 ## 可用文件
 
-所有论文摘要已存入 `/home/dog/game/.scratch/grilling-40-consciousness/papers/`:
+所有论文摘要已存入 `/home/dog/game/.`:
 - `01-itt-mathematical-structure.md` — IIT 3.0 + Kleiner-Tull 广义公理化
 - `02-friston-fep-consciousness.md` — FEP + Active Inference + Wiese-Friston 意识约束
 - `03-dehaene-gnw-consciousness.md` — GNW + Ignition 动力学

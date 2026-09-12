@@ -17,7 +17,7 @@
 - `src/YouAreNotTheFish.Console/Program.cs`（`FindDataDir` 首查 `YANTF_DATA_DIR`）
 - `src/YouAreNotTheFish.Core.Tests/Data/GameDataLoaderTests.cs`（+6 引擎测试）
 - `src/YouAreNotTheFish.Core.Tests/ConsoleApp/ConsoleAppTests.cs`（+1 Console 进程测试）
-- 文档：决策树 #106 注记 + #110 条目、六维状态、项目总览、[实现说明](../.scratch/grilling-107-fail-fast-impl/实现说明.md)、外审存档 ×3
+- 文档：决策树 #106 注记 + #110 条目、六维状态、项目总览、[实现说明](../grilling-107-fail-fast-impl/%E5%AE%9E%E7%8E%B0%E8%AF%B4%E6%98%8E.md)、外审存档 ×3
 
 ### 提交
 

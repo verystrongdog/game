@@ -6,7 +6,7 @@ description: 任务 md 四维质检：格式规范 / 术语正典 / 交叉引用
 
 对 AI 生成的决策总结/任务规划 md（`.scratch/` 下）做四维质检。只报告问题，不做设计决策，不改写文件。
 
-**参数**：`$ARGUMENTS` 为目标文件路径（如 `.scratch/unity-brain-connect/task-plan.md`）；追加 `--quick` 跳过引用核验。
+**参数**：`$ARGUMENTS` 为目标文件路径（如 `规格/素材/患者生态索引.md`）；追加 `--quick` 跳过引用核验。
 
 ## 执行
 

@@ -3,7 +3,7 @@ using YouAreNotTheFish.Core.Types;
 namespace YouAreNotTheFish.Core.Engine;
 
 /// <summary>
-/// 脑干 tone 单步动力学（csharp-engine plan §十一 step 5）——spec@v1.1（.scratch/csharp-tone/design/spec.md）。
+/// 脑干 tone 单步动力学（csharp-engine plan §十一 step 5）——spec@v1.1（../../../规格/引擎/csharp-tone.md）。
 /// 职责：对 4 个 tone 应用解析指数解 + clip（运行时状态模型 §5.2/§7.1 步骤 4）。
 /// 纯函数：无 static 可变状态、无 RNG、同输入同输出（AC-8）。
 /// 来源：csharp-engine plan §4.3；运行时状态模型 §5.2-5.4。

@@ -274,4 +274,4 @@ public sealed class EventProcessor
 
 ---
 *创建: 2026-08-13 | 更新: 2026-08-14 | 版本: v1.2.2*
-*关联: [任务issue 01](issues/01-events-spec.md), [plan §4.7](../../csharp-engine/design/plan.md), [运行时状态模型 §5.5](../../../规则/技能树系统/运行时状态模型.md), [types spec §二 2.11](../../csharp-engine-types/design/spec.md)*
+*关联: [任务issue 01](../../.scratch/csharp-events/design/issues/01-events-spec.md), [plan §4.7](../../csharp-engine/design/plan.md), [运行时状态模型 §5.5](../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E8%BF%90%E8%A1%8C%E6%97%B6%E7%8A%B6%E6%80%81%E6%A8%A1%E5%9E%8B.md), [types spec §二 2.11](../../csharp-engine-types/design/spec.md)*

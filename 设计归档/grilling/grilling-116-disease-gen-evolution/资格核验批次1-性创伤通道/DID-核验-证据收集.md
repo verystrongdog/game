@@ -120,7 +120,7 @@
 | 关联支持（流行病学/临床） | DSM-5：人际躯体与性虐待是 DID 风险因子；美/加/欧患者中童年虐待与忽视报告率约 90%；辅助特征：多数报告童年与成年多种人际虐待；亦可报告非虐待型压倒性早期事件（多次痛苦医疗操作、战争、儿童卖淫、恐怖主义等） | DSM-5 DID Risk and Prognostic Factors / Associated Features [页码需核验] |
 | 关联支持（后创伤模型） | 创伤-解离关联在客观创伤测量下仍显著、方向与时序支持创伤模型（"In keeping with the trauma model, the relationship between trauma and dissociation was consistent and moderate in strength, and remained significant when objective measures of trauma were used…"） | Dalenberg et al. 2012, *Psychological Bulletin* 138(3):550–588 |
 | 反对（社会认知模型/病因争议） | SCM：治疗与医源性因素在 DID 病因中起作用；"child abuse–DID 的证据链问题多于 Gleaves 所述"；回溯性创伤报告的可靠性受质疑 | Lilienfeld et al. 1999, *Psychological Bulletin* 125(5):507–523；Spanos 1994（SCM 原始表述，转引自该文）[需核验] |
-| 特异性材料 | 性创伤与 DID 关联并非特异：DSM-5 DID 共病与鉴别文本显示解离症状（创伤相关遗忘/人格解体等）同样出现在 PTSD、BPD 等（与转化接口 §3.2.1 把性创伤映射到候选集 {PTSD, DID, BPD} 一致——项目内该候选集为已定案） | DSM-5 DID 鉴别诊断；[创伤记忆转化接口](../../../规则/技能树系统/创伤记忆转化接口.md) §3.2.1 |
+| 特异性材料 | 性创伤与 DID 关联并非特异：DSM-5 DID 共病与鉴别文本显示解离症状（创伤相关遗忘/人格解体等）同样出现在 PTSD、BPD 等（与转化接口 §3.2.1 把性创伤映射到候选集 {PTSD, DID, BPD} 一致——项目内该候选集为已定案） | DSM-5 DID 鉴别诊断；[创伤记忆转化接口](../../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E5%88%9B%E4%BC%A4%E8%AE%B0%E5%BF%86%E8%BD%AC%E5%8C%96%E6%8E%A5%E5%8F%A3.md) §3.2.1 |
 | 性创伤专项数值 | 文献常引"DID 样本中童年性虐待报告率高"（如 Putnam 1986 的 100 例报告童年重大创伤、以虐待为主），但**具体性虐待百分比各研究差异大且依赖回溯报告**，需逐条核对原始表格后方可引用 | Putnam et al. 1986, *J Clin Psychiatry* 47(6):285–293（摘要仅述"childhood history of significant trauma, primarily child abuse"，具体百分比 [需核验]） |
 
 > 方向性注记：本表材料只回答"若患 DID 是否必有性创伤史"（标准层：非必备；关联层：常见但非特异、存在病因争议）。"有性创伤事件 ⟹ DID"的方向属 §三反样本与用户裁决范围。
@@ -173,14 +173,14 @@
 | alter 系统复杂但记忆共享/可迁移 | Eich 1997（跨身份迁移）、Allen & Movius 2000（ERP 再认）、Donath 2025 更正 meta（支持迁移）→ 文献存在"alter 系统存在但记忆非完全区隔"的实证样本 | 见 §4.1 行 |
 | 记忆空缺确实存在但不是 DID（D_seg 高却非目标病） | §三 R1（DA：无身份瓦解的遗忘）、R2（PTSD 解离亚型）、R4（器质/物质）、R8（正常遗忘/抑制）——均为"有遗忘空缺"的对照集合 | §三 各行 |
 | 患者不自知/最小化遗忘 → 表征层 MISSING 风险 | DSM-5：多数解离患者最初有 "amnesia for their amnesia"；DID 患者"vary in their awareness…commonly…minimize their amnestic symptoms"→ 若 #87/#90 只存"本人是否报出空缺"而不存"他人目击/证据发现"侧信息，D_seg 可能出现系统性 MISSING（三值语义下 → UNDETERMINED，非 FALSE） | DSM-5 解离章总论、DID 诊断特征 [页码需核验]；#113 三值语义（转化接口 §3.2.2） |
-| 记忆侧之外 DID 必备成分 | DSM-5 Criterion A 的身份/自我感/自主感断裂（可含行为/感知/运动成分）；Criterion C 功能损害 → DID 资格若只用 (N,F,D_seg) 表征域，Criterion A/C 中非记忆成分的承载位置是悬空问题（材料性提示，归属用户裁决：或由行为层 did_e01–e03/E_d^hist 承载） | DSM-5 p.292；[解离性身份障碍](../../../实体/疾病目录/解离性身份障碍.md)（did_e01–e03 行为覆盖） |
+| 记忆侧之外 DID 必备成分 | DSM-5 Criterion A 的身份/自我感/自主感断裂（可含行为/感知/运动成分）；Criterion C 功能损害 → DID 资格若只用 (N,F,D_seg) 表征域，Criterion A/C 中非记忆成分的承载位置是悬空问题（材料性提示，归属用户裁决：或由行为层 did_e01–e03/E_d^hist 承载） | DSM-5 p.292；[解离性身份障碍](../../../../%E5%AE%9E%E4%BD%93/%E7%96%BE%E7%97%85%E7%9B%AE%E5%BD%95/%E8%A7%A3%E7%A6%BB%E6%80%A7%E8%BA%AB%E4%BB%BD%E9%9A%9C%E7%A2%8D.md)（did_e01–e03 行为覆盖） |
 
 ### 4.3 D_seg 语义可对接的标准材料
 
 | 主题 | 材料 | 来源 |
 |------|------|------|
 | "存储保留、提取受控、可逆" | DSM-5 DA 特征："…differs from the permanent amnesias due to neurobiological damage or toxicity that prevent memory storage or retrieval in that it is **always potentially reversible because the memory has been successfully stored**"；DID 诊断特征亦描述"发现证据后才意识到" | DSM-5 DA/DID 特征 [页码需核验] |
-| 项目内同构 | #90 生命周期 COMPARTMENTALIZED = 访问层状态（记录保留、P_acc 受控、遗忘不作用于 m）；D_seg = 区隔化连续量 ∈ [0,1]，由 #90 提供（非 #87 生成字段） | [记忆内容层](../../../规则/技能树系统/记忆内容层.md) §2/§4；[创伤记忆转化接口](../../../规则/技能树系统/创伤记忆转化接口.md) §3.0/§3.2.3 |
+| 项目内同构 | #90 生命周期 COMPARTMENTALIZED = 访问层状态（记录保留、P_acc 受控、遗忘不作用于 m）；D_seg = 区隔化连续量 ∈ [0,1]，由 #90 提供（非 #87 生成字段） | [记忆内容层](../../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E8%AE%B0%E5%BF%86%E5%86%85%E5%AE%B9%E5%B1%82.md) §2/§4；[创伤记忆转化接口](../../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E5%88%9B%E4%BC%A4%E8%AE%B0%E5%BF%86%E8%BD%AC%E5%8C%96%E6%8E%A5%E5%8F%A3.md) §3.0/§3.2.3 |
 | 心理生理状态依赖性 | Reinders 2006（NIS/TIS 对创伤脚本的差异化 rCBF/心血管反应） | §4.1 行 |
 
 ---
@@ -233,4 +233,4 @@
 ---
 
 *创建: 2026-09-06 | 状态: 证据收集（非裁决）*
-*关联: [总览](总览.md), [PTSD-F资格阈值-证据基础](../../grilling-89-npc-material/PTSD-F资格阈值-证据基础.md), [创伤记忆转化接口](../../../规则/技能树系统/创伤记忆转化接口.md), [记忆内容层](../../../规则/技能树系统/记忆内容层.md), [解离性身份障碍](../../../实体/疾病目录/解离性身份障碍.md)*
+*关联: [总览](总览.md), [PTSD-F资格阈值-证据基础](../../../../.scratch/grilling-89-npc-material/PTSD-F%E8%B5%84%E6%A0%BC%E9%98%88%E5%80%BC-%E8%AF%81%E6%8D%AE%E5%9F%BA%E7%A1%80.md), [创伤记忆转化接口](../../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E5%88%9B%E4%BC%A4%E8%AE%B0%E5%BF%86%E8%BD%AC%E5%8C%96%E6%8E%A5%E5%8F%A3.md), [记忆内容层](../../../../%E8%A7%84%E5%88%99/%E6%8A%80%E8%83%BD%E6%A0%91%E7%B3%BB%E7%BB%9F/%E8%AE%B0%E5%BF%86%E5%86%85%E5%AE%B9%E5%B1%82.md), [解离性身份障碍](../../../../%E5%AE%9E%E4%BD%93/%E7%96%BE%E7%97%85%E7%9B%AE%E5%BD%95/%E8%A7%A3%E7%A6%BB%E6%80%A7%E8%BA%AB%E4%BB%BD%E9%9A%9C%E7%A2%8D.md)*

@@ -170,4 +170,4 @@ CombatState.EffectiveM[edge] = clamp(LinkState.M[edge] + Σ药物偏移 + Σ组�
 ---
 
 *创建: 2026-08-16 | 更新: 2026-08-16*
-*关联: [Grilling #70 路线图 task-plan](./../grilling-70-engine-roadmap/task-plan.md), [角色与面具](./../../实体/角色与面具.md), [Grilling #72 P1a task-plan](./../grilling-72-p1a-skill-context/task-plan.md), [Grilling #73 P1b task-plan](./../grilling-73-p1b-linkstate/task-plan.md), [Grilling #83 P5-2 task-plan](./../grilling-83-p5-2-consumables/task-plan.md), [数学语言书写规范](./../../docs/agents/math-language-writing.md)*
+*关联: [Grilling #70 路线图 task-plan](./../grilling-70-engine-roadmap/task-plan.md), [角色与面具](../../../%E5%AE%9E%E4%BD%93/%E8%A7%92%E8%89%B2%E4%B8%8E%E9%9D%A2%E5%85%B7.md), [Grilling #72 P1a task-plan](./../grilling-72-p1a-skill-context/task-plan.md), [Grilling #73 P1b task-plan](./../grilling-73-p1b-linkstate/task-plan.md), [Grilling #83 P5-2 task-plan](./../grilling-83-p5-2-consumables/task-plan.md), [数学语言书写规范](../../../docs/agents/math-language-writing.md)*

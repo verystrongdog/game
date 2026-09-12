@@ -52,9 +52,9 @@
 | 路径 | 内容 |
 |------|------|
 | `unity/Assets/Resources/YANTF/konza_plot_101x101_r16.bytes` | 高度图（20 402 字节）——**入库** |
-| `.scratch/grilling-126-rosefield/ref/plot_f32.tif` | 原始 F32 GeoTIFF（复算依据，66 KB）——入库 |
-| `.scratch/grilling-126-rosefield/ref/konza_plot_101x101_r16.raw`、`konza_plot_101x101_r16.meta.txt` | 高度图副本 + 元数据全文——入库 |
-| `.scratch/grilling-126-rosefield/ref/3dep_info.json`、`tnm_datasets.json`、`tnm_ned.json` | ImageServer / TNM API 响应存档（证明 1 m 源可用）——入库 |
+| `../规格/数据源/plot_f32.tif` | 原始 F32 GeoTIFF（复算依据，66 KB）——入库 |
+| `../规格/数据源/konza_plot_101x101_r16.raw`、`konza_plot_101x101_r16.meta.txt` | 高度图副本 + 元数据全文——入库 |
+| `../规格/数据源/3dep_info.json`、`tnm_datasets.json`、`tnm_ned.json` | ImageServer / TNM API 响应存档（证明 1 m 源可用）——入库 |
 | `.scratch/grilling-126-rosefield/ref/*.html` | 种植密度文献原文——**不入库**（`.gitignore` §56 `.scratch/**/*.html`，本地留存） |
 
 **raw 口径**：little-endian uint16，行主序，**行 0 = 北边缘**，值域 [0, 65535] 线性映射到 [0, 3.1075] m。
@@ -106,4 +106,4 @@ PY
 
 ---
 *创建: 2026-09-12 | 更新: 2026-09-12*
-*关联: [unity/README.md](README.md), [玫瑰株丛密度](./玫瑰株丛密度.md), [决策记录 #126](../.scratch/grilling-126-rosefield/决策记录.md)*
+*关联: [unity/README.md](README.md), [玫瑰株丛密度](./玫瑰株丛密度.md), [决策记录 #126](../设计归档/grilling/grilling-126-rosefield/决策记录.md)*

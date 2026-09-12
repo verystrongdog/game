@@ -195,4 +195,4 @@ public static class Program
 
 ---
 *创建: 2026-08-14 | 更新: 2026-09-02 | 版本: v1.3*
-*关联: [任务issue 01](issues/01-console-spec.md), [plan §九](../../../csharp-engine/design/plan.md), [csharp-flow spec](../../../csharp-flow/design/spec.md)*
+*关联: [任务issue 01](../../.scratch/csharp-console/design/issues/01-console-spec.md), [plan §九](../../../csharp-engine/design/plan.md), [csharp-flow spec](../../../csharp-flow/design/spec.md)*

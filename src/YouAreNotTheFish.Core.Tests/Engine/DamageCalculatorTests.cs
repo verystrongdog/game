@@ -4,7 +4,7 @@ using YouAreNotTheFish.Core.Types;
 namespace YouAreNotTheFish.Core.Tests.Engine;
 
 /// <summary>
-/// DamageCalculator spec@v1.1（.scratch/csharp-damage/design/spec.md）§六 AC-1~AC-17 + AC-18 新实证。
+/// DamageCalculator spec@v1.1（../../../规格/引擎/csharp-damage.md）§六 AC-1~AC-17 + AC-18 新实证。
 /// 锚点来源：spec §六（任务issue 01 第三轮实测表 #15-#19，runtime 8.0.29 本地实测 + 审计独立复算）；
 /// 「逐位」标注者精确相等（Assert.Equal float 无容差 = 逐位）。
 /// 无需数据加载（纯结算模块，输入全部合成）。

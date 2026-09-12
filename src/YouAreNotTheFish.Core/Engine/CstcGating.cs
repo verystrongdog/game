@@ -5,7 +5,7 @@ using YouAreNotTheFish.Core.Types;
 namespace YouAreNotTheFish.Core.Engine;
 
 /// <summary>
-/// Layer 3 CSTC Gurney 门控（csharp-engine plan §十一 step 6）——spec@v1.1（.scratch/csharp-cstc/design/spec.md）。
+/// Layer 3 CSTC Gurney 门控（csharp-engine plan §十一 step 6）——spec@v1.1（../../../规格/引擎/csharp-cstc.md）。
 /// 职责：把 WC 激活 a(t) 与 DA tone 转化为三环路（somatic/cognitive/limbic）各 5 群体 Gurney 激活
 /// + 3 个 gate + 3 环路 salience（运行时状态模型 §6.2-6.4；每回合 Phase 3 的最后一个数值引擎）。
 /// 纯函数：无 static 可变状态、无 RNG、同输入同输出（契约 C8）。
