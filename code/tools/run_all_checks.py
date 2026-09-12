@@ -24,24 +24,40 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from tools.md_utils import ROOT, collect_md_files
 
 # 校验脚本注册表（单一列表，不再用三个分散列表）
+#
+# 2026-09-12 修复：本表原与 CI 的校验器循环（.github/workflows/ci.yml 的
+# `for v in ...` 共 11 个）不一致——少了 5 个 2026-09 新增的校验器，且把
+# CI 实际当作门禁跑的 validate_cards 标成了 deprecated。判据以
+# design/engineering/build-and-test.md §2.1/§四 的「11/11 退出码 0」为准，
+# 故本表与 CI 循环逐项对齐。改动本表时必须同步改 CI 循环与 build-and-test.md。
 VALIDATOR_REGISTRY = {
     "validate_link_data.py":       {"status": "deprecated", "json": True, "replaced_by": "build_tripartite_model.py + build_function_labels.py"},
-    "validate_disease.py":         {"status": "active", "json": False},
-    "validate_spatial.py":         {"status": "active", "json": True},
+    "validate_cross_refs.py":      {"status": "active", "json": True},
     "validate_trash_isolation.py": {"status": "active", "json": False},
     "validate_params.py":          {"status": "active", "json": True},
-    "validate_cross_refs.py":      {"status": "active", "json": True},
-    "validate_cards.py":           {"status": "deprecated", "json": False},
+    "validate_spatial.py":         {"status": "active", "json": True},
+    "validate_disease.py":         {"status": "active", "json": False},
+    "validate_cards.py":           {"status": "active", "json": False,
+                                    "note": "守护已废弃系统的参考数据，但 CI 仍作为门禁跑——不通过即失败"},
+    "validate_eligibility.py":     {"status": "active", "json": False},
+    "validate_situation_fids.py":  {"status": "active", "json": False},
+    "validate_tripartite_annotations.py": {"status": "active", "json": False},
+    "validate_data_manifest.py":   {"status": "active", "json": False},
+    "validate_runtime_fixtures.py": {"status": "active", "json": False},
 }
 
 STATE_FILE = ROOT / ".checks-state.json"   # 运行状态（2026-09-12：原 .scratch/.last_check_state.json，随 .scratch 移出版本控制而迁出）
 
+# 校验脚本目录。2026-09-12 修复：Phase 3 把 tools/ 迁到 code/tools/ 后，
+# 本文件仍写 ROOT / "tools"（该目录已不存在）→ get_active_validators() 返回空列表，
+# 编排器「跑了 0 个校验器」却退出码 0，是静默全绿。见 WORKFLOW.md §5.1「零测试不是通过」。
+TOOLS_DIR = ROOT / "code" / "tools"
+
 
 def get_active_validators() -> list[Path]:
     """获取所有活跃校验脚本的路径"""
-    tools_dir = ROOT / "tools"
-    return [tools_dir / name for name, info in VALIDATOR_REGISTRY.items()
-            if info["status"] == "active" and (tools_dir / name).exists()]
+    return [TOOLS_DIR / name for name, info in VALIDATOR_REGISTRY.items()
+            if info["status"] == "active" and (TOOLS_DIR / name).exists()]
 
 
 def run_validator(script: Path) -> dict:
@@ -138,7 +154,7 @@ def format_output(validator_results: list[dict], new_files: list[str], fmt: str 
         status = "✅" if r["exit_code"] == 0 else ("❌" if r["exit_code"] > 0 else "💥")
         print(f"  - {status} {r['name']}")
     active_names = [n for n, i in VALIDATOR_REGISTRY.items() if i["status"] == "active"]
-    missing = [v for v in active_names if not (ROOT / "tools" / v).exists()]
+    missing = [v for v in active_names if not (TOOLS_DIR / v).exists()]
     if missing:
         print(f"\n- ⚠️ 未实现的校验脚本 ({len(missing)} 个): {', '.join(missing)}")
     deprecated = [n for n, i in VALIDATOR_REGISTRY.items() if i["status"] == "deprecated"]
@@ -190,6 +206,11 @@ def main():
 
     new_files = detect_new_files()
     scripts = get_active_validators()
+    if not scripts:
+        # WORKFLOW.md §5.1：未运行不是通过。找不到校验器必须显式失败，
+        # 不得以「0 个校验器、0 个失败」退出 0——那正是本文件 2026-09-12 修复的缺陷形态。
+        print("💥 未找到任何活跃校验器——拒绝在零校验状态下返回成功", file=sys.stderr)
+        sys.exit(2)
     results = [run_validator(s) for s in scripts]
 
     # 收集输出
