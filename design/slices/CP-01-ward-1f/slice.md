@@ -39,6 +39,7 @@
 | **Core → Unity 适配层** | `ACCEPTED` | **`FAKE`** | `ISOLATED` | `UNKNOWN` | `code/unity/Assets/Scripts/DemoSolver.cs` 手抄 `CalibrationConfig` 常量，自述"待 EngineSolver 替换"——见 [ARCHITECTURE.md §四](../../../ARCHITECTURE.md) |
 | **探索与接敌** | **`UNRESOLVED`** | `NONE` | `ISOLATED` | `UNKNOWN` | 无空间切片设计；Unity 场景靠 Editor 菜单运行时生成 |
 | **HUD 与反馈** | `ACCEPTED` | **`NONE`** | `ISOLATED` | `UNKNOWN` | [design/presentation/战斗界面布局.md](../../presentation) 有 37 项决策，但 Unity 侧未实现 |
+| **角色动作呈现**（✏️ 2026-09-12 新增） | `ACCEPTED` | **`PARTIAL`** | `ISOLATED` | **`REGRESSED`** | [动作库规格.md](../../presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md) 12 词表 + 契约 A+B；`ActionPlayer.cs` / `ActionCatalog.cs` 已入库。**缺口**：L1 九条中仅 5 条有 clip（locomotion 四条引用仓库外 KI 资产）→ PlayMode 2 项常红（健康度 `REGRESSED` 的判据）；[动作系统分解](../../engineering/%E5%8A%A8%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%88%86%E8%A7%A3-2026-09-12.md) 为本轮 frontier |
 | 结束条件 | `UNRESOLVED` | `NONE` | `ISOLATED` | `UNKNOWN` | — |
 | Unity 资产身份（`.meta`/ProjectSettings） | — | **`NONE`** | `ISOLATED` | `UNKNOWN` | `.meta` 0 个、场景 0 个 → 阻塞 P4b |
 

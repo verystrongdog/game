@@ -1,0 +1,195 @@
+{
+  "_schema_version": "1.0",
+  "_meta": {
+    "logical_id": "action_set",
+    "purpose": "Unity 动作集机器源：动作受控词表的元数据 + locomotion 混合参数。Editor 侧生成器在生成期读它产出 AnimatorController 与 C# 静态表。",
+    "design_authority": "design/presentation/动作库规格.md",
+    "consumer": "code/unity/Assets/Editor/（生成期；见 design/presentation/动作库规格.md §四·丙）",
+    "runtime_note": "运行时 Unity 不读本文件——运行时消费的是生成器写出的 C# 静态表。依赖边声明见 ARCHITECTURE.md §二（data/ → code/unity/ 仅生成期）。",
+    "role_justification": "role=generator-input 由 code/tools/build_data_manifest.py 的 GENERATOR_INPUT 声明式登记（不是引用计数推导）——理由见该文件内注释。",
+    "created": "2026-09-12"
+  },
+  "_sources": {
+    "_rule": "本仓硬约束：每个数值常量必须有来源。键为 JSON 路径，值为来源。",
+    "actions[].fade": "design/presentation/动作库规格.md §七（locomotion 0.12 / 动作类 0.10 / Jump 0.06）",
+    "actions[].priority": "design/presentation/动作库规格.md §四·甲（Down(4) > HitReaction(3) > 一次性(2) > Defend(1) > locomotion(0)）",
+    "actions[].category": "design/presentation/动作库规格.md §3.2（受控枚举）",
+    "actions[].level": "design/presentation/动作库规格.md §3.1（L1 落地 / L2 登记）",
+    "one_shot_tail_seconds": "design/presentation/动作库规格.md §七（clip.length + 0.05 s）",
+    "locomotion_blend.walk_speed_mps": "code/unity/Assets/Scripts/ActionLabDriver.cs 的 walkSpeed —— 该值为**演示常量，非正典数值**",
+    "locomotion_blend.run_speed_mps": "code/unity/Assets/Scripts/ActionLabDriver.cs 的 runSpeed —— 同上，演示常量",
+    "locomotion_blend.samples[].threshold": "0 / walk_speed_mps / run_speed_mps 三点（design/presentation/动作库规格.md §四·乙）"
+  },
+  "one_shot_tail_seconds": 0.05,
+  "locomotion_blend": {
+    "type": "1D",
+    "parameter": "speed01",
+    "note": "取代原「Idle/Walk/Run 三离散态 + CrossFade」——硬切不做相位对齐，走跑换挡处有步频相位跳（动作库规格.md §四·乙）。",
+    "walk_speed_mps": 3.0,
+    "run_speed_mps": 6.0,
+    "samples": [
+      { "action": "Idle", "threshold": 0.0 },
+      { "action": "Walk", "threshold": 3.0 },
+      { "action": "Run", "threshold": 6.0 }
+    ]
+  },
+  "actions": [
+    {
+      "id": "Idle",
+      "display_name": "待机",
+      "category": "locomotion",
+      "level": 1,
+      "loop": true,
+      "priority": 0,
+      "fade": 0.12,
+      "clip_asset": "Assets/Animations/Mixamo/Locomotion/Idle.fbx",
+      "asset_status": "pending-download",
+      "notes": "来源整条切 Mixamo（动作库规格.md §五）；候选类目未核验，不做已确定映射的声明。"
+    },
+    {
+      "id": "Walk",
+      "display_name": "走",
+      "category": "locomotion",
+      "level": 1,
+      "loop": true,
+      "priority": 0,
+      "fade": 0.12,
+      "clip_asset": "Assets/Animations/Mixamo/Locomotion/Walk.fbx",
+      "asset_status": "pending-download",
+      "notes": "blend tree 采样点之一，需与 Idle/Run 相位可匹配（同族同源）。"
+    },
+    {
+      "id": "Run",
+      "display_name": "跑",
+      "category": "locomotion",
+      "level": 1,
+      "loop": true,
+      "priority": 0,
+      "fade": 0.12,
+      "clip_asset": "Assets/Animations/Mixamo/Locomotion/Run.fbx",
+      "asset_status": "pending-download",
+      "notes": "同上。"
+    },
+    {
+      "id": "Jump",
+      "display_name": "跳",
+      "category": "locomotion",
+      "level": 1,
+      "loop": false,
+      "priority": 0,
+      "fade": 0.06,
+      "clip_asset": "Assets/Animations/Mixamo/Locomotion/Jump.fbx",
+      "asset_status": "pending-download",
+      "notes": "非循环；空中态播完定格末帧（沿用 KiWalkerLab 口径）。"
+    },
+    {
+      "id": "PhysicalAttack",
+      "display_name": "物攻",
+      "category": "combat",
+      "level": 1,
+      "loop": false,
+      "priority": 2,
+      "fade": 0.10,
+      "clip_asset": "Assets/Animations/Mixamo/Combat/PhysicalAttack.fbx",
+      "asset_status": "present",
+      "source_clip": "Mixamo `Jab Cross`",
+      "notes": "组合拳；单次直拳语义待 Play 目视判（#124 推迟清单）。"
+    },
+    {
+      "id": "MentalAttack",
+      "display_name": "精攻",
+      "category": "combat",
+      "level": 1,
+      "loop": false,
+      "priority": 2,
+      "fade": 0.10,
+      "clip_asset": "Assets/Animations/Mixamo/Combat/MentalAttack.fbx",
+      "asset_status": "present",
+      "source_clip": "Mixamo `Charge`",
+      "notes": "实证为伸手指人 = A 前指宣言形态（#124：文件名陷阱，Charge 语义非冲锋）。"
+    },
+    {
+      "id": "Defend",
+      "display_name": "防御",
+      "category": "combat",
+      "level": 1,
+      "loop": true,
+      "priority": 1,
+      "fade": 0.10,
+      "clip_asset": "Assets/Animations/Mixamo/Combat/Defend.fbx",
+      "asset_status": "present",
+      "source_clip": "Mixamo `Short Left Side Step`",
+      "notes": "实证为循环格挡（#124：文件名陷阱）。M1 运动抑制的持续态。"
+    },
+    {
+      "id": "HitReaction",
+      "display_name": "受击",
+      "category": "reaction",
+      "level": 1,
+      "loop": false,
+      "priority": 3,
+      "fade": 0.10,
+      "clip_asset": "Assets/Animations/Mixamo/Combat/HitReaction.fbx",
+      "asset_status": "present",
+      "source_clip": "Mixamo `Head Hit`",
+      "notes": "单型通用；物/精神差异留反馈动画方向。通用性待 Play 目视判。"
+    },
+    {
+      "id": "Down",
+      "display_name": "倒下",
+      "category": "reaction",
+      "level": 1,
+      "loop": false,
+      "priority": 4,
+      "fade": 0.10,
+      "clip_asset": "Assets/Animations/Mixamo/Combat/Down.fbx",
+      "asset_status": "present",
+      "source_clip": "Mixamo `Dying`",
+      "notes": "终态：停留末帧，须显式 Reset 才回 Idle。"
+    },
+    {
+      "id": "Sit",
+      "display_name": "坐",
+      "category": "interaction",
+      "level": 2,
+      "loop": false,
+      "priority": 0,
+      "fade": 0.10,
+      "clip_asset": null,
+      "clip_candidates": [
+        "Assets/Animations/Mixamo/Sit To Stand.fbx",
+        "Assets/Animations/Mixamo/Stand To Sit.fbx"
+      ],
+      "asset_status": "slot-pending-preview",
+      "notes": "两条坐立 clip 均在仓库，但**运动方向无法从文件内判定**（内部 take 名均为 mixamo.com、Title/Subject 空——2026-09-12 逐文件核验）。槽位必须 Play 预览后回填，不得据文件名预设（动作库规格.md §二 坐立注记）。"
+    },
+    {
+      "id": "Stand",
+      "display_name": "站起",
+      "category": "interaction",
+      "level": 2,
+      "loop": false,
+      "priority": 0,
+      "fade": 0.10,
+      "clip_asset": null,
+      "clip_candidates": [
+        "Assets/Animations/Mixamo/Sit To Stand.fbx",
+        "Assets/Animations/Mixamo/Stand To Sit.fbx"
+      ],
+      "asset_status": "slot-pending-preview",
+      "notes": "同上；与 Sit 互为另一条。"
+    },
+    {
+      "id": "Talk",
+      "display_name": "对话言语",
+      "category": "social",
+      "level": 2,
+      "loop": true,
+      "priority": 0,
+      "fade": 0.12,
+      "clip_asset": "Assets/Animations/Mixamo/Social/Talk.fbx",
+      "asset_status": "pending-download",
+      "notes": "来源从 KI 切 Mixamo（动作库规格.md §五）；候选类目未核验。"
+    }
+  ]
+}
