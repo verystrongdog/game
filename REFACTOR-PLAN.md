@@ -267,6 +267,37 @@ design/decisions/
 
 每阶段独立可交付、可回滚、可单独验收。
 
+### 执行进度总表
+
+| 阶段 | 状态 | 分支/提交 |
+|---|---|---|
+| Phase 0 — 冻结与止血 | ✅ **完成** | `6832a78` |
+| Phase 1 — 正确性修复（12 项） | ✅ **完成** | `dd5516a` `61b2d69` `77750aa` |
+| Phase 2 — 内容归位 | ⬜ 未开始 | — |
+| Phase 3 — 英文改名 | ⬜ 未开始 | — |
+| Phase 4 — 约束拆除 | ⬜ 未开始 | — |
+| Phase 5 — 终验与文档化 | ⬜ 未开始 | — |
+
+分支：`refactor/repo-structure`（从 `main` @ `bce2ee5` 开出）· 备份见 §3.1
+
+### Phase 0/1 实际结果
+
+| 指标 | 重构前 | 现在 |
+|---|---|---|
+| `.git` 体积 | 385 MB（6590 松散对象，`size-pack: 0`） | **160 MB**（1 pack，158.85 MiB） |
+| `validate_cross_refs` 死链 | 142 / 890 = 16.0 % | **0** |
+| 段引用警告 | 2 | **0** |
+| `validate_trash_isolation` | 10 处问题 | **全部通过** |
+| `validate_params` | 37 checks / 26 passed / **7 failed** | 36 checks / 32 passed / **0 failed** |
+| `validate_spatial` | 4 checks / 3 passed / **1 failed** | 4 checks / **4 passed** |
+| 9 个校验器退出码 | 4 个非 0 | **全部 0** |
+| `dotnet test` | — | **353 passed / 0 failed** |
+| NPC 杂兵 HP | 代码 15 ↔ 权威表 20-30 | **25**（对齐权威表中值） |
+| `W_sensory` 模态 | 数据 8 ↔ 注释/文档 6 | **8**（14 处同步） |
+| `term_registry` 计数 | 实测 311 ↔ 声称 310 | **311 / 288 / 23 三方吻合** |
+| `参考/` PDF 重复 | 8 组 | **0**（52 → 44 个） |
+| `垃圾桶/` 活跃引用 | 26 处 | **0** |
+
 ### Phase 0 — 冻结与止血（半天）
 
 | # | 动作 | 依据 |
