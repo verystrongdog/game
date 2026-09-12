@@ -15,6 +15,8 @@
     "actions[].priority": "design/presentation/动作库规格.md §四·甲（Down(4) > HitReaction(3) > 一次性(2) > Defend(1) > locomotion(0)）",
     "actions[].category": "design/presentation/动作库规格.md §3.2（受控枚举）",
     "actions[].level": "design/presentation/动作库规格.md §3.1（L1 落地 / L2 登记）",
+    "actions[].next_state": "design/presentation/动作库规格.md §四·甲（一次性动作播完的续切口径：Sit → SitIdle）",
+    "actions[].derived_from": "design/presentation/动作库规格.md §五（派生件：从 Mixamo 下载件算出、放 Assets/Animations/Derived/）",
     "one_shot_tail_seconds": "design/presentation/动作库规格.md §七（clip.length + 0.05 s）",
     "locomotion_blend.walk_speed_mps": "code/unity/Assets/Scripts/ActionLabDriver.cs 的 walkSpeed —— 该值为**演示常量，非正典数值**",
     "locomotion_blend.run_speed_mps": "code/unity/Assets/Scripts/ActionLabDriver.cs 的 runSpeed —— 同上，演示常量",
@@ -151,33 +153,44 @@
       "id": "Sit",
       "display_name": "坐",
       "category": "interaction",
-      "level": 2,
+      "level": 1,
       "loop": false,
-      "priority": 0,
+      "priority": 2,
       "fade": 0.10,
-      "clip_asset": null,
-      "clip_candidates": [
-        "Assets/Animations/Mixamo/Sit To Stand.fbx",
-        "Assets/Animations/Mixamo/Stand To Sit.fbx"
-      ],
-      "asset_status": "slot-pending-preview",
-      "notes": "两条坐立 clip 均在仓库，但**运动方向无法从文件内判定**（内部 take 名均为 mixamo.com、Title/Subject 空——2026-09-12 逐文件核验）。槽位必须 Play 预览后回填，不得据文件名预设（动作库规格.md §二 坐立注记）。"
+      "clip_asset": "Assets/Animations/Derived/SitDown.anim",
+      "asset_status": "present",
+      "derived_from": {
+        "clip": "Assets/Animations/Mixamo/Sit To Stand.fbx",
+        "transform": "reverse-time",
+        "generator": "code/unity/Assets/Editor/DerivedClipBuilder.cs（菜单 YANTF/动作演示/重建派生动画；VerifyDerived() 逐曲线自检漂移）"
+      },
+      "next_state": "SitIdle",
+      "notes": "坐下段**不是 Mixamo 原件**。原件 `Stand To Sit.fbx` 的坐姿端与 Sitting Idle / Sit To Stand 不同族（实测踝前后差 149 mm、膝角差 17.6°），接上会跳；反转 Sit To Stand 得到同族坐下段（实测接缝 1.8 / 0.0 / 0.4 mm）。**不用负 AnimatorState.speed**——实测非循环状态下 Unity 把时间钳在 [0, length]，状态会卡死在 clip 首帧（见 code/tools/unity-cli/README.md §五）。next_state=SitIdle 保证坐下后「坐得住」而不是弹回站姿。"
+    },
+    {
+      "id": "SitIdle",
+      "display_name": "坐姿待机",
+      "category": "interaction",
+      "level": 1,
+      "loop": true,
+      "priority": 1,
+      "fade": 0.12,
+      "clip_asset": "Assets/Animations/Mixamo/Sitting Idle.fbx",
+      "asset_status": "present",
+      "source_clip": "Mixamo `Sitting Idle`（用户提供，2026-09-12）",
+      "notes": "坐立三段的停留段（循环持续态）。与 Sit To Stand 同坐姿基准（RootT.y 差 0.36 mm、RootT.z 差 0.45 mm），实测接缝 ≤1.9 mm；循环稳定——沿循环 5 点采样髋位变化 <0.3 mm、t=0 与 t=1 读数逐位相同。⚠️ 导入时 Unity 默认给 Generic + NoAvatar，**必须手工设 Rig=Humanoid**（否则挂不上 X Bot，且读不到 RootT 曲线）。"
     },
     {
       "id": "Stand",
       "display_name": "站起",
       "category": "interaction",
-      "level": 2,
+      "level": 1,
       "loop": false,
-      "priority": 0,
+      "priority": 2,
       "fade": 0.10,
-      "clip_asset": null,
-      "clip_candidates": [
-        "Assets/Animations/Mixamo/Sit To Stand.fbx",
-        "Assets/Animations/Mixamo/Stand To Sit.fbx"
-      ],
-      "asset_status": "slot-pending-preview",
-      "notes": "同上；与 Sit 互为另一条。"
+      "clip_asset": "Assets/Animations/Mixamo/Sit To Stand.fbx",
+      "asset_status": "present",
+      "notes": "起身段用 Mixamo 原件（同时是 SitDown 派生件的源）。**末帧已裁**：`lastFrame` 68 → 54（clip 2.2667 → 1.8000 s）——原末 20% 是一段「漂」（t=0.80 躯干 3.8°、足底 +0.0042 → t=1.00 躯干 13.9°、足离地 +0.0175、髋继续升）。裁后末帧躯干 4.0°、足底 +0.0021/+0.0105（接地）。"
     },
     {
       "id": "Talk",
