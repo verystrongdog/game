@@ -34,7 +34,7 @@ VALIDATOR_REGISTRY = {
     "validate_cards.py":           {"status": "deprecated", "json": False},
 }
 
-STATE_FILE = ROOT / ".scratch/.last_check_state.json"
+STATE_FILE = ROOT / ".checks-state.json"   # 运行状态（2026-09-12：原 .scratch/.last_check_state.json，随 .scratch 移出版本控制而迁出）
 
 
 def get_active_validators() -> list[Path]:

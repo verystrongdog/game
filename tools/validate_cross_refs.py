@@ -96,6 +96,8 @@ def extract_links(filepath: Path) -> list[dict]:
         fm_match = re.match(r'^父类:\s*(.+)$', line)
         if fm_match:
             parent_name = fm_match.group(1).strip()
+            # 剥离括号注释——源材料常写「人格障碍（Q0.5 新建父类；原 社会认知障碍 迁出）」
+            parent_name = re.sub(r'[（(][^）)]*[）)]', '', parent_name).strip()
             parent_path = f"实体/疾病目录/_父类/{parent_name}.md"
             links.append({
                 "type": "frontmatter_parent",

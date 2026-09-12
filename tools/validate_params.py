@@ -40,6 +40,13 @@ DEPRECATED_PATH_KEYWORDS = [
     "链路槽位与激活系统",  # 核心机制.md 已声明废弃
 ]
 
+# 上下文域目录——每份文件描述同一模板的不同实例（如每个病种试点各自声明该病对
+# 同名神经递质参数的偏离量），同名参数值本就不同，不参与跨文件 C1 比较。
+# 2026-09-12 仓库重构 Phase 2：迁入 规格/素材/病种试点/ 后暴露（27 份试点互比产生假阳性）。
+CONTEXT_SCOPED_DIRS = [
+    "规格/素材/病种试点/",
+]
+
 # 参数表的列名识别（模糊匹配——不同文档用不同措辞）
 SYMBOL_COLUMNS = {"符号", "symbol", "参数标识", "变量名"}
 VALUE_COLUMNS = {"默认值", "值", "value", "数值", "标准值", "值/定义", "推荐值"}
@@ -126,6 +133,13 @@ def extract_numeric(value_str: str) -> float | None:
     if not value_str:
         return None
     v = value_str.strip()
+
+    # 先剥离括号注释——注释内的 "=" 或公式字样不应否决数值本身
+    # 例："0.04 s（k=25）" 应提取 0.04（2026-09-12 重构 Phase 2 修正）
+    v = re.sub(r'\([^)]*\)', '', v)
+    v = re.sub(r'（[^）]*）', '', v).strip()
+    if not v:
+        return None
 
     # 纯公式表达式——包含函数调用或变量引用
     if re.search(r'\b(floor|sin|cos|exp|sigmoid|log|min|max|sqrt|abs)\b', v, re.IGNORECASE):
@@ -434,6 +448,9 @@ def check_value_consistency(all_params: list[dict], exceptions: dict) -> list[Ch
         by_symbol[p["symbol"]].append(p)
 
     for sym, locs in sorted(by_symbol.items()):
+        # 过滤上下文域目录——每份文件一个实例，同名参数值本就不同
+        locs = [p for p in locs
+                if not any(p["file"].startswith(d) for d in CONTEXT_SCOPED_DIRS)]
         if len(locs) < 2:
             continue
         files = {p["file"] for p in locs}
