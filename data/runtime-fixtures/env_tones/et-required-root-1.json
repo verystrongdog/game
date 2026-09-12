@@ -1,0 +1,15 @@
+{
+  "schema": "env_tones",
+  "version": 1,
+  "modalities": [
+    "visual",
+    "auditory",
+    "somatosensory",
+    "pain",
+    "social_cognition",
+    "language_cognition",
+    "olfactory",
+    "thermoreception"
+  ],
+  "environments": {}
+}

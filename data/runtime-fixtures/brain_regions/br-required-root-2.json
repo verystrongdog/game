@@ -1,0 +1,10 @@
+{
+  "_description": "50 解剖实体 (2026-08-07 Grilling #25/26) | 58 皮层/皮下 + 11 脑干核团 = 69 functional_id | 67 功能剖面 + 2 mirror_of = 69 已剖绘",
+  "_coordinate_system": {
+    "mni": "MNI152 (mm, RAS+): X=右, Y=前, Z=上",
+    "game": "游戏世界空间: X=右, Y=上, Z=前",
+    "bounds": "X∈[-1.1,+1.1], Y∈[0,1.1], Z∈[-0.8,+0.9]",
+    "transform": "game_X=mni_X/90; game_Y=mni_Z/90+0.55; game_Z=mni_Y/126*0.85"
+  },
+  "regions": {}
+}

@@ -1,0 +1,518 @@
+{
+  "_description": "runtime 数据契约的跨语言共用 fixture（P4c）。Python 与 C# 必须给出相同的接受/拒绝判定。",
+  "_generated_by": "code/tools/build_runtime_data_fixtures.py",
+  "_rules": [
+    "每个非法 fixture 与合法版本的差异**恰好一处**（单点变异）——拒绝归因必须确定",
+    "expect=accept → 加载器必须成功；expect=reject → 加载器必须抛错",
+    "Python 侧 runner：code/tools/validate_runtime_fixtures.py",
+    "C# 侧 runner：code/src/YouAreNotTheFish.Core.Tests/Data/RuntimeFixtureTests.cs",
+    "两侧判定不一致 = 跨语言接受/拒绝集合分叉（owner 方案 §9.3 判据）"
+  ],
+  "count": {
+    "accept": 8,
+    "reject": 45
+  },
+  "cases": [
+    {
+      "file": "data/runtime-fixtures/brain_regions/valid.json",
+      "case": "valid",
+      "logical_id": "brain_regions",
+      "expect": "accept",
+      "rule": null,
+      "mutation": "真实文件的副本",
+      "depends_on": []
+    },
+    {
+      "file": "data/runtime-fixtures/signal_types/valid.json",
+      "case": "valid",
+      "logical_id": "signal_types",
+      "expect": "accept",
+      "rule": null,
+      "mutation": "真实文件的副本",
+      "depends_on": []
+    },
+    {
+      "file": "data/runtime-fixtures/tripartite_model/valid.json",
+      "case": "valid",
+      "logical_id": "tripartite_model",
+      "expect": "accept",
+      "rule": null,
+      "mutation": "真实文件的副本",
+      "depends_on": []
+    },
+    {
+      "file": "data/runtime-fixtures/W_sensory/valid.json",
+      "case": "valid",
+      "logical_id": "W_sensory",
+      "expect": "accept",
+      "rule": null,
+      "mutation": "真实文件的副本",
+      "depends_on": []
+    },
+    {
+      "file": "data/runtime-fixtures/situation_primitives/valid.json",
+      "case": "valid",
+      "logical_id": "situation_primitives",
+      "expect": "accept",
+      "rule": null,
+      "mutation": "真实文件的副本",
+      "depends_on": []
+    },
+    {
+      "file": "data/runtime-fixtures/alpha_patterns/valid.json",
+      "case": "valid",
+      "logical_id": "alpha_patterns",
+      "expect": "accept",
+      "rule": null,
+      "mutation": "真实文件的副本",
+      "depends_on": []
+    },
+    {
+      "file": "data/runtime-fixtures/env_tones/valid.json",
+      "case": "valid",
+      "logical_id": "env_tones",
+      "expect": "accept",
+      "rule": null,
+      "mutation": "真实文件的副本",
+      "depends_on": []
+    },
+    {
+      "file": "data/runtime-fixtures/moonlight_landing/valid.json",
+      "case": "valid",
+      "logical_id": "moonlight_landing",
+      "expect": "accept",
+      "rule": null,
+      "mutation": "真实文件的副本",
+      "depends_on": [
+        "brain_regions",
+        "tripartite_model"
+      ]
+    },
+    {
+      "file": "data/runtime-fixtures/brain_regions/br-required-root-1.json",
+      "case": "br-required-root-1",
+      "logical_id": "brain_regions",
+      "expect": "reject",
+      "rule": "BR-required-root",
+      "mutation": "缺 regions 根键 → 加载器必须拒绝（不能当成\"零脑区\"静默通过）",
+      "depends_on": []
+    },
+    {
+      "file": "data/runtime-fixtures/brain_regions/br-required-root-2.json",
+      "case": "br-required-root-2",
+      "logical_id": "brain_regions",
+      "expect": "reject",
+      "rule": "BR-required-root",
+      "mutation": "regions 为空 → 0 个脑区，行序锚全部失效",
+      "depends_on": []
+    },
+    {
+      "file": "data/runtime-fixtures/brain_regions/br-unique-functional-id-1.json",
+      "case": "br-unique-functional-id-1",
+      "logical_id": "brain_regions",
+      "expect": "reject",
+      "rule": "BR-unique-functional-id",
+      "mutation": "functional_id 重复（两个条目同 id）→ 主键不再唯一",
+      "depends_on": []
+    },
+    {
+      "file": "data/runtime-fixtures/brain_regions/br-enum-category-1.json",
+      "case": "br-enum-category-1",
+      "logical_id": "brain_regions",
+      "expect": "reject",
+      "rule": "BR-enum-category",
+      "mutation": "category 非法枚举值",
+      "depends_on": []
+    },
+    {
+      "file": "data/runtime-fixtures/brain_regions/br-key-match-functional-id-1.json",
+      "case": "br-key-match-functional-id-1",
+      "logical_id": "brain_regions",
+      "expect": "reject",
+      "rule": "BR-key-match-functional-id",
+      "mutation": "字典键 ≠ functional_id → 两套主键分叉",
+      "depends_on": []
+    },
+    {
+      "file": "data/runtime-fixtures/brain_regions/br-required-nested-1.json",
+      "case": "br-required-nested-1",
+      "logical_id": "brain_regions",
+      "expect": "reject",
+      "rule": "BR-required-nested",
+      "mutation": "缺 function_profile → 该脑区无功能剖面",
+      "depends_on": []
+    },
+    {
+      "file": "data/runtime-fixtures/signal_types/st-required-root-1.json",
+      "case": "st-required-root-1",
+      "logical_id": "signal_types",
+      "expect": "reject",
+      "rule": "ST-required-root",
+      "mutation": "缺 _categories 根键",
+      "depends_on": []
+    },
+    {
+      "file": "data/runtime-fixtures/signal_types/st-required-root-2.json",
+      "case": "st-required-root-2",
+      "logical_id": "signal_types",
+      "expect": "reject",
+      "rule": "ST-required-root",
+      "mutation": "_categories 为空 → 词表失效（membership 校验失去基准）",
+      "depends_on": []
+    },
+    {
+      "file": "data/runtime-fixtures/signal_types/st-required-nested-1.json",
+      "case": "st-required-nested-1",
+      "logical_id": "signal_types",
+      "expect": "reject",
+      "rule": "ST-required-nested",
+      "mutation": "缺 subtypes",
+      "depends_on": []
+    },
+    {
+      "file": "data/runtime-fixtures/tripartite_model/tp-required-root-1.json",
+      "case": "tp-required-root-1",
+      "logical_id": "tripartite_model",
+      "expect": "reject",
+      "rule": "TP-required-root",
+      "mutation": "缺 graph_nodes 根键",
+      "depends_on": []
+    },
+    {
+      "file": "data/runtime-fixtures/tripartite_model/tp-required-root-2.json",
+      "case": "tp-required-root-2",
+      "logical_id": "tripartite_model",
+      "expect": "reject",
+      "rule": "TP-required-root",
+      "mutation": "graph_nodes 为空 → 51 节点图坍塌，W 矩阵无行序锚",
+      "depends_on": []
+    },
+    {
+      "file": "data/runtime-fixtures/tripartite_model/tp-length-edges-1.json",
+      "case": "tp-length-edges-1",
+      "logical_id": "tripartite_model",
+      "expect": "reject",
+      "rule": "TP-length-edges",
+      "mutation": "corticocortical 为空 → 776 条皮层-皮层边丢失",
+      "depends_on": []
+    },
+    {
+      "file": "data/runtime-fixtures/tripartite_model/tp-length-edges-2.json",
+      "case": "tp-length-edges-2",
+      "logical_id": "tripartite_model",
+      "expect": "reject",
+      "rule": "TP-length-edges",
+      "mutation": "cstc 为空 → 47 条 CSTC 环路边丢失",
+      "depends_on": []
+    },
+    {
+      "file": "data/runtime-fixtures/tripartite_model/tp-node-profile-parity-1.json",
+      "case": "tp-node-profile-parity-1",
+      "logical_id": "tripartite_model",
+      "expect": "reject",
+      "rule": "TP-node-profile-parity",
+      "mutation": "node_profiles 与 graph_nodes 数量不等 → 剖面与图节点失配",
+      "depends_on": []
+    },
+    {
+      "file": "data/runtime-fixtures/W_sensory/ws-required-root-1.json",
+      "case": "ws-required-root-1",
+      "logical_id": "W_sensory",
+      "expect": "reject",
+      "rule": "WS-required-root",
+      "mutation": "缺 rows 根键",
+      "depends_on": []
+    },
+    {
+      "file": "data/runtime-fixtures/W_sensory/ws-row-matrix-parity-1.json",
+      "case": "ws-row-matrix-parity-1",
+      "logical_id": "W_sensory",
+      "expect": "reject",
+      "rule": "WS-row-matrix-parity",
+      "mutation": "matrix_2d 行数 ≠ rows 行数 → 行序锚错位",
+      "depends_on": []
+    },
+    {
+      "file": "data/runtime-fixtures/W_sensory/ws-row-width-1.json",
+      "case": "ws-row-width-1",
+      "logical_id": "W_sensory",
+      "expect": "reject",
+      "rule": "WS-row-width",
+      "mutation": "矩阵某行宽度 ≠ 模态数（8）",
+      "depends_on": []
+    },
+    {
+      "file": "data/runtime-fixtures/W_sensory/ws-length-modalities-1.json",
+      "case": "ws-length-modalities-1",
+      "logical_id": "W_sensory",
+      "expect": "reject",
+      "rule": "WS-length-modalities",
+      "mutation": "modalities 少于 8 → 感官模态列数不符",
+      "depends_on": []
+    },
+    {
+      "file": "data/runtime-fixtures/situation_primitives/sp-required-root-1.json",
+      "case": "sp-required-root-1",
+      "logical_id": "situation_primitives",
+      "expect": "reject",
+      "rule": "SP-required-root",
+      "mutation": "缺 situation_archetypes 根键",
+      "depends_on": []
+    },
+    {
+      "file": "data/runtime-fixtures/situation_primitives/sp-required-root-2.json",
+      "case": "sp-required-root-2",
+      "logical_id": "situation_primitives",
+      "expect": "reject",
+      "rule": "SP-required-root",
+      "mutation": "situation_archetypes 为空 → 情境选择无候选",
+      "depends_on": []
+    },
+    {
+      "file": "data/runtime-fixtures/situation_primitives/sp-required-nested-1.json",
+      "case": "sp-required-nested-1",
+      "logical_id": "situation_primitives",
+      "expect": "reject",
+      "rule": "SP-required-nested",
+      "mutation": "原型缺 key_brain_regions",
+      "depends_on": []
+    },
+    {
+      "file": "data/runtime-fixtures/situation_primitives/sp-enum-level-1.json",
+      "case": "sp-enum-level-1",
+      "logical_id": "situation_primitives",
+      "expect": "reject",
+      "rule": "SP-enum-level",
+      "mutation": "levels_involved 含 L0–L5 之外的值",
+      "depends_on": []
+    },
+    {
+      "file": "data/runtime-fixtures/situation_primitives/sp-network-registry-1.json",
+      "case": "sp-network-registry-1",
+      "logical_id": "situation_primitives",
+      "expect": "reject",
+      "rule": "SP-network-registry",
+      "mutation": "primary_networks 不在 functional_networks 注册表内",
+      "depends_on": []
+    },
+    {
+      "file": "data/runtime-fixtures/alpha_patterns/ap-schema-name-1.json",
+      "case": "ap-schema-name-1",
+      "logical_id": "alpha_patterns",
+      "expect": "reject",
+      "rule": "AP-schema-name",
+      "mutation": "schema 名不匹配（须以 alpha_patterns 开头）",
+      "depends_on": []
+    },
+    {
+      "file": "data/runtime-fixtures/alpha_patterns/ap-schema-major-1.json",
+      "case": "ap-schema-major-1",
+      "logical_id": "alpha_patterns",
+      "expect": "reject",
+      "rule": "AP-schema-major",
+      "mutation": "schema major 不匹配（期望 1）",
+      "depends_on": []
+    },
+    {
+      "file": "data/runtime-fixtures/alpha_patterns/ap-row-present-1.json",
+      "case": "ap-row-present-1",
+      "logical_id": "alpha_patterns",
+      "expect": "reject",
+      "rule": "AP-row-present",
+      "mutation": "消费行 A1 缺失（10 个消费行不可缺）",
+      "depends_on": []
+    },
+    {
+      "file": "data/runtime-fixtures/alpha_patterns/ap-pattern-length-1.json",
+      "case": "ap-pattern-length-1",
+      "logical_id": "alpha_patterns",
+      "expect": "reject",
+      "rule": "AP-pattern-length",
+      "mutation": "pattern 长度 ≠ 8",
+      "depends_on": []
+    },
+    {
+      "file": "data/runtime-fixtures/alpha_patterns/ap-pattern-domain-1.json",
+      "case": "ap-pattern-domain-1",
+      "logical_id": "alpha_patterns",
+      "expect": "reject",
+      "rule": "AP-pattern-domain",
+      "mutation": "pattern 值 ∉ {0,1}",
+      "depends_on": []
+    },
+    {
+      "file": "data/runtime-fixtures/alpha_patterns/ap-malpha-type-1.json",
+      "case": "ap-malpha-type-1",
+      "logical_id": "alpha_patterns",
+      "expect": "reject",
+      "rule": "AP-malpha-type",
+      "mutation": "m_alpha 既非有限数也非 \"m_delta\"",
+      "depends_on": []
+    },
+    {
+      "file": "data/runtime-fixtures/alpha_patterns/ap-malpha-range-1.json",
+      "case": "ap-malpha-range-1",
+      "logical_id": "alpha_patterns",
+      "expect": "reject",
+      "rule": "AP-malpha-range",
+      "mutation": "m_alpha 越界（须 ∈ [0,1] 或 \"m_delta\"）",
+      "depends_on": []
+    },
+    {
+      "file": "data/runtime-fixtures/alpha_patterns/ap-row-count-1.json",
+      "case": "ap-row-count-1",
+      "logical_id": "alpha_patterns",
+      "expect": "reject",
+      "rule": "AP-row-count",
+      "mutation": "events 行数不足 14",
+      "depends_on": []
+    },
+    {
+      "file": "data/runtime-fixtures/env_tones/et-schema-name-1.json",
+      "case": "et-schema-name-1",
+      "logical_id": "env_tones",
+      "expect": "reject",
+      "rule": "ET-schema-name",
+      "mutation": "schema 名不匹配（须以 env_tones 开头）",
+      "depends_on": []
+    },
+    {
+      "file": "data/runtime-fixtures/env_tones/et-schema-major-1.json",
+      "case": "et-schema-major-1",
+      "logical_id": "env_tones",
+      "expect": "reject",
+      "rule": "ET-schema-major",
+      "mutation": "schema major 不匹配（期望 1）",
+      "depends_on": []
+    },
+    {
+      "file": "data/runtime-fixtures/env_tones/et-required-root-1.json",
+      "case": "et-required-root-1",
+      "logical_id": "env_tones",
+      "expect": "reject",
+      "rule": "ET-required-root",
+      "mutation": "environments 为空 → 无环境基调可回退，且禁止回退零向量",
+      "depends_on": []
+    },
+    {
+      "file": "data/runtime-fixtures/env_tones/et-required-nested-1.json",
+      "case": "et-required-nested-1",
+      "logical_id": "env_tones",
+      "expect": "reject",
+      "rule": "ET-required-nested",
+      "mutation": "环境缺 display_name",
+      "depends_on": []
+    },
+    {
+      "file": "data/runtime-fixtures/env_tones/et-required-nested-2.json",
+      "case": "et-required-nested-2",
+      "logical_id": "env_tones",
+      "expect": "reject",
+      "rule": "ET-required-nested",
+      "mutation": "环境缺 situation.primary",
+      "depends_on": []
+    },
+    {
+      "file": "data/runtime-fixtures/env_tones/et-length-alpha-env-1.json",
+      "case": "et-length-alpha-env-1",
+      "logical_id": "env_tones",
+      "expect": "reject",
+      "rule": "ET-length-alpha-env",
+      "mutation": "alpha_env 长度 ≠ 8",
+      "depends_on": []
+    },
+    {
+      "file": "data/runtime-fixtures/env_tones/et-range-alpha-env-1.json",
+      "case": "et-range-alpha-env-1",
+      "logical_id": "env_tones",
+      "expect": "reject",
+      "rule": "ET-range-alpha-env",
+      "mutation": "alpha_env 值 ∉ [0,1]",
+      "depends_on": []
+    },
+    {
+      "file": "data/runtime-fixtures/moonlight_landing/ml-schema-name-1.json",
+      "case": "ml-schema-name-1",
+      "logical_id": "moonlight_landing",
+      "expect": "reject",
+      "rule": "ML-schema-name",
+      "mutation": "schema 名不匹配（须以 moonlight_landing 开头）",
+      "depends_on": [
+        "brain_regions",
+        "tripartite_model"
+      ]
+    },
+    {
+      "file": "data/runtime-fixtures/moonlight_landing/ml-schema-major-1.json",
+      "case": "ml-schema-major-1",
+      "logical_id": "moonlight_landing",
+      "expect": "reject",
+      "rule": "ML-schema-major",
+      "mutation": "schema major 不匹配（期望 1）",
+      "depends_on": [
+        "brain_regions",
+        "tripartite_model"
+      ]
+    },
+    {
+      "file": "data/runtime-fixtures/moonlight_landing/ml-calibration-status-1.json",
+      "case": "ml-calibration-status-1",
+      "logical_id": "moonlight_landing",
+      "expect": "reject",
+      "rule": "ML-calibration-status",
+      "mutation": "calibration_status ∉ {PLACEHOLDER, CALIBRATED}",
+      "depends_on": [
+        "brain_regions",
+        "tripartite_model"
+      ]
+    },
+    {
+      "file": "data/runtime-fixtures/moonlight_landing/ml-required-nested-1.json",
+      "case": "ml-required-nested-1",
+      "logical_id": "moonlight_landing",
+      "expect": "reject",
+      "rule": "ML-required-nested",
+      "mutation": "字段缺失 ≠ PLACEHOLDER（字段缺失必须 load error）",
+      "depends_on": [
+        "brain_regions",
+        "tripartite_model"
+      ]
+    },
+    {
+      "file": "data/runtime-fixtures/moonlight_landing/ml-r-range-1.json",
+      "case": "ml-r-range-1",
+      "logical_id": "moonlight_landing",
+      "expect": "reject",
+      "rule": "ML-r-range",
+      "mutation": "r 非正（须为正数或 \"PLACEHOLDER\"）",
+      "depends_on": [
+        "brain_regions",
+        "tripartite_model"
+      ]
+    },
+    {
+      "file": "data/runtime-fixtures/moonlight_landing/ml-supp-mutual-exclusion-1.json",
+      "case": "ml-supp-mutual-exclusion-1",
+      "logical_id": "moonlight_landing",
+      "expect": "reject",
+      "rule": "ML-supp-mutual-exclusion",
+      "mutation": "supp 互斥违反（primary 与 secondary 落点重叠）",
+      "depends_on": [
+        "brain_regions",
+        "tripartite_model"
+      ]
+    },
+    {
+      "file": "data/runtime-fixtures/moonlight_landing/ml-required-nested-2.json",
+      "case": "ml-required-nested-2",
+      "logical_id": "moonlight_landing",
+      "expect": "reject",
+      "rule": "ML-required-nested",
+      "mutation": "primary 落点数 ≠ 4",
+      "depends_on": [
+        "brain_regions",
+        "tripartite_model"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "schema": "moonlight_landing",
+  "version": 1,
+  "calibration_status": "PLACEHOLDER",
+  "calibration_version": 0,
+  "semantics": [
+    {
+      "id": "s_core",
+      "primary": [
+        "Amygdala",
+        "HippocampusCA1",
+        "HippocampusCA3",
+        "Parahippocampal"
+      ],
+      "secondary": [
+        "AnteriorCingulateCortex",
+        "RostralAnteriorCingulateCortex",
+        "AnteriorCingulateCortexDorsal",
+        "Insula",
+        "LateralOrbitofrontal",
+        "PosteriorCingulate",
+        "IsthmusCingulate",
+        "Amygdala"
+      ],
+      "r": "PLACEHOLDER",
+      "alpha_s": "PLACEHOLDER"
+    }
+  ]
+}

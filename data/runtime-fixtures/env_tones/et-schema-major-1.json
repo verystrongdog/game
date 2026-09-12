@@ -1,0 +1,64 @@
+{
+  "schema": "env_tones",
+  "version": 2,
+  "modalities": [
+    "visual",
+    "auditory",
+    "somatosensory",
+    "pain",
+    "social_cognition",
+    "language_cognition",
+    "olfactory",
+    "thermoreception"
+  ],
+  "environments": {
+    "ward": {
+      "display_name": "病房",
+      "alpha_env": [
+        0.3,
+        0.2,
+        0.2,
+        0.0,
+        0.1,
+        0.0,
+        0.4,
+        0.2
+      ],
+      "situation": {
+        "primary": "investigation_search"
+      }
+    },
+    "corridor": {
+      "display_name": "走廊",
+      "alpha_env": [
+        0.4,
+        0.3,
+        0.1,
+        0.0,
+        0.1,
+        0.0,
+        0.2,
+        0.1
+      ],
+      "situation": {
+        "primary": "combat_engagement"
+      }
+    },
+    "nurse_station": {
+      "display_name": "护士站",
+      "alpha_env": [
+        0.6,
+        0.4,
+        0.1,
+        0.0,
+        0.3,
+        0.2,
+        0.3,
+        0.2
+      ],
+      "situation": {
+        "primary": "authority_conflict"
+      }
+    }
+  }
+}

@@ -1,0 +1,212 @@
+{
+  "schema": "alpha_patterns",
+  "version": 1,
+  "modalities": [
+    "visual",
+    "auditory",
+    "somatosensory",
+    "pain",
+    "social_cognition",
+    "language_cognition",
+    "olfactory",
+    "thermoreception"
+  ],
+  "events": {
+    "A1": {
+      "trigger": "物理攻击命中",
+      "pattern": [
+        2,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "m_alpha": 1.0
+    },
+    "A2": {
+      "trigger": "被格挡/闪避",
+      "pattern": [
+        1,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "m_alpha": 1.0
+    },
+    "A3": {
+      "trigger": "物理暴击",
+      "pattern": [
+        1,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "m_alpha": 1.0
+    },
+    "A4": {
+      "trigger": "精神攻击执行",
+      "pattern": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0
+      ],
+      "m_alpha": 1.0
+    },
+    "A5": {
+      "trigger": "防御成功",
+      "pattern": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "m_alpha": 1.0
+    },
+    "A6": {
+      "trigger": "技能使用成功",
+      "pattern": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "m_alpha": 0.0
+    },
+    "A7": {
+      "trigger": "逃跑",
+      "pattern": [
+        1,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "m_alpha": 1.0
+    },
+    "B1": {
+      "trigger": "被物理击中",
+      "pattern": [
+        1,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "m_alpha": "m_delta"
+    },
+    "B2": {
+      "trigger": "闪避/格挡",
+      "pattern": [
+        1,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "m_alpha": "m_delta"
+    },
+    "B3": {
+      "trigger": "被暴击",
+      "pattern": [
+        1,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "m_alpha": "m_delta"
+    },
+    "B4": {
+      "trigger": "被精神攻击",
+      "pattern": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0
+      ],
+      "m_alpha": "m_delta"
+    },
+    "C1": {
+      "trigger": "SAN<30%",
+      "pattern": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "m_alpha": 1.0
+    },
+    "D1": {
+      "trigger": "队友倒下",
+      "pattern": [
+        1,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0
+      ],
+      "m_alpha": 1.0
+    },
+    "D2": {
+      "trigger": "敌人倒下",
+      "pattern": [
+        1,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0
+      ],
+      "m_alpha": 1.0
+    }
+  }
+}

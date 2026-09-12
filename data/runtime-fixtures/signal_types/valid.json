@@ -1,0 +1,220 @@
+{
+  "_description": "signal_type 受控词表 — 所有 function_profile 的 input_types/output_types 必须从此词表取值。Grilling #26 (2026-08-07) 创建。",
+  "_usage": "build_function_labels.py 使用此词表做 output_types ∩ input_types 精确匹配，推导连接语义。build_tripartite_model.py 读取此词表验证 profile 信号类型合法性。",
+  "_categories": {
+    "excitation": {
+      "definition": "兴奋性信息传递信号——前馈驱动，内容载荷，对应 gamma 频段 (Fries 2015 CTC)",
+      "source": "突触传递基本二分 (Albin, Young & Penney 1989)",
+      "subtypes": {
+        "motor_command": {
+          "definition": "运动指令——最终皮层运动输出，编码动作参数",
+          "anatomical_carriers": [
+            "Precentral",
+            "Paracentral",
+            "Putamen"
+          ],
+          "oscillatory_band": "gamma"
+        },
+        "sensory_feature": {
+          "definition": "感觉特征——原始或处理后的感觉信息（视觉/听觉/触觉）",
+          "anatomical_carriers": [
+            "Pericalcarine",
+            "TransverseTemporal",
+            "Postcentral",
+            "Cuneus",
+            "LateralOccipital",
+            "Fusiform"
+          ],
+          "oscillatory_band": "gamma"
+        },
+        "cognitive_goal": {
+          "definition": "认知目标/策略——前额决策输出、行动计划、规则表征",
+          "anatomical_carriers": [
+            "RostralMiddleFrontalDLPFC",
+            "SuperiorFrontalMPFC",
+            "CaudalMiddleFrontal",
+            "FrontalPole",
+            "AnteriorCingulateCortex"
+          ],
+          "oscillatory_band": "gamma"
+        },
+        "emotional_salience": {
+          "definition": "情绪突显/威胁标记——刺激的情感价值标签（正/负/威胁）",
+          "anatomical_carriers": [
+            "Amygdala",
+            "Insula",
+            "MedialOrbitalPrefrontalVMPFC"
+          ],
+          "oscillatory_band": "theta"
+        },
+        "memory_trace": {
+          "definition": "记忆痕迹——已编码和巩固的信息模式（情节/语义/空间）",
+          "anatomical_carriers": [
+            "HippocampusCA1",
+            "HippocampusCA3",
+            "Entorhinal",
+            "Parahippocampal"
+          ],
+          "oscillatory_band": "theta"
+        },
+        "social_intention": {
+          "definition": "社会意图/心理化——他人心理状态推断、语言含义",
+          "anatomical_carriers": [
+            "SupramarginalTPJ",
+            "ParsOpercularis",
+            "SuperiorTemporalWernicke",
+            "MedialOrbitalPrefrontalVMPFC"
+          ],
+          "oscillatory_band": "gamma"
+        }
+      }
+    },
+    "modulation": {
+      "definition": "神经调质信号——改变增益和信噪比，不传输内容本身。对应 theta/alpha 频段",
+      "source": "神经调质分类 (Marder 2012; Kupfermann 1979)",
+      "subtypes": {
+        "arousal_NE": {
+          "definition": "Norepinephrine 唤醒/警觉调制——全局皮层兴奋性提升，增强信噪比",
+          "anatomical_carriers": [
+            "LocusCoeruleus",
+            "LocusCoeruleusRight"
+          ],
+          "neurotransmitter": "norepinephrine",
+          "projection_pattern": "diffuse_broadcast",
+          "target_scope": "all_cortex_plus_L1_subcortical"
+        },
+        "reward_DA": {
+          "definition": "Dopamine 奖赏预测误差——VTA→NAcc/PFC，编码奖赏期望与实际偏差",
+          "anatomical_carriers": [
+            "VentralTegmentalArea"
+          ],
+          "neurotransmitter": "dopamine",
+          "projection_pattern": "targeted_broadcast",
+          "target_scope": "striatum_NAcc_Caudate_Putamen_plus_PFC"
+        },
+        "motor_DA": {
+          "definition": "Dopamine 运动启动/活力调制——SNc→Putamen/Caudate，D1/D2受体双向调控",
+          "anatomical_carriers": [
+            "SubstantiaNigraParsCompacta",
+            "SubstantiaNigraParsCompactaRight"
+          ],
+          "neurotransmitter": "dopamine",
+          "projection_pattern": "targeted_broadcast",
+          "target_scope": "striatum_Putamen_Caudate"
+        },
+        "mood_5HT": {
+          "definition": "Serotonin 情绪/冲动调制——中缝核→全皮层，情绪稳定性、延迟满足",
+          "anatomical_carriers": [
+            "DorsalRapheNucleus",
+            "MedianRapheNucleus"
+          ],
+          "neurotransmitter": "serotonin",
+          "projection_pattern": "diffuse_broadcast",
+          "target_scope": "all_cortex"
+        },
+        "pain_opioid": {
+          "definition": "Endogenous opioid 疼痛抑制/镇痛——PAG下行疼痛调制通路",
+          "anatomical_carriers": [
+            "PeriaqueductalGray"
+          ],
+          "neurotransmitter": "endogenous_opioid",
+          "projection_pattern": "descending_pathway",
+          "target_scope": "spinal_cord_brainstem"
+        }
+      }
+    },
+    "gating": {
+      "definition": "门控信号——决定动作释放/抑制/急停，不编码内容。对应 beta 频段",
+      "source": "基底节去抑制门控模型 (Albin, Young & Penney 1989; Chevalier & Deniau 1990)",
+      "subtypes": {
+        "go_direct": {
+          "definition": "GO 信号——D1 中型多棘神经元直接通路，纹状体抑制苍白球→丘脑去抑制→动作释放",
+          "anatomical_carriers": [
+            "Putamen",
+            "Caudate",
+            "StriatumMatrix",
+            "AccumbensShell",
+            "AccumbensCore",
+            "NucleusAccumbens",
+            "VentralStriatum"
+          ],
+          "pathway": "direct_D1",
+          "effect": "disinhibition_cascade"
+        },
+        "nogo_indirect": {
+          "definition": "NO-GO 信号——D2 中型多棘神经元间接通路，纹状体→GPe→STN→GPi/SNr 抑制增强→丘脑被钳制",
+          "anatomical_carriers": [
+            "Putamen",
+            "Caudate",
+            "StriatumMatrix",
+            "AccumbensShell",
+            "AccumbensCore",
+            "NucleusAccumbens",
+            "VentralStriatum"
+          ],
+          "pathway": "indirect_D2",
+          "effect": "inhibition_reinforcement"
+        },
+        "stop_hyperdirect": {
+          "definition": "STOP 信号——STN 超直接通路，皮层→STN→GPi/SNr 快速兴奋→全局急停（Nambu 2015）",
+          "anatomical_carriers": [
+            "SubthalamicNucleus"
+          ],
+          "pathway": "hyperdirect_STN",
+          "effect": "global_emergency_stop"
+        },
+        "disinhibition_thalamic": {
+          "definition": "丘脑去抑制释放——苍白球输出，终止对丘脑的 tonic GABA 抑制→丘脑兴奋皮层",
+          "anatomical_carriers": [
+            "Pallidum"
+          ],
+          "pathway": "pallidal_output",
+          "effect": "thalamic_release"
+        }
+      }
+    },
+    "plasticity": {
+      "definition": "可塑性信号——改变连接权重，不直接传输内容或门控。跨频段",
+      "source": "突触可塑性 (Bliss & Lømo 1973; Bear & Malenka 1994)",
+      "subtypes": {
+        "ltp_consolidation": {
+          "definition": "长时程增强——NMDA 依赖的突触强化，记忆巩固和技能学习的细胞基础",
+          "anatomical_carriers": [
+            "HippocampusCA1",
+            "Amygdala",
+            "VentralTegmentalArea"
+          ],
+          "mechanism": "NMDA_receptor_LTP"
+        },
+        "ltd_depression": {
+          "definition": "长时程抑制——突触减弱，冗余连接修剪和习惯化的细胞基础",
+          "anatomical_carriers": [
+            "SubstantiaNigraParsCompacta",
+            "SubstantiaNigraParsCompactaRight",
+            "StriatumMatrix",
+            "CerebellumCortex"
+          ],
+          "mechanism": "mGluR_LTD"
+        },
+        "context_code": {
+          "definition": "情境编码/模式分离——将相似输入映射到不同的神经表征，防止记忆干扰",
+          "anatomical_carriers": [
+            "HippocampusCA3",
+            "HippocampusCA1",
+            "Entorhinal",
+            "Amygdala"
+          ],
+          "mechanism": "pattern_separation_completion"
+        }
+      }
+    }
+  },
+  "_validation_rules": {
+    "R1": "所有 input_types 和 output_types 中的值必须匹配 'category/subtype' 格式",
+    "R2": "category 必须是 excitation/modulation/gating/plasticity 之一",
+    "R3": "subtype 必须在对应 category 的 subtypes 中定义",
+    "R4": "build_tripartite_model.py 应在此词表新增/修改 subtype 时自检 profile 合法性"
+  },
+  "_created": "2026-08-07",
+  "_grilling": "Grilling #26 (GitHub #27) — 三体神经模型"
+}

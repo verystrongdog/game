@@ -1,0 +1,12 @@
+{
+  "_description": "signal_type 受控词表 — 所有 function_profile 的 input_types/output_types 必须从此词表取值。Grilling #26 (2026-08-07) 创建。",
+  "_usage": "build_function_labels.py 使用此词表做 output_types ∩ input_types 精确匹配，推导连接语义。build_tripartite_model.py 读取此词表验证 profile 信号类型合法性。",
+  "_validation_rules": {
+    "R1": "所有 input_types 和 output_types 中的值必须匹配 'category/subtype' 格式",
+    "R2": "category 必须是 excitation/modulation/gating/plasticity 之一",
+    "R3": "subtype 必须在对应 category 的 subtypes 中定义",
+    "R4": "build_tripartite_model.py 应在此词表新增/修改 subtype 时自检 profile 合法性"
+  },
+  "_created": "2026-08-07",
+  "_grilling": "Grilling #26 (GitHub #27) — 三体神经模型"
+}

@@ -13,13 +13,14 @@
     "`--check` 校验文件集与属性合法性，**不重新推导属性**（refs 计数会随任意新增 .md 漂移）；属性更新是人工动作 `--refresh`"
   ],
   "_stats": {
-    "total": 46,
+    "total": 100,
     "runtime": 8,
     "generator_input": 1,
     "shipping_true": 8,
     "deprecated": 17,
     "archived": 0,
     "by_lifecycle_role": {
+      "active/evidence": 54,
       "active/generator-input": 1,
       "active/reference": 20,
       "active/runtime": 8,
@@ -256,7 +257,7 @@
       "runtime_consumers": [],
       "provenance": "本仓作者维护",
       "refs": {
-        "active_docs": 2,
+        "active_docs": 3,
         "deprecated_docs": 0
       }
     },
@@ -875,6 +876,870 @@
         "deprecated_docs": 2
       },
       "note": "医院建模参考的 provenance 记录（来源 PDF 路径为 Windows 绝对路径，跨机不可复现）。"
+    },
+    "data/runtime-fixtures/W_sensory/valid.json": {
+      "logical_id": "valid",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 1,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/W_sensory/ws-length-modalities-1.json": {
+      "logical_id": "ws-length-modalities-1",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/W_sensory/ws-required-root-1.json": {
+      "logical_id": "ws-required-root-1",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/W_sensory/ws-row-matrix-parity-1.json": {
+      "logical_id": "ws-row-matrix-parity-1",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/W_sensory/ws-row-width-1.json": {
+      "logical_id": "ws-row-width-1",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/alpha_patterns/ap-malpha-range-1.json": {
+      "logical_id": "ap-malpha-range-1",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/alpha_patterns/ap-malpha-type-1.json": {
+      "logical_id": "ap-malpha-type-1",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/alpha_patterns/ap-pattern-domain-1.json": {
+      "logical_id": "ap-pattern-domain-1",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/alpha_patterns/ap-pattern-length-1.json": {
+      "logical_id": "ap-pattern-length-1",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/alpha_patterns/ap-row-count-1.json": {
+      "logical_id": "ap-row-count-1",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/alpha_patterns/ap-row-present-1.json": {
+      "logical_id": "ap-row-present-1",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/alpha_patterns/ap-schema-major-1.json": {
+      "logical_id": "ap-schema-major-1",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/alpha_patterns/ap-schema-name-1.json": {
+      "logical_id": "ap-schema-name-1",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/alpha_patterns/valid.json": {
+      "logical_id": "valid",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 1,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/brain_regions/br-enum-category-1.json": {
+      "logical_id": "br-enum-category-1",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/brain_regions/br-key-match-functional-id-1.json": {
+      "logical_id": "br-key-match-functional-id-1",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/brain_regions/br-required-nested-1.json": {
+      "logical_id": "br-required-nested-1",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/brain_regions/br-required-root-1.json": {
+      "logical_id": "br-required-root-1",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/brain_regions/br-required-root-2.json": {
+      "logical_id": "br-required-root-2",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/brain_regions/br-unique-functional-id-1.json": {
+      "logical_id": "br-unique-functional-id-1",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/brain_regions/valid.json": {
+      "logical_id": "valid",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 1,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/env_tones/et-length-alpha-env-1.json": {
+      "logical_id": "et-length-alpha-env-1",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/env_tones/et-range-alpha-env-1.json": {
+      "logical_id": "et-range-alpha-env-1",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/env_tones/et-required-nested-1.json": {
+      "logical_id": "et-required-nested-1",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/env_tones/et-required-nested-2.json": {
+      "logical_id": "et-required-nested-2",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/env_tones/et-required-root-1.json": {
+      "logical_id": "et-required-root-1",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/env_tones/et-schema-major-1.json": {
+      "logical_id": "et-schema-major-1",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/env_tones/et-schema-name-1.json": {
+      "logical_id": "et-schema-name-1",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/env_tones/valid.json": {
+      "logical_id": "valid",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 1,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/index.json": {
+      "logical_id": "index",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 1,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/moonlight_landing/ml-calibration-status-1.json": {
+      "logical_id": "ml-calibration-status-1",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/moonlight_landing/ml-r-range-1.json": {
+      "logical_id": "ml-r-range-1",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/moonlight_landing/ml-required-nested-1.json": {
+      "logical_id": "ml-required-nested-1",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/moonlight_landing/ml-required-nested-2.json": {
+      "logical_id": "ml-required-nested-2",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/moonlight_landing/ml-schema-major-1.json": {
+      "logical_id": "ml-schema-major-1",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/moonlight_landing/ml-schema-name-1.json": {
+      "logical_id": "ml-schema-name-1",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/moonlight_landing/ml-supp-mutual-exclusion-1.json": {
+      "logical_id": "ml-supp-mutual-exclusion-1",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/moonlight_landing/valid.json": {
+      "logical_id": "valid",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 1,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/signal_types/st-required-nested-1.json": {
+      "logical_id": "st-required-nested-1",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/signal_types/st-required-root-1.json": {
+      "logical_id": "st-required-root-1",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/signal_types/st-required-root-2.json": {
+      "logical_id": "st-required-root-2",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/signal_types/valid.json": {
+      "logical_id": "valid",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 1,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/situation_primitives/sp-enum-level-1.json": {
+      "logical_id": "sp-enum-level-1",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/situation_primitives/sp-network-registry-1.json": {
+      "logical_id": "sp-network-registry-1",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/situation_primitives/sp-required-nested-1.json": {
+      "logical_id": "sp-required-nested-1",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/situation_primitives/sp-required-root-1.json": {
+      "logical_id": "sp-required-root-1",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/situation_primitives/sp-required-root-2.json": {
+      "logical_id": "sp-required-root-2",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/situation_primitives/valid.json": {
+      "logical_id": "valid",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 1,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/tripartite_model/tp-length-edges-1.json": {
+      "logical_id": "tp-length-edges-1",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/tripartite_model/tp-length-edges-2.json": {
+      "logical_id": "tp-length-edges-2",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/tripartite_model/tp-node-profile-parity-1.json": {
+      "logical_id": "tp-node-profile-parity-1",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/tripartite_model/tp-required-root-1.json": {
+      "logical_id": "tp-required-root-1",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/tripartite_model/tp-required-root-2.json": {
+      "logical_id": "tp-required-root-2",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 0,
+        "deprecated_docs": 0
+      }
+    },
+    "data/runtime-fixtures/tripartite_model/valid.json": {
+      "logical_id": "valid",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "evidence",
+      "shipping": false,
+      "owner": "归档（无活跃消费方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 1,
+        "deprecated_docs": 0
+      }
     },
     "data/signal_types.json": {
       "logical_id": "signal_types",
