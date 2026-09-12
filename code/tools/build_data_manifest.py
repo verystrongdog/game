@@ -202,23 +202,59 @@ def build():
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--check', action='store_true',
-                    help='校验已提交的 manifest 与磁盘实测一致，不写文件')
+                    help='校验契约：文件集与磁盘一致 + 属性合法（不重新推导属性）')
+    ap.add_argument('--refresh', action='store_true',
+                    help='重新从证据推导属性并覆盖 manifest（当分类需要更新时的人工动作）')
     args = ap.parse_args()
     m = build()
     path = os.path.join(ROOT, MANIFEST)
     if args.check:
+        # manifest 是**声明式契约**，不是生成物。
+        #
+        # 只校验三件事（2026-09-12 定案）：
+        #   ① 文件集与磁盘一致（无遗漏 / 无幽灵条目）
+        #   ② 属性值合法（枚举合法 + shipping 蕴含 role=runtime）
+        #   ③ 每个受控数据文件都被登记
+        #
+        # ★ 刻意**不**重新推导属性：refs 计数会因任意新增 .md 提及该文件名而漂移
+        #   （实测：新增一份证据文档即改变两个数据文件的 active_docs），
+        #   若 --check 比对推导值，写任何文档都要重生成 manifest —— 契约不可用。
+        #   属性更新是人工动作：--refresh。
         if not os.path.exists(path):
             print(f'❌ {MANIFEST} 不存在'); return 1
         old = json.load(open(path, encoding='utf-8'))
-        if old.get('files') != m['files'] or old.get('_stats') != m['_stats']:
-            print('❌ manifest 与磁盘实测不一致——请重跑 build_data_manifest.py')
-            of, nf = old.get('files', {}), m['files']
-            for k in sorted(set(of) | set(nf)):
-                if of.get(k) != nf.get(k):
-                    print(f'  差异: {k}')
+        of = old.get('files', {})
+        disk = set(tracked_data_files())
+        declared = set(of)
+        errs = []
+        for f in sorted(disk - declared):
+            errs.append(f'磁盘有 {f} 但 manifest 未登记')
+        for f in sorted(declared - disk):
+            errs.append(f'manifest 登记了 {f} 但磁盘没有（幽灵条目）')
+        for f, v in of.items():
+            if v.get('origin') not in ('authored', 'generated', 'external'):
+                errs.append(f'{f}: origin 非法 {v.get("origin")!r}')
+            if v.get('lifecycle') not in ('active', 'deprecated', 'archived'):
+                errs.append(f'{f}: lifecycle 非法 {v.get("lifecycle")!r}')
+            if v.get('role') not in ('runtime', 'generator-input', 'reference', 'evidence'):
+                errs.append(f'{f}: role 非法 {v.get("role")!r}')
+            if v.get('shipping') and v.get('role') != 'runtime':
+                errs.append(f'{f}: shipping=true 但 role={v.get("role")}')
+        if errs:
+            print(f'❌ 数据契约有 {len(errs)} 项问题：')
+            for e in errs[:30]:
+                print('   ' + e)
             return 1
-        print(f'✅ manifest 与实测一致（{m["_stats"]["total"]} 个文件）')
+        print(f'✅ 数据契约成立（{len(declared)} 个文件登记完整 · 属性合法）')
+        print('   注：属性更新为人工动作（--refresh），--check 不重新推导')
         return 0
+
+    if args.refresh or not os.path.exists(path):
+        pass          # 落到下方生成逻辑
+    else:
+        print(f'{MANIFEST} 已存在；属性更新请显式用 --refresh（避免误覆盖已审定的分类）')
+        return 0
+
     json.dump(m, open(path, 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
     print(f'✓ 已生成 {MANIFEST}')
     print(json.dumps(m['_stats'], ensure_ascii=False, indent=1))

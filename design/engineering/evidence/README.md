@@ -20,7 +20,8 @@
 
 | 文件 | 阶段 | 结论 | 未闭合项 |
 |---|---|---|---|
-| [P4a-2026-09-12.md](P4a-2026-09-12.md) | P4a 环境锁定与最小 CI | 9/9 校验器 · 353 测试 · 干净 restore 可复现 · `new_finding` 空 | CI 未在 GitHub 真跑 · 回滚演练未实测 · Unity `NOT_AVAILABLE` |
+| [P4a-2026-09-12.md](P4a-2026-09-12.md) | P4a 环境锁定与最小 CI | CI 首跑失败→三轮修复→四连 success · 抓出 6 类「本地通过、干净检出失败」缺陷 · `new_finding` 空 | 回滚演练未实测 · Unity `NOT_AVAILABLE` |
+| [P4c-2026-09-12.md](P4c-2026-09-12.md) | P4c 数据契约 | 47 文件 manifest · runtime allowlist 双向校验 · 确定性成立 · 10/10 校验器 | schema 未建 · skills-lock 误放 · archived 未清理 · Unity 阻塞消费闭合 |
 
 ---
 *创建: 2026-09-12 | 更新: 2026-09-12*
