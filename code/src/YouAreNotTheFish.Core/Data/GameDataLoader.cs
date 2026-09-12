@@ -14,37 +14,134 @@ public static class GameDataLoader
         ReadCommentHandling = JsonCommentHandling.Skip,
     };
 
-    /// <summary>从脑区 JSON 文件加载 69 个脑区。</summary>
+    /// <summary>
+    /// 从脑区 JSON 文件加载 69 个脑区。
+    /// 加载期 fail-fast（JsonException，P4c 结构契约 BR-*）：
+    /// regions 缺失/为空 / 字典键 ≠ functional_id / functional_id 重复 /
+    /// category 非法枚举（由 SnakeCaseEnumConverter 抛）/ 条目缺 function_profile。
+    /// 这些此前静默通过——空 regions 会被当成"零脑区"一路走下去，直到行序锚错位才炸。
+    /// </summary>
     public static BrainRegionsData LoadBrainRegions(string jsonPath)
     {
         var json = File.ReadAllText(jsonPath);
-        return JsonSerializer.Deserialize<BrainRegionsData>(json, Options)
-               ?? throw new InvalidOperationException($"Failed to deserialize {jsonPath}");
+        var data = JsonSerializer.Deserialize<BrainRegionsData>(json, Options)
+                   ?? throw new InvalidOperationException($"Failed to deserialize {jsonPath}");
+
+        if (data.Regions.Count == 0)
+            throw new JsonException("brain_regions regions 缺失或为空");
+
+        // ★ 必需嵌套键必须**查原始 JSON** 是否存在，不能判 `r.FunctionProfile is null`：
+        //   record 的 init 默认值是 `new()`，字段缺失时属性是空对象而**不是 null**
+        //   （2026-09-12，fixture `BR-required-nested-1` 抓到——该用例曾被 C# 静默接受）。
+        using var raw = JsonDocument.Parse(json);
+        var seen = new HashSet<string>(StringComparer.Ordinal);
+        foreach (var (key, r) in data.Regions)
+        {
+            if (!string.Equals(r.FunctionalId, key, StringComparison.Ordinal))
+                throw new JsonException(
+                    $"brain_regions 键与 functional_id 不一致: \"{key}\" vs \"{r.FunctionalId}\"");
+            if (!seen.Add(r.FunctionalId))
+                throw new JsonException($"brain_regions functional_id 重复: \"{r.FunctionalId}\"");
+            if (!raw.RootElement.GetProperty("regions").GetProperty(key)
+                    .TryGetProperty("function_profile", out _))
+                throw new JsonException($"brain_regions \"{key}\" 缺 function_profile");
+        }
+        return data;
     }
 
-    /// <summary>从三体模型 JSON 文件加载 51 节点 + 4 种边数据。</summary>
+    /// <summary>
+    /// 从三体模型 JSON 文件加载 51 节点 + 4 种边数据。
+    /// 加载期 fail-fast（JsonException，P4c 结构契约 TP-*）：
+    /// graph_nodes / node_profiles 缺失或为空 / 两者数量不等 /
+    /// 四种通信原语任一为空（皮层-皮层 / 脑干广播 / CSTC / 特权通路）。
+    /// </summary>
     public static TripartiteModel LoadTripartiteModel(string jsonPath)
     {
         var json = File.ReadAllText(jsonPath);
-        return JsonSerializer.Deserialize<TripartiteModel>(json, Options)
-               ?? throw new InvalidOperationException($"Failed to deserialize {jsonPath}");
+        var data = JsonSerializer.Deserialize<TripartiteModel>(json, Options)
+                   ?? throw new InvalidOperationException($"Failed to deserialize {jsonPath}");
+
+        if (data.GraphNodes.Count == 0)
+            throw new JsonException("tripartite_model graph_nodes 缺失或为空");
+        if (data.NodeProfiles.Count != data.GraphNodes.Count)
+            throw new JsonException(
+                $"tripartite_model graph_nodes={data.GraphNodes.Count} ≠ node_profiles={data.NodeProfiles.Count}");
+        if (data.Corticocortical.Count == 0)
+            throw new JsonException("tripartite_model corticocortical 为空");
+        if (data.Brainstem.Count == 0)
+            throw new JsonException("tripartite_model brainstem 为空");
+        if (data.Cstc.Count == 0)
+            throw new JsonException("tripartite_model cstc 为空");
+        if (data.PrivilegedPathways.Count == 0)
+            throw new JsonException("tripartite_model privileged_pathways 为空");
+        return data;
     }
 
-    /// <summary>从 W_sensory.json 加载 69×8 感觉模态矩阵，并按 Rows.Keys 顺序填充 RegionIds。</summary>
+    /// <summary>
+    /// 从 W_sensory.json 加载 69×8 感觉模态矩阵，并按 Rows.Keys 顺序填充 RegionIds。
+    /// 加载期 fail-fast（JsonException，P4c 结构契约 WS-*）：
+    /// rows / matrix_2d / modalities 缺失或为空 / modalities 数 ≠ 8 /
+    /// 矩阵行数 ≠ rows 行数 / 任一行宽度 ≠ 模态数。
+    /// 行序锚（spec §五 约束2）靠这三者的形状一致成立——形状不符则行序静默错位。
+    /// </summary>
     public static WsensoryMatrix LoadWsensory(string jsonPath)
     {
         var json = File.ReadAllText(jsonPath);
         var data = JsonSerializer.Deserialize<WsensoryMatrix>(json, Options)
                    ?? throw new InvalidOperationException($"Failed to deserialize {jsonPath}");
-        return data with { RegionIds = data.Rows.Keys.ToArray() };
+        data = data with { RegionIds = data.Rows.Keys.ToArray() };
+
+        if (data.Rows.Count == 0)
+            throw new JsonException("W_sensory rows 缺失或为空");
+        if (data.Modalities.Length != 8)
+            throw new JsonException($"W_sensory modalities={data.Modalities.Length} ≠ 8");
+        if (data.Matrix.Length != data.Rows.Count)
+            throw new JsonException(
+                $"W_sensory matrix_2d 行数={data.Matrix.Length} ≠ rows 行数={data.Rows.Count}");
+        for (int i = 0; i < data.Matrix.Length; i++)
+            if (data.Matrix[i].Length != data.Modalities.Length)
+                throw new JsonException(
+                    $"W_sensory 第 {i} 行宽度={data.Matrix[i].Length} ≠ 模态数 {data.Modalities.Length}");
+        return data;
     }
 
-    /// <summary>从 situation_primitives.json 加载 27 个情境原型。</summary>
+    /// <summary>
+    /// 从 situation_primitives.json 加载 27 个情境原型。
+    /// 加载期 fail-fast（JsonException，P4c 结构契约 SP-*）：
+    /// situation_archetypes 缺失或为空 / 原型缺 name 或 key_brain_regions /
+    /// levels_involved 含 L0–L5 之外的值 / primary_networks 不在 functional_networks 注册表内。
+    /// </summary>
     public static SituationPrimitives LoadSituationPrimitives(string jsonPath)
     {
         var json = File.ReadAllText(jsonPath);
-        return JsonSerializer.Deserialize<SituationPrimitives>(json, Options)
-               ?? throw new InvalidOperationException($"Failed to deserialize {jsonPath}");
+        var data = JsonSerializer.Deserialize<SituationPrimitives>(json, Options)
+                   ?? throw new InvalidOperationException($"Failed to deserialize {jsonPath}");
+
+        if (data.Archetypes.Count == 0)
+            throw new JsonException("situation_primitives situation_archetypes 缺失或为空");
+
+        // 层级值域 L0–L5（L6 已删除——见决策树 §D6：没有独立的 L6 解剖实体）
+        string[] levels = ["L0", "L1", "L2", "L3", "L4", "L5"];
+        var registered = data.FunctionalNetworks.Networks
+            .Select(n => n.Name).ToHashSet(StringComparer.Ordinal);
+
+        foreach (var a in data.Archetypes)
+        {
+            if (string.IsNullOrEmpty(a.Name))
+                throw new JsonException("situation_primitives 原型缺 name");
+            if (a.KeyBrainRegions.Length == 0)
+                throw new JsonException($"situation_primitives 原型 \"{a.Name}\" 缺 key_brain_regions");
+            foreach (var lv in a.LevelsInvolved)
+                if (!levels.Contains(lv))
+                    throw new JsonException(
+                        $"situation_primitives \"{a.Name}\" levels_involved 含 {lv}（须 ∈ L0–L5）");
+            if (registered.Count > 0)
+                foreach (var n in a.PrimaryNetworks)
+                    if (!registered.Contains(n))
+                        throw new JsonException(
+                            $"situation_primitives \"{a.Name}\" primary_networks 含未注册网络 \"{n}\"");
+        }
+        return data;
     }
 
     /// <summary>
@@ -84,12 +181,26 @@ public static class GameDataLoader
         return data;
     }
 
-    /// <summary>从 signal_types.json 加载信号类型词表（4 类目 × 18 子类）。</summary>
+    /// <summary>
+    /// 从 signal_types.json 加载信号类型词表（4 类目 × 18 子类）。
+    /// 加载期 fail-fast（JsonException，P4c 结构契约 ST-*）：_categories 缺失或为空 /
+    /// 任一类目缺 subtypes。词表是 function_label membership 校验的基准——
+    /// 空的 _categories 会让所有 membership 校验"通过"（无基准可比）。
+    /// </summary>
     public static SignalTypesCatalog LoadSignalTypes(string jsonPath)
     {
         var json = File.ReadAllText(jsonPath);
-        return JsonSerializer.Deserialize<SignalTypesCatalog>(json, Options)
-               ?? throw new InvalidOperationException($"Failed to deserialize {jsonPath}");
+        var data = JsonSerializer.Deserialize<SignalTypesCatalog>(json, Options)
+                   ?? throw new InvalidOperationException($"Failed to deserialize {jsonPath}");
+
+        if (data.Categories.Count == 0)
+            throw new JsonException("signal_types _categories 缺失或为空");
+        // 注意用 Count==0 而非 null 判断：record 的 init 默认值是 new()，
+        // 字段缺失时属性是空字典而**不是 null**（2026-09-12，fixture ST-required-nested 抓到）。
+        foreach (var (name, cat) in data.Categories)
+            if (cat.Subtypes.Count == 0)
+                throw new JsonException($"signal_types 类目 \"{name}\" 缺 subtypes");
+        return data;
     }
 
     /// <summary>

@@ -626,11 +626,33 @@ public class GameDataLoaderTests
         }
     }
 
+    /// <summary>
+    /// 结构完整的**最小** tripartite 文档（P4c 契约新增后必需）。
+    ///
+    /// 为何需要它：`LoadTripartiteModel` 现在要求在加载期满足 graph_nodes/node_profiles
+    /// 数量相等且四种通信原语非空（P4c 结构契约 TP-*）。用 `{"brainstem":[{...}]}` 这种
+    /// 只有一个原语的桩，会在**契约校验处**就抛，于是「显式 role 能否正常加载」这条断言
+    /// 变成 vacuous——它测的是契约，不是 role。
+    ///
+    /// ⚠️ 反过来：`Loader_MissingRole_ThrowsJsonException` / `Loader_NullRole_...` 仍可用
+    /// 最小桩——它们在反序列化阶段抛（JsonRequired / converter），早于契约校验，语义未变。
+    /// </summary>
+    private static string MinimalTripartiteJson(string edgeJson) => $$"""
+        {
+          "graph_nodes": { "x": { "dk_name": "x" } },
+          "node_profiles": { "x": {} },
+          "corticocortical": [ { "source": "x", "target": "x", "role": "active" } ],
+          "cstc": [ { "source": "x", "target": "x", "role": "active" } ],
+          "privileged_pathways": [ { "source": "x", "target": "x", "role": "active" } ],
+          "brainstem": [ {{edgeJson}} ]
+        }
+        """;
+
     [Fact]
     public void Loader_ExplicitRole_LoadsFine()
     {
         // 显式 "role":"active" → 正常通过（验收语义：不能写成「所有最终得到 Active 的情况都失败」）
-        var tmp = WriteTempJson("{\"brainstem\": [{\"source\": \"x\", \"target\": \"y\", \"role\": \"active\"}]}");
+        var tmp = WriteTempJson(MinimalTripartiteJson("{\"source\": \"x\", \"target\": \"y\", \"role\": \"active\"}"));
         try
         {
             var model = GameDataLoader.LoadTripartiteModel(tmp);
