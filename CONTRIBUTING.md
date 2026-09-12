@@ -2,7 +2,7 @@
 
 > 这个仓库是**一个人的游戏设计项目**，配合 AI 助手推进。本文档定义协作方式与 Git 约定，**不绑定任何特定的 AI 工具**——助手可以是任何模型、任何编辑器。
 
-> **内容规约见** [design/conventions/README.md](design/conventions/README.md)（文档格式、内容禁令、引用规范、归档隔离）。本文只讲**怎么协作与怎么提交**。
+> **内容规约见** [design/conventions/README.md](design/conventions/README.md)（文档格式、内容禁令、引用规范、归档隔离）；**代码与设计的边界见** [ARCHITECTURE.md](ARCHITECTURE.md)。本文只讲**怎么协作与怎么提交**。
 
 ## 目录
 

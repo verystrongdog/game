@@ -275,8 +275,41 @@ design/decisions/
 | Phase 1 — 正确性修复（12 项） | ✅ **完成** | `dd5516a` `61b2d69` `77750aa` |
 | Phase 2 — 内容归位 | ✅ **完成**（2.2–2.4） | `688629c` `7ecd2bb` `aff588a` |
 | Phase 3 — 英文改名 | ✅ **完成** | `ed8d400` `cb5bcb3` `040bb5f` |
-| Phase 4 — 约束拆除 | ⬜ 未开始 | — |
-| Phase 5 — 终验与文档化 | ⬜ 未开始 | — |
+| Phase 4 — 约束拆除 | ✅ **完成** | `65e6fff` `ab6a93a` |
+| Phase 5 — 终验与文档化 | ✅ **完成**（除合并分支） | `df80298` 后续提交 |
+
+### Phase 4 实际结果
+
+| 项 | 结果 |
+|---|---|
+| `CLAUDE.md` | **已删除**（379 行 / 87 条规则） |
+| 新建 `design/conventions/README.md` | 承接 §八 必须保留的 9 类厂商中立约束（架构边界 / 内容禁令 / 文档格式 / 引用与参数规范 / 术语注册表 / 归档隔离 / Git 工作流 / 工具链） |
+| `CONTRIBUTING.md` | 重写：去掉「人类 vs AI 分工」与 Grilling Issue 工作流，保留 Git 约定与改动前自检 |
+| `README.md` | 重写：导航表对齐新结构 + 新增「从哪里开始读」路由 |
+| issue 导出 | **122/122**（106 关闭 / 16 开放）→ `design/archive/grilling/issues/`，0 评论拉取失败 |
+| 归档失效物 | `code/tools/sync_issues.py`（输入 `.scratch/*/issues/` 已不存在）· `.github/ISSUE_TEMPLATE/grilling.md` |
+| grilling skill | 加退休声明（D4 要求 40 个 skill 全保留，故不删文件）；**7 个上游 skill 的 `/grilling` 调用未动**——那是对一个仍然存在的 skill 的有效引用，改它们只会造成与上游的分叉（偏离计划 4.7，理由记录于此） |
+| 去 grilling 化 | `six-dimensions.md`（开篇 + 6 处「Grilling 队列」→「待决队列」）· `design/README.md`（标题 + 移除优先级框架）· `term_registry.json`（`_description`/`_maintenance` 中立化 + 13 处 `source` 重定向）· 两个 `.github` 模板 · task-checker skill+command · math-language-writing · pipeline.md · md_utils.py · validate_trash_isolation.py —— 共 40 处 |
+| **保留** | `Grilling #NN` 历史溯源标注（那是出处，不是流程）；决策树与归档内的一切引用 |
+
+### Phase 5 实际结果
+
+| 项 | 结果 |
+|---|---|
+| 新建 `ARCHITECTURE.md` | 边界声明：四层结构 / 依赖方向 / 数据流对齐规则 / **已知越界点** / 强制机制。全文以实测为依据（`asmdef references: []`、`LoadAll` 的 8 个数据文件、`DemoSolver.cs` 手抄常量） |
+| 入口文档 | 4 个入口（README / CONTRIBUTING / design/README / conventions）互相交叉引用 ARCHITECTURE |
+| 9 个校验器 | 全部 exit=0（`1338 refs / 1337 passed / 0 dead / 0 section warnings`） |
+| 严格链接检查（无回退） | 2814 链接 / 失效 127 = 100 归档与 vendored 内历史 + 27 模板占位符；**活跃文档 0** |
+| `dotnet test` | **353 passed / 0 failed** |
+| `.git` | 175M → **162M**（gc 回收 13M） |
+| 受控文件 | 1291 → **1413**（+122 issue 存档） |
+
+**`ARCHITECTURE.md` §四 记录的已知越界点**（诚实清单，非"边界已完美"的宣传）：
+
+1. **`code/unity/Assets/Scripts/DemoSolver.cs` 手抄结算常量** —— 本仓**唯一的反向污染点**。文件自述「临时白盒结算（待 EngineSolver 替换）」。凡改结算常量必须同时改这里，否则 demo 与引擎静默分叉
+2. Unity 工程 `.meta` 全缺、场景不入库（工程卫生，非设计问题）
+3. `code/sim/` 的 `--outdir` 默认写入 `data/`（已在 .gitignore 排除生成物，建议改为默认落仓库外）
+
 
 ### Phase 3 实际结果
 

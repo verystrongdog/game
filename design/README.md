@@ -3,6 +3,8 @@
 > 游戏设计六维框架入口。**实时设计状态见 [设计框架-六维状态](framework/six-dimensions.md)**（维度归属 / 完成度 / 待决队列）。
 >
 > 本文是设计文档的索引与总览。文中 `Grilling #NN` 是历史溯源标注，指向 [决策树](decisions/README.md) 对应条目。
+>
+> 设计与代码的边界声明见 [ARCHITECTURE.md](../ARCHITECTURE.md)。
 
 ## 项目
 

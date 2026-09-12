@@ -48,6 +48,7 @@
 | 某个名词在这个项目里是什么意思 | [`data/term_registry.json`](data/term_registry.json)（看 `status` 字段——很多常规词汇在本项目里是**已废弃**的旧模型） |
 | 写文档/改设计要守什么规矩 | [项目规约](design/conventions/README.md) · [写作与引用规范](design/conventions/writing-and-references.md) |
 | 怎么提交 | [协作指南](CONTRIBUTING.md) |
+| 代码和设计之间的边界在哪 | [架构声明](ARCHITECTURE.md) |
 
 ## 维护约定
 

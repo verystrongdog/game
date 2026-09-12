@@ -30,7 +30,7 @@ data/       结构化数据契约           ← 参数真值源
 
 | 边界 | 规则 |
 |---|---|
-| design ↔ code | 代码里的数值必须与 `design/` 正典一致；不一致时以 `design/` 为准并修代码（例：`CalibrationConfig.NpcHp` 曾长期停留在 15，而权威表为 20-30） |
+| design ↔ code | 代码里的数值必须与 `design/` 正典一致；不一致时以 `design/` 为准并修代码（例：`CalibrationConfig.NpcHp` 曾长期停留在 15，而权威表为 20-30）。**完整边界声明与已知越界点见 [ARCHITECTURE.md](../../ARCHITECTURE.md)** |
 | design ↔ data | `data/canon/` 是引擎消费的契约；参数的权威定义在 `design/`，`data/` 是其机器可读形态 |
 | code/unity | Unity 工程是**纯呈现**，不承载逻辑正典。逻辑正典在 `code/src/`（C# 类库） |
 | 跨语言 | 设计文档（中文）→ `data/*.json` → 引擎消费。三者的参数必须可机械比对 |
