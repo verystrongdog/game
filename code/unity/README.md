@@ -98,7 +98,42 @@ unity command editor_play  # 进 Play 模式（验证用）
 3. **验收（目视清单，规格 §六）**：① 待机→走→跑→停顺滑；② 每动作触发后 HUD 显示正确动作名；③ 物攻→受击（打断）→回待机；④ 防御姿态循环不穿模；⑤ 倒下停留不悬浮；⑥ 衔接过渡帧可接受（不可接受 → 调 fade / 换 clip / 该动作局部迁 B，见规格 §四）。
 4. **测试**：Test Runner → PlayMode → Run All（防漂移断言按资产存在性分档：已导入 clip 的状态断言「有 clip」，未导入状态断言「状态存在 + clip 空」，随导入自动全绿）。
 
-> ⚠️ 已知：X Bot 上 KI Walk/Run retarget 质量为首验点（载体锚定 #124 决策依据）；Jab Cross 为组合拳，若直拳单次语义不合 → 换 Punch 类 clip 或走程序化兜底。
+> ⚠️ 已知：Jab Cross 为组合拳，若直拳单次语义不合 → 换 Punch 类 clip 或走程序化兜底。
+>
+> **🔧 2026-09-12 修正**：本节的 KI 引用路径（`Assets/Kevin Iglesias/...`）**已作废**——来源整条切 Mixamo，KI 包弃用（三条理由见 [动作库规格.md §五](../../design/presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md)）。后果与处置见 §二·G。原「X Bot 上 KI Walk/Run retarget 质量」这条已知项随之消失：不再有 retarget。
+
+## 二·G、本轮工作：动作系统结构升级（#137–#140，2026-09-12）
+
+> 目标：把动作集从「演示够用」推到「**足够多完整动作 + 姿态切换自然**」的工程底子。范围裁定为**结构升级 + 站↔坐探针**，动作内容仍限 L1 九条（决策记录见 [动作库规格.md](../../design/presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md) 第二次 🔧 修正；分解见 [动作系统分解](../../design/engineering/%E5%8A%A8%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%88%86%E8%A7%A3-2026-09-12.md)）。
+
+### 前置（在 Windows 工作区，本目录 `C:\Users\9527\game`）
+
+1. **先与 `main` 对齐**：这份拷贝历史上与 Linux 侧分叉过（`CameraOrbit.cs` / `SitPoint.cs` 曾只存在于本地盘）。四条 issue 都以此为真实前提。
+2. **确认 unity CLI 可直驱**：`unity --version` → `unity pipeline install`（装入 `com.unity.pipeline`）→ `unity status` 应显示 `state: ready`。
+   - ⚠️ **unity-cli 是**本机**通道，不是远程访问**——它只能连**同一台机器**上开着的 Editor。故 Unity 工作必须在本工作区做，Linux 侧写不了也验不了 `code/unity/`。
+   - 连不上先查 Safe Mode：有 C# 编译错误时 Editor 会进 Safe Mode，Pipeline 包不加载，`unity status` / `unity command` 全部连不上。先修编译错误再重启。
+3. **资产区单机所有权**：`code/unity/Assets/**` 的资产（`.meta` / `.controller` / `.asset` / 场景）**只由本工作区生成与手调**（见 [ARCHITECTURE.md §五](../../ARCHITECTURE.md)）。手调成果要入库，两侧的 `.meta` GUID 必须一致。
+
+### 四条 issue（严格串行，工作面相交所致）
+
+| 序 | issue | 做什么 | 状态 |
+|---|---|---|---|
+| 1 | [#137](https://github.com/verystrongdog/game/issues/137) | **站↔坐探针**：裁定动作位移口径（root motion vs CharacterController）。归位 `SitPoint.cs`，在 X Bot 上跑通 Sit↔Stand，产出落点偏差读数 | `ready-for-human` |
+| 2 | [#138](https://github.com/verystrongdog/game/issues/138) | **数据契约消费**：生成器读 `data/action_set.json` 产出 controller 与 C# 静态表，且**非破坏**（不覆盖已手调值） | `ready-for-human` |
+| 3 | [#139](https://github.com/verystrongdog/game/issues/139) | **五条 clip 到库**：Idle/Walk/Run/Jump/Talk 下载 + Humanoid 导入 + **Play 预览实证归槽**（文件名不作依据），PlayMode 断言转绿 | `blocked`（by #138） |
+| 4 | [#140](https://github.com/verystrongdog/game/issues/140) | **locomotion 迁契约 B**：1D blend tree（`speed01`，采样点 0 / 3.0 / 6.0）取代三态硬切 | `blocked`（by #139） |
+
+### 两条必须先懂的陷阱
+
+1. **文件名 ≠ 动作语义**（#124 实证）：`Charge` 实为伸手指人、`Short Left Side Step` 实为循环格挡。每条新 clip 都要 Play 预览后归槽。
+2. **坐立两条连方向都判不出来**：`Sit To Stand.fbx` 与 `Stand To Sit.fbx` 的内部 take 名均为 `mixamo.com`、`Title`/`Subject` 为空（2026-09-12 逐字节核验）。**必须预览**，不得据文件名预设——两条是近似镜像动作，误配比战斗类更隐蔽。
+
+### 与既有文档的关系
+
+- 机器源 `data/action_set.json`：词条元数据 + blend 参数，每个数值带来源；`role=generator-input`（生成期输入，**运行时 Unity 不读它**）。
+- `ActionCatalog.cs` 的 KI 路径为已知作废项，#138 落地后由生成表取代。
+- `KiWalkerLab` 保留为历史对照场景，但**不再是词表来源**。
+
 
 ## 二·F、玫瑰花海场景（真实草原 DEM + 商业化密度株丛 + 小人穿行）
 
@@ -192,5 +227,5 @@ code/unity/
 
 ---
 
-*创建: 2026-09-06 | 更新: 2026-09-12（§二·F 玫瑰花海场景 — Grilling #126）*
-*关联: [战斗界面布局](../../design/presentation/%E6%88%98%E6%96%97%E7%95%8C%E9%9D%A2%E5%B8%83%E5%B1%80.md), [核心机制](../../design/rules/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md), [回合战斗流程](../../design/rules/%E5%9B%9E%E5%90%88%E6%88%98%E6%96%97%E6%B5%81%E7%A8%8B.md), [关键突破](../../design/rules/skill-tree/%E5%85%B3%E9%94%AE%E7%AA%81%E7%A0%B4.md), [动作库规格](../../design/presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md), [地块数据-Konza草原](../../design/presentation/%E5%9C%B0%E5%9D%97%E6%95%B0%E6%8D%AE-Konza%E8%8D%89%E5%8E%9F.md), [玫瑰株丛密度](../../design/presentation/%E7%8E%AB%E7%91%B0%E6%A0%AA%E4%B8%9B%E5%AF%86%E5%BA%A6.md), [决策树](../../design/decisions/README.md)*
+*创建: 2026-09-06 | 更新: 2026-09-12（🔧 第二次修正：§二·G 本轮工作 #137–#140 + KI 引用作废；§二·F 玫瑰花海场景 — Grilling #126）*
+*关联: [战斗界面布局](../../design/presentation/%E6%88%98%E6%96%97%E7%95%8C%E9%9D%A2%E5%B8%83%E5%B1%80.md), [核心机制](../../design/rules/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md), [回合战斗流程](../../design/rules/%E5%9B%9E%E5%90%88%E6%88%98%E6%96%97%E6%B5%81%E7%A8%8B.md), [关键突破](../../design/rules/skill-tree/%E5%85%B3%E9%94%AE%E7%AA%81%E7%A0%B4.md), [动作库规格](../../design/presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md), [动作系统分解](../../design/engineering/%E5%8A%A8%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%88%86%E8%A7%A3-2026-09-12.md), [地块数据-Konza草原](../../design/presentation/%E5%9C%B0%E5%9D%97%E6%95%B0%E6%8D%AE-Konza%E8%8D%89%E5%8E%9F.md), [玫瑰株丛密度](../../design/presentation/%E7%8E%AB%E7%91%B0%E6%A0%AA%E4%B8%9B%E5%AF%86%E5%BA%A6.md), [决策树](../../design/decisions/README.md)*
