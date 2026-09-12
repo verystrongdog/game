@@ -193,12 +193,92 @@ ActionLab 的 `Main Camera` 是**静止**的（builder 只给了固定位置与�
 > ⚠️ 两点必知：① **必须设 `Target`** —— 留空时组件的 `Start()` 会兜底把它设成自身 transform，结果是相机绕自己头顶打转（那是调试兜底，不是你要的效果）。② **重新生成场景会丢掉挂载**（场景不入库、由 builder 重建）——#139/#140 改 builder 后会重建一次，届时需重挂。
 
 > 裁定（owner，2026-09-12）：**走手动挂载，不建 issue、不改 builder**——它是观察工具、不是能力增量，且场景本就按单机所有权不入库。若日后需要重建场景时自动挂上，再折进 [#137](https://github.com/verystrongdog/game/issues/137)。
+
+> 🔧 **2026-09-12（#136）：「场景不入库」有一条显式例外。** 基准场景 `Assets/Scenes/ActionLab.unity`（连同 `Assets/ActionLab/ActionLab.controller`）**已入库**——[#136](https://github.com/verystrongdog/game/issues/136) 的交付物 2 要求「至少一个可打开的基准场景，替代靠 Editor 菜单运行时生成」，owner 裁定取 ActionLab（早期白盒 `DemoSandbox` 太简陋，不用）。因此上一条的「重新生成会丢掉挂载」对 ActionLab 改为：**菜单重建会覆盖已入库的场景，差异必须显式提交**（不要再把 `CameraOrbit` 挂载当成一次性手调）。其余 lab 场景仍不入库，见 §二·H。
+
 ### 与既有文档的关系
 
 - 机器源 `data/action_set.json`：词条元数据 + blend 参数，每个数值带来源；`role=generator-input`（生成期输入，**运行时 Unity 不读它**）。
 - `ActionCatalog.cs` 的 KI 路径为已知作废项，#138 落地后由生成表取代。
 - `KiWalkerLab` 保留为历史对照场景，但**不再是词表来源**。
 
+
+## 二·H、资产身份与提交范围（[#136](https://github.com/verystrongdog/game/issues/136)，2026-09-12 实测）
+
+> **要解决的是什么**：`Assets/**` 此前只有 2 个 `.meta`（`SitPoint` / `CameraOrbit`），而 9 个 Mixamo FBX（5 条 combat clip + `Sit To Stand` / `Stand To Sit` + X Bot / Y Bot）**已在 git 里却没有一个 `.meta`**。后果不是"少几个文件"，而是**干净检出每次开工程都重发 GUID**——`ActionLab.controller` 的 clip 绑定、场景里的组件引用必然失效，手调资产成果既无法入库也无法合并（[build-and-test.md §五](../../design/engineering/build-and-test.md) 登记为缺口）。
+
+### 入库了什么（3 个提交，80 个新文件 + 2 个文件改动，+4843/−2 行）
+
+| 类别 | 内容 | 为什么是它 |
+|---|---|---|
+| `.meta` ×51（新） | 每个**已跟踪**资产一份 + 干净检出里会存在的目录各一份 | 锁 GUID。**未入库资产不给 `.meta`**——孤儿 `.meta` 会制造"引用了不存在资产"的假象 |
+| `ProjectSettings/` ×23 | 含 `ProjectVersion.txt`（补 `m_EditorVersionWithRevision: 6000.5.2f1 (eb73d3b415a1)`）、`EditorSettings.asset`（`m_SerializationMode: 2` = **Force Text**，资产是文本才可合并）、`ProjectSettings.asset`（`runInBackground: 1`，§二·F 的失焦冻结坑从此随工程走） | 工程身份：换机/重装后行为一致 |
+| `Packages/manifest.json` + `packages-lock.json` | manifest 新增 `com.unity.pipeline: 0.6.0-exp.1`（unity-cli 直驱用） | 锁是在**这份 manifest** 下由 Editor 生成的；只提交锁会让两者立刻不一致 |
+| `Assets/Scenes/ActionLab.unity` + `Assets/ActionLab/ActionLab.controller`（+4 个 `.meta`） | 基准场景 + 12 态控制器 | 5 条 combat clip 的 FBX 早已在 git，缺的只是 `.meta`；补齐后这两件一入库，干净检出即可打开并 Play。controller 正是缺口行抱怨的「Blend Tree 阈值 / transition 参数无处安放」那份手调成果 |
+
+### 没入库什么（以及为什么）
+
+| 排除项 | 理由 |
+|---|---|
+| `Assets/Kevin Iglesias/`（**68 MB**） | 第三方资产包；来源已整条切 Mixamo（[动作库规格 §五](../../design/presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md)）；[#139](https://github.com/verystrongdog/game/issues/139) 的验收标准明写「干净检出下 `Assets/Kevin Iglesias/` 不存在」。`.gitignore` 已排除 |
+| `Assets/Temp/` | #137 站↔坐探针的过程物（`SitCheck.controller` + 两张截图），不是工程资产 |
+| `WalkerLab` / `KiWalkerLab` / `RoseFieldLab` / `DemoSandbox` 四个 lab 场景 | 由 builder 菜单重建，随各自 issue 落地；`DemoSandbox` 是早期白盒演示（owner 裁定不作基准场景） |
+| `Assets/Settings/Pipeline/EditorPipelineManager.asset` | `com.unity.pipeline` 首次使用的自动产物，可再生 |
+
+### 实测记录（改前 / 改后）
+
+| 指标 | 改前（干净检出 = git 跟踪） | 改后 |
+|---|---|---|
+| `code/unity/**/*.meta` | **2** | **57** |
+| 场景 `.unity` | **0** | **1**（`ActionLab.unity`） |
+| controller | **0** | **1**（`ActionLab.controller`） |
+| `Packages/packages-lock.json` | **不存在** | 在位 |
+| `ProjectSettings/` 跟踪文件数 | 1 | 23 |
+| 同一时刻 Windows 工程实况（Editor 所见） | 294 `.meta` / 5 场景 / 5 controller / 23 ProjectSettings / 锁在位 | 未变（入库是它的子集） |
+| `code/src/` 与 `data/` 是否被动过 | — | **0 个文件**（#136 预期不变项） |
+| `YANTF.Demo.asmdef` 的 `references` | `[]` | `[]`（结构性保证未破） |
+
+### 门禁 `unity` 的证据（Windows Editor 6000.5.2f1，unity-cli 经 WSL interop 直驱）
+
+| 项 | 实测 |
+|---|---|
+| `unity status` | `state: ready`（PID 32804，工程 `C:\Users\9527\game\code\unity`） |
+| `editor_status` | `compiling: false`、`playMode: stopped`、`domainReloadInProgress: false` |
+| `console` | **0 error**（仅 2 条与本主题无关的弃用警告：Input Manager / Dynamic Batching） |
+| 基准场景可打开 | `open_scene Assets/Scenes/ActionLab.unity` 返回 `guid: dee800a53d8d6934e91729219e7411f1`，与本仓库的 `ActionLab.unity.meta` **逐字一致** |
+| Play 后层级 | `ActionLab演示者(X Bot)` 带 `Animator`+`CharacterController`+`ActionPlayer`+`ActionLabDriver`，`Beta_Joints`/`Beta_Surface` 蒙皮 + 完整 `mixamorig` 骨架；`Main Camera` 带手挂的 `CameraOrbit` |
+| 抓帧 | 640×360 = **3625 种颜色**，均值 (193,220,219)；作为对照，早期 `DemoSandbox` 抓帧是 84% 纯白 |
+| `run_tests`（`--mode playmode --async_tests`） | `status: completed`，**16 项：14 过 / 2 败**（5.22 s） |
+| 2 项失败的真因 | `ActionPlayer_OneShotElapsed_Threshold`、`ActionPlayer_Play_PriorityAndLevelRules`——**纯逻辑断言，不碰任何 clip**（`ResetToIdle()` 后 `CurrentActionId` 仍为 `Down`）。**与资产缺失无关**，见下方残留缺口 ② |
+| 提交字节的来源证明 | 84 个入库文件逐个 `sha256` 与 Windows 工程比对：**84/84 一致**（`git show HEAD:<path>` vs 工程文件） |
+
+### 残留缺口（诚实清单）
+
+1. **4 条 locomotion 态仍引用不入库的 KI 包**：`ActionLab.controller` 的 Idle/Walk/Run/Jump 指向 `Assets/Kevin Iglesias/...`。干净检出下这 4 态是「状态存在 + clip 空（Missing）」——正是 [#139](https://github.com/verystrongdog/game/issues/139) 的工作面（整条切 Mixamo 并落库）。入库的是**工程当前的真实状态**，不是伪造的完整态。
+2. **2 项常红 PlayMode 断言的真因与 #139 的归因不符**（实测见上表）：那两条是 `ActionPlayer` 的纯逻辑缺陷，落 5 条 clip **不会**让它们转绿；而 `ActionPlayer.cs` / 断言文件都不在 #139 的「允许变化」里 → #139 按现文写达不到自己的验收标准。按 [WORKFLOW.md §一](../../WORKFLOW.md) 非阻塞发现进候选队列，**不在 #136 里顺手修**。
+3. **干净检出的首次导入 / 编译 / Play 未实测**：Editor 只跑在 Windows 拷贝上（Linux 侧无 Editor，且 WSL 对 `/mnt/c` 只读）。正确性由三条间接证据支撑：① 84/84 逐文件字节一致；② 场景与 controller 的 GUID 引用全部可解析到已跟踪资产（含 X Bot.fbx、5 条 combat clip）；③ 来源工程（就是提交的那批字节）内 Editor 0 错误、16 项测试跑通。
+4. **资产身份还没有常驻机械校验器**：`.meta` 齐全性、GUID 唯一性、场景/controller 引用可解析性本次是用一次性脚本核的（294 个 `.meta` → 294 个唯一 GUID，0 冲突）。建议进候选队列，别让它退回成人工步骤。
+
+### 怎么复核
+
+```bash
+git ls-files 'code/unity/**/*.meta' | wc -l        # 期望 57
+git ls-files 'code/unity/**/*.unity'               # 期望 1（ActionLab）
+git ls-files code/unity/Packages/packages-lock.json
+grep -A2 '"references"' code/unity/Assets/Scripts/YANTF.Demo.asmdef   # 期望 []
+```
+
+### ⚠️ Windows 拷贝怎么对齐（**不要直接 `git pull`**）
+
+Windows 侧那份拷贝里，这些文件是**未跟踪但已存在**的（本次入库把它们变成了跟踪文件）。`git pull` 会以「untracked working tree files would be overwritten by merge」拒绝——**即使字节完全相同**（2026-09-12 实测）。正确做法是只对齐 HEAD 与索引，不碰工作树：
+
+```bat
+cd C:\Users\9527\game
+git fetch origin
+git reset --mixed origin/main
+```
+
+`reset --mixed` 不动工作树，所以那两处既有分叉（`AnimatorWalker.cs` 的坐/起 vs main 的空中方向修正、`KiWalkerLabBuilder.cs`）作为"已修改"原样保留，留给 [#137](https://github.com/verystrongdog/game/issues/137)。**不要用 `git reset --hard` / `checkout -f`**——那会覆盖这两处未提交的分叉实现。
 
 ## 二·F、玫瑰花海场景（真实草原 DEM + 商业化密度株丛 + 小人穿行）
 
@@ -274,9 +354,12 @@ code/unity/
 │       ├── WalkerLabSmokeTests.cs
 │       ├── RoseFieldSmokeTests.cs    # 高度图/地面网格/六角格密度判据/小人贴合地形
 │       └── ActionLabSmokeTests.cs    # 防漂移分档断言 + ActionPlayer 优先级冒烟
-├── Packages/manifest.json            # uGUI 2.0.0 + Test Framework 1.4.5
-└── ProjectSettings/ProjectVersion.txt
+├── Packages/manifest.json            # uGUI + Test Framework + com.unity.pipeline（unity-cli）
+├── Packages/packages-lock.json      # 包版本可复现（#136 起入库）
+└── ProjectSettings/                  # 工程身份 23 个文件（#136 起入库，含 Editor 版本与序列化模式）
 ```
+
+> 场景与控制器：`Assets/Scenes/ActionLab.unity` + `Assets/ActionLab/ActionLab.controller` 已入库（基准场景，#136）；其余 lab 场景由 builder 菜单重建，不入库——范围与理由见 §二·H。
 
 ## 四、替换/扩展指引
 
@@ -292,5 +375,5 @@ code/unity/
 
 ---
 
-*创建: 2026-09-06 | 更新: 2026-09-12（🔧 第二次修正：§二·G 本轮工作 #137–#140 + KI 引用作废；§二·F 玫瑰花海场景 — Grilling #126）*
+*创建: 2026-09-06 | 更新: 2026-09-12（🔧 第三次修正：§二·H 资产身份与提交范围（#136）+ §二·G 的「场景不入库」加显式例外；🔧 第二次：§二·G 本轮工作 #137–#140 + KI 引用作废；§二·F 玫瑰花海场景 — Grilling #126）*
 *关联: [战斗界面布局](../../design/presentation/%E6%88%98%E6%96%97%E7%95%8C%E9%9D%A2%E5%B8%83%E5%B1%80.md), [核心机制](../../design/rules/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md), [回合战斗流程](../../design/rules/%E5%9B%9E%E5%90%88%E6%88%98%E6%96%97%E6%B5%81%E7%A8%8B.md), [关键突破](../../design/rules/skill-tree/%E5%85%B3%E9%94%AE%E7%AA%81%E7%A0%B4.md), [动作库规格](../../design/presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md), [动作系统分解](../../design/engineering/%E5%8A%A8%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%88%86%E8%A7%A3-2026-09-12.md), [地块数据-Konza草原](../../design/presentation/%E5%9C%B0%E5%9D%97%E6%95%B0%E6%8D%AE-Konza%E8%8D%89%E5%8E%9F.md), [玫瑰株丛密度](../../design/presentation/%E7%8E%AB%E7%91%B0%E6%A0%AA%E4%B8%9B%E5%AF%86%E5%BA%A6.md), [决策树](../../design/decisions/README.md)*

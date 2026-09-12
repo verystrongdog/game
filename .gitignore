@@ -83,6 +83,17 @@ code/unity/Assets/Plugins/*.pdb
 .unity-home/
 code/unity/*.log
 
+# Unity 资产——**刻意不入库**（2026-09-12 #136 裁定，范围与理由见 code/unity/README.md §二·H）
+#
+# Kevin Iglesias Human Animations（68 MB 第三方资产包）：来源已整条切 Mixamo
+# （design/presentation/动作库规格.md §五），且 #139 的验收标准明写「干净检出下
+# Assets/Kevin Iglesias/ 不存在」——故它既不入库、也不得再作为受控文件的引用目标。
+# 它只存在于本机工程里，供 KiWalkerLab 历史对照场景使用。
+code/unity/Assets/Kevin Iglesias/
+
+# Assets/Temp/：站↔坐探针与截图过程物（#137 的核对面），不是工程资产
+code/unity/Assets/Temp/
+
 # 仓库重构前的本地安全备份（bundle + 工作区快照，仅本地，重构完成后删除）
 .refactor-backup/
 

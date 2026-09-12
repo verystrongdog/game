@@ -23,7 +23,7 @@
 | Python | **3.10.12** | CI 的 `setup-python` | 校验器与 sim 脚本 |
 | 校验器依赖 | `PyYAML==6.0.3` | [`code/tools/requirements.txt`](../../code/tools/requirements.txt) | 11 个校验器里**只有 `validate_disease.py`** 需要第三方库 |
 | 数值实验依赖 | `numpy==2.2.6` · `scipy==1.15.3` · `numba==0.67.0` | [`code/sim/requirements.txt`](../../code/sim/requirements.txt) | 15 个 sim 脚本里只有 3 个需要 |
-| Unity Editor | **6000.5.2f1** | [`code/unity/ProjectSettings/ProjectVersion.txt`](../../code/unity/ProjectSettings/ProjectVersion.txt) | ⚠️ 见 §五 |
+| Unity Editor | **6000.5.2f1**（revision `eb73d3b415a1`） | [`code/unity/ProjectSettings/ProjectVersion.txt`](../../code/unity/ProjectSettings/ProjectVersion.txt) | 版本与 revision 自 #136 起随工程入库（此前该文件只有 `m_EditorVersion` 一行）；包版本另有 `code/unity/Packages/packages-lock.json` 可复现。Unity 侧的**未验证项**见 §五 |
 
 **锁定原则**：**不在锁定提交中升级**任何运行时或软件包。上表版本即当前实测版本。
 
@@ -158,15 +158,17 @@ sim 脚本用**扁平 import**（`from sim_consciousness_cs4_test import ...`）
 | 缺口 | 影响 | 解除条件 |
 |---|---|---|
 | **Unity 门禁** | ✏️ 2026-09-12：**本机已可跑**——Linux 侧是同一台 Windows 上的 WSL2，`unity.exe` 经 interop 直驱 Windows Editor（实测 `unity status` → `state: ready`、`unity open` 工程 → 编译 0 错误）。**CI（ubuntu）侧仍不可用**，其 `unity` job 继续显式报告 `NOT_AVAILABLE`。判据按 [gates.json](gates.json) 的 `environment` 判定 | — |
-| `code/unity/Packages/packages-lock.json` 缺失 | 包版本不可复现 | ✅ 2026-09-12 已随迁移补齐（`code/unity/Packages/packages-lock.json`） |
-| `.meta` 0 个 / 场景 0 个 | Unity 工程不完整，场景靠 Editor 菜单运行时生成；**Blend Tree 阈值 / transition 参数 / Avatar Mask 无处安放**——手调动画成果无法入库 | ✏️ 2026-09-12：**已随迁移落地**（294 个 `.meta` + 5 个场景 + 5 个 controller + `ProjectSettings/` 23 个文件）。**尚未提交进 git**——提交范围（尤其 68M 的 `Kevin Iglesias/`）由 [#136](https://github.com/verystrongdog/game/issues/136) 裁定 |
-| 无 `NuGet.lock`（packages.lock.json） | 传递依赖版本可漂移 | 待定：需在 `dotnet restore --use-lock-file` 后提交 |
+| `code/unity/Packages/packages-lock.json` 缺失 | 包版本不可复现 | ✅ 2026-09-12 **已入库**（`code/unity/Packages/packages-lock.json` + 与之同源的 `manifest.json`——只提交锁会让两者立刻不一致）。一致性机械核法：锁里 builtin 依赖版本 = Editor 6000.5.2f1 安装自带的版本（`com.unity.ugui` 2.5.0 / `com.unity.test-framework` 1.7.0，取自该安装的 `BuiltInPackages/`） |
+| `.meta` 2 个 / 场景 0 个 | Unity 工程不完整，场景靠 Editor 菜单运行时生成；**Blend Tree 阈值 / transition 参数 / Avatar Mask 无处安放**——手调动画成果无法入库。更具体地说：9 个 Mixamo FBX **已在 git 里却没有 `.meta`** → 干净检出每次开工程都重发 GUID，`ActionLab.controller` 的 clip 绑定必然失效 | ✅ 2026-09-12 [#136](https://github.com/verystrongdog/game/issues/136) 闭合：`.meta` **2 → 57**、场景 **0 → 1**（`ActionLab.unity`）、controller **0 → 1**、`ProjectSettings/` **1 → 23**，共 80 个新文件 + 2 个文件改动（`code/src/` 与 `data/` 零改动）。实测记录与证据见 [code/unity/README.md §二·H](../../code/unity/README.md)。**残留**：controller 的 4 条 locomotion 态仍引用不入库的 KI 包（#139 工作面）；干净检出的首次导入未实测（Editor 只跑在 Windows 拷贝上）；资产身份尚无常驻校验器 |
+| 无 `NuGet.lock`（packages.lock.json） | 传递依赖版本可漂移 | 待定：需在 `dotnet restore --use-lock-file` 后提交（[#129](https://github.com/verystrongdog/game/issues/129)） |
 
 ### 5.1 未验证项（诚实清单）
 
 - CI **未在 GitHub 上真实跑过**——本机只逐条模拟了各 step 的命令与退出码。首次 push 后的 CI 结果才是真证据
 - 数值实验（sim）**不在 CI 中**——它们不在切片关键路径上，且成本高（部分脚本需数分钟）
 - Blender 相关工具（`code/tools/*blender*.py`）**无环境验证**——本机有 `/snap/bin/blender`，但未纳入 CI
+- Unity **干净检出（无 `Library/`）的首次导入 / 编译 / Play 未实测**——Editor 只跑在 Windows 那份拷贝上（Linux 侧无 Editor，且 WSL 对 `/mnt/c` 只读）。#136 入库的正确性由三条间接证据支撑（逐文件字节一致 / GUID 引用全部可解析 / 来源工程内 0 错误且 16 项测试跑通），见 [code/unity/README.md §二·H](../../code/unity/README.md)
+- **资产身份无常驻机械校验器**（`.meta` 齐全性、GUID 唯一性、场景与 controller 的引用可解析性）——#136 是用一次性脚本核的（294 个 `.meta` → 294 个唯一 GUID / 0 冲突）。缺它则本次的判据无法回归
 
 ---
 *创建: 2026-09-12 | 更新: 2026-09-12*
