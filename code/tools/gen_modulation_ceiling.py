@@ -13,7 +13,13 @@ gen_modulation_ceiling.py — 从文献数据推导链路调制上限
 
 输出:
   - data/connectivity/link_modulation_ceiling.json — 每条合法链路的调制参数
-  - design/rules/skill-tree/deprecated/链路调制上限参考表.md — 人类可读的参考文档（⚠️ 本脚本的 MD 输出尚未随 Phase 3 路径改名更新）
+    ⚠️ 该 JSON 是**冻结快照**（`_metadata.provenance_note` 自述：2026-07-27 快照、数值未重算）。
+    重跑本脚本会重算 836 个数值并丢掉那条标注——所以想只看表请用 `--md-only`。
+  - artifacts/链路调制上限参考表.md — 人类可读参考表（**非受控产物目录**，默认落点，见 --md-out）
+    🔧 2026-09-13（#134）：此前落点是重构前的 `技能树系统/`（目录已不存在 → 每次跑到这一步必抛
+    `FileNotFoundError`，而两个 JSON 已被先写出）。**已解耦**：`--md-only` 不重写任何 JSON，
+    默认落点改到被 gitignore 的 `artifacts/`——既不再写回正典，也不去刷新
+    `design/rules/skill-tree/deprecated/链路调制上限参考表.md` 那份历史快照（v1 已被 v2 取代）。
 
 公式:
   modulation_ceiling = sc_norm × layer_weight × direction_factor
@@ -25,12 +31,18 @@ gen_modulation_ceiling.py — 从文献数据推导链路调制上限
   actual_modulation = ceiling × myelination (myelination ∈ [0, 1])
 """
 
+import argparse
 import json
 import numpy as np
 from pathlib import Path
 from collections import defaultdict
 
 ROOT = Path(__file__).parent.parent.parent
+
+# MD 参考表的默认落点：被 gitignore 的非受控产物目录（#134）。
+# 为什么不是 design/ 下的某个位置：v1 已被 v2 取代，把废弃表写进正典会制造第二个权威来源；
+# 为什么不刷新 deprecated/ 里那份：那是 2026-07-27 的历史快照（与 v1 JSON 同一份快照纪律）。
+DEFAULT_MD_OUT = ROOT / 'artifacts/链路调制上限参考表.md'
 
 # === 1. 加载数据 ===
 
@@ -533,7 +545,19 @@ EFFECT_TYPE_GROUPS = {
 
 # === 6. 主函数 ===
 
-def main():
+def parse_args(argv):
+    p = argparse.ArgumentParser(
+        description='从 ENIGMA SC + 脑干强度估计 + 白质纤维束推导链路调制上限',
+        epilog='#134：默认模式会重算并重写 JSON（冻结快照）；只看表请用 --md-only。')
+    p.add_argument('--md-only', action='store_true',
+                   help='只写 MD 参考表，不重写 JSON（解耦：让路径修复可被验证而不动数值）')
+    p.add_argument('--md-out', default=None, metavar='PATH',
+                   help=f'MD 输出路径（默认 {DEFAULT_MD_OUT.relative_to(ROOT)}）')
+    return p.parse_args(argv)
+
+
+def main(argv=None):
+    args = parse_args(argv)
     results, regions, enigma_data = compute_all_links()
 
     # 保存 JSON
@@ -558,33 +582,38 @@ def main():
         'effect_type_groups': EFFECT_TYPE_GROUPS,
     }
 
-    with open(output_json, 'w') as f:
-        json.dump(output_data, f, ensure_ascii=False, indent=2)
-    print(f'✓ 已生成 {output_json}')
-    print(f'  共 {len(results)} 条链路')
+    if args.md_only:
+        # #134 的核心：这条路径**不碰数据契约**。上面的 output_data 只是算出来放着，
+        # 不落盘——校验器 validate_ceiling_generator.py 就靠这一点判定解耦是否成立。
+        print('ℹ️  --md-only：跳过 JSON 写入（data/connectivity/link_modulation_ceiling.json 字节不变）')
+    else:
+        with open(output_json, 'w') as f:
+            json.dump(output_data, f, ensure_ascii=False, indent=2)
+        print(f'✓ 已生成 {output_json}')
+        print(f'  共 {len(results)} 条链路')
 
-    # 按层级统计
-    from collections import Counter
-    layer_counts = Counter(r['source_layer'] for r in results)
-    for lvl in sorted(layer_counts.keys(), key=lambda x: x or 99):
-        entries = [r for r in results if r['source_layer'] == lvl]
-        avg_c = np.mean([r['modulation_ceiling'] for r in entries])
-        print(f'  L{lvl}: {layer_counts[lvl]} 条, 平均 ceiling={avg_c:.3f}')
+        # 按层级统计
+        from collections import Counter
+        layer_counts = Counter(r['source_layer'] for r in results)
+        for lvl in sorted(layer_counts.keys(), key=lambda x: x or 99):
+            entries = [r for r in results if r['source_layer'] == lvl]
+            avg_c = np.mean([r['modulation_ceiling'] for r in entries])
+            print(f'  L{lvl}: {layer_counts[lvl]} 条, 平均 ceiling={avg_c:.3f}')
 
-    # 按数据来源统计
-    source_counts = Counter(r['data_source'] for r in results)
-    for src, cnt in source_counts.most_common():
-        entries = [r for r in results if r['data_source'] == src]
-        avg_c = np.mean([r['modulation_ceiling'] for r in entries])
-        print(f'  {src}: {cnt} 条, 平均 ceiling={avg_c:.3f}')
+        # 按数据来源统计
+        source_counts = Counter(r['data_source'] for r in results)
+        for src, cnt in source_counts.most_common():
+            entries = [r for r in results if r['data_source'] == src]
+            avg_c = np.mean([r['modulation_ceiling'] for r in entries])
+            print(f'  {src}: {cnt} 条, 平均 ceiling={avg_c:.3f}')
 
     # 生成 Markdown 参考表
-    gen_markdown(results, output_json)
+    gen_markdown(results, Path(args.md_out) if args.md_out else DEFAULT_MD_OUT)
 
     return results
 
 
-def gen_markdown(results, json_output):
+def gen_markdown(results, md_out):
     """生成人类可读的 Markdown 参考表"""
     lines = []
     lines.append('# 链路调制上限参考表')
@@ -645,15 +674,18 @@ def gen_markdown(results, json_output):
     lines.append('*生成: 2026-07-27 | 数据来源: ENIGMA Toolbox HCP SC（实测）；脑干强度为本仓估计（社区划分依 Hansen et al. (2024) Nat Neurosci）；Kroell (2024)*')
     lines.append(f'*JSON: [link_modulation_ceiling.json](../../data/connectivity/link_modulation_ceiling.json)*')
 
-    # ⚠️ 2026-09-13：本脚本是**已被取代**的那一代（v1 参考表已由
-    #   gen_modulation_ceiling_v2.py 产出的 design/rules/skill-tree/modulation/
-    #   链路调制上限参考表-v2.md 取代）。因此**不修**这个输出路径：
-    #   把废弃表写回正典目录会制造第二个权威来源，正是归档隔离要防的事。
-    #   现状：JSON 先写出，MD 一步抛 FileNotFoundError（目录不存在）——保持 fail-loud。
-    output_md = ROOT / '技能树系统/链路调制上限参考表.md'
-    with open(output_md, 'w') as f:
+    # 🔧 2026-09-13（#134）：落点由已不存在的 `技能树系统/` 改为**非受控产物目录**。
+    #   为什么不是 design/ 下的某个位置：v1 参考表已被 gen_modulation_ceiling_v2.py 产出的
+    #   design/rules/skill-tree/modulation/链路调制上限参考表-v2.md 取代——把废弃表写回正典
+    #   目录会制造第二个权威来源（正是归档隔离要防的事）。
+    #   为什么也不刷新 deprecated/ 里那份：它是 2026-07-27 的**历史快照**，与
+    #   data/connectivity/link_modulation_ceiling.json 的 provenance_note 同一份快照纪律——
+    #   重算会把它从"当时的表"改成"今天的表"，抹掉历史。
+    #   因此默认落到被 gitignore 的 artifacts/：能验证"MD 能写出"，又不改任何受控产物。
+    md_out.parent.mkdir(parents=True, exist_ok=True)
+    with open(md_out, 'w') as f:
         f.write('\n'.join(lines))
-    print(f'✓ 已生成 {output_md}')
+    print(f'✓ 已生成 {md_out}')
 
 
 if __name__ == '__main__':

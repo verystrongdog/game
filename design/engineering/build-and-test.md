@@ -22,7 +22,7 @@
 | NuGet 源 | nuget.org | [`NuGet.config`](../../NuGet.config) | 此前包路径被烘焙进 `obj/*.nuget.g.props` 指向开发机（`/home/dog/game/.nuget-pkgs`），**干净检出无法复现**——本文件修掉该问题 |
 | NuGet 依赖锁定 | 三份 `code/src/<工程>/packages.lock.json` + `RestoreLockedMode` | 三个 `.csproj` | 锁的是**包图**（含传递依赖），不是"源"。漂移即 `NU1004` 失败；做法与实测见 §1.2。**自 2026-09-13（#129）** |
 | Python | **3.10.12** | CI 的 `setup-python` | 校验器与 sim 脚本 |
-| 校验器依赖 | `PyYAML==6.0.3` | [`code/tools/requirements.txt`](../../code/tools/requirements.txt) | 12 个校验器里**只有 `validate_disease.py`** 需要第三方库 |
+| 校验器依赖 | `PyYAML==6.0.3` · `numpy==2.2.6` | [`code/tools/requirements.txt`](../../code/tools/requirements.txt) | 13 个校验器里**只有两个**需要第三方库：`validate_disease.py`（YAML frontmatter）与 `validate_ceiling_generator.py`（numpy——它要真跑一次生成器，#134） |
 | 数值实验依赖 | `numpy==2.2.6` · `scipy==1.15.3` · `numba==0.67.0` | [`code/sim/requirements.txt`](../../code/sim/requirements.txt) | 15 个 sim 脚本里只有 3 个需要 |
 | Unity Editor | **6000.5.2f1**（revision `eb73d3b415a1`） | [`code/unity/ProjectSettings/ProjectVersion.txt`](../../code/unity/ProjectSettings/ProjectVersion.txt) | 版本与 revision 自 #136 起随工程入库（此前该文件只有 `m_EditorVersion` 一行）；包版本另有 `code/unity/Packages/packages-lock.json` 可复现。Unity 侧的**未验证项**见 §五 |
 
@@ -123,6 +123,7 @@ python3 code/tools/validate_tripartite_annotations.py  # 三体模型注释
 python3 code/tools/validate_data_manifest.py     # 数据契约（runtime allowlist / 属性正交 / 清单一致）
 python3 code/tools/validate_runtime_fixtures.py  # runtime 数据结构契约 + 53 条 fixture 判定（Python 侧）
 python3 code/tools/validate_unity_assets.py      # Unity 资产身份：.meta 成对性 / GUID 唯一性 / guid 引用可解析 / FBX Rig（无 Editor 依赖）
+python3 code/tools/validate_ceiling_generator.py # 生成链解耦：只写 MD 不得改写数据契约（#134，需 numpy）
 python3 code/tools/build_runtime_data_fixtures.py --check   # fixture 索引与磁盘一致
 ```
 
@@ -151,7 +152,7 @@ python3 code/tools/check_clean_checkout.py
 
 编排器：`python3 code/tools/run_all_checks.py`（⚠️ **有副作用**——写 `.checks-state.json`，CI 里不要用）
 
-> 2026-09-12 修：编排器此前把校验器目录写成 `ROOT / "tools"`（Phase 3 之后该目录已不存在），于是 `get_active_validators()` 返回空列表——**跑了 0 个校验器却退出码 0**，是静默全绿。现已改为 `code/tools/`，注册表与 CI 的 12 个循环逐项对齐，并加「找不到校验器即退出 2」的断言。判据：编排器读数必须与 §三 的 `docs-integrity` job 一致。
+> 2026-09-12 修：编排器此前把校验器目录写成 `ROOT / "tools"`（Phase 3 之后该目录已不存在），于是 `get_active_validators()` 返回空列表——**跑了 0 个校验器却退出码 0**，是静默全绿。现已改为 `code/tools/`，注册表与 CI 的 13 个循环逐项对齐，并加「找不到校验器即退出 2」的断言。判据：编排器读数必须与 §三 的 `docs-integrity` job 一致。
 
 ### 2.2 引擎（改代码后必跑）
 
@@ -197,13 +198,44 @@ python3 code/sim/sim_consciousness_v7_rb_test.py      # 例：判别三角自检
 
 sim 脚本用**扁平 import**（`from sim_consciousness_cs4_test import ...`），必须**以 `code/sim/` 为工作目录**运行，否则 import 失败。
 
+### 2.4 数据生成链（链路调制上限 · [#134](https://github.com/verystrongdog/game/issues/134)）
+
+```bash
+python3 code/tools/gen_modulation_ceiling.py --md-only   # 只写参考表，不重写数据契约（安全）
+python3 code/tools/validate_ceiling_generator.py         # 把"解耦成立"钉成判据（CI 已纳入）
+```
+
+`gen_modulation_ceiling.py`（v1）默认模式会**重算并重写** `data/connectivity/link_modulation_ceiling.json`——
+那份 JSON 是 **2026-07-27 的冻结快照**（`_metadata.provenance_note` 自述数值未重算），所以日常不要跑默认模式。
+`--md-only` 是给"只想看表"和"验证解耦"用的：**一个字节的数据契约都不碰**。
+
+MD 参考表的默认落点是被 gitignore 的 `artifacts/链路调制上限参考表.md`（可用 `--md-out PATH` 改）：
+
+- **不写回 `design/`**：v1 参考表已被 v2（`gen_modulation_ceiling_v2.py` → `design/rules/skill-tree/modulation/链路调制上限参考表-v2.md`）取代，写回正典会制造第二个权威来源；
+- **不刷新 `design/rules/skill-tree/deprecated/链路调制上限参考表.md`**：那是与 v1 JSON 同一份快照纪律的**历史快照**，重算等于把"当时的表"改成"今天的表"（2026-09-13 owner 决定）。
+
+| # | 检查（2026-09-13 实测，base `e51b586`） | 退出码 | 读数 |
+|---|---|---|---|
+| 1 | 改动前：`python3 code/tools/gen_modulation_ceiling.py`（默认模式） | **1** | 数据契约**先被改写**（`79d7cab…` → `dc2e62f…`，273 行数值），随后抛 `FileNotFoundError: …/技能树系统/链路调制上限参考表.md`——「修路径」与「改 836 个数值」被绑在一起 |
+| 2 | `… --md-only`（解耦后） | 0 | 两个 JSON SHA256 **不变**（`79d7cab…` / `95a7082…`）· MD 成功写出（84 行） |
+| 3 | `validate_ceiling_generator.py` | 0 | 通过侧：数据契约不变 · MD 已写出 · 历史快照未被动 |
+| 4 | 同校验器 + **注入缺陷 1**（让 `--md-only` 不生效） | **1** | `❌ 数据契约被改写：link_modulation_ceiling.json`（带 before/after SHA256） |
+| 5 | 同校验器 + **注入缺陷 2**（把 MD 写回那份历史快照） | **1** | `❌ 历史快照被动过：design/rules/skill-tree/deprecated/链路调制上限参考表.md` |
+
+第 4/5 行是**在临时 worktree 里注入缺陷后跑的**（跑完即删）——「两侧都要演示」不许只演通过侧。
+校验器把 MD 写到 `<临时目录>`，**自己绝不写工作树**（§四「工作树」判据）。
+
+> ⚠️ **一处已知的小疣**（如实记）：MD 模板里那行 JSON 链接（`../../data/connectivity/…`）是按旧落点写死的，
+> 落到 `artifacts/` 后它是相对错误的。**没修**——#134 明确排除"改 MD 内容模板"，
+> 且默认落点是非受控产物（不进任何校验器的引用面）。要点是"能写出来"，不是"这份产物完美"。
+
 ## 三、CI
 
 [`.github/workflows/ci.yml`](../../.github/workflows/ci.yml) — 四个 job，对应切片三轴 + issue 契约：
 
 | job | 覆盖 | 本机可复现 |
 |---|---|---|
-| `docs-integrity` | 12 个校验器（与 §2.1 同一循环）+ fixture 索引契约 | ✅ |
+| `docs-integrity` | 13 个校验器（与 §2.1 同一循环）+ fixture 索引契约 | ✅ |
 | `engine` | SDK 版本核对 → restore → Release build → Release test → **跨语言 fixture 判定比对** → trx artifact | ✅ |
 | `issues-snapshot` | 规则 fixture（`test_validate_issues.py`，不联网）+ 开放 issue 的契约校验（`validate_issues.py --from-github`，需 `issues: read`） | ✅ |
 | `unity` | **显式报告 `NOT_AVAILABLE`** | ❌ 需 Editor |
@@ -223,7 +255,7 @@ sim 脚本用**扁平 import**（`from sim_consciousness_cs4_test import ...`）
 
 | 判据 | 要求 |
 |---|---|
-| 校验器 | 12/12 退出码 0 |
+| 校验器 | 13/13 退出码 0 |
 | `validate_cross_refs` | **0 死链 / 0 段引用警告** |
 | 引擎测试 | **416 passed / 0 failed**（唯一权威；其余文档引用本节） |
 | 跨语言 fixture 判定 | `compare_fixture_verdicts.py` 逐条比对 Python 与 C# 的接受/拒绝，**差异为空**（53 条） |
@@ -250,5 +282,5 @@ sim 脚本用**扁平 import**（`from sim_consciousness_cs4_test import ...`）
 - **资产身份无常驻机械校验器**（`.meta` 齐全性、GUID 唯一性、场景与 controller 的引用可解析性）——#136 是用一次性脚本核的（294 个 `.meta` → 294 个唯一 GUID / 0 冲突）。缺它则本次的判据无法回归
 
 ---
-*创建: 2026-09-12 | 更新: 2026-09-13（§1.2 依赖锁定 · #129）*
+*创建: 2026-09-12 | 更新: 2026-09-13（§1.2 依赖锁定 #129 · §1.3 roll-forward 口径 #131 · §2.4 生成链解耦 #134）*
 *关联: [工程文档索引](README.md), [WORKFLOW.md](../../WORKFLOW.md), [ARCHITECTURE.md](../../ARCHITECTURE.md), [证据](evidence/README.md)*

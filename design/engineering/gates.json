@@ -30,8 +30,8 @@
       "ci_job": "docs-integrity",
       "command": "python3 code/tools/run_all_checks.py",
       "available": true,
-      "covers": "12 个校验器的编排（与 CI 循环逐项对齐）",
-      "criterion": "12/12 退出码 0",
+      "covers": "13 个校验器的编排（与 CI 循环逐项对齐）",
+      "criterion": "13/13 退出码 0",
       "note": "有副作用：会写 .checks-state.json（被 gitignore）。CI 里跑的是等价的显式循环，不用本编排器。"
     },
     {
@@ -52,6 +52,15 @@
       "available": true,
       "covers": "Unity 资产身份：.meta 成对性 / GUID 唯一性 / guid 引用可解析 / FBX Rig 断言。纯 git + 文本解析，**无 Editor 依赖**——故在 CI 可用（`unity` 门禁在 CI 上 NOT_AVAILABLE）",
       "criterion": "退出码 0（四条规则违规均为 0；豁免走 validate_unity_assets_exceptions.json 的三段允许清单）"
+    },
+    {
+      "id": "ceiling-generator",
+      "kind": "script",
+      "ci_job": "docs-integrity",
+      "command": "python3 code/tools/validate_ceiling_generator.py",
+      "available": true,
+      "covers": "链路调制上限生成链的解耦：跑一次 `gen_modulation_ceiling.py --md-only` 后，两个产出 JSON 的 SHA256 必须不变；历史快照 design/rules/skill-tree/deprecated/链路调制上限参考表.md 不许被写入（#134）",
+      "criterion": "退出码 0（数据契约字节不变 · MD 已写出 · 历史快照未被触碰）"
     },
     {
       "id": "clean-checkout",
@@ -109,7 +118,11 @@
       "available": true,
       "covers": "Unity 资产身份、Core→Unity 接缝、切片试玩",
       "criterion": "本机：unity status → state ready；Console 0 错误；run_tests 退出码 0。CI（ubuntu）：显式报告 NOT_AVAILABLE，不静默跳过",
-      "blocks": ["P4b Unity 资产身份", "P4d Core→Unity 接缝", "P5 实现并试玩 CP-01"],
+      "blocks": [
+        "P4b Unity 资产身份",
+        "P4d Core→Unity 接缝",
+        "P5 实现并试玩 CP-01"
+      ],
       "note": "2026-09-12 起本机可跑：Linux 侧是同一台 Windows 上的 WSL2，unity.exe 经 interop 直连 Windows Editor（实测 status→ready、open 工程→编译 0 错误）。CI 的 unity job 依旧报告 NOT_AVAILABLE（runner 无 Editor），故本门禁在 CI 上不可用、在本机可用——判据按 environment 判定。**实测教训**：驱动 Unity 本身不需要提权；但写 /mnt/c 下的文件需要（沙箱把 workspace 之外设为只读）。"
     }
   ]
