@@ -290,10 +290,10 @@ namespace YANTF.EditorTools
                     }
                 }
                 WriteRootTranslation(src, dst, rootBindings, times, corr);
-                AnimationMode.StopAnimationMode();
             }
             finally
             {
+                AnimationMode.StopAnimationMode();   // 异常路径也要退出采样模式（否则编辑器留着 AnimationMode 状态）
                 Object.DestroyImmediate(rigSrc);
                 Object.DestroyImmediate(rigDst);
             }
@@ -490,10 +490,10 @@ namespace YANTF.EditorTools
                         control = Mathf.Max(control, Vector3.Distance(pD[b], pS[b]) * 1000f);
                     }
                 }
-                AnimationMode.StopAnimationMode();
             }
             finally
             {
+                AnimationMode.StopAnimationMode();   // 异常路径也要退出采样模式
                 Object.DestroyImmediate(rigS);
                 Object.DestroyImmediate(rigD);
             }
