@@ -61,7 +61,7 @@
 
 | 项 | 方案 |
 |---|---|
-| 来源 | **由 `code/tools/bake_brain_shell.py` 从受控载体烘焙**——`brain_regions.json` 里带 `obj_file` 的条目按**文件去重后 40 个解剖载体**（58 个 functional_id 共享这 40 份几何；来源：正典"功能变体共享同一解剖载体的坐标和 OBJ"）。⚠️ 不是把 `pial_DK/` 70 个文件全导进去 |
+| 来源 | **由 `code/tools/bake_brain_shell.py` 从受控载体烘焙**——`brain_regions.json` 里带 `obj_file` 的条目按**文件去重后 40 个解剖载体**（58 个 functional_id 共享这 40 份几何；来源：正典"功能变体共享同一解剖载体的坐标和 OBJ"），**每侧各一份 → 80 个区域对象**（对侧按命名约定 `lh.`↔`rh.` / `Left-`↔`Right-` 派生，实测 40/40 有真实对照文件）。⚠️ 不是把 `pial_DK/` 70 个文件全导进去 |
 | **坐标空间** | **MNI 毫米**（烘焙件原尺度，实测世界包围盒 72.5 × 169.3 × 121.6）——**不在烘焙侧换算**；视图根部施加单一等比变换（≈1/90）。口径见 §8.5 |
 | 形态 | **40 个区域对象挂在一个父节点下 + ≤13 个共享材质**（每个对象带 `functional_ids` / `lobe` 属性；高亮 = 换该对象的材质或 MaterialPropertyBlock）<br>实测：387,510 → **199,966 三角面**（预算 20 万）· **8 个**材质 · `.fbx` **6.4 MB** |
 | 材质 | **共享材质球**（≤ 12 组，按脑叶/结构分组），透明度走同一套 shader |
@@ -253,7 +253,7 @@ Unity 侧实测现状（2026-09-13，[code/unity/README.md](../../../code/unity/
 | 3 | 节点（71 上下文）与连线（1049 三体边）的运行时生成器 | 已按 [#145](https://github.com/verystrongdog/game/issues/145) 的裁定**拆成两层**：<br>· **只读骨架**（脑壳 + 脑区 + 链路 + 相机，零玩家行为）→ ✅ 已分解为 [#146](https://github.com/verystrongdog/game/issues/146)，可立即开工<br>· **玩家可操作面**（构建层聚焦配置 / 技能编排 / 链路操作）→ 随切片准入进入，届时声明 `requires: PLAYABLE:AUTHORIZED_PLAYABLE` |
 | 4 | 空间断言覆盖"3D 节点落在其脑区网格内" | §14.1 的硬要求目前无机械判据（[`validate_spatial.py`](../../../code/tools/validate_spatial.py) 未覆盖视图节点） |
 | 4b | ~~对齐 Windows 拷贝并重跑 `unity` 门禁~~ → ✅ **已完成（2026-09-13）**：`fetch` + `reset --mixed` 使 Editor 侧 HEAD = 仓库 HEAD，强制重编译后**新增错误 0 条**，基线（拷贝 + commit + 脏条目 87）已写进 [#143](https://github.com/verystrongdog/game/issues/143) 的闭合证据 | 危险点表 §七「`unity status` 的 `projectPath`」行：本机有两份拷贝，门禁证据必须写明基线——**每轮跑 `unity` 门禁都要重做这一步**，它不是一个一次性的待办 |
-| 5b | **整脑覆盖**：`brain_regions.json` 的 58 条 `obj_file` 全是左半球（44 `lh.*` + 14 `Left-*`），画面只能是半脑；`all_obj/pial_DK/` 里存在同名 `rh.*` 但不在契约里 | 属**数据契约**工作面（改 `obj_file` 或裁定允许镜像渲染），不是视图实现能单方面决定的；发现于 [#146](https://github.com/verystrongdog/game/issues/146) |
+| 5b | ~~**整脑覆盖**~~ → ✅ **已完成（[#147](https://github.com/verystrongdog/game/issues/147)，2026-09-13）**：对侧按命名约定派生真实网格，40 载体 → 80 区域对象（左 40 / 右 40）；**未动数据契约** | 派生规则只依赖既有 `obj_file` 值，故不需要新字段；若将来偏侧化机制要求按半球区分几何/染色，再另立数据契约 issue |
 | 6 | **构建层可操作面的设计对齐正典**（把 [3D可视化设计规范](3D%E5%8F%AF%E8%A7%86%E5%8C%96%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83.md) §四 的交互设计对齐到 71 上下文 / 1049 三边 / 14 网络 × 8 角色 / 节点层口径） | owner 2026-09-13 指示**暂缓**（"先不要设计"）——本条无准入依赖，随时可做；它决定玩法面 issue 开工时的口径准确性 |
 | ~~5~~ | ~~`obj_file` 存在性校验器~~ | ❌ **owner 2026-09-13 决定不做**——不加这条机械校验；缺口如实留在[脑模型资产登记](%E8%84%91%E6%A8%A1%E5%9E%8B%E8%B5%84%E4%BA%A7%E7%99%BB%E8%AE%B0.md) §八 缺陷 5 |
 
@@ -313,7 +313,8 @@ Unity 侧实测现状（2026-09-13，[code/unity/README.md](../../../code/unity/
 | ① | `Task` | [#143](https://github.com/verystrongdog/game/issues/143) | 烘焙脑壳进 Unity 工程——资产身份与导入动线 ✅ **已闭合（2026-09-13）** |
 | ② | `Task` | [#144](https://github.com/verystrongdog/game/issues/144) | 正典同步——§16.1 节点颜色列口径回写（被 D23 取代） |
 | ③ | `RFC` | [#145](https://github.com/verystrongdog/game/issues/145) | 3D 脑区面板的切片归属与准入 ✅ **已闭合（2026-09-13）**：性质 = **玩法承载面**；归属 = 需切片承载、当前不指定（触发条件：owner 指定下一个 current playable） |
-| ④ | `Task` | [#146](https://github.com/verystrongdog/game/issues/146) | 只读骨架——BrainViewLab 演示场（脑壳 + 脑区 + 链路，**零玩家行为**）｜✅ **已交付**（2026-09-13，实测 40/8/1049/16 · PlayMode 38/38 通过），闭合待 triage |
+| ④ | `Task` | [#146](https://github.com/verystrongdog/game/issues/146) | 只读骨架——BrainViewLab 演示场（脑壳 + 脑区 + 链路，**零玩家行为**）｜✅ **已闭合（2026-09-13）**：实测 40/8/1049/16 · PlayMode 38/38 |
+| ⑤ | `Task` | [#147](https://github.com/verystrongdog/game/issues/147) | 整脑覆盖——对侧按命名约定派生（不改数据契约）｜✅ **已交付**：40 载体 → 80 区域对象（左 40 / 右 40）· PlayMode **39/39** |
 
 **暂不导入**：视图运行时生成器。它是 `Implementation`，前置（归属）由 #145 决定——按 issue-process §六 R7 的正解，先出裁定，再由切片或独立通道分解。**不得**在裁定前抢开。
 

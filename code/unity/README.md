@@ -416,10 +416,11 @@ U="/mnt/c/Users/9527/AppData/Local/Unity/bin/unity.exe"; P="C:\Users\9527\game\c
 
 | 项 | 值 |
 |---|---|
-| 资产 | `code/unity/Assets/SkillTree/Models/brain_shell.fbx`（6.4 MB · sha256 前 16 `e983c347471e0827`） |
+| 资产 | `code/unity/Assets/SkillTree/Models/brain_shell.fbx`（**6.8 MB** · 双侧 · sha256 前 16 `20f3424f0139b6fe` —— [#147](https://github.com/verystrongdog/game/issues/147) 替换；单侧旧值 `e983c347471e0827`） |
 | 目录 | `Assets/SkillTree/`（GUID `44b2e4aa2db3ccb45bd480b630e04fc0`）· `Assets/SkillTree/Models/`（GUID `42a08dffda1b07d4890feda12e5e2026`） |
 | 资产 GUID | `6551384821590304e9bb1979565e9b4e`（**由 Editor 生成**，仓库采用同一值） |
-| 来源 | `code/tools/bake_brain_shell.py` ← `data/brain_regions.json` 的 40 个受控解剖载体（58 个 functional_id 共享） |
+| 来源 | `code/tools/bake_brain_shell.py` ← `data/brain_regions.json` 的 **40 个受控解剖载体 × 两侧**（58 个 functional_id 共享这些载体） |
+| 对侧口径 | 契约的 58 条 `obj_file` **全为左半球**，故烘焙侧按**命名约定**派生对侧：`lh.`↔`rh.` · `Left-`↔`Right-`，并**逐个校验存在性**（实测 40/40 都有真实对照文件 → 用真实网格，不做几何镜像）。**派生规则只从既有契约字段推导，故不新增第二份真相源、不动数据契约**（理由见 [#147](https://github.com/verystrongdog/game/issues/147)） |
 | 接入位置 | 工程资产区。**未接进任何场景**：装配属视图实现，等归属与准入裁定（[#145](https://github.com/verystrongdog/game/issues/145)） |
 
 ### 导入动线（实测跑通，2026-09-13）
@@ -495,7 +496,7 @@ grep '^guid:' code/unity/Assets/SkillTree*/**/*.meta 2>/dev/null || \
 
 | 判据 | 读数 |
 |---|---|
-| builder 产出 | 脑壳 区域对象 **40**（数据侧 `obj_file` 去重载体 **40**，一致）· 材质 **8** |
+| builder 产出 | 脑壳 区域对象 **80**（数据侧载体 40 × 双侧；**左 40 / 右 40**）· 材质 **8**（不因双侧增加） |
 | | 链路 **1049** 条 · submesh **16** · 材质 **16** |
 | 根变换 | rot **(270, 0, 0)**（= −90° X）· scale **0.01111**（= 1/90，口径见接入设计 §8.5） |
 | 网格/链路对齐 | links 世界包围盒中心落在 shell 包围盒内 **True**；轴向比 shell/link = **0.71 / 1.15 / 1.19**（shell 是左半球、链路跨双侧，故 X 更窄——比例关系自洽） |
@@ -515,9 +516,10 @@ grep '^guid:' code/unity/Assets/SkillTree*/**/*.meta 2>/dev/null || \
 | # | 事项 | 说明 |
 |---|---|---|
 | 1 | **链路在 builder 时生成，不是 Play 时** | 场景自带烘好的链路 Mesh；改 `data/` 后需**重跑 builder**才反映。这与接入设计 A7"改数据不改场景"尚有距离——A7 的达成需要数据进 Assets（生成式 C# 静态表，参考 [#138](https://github.com/verystrongdog/game/issues/138) 的方向），属后续工作面 |
-| 2 | **脑壳只覆盖左半球** | `brain_regions.json` 的 58 条 `obj_file` **全部**是左半球（44 `lh.*` + 14 `Left-*`）；`all_obj/pial_DK/` 里存在同名 `rh.*`，但不在契约里。故画面是半脑——整脑需要一次口径裁定（是否把右半球纳入 `obj_file`，或允许镜像渲染）。**属数据契约工作面，本条不擅自动** |
+| 2 | ~~脑壳只覆盖左半球~~ → ✅ **已解决（[#147](https://github.com/verystrongdog/game/issues/147)，2026-09-13）** | 对侧按命名约定派生并用**真实网格**补齐：40 载体 → **80 区域对象**（左 40 / 右 40）。实测画面非背景像素 3.9% → **7.9%**、内容包围盒 211×262 → **309×274 px**。**未改数据契约**（派生规则只依赖既有 `obj_file` 值） |
 | 3 | **脑壳不透明度被运行时改写过** | 烘焙件沿用 v2 世代的逐脑叶 `alpha=0.10`，深色背景下近乎不可见；该材质是**导入资产的内嵌材质**，直接改不持久（重导入即还原）→ `BrainViewRig` 用 `MaterialPropertyBlock` 覆盖为 **0.35**（呈现层取值，可调），不碰资产 |
 | 4 | **`write_text_file` 与仓库版差一个尾换行** | Editor 侧写出的文件无尾换行（`.meta` 同现象），仓库侧有。逐文件 `diff` 只此一处差异；已核对 **API Updater 未改写任何源码**（危险点表 §七 的行） |
+| 5 | **测试不得断言 gitignore 资产的存在** | 首版"对侧文件存在性"断言在 Windows 侧**假失败**——那份拷贝里没有 `all_obj/`（gitignore，从未复制过去）。已改为两层判定：**命名约定（字符串层）必判**，**文件存在性（文件层）仅在目录可用时判**并留痕。教训：断言只能依赖"每个环境都有的东西" |
 
 ### 怎么复核
 

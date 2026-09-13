@@ -10,6 +10,9 @@ functional_id 共享同一载体）导入、减面、挂**共享材质**，导�
   - 减面目标 200,000 三角面：来源 design/presentation/visualization-3d/Unity接入设计.md §五
   - 资产形态：脑壳是**唯一进 Unity 工程的建模产物**（同上 §四）；.blend / 742 MB 中间件都不进
   - 不保留全半球外壳：见 脑模型资产登记.md 与 Unity接入设计.md §八-4
+  - **整脑覆盖（#147）**：`data/brain_regions.json` 的 58 条 obj_file 全为左半球，故本工具按
+    **命名约定**派生对侧（`lh.`↔`rh.`、`Left-`↔`Right-`）并**逐个校验存在性**——实测 40/40 都有
+    真实对照文件，故用真实网格而非几何镜像；派生规则只从既有契约字段推导，**不新增第二份真相源**
 
 用法:
   blender.exe --background --factory-startup --python code/tools/bake_brain_shell.py \
@@ -60,10 +63,26 @@ PROJECT = os.environ.get("YANTF_BRAIN_PROJECT") or str(Path(__file__).resolve().
 ASSET_DIR = os.path.join(PROJECT, "design", "presentation", "visualization-3d", "blender_assets")
 OUT_DIR = argv_opt("--out") or os.path.join(ASSET_DIR, "build")
 TRI_BUDGET = int(argv_opt("--tris", "200000"))
+# 整脑覆盖（#147）：对侧按命名约定派生。默认开——58 条 obj_file 全为左半球，
+# 关掉就退回"半颗脑"（#146 的诚实清单第 2 项）。
+BILATERAL = argv_opt("--bilateral", "1") not in ("0", "false", "no")
 
 
 def log(m):
     print(f"[BakeShell] {m}")
+
+
+def counterpart(rel):
+    """左半球载体 → 对侧载体（命名约定；只依赖契约里既有的 obj_file 值）。
+
+    来源：2026-09-13 实测——40 个载体在 all_obj/ 里全部有真实对侧文件
+    （pial_DK 的 lh./rh. 各 35 个、subcortical 的 Left-/Right- 各 12 个），故不需要几何镜像。
+    """
+    d, b = os.path.split(rel)
+    for a, z in (("lh.", "rh."), ("rh.", "lh."), ("Left-", "Right-"), ("Right-", "Left-")):
+        if b.startswith(a):
+            return os.path.join(d, z + b[len(a):])
+    return None
 
 
 def obj_lobe(name):
@@ -168,13 +187,15 @@ def main():
     root = bpy.data.collections.new("BrainShell")
     bpy.context.scene.collection.children.link(root)
 
-    missing, imported = [], []
+    missing, imported, missing_counterpart = [], [], []
     mats = {}
-    for rel, fids in sorted(by_file.items()):
+    carrier_names = set(by_file)
+
+    def place(rel, fids, suffix):
+        """导入一个载体文件并把对象挂到 root；返回导入的对象列表。"""
         path = os.path.join(PROJECT, rel)
         if not os.path.exists(path):
-            missing.append(rel)
-            continue
+            return None
         before = set(bpy.data.objects)
         import_obj(path)
         new = [o for o in bpy.data.objects if o not in before and o.type == 'MESH']
@@ -185,19 +206,41 @@ def main():
             for c in list(o.users_collection):
                 c.objects.unlink(o)
             root.objects.link(o)
-            o.name = fids[0] if len(new) == 1 else f"{fids[0]}_{o.name}"
+            base = fids[0] + suffix
+            o.name = base if len(new) == 1 else f"{base}_{o.name}"
             o.data.materials.clear()
             o.data.materials.append(mat)
             for fid in fids[1:]:
                 o[f"functional_id_{fid}"] = True
             o["functional_ids"] = ",".join(fids)
             o["lobe"] = lobe
+            o["hemisphere"] = "right" if suffix else "left"
             imported.append(o)
+        return new
+
+    for rel, fids in sorted(by_file.items()):
+        if not os.path.exists(os.path.join(PROJECT, rel)):
+            missing.append(rel)
+            continue
+        place(rel, fids, "")                       # 左半球（契约指名的那侧）
+        if BILATERAL:
+            alt = counterpart(rel)
+            if alt is None:
+                missing_counterpart.append(rel + "（无命名对照规则）")
+            elif alt in carrier_names:
+                pass                                # 对侧本身也是契约载体 → 不重复导入
+            elif os.path.exists(os.path.join(PROJECT, alt)):
+                place(alt, fids, "_R")              # 右半球（真实对照网格）
+            else:
+                missing_counterpart.append(rel + " → " + os.path.basename(alt))
 
     pre_tris = sum(tris_of(o) for o in imported)
-    log(f"导入 {len(imported)} 个 mesh · 原始 {pre_tris:,} 三角面 · 材质 {len(mats)} 个")
+    log(f"导入 {len(imported)} 个 mesh · 原始 {pre_tris:,} 三角面 · 材质 {len(mats)} 个"
+        f" · 双侧={'开' if BILATERAL else '关'}")
     if missing:
         log(f"⚠ 缺失 {len(missing)} 个 OBJ（前 3：{missing[:3]}）——all_obj 需按登记重下")
+    if missing_counterpart:
+        log(f"⚠ {len(missing_counterpart)} 个载体缺对侧网格（前 3：{missing_counterpart[:3]}）")
 
     # 按原始面数比例分配预算 → Decimate COLLAPSE
     for o in imported:
@@ -244,6 +287,8 @@ def main():
         "_description": "脑壳烘焙产出核对（工具：code/tools/bake_brain_shell.py）",
         "carrier_files": len(by_file),
         "functional_ids": sum(len(v) for v in by_file.values()),
+        "bilateral": BILATERAL,
+        "missing_counterparts": missing_counterpart,
         "imported_meshes": len(imported),
         "missing_files": missing,
         "tris_source": pre_tris,
@@ -257,6 +302,9 @@ def main():
         json.dump(report, f, ensure_ascii=False, indent=1)
     log(f"FBX → {fbx}  ({report['fbx_bytes']/1e6:.1f} MB)")
     log(f"核对报告 → {os.path.join(OUT_DIR, 'bake_report.json')}")
+    expect = len(by_file) * (2 if BILATERAL else 1) - len(missing_counterpart)
+    if BILATERAL and len(imported) != expect:
+        log(f"⚠⚠ 导入 mesh 数 {len(imported)} ≠ 期望 {expect}（载体 {len(by_file)} × 双侧）")
     ok = (not missing) and post_tris <= TRI_BUDGET * 1.05
     log("✅ 达成" if ok else "⚠ 未达成（见报告）")
 

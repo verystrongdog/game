@@ -94,13 +94,23 @@ namespace YANTF.EditorTools
             EditorSceneManager.SaveScene(scene, ScenePath);
 
             // ---- 产出核对（数据驱动，不写死数字）----
-            int expectedRegions = CountDataCarriers(repoRoot);
+            // 整脑覆盖（#147）：契约的 58 条 obj_file 全为左半球，烘焙侧按命名约定补了对侧
+            // （lh.↔rh. / Left-↔Right-，实测 40/40 有真实对照），故期望 = 载体数 × 2。
+            int carriers = CountDataCarriers(repoRoot);
+            int expectedRegions = carriers * 2;
+            int right = 0;
+            foreach (var mf in shell.GetComponentsInChildren<MeshFilter>(true))
+                if (mf.name.EndsWith("_R")) right++;
             Debug.Log($"[BrainView] 场景 → {ScenePath}\n" +
-                      $"  脑壳：区域对象 {rig.RegionCount}（数据侧 obj_file 去重载体 {expectedRegions}）· 材质 {rig.ShellMaterialCount}\n" +
+                      $"  脑壳：区域对象 {rig.RegionCount}（数据侧载体 {carriers} × 双侧 = {expectedRegions}；" +
+                      $"左 {rig.RegionCount - right} / 右 {right}）· 材质 {rig.ShellMaterialCount}\n" +
                       $"  链路：{renderer.LinkCount} 条 · submesh {renderer.SubmeshCount} · 材质 {renderer.MaterialCount}\n" +
                       $"  根变换：rot {rig.transform.localRotation.eulerAngles} · scale {rig.transform.localScale.x:F5}");
             if (expectedRegions > 0 && rig.RegionCount != expectedRegions)
-                Debug.LogWarning($"[BrainView] ⚠ 区域对象数 {rig.RegionCount} ≠ 数据侧载体数 {expectedRegions}");
+                Debug.LogWarning($"[BrainView] ⚠ 区域对象数 {rig.RegionCount} ≠ 期望 {expectedRegions}" +
+                                 $"（载体 {carriers} × 双侧）——检烘焙是否按 §二·K 跑了双侧");
+            if (right * 2 != rig.RegionCount)
+                Debug.LogWarning($"[BrainView] ⚠ 左右半球对象数不等：左 {rig.RegionCount - right} / 右 {right}");
             foreach (var line in log) Debug.LogWarning("[BrainView] " + line);
         }
 
