@@ -57,6 +57,8 @@ dotnet test code/src/YouAreNotTheFish.sln        # 引擎测试（改代码时�
 
 改设计文档或数据后跑前三条；改代码后跑第四条；**新建或修改 issue 后跑第四条**（issue 是准入载体，其字段与依赖边同样受机械校验）。**报 0 死链 + 测试全绿是底线**，不是"锦上添花"。
 
+**改 `code/unity/Assets/**`、或经 CLI 驱动 Unity Editor 之前**，先查 [危险点表](design/engineering/危险点表.md)（按**位置**检索的排障索引：这个位置反复出什么事、判据是什么、怎么躲）。⚠️ 该表覆盖 Unity 侧的坑，而 **`code/` 与根目录文档不在上述校验器的扫描范围内**——它的死链要人盯。
+
 ## 四、Git
 
 - **小步提交**，按主题分批，不混 commit

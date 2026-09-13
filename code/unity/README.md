@@ -160,7 +160,7 @@ P="C:\Users\9527\game\code\unity"
 ### 会话启动清单
 
 1. **确认 Editor 可直驱**：上表的 `unity status`，期望 `state: ready`（Editor 已开则直接连；未开则 `unity open`）。
-2. **认准起点**：先读 [AGENTS.md](../../AGENTS.md)（全仓约束入口，含提交前必跑的校验器）→ 本 README §二·G → [动作库规格.md §四·乙/§六](../../design/presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md) → [动作系统分解](../../design/engineering/%E5%8A%A8%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%88%86%E8%A7%A3-2026-09-12.md)。
+2. **认准起点**：先读 [AGENTS.md](../../AGENTS.md)（全仓约束入口，含提交前必跑的校验器）→ 本 README §二·G → [危险点表](../../design/engineering/%E5%8D%B1%E9%99%A9%E7%82%B9%E8%A1%A8.md)（**改 `Assets/**`、或驱动 Editor 前先查你要动的那处**）→ [动作库规格.md §四·乙/§六](../../design/presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md) → [动作系统分解](../../design/engineering/%E5%8A%A8%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%88%86%E8%A7%A3-2026-09-12.md)。
 3. **开工顺序**：**#137 → #138 → #139 → #140**（严格串行，工作面相交）。每条的门禁、验收标准、预期差分、明确排除都在 issue 正文里，照做即可。
 4. **本侧对 `code/unity/Assets/**` 可写**（经提权），实现与验证能在同一侧闭环——**不再需要跨机交接**。
 
