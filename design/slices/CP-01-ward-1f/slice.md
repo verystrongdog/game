@@ -42,7 +42,7 @@
 | **角色动作呈现**（✏️ 2026-09-12 新增） | `ACCEPTED` | **`PARTIAL`** | `ISOLATED` | **`REGRESSED`** | [动作库规格.md](../../presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md) 12 词表 + 契约 A+B；`ActionPlayer.cs` / `ActionCatalog.cs` 已入库。**缺口**：L1 九条中仅 5 条有 clip（locomotion 四条引用仓库外 KI 资产）→ PlayMode 2 项常红（健康度 `REGRESSED` 的判据）；[动作系统分解](../../engineering/%E5%8A%A8%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%88%86%E8%A7%A3-2026-09-12.md) 为本轮 frontier |
 | **就座交互（找椅子才能坐）**（✏️ 2026-09-13 新增） | `ACCEPTED` | **`PARTIAL`** | `ISOLATED` | `UNKNOWN` | [动作库规格.md](../../presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md) §四·丁：就座判定（距离 + 前侧 + 空闲）· 对齐段 · 占用锁 · 就座锚点 0.423 m 实测。实现已落地（`ChairSeat.cs` + 驱动层判定/对齐/根位移 + 10 项 PlayMode 断言；就座后臀部↔坐面 +4.8 mm）→ `PARTIAL`；**未 `DONE_FOR_SLICE`**：owner 目视清单 ⑧ 未确认 |
 | 结束条件 | `UNRESOLVED` | `NONE` | `ISOLATED` | `UNKNOWN` | — |
-| Unity 资产身份（`.meta`/ProjectSettings） | — | **`NONE`** | `ISOLATED` | `UNKNOWN` | `.meta` 0 个、场景 0 个 → 阻塞 P4b |
+| Unity 资产身份（`.meta`/ProjectSettings） | — | **`DONE_FOR_SLICE`** | `ISOLATED` | **`PASS`** | `code/unity/README.md` §二·H（#136 资产身份入库）+ `code/tools/validate_unity_assets.py`（#142 常驻校验：128 个受控 Unity 文件 / 58 个 `.meta` / 1 场景 / 1 controller，四条规则 0 违规）。🔧 2026-09-13 回填——本行原写「`.meta` 0 个、场景 0 个 → 阻塞 P4b」，与 #136 落地后的事实不符 |
 
 **读法**：结算与资源**逻辑已真实可用**（Console 端 E2E）；但**呈现侧几乎全停在 `ISOLATED` 或 `NONE`**——这正是 M1/M2/M3 全部 `UNTESTED` 的原因。
 
@@ -51,7 +51,7 @@
 | 位置 | 性质 | 替换条件 |
 |---|---|---|
 | `code/unity/Assets/Scripts/DemoSolver.cs` | 手抄 `CalibrationConfig.Default` 的结算常量（伤害 4 / 命中 0.75 / SAN 惩罚 1.3·2 / HP=san×0.5）。**后果**：凡改结算常量必须同时改它，否则 demo 与引擎静默分叉 | P4d 完成 Core→Unity 接缝后删除 |
-| Unity 场景 | 不入库，靠 Editor 菜单运行时生成 | P4b 建立资产身份后改为提交场景 |
+| Unity 场景 | **已解除**：`Assets/Scenes/ActionLab.unity` 自 #136 起入库，为可打开的基准场景（`docs`：`code/unity/README.md` §二·H） | 🔧 2026-09-13 修正——本行原写「不入库，靠 Editor 菜单运行时生成」，该捷径已由 #136 消除；其余 lab 场景仍由 builder 菜单重建 |
 | `code/unity/Assets/Kevin Iglesias/*` 引用 | 该资产包**不在仓库**，导致 PlayMode 2 项失败（locomotion clip 缺失） | 要么入库、要么改为仓库内资产 |
 
 ## 四、阻塞项

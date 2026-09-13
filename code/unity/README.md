@@ -266,8 +266,8 @@ ActionLab 的 `Main Camera` **自带环绕跟随**：`ActionLabBuilder.CreateSce
      - ① `OneShotElapsed`——C# 允许浮点运算使用**高于结果类型的精度**：`elapsed >= clipLength + OneShotTailSeconds` 的右侧可能以 **double 中间值**参与比较，与外部按 float 落回的同一个和**差 1 ulp**，恰好到点被判"未到点"（实测：`a = clipLen + 0.05f` 与函数内的和同为 bits `1065772646`，函数却返回 `False`）。改为显式落回 float 再比。此计时正是 `Sit` 播完切 `SitIdle` 的依据。
      - ② `ResetToIdle` 不清 `CurrentActionId`——重置后仍留旧值，凡靠它做输入守卫的路径被误导（例：7 起身的守卫要求"当前是 `SitIdle`"）。
    - **证据**：PlayMode **23 项 23 过 / 0 红**（此前 21 项中 2 项常红，见 §二·I）。
-3. **干净检出的首次导入 / 编译 / Play 未实测**：Editor 只跑在 Windows 拷贝上（Linux 侧无 Editor，且 WSL 对 `/mnt/c` 只读）。正确性由三条间接证据支撑：① 84/84 逐文件字节一致；② 场景与 controller 的 GUID 引用全部可解析到已跟踪资产（含 X Bot.fbx、5 条 combat clip）；③ 来源工程（就是提交的那批字节）内 Editor 0 错误、16 项测试跑通。
-4. **资产身份还没有常驻机械校验器**：`.meta` 齐全性、GUID 唯一性、场景/controller 引用可解析性本次是用一次性脚本核的（294 个 `.meta` → 294 个唯一 GUID，0 冲突）。建议进候选队列，别让它退回成人工步骤。
+3. **干净检出的首次导入 / 编译 / Play 未实测**：Editor 只跑在 Windows 拷贝上（Linux 侧无 Editor，且 WSL 对 `/mnt/c` 只读）。正确性由三条间接证据支撑：① 84/84 逐文件字节一致；② 场景与 controller 的 GUID 引用全部可解析到已跟踪资产（含 X Bot.fbx、5 条 combat clip）〔🔧 2026-09-13 更正：**此句当时写宽了**——`ActionLab.controller` 的 4 条 locomotion 态引用**不可解析**（KI 包未入库），即下方残留缺口 ①；现由 `validate_unity_assets.py` 的 A3 每次报出，并登记在允许清单 `known_dangling`〕；③ 来源工程（就是提交的那批字节）内 Editor 0 错误、16 项测试跑通。
+4. ~~**资产身份还没有常驻机械校验器**~~ → **✅ 2026-09-13 已闭合（#142）**：当时 `.meta` 齐全性、GUID 唯一性、场景/controller 引用可解析性是用一次性脚本核的（294 个 `.meta` → 294 个唯一 GUID，0 冲突），**核完即弃**。现在常驻 **`code/tools/validate_unity_assets.py`**，四条规则（成对性 / GUID 唯一性 / 引用可解析 / FBX Rig）进 `docs-integrity` 循环；它**不需要 Unity Editor**，故在 CI 上也能拦（`unity` 门禁在 CI 上是 `NOT_AVAILABLE`）。已登录在案的例外见 `code/tools/validate_unity_assets_exceptions.json` 的三段允许清单——其中 4 条 KI 悬空引用归属 [#139](https://github.com/verystrongdog/game/issues/139)，**该 issue 关闭时必须删除那 4 条**。
 
 ### 怎么复核
 
