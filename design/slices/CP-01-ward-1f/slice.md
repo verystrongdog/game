@@ -40,6 +40,7 @@
 | **探索与接敌** | **`UNRESOLVED`** | `NONE` | `ISOLATED` | `UNKNOWN` | 无空间切片设计；Unity 场景靠 Editor 菜单运行时生成 |
 | **HUD 与反馈** | `ACCEPTED` | **`NONE`** | `ISOLATED` | `UNKNOWN` | [design/presentation/战斗界面布局.md](../../presentation) 有 37 项决策，但 Unity 侧未实现 |
 | **角色动作呈现**（✏️ 2026-09-12 新增） | `ACCEPTED` | **`PARTIAL`** | `ISOLATED` | **`REGRESSED`** | [动作库规格.md](../../presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md) 12 词表 + 契约 A+B；`ActionPlayer.cs` / `ActionCatalog.cs` 已入库。**缺口**：L1 九条中仅 5 条有 clip（locomotion 四条引用仓库外 KI 资产）→ PlayMode 2 项常红（健康度 `REGRESSED` 的判据）；[动作系统分解](../../engineering/%E5%8A%A8%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%88%86%E8%A7%A3-2026-09-12.md) 为本轮 frontier |
+| **就座交互（找椅子才能坐）**（✏️ 2026-09-13 新增） | `ACCEPTED` | **`NONE`** | `ISOLATED` | `UNKNOWN` | [动作库规格.md](../../presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md) §四·丁：就座判定（距离 + 前侧 + 空闲）· 对齐段 · 占用锁 · 就座锚点 0.423 m 实测。**实现（椅子场景件 + 驱动层判定/对齐）尚未落地** → 本行 `Implementation` 落 `NONE`，由本轮 issue 交付后转 `PARTIAL` |
 | 结束条件 | `UNRESOLVED` | `NONE` | `ISOLATED` | `UNKNOWN` | — |
 | Unity 资产身份（`.meta`/ProjectSettings） | — | **`NONE`** | `ISOLATED` | `UNKNOWN` | `.meta` 0 个、场景 0 个 → 阻塞 P4b |
 

@@ -20,7 +20,9 @@
     "one_shot_tail_seconds": "design/presentation/动作库规格.md §七（clip.length + 0.05 s）",
     "locomotion_blend.walk_speed_mps": "code/unity/Assets/Scripts/ActionLabDriver.cs 的 walkSpeed —— 该值为**演示常量，非正典数值**",
     "locomotion_blend.run_speed_mps": "code/unity/Assets/Scripts/ActionLabDriver.cs 的 runSpeed —— 同上，演示常量",
-    "locomotion_blend.samples[].threshold": "0 / walk_speed_mps / run_speed_mps 三点（design/presentation/动作库规格.md §四·乙）"
+    "locomotion_blend.samples[].threshold": "0 / walk_speed_mps / run_speed_mps 三点（design/presentation/动作库规格.md §四·乙）",
+    "actions[].exit_via": "design/presentation/动作库规格.md §四·丁#7（坐姿下收到移动意图时先播的一次性动作：SitIdle → Stand；按字段判定，不硬编码 id）",
+    "actions[].root_motion_xz": "design/presentation/动作库规格.md §四·乙 再修正（坐立三段把 clip 的 XZ 根位移经 cc.Move 施加；其余词条一律 false）"
   },
   "one_shot_tail_seconds": 0.05,
   "locomotion_blend": {
@@ -165,6 +167,7 @@
         "generator": "code/unity/Assets/Editor/DerivedClipBuilder.cs（菜单 YANTF/动作演示/重建派生动画；VerifyDerived() 逐曲线自检漂移）"
       },
       "next_state": "SitIdle",
+      "root_motion_xz": true,
       "notes": "坐下段**不是 Mixamo 原件**。原件 `Stand To Sit.fbx` 的坐姿端与 Sitting Idle / Sit To Stand 不同族（实测踝前后差 149 mm、膝角差 17.6°），接上会跳；反转 Sit To Stand 得到同族坐下段（实测接缝 1.8 / 0.0 / 0.4 mm）。**不用负 AnimatorState.speed**——实测非循环状态下 Unity 把时间钳在 [0, length]，状态会卡死在 clip 首帧（见 code/tools/unity-cli/README.md §五）。next_state=SitIdle 保证坐下后「坐得住」而不是弹回站姿。"
     },
     {
@@ -178,6 +181,8 @@
       "clip_asset": "Assets/Animations/Mixamo/Sitting Idle.fbx",
       "asset_status": "present",
       "source_clip": "Mixamo `Sitting Idle`（用户提供，2026-09-12）",
+      "exit_via": "Stand",
+      "root_motion_xz": true,
       "notes": "坐立三段的停留段（循环持续态）。与 Sit To Stand 同坐姿基准（RootT.y 差 0.36 mm、RootT.z 差 0.45 mm），实测接缝 ≤1.9 mm；循环稳定——沿循环 5 点采样髋位变化 <0.3 mm、t=0 与 t=1 读数逐位相同。⚠️ 导入时 Unity 默认给 Generic + NoAvatar，**必须手工设 Rig=Humanoid**（否则挂不上 X Bot，且读不到 RootT 曲线）。"
     },
     {
@@ -190,7 +195,8 @@
       "fade": 0.10,
       "clip_asset": "Assets/Animations/Mixamo/Sit To Stand.fbx",
       "asset_status": "present",
-      "notes": "起身段用 Mixamo 原件（同时是 SitDown 派生件的源）。**末帧已裁**：`lastFrame` 68 → 54（clip 2.2667 → 1.8000 s）——原末 20% 是一段「漂」（t=0.80 躯干 3.8°、足底 +0.0042 → t=1.00 躯干 13.9°、足离地 +0.0175、髋继续升）。裁后末帧躯干 4.0°、足底 +0.0021/+0.0105（接地）。"
+      "notes": "起身段用 Mixamo 原件（同时是 SitDown 派生件的源）。**末帧已裁**：`lastFrame` 68 → 54（clip 2.2667 → 1.8000 s）——原末 20% 是一段「漂」（t=0.80 躯干 3.8°、足底 +0.0042 → t=1.00 躯干 13.9°、足离地 +0.0175、髋继续升）。裁后末帧躯干 4.0°、足底 +0.0021/+0.0105（接地）。",
+      "root_motion_xz": true
     },
     {
       "id": "Talk",
