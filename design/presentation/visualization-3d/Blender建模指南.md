@@ -1,6 +1,11 @@
 # Blender 建模指南 — 玻璃大脑技能树
 
 > 从脑图谱数据到 Blender 可渲染的玻璃大脑模型的建模工作流。目标：生成的 FBX/GLTF 可直接导入 Unity 作为技能树 UI。
+>
+> ⚠️ **2026-09-13 范围重新划定**：
+> - ✅ **仍然有效**：§一 mesh 下载与来源、§二 集合结构、§三 材质做法、§五 渲染 —— 建模操作层面
+> - 🔶 **已迁走**：**接 Unity 的资产形态、渲染方案与验收判据见 [Unity接入设计](Unity%E6%8E%A5%E5%85%A5%E8%AE%BE%E8%AE%A1.md)**；**资产身份、正典源与重建命令见 [脑模型资产登记](%E8%84%91%E6%A8%A1%E5%9E%8B%E8%B5%84%E4%BA%A7%E7%99%BB%E8%AE%B0.md)**
+> - ⚠️ **已废弃**：本文中"按分支（认知/情绪/行为/终极）定形状与配色"的部分——分类现为**主导网络 × 主导角色**，节点形状改按**层级 L0–L5**
 
 ---
 
@@ -19,7 +24,7 @@
 ## 一、前置准备
 
 ### 1.1 软件
-- **Blender** ≥ 4.0
+- **Blender** ≥ 4.2 / 5.x（仓库构建脚本已回植 4.2/5.x 兼容：obj 导入算子、Emission 输入名、透明阴影字段、EEVEE Next——见[脑模型资产登记](%E8%84%91%E6%A8%A1%E5%9E%8B%E8%B5%84%E4%BA%A7%E7%99%BB%E8%AE%B0.md) §8.1）
 - Python 3.10+ (系统已安装)
 
 ### 1.2 数据文件下载
@@ -37,14 +42,17 @@ https://s3.us-east-2.amazonaws.com/brainder/software/brain4blender/subcortical_o
 https://s3.us-east-2.amazonaws.com/brainder/software/brain4blender/pial_Full_obj.tar.bz2
 ```
 
-下载后解压到 `技能树系统/blender_assets/` 目录。
+下载后解压到 `design/presentation/visualization-3d/blender_assets/all_obj/` 目录（13 个子目录 · 890 个 .obj · 289 MB；provenance 登记见 [all_obj_manifest.json](all_obj_manifest.json)）。
 
 ### 1.3 项目坐标数据
 
-运行数据管线确保坐标文件最新:
+⚠️ **2026-09-13**：这两个命令**不该照跑**——`brain_atlas_to_blender.py` 是 57 脑区那一代的历史生成器，
+`map_skills_to_regions.py` 产出的是契约里登记为 `LEGACY` 的 `skill_coords.json`。坐标已定稿并受控：
+
 ```bash
-python code/tools/brain_atlas_to_blender.py
-python code/tools/map_skills_to_regions.py
+# 脑区坐标：已定稿（69 functional_id / 50 解剖实体）；重跑会覆盖受控契约，别跑
+# 需要从 OBJ 质心精炼坐标时（少数场景）：
+python code/tools/refine_coords_from_objs.py
 ```
 
 ---
@@ -54,19 +62,22 @@ python code/tools/map_skills_to_regions.py
 ### 2.1 Blender 工作文件结构
 
 ```
-brain_skill_tree.blend
+brain_skill_tree.blend            ← 实测结构（2026-09-13 只读探针，正典源那一份）
 ├── Collections/
-│   ├── BrainMesh/          ← 所有脑区 OBJ
-│   │   ├── Cortex/         ← DK 皮层区 (60+ 个独立 mesh)
-│   │   └── Subcortical/    ← 皮层下结构 (amygdala, hippocampus, thalamus, etc.)
-│   ├── SkillNodes/         ← 74 技能节点 (Empty + 几何体)
-│   │   ├── Cognition/      ← 二十五面体节点
-│   │   ├── Emotion/        ← 球体节点
-│   │   ├── Behavior/       ← 棱柱节点
-│   │   └── Ultimate/       ← 大十二面体节点
-│   ├── Tracts/             ← Bezier 曲线连线
-│   └── Lighting/           ← 灯光设置
+│   ├── Collection/         ← Camera ×1 + Light ×3
+│   ├── BrainMesh/          ← 102 个 OBJ mesh
+│   │   ├── Cortex/         ← DK 皮层分区 70
+│   │   └── Subcortical/    ← 皮层下结构 32
+│   ├── SkillNodes/         ← 74 节点 ⚠️ 分类口径已废弃（四分支 → 14 网络 × 8 角色）
+│   │   ├── Cognition/ 25 · Emotion/ 15 · Behavior/ 21 · Ultimate/ 13
+│   ├── Tracts/             ← 152 条 Bezier 曲线
+│   │   ├── Functional/ 89  ← 来自 prereqs
+│   │   └── Tier/ 63        ← 层级相邻 + L5→终极
+└── (v1 世代另有 FullHemisphere/ 玻璃外壳 2 个；v2 世代改用逐脑区半透明，不再需要外壳)
 ```
+
+> 合计 332 对象 / 533,066 顶点 / 939,079 三角面。**对比**：正典是 71 个链路上下文 / 1049 条三体边
+> ——这份 .blend 是视觉参考，不是拓扑来源（见[脑模型资产登记](%E8%84%91%E6%A8%A1%E5%9E%8B%E8%B5%84%E4%BA%A7%E7%99%BB%E8%AE%B0.md) §七）。
 
 ### 2.2 导入步骤
 
@@ -151,22 +162,27 @@ Wireframe Modifier:
 
 ## 四、技能节点放置
 
-### 4.1 自动化放置脚本
+### 4.1 自动化构建脚本（2026-09-13 更正）
 
-运行 `code/tools/place_skill_nodes_blender.py`:
+本文原写"运行 `code/tools/place_skill_nodes_blender.py`"——**该文件从未生成**。实际落地的是两个构建脚本：
 
 ```bash
-blender --background --python code/tools/place_skill_nodes_blender.py
+blender.exe --background --factory-startup \
+  --python code/tools/build_brain_skill_tree_windows.py -- --out <独立输出目录>
 ```
 
-或在 Blender Scripting 面板中加载运行。
+| 脚本 | 世代 | 产出 |
+|---|---|---|
+| `build_brain_skill_tree_windows.py` | **当前（v2）** | 逐脑区半透明着色：`ctx_{脑叶}` + `sub_{群组}` + 逐节点/逐连线材质，无外壳 |
+| `build_brain_skill_tree.py` | v1（2026-07-11） | 玻璃外壳那一代：`brain_glass` + 线框 + 共享 `node_*` 材质 |
 
-该脚本:
-1. 读取 `data/brain_regions.json` 获取脑区游戏空间坐标
-2. 读取 `data/skill_coords.json` 获取 74 技能→脑区映射
-3. 为每个技能创建对应几何体 (二十面体/球体/棱柱/十二面体)
-4. 创建基础材质 (解锁前灰色半透明)
-5. 放入对应 Collection
+⚠️ **输出不要指向 `blender_assets/` 资产目录**（那里是正典源与冻结快照）；脚本默认落 `build/`，
+要写资产目录须显式 `--out`。该脚本做:
+1. 读 `data/brain_regions.json` + `data/skill_coords.json`（后者＝契约里的 `LEGACY`）
+2. 导入 `all_obj/`（DK 皮层 70 + 皮层下 32）
+3. 按数据放置节点（⚠️ `region_matched` 查表 74/74 落空 → 走 `game_xyz_new` 回退，见登记 §八）
+4. 生成连线（Functional ← prereqs；Tier ← 层级相邻 + L5→终极）
+5. **产出核对**：把场景内容与 `skill_coords.json` 逐分支对照并打印，不一致标 ⚠
 
 ### 4.2 手动调整
 
@@ -176,7 +192,10 @@ blender --background --python code/tools/place_skill_nodes_blender.py
 
 ### 4.3 节点几何体参数
 
-| 分支 | 节点形状 | 基本半径 | 面数 |
+> ⚠️ **2026-09-13**：下表按**分支**定形状，属废弃口径。当前形状/大小按**层级 L0–L5**
+> （[脑功能层级模型](../../rules/skill-tree/%E8%84%91%E5%8A%9F%E8%83%BD%E5%B1%82%E7%BA%A7%E6%A8%A1%E5%9E%8B.md) §16.1：小八面体 → 球体 → 立方体 → 二十面体 → 十二面体，radius 0.025→0.05）。
+
+| 分支（⚠️ 废弃口径） | 节点形状 | 基本半径 | 面数 |
 |------|---------|---------|------|
 | 认知 | Ico Sphere | 0.04 | Subdivision 1 |
 | 情绪 | UV Sphere | 0.045 | 20×20 |
@@ -263,5 +282,5 @@ Unity 端的详细设置见 [3D可视化设计规范](3D%E5%8F%AF%E8%A7%86%E5%8C
 
 ---
 
-*创建: 2026-07-11*
-*关联: [脑图谱数据管线](%E8%84%91%E5%9B%BE%E8%B0%B1%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%BA%BF.md), [大脑形态技能树-设计](../../rules/skill-tree/deprecated/%E5%A4%A7%E8%84%91%E5%BD%A2%E6%80%81%E6%8A%80%E8%83%BD%E6%A0%91-%E8%AE%BE%E8%AE%A1.md), [3D可视化设计规范](3D%E5%8F%AF%E8%A7%86%E5%8C%96%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83.md)*
+*创建: 2026-07-11 | 更新: 2026-09-13（范围重新划定：分支口径标注废弃；改正"运行不存在的 place_skill_nodes_blender.py"；集合结构换成实测；路径随仓库重构更新）*
+*关联: [脑模型资产登记](%E8%84%91%E6%A8%A1%E5%9E%8B%E8%B5%84%E4%BA%A7%E7%99%BB%E8%AE%B0.md), [Unity接入设计](Unity%E6%8E%A5%E5%85%A5%E8%AE%BE%E8%AE%A1.md), [脑图谱数据管线](%E8%84%91%E5%9B%BE%E8%B0%B1%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%BA%BF.md), [3D可视化设计规范](3D%E5%8F%AF%E8%A7%86%E5%8C%96%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83.md), [脑功能层级模型](../../rules/skill-tree/%E8%84%91%E5%8A%9F%E8%83%BD%E5%B1%82%E7%BA%A7%E6%A8%A1%E5%9E%8B.md)*
