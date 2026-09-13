@@ -287,6 +287,7 @@
 | 战斗界面布局 | 37项决策：整体布局/操作流/脑区面板/HUD/信息展示/键盘快捷键/过渡 | [战斗界面布局.md](../presentation/%E6%88%98%E6%96%97%E7%95%8C%E9%9D%A2%E5%B8%83%E5%B1%80.md) |
 | Unity 沙盘动作集规格 | ✅ 2026-09-07 Grilling #123——12 动作受控词表（L1=9 落地 / L2=3 登记）+ 引用契约 A（纯状态+CrossFade）+ 来源矩阵 + 扩展协议；载体 ActionLab 待实施 → 🔧 2026-09-08 Grilling #124 载体锚定 Mixamo X Bot/Y Bot + Batch0 执行契约闭合 | [动作库规格.md](../presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md) |
 | ActionLab 实施执行层 | ✅ 2026-09-08 Grilling #124——载体锚 Mixamo X Bot（默认）/Y Bot（备用）、Batch0 契约（ActionIds+ActionCatalog+ActionPlayer+幂等 builder+防漂移分档断言）、5 条 Mixamo clip 实证映射（Jab Cross→物攻 / Charge→精攻 A 前指 / Short Left Side Step→防御 / Head Hit→受击 / Dying→倒下）；Batch0 代码交付中 | [决策记录 #124](../archive/grilling/grilling-124-actionlab/%E5%86%B3%E7%AD%96%E8%AE%B0%E5%BD%95.md) + [动作库规格.md](../presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md) |
+| 持椅交互（手里有东西） | ✅ 2026-09-13 讨论收敛（**未走 grilling 流程**）——**缺的不是动画，是"手里有东西"这一层**：词表 13→17（`Lift1H`/`Carry1H`/`Wield2H`/`PutDown`，手数显式；**两条链可互切、双手链由 `Carry1H` 换握进入**——原 `Grab2H`「双手抓起」**取消**，Mixamo 无"双手拾取"素材）+ 新字段 `Variants`（状态用词条、动作用变体）+ 挂点三层（逐状态可握锚点 / 阻尼摆动 / "手到位帧"）+ 副手 IK（仅格挡变体）+ 派生件新增**镜像**；7 条 Mixamo clip 全部实测归槽；**HUMOTO 仅参照量测**（Adobe Research License v1.1 = 只许非商业研究）。⚠️ **设计侧 `ACCEPTED`、代码侧 `NONE`**；本轮是**呈现探针**，规则层 §10.13 不动 | [动作库规格.md](../presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md) §四·戊 |
 
 ### 空缺 ❌
 
