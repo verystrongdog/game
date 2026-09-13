@@ -20,6 +20,7 @@
 |---|---|---|---|
 | .NET SDK | **10.0.400** | [`global.json`](../../global.json)（`rollForward: latestFeature`） | 工程目标框架是 **net8.0**；SDK 10 可编译。**本机无 net8.0 runtime**，跑测试需 `DOTNET_ROLL_FORWARD=Major` |
 | NuGet 源 | nuget.org | [`NuGet.config`](../../NuGet.config) | 此前包路径被烘焙进 `obj/*.nuget.g.props` 指向开发机（`/home/dog/game/.nuget-pkgs`），**干净检出无法复现**——本文件修掉该问题 |
+| NuGet 依赖锁定 | 三份 `code/src/<工程>/packages.lock.json` + `RestoreLockedMode` | 三个 `.csproj` | 锁的是**包图**（含传递依赖），不是"源"。漂移即 `NU1004` 失败；做法与实测见 §1.2。**自 2026-09-13（#129）** |
 | Python | **3.10.12** | CI 的 `setup-python` | 校验器与 sim 脚本 |
 | 校验器依赖 | `PyYAML==6.0.3` | [`code/tools/requirements.txt`](../../code/tools/requirements.txt) | 12 个校验器里**只有 `validate_disease.py`** 需要第三方库 |
 | 数值实验依赖 | `numpy==2.2.6` · `scipy==1.15.3` · `numba==0.67.0` | [`code/sim/requirements.txt`](../../code/sim/requirements.txt) | 15 个 sim 脚本里只有 3 个需要 |
@@ -37,6 +38,46 @@
 | `coverlet.collector` | 6.0.0 |
 
 `YouAreNotTheFish.Core`（逻辑库）**无第三方依赖**——这是刻意的：逻辑核要能被 Unity 稳定引用。
+
+### 1.2 依赖锁定（nuget 包图，2026-09-13 · [#129](https://github.com/verystrongdog/game/issues/129)）
+
+**锁在哪**：`code/src/<工程>/packages.lock.json`（三个工程各一份，随工程入库）**加上**工程属性
+`RestorePackagesWithLockFile` / `RestoreLockedMode`（三个 `.csproj` 各 5 行）。锁定日 **2026-09-13**，SDK **10.0.400**。
+
+| 工程 | 锁文件内容 |
+|---|---|
+| `YouAreNotTheFish.Core` | **0 依赖**（空 `net8.0` 节点——把"逻辑核无第三方依赖"变成机械可查的事实） |
+| `YouAreNotTheFish.Console` | 1 条：对 `Core` 的**项目引用**（不是包） |
+| `YouAreNotTheFish.Core.Tests` | 4 个直接依赖 + 89 条包图（含传递依赖，逐条带 `contentHash`） |
+
+**为什么还要 `RestoreLockedMode`**：只提交锁文件时，`dotnet restore` 在"锁文件与工程不一致"的场合会**静默重写**它——
+锁就退化成一份随时会被改写的快照，漂移照样进得来。打开锁模式后，不一致直接 `NU1004` 失败。
+**它不需要改 CI**：CI 跑的就是普通 `dotnet restore`，强制点在工程属性里，`engine` job 自动受约束。
+
+**加包 / 改版本后，更新锁文件的唯一正确做法**：
+
+```bash
+dotnet restore code/src/YouAreNotTheFish.sln --force-evaluate
+```
+
+#### 实测读数（2026-09-13）
+
+| # | 检查 | 退出码 | 读数 |
+|---|---|---|---|
+| 1 | 锁定前后包集合逐条比对 | — | **零版本漂移**（89 条包图完全相同；差异只有 assets 里两个 `type: Project` 工程引用条目） |
+| 2 | **注入漂移**：`xunit` `2.5.3` → `2.5.4` 后跑 `dotnet restore` | **1** | `NU1004: The package reference xunit version has changed from [2.5.3, ) to [2.5.4, ) … can't be run in locked mode`——**锁模式确实在生效**，不是摆设 |
+| 3 | 锁模式下 restore 是否改写锁文件 | 0 | 工作区干净：**锁文件未被改写** |
+| 4 | 干净 worktree + **空** `NUGET_PACKAGES`（初始 0 个文件）下 `dotnet restore` | 0 | 包全部由 nuget.org 现取（探针包目录 0 → 92 条），**不依赖开发机缓存**；探法与 P4a 的 `.ci-probe-pkgs` 同构 |
+| 5 | 同环境 `dotnet restore --locked-mode` | 0 | 锁文件与工程图一致 |
+| 6 | 同环境 `dotnet build --no-restore -c Release` | 0 | 0 error |
+| 7 | 同环境 `dotnet test --no-build -c Release` | 0 | **416 passed / 0 failed** |
+| 8 | 同环境 `dotnet restore --force-evaluate` 后比对 | 0 | 锁文件**逐字节不变**——**生成确定性成立**（空缓存态与开发机态生成同一份锁） |
+
+> 探针环境的一处噪声（如实记）：`NU1900` 警告——本机 NuGet HTTP 缓存目录只读，取漏洞数据失败。
+> 它不参与包图解析，也不改变上表任一条判定。
+
+> ⚠️ **`.csproj` 注释里不能出现 `--`**：把 `dotnet restore --force-evaluate` 原样写进 XML 注释会让工程解析直接失败
+> （`MSB4025: An XML comment cannot contain '--'`，三个工程全挂）。所以注释只指路（指到本节），命令写在这里。
 
 ## 二、命令
 
@@ -164,7 +205,7 @@ sim 脚本用**扁平 import**（`from sim_consciousness_cs4_test import ...`）
 | **Unity 门禁** | ✏️ 2026-09-12：**本机已可跑**——Linux 侧是同一台 Windows 上的 WSL2，`unity.exe` 经 interop 直驱 Windows Editor（实测 `unity status` → `state: ready`、`unity open` 工程 → 编译 0 错误）。**CI（ubuntu）侧仍不可用**，其 `unity` job 继续显式报告 `NOT_AVAILABLE`。判据按 [gates.json](gates.json) 的 `environment` 判定 | — |
 | `code/unity/Packages/packages-lock.json` 缺失 | 包版本不可复现 | ✅ 2026-09-12 **已入库**（`code/unity/Packages/packages-lock.json` + 与之同源的 `manifest.json`——只提交锁会让两者立刻不一致）。一致性机械核法：锁里 builtin 依赖版本 = Editor 6000.5.2f1 安装自带的版本（`com.unity.ugui` 2.5.0 / `com.unity.test-framework` 1.7.0，取自该安装的 `BuiltInPackages/`） |
 | `.meta` 2 个 / 场景 0 个 | Unity 工程不完整，场景靠 Editor 菜单运行时生成；**Blend Tree 阈值 / transition 参数 / Avatar Mask 无处安放**——手调动画成果无法入库。更具体地说：9 个 Mixamo FBX **已在 git 里却没有 `.meta`** → 干净检出每次开工程都重发 GUID，`ActionLab.controller` 的 clip 绑定必然失效 | ✅ 2026-09-12 [#136](https://github.com/verystrongdog/game/issues/136) 闭合：`.meta` **2 → 57**、场景 **0 → 1**（`ActionLab.unity`）、controller **0 → 1**、`ProjectSettings/` **1 → 23**，共 80 个新文件 + 2 个文件改动（`code/src/` 与 `data/` 零改动）。实测记录与证据见 [code/unity/README.md §二·H](../../code/unity/README.md)。**残留**：controller 的 4 条 locomotion 态仍引用不入库的 KI 包（#139 工作面）；干净检出的首次导入未实测（Editor 只跑在 Windows 拷贝上）；资产身份尚无常驻校验器 |
-| 无 `NuGet.lock`（packages.lock.json） | 传递依赖版本可漂移 | 待定：需在 `dotnet restore --use-lock-file` 后提交（[#129](https://github.com/verystrongdog/game/issues/129)） |
+| 无 `NuGet.lock`（packages.lock.json） | 传递依赖版本可漂移 | ✅ 2026-09-13 [#129](https://github.com/verystrongdog/game/issues/129) 闭合：三个工程提交 `packages.lock.json` 并打开 `RestoreLockedMode`（SDK 10.0.400 · 锁定日 2026-09-13）——干净 worktree + **空**包目录下 restore/build/test 通过（**416 passed / 0 failed**），注入漂移实测 `NU1004`，锁文件生成确定性成立。读数见 §1.2 |
 
 ### 5.1 未验证项（诚实清单）
 
@@ -175,5 +216,5 @@ sim 脚本用**扁平 import**（`from sim_consciousness_cs4_test import ...`）
 - **资产身份无常驻机械校验器**（`.meta` 齐全性、GUID 唯一性、场景与 controller 的引用可解析性）——#136 是用一次性脚本核的（294 个 `.meta` → 294 个唯一 GUID / 0 冲突）。缺它则本次的判据无法回归
 
 ---
-*创建: 2026-09-12 | 更新: 2026-09-12*
+*创建: 2026-09-12 | 更新: 2026-09-13（§1.2 依赖锁定 · #129）*
 *关联: [工程文档索引](README.md), [WORKFLOW.md](../../WORKFLOW.md), [ARCHITECTURE.md](../../ARCHITECTURE.md), [证据](evidence/README.md)*
