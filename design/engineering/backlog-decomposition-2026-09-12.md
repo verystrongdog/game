@@ -188,6 +188,8 @@ python3 code/tools/validate_issues.py --from-github
 | ~~**`design/slices/CP-01-ward-1f/slice.md` 的状态回填（2026-09-13 发现）**~~ → **✅ 2026-09-13 全部回填完毕** | 记录态与实际矛盾的五处，均已就地更正并留 🔧 注记（**不重写历史**）：① `Unity 资产身份` 行写 `NONE` + 「`.meta` 0 个、场景 0 个」，实测 **58 个受控 `.meta` / 1 场景**（#136 未回填该行）—— 随 [#142](https://github.com/verystrongdog/game/issues/142) 关闭回填为 `DONE_FOR_SLICE`/`PASS` ② `就座交互` 行「owner 目视清单 ⑧ 未确认」，而 `ae33281` 已记通过 → 按该行自述的唯一缺口判 `DONE_FOR_SLICE` ③ `角色动作呈现` 行 `Health: REGRESSED` 的判据「PlayMode 2 项常红」，而实测 33/33 全过 → `PASS` ④ §三「KI 包引用**导致** PlayMode 2 项失败」的因果，被 `code/unity/README.md` §二·H 明确否定 → 改为「4 条 locomotion 态 clip 为空」 ⑤ §四「无 Unity Editor 阻塞 P4b」→ 阻塞解除（本机经 WSL interop 直驱；`gates.json` 的 `unity` = `available: true`），并拆出 P4d 的真实前置 #135。另修第六条：§三「Unity 场景不入库」亦已由 #136 消除（随 #142 一并回填）。**根因**：该表只在"新增行"时被改（`4b73388` / `fa83aa6` / `2b57b03`），**没有"状态变了就回填"的机制** |
 | **`code/tools/validate_issues.py` 的规则 fixture 测试（14 条规则各一正一反）**（2026-09-13 发现） | 该文件 **1459 行 / 14 条规则，无任何自动化测试**：不在 `run_all_checks.py` 的注册表内（它是独立的 `issues` CI job），`code/tools/` 下无 `test_*.py`（历史测试脚本只存在于归档与安全备份目录，不参与运行）。**后果实测**：一条"文档承诺了、代码没实现"的偏差存活至今——§4.1.1 例外 1 直到 #142 交付新门禁才被撞出；而 **#134 的门禁行因解析器从散文里误抓到一个已存在的文档路径而"空过"**（已修，见 [issue-process.md](issue-process.md) §5.3）。**为何此刻不建 issue**：① 不阻塞任何门禁——`issues` 快照 job 本身是它的回归面 ② 属独立设计决策（fixture 放哪、怎么进 CI），此刻导入会缺 [§2.2](issue-process.md) 的「决策表」与「受影响面」两块，属 R4 型。**形态先例**：`data/runtime-fixtures/` 的跨语言 fixture（53 条判定逐条相同、零豁免）+ `build_runtime_data_fixtures.py --check` 的索引校验模式 |
 
+| **主干 `check_clean_checkout` 常红**（2026-09-13 演练中发现） | `code/tools/build_brain_skill_tree_windows.py:31` 的 docstring 里留着一条开发机路径（`C:/Users/9527/temp_build_brain_skill_tree.py`，历史注记）→ 该检查器 exit 1，**主干 CI 的 `docs-integrity` job 死在「干净检出可解析性检查」这一步**（run `34760300460` 实测；本机同款复现）。修法就是改写那一行 docstring（一行），但**它不阻塞 #128 的成果**——演练在临时 worktree 内完成，结论不依赖主干该门禁是否绿；且 #128 明确排除"改校验器 / CI / 工作流"，故不顺手修。**是否即刻修（它让一条门禁常红）由 owner 定** |
+
 ## 七、本次分解暴露的问题（诚实清单）
 
 ### 7.1 约束文档自身被改了四处（真实 backlog 逼出来的）
@@ -222,7 +224,7 @@ python3 code/tools/validate_issues.py --from-github
 - **CI 是否真跑过**：`build-and-test.md §5.1` 说"未在 GitHub 上真实跑过"，而 P4a 证据记录了四连 `success`。**两处口径不一致，本次未处置**（需 `gh run list` 实测才能定性）
 - **`GameData` 消费者数量**：`data/README.md` §一 说 5 record 聚合，实测 8 字段——本次未处置
 - **PlayMode 失败项计数**（2 项 / 共 16 项）**未确认**（无 Editor）
-- **P4a 证据的自述内部不一致**：正文写「登记为 P4a 的未闭合项」（回滚演练），但同文「仍未闭合项」4 条清单里没有它（`evidence/README.md` 的未闭合项列又含它）。**不另开 issue**——I1 #128 完成的当次就会让这条口径归零（该项由"未闭合"变"已闭合"），现在动它是白改
+- **P4a 证据的自述内部不一致**：正文写「登记为 P4a 的未闭合项」（回滚演练），但同文「仍未闭合项」4 条清单里没有它（`evidence/README.md` 的未闭合项列又含它）。**不另开 issue**——I1 #128 完成的当次就会让这条口径归零（该项由"未闭合"变"已闭合"），现在动它是白改。**→ ✅ 2026-09-13 已归零（#128）**：演练实测见 [P4a 证据](evidence/P4a-2026-09-12.md) §回滚演练——回滚逐字节恢复 base（tree hash 相同），但回滚态 `docs-integrity` 与 `engine` 均 FAIL（P4a 修掉的缺陷被放回）；正文那条「未做实测」已由实测结论取代，「仍未闭合项」清单列为第 1 条已闭合项
 - **决策树里仍列着已删除的桥接工程草稿**（`design/decisions/06-numbered-disease-and-presentation.md` 记 `code/src/YouAreNotTheFish.Core.Unity/`「Q6b 定案后启用」，而 [ARCHITECTURE.md §四](../../ARCHITECTURE.md) 记该目录已于 2026-09-12 删除）。**这不是缺陷**：决策树按 [项目规约 §六](../conventions/README.md) 是**冻结的历史层**，它记录的是当时的决定（"定案后启用"），不是当下的状态声明。真实状态以 `ARCHITECTURE.md` §四 与实测为准。**这条要写下来**——否则下一个人会照着"一致性"的直觉去改一份只读历史
 
 ## 八、存量 issue 清理记录（2026-09-12）
