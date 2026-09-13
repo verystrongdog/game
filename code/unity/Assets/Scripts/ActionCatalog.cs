@@ -22,6 +22,10 @@ namespace YANTF.ActionLab
     /// 资产是否存在 = "现成/缺口" 的机器判据，缺口时状态仍建、clip 留空。
     /// nextState：一次性动作播完后要切到的状态名；null = 回退 locomotion 目标态。
     ///   （用于 Sit → SitIdle：坐下播完要"坐住"，而不是弹回站姿。）
+    /// exitVia：**持续态**被移动意图打断时要先播的一次性动作；null = 直接回 locomotion。
+    ///   （用于 SitIdle → Stand：坐姿下按 WASD 要先起身，而不是无动画地弹起来。规格 §四·丁#7。）
+    /// rootMotionXZ：该状态播放期间把 clip 的 **XZ 根位移**经 CharacterController 施加；false = 丢弃根位移。
+    ///   （用于坐立三段：角色从椅子前方 0.423 m 处"退到坐面上"。规格 §四·乙 再修正。）
     /// </summary>
     public sealed class ActionEntry
     {
@@ -34,10 +38,12 @@ namespace YANTF.ActionLab
         public readonly float Fade;           // CrossFade 融合时长 s（规格 §七：locomotion 0.12 / 动作类 0.10 / Jump 0.06）
         public readonly string ClipAssetPath; // null = 无资产锚（L2 登记期或待导入填写）
         public readonly string NextState;     // 一次性动作播完切到的状态；null = 回退 locomotion
+        public readonly string ExitVia;       // 持续态被移动意图打断时先播的一次性动作；null = 直接回 locomotion
+        public readonly bool RootMotionXZ;    // 播放期间施加 clip 的 XZ 根位移（经 CC）
 
         public ActionEntry(string id, string displayName, ActionCategory category, int level,
                            bool loop, int priority, float fade, string clipAssetPath,
-                           string nextState = null)
+                           string nextState = null, string exitVia = null, bool rootMotionXz = false)
         {
             Id = id;
             DisplayName = displayName;
@@ -48,6 +54,8 @@ namespace YANTF.ActionLab
             Fade = fade;
             ClipAssetPath = clipAssetPath;
             NextState = nextState;
+            ExitVia = exitVia;
+            RootMotionXZ = rootMotionXz;
         }
     }
 
@@ -94,12 +102,14 @@ namespace YANTF.ActionLab
             new ActionEntry(ActionIds.HitReaction, "受击", ActionCategory.Reaction, 1, loop: false, priority: 3, fade: 0.10f, clipAssetPath: MixamoCombatDir + ActionIds.HitReaction + ".fbx"),
             new ActionEntry(ActionIds.Down, "倒下", ActionCategory.Reaction, 1, loop: false, priority: 4, fade: 0.10f, clipAssetPath: MixamoCombatDir + ActionIds.Down + ".fbx"),
             // L1 interaction（坐立三段同源）
+            // rootMotionXz=true：坐立三段把 clip 的 XZ 根位移经 CC 施加（角色从椅子前方退到坐面上）。
+            // exitVia=Stand：坐姿下收到移动意图先播起身，播完才回 locomotion（规格 §四·丁#7）。
             new ActionEntry(ActionIds.Sit, "坐", ActionCategory.Interaction, 1, loop: false, priority: 2, fade: 0.10f,
-                            clipAssetPath: SitDownDerived, nextState: ActionIds.SitIdle),
+                            clipAssetPath: SitDownDerived, nextState: ActionIds.SitIdle, rootMotionXz: true),
             new ActionEntry(ActionIds.SitIdle, "坐姿待机", ActionCategory.Interaction, 1, loop: true, priority: 1, fade: 0.12f,
-                            clipAssetPath: SittingIdleFbx),
+                            clipAssetPath: SittingIdleFbx, exitVia: ActionIds.Stand, rootMotionXz: true),
             new ActionEntry(ActionIds.Stand, "站起", ActionCategory.Interaction, 1, loop: false, priority: 2, fade: 0.10f,
-                            clipAssetPath: SitToStandFbx),
+                            clipAssetPath: SitToStandFbx, rootMotionXz: true),
             // L2 登记（不接线；clipAssetPath 资产锚在 L2→L1 迁移时填写）
             new ActionEntry(ActionIds.Talk, "对话言语", ActionCategory.Social, 2, loop: true, priority: 0, fade: 0.12f, clipAssetPath: null),
         };

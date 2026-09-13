@@ -6,9 +6,11 @@
 // - 空中 Jump → 落地：显式补发一次回切（Jump 这次切态不进 _locomotionTarget 的账，
 //   否则落地目标与起跳前同档时守卫判"无变化"→ 状态机停在 Jump，身体平移而腿不动）
 // - 循环持续态（Loop=true 的动作词条：Defend / SitIdle）：TickLocomotion 收到移动意图(speed>0)
-//   即退出；或更高优先级动作打断。**不硬编码具体 id**——新增持续态只改词表即可。
+//   即退出；**若该词条声明了 `ExitVia`（SitIdle → Stand），则先播那条一次性动作、播完才回 locomotion**
+//   （规格 §四·丁#7：离座也要走完整动作）；或更高优先级动作打断。**不硬编码具体 id**——新增持续态只改词表即可。
 // - Down 终态停留末帧：不自动回退，须 Reset()（演示 R 键）
-// - 位移全走 CharacterController（本组件不移动物体），applyRootMotion=false 由场景侧保证
+// - 位移全走 CharacterController（本组件不移动物体）；`Animator.applyRootMotion` **按词条状态**切换：
+//   只有声明了 `RootMotionXZ` 的坐立三段为 true（驱动层据此施加 XZ 根位移，规格 §四·乙 再修正），其余为 false。
 using UnityEngine;
 
 namespace YANTF.ActionLab
@@ -36,6 +38,14 @@ namespace YANTF.ActionLab
         public string LastRequestedState { get; private set; }
         /// <summary>切态请求累计次数（守卫应只在"档位变化/落地/退出防御"边沿请求，不逐帧刷）。</summary>
         public int StateRequestCount { get; private set; }
+
+        /// <summary>
+        /// 当前动作是否声明了 **XZ 根位移**（坐立三段：`Sit` / `SitIdle` / `Stand`）。
+        /// 驱动层据此逐帧切 `Animator.applyRootMotion`，并在 `OnAnimatorMove` 里把
+        /// `deltaPosition` 的 XZ 分量经 CharacterController 施加——角色由此从椅子前方的
+        /// 就座锚点（0.423 m）退到坐面上。规格 §四·乙 再修正 / §四·丁#5。
+        /// </summary>
+        public bool ApplyRootMotionXZ => _activeEntry != null && _activeEntry.RootMotionXZ;
 
         private ActionEntry _activeEntry;   // 当前动作（一次性/Defend/Down）；null = locomotion 控制
         private bool _returnFromJumpPending; // 空中发过 Jump（缓存 _locomotionTarget 未跟账）→ 落地必须补发一次回切
@@ -89,12 +99,20 @@ namespace YANTF.ActionLab
             // 离开持续态时记名：下面要清 _activeEntry，但守卫需要知道"刚从哪个持续态出来"
             string sustainedExited = (_activeEntry != null && _activeEntry.Loop) ? _activeEntry.Id : null;
 
+            // 🔧 离座口径（规格 §四·丁#7）：持续态声明了 exitVia（SitIdle → Stand）时，
+            //    移动意图不直接弹回 locomotion，而是先把那条一次性动作播完——「先找到椅子才能坐」
+            //    的对称面：坐下与离座都走完整动作，不出现"无起身动画地站起来"。按字段判定，不硬编码 id。
+            if (_activeEntry != null && _activeEntry.Loop && _activeEntry.ExitVia != null
+                && ActionCatalog.TryGet(_activeEntry.ExitVia, out var exitEntry))
+            {
+                StartAction(exitEntry);
+                return;
+            }
+
             // locomotion 目标（持续态被移动意图退出）
             _activeEntry = null;
             CurrentActionId = null; // 持续态退出 / 常规 locomotion 路径清动作显示
-            string target = speed01 < 0.05f ? ActionIds.Idle
-                          : speed01 < 0.55f ? ActionIds.Walk
-                          : ActionIds.Run;
+            string target = LocomotionTargetForSpeed(speed01);
 
             // 守卫：档位变化 || 刚从空中落地（补发）|| 刚从持续态退出（需显式切出去）
             if (target != _locomotionTarget || _returnFromJumpPending
@@ -242,11 +260,20 @@ namespace YANTF.ActionLab
             _activeEntry = null;
             IsLocked = false;
             CurrentActionId = null;
+            // 回退档位按**当前速度**取（锁定期间 speed01 照常由驱动层喂进来）：
+            // 若这里沿用旧缓存，坐姿下按 W → Stand 播完 → 先淡回 Idle、下一帧才淡到 Walk（多一次融合）。
+            _locomotionTarget = LocomotionTargetForSpeed(HorizontalSpeed01);
             if (animator != null && animator.runtimeAnimatorController != null)
             {
                 CrossFadeState(_locomotionTarget, ActionCatalog.Get(_locomotionTarget).Fade);
             }
         }
+
+        /// <summary>locomotion 档位阈值（唯一来源：0.05 起走 / 0.55 起跑）。</summary>
+        private static string LocomotionTargetForSpeed(float speed01)
+            => speed01 < 0.05f ? ActionIds.Idle
+             : speed01 < 0.55f ? ActionIds.Walk
+             : ActionIds.Run;
 
         /// <summary>
         /// 一次性动作**目标态**的 clip 长度（未定则返回 0，调用方下一帧再试）。

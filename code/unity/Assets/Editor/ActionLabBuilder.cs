@@ -5,7 +5,8 @@
 // - 派生件：建场景前 EnsureSitDown()（SitDown = Sit To Stand 反转），并 VerifyDerived() 自检漂移
 // - 足部贴地（规格 §四·乙）：打开 controller Base Layer 的 iKPass 并挂 FootGroundingIK——
 //     不开 iKPass 则 OnAnimatorIK 不会被调用，足 IK 静默失效
-// - 凳子：坐面高 = 坐姿网格实测（见 StoolSeatTopY 注释），摆在坐姿髋落点正下方，**不带碰撞体**
+// - 椅子（规格 §四·丁）：**三张**实心可推的椅子（坐板 + 四条腿 + 靠背 + Rigidbody + ChairSeat 锚点），
+//     摆位是演示常量；就座锚点由 ChairSeat 从椅子 transform 实时求得（不再烘任何世界坐标）
 // - 用法：菜单 YANTF → 动作演示 → 创建 ActionLab 场景；或 headless:
 //   Unity -batchmode -quit -executeMethod YANTF.EditorTools.ActionLabBuilder.CreateSceneBatch
 using System.Collections.Generic;
@@ -26,16 +27,29 @@ namespace YANTF.EditorTools
         private const string XBotPath = "Assets/Mixamo/Characters/X Bot.fbx";
         private const string YBotPath = "Assets/Mixamo/Characters/Y Bot.fbx";
 
-        // ---- 凳子几何（全部来自 2026-09-12 实测，非目视估计）----
+        // ---- 椅子几何（全部来自 2026-09-12/13 实测，非目视估计）----
         /// <summary>坐面高度 m = 坐姿（Sitting Idle + 足 IK）下髋部半径 0.30 m 内蒙皮网格最低点。
         /// 实测 r=0.10/0.15/0.20/0.30 四档全部收敛到 0.4449（r=0.40 起会把小腿顶点算进来 → 失真）。</summary>
-        private const float StoolSeatTopY = 0.4449f;
-        /// <summary>坐姿髋部落点（相对角色 transform，角色朝 +z）——凳子坐面中心应在此正下方。</summary>
-        private const float StoolCenterX = 0.0f;      // 实测坐姿 hips.x = 0.0027 ≈ 0
-        private const float StoolCenterZ = -0.104f;   // 实测坐姿 hips.z = −0.1040
-        private const float StoolSeatThickness = 0.05f;
-        private const float StoolSeatSize = 0.42f;    // 边长：容下两侧臀部（实测接触点 x 偏 +0.084）
-        private const float StoolLegSize = 0.05f;
+        private const float ChairSeatTopY = 0.4449f;
+        private const float ChairSeatThickness = 0.05f;
+        private const float ChairSeatSize = 0.42f;    // 边长：容下两侧臀部（实测接触点 x 偏 +0.084）
+        private const float ChairLegSize = 0.05f;
+        private const float ChairLegSpread = 0.165f;  // = 坐板半边 − 腿半 − 0.02（同旧凳实测值）
+        private const float ChairBackHeight = 0.35f;
+        private const float ChairBackThickness = 0.04f;
+        private const float ChairMass = 6f;           // 演示常量：轻到能被角色推开，重到不会自己滑走
+
+        /// <summary>
+        /// 三张椅子的摆位（**演示摆位，非正典数值**）：由 builder 摆在出生点之外，逼出"走过去找"这件事。
+        /// 朝向各不相同 → 「在椅子前侧」这条判定才有区分度（规格 §四·丁#2）。
+        /// </summary>
+        private static readonly Vector3[] ChairPositions =
+        {
+            new Vector3(-2.2f, 0f, 2.4f),
+            new Vector3(2.6f, 0f, 1.4f),
+            new Vector3(0.4f, 0f, -2.6f),
+        };
+        private static readonly float[] ChairYaws = { 200f, 330f, 90f };
 
         [MenuItem("YANTF/动作演示/创建 ActionLab 场景")]
         public static void CreateSceneMenu() => CreateScene();
@@ -64,8 +78,8 @@ namespace YANTF.EditorTools
             AddMarker(new Vector3(0f, 0f, 3f), new Color(0.9f, 0.35f, 0.35f));
             AddMarker(new Vector3(3f, 0f, 0f), new Color(0.35f, 0.8f, 0.4f));
 
-            // ---- 凳子（坐立三段的落点；几何全部来自实测，见 StoolSeatTopY 注释）----
-            AddStool();
+            // ---- 椅子（就座交互的落点；规格 §四·丁）----
+            AddChairs();
 
             var sunGo = new GameObject("Sun");
             var light = sunGo.AddComponent<Light>();
@@ -112,7 +126,8 @@ namespace YANTF.EditorTools
             if (!Directory.Exists("Assets/Scenes")) Directory.CreateDirectory("Assets/Scenes");
             EditorSceneManager.SaveScene(scene, ScenePath);
 
-            Debug.Log($"[ActionLab] 场景已保存: {ScenePath} — Play：WASD 走 / Shift 跑 / Space 跳 / 1物攻 2精攻 3防御 4受击 5倒下 6坐 7起身 / R 重置");
+            Debug.Log($"[ActionLab] 场景已保存: {ScenePath} — Play：WASD 走 / Shift 跑 / Space 跳 / 1物攻 2精攻 3防御 4受击 5倒下 6坐（需走到椅子前）7起身 / R 重置");
+            Debug.Log($"[ActionLab] 椅子 {ChairPositions.Length} 张（实心可推；就座锚点 = 坐面中心沿椅子 forward 前方 {ChairSeat.DefaultAnchorDistance} m，交互半径 {ChairSeat.DefaultInteractRadius} m）");
             Debug.Log($"[ActionLab] controller 接线: {wired}/{ActionCatalog.Level1.Count} 态有 clip（防漂移分档：已导入资产 → 有 clip；缺口 {gaps.Count} 个 → 留空待填）");
             if (gaps.Count > 0)
             {
@@ -227,30 +242,40 @@ namespace YANTF.EditorTools
         }
 
         /// <summary>
-        /// 凳子：坐板 + 四条腿（Cube 原语）。坐板**上表面**落在 StoolSeatTopY。
-        /// 不带碰撞体——角色 transform 在原点、坐姿髋落点在 z=−0.104，凳子占地范围内正站着人；
-        /// 留了碰撞体会把起身与移动卡死。
+        /// 三张椅子（规格 §四·丁#8）：坐板 + 四条腿 + 靠背 + Rigidbody + `ChairSeat` 锚点组件。
+        /// **实心**（各部件保留 BoxCollider）——角色会被挡在离坐面中心 0.522 m 处（实测 = 胶囊半径 0.3117
+        /// + 坐面半深 0.21），"走到椅子前"这件事才看得见；就座序列期间与角色的碰撞由 `ChairSeat` 忽略。
+        /// 刚体让椅子可被推开，从而验证锚点确实是**实时**求出来的（搬动椅子后落点跟随）。
         /// </summary>
-        private static void AddStool()
+        private static void AddChairs()
         {
-            var root = new GameObject("Stool(凳子)");
-            root.transform.position = new Vector3(StoolCenterX, 0f, StoolCenterZ);
+            for (int i = 0; i < ChairPositions.Length; i++)
+            {
+                AddChair("Chair(椅子)" + (char)('A' + i), ChairPositions[i], ChairYaws[i % ChairYaws.Length]);
+            }
+        }
 
-            float seatCenterY = StoolSeatTopY - StoolSeatThickness * 0.5f;
+        private static void AddChair(string name, Vector3 position, float yaw)
+        {
+            var root = new GameObject(name);
+            root.transform.position = position;
+            root.transform.rotation = Quaternion.Euler(0f, yaw, 0f);
+
+            // 坐板：上表面落在 ChairSeatTopY
+            float seatCenterY = ChairSeatTopY - ChairSeatThickness * 0.5f;
             var seat = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            seat.name = "Seat";
+            seat.name = "Seat(坐板)";
             seat.transform.SetParent(root.transform, false);
             seat.transform.localPosition = new Vector3(0f, seatCenterY, 0f);
-            seat.transform.localScale = new Vector3(StoolSeatSize, StoolSeatThickness, StoolSeatSize);
+            seat.transform.localScale = new Vector3(ChairSeatSize, ChairSeatThickness, ChairSeatSize);
             SetColor(seat, new Color(0.55f, 0.36f, 0.20f));
-            StripCollider(seat);
 
-            float legH = seatCenterY - StoolSeatThickness * 0.5f;  // 地面 → 坐板底面
-            float half = StoolSeatSize * 0.5f - StoolLegSize * 0.5f - 0.02f;
+            // 四条腿：地面 → 坐板底面
+            float legH = seatCenterY - ChairSeatThickness * 0.5f;
             var offs = new[]
             {
-                new Vector3(-half, 0f, -half), new Vector3(half, 0f, -half),
-                new Vector3(-half, 0f,  half), new Vector3(half, 0f,  half),
+                new Vector3(-ChairLegSpread, 0f, -ChairLegSpread), new Vector3(ChairLegSpread, 0f, -ChairLegSpread),
+                new Vector3(-ChairLegSpread, 0f,  ChairLegSpread), new Vector3(ChairLegSpread, 0f,  ChairLegSpread),
             };
             for (int i = 0; i < offs.Length; i++)
             {
@@ -258,17 +283,31 @@ namespace YANTF.EditorTools
                 leg.name = "Leg" + (i + 1);
                 leg.transform.SetParent(root.transform, false);
                 leg.transform.localPosition = new Vector3(offs[i].x, legH * 0.5f, offs[i].z);
-                leg.transform.localScale = new Vector3(StoolLegSize, legH, StoolLegSize);
+                leg.transform.localScale = new Vector3(ChairLegSize, legH, ChairLegSize);
                 SetColor(leg, new Color(0.42f, 0.27f, 0.15f));
-                StripCollider(leg);
             }
-        }
 
-        /// <summary>演示道具不留碰撞体（理由见 AddStool 注释）。</summary>
-        private static void StripCollider(GameObject go)
-        {
-            var col = go.GetComponent<Collider>();
-            if (col != null) UnityEngine.Object.DestroyImmediate(col);
+            // 靠背：坐面**后方**（−z；椅子 forward = 坐下后角色胸口朝向，故靠背在 −z 侧）
+            var back = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            back.name = "Back(靠背)";
+            back.transform.SetParent(root.transform, false);
+            back.transform.localPosition = new Vector3(0f, ChairSeatTopY + ChairBackHeight * 0.5f,
+                                                        -(ChairSeatSize * 0.5f + ChairBackThickness * 0.5f));
+            back.transform.localScale = new Vector3(ChairSeatSize, ChairBackHeight, ChairBackThickness);
+            SetColor(back, new Color(0.45f, 0.29f, 0.16f));
+
+            // 刚体：可被角色推开；锁住 X/Z 旋转（椅子不会翻倒），阻尼让推力停下后自然静止
+            var rb = root.AddComponent<Rigidbody>();
+            rb.mass = ChairMass;
+            rb.linearDamping = 2.5f;
+            rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+            rb.interpolation = RigidbodyInterpolation.Interpolate;
+
+            // 就座锚点（实时求解；组件自带默认值 = 规格 §四·丁 的实测值）
+            var chair = root.AddComponent<ChairSeat>();
+            chair.anchorDistance = ChairSeat.DefaultAnchorDistance;
+            chair.interactRadius = ChairSeat.DefaultInteractRadius;
+            chair.seatTopY = ChairSeatTopY;
         }
 
         private static void AddMarker(Vector3 pos, Color c)
