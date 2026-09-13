@@ -14,7 +14,7 @@ import os
 import glob
 import math
 
-OBJ_BASE = "技能树系统/blender_assets/all_obj"
+OBJ_BASE = "design/presentation/visualization-3d/blender_assets/all_obj"
 
 # bfb_region 名称 → OBJ 文件路径模式
 # DK atlas: lh.pial.DK.<region>.obj

@@ -757,10 +757,10 @@ def gen_markdown(results):
     lines.append('*文献: Momi et al. (2025) Nat Commun, Hansen et al. (2024) Nat Neurosci（社区划分）, Pajevic et al. (2023) eLife；增益系数为本仓估计*')
     lines.append('*JSON: [link_modulation_ceiling_v2.json](../../data/connectivity/link_modulation_ceiling_v2.json)*')
 
-    # ⚠️ 2026-09-12 记录：路径仍是 Phase 3 改名前的「技能树系统/」，该目录已不存在，
+    # ✅ 2026-09-13：输出路径已随仓库重构更新（原记录：路径仍是 Phase 3 改名前的「技能树系统/」，
     #   故本脚本跑到 MD 生成一步必抛 FileNotFoundError（JSON 已先写出）。
     #   现行正典是 design/rules/skill-tree/modulation/链路调制上限参考表-v2.md。
-    output_md = ROOT / '技能树系统/链路调制上限参考表-v2.md'
+    output_md = ROOT / 'design/rules/skill-tree/modulation/链路调制上限参考表-v2.md'
     with open(output_md, 'w') as f:
         f.write('\n'.join(lines))
     print(f'✓  MD → {output_md}')

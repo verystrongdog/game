@@ -645,9 +645,11 @@ def gen_markdown(results, json_output):
     lines.append('*生成: 2026-07-27 | 数据来源: ENIGMA Toolbox HCP SC（实测）；脑干强度为本仓估计（社区划分依 Hansen et al. (2024) Nat Neurosci）；Kroell (2024)*')
     lines.append(f'*JSON: [link_modulation_ceiling.json](../../data/connectivity/link_modulation_ceiling.json)*')
 
-    # ⚠️ 2026-09-12 记录：路径仍是 Phase 3 改名前的「技能树系统/」，该目录已不存在，
-    #   故本脚本跑到 MD 生成一步必抛 FileNotFoundError（JSON 已先写出）。
-    #   未在本次「如实标注」改动中修路径——改它会同时触发数值重算，属独立事项。
+    # ⚠️ 2026-09-13：本脚本是**已被取代**的那一代（v1 参考表已由
+    #   gen_modulation_ceiling_v2.py 产出的 design/rules/skill-tree/modulation/
+    #   链路调制上限参考表-v2.md 取代）。因此**不修**这个输出路径：
+    #   把废弃表写回正典目录会制造第二个权威来源，正是归档隔离要防的事。
+    #   现状：JSON 先写出，MD 一步抛 FileNotFoundError（目录不存在）——保持 fail-loud。
     output_md = ROOT / '技能树系统/链路调制上限参考表.md'
     with open(output_md, 'w') as f:
         f.write('\n'.join(lines))

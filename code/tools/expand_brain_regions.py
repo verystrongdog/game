@@ -15,6 +15,10 @@
   - literature_approx: 文献近似值（无精确坐标的核团）
 """
 
+⚠️ 世代定位（2026-09-13）：本脚本是**历史一次性工具**（"从 59 区扩展"那一代）。当前
+brain_regions.json 的登记生成器是 rebuild_brain_regions.py（见 data/manifest.json）。
+obj_file 字面量已随仓库重构改为新路径，**但计数与分区口径仍是旧的**——勿重跑覆盖契约。
+
 import json
 import os
 import sys
@@ -182,7 +186,7 @@ L1_NEW_REGIONS = {
         "category": "subcortical",
         "lobe": "basal_ganglia",
         "mni": [-20, -4, -4],
-        "obj_file": "技能树系统/blender_assets/all_obj/subcortical/Left-Pallidum.obj",
+        "obj_file": "design/presentation/visualization-3d/blender_assets/all_obj/subcortical/Left-Pallidum.obj",
         "notes": "基底节间接通路输出核. 抑制丘脑→抑制运动. CSTC环路关键节点"
     },
     # 尾状核
@@ -192,7 +196,7 @@ L1_NEW_REGIONS = {
         "category": "subcortical",
         "lobe": "basal_ganglia",
         "mni": [-14, 8, 10],
-        "obj_file": "技能树系统/blender_assets/all_obj/subcortical/Left-Caudate.obj",
+        "obj_file": "design/presentation/visualization-3d/blender_assets/all_obj/subcortical/Left-Caudate.obj",
         "notes": "目标导向行为的纹状体区. 联合环路(dmStr)的皮层输入区"
     },
     # 壳核
@@ -202,7 +206,7 @@ L1_NEW_REGIONS = {
         "category": "subcortical",
         "lobe": "basal_ganglia",
         "mni": [-26, 0, 4],
-        "obj_file": "技能树系统/blender_assets/all_obj/subcortical/Left-Putamen.obj",
+        "obj_file": "design/presentation/visualization-3d/blender_assets/all_obj/subcortical/Left-Putamen.obj",
         "notes": "感觉运动环路的纹状体区(dlStr). 习惯形成/自动执行"
     },
 }
@@ -226,7 +230,7 @@ L3_NEW_REGIONS = {
         "category": "cortical",
         "lobe": "frontal",
         "mni": [-37, -22, 58],
-        "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.precentral.obj",
+        "obj_file": "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.precentral.obj",
         "notes": "运动输出的最终皮层端. 控制对侧身体运动. 皮质脊髓束起源"
     },
     # S1 初级体感皮层
@@ -236,7 +240,7 @@ L3_NEW_REGIONS = {
         "category": "cortical",
         "lobe": "parietal",
         "mni": [-42, -26, 54],
-        "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.postcentral.obj",
+        "obj_file": "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.postcentral.obj",
         "notes": "触觉/本体感觉的初级皮层. 身体图式. 内感受的上游输入"
     },
     # A1 初级听觉皮层
@@ -246,7 +250,7 @@ L3_NEW_REGIONS = {
         "category": "cortical",
         "lobe": "temporal",
         "mni": [-42, -24, 10],
-        "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.transversetemporal.obj",
+        "obj_file": "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.transversetemporal.obj",
         "notes": "听觉输入的第一站皮层. 音调/频率处理. 颞横回(Heschl回)"
     },
     # 旁中央小叶
@@ -256,7 +260,7 @@ L3_NEW_REGIONS = {
         "category": "cortical",
         "lobe": "frontal",
         "mni": [-8, -30, 60],
-        "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.paracentral.obj",
+        "obj_file": "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.paracentral.obj",
         "notes": "下肢运动/感觉代表区. 连接M1和S1的内侧延伸"
     },
     # 楔叶 (次级视觉)
@@ -266,7 +270,7 @@ L3_NEW_REGIONS = {
         "category": "cortical",
         "lobe": "occipital",
         "mni": [-8, -80, 28],
-        "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.cuneus.obj",
+        "obj_file": "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.cuneus.obj",
         "notes": "背侧视觉通路的一部分. 空间视觉/运动检测"
     },
 }
@@ -290,7 +294,7 @@ L4_NEW_REGIONS = {
         "category": "cortical",
         "lobe": "temporal",
         "mni": [-40, -50, -22],
-        "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.fusiform.obj",
+        "obj_file": "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.fusiform.obj",
         "notes": "面孔识别(FFA)/物体精细分类. 视觉词形区(VWFA)也在附近"
     },
     # 外侧枕叶
@@ -300,7 +304,7 @@ L4_NEW_REGIONS = {
         "category": "cortical",
         "lobe": "occipital",
         "mni": [-30, -82, 12],
-        "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.lateraloccipital.obj",
+        "obj_file": "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.lateraloccipital.obj",
         "notes": "物体识别的关键区(LO). 腹侧视觉通路"
     },
     # 舌回
@@ -310,7 +314,7 @@ L4_NEW_REGIONS = {
         "category": "cortical",
         "lobe": "occipital",
         "mni": [-16, -78, -6],
-        "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.lingual.obj",
+        "obj_file": "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.lingual.obj",
         "notes": "腹侧视觉通路. 颜色/文字处理. 连接V1与纺锤体回"
     },
     # 颞中回
@@ -320,7 +324,7 @@ L4_NEW_REGIONS = {
         "category": "cortical",
         "lobe": "temporal",
         "mni": [-54, -42, -6],
-        "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.middletemporal.obj",
+        "obj_file": "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.middletemporal.obj",
         "notes": "运动处理(MT/MST). 语义记忆. 背侧听觉通路"
     },
     # 颞上沟岸
@@ -330,7 +334,7 @@ L4_NEW_REGIONS = {
         "category": "cortical",
         "lobe": "temporal",
         "mni": [-52, -44, 8],
-        "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.bankssts.obj",
+        "obj_file": "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.bankssts.obj",
         "notes": "社会知觉/生物运动检测. 意图感知/心理理论的前体"
     },
 }
@@ -354,7 +358,7 @@ L5_NEW_REGIONS = {
         "category": "cortical",
         "lobe": "frontal",
         "mni": [-18, 38, 42],
-        "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.superiorfrontal.obj",
+        "obj_file": "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.superiorfrontal.obj",
         "notes": "高级认知/自我意识/工作记忆. 包含SMA前区(pre-SMA)"
     },
     # 缘上回
@@ -364,7 +368,7 @@ L5_NEW_REGIONS = {
         "category": "cortical",
         "lobe": "parietal",
         "mni": [-52, -44, 32],
-        "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.supramarginal.obj",
+        "obj_file": "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.supramarginal.obj",
         "notes": "语音处理/工作记忆/模仿. TPJ的组成部分. 与角回一起构成感觉-语言界面"
     },
     # 颞上回
@@ -374,7 +378,7 @@ L5_NEW_REGIONS = {
         "category": "cortical",
         "lobe": "temporal",
         "mni": [-54, -32, 8],
-        "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.superiortemporal.obj",
+        "obj_file": "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.superiortemporal.obj",
         "notes": "含Wernicke区后部. 听觉联合皮层. 语言理解"
     },
     # 额中回尾部 — dlPFC的一部分
@@ -384,7 +388,7 @@ L5_NEW_REGIONS = {
         "category": "cortical",
         "lobe": "frontal",
         "mni": [-34, 14, 48],
-        "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.caudalmiddlefrontal.obj",
+        "obj_file": "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.caudalmiddlefrontal.obj",
         "notes": "dlPFC后部. 工作记忆/执行控制的运动端"
     },
 }
@@ -408,7 +412,7 @@ OTHER_NEW = {
         "category": "subcortical",
         "lobe": "cerebellum",
         "mni": [-32, -58, -28],
-        "obj_file": "技能树系统/blender_assets/all_obj/subcortical/Left-Cerebellum-Cortex.obj",
+        "obj_file": "design/presentation/visualization-3d/blender_assets/all_obj/subcortical/Left-Cerebellum-Cortex.obj",
         "level": 0,  # 进化上古老，但在技能熟练化中是关键
         "notes": "预测/时序/自动化. 内部模型. 技能熟练化→习惯形成的关键结构"
     },
@@ -419,7 +423,7 @@ OTHER_NEW = {
         "category": "subcortical",
         "lobe": "diencephalon",
         "mni": [-12, -18, 6],
-        "obj_file": "技能树系统/blender_assets/all_obj/subcortical/Left-Thalamus-Proper.obj",
+        "obj_file": "design/presentation/visualization-3d/blender_assets/all_obj/subcortical/Left-Thalamus-Proper.obj",
         "level": 1,  # 感觉中继站，连接皮层的关键枢纽
         "notes": "感觉中继/皮层间通信/CSTC环路中继. MD核=前额叶中继, 前核=海马中继"
     },
@@ -430,7 +434,7 @@ OTHER_NEW = {
         "category": "cortical",
         "lobe": "temporal",
         "mni": [-28, -36, -18],
-        "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.parahippocampal.obj",
+        "obj_file": "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.parahippocampal.obj",
         "level": 1,  # 旁海马皮层，design/space/情景记忆
         "notes": "空间导航/场景识别(PPA). 海马体的主要皮层输入. 内嗅皮层-海马的中继"
     },
@@ -441,7 +445,7 @@ OTHER_NEW = {
         "category": "cortical",
         "lobe": "cingulate",
         "mni": [-8, -46, 10],
-        "obj_file": "技能树系统/blender_assets/all_obj/pial_DK/lh.pial.DK.isthmuscingulate.obj",
+        "obj_file": "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.isthmuscingulate.obj",
         "level": 2,  # 旁边缘, 记忆与空间的桥梁
         "notes": "海马-默认网络接口. 空间记忆/场景构建. Alzheimer早期萎缩区"
     },
