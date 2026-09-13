@@ -315,6 +315,17 @@ gh issue edit <新编号> --add-blocked-by <前置编号>
 > 逐条命令与退出码、两项门禁的实跑判定与交付物 commit（见 [WORKFLOW.md §六](../../WORKFLOW.md)
 > "代码写完、文档写完、CI 表面绿色都不能单独作为关闭证据"）。
 
+> **常设授权（2026-09-13 起 · 取代上面那条"逐次确认"，无需再逐个问）**：
+> `Task` / `Bug` 类 issue 在**交付物已落库、声明的门禁实跑通过、且该 commit 的真实 CI 已绿**之后，
+> agent 可**直接关闭**（置 `closed`，同时清掉 `state:in-progress`——[WORKFLOW.md §一](../../WORKFLOW.md)
+> 规定全仓同时只允许一个 in-progress，闭合的 issue 不得挂着它）。标签沿用既有约定：闭合后只留 `type:*`。
+>
+> **仍须逐次确认**：`RFC` / `Experiment` / `Slice` / `Implementation` 的关闭（判据含 owner 决策或玩家可观察行为）、
+> 关闭或修改存量历史 issue、改 issue 正文、删评论、以及任何 push。
+>
+> **直接关闭不等于免证据**：仓库里必须已有该 issue 的实跑读数（证据文件或权威文档），
+> 「CI 表面绿色」本身不构成关闭证据——这条判据不变。
+
 ### 7.3 本机工具限制（实测）
 
 | 限制 | 影响 | 处置 |
