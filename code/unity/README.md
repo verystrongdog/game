@@ -478,6 +478,60 @@ grep '^guid:' code/unity/Assets/SkillTree*/**/*.meta 2>/dev/null || \
 
 ---
 
+## 二·L、只读骨架 BrainViewLab（[#146](https://github.com/verystrongdog/game/issues/146)，2026-09-13）
+
+> 把 [#143](https://github.com/verystrongdog/game/issues/143) 入库的脑壳接进一个**独立演示场**：脑壳 + 脑区 + 1049 条三体边 + 相机绕看。**零玩家可操作行为**——玩家的可操作面（构建层聚焦配置等）按 [#145](https://github.com/verystrongdog/game/issues/145) 的裁定随切片准入进入。
+
+### 交付物与接入位置
+
+| 项 | 值 |
+|---|---|
+| 场景 | `code/unity/Assets/Scenes/BrainViewLab.unity`（独立演示场，与 `ActionLab` 并存、互不引用；**未加入 Build Settings**） |
+| builder | `code/unity/Assets/Editor/BrainViewLabBuilder.cs` — 菜单 **YANTF → 大脑视图 → 创建 BrainViewLab 场景** |
+| 运行时 | `code/unity/Assets/Scripts/BrainViewRig.cs`（根变换 / 计数 / 脑壳透明度）· `BrainLinkRenderer.cs`（三体边 → 单 Mesh + 16 材质槽，内含极简 JSON 解析器） |
+| 断言 | `code/unity/Assets/Tests/PlayMode/BrainViewSmokeTests.cs`（5 条，判据全部读数据推导） |
+
+### 实测读数（Editor 6000.5.2f1 · 基线 `C:\Users\9527\game\code\unity`）
+
+| 判据 | 读数 |
+|---|---|
+| builder 产出 | 脑壳 区域对象 **40**（数据侧 `obj_file` 去重载体 **40**，一致）· 材质 **8** |
+| | 链路 **1049** 条 · submesh **16** · 材质 **16** |
+| 根变换 | rot **(270, 0, 0)**（= −90° X）· scale **0.01111**（= 1/90，口径见接入设计 §8.5） |
+| 网格/链路对齐 | links 世界包围盒中心落在 shell 包围盒内 **True**；轴向比 shell/link = **0.71 / 1.15 / 1.19**（shell 是左半球、链路跨双侧，故 X 更窄——比例关系自洽） |
+| PlayMode 测试 | **38/38 通过**（含本条 5 条；其余 33 条为阶段回归，无失败） |
+| 抓帧 | 非背景像素 **3.9%** · 内容包围盒 **211×262 px** · 非背景平均亮度 **158** · 色相桶 **11/12 非空**（多网络链路确实在渲染） |
+
+### 坐标口径（实测，非推导）
+
+资产以 **MNI 轴向**存储、单位毫米，在 Unity 里是**躺着**的：
+
+- 以 40 个载体的网格质心对 MNI 标签坐标做候选映射拟合 → `资产空间 = (−mni_X, mni_Y, mni_Z)`，平均绝对误差 **9.5 mm**（次优候选 30 mm 以上）
+- 故根部施加 **−90° X 旋转**使其立起 + **等比 1/90**
+- FBX 导入的局部缩放实测为 **100**（Unity 对 Blender 单位的换算），由根变换统一处理
+
+### ⚠️ 诚实清单（四项，均已在案）
+
+| # | 事项 | 说明 |
+|---|---|---|
+| 1 | **链路在 builder 时生成，不是 Play 时** | 场景自带烘好的链路 Mesh；改 `data/` 后需**重跑 builder**才反映。这与接入设计 A7"改数据不改场景"尚有距离——A7 的达成需要数据进 Assets（生成式 C# 静态表，参考 [#138](https://github.com/verystrongdog/game/issues/138) 的方向），属后续工作面 |
+| 2 | **脑壳只覆盖左半球** | `brain_regions.json` 的 58 条 `obj_file` **全部**是左半球（44 `lh.*` + 14 `Left-*`）；`all_obj/pial_DK/` 里存在同名 `rh.*`，但不在契约里。故画面是半脑——整脑需要一次口径裁定（是否把右半球纳入 `obj_file`，或允许镜像渲染）。**属数据契约工作面，本条不擅自动** |
+| 3 | **脑壳不透明度被运行时改写过** | 烘焙件沿用 v2 世代的逐脑叶 `alpha=0.10`，深色背景下近乎不可见；该材质是**导入资产的内嵌材质**，直接改不持久（重导入即还原）→ `BrainViewRig` 用 `MaterialPropertyBlock` 覆盖为 **0.35**（呈现层取值，可调），不碰资产 |
+| 4 | **`write_text_file` 与仓库版差一个尾换行** | Editor 侧写出的文件无尾换行（`.meta` 同现象），仓库侧有。逐文件 `diff` 只此一处差异；已核对 **API Updater 未改写任何源码**（危险点表 §七 的行） |
+
+### 怎么复核
+
+```bash
+./code/tools/unity-cli/uc.sh menu "YANTF/大脑视图/创建 BrainViewLab 场景"   # 幂等：重建场景
+./code/tools/unity-cli/uc.sh editor_play                                   # 进 Play
+./code/tools/unity-cli/uc.sh capture_game_view --source camera --save_path Assets/Temp/brainview.png
+./code/tools/unity-cli/uc.sh run_tests && ./code/tools/unity-cli/uc.sh test_status
+```
+
+> builder **幂等**：每次都 `NewScene(EmptyScene)` 从零重建，无手工挂载件（危险点表 §四 的"一切折进 builder"）。重复执行不产生重复对象——实测两次运行的计数完全一致。
+
+---
+
 ## 三、工程结构
 
 ```
