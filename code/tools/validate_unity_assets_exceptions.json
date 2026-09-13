@@ -1,0 +1,55 @@
+{
+  "_description": "validate_unity_assets.py 的允许清单。三段的生命周期**各不相同**，不要混用——混用会让它从『例外登记』长成『永久豁免名单』。",
+  "_maintenance": [
+    "builtin_guids  —— Unity 内置资源 guid，恒等成立，不随项目变化。",
+    "non_humanoid_ok—— 非人形用途的 FBX（静态模型/道具），长期豁免；每条必须写清『为什么不驱动 Humanoid 载体』。",
+    "known_dangling —— 已知缺口引用：每条必须带 reason 与 issue 编号，**该 issue 关闭后必须删除该条**（新增同类缺口也应先修根因，而不是先加条目）。"
+  ],
+  "_created": "2026-09-13",
+  "_source": "design/engineering/危险点表.md §十（规则 A3/A4）· issue #142",
+
+  "builtin_guids": [
+    {
+      "guid": "0000000000000000f000000000000000",
+      "reason": "Unity 内置资源（builtin extra，如默认材质/内置组件）。出现于 ActionLab.unity 与 ProjectSettings/GraphicsSettings.asset。"
+    },
+    {
+      "guid": "0000000000000000e000000000000000",
+      "reason": "Unity 内置资源（builtin resources，如默认天空盒/内置贴图）。出现于 ActionLab.unity 与 ProjectSettings/PackageManagerSettings.asset。"
+    }
+  ],
+
+  "non_humanoid_ok": [
+    {
+      "asset": "code/unity/Assets/SkillTree/Models/brain_shell.fbx",
+      "reason": "静态脑壳模型（6.4 MB），不驱动 Humanoid 角色，无根位移需求——Generic + NoAvatar 是**正确**导入设置，不属 A4 的适用对象。来源：脑模型资产登记（#143）。"
+    }
+  ],
+
+  "known_dangling": [
+    {
+      "guid": "56fd86b76fc74d24d83522069f5deb9b",
+      "subject": "ActionLab.controller 状态 Idle 的 m_Motion",
+      "reason": "指向不入库的 KI 资产包（Assets/Kevin Iglesias/...）——干净检出下该状态是『状态存在 + clip 空（Missing）』。",
+      "issue": "#139"
+    },
+    {
+      "guid": "c133e3c197c12e04a9dd23bd0966910f",
+      "subject": "ActionLab.controller 状态 Walk 的 m_Motion",
+      "reason": "同上，指向不入库的 KI 资产包。",
+      "issue": "#139"
+    },
+    {
+      "guid": "2035f8d45874b4e47a2c15ea2fa026fb",
+      "subject": "ActionLab.controller 状态 Jump 的 m_Motion",
+      "reason": "同上，指向不入库的 KI 资产包。",
+      "issue": "#139"
+    },
+    {
+      "guid": "6deac83e30d8acd4cbb8c7d8a11545bd",
+      "subject": "ActionLab.controller 状态 Run 的 m_Motion",
+      "reason": "同上，指向不入库的 KI 资产包。",
+      "issue": "#139"
+    }
+  ]
+}

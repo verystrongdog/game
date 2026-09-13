@@ -44,6 +44,7 @@ VALIDATOR_REGISTRY = {
     "validate_tripartite_annotations.py": {"status": "active", "json": False},
     "validate_data_manifest.py":   {"status": "active", "json": False},
     "validate_runtime_fixtures.py": {"status": "active", "json": False},
+    "validate_unity_assets.py":   {"status": "active", "json": False},
 }
 
 STATE_FILE = ROOT / ".checks-state.json"   # 运行状态（2026-09-12：原 .scratch/.last_check_state.json，随 .scratch 移出版本控制而迁出）
