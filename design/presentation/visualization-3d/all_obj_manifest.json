@@ -1,0 +1,319 @@
+{
+ "_description": "brain-for-blender OBJ 中间件的 provenance 登记：来源、许可、目录清单、被数据契约引用的文件校验值。不随仓库分发——按 source 重下后可用本表复核。",
+ "_generated": "2026-09-13",
+ "_generator": "手工一次性核对（脚本记录在 design/presentation/visualization-3d/脑模型资产登记.md §十）",
+ "source": {
+  "dataset": "brain-for-blender (brainder.org)",
+  "index": "https://brainder.org/research/brain-for-blender/",
+  "archives": [
+   "https://s3.us-east-2.amazonaws.com/brainder/software/brain4blender/pial_DK_obj.tar.bz2",
+   "https://s3.us-east-2.amazonaws.com/brainder/software/brain4blender/subcortical_obj.tar.bz2",
+   "https://s3.us-east-2.amazonaws.com/brainder/software/brain4blender/pial_Full_obj.tar.bz2"
+  ],
+  "license": "CC BY-SA 3.0",
+  "note": "解压到 blender_assets/all_obj/（12 个子目录）；本仓只分发「被引用文件的校验值」，不分发 mesh 本体"
+ },
+ "inventory": {
+  "inflated_DK": {
+   "files": 70,
+   "bytes": 22992017
+  },
+  "inflated_DKT": {
+   "files": 64,
+   "bytes": 22900972
+  },
+  "inflated_Destrieux": {
+   "files": 150,
+   "bytes": 25763335
+  },
+  "inflated_Full": {
+   "files": 2,
+   "bytes": 21610476
+  },
+  "pial_DK": {
+   "files": 70,
+   "bytes": 22904119
+  },
+  "pial_DKT": {
+   "files": 64,
+   "bytes": 22817729
+  },
+  "pial_Destrieux": {
+   "files": 150,
+   "bytes": 25657181
+  },
+  "pial_Full": {
+   "files": 2,
+   "bytes": 21547983
+  },
+  "subcortical": {
+   "files": 32,
+   "bytes": 9899120
+  },
+  "white_DK": {
+   "files": 70,
+   "bytes": 22910451
+  },
+  "white_DKT": {
+   "files": 64,
+   "bytes": 22823046
+  },
+  "white_Destrieux": {
+   "files": 150,
+   "bytes": 25664665
+  },
+  "white_Full": {
+   "files": 2,
+   "bytes": 21552749
+  }
+ },
+ "referenced_by_contract": {
+  "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.transversetemporal.obj": {
+   "region": "TransverseTemporal",
+   "exists": true,
+   "bytes": 61315,
+   "sha256": "a18bbd39185bcf9f351c5a48e2f72c83311157904d8017338bb87f803fd6f82d"
+  },
+  "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.caudalanteriorcingulate.obj": {
+   "region": "FrontalPoleSN",
+   "exists": true,
+   "bytes": 73440,
+   "sha256": "7b523bf95d9c11bb83cd0fb7559b6c161ef8e106078303886498a1d50fcafff2"
+  },
+  "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.rostralanteriorcingulate.obj": {
+   "region": "RostralAnteriorCingulateCortex",
+   "exists": true,
+   "bytes": 114668,
+   "sha256": "92288110d91009eb5bc395b7da70abd34d02cd0dff87cee2cde88b0443197029"
+  },
+  "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.parsopercularis.obj": {
+   "region": "ParsOpercularis",
+   "exists": true,
+   "bytes": 201799,
+   "sha256": "f46f7ea9197b254e1297377307c3aebfe2f0a9873d217d503a8b11cb0c461b4c"
+  },
+  "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.medialorbitofrontal.obj": {
+   "region": "FrontalPoleDMN",
+   "exists": true,
+   "bytes": 254759,
+   "sha256": "59bf62d762409203f658d591c05d27cb7fa2d177951b883a4f3c4f1eb83da7b8"
+  },
+  "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.precentral.obj": {
+   "region": "Precentral",
+   "exists": true,
+   "bytes": 683037,
+   "sha256": "4e67e0be9b8f4b3b5c14b397f126814c543b5a1aa1c929b890a97d6d09fee03c"
+  },
+  "design/presentation/visualization-3d/blender_assets/all_obj/subcortical/Left-Accumbens-area.obj": {
+   "region": "VentralStriatum",
+   "exists": true,
+   "bytes": 40052,
+   "sha256": "ca61a8ad00721253b3633efa36c7a177b97b89a22399b0a423dee95f098d8ccf"
+  },
+  "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.lateralorbitofrontal.obj": {
+   "region": "LateralOrbitofrontal",
+   "exists": true,
+   "bytes": 397952,
+   "sha256": "b0e84d744d0fea66883156c8d30d5f8f630dd06155ae32ab8aa253cd9b8d46bd"
+  },
+  "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.postcentral.obj": {
+   "region": "Postcentral",
+   "exists": true,
+   "bytes": 530520,
+   "sha256": "a641d0cd74e5446765de9a27f501122c812eec344bbcf5a5399224980652b457"
+  },
+  "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.supramarginal.obj": {
+   "region": "Supramarginal",
+   "exists": true,
+   "bytes": 522679,
+   "sha256": "150c9a4875d11a8725a0c00debfb43d623c4e35e4896cbfdd0592526a2ac884a"
+  },
+  "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.superiortemporal.obj": {
+   "region": "SuperiorTemporalSulcus",
+   "exists": true,
+   "bytes": 472940,
+   "sha256": "f05e5dbe690b90886027ae24723343468018af7f45874a1362f4d1951fd5980d"
+  },
+  "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.rostralmiddlefrontal.obj": {
+   "region": "FrontalPoleFPN",
+   "exists": true,
+   "bytes": 657737,
+   "sha256": "6b385f9dacd6ba3d1b97ef657386c1221f38878dd8291f6689899df8b14a9094"
+  },
+  "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.superiorfrontal.obj": {
+   "region": "SuperiorFrontal",
+   "exists": true,
+   "bytes": 913835,
+   "sha256": "0c23072c122fe498dcc99b113ae08fb61a20d19024a49a9c3b4cc0e462e060a1"
+  },
+  "design/presentation/visualization-3d/blender_assets/all_obj/subcortical/Left-Thalamus-Proper.obj": {
+   "region": "ThalamusPulvinar",
+   "exists": true,
+   "bytes": 245476,
+   "sha256": "cdb3581d67206669e685cd5b752cb6a6007d770087ccee8d92bb568c188c6540"
+  },
+  "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.entorhinal.obj": {
+   "region": "Entorhinal",
+   "exists": true,
+   "bytes": 71396,
+   "sha256": "fcb65e49522cecce480dd352c027619ddd88b280e8bbce50988c9aa7740e3684"
+  },
+  "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.insula.obj": {
+   "region": "Insula",
+   "exists": true,
+   "bytes": 278913,
+   "sha256": "846b450930839708f453d997ed2244966ddcc67d8b34585fd69c09fb3e82b078"
+  },
+  "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.posteriorcingulate.obj": {
+   "region": "PosteriorCingulate",
+   "exists": true,
+   "bytes": 144726,
+   "sha256": "47ad26bd2b0bda1cbcaf697c871b339b8454cbc0ef5e284ce4c53f6d4d4ea6c8"
+  },
+  "design/presentation/visualization-3d/blender_assets/all_obj/subcortical/Left-Putamen.obj": {
+   "region": "Putamen",
+   "exists": true,
+   "bytes": 227625,
+   "sha256": "bce8af3e6e3e9af42d7a9852746ff7dd7adc59cc6f0235495860316c65b96a7e"
+  },
+  "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.lateraloccipital.obj": {
+   "region": "LateralOccipitalOccipitoParietal",
+   "exists": true,
+   "bytes": 544980,
+   "sha256": "ebe90c07226ce97b3c20e08cd6408d2bece4797b792ec13f6397691dc0a1914e"
+  },
+  "design/presentation/visualization-3d/blender_assets/all_obj/subcortical/Left-Cerebellum-Cortex.obj": {
+   "region": "CerebellumCortex",
+   "exists": true,
+   "bytes": 2210818,
+   "sha256": "c9b5437ecaa4cd3782e39c27f59cfdacaea7a87a1d9634642ea6af6d1663ddb6"
+  },
+  "design/presentation/visualization-3d/blender_assets/all_obj/subcortical/Left-Caudate.obj": {
+   "region": "StriatumMatrix",
+   "exists": true,
+   "bytes": 184454,
+   "sha256": "336659587841856025ec88eac7ff6df8f5b4c27881eeca81a255574da5de1bbb"
+  },
+  "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.isthmuscingulate.obj": {
+   "region": "IsthmusCingulate",
+   "exists": true,
+   "bytes": 147344,
+   "sha256": "fbe696512ffff154c23ff58357859877bef9272e00420eb6257c8a71f9259d5b"
+  },
+  "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.paracentral.obj": {
+   "region": "Paracentral",
+   "exists": true,
+   "bytes": 204089,
+   "sha256": "be66f16043587d6a5fb90dd71b6d751912078f4b2e5af6d02b5e10317340607a"
+  },
+  "design/presentation/visualization-3d/blender_assets/all_obj/subcortical/Left-Amygdala.obj": {
+   "region": "Amygdala",
+   "exists": true,
+   "bytes": 75174,
+   "sha256": "cb0adcff3f4c787440a3eb581cc67c2b8a22d156418c890d5c84930fbcae945b"
+  },
+  "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.pericalcarine.obj": {
+   "region": "Pericalcarine",
+   "exists": true,
+   "bytes": 166242,
+   "sha256": "e872cedb01d590b10966a381a62aa9ad579c7fbf9280e4f093bde2dad1b0f68b"
+  },
+  "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.precuneus.obj": {
+   "region": "Precuneus",
+   "exists": true,
+   "bytes": 453705,
+   "sha256": "3fb1186c1ad061aa16e79e7475a2eb8c604346dcf59d329300a0bfab972f34f6"
+  },
+  "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.cuneus.obj": {
+   "region": "Cuneus",
+   "exists": true,
+   "bytes": 187648,
+   "sha256": "53dc6b9bbffa296af49504afab441381a5c6cdae42e3de648af8edb070cba0c4"
+  },
+  "design/presentation/visualization-3d/blender_assets/all_obj/subcortical/Left-Hippocampus.obj": {
+   "region": "HippocampusCA3",
+   "exists": true,
+   "bytes": 231173,
+   "sha256": "4f5a42bf5732e4e35601b641441a4e6d5f67b357d4d03650cf939bec7aa63a72"
+  },
+  "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.parahippocampal.obj": {
+   "region": "Parahippocampal",
+   "exists": true,
+   "bytes": 137389,
+   "sha256": "d341ae8e561ecb4f41e019c160f12f6a3f7d9492a5fd24b0fc4b757f4a808df7"
+  },
+  "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.fusiform.obj": {
+   "region": "Fusiform",
+   "exists": true,
+   "bytes": 408062,
+   "sha256": "b8d4a446e5e91295054040ff3ff49fc09df55105c0ecaef0675f890edc2f1246"
+  },
+  "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.lingual.obj": {
+   "region": "Lingual",
+   "exists": true,
+   "bytes": 374625,
+   "sha256": "91fecee30c2f9bfafceda6ccbf76ed248ddadd9572bde72b7bb266cb23380793"
+  },
+  "design/presentation/visualization-3d/blender_assets/all_obj/subcortical/Left-Pallidum.obj": {
+   "region": "Pallidum",
+   "exists": true,
+   "bytes": 92384,
+   "sha256": "8edcefa24cd0360ba5bfed83d26c0e53e74cff51c52e90db4b58099c1c3689b0"
+  },
+  "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.inferiorparietal.obj": {
+   "region": "InferiorParietal",
+   "exists": true,
+   "bytes": 595389,
+   "sha256": "e7b72582002a4db927e8b4da948164b69eb5b36494b87464d9d48787e8399787"
+  },
+  "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.superiorparietal.obj": {
+   "region": "SuperiorParietal",
+   "exists": true,
+   "bytes": 616775,
+   "sha256": "9628f9241ca05c034f029aee2e9b079dc571c887c02e41bb73a240041fdb6365"
+  },
+  "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.caudalmiddlefrontal.obj": {
+   "region": "CaudalMiddleFrontal",
+   "exists": true,
+   "bytes": 317846,
+   "sha256": "276a88d950fa94e31bd8e7231d9d9f86902b4ef7e45387f6381e1cce78b9f217"
+  },
+  "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.frontalpole.obj": {
+   "region": "FrontalPoleExtreme",
+   "exists": true,
+   "bytes": 31765,
+   "sha256": "fda822b68a3ada61ecf0265ec5d75ebba688c700068dd36d227312f59dbecb53"
+  },
+  "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.bankssts.obj": {
+   "region": "BanksSTS",
+   "exists": true,
+   "bytes": 173770,
+   "sha256": "702e98d7f59ac79f690ee682f08d3634955ad44836f48d3b78a0e4cb0d74853f"
+  },
+  "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.inferiortemporal.obj": {
+   "region": "InferiorTemporal",
+   "exists": true,
+   "bytes": 441573,
+   "sha256": "4d8bb8b9f72108e940c323b5ab4499d97e1f2988db0419d727b329addc57a9e8"
+  },
+  "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.middletemporal.obj": {
+   "region": "MiddleTemporal",
+   "exists": true,
+   "bytes": 444399,
+   "sha256": "7cebd43d27ae1a835006690050db5f7b5208df5023295be0596c9a8b6c38a45a"
+  },
+  "design/presentation/visualization-3d/blender_assets/all_obj/pial_DK/lh.pial.DK.temporalpole.obj": {
+   "region": "TemporalPole",
+   "exists": true,
+   "bytes": 61776,
+   "sha256": "6b1c725a0c062f77ccb771ab101f235fea273eb06eb9ecb4bf08418562657c91"
+  }
+ },
+ "_stats": {
+  "subdirs": 13,
+  "obj_total": 890,
+  "bytes_total": 289043843,
+  "referenced": 40,
+  "referenced_present": 40
+ }
+}
