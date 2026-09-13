@@ -1,0 +1,357 @@
+{
+  "inside_count": 2,
+  "borderline_count": 15,
+  "outside_count": 44,
+  "no_mesh_count": 0,
+  "outside_details": [
+    {
+      "skill": "cog_1_凝神",
+      "brain": "lateraloccipital",
+      "mesh": "rh.pial.DK.lateraloccipital",
+      "distance": 43.2989790868771
+    },
+    {
+      "skill": "cog_2_察微",
+      "brain": "cuneus",
+      "mesh": "rh.pial.DK.cuneus",
+      "distance": 47.12485914942893
+    },
+    {
+      "skill": "cog_3_纵观",
+      "brain": "superiorparietal",
+      "mesh": "rh.pial.DK.superiorparietal",
+      "distance": 69.06300241969397
+    },
+    {
+      "skill": "cog_4_警觉",
+      "brain": "precuneus",
+      "mesh": "rh.pial.DK.precuneus",
+      "distance": 52.14102416875974
+    },
+    {
+      "skill": "cog_6_追忆",
+      "brain": "middletemporal",
+      "mesh": "rh.pial.DK.middletemporal",
+      "distance": 37.34880449253342
+    },
+    {
+      "skill": "cog_7_闪回",
+      "brain": "entorhinal",
+      "mesh": "rh.pial.DK.entorhinal",
+      "distance": 48.33013364241798
+    },
+    {
+      "skill": "cog_8_铭刻",
+      "brain": "parahippocampal",
+      "mesh": "rh.pial.DK.parahippocampal",
+      "distance": 48.41923678739276
+    },
+    {
+      "skill": "cog_9_释怀",
+      "brain": "isthmuscingulate",
+      "mesh": "rh.pial.DK.isthmuscingulate",
+      "distance": 60.42622644318513
+    },
+    {
+      "skill": "cog_11_定性",
+      "brain": "supramarginal",
+      "mesh": "rh.pial.DK.supramarginal",
+      "distance": 108.68228819571317
+    },
+    {
+      "skill": "cog_13_正名",
+      "brain": "superiortemporal",
+      "mesh": "rh.pial.DK.superiortemporal",
+      "distance": 66.32987945357051
+    },
+    {
+      "skill": "cog_14_类比",
+      "brain": "inferiorparietal",
+      "mesh": "rh.pial.DK.inferiorparietal",
+      "distance": 106.3267720110465
+    },
+    {
+      "skill": "cog_15_隐喻",
+      "brain": "supramarginal",
+      "mesh": "rh.pial.DK.supramarginal",
+      "distance": 105.23204267900763
+    },
+    {
+      "skill": "cog_17_构想",
+      "brain": "precuneus",
+      "mesh": "rh.pial.DK.precuneus",
+      "distance": 47.36898225998401
+    },
+    {
+      "skill": "cog_18_转述",
+      "brain": "parsopercularis",
+      "mesh": "rh.pial.DK.parsopercularis",
+      "distance": 43.49006872701927
+    },
+    {
+      "skill": "cog_19_命名",
+      "brain": "parstriangularis",
+      "mesh": "rh.pial.DK.parstriangularis",
+      "distance": 78.07866096427136
+    },
+    {
+      "skill": "cog_21_决意",
+      "brain": "superiorfrontal",
+      "mesh": "rh.pial.DK.superiorfrontal",
+      "distance": 49.200196000615925
+    },
+    {
+      "skill": "cog_22_筹算",
+      "brain": "caudalmiddlefrontal",
+      "mesh": "rh.pial.DK.caudalmiddlefrontal",
+      "distance": 74.1577014547956
+    },
+    {
+      "skill": "emo_0_快乐",
+      "brain": "Left-Amygdala",
+      "mesh": "Left-Amygdala",
+      "distance": 40.18427934096049
+    },
+    {
+      "skill": "emo_2_平静",
+      "brain": "Brain-Stem",
+      "mesh": "Brain-Stem",
+      "distance": 45.03187261166887
+    },
+    {
+      "skill": "emo_3_希望",
+      "brain": "Left-Accumbens-area",
+      "mesh": "Left-Accumbens-area",
+      "distance": 20.834323444005133
+    },
+    {
+      "skill": "emo_4_愤怒",
+      "brain": "Left-Amygdala",
+      "mesh": "Left-Amygdala",
+      "distance": 38.1814351611722
+    },
+    {
+      "skill": "emo_5_悲痛",
+      "brain": "Left-Accumbens-area",
+      "mesh": "Left-Accumbens-area",
+      "distance": 21.64002998718398
+    },
+    {
+      "skill": "emo_6_共情",
+      "brain": "insula_lh",
+      "mesh": "lh.pial.DK.insula",
+      "distance": 71.71830080012181
+    },
+    {
+      "skill": "emo_7_爱",
+      "brain": "Left-Accumbens-area",
+      "mesh": "Left-Accumbens-area",
+      "distance": 31.879311184016867
+    },
+    {
+      "skill": "emo_8_焦虑",
+      "brain": "Left-Amygdala",
+      "mesh": "Left-Amygdala",
+      "distance": 38.1814351611722
+    },
+    {
+      "skill": "emo_12_敬畏",
+      "brain": "temporalpole_lh",
+      "mesh": "lh.pial.DK.temporalpole",
+      "distance": 69.52781043985598
+    },
+    {
+      "skill": "emo_14_恐怖",
+      "brain": "Left-Amygdala",
+      "mesh": "Left-Amygdala",
+      "distance": 40.491474149007786
+    },
+    {
+      "skill": "beh_0_逃跑",
+      "brain": "Brain-Stem",
+      "mesh": "Brain-Stem",
+      "distance": 37.84382262723019
+    },
+    {
+      "skill": "beh_1_僵住",
+      "brain": "Brain-Stem",
+      "mesh": "Brain-Stem",
+      "distance": 32.46263937132526
+    },
+    {
+      "skill": "beh_3_回避",
+      "brain": "Left-Amygdala",
+      "mesh": "Left-Amygdala",
+      "distance": 17.749703767480543
+    },
+    {
+      "skill": "beh_4_妥协",
+      "brain": "Left-Pallidum",
+      "mesh": "Left-Pallidum",
+      "distance": 29.964672395954455
+    },
+    {
+      "skill": "beh_6_试探",
+      "brain": "Left-Accumbens-area",
+      "mesh": "Left-Accumbens-area",
+      "distance": 20.834323444005133
+    },
+    {
+      "skill": "beh_7_追求",
+      "brain": "Left-Accumbens-area",
+      "mesh": "Left-Accumbens-area",
+      "distance": 20.834323444005133
+    },
+    {
+      "skill": "beh_8_坚持",
+      "brain": "Left-Putamen",
+      "mesh": "Left-Putamen",
+      "distance": 31.10811940087341
+    },
+    {
+      "skill": "beh_9_自责",
+      "brain": "rostralanteriorcingulate_lh",
+      "mesh": "lh.pial.DK.rostralanteriorcingulate",
+      "distance": 20.279073895295177
+    },
+    {
+      "skill": "beh_10_维护",
+      "brain": "superiorfrontal_lh",
+      "mesh": "lh.pial.DK.superiorfrontal",
+      "distance": 87.26790769591676
+    },
+    {
+      "skill": "beh_11_坚守",
+      "brain": "precuneus_lh",
+      "mesh": "lh.pial.DK.precuneus",
+      "distance": 18.046930747338266
+    },
+    {
+      "skill": "beh_12_遵从",
+      "brain": "temporalpole_lh",
+      "mesh": "lh.pial.DK.temporalpole",
+      "distance": 69.52781043985598
+    },
+    {
+      "skill": "beh_15_牺牲",
+      "brain": "rostralmiddlefrontal_lh",
+      "mesh": "lh.pial.DK.rostralmiddlefrontal",
+      "distance": 46.150897026229984
+    },
+    {
+      "skill": "beh_16_对抗",
+      "brain": "superiorfrontal_lh",
+      "mesh": "lh.pial.DK.superiorfrontal",
+      "distance": 51.61509982818436
+    },
+    {
+      "skill": "beh_17_突破",
+      "brain": "caudalmiddlefrontal_lh",
+      "mesh": "lh.pial.DK.caudalmiddlefrontal",
+      "distance": 65.76614689274354
+    },
+    {
+      "skill": "beh_18_安抚",
+      "brain": "insula_lh",
+      "mesh": "lh.pial.DK.insula",
+      "distance": 71.71830080012181
+    },
+    {
+      "skill": "beh_19_保护",
+      "brain": "rostralanteriorcingulate_lh",
+      "mesh": "lh.pial.DK.rostralanteriorcingulate",
+      "distance": 24.89399262543976
+    },
+    {
+      "skill": "beh_20_舍身",
+      "brain": "Left-Accumbens-area",
+      "mesh": "Left-Accumbens-area",
+      "distance": 33.38908135608485
+    }
+  ],
+  "borderline_details": [
+    {
+      "skill": "cog_0_洞见",
+      "brain": "pericalcarine",
+      "mesh": "rh.pial.DK.pericalcarine"
+    },
+    {
+      "skill": "cog_5_拾遗",
+      "brain": "inferiortemporal",
+      "mesh": "rh.pial.DK.inferiortemporal"
+    },
+    {
+      "skill": "cog_10_甄别",
+      "brain": "inferiorparietal",
+      "mesh": "rh.pial.DK.inferiorparietal"
+    },
+    {
+      "skill": "cog_12_归因",
+      "brain": "precuneus",
+      "mesh": "rh.pial.DK.precuneus"
+    },
+    {
+      "skill": "cog_20_预判",
+      "brain": "rostralmiddlefrontal",
+      "mesh": "rh.pial.DK.rostralmiddlefrontal"
+    },
+    {
+      "skill": "cog_23_推演",
+      "brain": "rostralmiddlefrontal",
+      "mesh": "rh.pial.DK.rostralmiddlefrontal"
+    },
+    {
+      "skill": "cog_24_权衡",
+      "brain": "superiorfrontal",
+      "mesh": "rh.pial.DK.superiorfrontal"
+    },
+    {
+      "skill": "emo_9_厌恶",
+      "brain": "insula_lh",
+      "mesh": "lh.pial.DK.insula"
+    },
+    {
+      "skill": "emo_10_绝望",
+      "brain": "medialorbitofrontal_lh",
+      "mesh": "lh.pial.DK.medialorbitofrontal"
+    },
+    {
+      "skill": "emo_11_内疚",
+      "brain": "rostralanteriorcingulate_lh",
+      "mesh": "lh.pial.DK.rostralanteriorcingulate"
+    },
+    {
+      "skill": "emo_13_孤独",
+      "brain": "lateralorbitofrontal_lh",
+      "mesh": "lh.pial.DK.lateralorbitofrontal"
+    },
+    {
+      "skill": "beh_2_闪避",
+      "brain": "Brain-Stem",
+      "mesh": "Brain-Stem"
+    },
+    {
+      "skill": "beh_5_克制",
+      "brain": "Left-Caudate",
+      "mesh": "Left-Caudate"
+    },
+    {
+      "skill": "beh_13_从众",
+      "brain": "lateralorbitofrontal_lh",
+      "mesh": "lh.pial.DK.lateralorbitofrontal"
+    },
+    {
+      "skill": "beh_14_运用仪式",
+      "brain": "posteriorcingulate_lh",
+      "mesh": "lh.pial.DK.posteriorcingulate"
+    }
+  ],
+  "modifications": {
+    "ultimate_nodes_deleted": 13,
+    "ultimate_curves_deleted": 53,
+    "skill_nodes_shrunk": 61,
+    "skill_scale_factor": 0.35,
+    "curves_thinned": 99,
+    "curve_bevel_depth": 0.015
+  }
+}

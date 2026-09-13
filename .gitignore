@@ -33,7 +33,13 @@ Thumbs.db
 
 # Large reference PDFs — uncomment if you want to exclude them
 # *.pdf
-blender_assets/
+# 3D 脑模型资产（742 MB，主体不入库）
+# 只放行「正典源 + 冻结快照」——登记与裁定见 design/presentation/visualization-3d/脑模型资产登记.md
+design/presentation/visualization-3d/blender_assets/*
+!design/presentation/visualization-3d/blender_assets/brain_skill_tree_backup_20260719_0158.blend
+!design/presentation/visualization-3d/blender_assets/brain_skill_tree.glb
+# 节点落在脑区 mesh 之外的核对产物（证据，9 KB）
+!design/presentation/visualization-3d/blender_assets/verify_result.json
 
 # Large reference data — re-downloadable from public sources
 data/connectivity/abagen/
