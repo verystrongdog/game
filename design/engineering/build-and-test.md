@@ -188,11 +188,19 @@ sim 脚本用**扁平 import**（`from sim_consciousness_cs4_test import ...`）
 
 ## 四、判据
 
+> **测试计数的唯一权威处就是本节**（2026-09-13 实跑：`416 passed / 0 failed`，命令与工具口径见 §2.2）。
+> 其余文档**引用本节、不复述数字**——复述就是下一次漂移的入口（[#130](https://github.com/verystrongdog/game/issues/130) 的成因：
+> `ARCHITECTURE.md` / `README.md` / `slice.md` 三处停在 `353`，与本节判据不一致）。
+>
+> **历史时点读数不改写**：`REFACTOR-PLAN.md` 各 Phase 结果表（4 处 `353 passed`）、`design/README.md` 路线图日志里
+> `2026-09-03 … 353/353 绿`、`design/archive/`、以及 `evidence/` 里绑定 base/head 的读数——
+> 记的都是"那一刻跑出来多少"，各自绑定当时的 commit。它们**不是当前口径**，看到旧数字不要"顺手统一"。
+
 | 判据 | 要求 |
 |---|---|
 | 校验器 | 12/12 退出码 0 |
 | `validate_cross_refs` | **0 死链 / 0 段引用警告** |
-| 引擎测试 | **416 passed / 0 failed** |
+| 引擎测试 | **416 passed / 0 failed**（唯一权威；其余文档引用本节） |
 | 跨语言 fixture 判定 | `compare_fixture_verdicts.py` 逐条比对 Python 与 C# 的接受/拒绝，**差异为空**（53 条） |
 | 干净检出 | 无本地缓存（`.nuget-pkgs`）也能 restore + 构建 + 测试 |
 | SDK 版本 | 与 `global.json` 一致，不一致即失败（CI 有显式断言） |

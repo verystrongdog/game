@@ -34,7 +34,7 @@
 | [`design/slices/`](design/slices/README.md) | 当前可玩目标的**四轴状态**与试玩证据（准入状态见 [PLAYABLE.md](PLAYABLE.md)） |
 | [`design/archive/`](design/archive) | 归档：`grilling/`（各轮源记录 + 122 issue 存档）· `owner-plan/`。**垃圾箱已于 2026-09-13 移出仓库**——本地保留在 `.trash/`（被忽略、26 个文件），历史可 `git show <sha>:design/archive/trash/<路径>` 取回 |
 | [`reference/`](reference) | 文献、书籍、灵感收件箱；`deprecated/` 保留已废弃子系统为参考数据源 |
-| [`code/src/`](code/src) | C# 逻辑引擎（.NET 8 库 + Console harness + 353 个测试） |
+| [`code/src/`](code/src) | C# 逻辑引擎（.NET 8 库 + Console harness + 引擎测试；**测试计数见** [构建与测试 §四](design/engineering/build-and-test.md)） |
 | [`code/unity/`](code/unity) | Unity 6 呈现沙盘工程 |
 | [`code/sim/`](code/sim) | Python 数值模拟验证脚本 |
 | [`code/tools/`](code/tools) | 校验器（`validate_*.py`）与数据生成工具 |
@@ -65,5 +65,5 @@
 - **Git**：提交信息用中文，`类型: 描述`；按主题小步提交
 
 ---
-*创建: 2026-09-06 | 更新: 2026-09-12（仓库重构后重写导航）*
+*创建: 2026-09-06 | 更新: 2026-09-13（测试计数改为引用构建与测试 §四 · #130）*
 *关联: [AGENTS.md](AGENTS.md), [PLAYABLE.md](PLAYABLE.md), [WORKFLOW.md](WORKFLOW.md), [架构](ARCHITECTURE.md), [设计总览](design/README.md), [项目规约](design/conventions/README.md)*

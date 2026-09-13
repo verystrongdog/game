@@ -32,7 +32,7 @@
 
 | 能力 | Design | Implementation | Integration | Health | 证据 |
 |---|---|---|---|---|---|
-| 回合结算（物理/精神攻击/防御） | `ACCEPTED` | `DONE_FOR_SLICE` | Console `E2E` · Unity `ISOLATED` | `PASS` | [design/rules/核心机制.md](../../rules) §4；`code/src/.../Engine/` + 353 测试 |
+| 回合结算（物理/精神攻击/防御） | `ACCEPTED` | `DONE_FOR_SLICE` | Console `E2E` · Unity `ISOLATED` | `PASS` | [design/rules/核心机制.md](../../rules) §4；`code/src/.../Engine/` + 引擎测试（计数见 [构建与测试 §四](../../engineering/build-and-test.md)） |
 | 敌方 HP / SAN 双资源 | `ACCEPTED` | `DONE_FOR_SLICE` | 同上 | `PASS` | [design/entities/敌人与事件.md](../../entities) §4.1 权威表（轻度病人 HP 20-30 / SAN 50-70） |
 | 基础行动（物攻/精攻/防御） | `ACCEPTED` | `DONE_FOR_SLICE` | 同上 | `PASS` | [design/rules/skill-tree/operations/](../../rules/skill-tree/operations/) §二/§三 |
 | 速度排序 / 响应窗口 | `ACCEPTED` | `DONE_FOR_SLICE` | 同上 | `PASS` | [design/rules/回合战斗流程.md](../../rules) §三/§六 |
@@ -64,5 +64,5 @@
 | 切片未准入 | 不得新增正式玩家行为 | owner 在 [PLAYABLE.md](../../../PLAYABLE.md) 改为 `AUTHORIZED_PLAYABLE: CP-01` |
 
 ---
-*创建: 2026-09-12 | 更新: 2026-09-13（🔧 四轴表与 §三/§四 回填：`Unity 资产身份` 行 `NONE`/`UNKNOWN` → `DONE_FOR_SLICE`/`PASS`（#136 + #142）；`就座交互` 行 ⑧ 已通过 → `DONE_FOR_SLICE`；`角色动作呈现` 行 `REGRESSED` 判据失效 → `PASS`；§三 KI 行因果更正；§四 「无 Unity Editor」阻塞解除并拆出 P4d 的真实前置 #135）*
+*创建: 2026-09-12 | 更新: 2026-09-13（🔧 四轴表与 §三/§四 回填：`Unity 资产身份` 行 `NONE`/`UNKNOWN` → `DONE_FOR_SLICE`/`PASS`（#136 + #142）；`就座交互` 行 ⑧ 已通过 → `DONE_FOR_SLICE`；`角色动作呈现` 行 `REGRESSED` 判据失效 → `PASS`；§三 KI 行因果更正；§四 「无 Unity Editor」阻塞解除并拆出 P4d 的真实前置 #135；测试计数不再复述、改为引用构建与测试 §四（#130））*
 *关联: [PLAYABLE.md](../../../PLAYABLE.md), [WORKFLOW.md](../../../WORKFLOW.md), [架构](../../../ARCHITECTURE.md), [六维状态](../../framework/six-dimensions.md)*

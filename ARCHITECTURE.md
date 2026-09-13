@@ -75,7 +75,7 @@ data/*.json（引擎契约）           ← 8 个文件由 GameDataLoader.LoadAl
 code/src/YouAreNotTheFish.Core（.NET 8 库）
         │  CalibrationConfig 集中承载可调常量，每个字段的 XML 注释写明来源章节
         ▼
-code/src/YouAreNotTheFish.Console（harness）/ Tests（353 个）
+code/src/YouAreNotTheFish.Console（harness）/ Tests（计数见 构建与测试 §四）
 ```
 
 **对齐规则**：
@@ -103,12 +103,12 @@ code/src/YouAreNotTheFish.Console（harness）/ Tests（353 个）
 | `code/tools/validate_cross_refs.py` | 设计文档间引用完整性（死链 / 段引用） |
 | `code/tools/validate_trash_isolation.py` | 归档隔离——活跃文档不引用垃圾箱 |
 | `code/tools/validate_disease.py` / `validate_eligibility.py` / `validate_situation_fids.py` / `validate_tripartite_annotations.py` | `data/` 与 `design/entities/` 的契约 |
-| `dotnet test code/src/YouAreNotTheFish.sln` | 引擎行为（353 个测试） |
+| `dotnet test code/src/YouAreNotTheFish.sln` | 引擎行为（测试计数见 [构建与测试 §四](design/engineering/build-and-test.md)——本节**不复述数字**，避免第二次漂移） |
 | `data/term_registry.json` | 术语边界——哪些词在本项目里是**已废弃**的旧模型 |
 | **资产区单机所有权**（✏️ 2026-09-12，人工约定，**尚无机械校验**） | `code/unity/Assets/**` 的资产（`.meta` / `.controller` / `.asset` / 场景）**只由这一台机生成与手调**。理由：手调成果入库要求 `.meta` GUID 稳定，多台机器各自手调资产则合并必然 GUID 冲突。**2026-09-12 补充**：原先的两份分叉拷贝已合并为一份（Linux 侧 WSL2 + Windows 侧 Editor 属同一台物理机，unity-cli 经 interop 直驱），该约束现在是"一台机一份拷贝"，不再有跨机面。文本（`design/` `data/` C# 源码与断言）不受此限 |
 
 **提交前的底线**：`validate_cross_refs.py` 报 0 死链 + `dotnet test` 全绿。
 
 ---
-*创建: 2026-09-12 | 更新: 2026-09-12*
+*创建: 2026-09-12 | 更新: 2026-09-13（测试计数改为引用构建与测试 §四，不在本文复述 · #130）*
 *关联: [项目规约](design/conventions/README.md), [设计总览](design/README.md), [协作指南](CONTRIBUTING.md), [数据说明](data/README.md)*
