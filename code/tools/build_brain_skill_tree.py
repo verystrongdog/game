@@ -1,6 +1,12 @@
 #!/usr/bin/env python3
 """
-玻璃大脑技能树 — Blender 自动化构建脚本
+玻璃大脑技能树 — Blender 自动化构建脚本（v1 世代，2026-07-11）
+
+⚠️ 世代定位：本脚本产出的是**玻璃外壳那一代**（brain_glass + 线框 + node_* 共享材质）。
+当前世代是 build_brain_skill_tree_windows.py（逐脑区半透明着色，无外壳）——两者
+产出不同，别混用。本脚本保留作 v1 世代的参照实现，其 API 目标为 Blender ≤3.x
+（未回植 Blender 4.2/5.x 兼容：import_scene.obj / Emission 输入名 / shadow_method）。
+资产身份与重建口径见 design/presentation/visualization-3d/脑模型资产登记.md。
 ========================================
 导入 brain-for-blender OBJ, 创建玻璃脑材质, 放置 74 技能节点, 创建连线。
 
@@ -14,8 +20,8 @@
   - data/skill_coords.json 已生成
 
 输出:
-  - 技能树系统/blender_assets/brain_skill_tree.blend  (Blender 工作文件)
-  - 技能树系统/blender_assets/brain_skill_tree.glb    (GLB 导出, 可选)
+  - design/presentation/visualization-3d/blender_assets/build/brain_skill_tree_v1.blend  (Blender 工作文件)
+  - design/presentation/visualization-3d/blender_assets/build/brain_skill_tree_v1.glb    (GLB 导出, 可选)
 """
 
 import bpy
@@ -33,11 +39,14 @@ from pathlib import Path
 PROJECT_DIR = Path(__file__).resolve().parent.parent.parent
 
 # OBJ 目录
-OBJ_BASE = PROJECT_DIR / "技能树系统" / "blender_assets" / "all_obj"
+OBJ_BASE = PROJECT_DIR / "design" / "presentation" / "visualization-3d" / "blender_assets" / "all_obj"
 
-# 输出
-BLEND_OUT = str(PROJECT_DIR / "技能树系统" / "blender_assets" / "brain_skill_tree.blend")
-GLB_OUT = str(PROJECT_DIR / "技能树系统" / "blender_assets" / "brain_skill_tree.glb")
+# 输出 —— ⚠️ 默认落 build/ 子目录，**不指向资产目录**
+# 资产目录里是正典源与冻结快照，一次误运行就会覆盖（2026-09-13 事故，见
+# design/presentation/visualization-3d/脑模型资产登记.md §九）
+OUT_DIR = PROJECT_DIR / "design" / "presentation" / "visualization-3d" / "blender_assets" / "build"
+BLEND_OUT = str(OUT_DIR / "brain_skill_tree_v1.blend")
+GLB_OUT = str(OUT_DIR / "brain_skill_tree_v1.glb")
 
 # 导入哪些 OBJ
 IMPORT_PIAL_DK = True       # DK 皮层表面 (pial, 含脑沟)
@@ -462,7 +471,7 @@ def create_tract_connections(node_objects):
 def extract_prereqs_from_html():
     """从 HTML 提取前置关系"""
     import re
-    html_path = PROJECT_DIR / "技能树系统" / "大脑技能树3D.html"
+    html_path = PROJECT_DIR / "design" / "presentation" / "visualization-3d" / "大脑技能树3D.html"
     if not html_path.exists():
         return []
 
@@ -625,6 +634,7 @@ def setup_render():
 
 def export():
     """导出 .blend 和 .glb"""
+    os.makedirs(OUT_DIR, exist_ok=True)
     if EXPORT_BLEND:
         log(f"Saving .blend → {BLEND_OUT}")
         bpy.ops.wm.save_as_mainfile(filepath=BLEND_OUT)

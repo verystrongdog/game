@@ -4,41 +4,63 @@
 在 Windows 版 Blender 中运行此脚本。
 
 用法:
-  方式1 (推荐): blender --background --python 此文件.py
+  方式1 (推荐): blender --background --python 此文件.py -- --out <输出目录>
   方式2 (GUI):   Blender → Scripting 工作区 → Open → 此文件 → Run Script
 
-前置条件:
-  - WSL 中已生成 data/brain_regions.json + data/skill_coords.json
-  - WSL 中已解压 blender_assets/all_obj/ (brain-for-blender OBJ)
-  - Windows 版 Blender >= 3.0
+  ⚠️ 输出默认落在 `.../blender_assets/build/`，**不是**资产目录本身——
+  资产目录里是正典源与冻结快照，一次误运行就会覆盖它们（2026-09-13 事故，
+  见 design/presentation/visualization-3d/脑模型资产登记.md §九）。
+  要写回资产目录必须显式 `--out` 指到它。
 
-输出:
-  - 技能树系统/blender_assets/brain_skill_tree.blend
-  - 技能树系统/blender_assets/brain_skill_tree.glb
+前置条件:
+  - data/brain_regions.json + data/skill_coords.json 已生成
+  - design/presentation/visualization-3d/blender_assets/all_obj/ 已解压 (brain-for-blender OBJ)
+  - Blender >= 3.0（本脚本已兼容 Blender 4.2/5.x：obj 导入算子、Emission 输入名、
+    透明阴影字段；见 §兼容 注释块）
+
+输出（默认）:
+  - design/presentation/visualization-3d/blender_assets/build/brain_skill_tree.blend
+  - design/presentation/visualization-3d/blender_assets/build/brain_skill_tree.glb
+
+环境变量（可选）:
+  - YANTF_BRAIN_PROJECT  仓库根；默认由本脚本位置推出（跨 WSL/Windows 通用）
+    ⚠️ 经 WSL interop 直驱 Windows Blender 时**环境变量不会传入**（2026-09-13 实测
+    `os.environ.get(...)` 为 None）——配置一律走 `--` 之后的命令行参数。
+
+历史: 本脚本的 Blender 5 兼容修复此前只存在于未入库的
+  `C:/Users/9527/temp_build_brain_skill_tree.py`（2026-09-13 发现），已回植。
 """
 
 import bpy
 import json
 import os
+import sys
 import math
+from pathlib import Path
 
 # ═══════════════════════════════════════════════════════════
 #  配置 — 按需修改
 # ═══════════════════════════════════════════════════════════
 
-# WSL 项目路径 (从 Windows 访问 WSL 文件)
-# 格式: \\wsl$\<发行版名>\home\<用户名>\game
-PROJECT = r"\\wsl$\Ubuntu\home\dog\game"
+# 仓库根：优先环境变量；否则由脚本位置推出（Windows 侧经 \\wsl.localhost\... 打开时同样成立）
+PROJECT = os.environ.get("YANTF_BRAIN_PROJECT") or str(Path(__file__).resolve().parents[2])
 
-# 如果 WSL 路径不可用, 把 data/ 和 blender_assets/ 复制到 Windows 某目录, 然后改下面路径
-# PROJECT = r"D:\game"
+VIS_DIR = os.path.join(PROJECT, "design", "presentation", "visualization-3d")
+ASSET_DIR = os.path.join(VIS_DIR, "blender_assets")
+
+# 输出目录：命令行 `-- --out <dir>` > 环境变量 > 默认 build/ 子目录（**绝不默认写资产目录**）
+def _argv_opt(flag):
+    a = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
+    return a[a.index(flag) + 1] if flag in a and a.index(flag) + 1 < len(a) else None
+
+OUTPUT_DIR = (_argv_opt("--out") or os.environ.get("YANTF_BRAIN_OUT")
+              or os.path.join(ASSET_DIR, "build"))
+DATA_DIR   = os.path.join(PROJECT, "data")
+OBJ_DIR    = os.path.join(ASSET_DIR, "all_obj")
 
 EXPORT_GLB = True     # 导出 GLB (给 Unity / 3D Viewer)
 EXPORT_BLEND = True   # 保存 .blend (给 Blender)
-
-OUTPUT_DIR = os.path.join(PROJECT, "技能树系统", "blender_assets")
-DATA_DIR   = os.path.join(PROJECT, "data")
-OBJ_DIR    = os.path.join(PROJECT, "技能树系统", "blender_assets", "all_obj")
+EXPORT_DRACO = True   # GLB 走 Draco 几何压缩（187MB → 13MB 级；Unity/glTFast 支持）
 
 # ═══════════════════════════════════════════════════════════
 #  视觉配置
@@ -101,15 +123,45 @@ def mat(name, base, emission=None, alpha=1.0, roughness=0.3):
     bsdf.inputs['Base Color'].default_value = base
     bsdf.inputs['Roughness'].default_value = roughness
     if alpha < 1.0:
-        m.blend_method = 'BLEND'
-        m.shadow_method = 'NONE'
+        m.blend_method = 'BLEND'            # Blender <4.2
+        if hasattr(m, 'use_transparent_shadow'):
+            m.use_transparent_shadow = False   # Blender >=4.2（旧名 shadow_method='NONE'）
+        if hasattr(m, 'surface_render_method'):
+            m.surface_render_method = 'BLENDED'  # Blender >=4.2 EEVEE Next
         bsdf.inputs['Alpha'].default_value = alpha
     if emission:
-        bsdf.inputs['Emission'].default_value = (*emission, 0.3)
+        # Blender <4.0 为单个 'Emission'；>=4.0 拆成 'Emission Color' + 'Emission Strength'
+        if 'Emission Color' in bsdf.inputs:
+            bsdf.inputs['Emission Color'].default_value = (*emission, 1.0)
+            bsdf.inputs['Emission Strength'].default_value = 0.3
+        else:
+            bsdf.inputs['Emission'].default_value = (*emission, 0.3)
     out = nodes.new('ShaderNodeOutputMaterial')
     out.location = (300, 0)
-    links.new(bsdf.outputs['BSDF'], out.inputs['Surface'])
+    if alpha < 1.0:
+        # 真透明：Mix Shader 混 Principled 与 Transparent（Blender 4.2+ 的下 alpha 不再自动透出）
+        transparent = nodes.new('ShaderNodeBsdfTransparent')
+        transparent.location = (-300, -100)
+        mix = nodes.new('ShaderNodeMixShader')
+        mix.location = (0, 0)
+        alpha_node = nodes.new('ShaderNodeValue')
+        alpha_node.location = (-300, 0)
+        alpha_node.outputs['Value'].default_value = alpha
+        links.new(bsdf.outputs['BSDF'], mix.inputs[1])
+        links.new(transparent.outputs['BSDF'], mix.inputs[2])
+        links.new(alpha_node.outputs['Value'], mix.inputs['Fac'])
+        links.new(mix.outputs['Shader'], out.inputs['Surface'])
+    else:
+        links.new(bsdf.outputs['BSDF'], out.inputs['Surface'])
     return m
+
+
+def import_obj(filepath):
+    """跨版本 OBJ 导入：Blender >=4.0 移除了 bpy.ops.import_scene.obj。"""
+    if hasattr(bpy.ops.wm, 'obj_import'):
+        bpy.ops.wm.obj_import(filepath=filepath)
+    else:
+        bpy.ops.import_scene.obj(filepath=filepath)
 
 # ═══════════════════════════════════════════════════════════
 #  OBJ 文件名 → 脑叶 解析
@@ -162,7 +214,7 @@ def step1_import():
         log(f"DK 皮层: {len(files)} files")
         for i, f in enumerate(files):
             try:
-                bpy.ops.import_scene.obj(filepath=os.path.join(dk, f))
+                import_obj(os.path.join(dk, f))
                 for o in bpy.context.selected_objects:
                     for c in o.users_collection: c.objects.unlink(o)
                     ctx.objects.link(o)
@@ -176,7 +228,7 @@ def step1_import():
         log(f"皮层下: {len(files)} files")
         for i, f in enumerate(files):
             try:
-                bpy.ops.import_scene.obj(filepath=os.path.join(sc, f))
+                import_obj(os.path.join(sc, f))
                 for o in bpy.context.selected_objects:
                     for c in o.users_collection: c.objects.unlink(o)
                     sub.objects.link(o)
@@ -387,7 +439,12 @@ def step5_lighting():
         cam.data.lens = 50
 
     s = bpy.context.scene
-    s.render.engine = 'BLENDER_EEVEE'
+    for _eng in ('BLENDER_EEVEE_NEXT', 'BLENDER_EEVEE'):  # 4.2+ 改名 EEVEE Next
+        try:
+            s.render.engine = _eng
+            break
+        except TypeError:
+            continue
     try: s.eevee.use_bloom = True; s.eevee.bloom_intensity = 0.3
     except: pass
     s.render.resolution_x = 1920
@@ -402,6 +459,10 @@ def step6_export():
     log("="*50)
     log("6/6 导出")
     log("="*50)
+    log(f"输出目录: {OUTPUT_DIR}")
+    if os.path.abspath(OUTPUT_DIR) == os.path.abspath(ASSET_DIR):
+        log("⚠⚠ 输出目录 == 资产目录：将覆盖正典源与冻结快照。")
+        log("⚠⚠ 只在你确实要重产正典资产时这样做；否则用 `-- --out <dir>`。")
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
     if EXPORT_BLEND:
@@ -417,16 +478,60 @@ def step6_export():
             c = bpy.data.collections.get(cn)
             if c:
                 for o in c.all_objects: o.select_set(True)
+        kw = dict(use_selection=True, export_format='GLB')
+        if EXPORT_DRACO:
+            kw['export_draco_mesh_compression_enable'] = True
         try:
-            bpy.ops.export_scene.gltf(filepath=fp, use_selection=True, export_format='GLB')
-            log(f".glb → {fp}")
+            bpy.ops.export_scene.gltf(filepath=fp, **kw)
+            log(f".glb → {fp}  ({os.path.getsize(fp)/1e6:.1f} MB"
+                f"{' · Draco' if EXPORT_DRACO else ''})")
         except Exception as e:
             log(f"GLB export failed: {e}")
             try:
                 bpy.ops.export_scene.gltf(filepath=fp, export_format='GLB')
-                log(f".glb → {fp} (all objects)")
+                log(f".glb → {fp} (all objects, no draco)")
             except Exception as e2:
                 log(f"GLB retry also failed: {e2}")
+
+
+def verify_scene(nodes):
+    """产出自我核对（数据驱动，不写死数字）。
+
+    2026-07-19 事故的教训：`brain_skill_tree.blend` 比它 3 分钟前的备份少 13 个
+    终极节点、53 条连线，而当时**没有任何地方会报出来**。此处把「场景内容 vs
+    skill_coords.json 期望」的差异显式打出来，不一致就标 ⚠。
+    """
+    log("="*50)
+    log("7/7 产出核对")
+    log("="*50)
+    sp = os.path.join(DATA_DIR, "skill_coords.json")
+    try:
+        with open(sp, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except Exception as e:
+        log(f"⚠ 读不到 skill_coords.json（跳过核对）: {e}")
+        return
+    want = {}
+    for s in data.get("skills", []):
+        want[s.get("branch")] = want.get(s.get("branch"), 0) + 1
+    got = {}
+    for sid, o in nodes.items():
+        b = o.get("branch")
+        got[b] = got.get(b, 0) + 1
+    ok = True
+    for b in sorted(set(want) | set(got)):
+        mark = "✅" if want.get(b, 0) == got.get(b, 0) else "⚠"
+        if mark == "⚠":
+            ok = False
+        log(f"  {mark} {b:10s} 数据 {want.get(b,0):3d} · 场景 {got.get(b,0):3d}")
+    n_tr = sum(len(bpy.data.collections[n].all_objects)
+               for n in ("Tracts",) if bpy.data.collections.get(n))
+    n_f = len(bpy.data.collections.get("Functional").all_objects) if bpy.data.collections.get("Functional") else 0
+    n_t = len(bpy.data.collections.get("Tier").all_objects) if bpy.data.collections.get("Tier") else 0
+    log(f"  连线: 合计 {n_tr}（功能 {n_f} · 层级 {n_t}）· 数据 prereqs {len(data.get('prereqs', []))}")
+    if not ok:
+        log("  ⚠⚠ 场景内容与数据不一致——不要把这个 .blend 当正典源（先查 step3/step4 是否被跳过）")
+    return ok
 
 # ═══════════════════════════════════════════════════════════
 #  MAIN
@@ -439,6 +544,7 @@ def main():
     log("║  脑叶着色 · 分层透明 · 升级连线            ║")
     log("╚══════════════════════════════════════════╝")
     log(f"项目路径: {PROJECT}")
+    log(f"输出目录: {OUTPUT_DIR}")
 
     if not os.path.isdir(PROJECT):
         log(f"\n!!! 错误: 找不到项目路径")
@@ -460,6 +566,7 @@ def main():
     nodes = step3_nodes()
     step4_tracts(nodes)
     step5_lighting()
+    verify_scene(nodes)
     step6_export()
 
     log("\n╔══════════════════════════════════════════╗")
