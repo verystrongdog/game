@@ -188,7 +188,8 @@ sim 脚本用**扁平 import**（`from sim_consciousness_cs4_test import ...`）
 
 ## 四、判据
 
-> **测试计数的唯一权威处就是本节**（2026-09-13 实跑：`416 passed / 0 failed`，命令与工具口径见 §2.2）。
+> **测试计数的唯一权威处就是本节**（2026-09-13 实跑：`416 passed / 0 failed`，命令与工具口径见 §2.2；
+> 同 commit 的 CI `engine` job 亦绿，run `34761515884`——干净 runner 上可复现）。
 > 其余文档**引用本节、不复述数字**——复述就是下一次漂移的入口（[#130](https://github.com/verystrongdog/game/issues/130) 的成因：
 > `ARCHITECTURE.md` / `README.md` / `slice.md` 三处停在 `353`，与本节判据不一致）。
 >
