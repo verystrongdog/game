@@ -148,30 +148,34 @@ P="C:\Users\9527\game\code\unity"
 
 **迁移的验证**：新工程已由 Unity 6000.5.2f1 打开并完成首次导入 → `compiling: false`、`status: ready`、**Console 0 错误**（仅 2 条与迁移无关的弃用警告）。旧 `unity/` 目录**已于 2026-09-12 删除**（254 MB）——删除前做过完整性核对：旧工程 534 个文件 → 新工程缺失 **0** 个；且旧目录无任何跟踪文件（`git ls-files unity/` = 0），故删除不动 git 历史。迁移前的完整备份在 Linux 侧 `.scratch/win-backup/`：`unity-project-2026-09-12.tar.gz`（22 MB，含 Assets/ProjectSettings/Packages）+ `unity-root-files/`（导入日志、测试结果、两个旧 md）。
 
-**⚠️ 遗留一处需要合的分叉**（不要盲目覆盖）：`AnimatorWalker.cs` 是**双向发散**，两侧各有对方没有的功能——
+**🔧 2026-09-13 更正：这一处「待合的分叉」已作废，不要再去合它。**
 
-| 侧 | 独有内容 |
-|---|---|
-| 原 Windows 拷贝 | 整套坐/起：`SitPhase` 状态机、`E` 键、`OnAnimatorMove` 接管 root motion、`_standLift` 过程性起身 |
-| `main` | 空中方向修正参数化：`airControl` 0.15 / `airDrag` 0.5 与 `_airVelocity` 衰减逻辑 |
+`AnimatorWalker.cs` 确实双向发散（原 Windows 拷贝有 `SitPhase` 状态机 + `OnAnimatorMove` 接管 root motion；
+`main` 有 `airControl` 0.15 / `airDrag` 0.5 的空中方向修正参数化）。但 **owner 已于 2026-09-12 裁定把这套 KI 旧线的坐/起实现「整体舍弃、不再作为工作面」**
+（见 [动作库规格.md](../../design/presentation/动作库规格.md) 第四次修正），随后坐立三段改在 **ActionLab + `ActionPlayer`** 上落地（同文第五、六次修正）。
+**合并这份分叉 = 把一份已作废的实现搬回工作面**，属反工。
 
-迁移时**保留了 Windows 侧版本**（先保住能跑的坐/起功能；main 的 25 行仍在 git 历史里，未丢失）。两者的合并是 #137 范围内的实作工作。`KiWalkerLabBuilder.cs` 同理（Windows 侧多 `StandToSit` 第五状态与 `StandUpTrigger`）。
+现行的坐立口径与读数在 [动作库规格.md §四·乙/§四·丁](../../design/presentation/动作库规格.md)：
+「Y 烘进姿势」+ 默认 `applyRootMotion = false`，坐立三段按词条 `RootMotionXZ` **逐状态**切换；接缝 ≤1.9 mm、足底 +2.0/+2.3 mm、PlayMode 23/23。
+`main` 的 airControl/airDrag 仍然有效（在 `AnimatorWalker.cs` 的 main 版里），**不是待合并项**。
 
 ### 会话启动清单
 
 1. **确认 Editor 可直驱**：上表的 `unity status`，期望 `state: ready`（Editor 已开则直接连；未开则 `unity open`）。
 2. **认准起点**：先读 [AGENTS.md](../../AGENTS.md)（全仓约束入口，含提交前必跑的校验器）→ 本 README §二·G → [危险点表](../../design/engineering/%E5%8D%B1%E9%99%A9%E7%82%B9%E8%A1%A8.md)（**改 `Assets/**`、或驱动 Editor 前先查你要动的那处**）→ [动作库规格.md §四·乙/§六](../../design/presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md) → [动作系统分解](../../design/engineering/%E5%8A%A8%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%88%86%E8%A7%A3-2026-09-12.md)。
-3. **开工顺序**：**#137 → #138 → #139 → #140**（严格串行，工作面相交）。每条的门禁、验收标准、预期差分、明确排除都在 issue 正文里，照做即可。
+3. **开工顺序**：**#138 → #139 → #140**（严格串行，工作面相交）。每条的门禁、验收标准、预期差分、明确排除都在 issue 正文里，照做即可。
+   🔧 `#137`（站↔坐探针）已于 2026-09-13 **按 superseded 关闭**——原假设被实测否定、其后续口径在 ActionLab 上落地（见上一节更正块），无剩余工作面。
 4. **本侧对 `code/unity/Assets/**` 可写**（经提权），实现与验证能在同一侧闭环——**不再需要跨机交接**。
 
-### 四条 issue（严格串行，工作面相交所致）
+### 三条 issue（严格串行，工作面相交所致）
+
+> `#137` 曾在本表第 1 行，已于 2026-09-13 按 superseded 关闭（原假设否定 + 口径改在 ActionLab 落地）。
 
 | 序 | issue | 做什么 | 状态 |
 |---|---|---|---|
-| 1 | [#137](https://github.com/verystrongdog/game/issues/137) | **站↔坐**。**注意：原假设已被既有实现否定**——本 issue 的实际内容已变为「核对落点读数 + 合并 `AnimatorWalker.cs` 的双向分叉」，见上一节的遗留项 | `ready-for-human` |
-| 2 | [#138](https://github.com/verystrongdog/game/issues/138) | **数据契约消费**：生成器读 `data/action_set.json` 产出 controller 与 C# 静态表，且**非破坏**（不覆盖已手调值） | `ready-for-human` |
-| 3 | [#139](https://github.com/verystrongdog/game/issues/139) | **五条 clip 到库**：Idle/Walk/Run/Jump/Talk 下载 + Humanoid 导入 + **Play 预览实证归槽**（文件名不作依据），PlayMode 断言转绿 | `blocked`（by #138） |
-| 4 | [#140](https://github.com/verystrongdog/game/issues/140) | **locomotion 迁契约 B**：1D blend tree（`speed01`，采样点 0 / 3.0 / 6.0）取代三态硬切 | `blocked`（by #139） |
+| 1 | [#138](https://github.com/verystrongdog/game/issues/138) | **数据契约消费**：生成器读 `data/action_set.json` 产出 controller 与 C# 静态表，且**非破坏**（不覆盖已手调值） | `ready-for-human` |
+| 2 | [#139](https://github.com/verystrongdog/game/issues/139) | **五条 clip 到库**：Idle/Walk/Run/Jump/Talk 下载 + Humanoid 导入 + **Play 预览实证归槽**（文件名不作依据），PlayMode 断言转绿 | `blocked`（by #138） |
+| 3 | [#140](https://github.com/verystrongdog/game/issues/140) | **locomotion 迁契约 B**：1D blend tree（`speed01`，采样点 0 / 3.0 / 6.0）取代三态硬切 | `blocked`（by #139） |
 
 > 门禁可用性：`unity` 在**本机可跑**（WSL 经 interop 直驱 Windows Editor），故 [`gates.json`](../../design/engineering/gates.json) 的 `available` 为 `true`。CI（ubuntu，无 Unity）侧仍不可跑，其 `unity` job 继续显式报告 `NOT_AVAILABLE`。
 
@@ -711,5 +715,5 @@ code/unity/
 
 ---
 
-*创建: 2026-09-06 | 更新: 2026-09-13（🔧 第七次：Q6b 裁定 A（子集桥接）——数值源行与 §四 接缝指引指向 ARCHITECTURE §4.1（#135）；🔧 第五次修正：§二·J 就座交互（先找到椅子才能坐，#141）——判定/对齐/占用锁/XZ 根位移/三张可推椅子 + PlayMode 33/33 + 六条实测读数 + 修掉"角色整体悬浮 80 mm"（`skinWidth`）+ 三条新坑；🔧 第四次修正：§二·I ActionLab 落地回切修复（`6bd8ddc`）红/绿实测 + 目视验证 + 运维补充；🔧 第三次修正：§二·H 资产身份与提交范围（#136）+ §二·G 的「场景不入库」加显式例外；🔧 第二次：§二·G 本轮工作 #137–#140 + KI 引用作废；§二·F 玫瑰花海场景 — Grilling #126；🔧 第六次修正（2026-09-13，owner 裁定移除花海 lab）：删 §二·F 全节 + 6 个源文件 + `Assets/Shaders/` + `Assets/Resources/YANTF/` 高度图 + 4 项 PlayMode 测试，§二·H 排除表与 §三 目录树同步，PlayMode 33 → 29（算术推断，未重跑 Editor）；地块数据/玫瑰株丛密度两篇口径文档标记 ⚠️ 已废弃，保留仅供 #126 冻结历史引用）*
+*创建: 2026-09-06 | 更新: 2026-09-13（🔧 第八次：#137 按 superseded 关闭——KI 旧线坐/起实现「待合的分叉」改为**作废更正**、开工顺序 4→3 条；`SitPoint.cs` 随舍弃裁定删除（#137）；🔧 第七次：Q6b 裁定 A（子集桥接）——数值源行与 §四 接缝指引指向 ARCHITECTURE §4.1（#135）；🔧 第五次修正：§二·J 就座交互（先找到椅子才能坐，#141）——判定/对齐/占用锁/XZ 根位移/三张可推椅子 + PlayMode 33/33 + 六条实测读数 + 修掉"角色整体悬浮 80 mm"（`skinWidth`）+ 三条新坑；🔧 第四次修正：§二·I ActionLab 落地回切修复（`6bd8ddc`）红/绿实测 + 目视验证 + 运维补充；🔧 第三次修正：§二·H 资产身份与提交范围（#136）+ §二·G 的「场景不入库」加显式例外；🔧 第二次：§二·G 本轮工作 #137–#140 + KI 引用作废；§二·F 玫瑰花海场景 — Grilling #126；🔧 第六次修正（2026-09-13，owner 裁定移除花海 lab）：删 §二·F 全节 + 6 个源文件 + `Assets/Shaders/` + `Assets/Resources/YANTF/` 高度图 + 4 项 PlayMode 测试，§二·H 排除表与 §三 目录树同步，PlayMode 33 → 29（算术推断，未重跑 Editor）；地块数据/玫瑰株丛密度两篇口径文档标记 ⚠️ 已废弃，保留仅供 #126 冻结历史引用）*
 *关联: [战斗界面布局](../../design/presentation/%E6%88%98%E6%96%97%E7%95%8C%E9%9D%A2%E5%B8%83%E5%B1%80.md), [核心机制](../../design/rules/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md), [回合战斗流程](../../design/rules/%E5%9B%9E%E5%90%88%E6%88%98%E6%96%97%E6%B5%81%E7%A8%8B.md), [关键突破](../../design/rules/skill-tree/%E5%85%B3%E9%94%AE%E7%AA%81%E7%A0%B4.md), [动作库规格](../../design/presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md), [动作系统分解](../../design/engineering/%E5%8A%A8%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%88%86%E8%A7%A3-2026-09-12.md), [决策树](../../design/decisions/README.md)*

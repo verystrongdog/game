@@ -14,7 +14,9 @@ namespace YANTF.ActionLab
 {
     /// <summary>
     /// 椅子就座锚点。transform 位置 = **坐面中心在地面的投影**，transform.forward = 椅子正面朝向
-    /// （= 角色坐下后胸口朝向），与 WalkerLab 的 <see cref="YANTF.WalkerLab.SitPoint"/> 同约定。
+    /// （= 角色坐下后胸口朝向）。🔧 2026-09-13：该约定沿用已删的 WalkerLab `SitPoint`（#137 关闭时
+    /// 随「KI 旧线整体舍弃」一并删除，owner 裁定），**值与它不同**——本件锚点 0.423 m（实测），
+    /// 旧线是 0.49 m（KI 载体旧值），两者不是同一个量。
     ///
     /// 就座锚点 = transform.position + forward × <see cref="anchorDistance"/>：角色必须站到那里，
     /// 播 Sit 时 clip 的 XZ 根位移（0.3201 m）才会把臀部送到坐面正上方。
@@ -78,7 +80,7 @@ namespace YANTF.ActionLab
         /// 判定纯函数（无场景依赖，PlayMode 断言直接调它）：「找到椅子」= 三条件同时成立——
         /// ① 到锚点水平距离 ≤ interactRadius；② 角色在椅子前侧；③ 椅子空闲。
         /// 规格 §四·丁#2。**朝向不参与判定**——驱动层每帧把角色转向移动方向，锚点在椅子正面一侧，
-        /// 玩家走到那里必然"面朝椅子"（点积 ≈ −1），故原 SitPoint 的 facingDotMin 口径在此不可达；
+        /// 玩家走到那里必然"面朝椅子"（点积 ≈ −1），故旧线 `SitPoint` 的 facingDotMin 口径在此不可达（该件已删，见文件头注）；
         /// 朝向由对齐段（0.25 s 转身就位）负责。
         /// </summary>
         public static bool IsUsable(Vector3 seatCenter, Vector3 forward, float anchorDistance, float interactRadius,
