@@ -18,7 +18,7 @@
 
 | 生态 | 版本 | 锁在哪 | 备注 |
 |---|---|---|---|
-| .NET SDK | **10.0.400** | [`global.json`](../../global.json)（`rollForward: latestFeature`） | 工程目标框架是 **net8.0**；SDK 10 可编译。**本机无 net8.0 runtime**，跑测试需 `DOTNET_ROLL_FORWARD=Major` |
+| .NET SDK | **10.0.400** | [`global.json`](../../global.json)（`rollForward: latestFeature`） | 工程目标框架是 **net8.0**；SDK 10 可编译。**本机无 net8.0 runtime**，跑测试须 `DOTNET_ROLL_FORWARD=Major`——**口径的唯一权威处，理由与实测见 §1.3** |
 | NuGet 源 | nuget.org | [`NuGet.config`](../../NuGet.config) | 此前包路径被烘焙进 `obj/*.nuget.g.props` 指向开发机（`/home/dog/game/.nuget-pkgs`），**干净检出无法复现**——本文件修掉该问题 |
 | NuGet 依赖锁定 | 三份 `code/src/<工程>/packages.lock.json` + `RestoreLockedMode` | 三个 `.csproj` | 锁的是**包图**（含传递依赖），不是"源"。漂移即 `NU1004` 失败；做法与实测见 §1.2。**自 2026-09-13（#129）** |
 | Python | **3.10.12** | CI 的 `setup-python` | 校验器与 sim 脚本 |
@@ -80,6 +80,30 @@ dotnet restore code/src/YouAreNotTheFish.sln --force-evaluate
 > ⚠️ **`.csproj` 注释里不能出现 `--`**：把 `dotnet restore --force-evaluate` 原样写进 XML 注释会让工程解析直接失败
 > （`MSB4025: An XML comment cannot contain '--'`，三个工程全挂）。所以注释只指路（指到本节），命令写在这里。
 
+### 1.3 roll-forward 口径（2026-09-13 · [#131](https://github.com/verystrongdog/game/issues/131)）
+
+**规定值：`DOTNET_ROLL_FORWARD=Major`。** 本机只有 .NET 10 运行时（10.0.11）而工程目标框架是 net8.0，
+所以跑测试**必须** roll-forward——它不是一个可有可无的偏好项。
+
+| # | 命令（base `0a5e346`） | 退出码 | 读数 |
+|---|---|---|---|
+| 1 | `DOTNET_ROLL_FORWARD=Major dotnet test code/src/YouAreNotTheFish.sln -c Release` | 0 | **416 passed / 0 failed** |
+| 2 | `DOTNET_ROLL_FORWARD=LatestMajor`（同上，只换这一个变量） | 0 | **416 passed / 0 failed** |
+| 3 | **不设**该变量（同上） | **1** | testhost 起不来：`You must install or update .NET to run this application` |
+
+**为什么规定 `Major` 而不是 `LatestMajor`**（两个值在本机都可行，所以必须写明理由，不能"任选其一"）：
+`Major` 取**最近**的高主版本，`LatestMajor` 取**最高**的。本机将来装上 11/12 时，前者仍优先选最近的 runtime，
+行为更保守、更可预测——门禁要的是"能跑起来"而不是"跑在最新上"。`gates.json` 的 `engine` 命令与
+`code/tools/compare_fixture_verdicts.py` 的默认值同为此值。
+
+> ⚠️ **实测推翻了 #131 立题时的一个前提**：两个值**不是**"只可能有一个成立"——只装一个主版本（10）时，
+> 两者解析到同一个 runtime。真正会失败的是**不设**这一项（第 3 行）。所以本 issue 的结论不是"改正一个错值"，
+> 而是"在两个可行值里**规定一个**并写死理由"。
+>
+> **历史时点口径不改写**（同 §四 的规矩）：`design/decisions/05-numbered-engine-implementation.md` 与
+> `design/archive/grilling/` 里的环境注记写的是 `LatestMajor`，那是**当时**沙箱的记法；
+> 决策树按 [项目规约 §六](../conventions/README.md) 是冻结历史层——看到旧口径不要"顺手统一"。
+
 ## 二、命令
 
 ### 2.1 设计正典与数据契约（改文档或数据后必跑）
@@ -132,7 +156,7 @@ python3 code/tools/check_clean_checkout.py
 ### 2.2 引擎（改代码后必跑）
 
 ```bash
-# 本机无 net8.0 runtime，需 roll-forward
+# 本机无 net8.0 runtime，必须 roll-forward；规定值 Major，口径与实测见 §1.3
 export DOTNET_ROLL_FORWARD=Major
 
 dotnet restore code/src/YouAreNotTheFish.sln

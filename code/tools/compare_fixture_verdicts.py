@@ -46,7 +46,9 @@ def run_python(export_path):
 def run_csharp(export_path):
     env = dict(os.environ, DSH_FIXTURE_VERDICTS=export_path)
     env.setdefault('NUGET_PACKAGES', os.path.join(ROOT, '.nuget-pkgs'))
-    env.setdefault('DOTNET_ROLL_FORWARD', 'LatestMajor')
+    # 来源：design/engineering/build-and-test.md §一（本机无 net8.0 runtime，跑测试须 roll-forward）。
+    # 规定值是 `Major`（取"最近的高主版本"，最保守的那一个）——与 gates.json 的 engine 命令同一口径（#131）。
+    env.setdefault('DOTNET_ROLL_FORWARD', 'Major')
     r = subprocess.run(
         ['dotnet', 'test', 'code/src/YouAreNotTheFish.sln', '--nologo',
          '--filter', 'FullyQualifiedName~RuntimeFixtureTests'],
