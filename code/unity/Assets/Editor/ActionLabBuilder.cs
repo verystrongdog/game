@@ -39,6 +39,12 @@ namespace YANTF.EditorTools
         private const float ChairBackThickness = 0.04f;
         private const float ChairMass = 6f;           // 演示常量：轻到能被角色推开，重到不会自己滑走
 
+        // ---- 持椅挂点参数（规格 §七；**演示常量，非正典**，手感待 Play / owner 目视调）----
+        /// <summary>阻尼摆动刚度（§戊·2#9 的 B 情形）。> 0 即启用弹簧阻尼；= 0 退化为刚性挂点（A）。</summary>
+        private const float GripSwayStiffness = 120f;
+        /// <summary>阻尼摆动阻尼系数。ζ = c / (2√k) ≈ 0.82（略欠阻尼 → 有"重量感"但不抖）。</summary>
+        private const float GripSwayDamping = 18f;
+
         /// <summary>
         /// 三张椅子的摆位（**演示摆位，非正典数值**）：由 builder 摆在出生点之外，逼出"走过去找"这件事。
         /// 朝向各不相同 → 「在椅子前侧」这条判定才有区分度（规格 §四·丁#2）。
@@ -128,6 +134,11 @@ namespace YANTF.EditorTools
 
             Debug.Log($"[ActionLab] 场景已保存: {ScenePath} — Play：WASD 走 / Shift 跑 / Space 跳 / 1物攻 2精攻 3防御 4受击 5倒下 6坐（需走到椅子前）7起身 / R 重置");
             Debug.Log($"[ActionLab] 椅子 {ChairPositions.Length} 张（实心可推；就座锚点 = 坐面中心沿椅子 forward 前方 {ChairSeat.DefaultAnchorDistance} m，交互半径 {ChairSeat.DefaultInteractRadius} m）");
+            var gripAnchors = BuildGripAnchors();
+            var gripPoses = DefaultGripPoses();
+            Debug.Log($"[ActionLab] 持椅挂点：锚点 {gripAnchors.Length} 个（{string.Join("/", System.Array.ConvertAll(gripAnchors, a => a.id))}，均为**椅子局部坐标**）"
+                    + $" · 逐状态挂点 {gripPoses.Length} 组（Carry1H 垂下 / Wield2H 横在身前 / DefendCarry1H 当盾，均在 {HumanBodyBones.RightHand}）"
+                    + $" · 阻尼摆动 刚度 {GripSwayStiffness} / 阻尼 {GripSwayDamping}（演示常量，非正典）");
             Debug.Log($"[ActionLab] controller 接线: {wired}/{ActionCatalog.Level1.Count} 态有 clip（防漂移分档：已导入资产 → 有 clip；缺口 {gaps.Count} 个 → 留空待填）");
             if (gaps.Count > 0)
             {
@@ -242,6 +253,17 @@ namespace YANTF.EditorTools
         }
 
         /// <summary>
+        /// 供 PlayMode 断言经**反射桥**取资产（`YANTF.Demo.Tests` 的引用集实测无 UnityEditor，见
+        /// `ActionLabGripTests.cs` 头注）：clip = FBX 里的一条 take 或 `.anim` 派生件。
+        /// </summary>
+        public static AnimationClip LoadClipForProbe(string assetPath, string preferredName)
+            => LoadClip(assetPath, preferredName);
+
+        /// <summary>同上：取载体预制（X Bot），断言侧再 Instantiate 得到带 Humanoid Avatar 的骨架。</summary>
+        public static GameObject LoadCarrierForProbe()
+            => AssetDatabase.LoadAssetAtPath<GameObject>(XBotPath);
+
+        /// <summary>
         /// 三张椅子（规格 §四·丁#8）：坐板 + 四条腿 + 靠背 + Rigidbody + `ChairSeat` 锚点组件。
         /// **实心**（各部件保留 BoxCollider）——角色会被挡在离坐面中心 0.522 m 处（实测 = 胶囊半径 0.3117
         /// + 坐面半深 0.21），"走到椅子前"这件事才看得见；就座序列期间与角色的碰撞由 `ChairSeat` 忽略。
@@ -308,6 +330,52 @@ namespace YANTF.EditorTools
             chair.anchorDistance = ChairSeat.DefaultAnchorDistance;
             chair.interactRadius = ChairSeat.DefaultInteractRadius;
             chair.seatTopY = ChairSeatTopY;
+
+            // 持握挂点（规格 §四·戊 §戊·2）：可握锚点 = **椅子局部坐标**（由上面的几何常量算出，不烘世界坐标）；
+            // 逐状态挂点表 = 挂哪只手 / 握哪一处 / 椅子相对手骨的基准朝向（三组各不相同）
+            var grip = root.AddComponent<ChairGrip>();
+            grip.anchors = BuildGripAnchors();
+            grip.poses = DefaultGripPoses();
+            grip.swayStiffness = GripSwayStiffness;
+            grip.swayDamping = GripSwayDamping;
+        }
+
+        /// <summary>
+        /// 可握锚点表（**椅子局部**坐标，规格 §戊·2#8「锚点在椅子几何上实时求得」）：
+        /// 前/后腿中段 + 靠背中腰。位置全部由本文件的椅子几何常量算出——改椅子尺寸则锚点自动跟随，
+        /// 不需要手改任何世界坐标。
+        /// </summary>
+        public static GripAnchor[] BuildGripAnchors()
+        {
+            float seatCenterY = ChairSeatTopY - ChairSeatThickness * 0.5f;
+            float legH = seatCenterY - ChairSeatThickness * 0.5f;      // 与 AddChair 的腿高同式
+            float railZ = -(ChairSeatSize * 0.5f + ChairBackThickness * 0.5f);
+            return new[]
+            {
+                new GripAnchor { id = "leg_front", localPosition = new Vector3(ChairLegSpread, legH * 0.5f, ChairLegSpread), localEuler = Vector3.zero },
+                new GripAnchor { id = "leg_back", localPosition = new Vector3(-ChairLegSpread, legH * 0.5f, -ChairLegSpread), localEuler = Vector3.zero },
+                new GripAnchor { id = "backrest_rail", localPosition = new Vector3(0f, ChairSeatTopY + ChairBackHeight * 0.5f, railZ), localEuler = Vector3.zero },
+            };
+        }
+
+        /// <summary>
+        /// 逐状态挂点表（规格 §戊·2 的"逐状态挂点表"）。三条的**基准朝向互不相同**——这正是"组间不同"的判据；
+        /// 角度值是演示常量（待 owner 目视调），届时只改这张表即可。
+        /// </summary>
+        public static GripPose[] DefaultGripPoses()
+        {
+            return new[]
+            {
+                // 单手提携：握前腿、椅子**垂下**在手侧（绕手骨前向轴转 90°）
+                new GripPose { state = GripState.Carry1H, hand = HumanBodyBones.RightHand, anchorId = "leg_front",
+                               chairEulerInHand = new Vector3(0f, 0f, 90f) },
+                // 双手持握准备：握靠背中腰、椅子**横在身前**（绕手骨长轴转 90°）
+                new GripPose { state = GripState.Wield2H, hand = HumanBodyBones.RightHand, anchorId = "backrest_rail",
+                               chairEulerInHand = new Vector3(90f, 0f, 0f) },
+                // 持椅格挡：同握靠背中腰，但**椅背朝前当盾**——与 Wield2H 的基准朝向差 180°
+                new GripPose { state = GripState.DefendCarry1H, hand = HumanBodyBones.RightHand, anchorId = "backrest_rail",
+                               chairEulerInHand = new Vector3(90f, 0f, 180f) },
+            };
         }
 
         private static void AddMarker(Vector3 pos, Color c)
