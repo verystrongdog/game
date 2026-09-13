@@ -459,7 +459,7 @@ blender.exe --background --factory-startup \
 
 | # | 发现 | 处置 |
 |---|---|---|
-| 1 | **Console 非 0 错误，但与本次导入无关**——最近一条是 `ActionLabDriver.cs` 的 `CS0103: The name 'chair' does not exist`（01:35:51Z，早于本次导入 3 小时），出自 **Windows 拷贝里未提交的在制改动**；本次导入自身未产生错误 | **owner 裁定：等 Windows 拷贝对齐后在干净树重跑**。对齐步骤见 §二·H；在此之前该判据不成立、也不归本次工作 |
+| 1 | **Console 非 0 错误，但与本次导入无关**——最近一条是 `ActionLabDriver.cs` 的 `CS0103: The name 'chair' does not exist`（01:35:51Z，早于本次导入 3 小时，且**当前该文件第 212 行根本没有这个标识符**，属中间态残留） | ✅ **已按 owner 裁定处理**：对齐 Windows 拷贝（§二·H 的 `fetch` + `reset --mixed`，HEAD `fa60ef1` → `ed44ccd`，工作树未动、两处分叉保留）后**强制一次重编译**（`RequestScriptCompilation` → `recompile_status: completed`）——**新增 error 0 条**；控制台内 6 条历史 error 全部可归因（1 条旧编译残留 + 5 条本次探测命令缺参数）。详见 #143 评论 |
 | 2 | **FBX 未携带 `functional_ids`**——对象名只带**主** `functional_id`（如 `AccumbensShell`）；`functional_ids` / `lobe` 字符串在 FBX 中零命中（Blender FBX 需 `use_custom_props` 才导出自定义属性） | **owner 裁定：不加进 FBX**。完整映射运行时读 `data/brain_regions.json` 的 `obj_file` 字段（本就受控）——FBX 不背第二份真相源；[#143](https://github.com/verystrongdog/game/issues/143) 的 AC 已据此改写并退回 triage |
 | 3 | **尺度口径矛盾**（本次新发现）——资产是 MNI 毫米（世界包围盒 72.5 × 169.3 × 121.6），而 [Unity接入设计 §五](../presentation/visualization-3d/Unity%E6%8E%A5%E5%85%A5%E8%AE%BE%E8%AE%A1.md) 原写"单位 m" | **owner 裁定：视图内部统一用 MNI 毫米 + 根部单一等比变换（≈1/90）**；`game_xyz`/§14.1 明确为**点位映射**（Z 除以 148.2，非等比），不得当作网格变换——否则网格与节点在 Z 轴差 1.65 倍。已落 [Unity接入设计 §8.5](../presentation/visualization-3d/Unity%E6%8E%A5%E5%85%A5%E8%AE%BE%E8%AE%A1.md) |
 
