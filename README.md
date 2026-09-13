@@ -30,7 +30,9 @@
 | [`design/framework/`](design/framework) | 六维状态路由表 + 六维度索引 |
 | [`design/decisions/`](design/decisions/README.md) | 决策树——93 个条目的设计决策分叉记录 |
 | [`design/conventions/`](design/conventions/README.md) | 项目规约、写作与引用规范、agent 工作流文档 |
-| [`design/archive/`](design/archive) | 归档：`grilling/`（各轮源记录 + 122 issue 存档）· `trash/`（垃圾箱） |
+| [`design/engineering/`](design/engineering/README.md) | **工程侧权威**：构建与测试、issue 创建约束、门禁能力表（`gates.json`）、阶段证据；含 [**工程危险点表**](design/engineering/危险点表.md)（按**位置**检索的排障索引） |
+| [`design/slices/`](design/slices/README.md) | 当前可玩目标的**四轴状态**与试玩证据（准入状态见 [PLAYABLE.md](PLAYABLE.md)） |
+| [`design/archive/`](design/archive) | 归档：`grilling/`（各轮源记录 + 122 issue 存档）· `owner-plan/`。**垃圾箱已于 2026-09-13 移出仓库**——本地保留在 `.trash/`（被忽略、26 个文件），历史可 `git show <sha>:design/archive/trash/<路径>` 取回 |
 | [`reference/`](reference) | 文献、书籍、灵感收件箱；`deprecated/` 保留已废弃子系统为参考数据源 |
 | [`code/src/`](code/src) | C# 逻辑引擎（.NET 8 库 + Console harness + 353 个测试） |
 | [`code/unity/`](code/unity) | Unity 6 呈现沙盘工程 |
@@ -47,6 +49,8 @@
 | **怎么干活 / 什么算做完** | [WORKFLOW.md](WORKFLOW.md) |
 | 代码和设计之间的边界 | [ARCHITECTURE.md](ARCHITECTURE.md) |
 | 这个游戏现在设计到哪一步了 | [设计框架-六维状态](design/framework/six-dimensions.md) |
+| **某个位置反复出什么事、怎么躲** | [**工程危险点表**](design/engineering/危险点表.md)——按**位置**做主键（导入期 / 生成期 / 场景装配 / 播放期 / 编辑器驱动 / 提交期 / 引擎层，共 30 个位置键），症状做列，可 grep 症状词排障 |
+| **怎么造 / 怎么验证 / 门禁是什么** | [工程文档索引](design/engineering/README.md)：[构建与测试](design/engineering/build-and-test.md) · [issue 创建约束](design/engineering/issue-process.md) · [`gates.json`](design/engineering/gates.json) · [阶段证据](design/engineering/evidence/README.md) |
 | 某个机制怎么结算 | [design/rules/核心机制.md](design/rules) |
 | 某个设计为什么这么定 | [决策树](design/decisions/README.md) → 对应轮的[源记录](design/archive/grilling/) |
 | 某个名词在这个项目里是什么意思 | [`data/term_registry.json`](data/term_registry.json)（看 `status` 字段——很多常规词汇在本项目里是**已废弃**的旧模型） |

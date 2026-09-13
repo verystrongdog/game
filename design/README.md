@@ -18,9 +18,9 @@
 | [spec/](spec) | 实现规格与输入素材（被代码或正典消费） | 活跃 |
 | [conventions/](conventions) | 项目规约、写作与引用规范 | 活跃 |
 | [slices/](slices/README.md) | **当前可玩目标**（四轴状态 + 试玩证据） | 见 [PLAYABLE.md](../PLAYABLE.md) |
-| [engineering/](engineering) | 工程文档与阶段证据 | 活跃 |
+| [engineering/](engineering) | 工程文档与阶段证据——含 [**危险点表**](engineering/危险点表.md)（按**位置**检索的排障索引：30 个位置键） | 活跃 |
 | [decisions/](decisions/README.md) | 决策分叉记录（"怎么走到这里的"） | **已冻结，只读** |
-| [archive/](archive) | `grilling/` 各轮源记录 · `trash/` 垃圾箱 | **归档，不作依据** |
+| [archive/](archive) | `grilling/` 各轮源记录 · `owner-plan/`。**垃圾箱已于 2026-09-13 移出仓库**（本地 `.trash/`，被忽略） | **归档，不作依据** |
 | [`data/term_registry.json`](../data/term_registry.json) | 术语状态（`status` 字段） | 活跃 |
 | [ARCHITECTURE.md](../ARCHITECTURE.md) | 设计与代码的边界声明 | 活跃 |
 | [WORKFLOW.md](../WORKFLOW.md) | 执行顺序、状态定义、阶段闭合的唯一权威 | 活跃 |
