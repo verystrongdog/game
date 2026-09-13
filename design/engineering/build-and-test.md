@@ -72,6 +72,7 @@ dotnet restore code/src/YouAreNotTheFish.sln --force-evaluate
 | 6 | 同环境 `dotnet build --no-restore -c Release` | 0 | 0 error |
 | 7 | 同环境 `dotnet test --no-build -c Release` | 0 | **416 passed / 0 failed** |
 | 8 | 同环境 `dotnet restore --force-evaluate` 后比对 | 0 | 锁文件**逐字节不变**——**生成确定性成立**（空缓存态与开发机态生成同一份锁） |
+| 9 | **真实 CI**（`ubuntu-latest`，空包缓存）`engine` job | 0 | run `34761263268`（`47b05ea`）四 job 全绿——锁模式在干净 runner 上同样生效，不是只在本机成立 |
 
 > 探针环境的一处噪声（如实记）：`NU1900` 警告——本机 NuGet HTTP 缓存目录只读，取漏洞数据失败。
 > 它不参与包图解析，也不改变上表任一条判定。
