@@ -607,6 +607,10 @@ python3 code/tools/validate_unity_assets.py                                     
 
 > ⚠️ 跑 `unity` 门禁前先读 `editor_status` 的 `projectPath` 并核对与仓库 HEAD 的距离（危险点表 §七），跑 `run_tests` 前先 `focus.sh`。
 
+### 回滚演练（实测）
+
+`git revert` 本条提交组时**必须按时间倒序**（`git log --oneline 6ea806a..HEAD` 从新到旧）——正序会冲突（`fix` 提交改的正是 `feat` 引入的那几行；实测报 `hint: after resolving the conflicts…`）。倒序 revert 后，临时 worktree 的工作树与基线 `6ea806a` **逐字节一致**（`git diff 6ea806a` 为空）：镜像件与 `ActionLabGripTests` 连同 `.meta` 一并消失、`Derived/` 只剩 `SitDown.anim`，即 `DerivedClipBuilder.cs` 退回"只做时间反转"。**无数据迁移**；`VerifyDerived()` 恢复为只校验 `SitDown.anim`（回滚后的文件与基线逐字节相同，故该行为由同一性保证——Unity 层未重跑）。
+
 ---
 
 ## 三、工程结构
