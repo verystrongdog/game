@@ -613,6 +613,51 @@ python3 code/tools/validate_unity_assets.py                                     
 
 ---
 
+## 二·N、持椅挂点组件（[#152](https://github.com/verystrongdog/game/issues/152)，2026-09-13）
+
+> 「手里有东西」这一层在代码里**此前完全不存在**（全工程唯一 `OnAnimatorIK` 在 `FootGroundingIK.cs`：无挂点代码、无 `GetBoneTransform`、无父级切换）。本条是规格 §一 道具口径（「不换模型，作为**骨骼挂点道具**」）的**第一次落地**，实现 §戊·2 的三个机制件。
+
+### 交付物与接入位置
+
+| 项 | 值 |
+|---|---|
+| 组件 | `code/unity/Assets/Scripts/ChairGrip.cs`（挂在场景椅子上，与 `ChairSeat.cs` 共用同一把椅子）——可握锚点表 / 逐状态挂点表 / 自动对齐 / 手到位帧读数 / 阻尼摆动 / 挂点与解除 |
+| builder | `code/unity/Assets/Editor/ActionLabBuilder.cs` — `BuildGripAnchors()`（锚点由椅子几何常量算出，**局部坐标**）· `DefaultGripPoses()`（逐状态表）· 给椅子挂 `ChairGrip` |
+| 场景 | `code/unity/Assets/Scenes/ActionLab.unity` 已重建并显式提交（3 张椅子各带挂点组件；关键标记计数逐个对齐：ChairSeat 3→3 · CameraOrbit / FootGroundingIK / ActionLabDriver / ActionPlayer / CharacterController 各 1→1 · Rigidbody 3→3） |
+| 断言 | `code/unity/Assets/Tests/PlayMode/ActionLabGripTests.cs` 新增 6 条（锚点实时性 / 三者同时 / 逐状态基准朝向 / 手到位帧 / 阻尼收敛 / 与就座不互抢） |
+| 接入 | **本条不接线**：状态机、按键、`Variants` 解析属「持椅状态链接线」issue；副手 IK 属双手链 issue |
+
+### 实测读数（Editor 6000.5.2f1 · 基线 `C:\Users\9527\game\code\unity`）
+
+| 判据 | 读数 |
+|---|---|
+| 锚点实时性 | 推椅 0.8 m → 锚点同步 **0.8 m**（容差 1 mm）；转向 130° 后仍贴在椅子几何上；锚点 ≠ 椅子原点（对照项） |
+| 逐状态基准朝向 | `Carry1H` 垂下 / `Wield2H` 横在身前 / `DefendCarry1H` 当盾 → 两两夹角 **120° / 120° / 180°**；手骨平移+旋转后组内位姿**逐位稳定**，锚点始终落在手骨原点（≤1 mm） |
+| 手到位帧（距离曲线最低点） | 角色在原点、椅子正前 1.6 m、41 点采样：`Lift1H` **t=0.325**（1662.9 → 1374.7 → 1767.2 mm，真低谷）· `Carry1H` t=0.750 · `Wield2H` t=0.425 · 镜像格挡 t=0.375 |
+| 挂点"三者同时" | 父子到 `RightHand` ✓ · 椅子 `isKinematic` ✓ · `Physics.GetIgnoreCollision(cc, 椅子)` ✓——解除时三条一起还原 |
+| 阻尼摆动 | 刚度 120 / 阻尼 18（ζ≈0.82）→ 收敛 **0.800 s**，残差 0.0015 m / 0.00000°，随后**精确定位**到基准；刚度 0 → 耗时为 0 的刚性退化（A） |
+| 两种占用不互抢 | 就座占用中 → 挂点被拒（理由留痕"椅子正被就座占用 → 拒绝挂点"）；解除后挂点成功 |
+| 门禁 `unity` | `run_tests` **53/53 通过**（含挂点 6 条 + 镜像 4 条） |
+| 门禁 `unity-assets` | 受控 Unity 文件 **161**（`.meta` 75）· A1 0 · A2 0 · A3 0 · A4 0（17 条受控 FBX 全 Humanoid） |
+
+### ⚠️ 未闭合（诚实清单）
+
+1. **三个基准朝向角度与刚度/阻尼是演示常量**：观感（椅子垂下的姿态像不像"垂下"、0.8 s 收敛够不够"重"）**待 owner 目视**——与 §戊·4 素材归槽同一类未闭合。
+2. **未接线**：本条不驱动状态机（链接线 issue 才会让 `Lift1H`/`Carry1H`/`Wield2H`/格挡各自挂上并按"手到位帧"切换）。
+3. 场景重建是**整文件重写**（builder 每次 `NewScene`）——与前两次重建同口径（#141 那次 3620/777 行），差异已显式提交。
+
+### 怎么复核
+
+```bash
+./code/tools/unity-cli/uc.sh menu "YANTF/动作演示/创建 ActionLab 场景"   # 幂等：重建场景（含挂点组件与两张表）
+./code/tools/unity-cli/uc.sh run_tests && ./code/tools/unity-cli/uc.sh test_status   # 53 条
+python3 code/tools/validate_unity_assets.py                                          # A1–A4
+```
+
+> 只读读数（不重建场景）：调 `ChairGrip.MeasureHandArrival(animator, clip, state)` 与 `StepSwayToSettle(...)`——读数都写进 `LastArrival` / `LastSwaySettleSeconds` / `LastAttachReport`。
+
+---
+
 ## 三、工程结构
 
 ```
