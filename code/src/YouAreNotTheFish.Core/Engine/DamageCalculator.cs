@@ -44,7 +44,10 @@ public sealed class DamageCalculator
         int baseDamage, int weaponBonus, float forceMod, float motivationMod,
         float gateBonus, bool defenderIsDefending, IRng rng)
     {
-        ArgumentNullException.ThrowIfNull(rng);
+        // 🔧 2026-09-13（#155，Q6b 裁定 A）：原为 ArgumentNullException.ThrowIfNull(rng)——
+        // netstandard2.1 无该 API，而本文件被桥接工程**链接**（桥接护栏要求它能在 ns2.1 下编译）。
+        // 语义逐位等价（同为「rng 为 null 时抛 ArgumentNullException(nameof(rng))」），全量回归可证。
+        if (rng is null) throw new ArgumentNullException(nameof(rng));
 
         // B4：一位小数结算——每步结算产物在最后一步统一量化（中间步保持全精度，Round1 仅作用于 s5）
         float s1 = (float)(baseDamage + weaponBonus);                    // int 加法精确，后转 float

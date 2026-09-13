@@ -89,8 +89,8 @@ code/src/YouAreNotTheFish.Console（harness）/ Tests（计数见 构建与测�
 
 | 越界点 | 现状 | 处置 |
 |---|---|---|
-| **`code/unity/Assets/Scripts/DemoSolver.cs`** | 手抄了 `CalibrationConfig.Default` 的结算常量（伤害 `4f`、命中 `0.75f`、SAN 惩罚 `1.3`/`2`、HP = `san×0.5`）。文件自述「临时白盒结算（待 EngineSolver 替换）」 | **这是本仓唯一的反向污染点。** 处置已定：**Q6b 裁定 A（子集桥接）**，见下方 §4.1——桥接工程链接 Core 的 3 个源文件产出 netstandard2.1 程序集，Unity 侧 `EngineSolver` 替换 `WhiteboxSolver`；在那之前，**凡修改结算常量必须同时改这里**，否则 demo 与引擎静默分叉 |
-| `code/src/YouAreNotTheFish.Core.Unity/` | 桥接工程草稿，**从未构建成功** | 已于 2026-09-12 删除（D10）。**Q6b 已定案（2026-09-13，裁定 A）**，重建范围与准入条件见 §4.1 |
+| ~~**`code/unity/Assets/Scripts/DemoSolver.cs`**（手抄 `CalibrationConfig.Default` 的结算常量）~~ | **✅ 2026-09-13 已消除（[#155](https://github.com/verystrongdog/game/issues/155)）**：该越界点连同它的**宿主一起退役**——owner 裁定把整个 Demo 战斗沙盘那套（`DemoSolver`/`DemoActor`/`DemoCombatDriver`/`DemoHud`/`DemoTypes`/`DemoBootstrapper`/`CharacterVisual` + 其场景生成器与冒烟测试）整体删除，而不是去接线修好一个「什么都做不了」的白盒 | **这一格现在没有待办**。「凡改结算常量必须同时改两处」这条风险随宿主消失。桥接工程（§4.1）作为**未来接缝的地基**保留并在 CI 里守着 |
+| `code/src/YouAreNotTheFish.Core.Unity/` | ✅ **2026-09-13 已按 §4.1 重建并构建成功**（`netstandard2.1`，链接 Core 的 3 个源文件 + `IsExternalInit` 垫片） | 进了 CI 的 `engine` job 当**机械护栏**（见 §4.1）。⚠️ 现状：**Unity 侧暂无消费者**——原来的消费者是 Demo 战斗沙盘，它已随上一条整体退役；`EngineSolver` 的接线留到接缝真正需要时（P4d / CP-01 准入后），届时不必再动 Core 侧 |
 | `code/unity/` 的 `.meta` 全缺、场景不入库 | Unity 工程不完整：`ProjectSettings/` 只有 `ProjectVersion.txt`、`Assets/Scenes/` 空、`Packages/packages-lock.json` 缺失，场景靠 Editor 菜单运行时生成 | ✏️ 2026-09-12：**已立项**（[#136](https://github.com/verystrongdog/game/issues/136)「Unity 资产身份」）。在此之前是已知取舍：重开工程会重新生成 GUID。**不是设计问题，是工程卫生**——但它是「手调动画成果无法入库」的根因：Blend Tree 阈值、transition 参数、Avatar Mask 全部序列化在需要 GUID 的资产里 |
 | `code/sim/` 写 `data/sim_results/` | 研究脚本的 `--outdir` 默认 `.`，即写入 `data/` | 已在 `.gitignore` 排除（2.6G 生成物）。建议改为默认落仓库外 |
 
@@ -131,7 +131,9 @@ code/src/YouAreNotTheFish.Console（harness）/ Tests（计数见 构建与测�
 | B 全量重构 | 74 + 56 + 66 处（多目标或降级两种做法）· 大范围改动 + 416 项全量回归 · 与「不在锁定提交中升级」的原则需协调 | 改动面大，回滚成本高（但仍是源码改动，无数据风险） |
 | C 换桥接机制 | **C2「Unity 直接吃 net8.0 程序集」已被实测排除**（第 1 条）；剩下 C1 进程边界：不碰兼容墙，但要新增 IPC 协议、进程生命周期、确定性/日志一整套面 | 无数据风险，但架构面变更难回退 |
 
-**为什么选 A**：闭包只有 3 个文件（实测），改动是 1 处 API 改写 + 1 处判空重写 + 1 个垫片，就能消灭本仓唯一的反向污染点、让 M1 成立；而 A 唯一的软肋（桥接面窄）被「链接源文件 + 编译进 CI」变成编译期问题。B 的收益只是"以后加文件不用动清单"，账单却是 74+56+66 处；C1 给 M1 换一种含义并新增一层 IPC，对一个确定性回合制引擎不值得。
+**🔧 2026-09-13 进展（[#155](https://github.com/verystrongdog/game/issues/155)）**：本节的**技术部分已落地**——桥接工程按上面的闭包建好、`DamageCalculator.cs` 那 1 处 API 已改写（引擎 416/0 不变）、工程进了 `engine` job；而**动机那一半的结局变了**：反向污染点的宿主（Demo 战斗沙盘）经 owner 裁定**整体退役**，所以「让 M1 成立」这件事**不再由它承载**——`EngineSolver` 与 Unity 侧接线推迟到 CP-01 准入 / P4d 真需要接缝时再做。本节作为**接缝的技术定案**继续有效（那时照它做即可），但别按它去复活那个沙盘。
+
+**为什么当初选 A**：闭包只有 3 个文件（实测），改动是 1 处 API 改写 + 1 处判空重写 + 1 个垫片，就能消灭本仓唯一的反向污染点、让 M1 成立；而 A 唯一的软肋（桥接面窄）被「链接源文件 + 编译进 CI」变成编译期问题。B 的收益只是"以后加文件不用动清单"，账单却是 74+56+66 处；C1 给 M1 换一种含义并新增一层 IPC，对一个确定性回合制引擎不值得。
 
 **后续实施 issue 的准入条件**（供候选队列中的 P4d「Core→Unity 接缝实现」消费）：
 
@@ -156,5 +158,5 @@ code/src/YouAreNotTheFish.Console（harness）/ Tests（计数见 构建与测�
 **提交前的底线**：`validate_cross_refs.py` 报 0 死链 + `dotnet test` 全绿。
 
 ---
-*创建: 2026-09-12 | 更新: 2026-09-13（新增 §4.1：Q6b 桥接范围裁定 A · #135；测试计数改为引用构建与测试 §四 · #130）*
+*创建: 2026-09-12 | 更新: 2026-09-13（§4.1 技术部分落地 + 反向污染点随宿主退役 · #155；新增 §4.1：Q6b 桥接范围裁定 A · #135；测试计数改为引用构建与测试 §四 · #130）*
 *关联: [项目规约](design/conventions/README.md), [设计总览](design/README.md), [协作指南](CONTRIBUTING.md), [数据说明](data/README.md)*

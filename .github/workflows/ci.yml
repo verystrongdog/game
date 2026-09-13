@@ -83,6 +83,11 @@ jobs:
         run: dotnet restore code/src/YouAreNotTheFish.sln
       - name: build
         run: dotnet build code/src/YouAreNotTheFish.sln --no-restore -c Release
+      # 桥接工程（netstandard2.1）已在上面这次 sln 构建里被编到；本步把它**单独再编一次**是为了：
+      # ① 失败时一眼看出是护栏红了，而不是主工程红了；② 把「链接的 3 个 Core 源文件必须能在
+      #    netstandard2.1 下编译」这条判据钉在 CI 上（Q6b 裁定 A · ARCHITECTURE §4.1 · #155）。
+      - name: 桥接工程构建（netstandard2.1 护栏 · #155）
+        run: dotnet build code/src/YouAreNotTheFish.Core.Unity/YouAreNotTheFish.Core.Unity.csproj --no-restore -c Release
       - name: test
         run: |
           dotnet test code/src/YouAreNotTheFish.sln --no-build -c Release \

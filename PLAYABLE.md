@@ -23,7 +23,7 @@ NO_AUTHORIZED_PLAYABLE
 | 载体 | 是什么 | 缺口 |
 |---|---|---|
 | `code/src/YouAreNotTheFish.Console` | .NET 控制台 harness。真实 Core 的回合结算跑通（`--seed` / `--demo-situation` / `--trace-resting` 等） | 无图形、无玩家输入、无探索与接敌 |
-| `code/unity/` 的 Editor 菜单场景生成器 | 6 个 builder（`SceneBuilder` / `ActionLabBuilder` / `WalkerLabBuilder` / `KiWalkerLabBuilder` / `RoseFieldLabBuilder` / `MixamoSetup`），运行时生成场景 | **场景与 `.meta` 均不入库**——必须先在 Editor 里手动跑菜单才能得到场景；且 `DemoSolver.cs` 走的是**手抄常量的白盒结算**，不是真实 Core（见 [ARCHITECTURE.md §四](ARCHITECTURE.md)） |
+| `code/unity/` 的 Editor 菜单场景生成器 | 5 个 builder（`ActionLabBuilder` / `WalkerLabBuilder` / `KiWalkerLabBuilder` / `MixamoSetup` / `BrainViewLabBuilder`），运行时生成场景 | **场景与 `.meta` 均不入库**（`ActionLab` 是唯一例外，见 [code/unity/README.md §二·H](code/unity/README.md)）——必须先在 Editor 里手动跑菜单才能得到场景。🔧 2026-09-13：白盒 Demo 沙盘那套（`SceneBuilder` + `DemoSolver.cs` 手抄常量）已按 owner 裁定**整体退役**（[#155](https://github.com/verystrongdog/game/issues/155)），故本条不再有「不是真实 Core」的例外 |
 | `code/sim/`（15 个 Python 脚本） | 数值模拟与验证实验 | 研究产物，**不入游戏正典** |
 
 ## 候选切片（待 owner 准入）

@@ -1,0 +1,45 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    桥接工程（Q6b 裁定 A · #155 · ARCHITECTURE.md §4.1）
+
+    它**不是**一份拷贝：下面用 <Compile Include> **链接** Core 的源文件（`Link` 只影响 IDE 里的
+    显示路径，不复制文件）。于是：
+      · 任何动到这几个文件、破坏 netstandard2.1 的提交 → **本工程编译当场失败**（CI 的 engine job 跑它）；
+      · 扩子集 = 往下面加一条 <Compile Include>，编译器立刻验证。
+    这就是裁定里那条「机械护栏」——不靠约定，也不靠人记得检查。
+
+    目标框架 netstandard2.1 是 Unity 侧的天花板（实测：Unity 6000.5.2f1 只带
+    `Data/NetStandard/ref/2.1.0/netstandard.dll` 与 `UnityReferenceAssemblies/unity-4.8-api/`）。
+  -->
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <!-- 语言级别必须显式给：netstandard2.1 的 SDK 默认是 **C# 7.3**，连 `record` 都解析不了。
+         取 10.0 = 当前闭包实际需要的最低级别（file-scoped namespace + implicit usings）。
+         故意不写 `latest`：新语法要进这个闭包，先过这一行——等于强制一次审查。
+         （Unity 能否**运行**这个程序集取决于 IL 与 API 面，由 netstandard2.1 引用程序集兜底，
+           与编译器语言级别无关。） -->
+    <LangVersion>10.0</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>YouAreNotTheFish.Core</RootNamespace>
+    <AssemblyName>YouAreNotTheFish.Core.Unity</AssemblyName>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <!-- 逐字节可复现：入库的 DLL 要能在 CI 里与重新构建的产物比对（漂移即失败） -->
+    <Deterministic>true</Deterministic>
+
+    <!-- NuGet 依赖锁定（#129 的口径，见 build-and-test §1.2） -->
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <RestoreLockedMode>true</RestoreLockedMode>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- netstandard2.1 缺 IsExternalInit（C# 9 的 init/record 依赖它）→ 垫片 -->
+    <Compile Include="IsExternalInit.cs" />
+    <!-- 闭包（2026-09-13 按类型引用 BFS 实测）：DamageCalculator 的传递依赖 = 这 3 个文件 -->
+    <Compile Include="../YouAreNotTheFish.Core/Engine/DamageCalculator.cs" Link="Linked/DamageCalculator.cs" />
+    <Compile Include="../YouAreNotTheFish.Core/Types/CalibrationConfig.cs" Link="Linked/CalibrationConfig.cs" />
+    <Compile Include="../YouAreNotTheFish.Core/Types/IRng.cs" Link="Linked/IRng.cs" />
+  </ItemGroup>
+
+</Project>

@@ -166,6 +166,10 @@ dotnet build   code/src/YouAreNotTheFish.sln --no-restore -c Release
 dotnet test    code/src/YouAreNotTheFish.sln --no-build  -c Release
 ```
 
+> **sln 里还有一项：桥接工程**（`code/src/YouAreNotTheFish.Core.Unity/`，`netstandard2.1`）——它是 [ARCHITECTURE.md §4.1](../../ARCHITECTURE.md) 的**机械护栏**（[#155](https://github.com/verystrongdog/game/issues/155)）：
+> 用 `<Compile Include>` **链接** Core 的 3 个源文件（`Engine/DamageCalculator.cs` · `Types/CalibrationConfig.cs` · `Types/IRng.cs`）+ `IsExternalInit` 垫片。
+> 上面那条 `dotnet build` 已经把它编了；CI 里另有一步**单独再编一次**，好让护栏红了时一眼可辨（护栏当前无 Unity 侧消费者——白盒宿主已退役）。
+
 **离线环境**：设 `NUGET_PACKAGES=<repo>/.nuget-pkgs` 复用仓库内缓存（该目录被 gitignore，非干净检出可依赖）。
 
 ### 2.2.1 跨语言数据契约（P4c）

@@ -281,7 +281,7 @@ gh issue edit <新编号> --add-blocked-by <前置编号>
 
 | # | 反例 | 为什么错 | 正确做法 |
 |---|---|---|---|
-| R1 | **按文件拆**："改 `DemoSolver.cs`" / "改 `GameDataLoader.cs`" | 文件不是行为，重构一改名 issue 即失效；且无法验收 | 按能力增量拆："Core→Unity 适配层 `FAKE→PARTIAL`" |
+| R1 | **按文件拆**："改 `ActionPlayer.cs`" / "改 `GameDataLoader.cs`" | 文件不是行为，重构一改名 issue 即失效；且无法验收 | 按能力增量拆："Core→Unity 适配层 `FAKE→PARTIAL`" |
 | R2 | **按层横切**："先写全部 schema，再写全部 loader" | 中间态不可验收，第一层做完时系统行为毫无变化（A2 违反） | 纵切：一条 issue 打通一条最小端到端路径（walking skeleton） |
 | R3 | **巨型 issue**："实现 CP-01 切片" | 无门禁能在中间给出判定；失败时无法定位 | 按 must-prove 与阻塞项拆成依赖有序的多条 |
 | R4 | **无门禁 issue**："整理文档" / "调研一下" | 没有变化的门禁，做没做不知道 | 若真是调研 → `Experiment`，必须写判定标准与原型去向 |

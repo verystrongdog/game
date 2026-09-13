@@ -3,25 +3,25 @@
 > 呈现维度的可运行验证载体：Unity 工程 + 白盒人形角色，可接收基础行动指令并作出动作，底部 HUD 显示 HP/SAN 状态变化——为「状态面板细部规格」grilling 提供 UI 调试反馈底子。
 >
 > **维度: 呈现 + 管线** — Issue [#122](https://github.com/verystrongdog/game/issues/122)。
+>
+> 🔧 **2026-09-13（[#155](https://github.com/verystrongdog/game/issues/155)）**：本文档已从 #122 的白盒战斗沙盘扩展成 **Unity 侧总览**；**那套白盒沙盘本身已按 owner 裁定整体退役**（`DemoSolver`/`DemoActor`/`DemoCombatDriver`/`DemoHud`/`DemoTypes`/`DemoBootstrapper`/`CharacterVisual` + `SceneBuilder` + `DemoSmokeTests`）。现行基准场景是 `Assets/Scenes/ActionLab.unity`（[#136](https://github.com/verystrongdog/game/issues/136)）。
 
 ## 一、这是什么
 
 | 项 | 内容 |
 |----|------|
-| 场景 | 单场景沙盘：演示者（白盒人形，蓝） vs 陪练（红，脚本 AI） |
-| 指令 | WASD 移动（自由走位，非战棋网格）+ `1`物理攻击 / `2`防御 / `3`精神攻击 + `Space`执行回合 + `R`重置 |
-| 回合 | 轻量手动回合沙盘：每回合选 M1 动作 + Broca 动作 → 执行 → 陪练 AI 行动（不触碰引擎 TurnManager） |
-| HUD | 左下状态面板（HP/SAN 条+数值、防御/冷却/回合标签）、右下行动栏、日志区、陪练头顶精确数值（**调试显示**，非正典敌方模糊规则 §3.8） |
-| 数值源 | `WhiteboxSolver`（临时）镜像 `CalibrationConfig.Default`（物攻 4/命中 0.75/防御 ×0.5/精攻 2−忍耐1/低SAN穿透），结算一位小数。**🔧 2026-09-13：Q6b 已裁定 A（子集桥接）**——[ARCHITECTURE.md §4.1](../../ARCHITECTURE.md) 定了闭包（3 个 Core 源文件 + `IsExternalInit` 垫片）与护栏（链接源文件、编译进 CI）；`EngineSolver` 的实施准入条件见同一节。**在桥接落地之前，本行仍是临时镜像，改结算常量必须同时改引擎** |
+| 场景 | **现行基准场景**：`Assets/Scenes/ActionLab.unity`（入库，#136）——动作系统（13 词表 / 契约 A+B）+ 就座交互 + 持椅挂点；其余 lab 场景由 Editor 菜单重建、不入库 |
+| ~~白盒战斗沙盘~~ | 🚫 **2026-09-13 整体退役**（#155）：演示者/陪练两个白盒小人 + 指令回合 + HUD 那一套连同它的场景生成器与冒烟测试一并删除 |
+| 数值源 | 🚫 **随沙盘一起消失**：原 `WhiteboxSolver`（手抄 `CalibrationConfig.Default` 常量）就是 [ARCHITECTURE.md §四](../../ARCHITECTURE.md) 认定的**本仓唯一反向污染点**——owner 裁定把宿主整套退役，该风险随之归零。Core→Unity 接缝的技术定案（[§4.1](../../ARCHITECTURE.md)）与桥接工程保留，**接线推迟到接缝真正需要时** |
 
 ## 二、本地验证步骤（Windows/macOS/Linux 桌面）
 
 前置：Unity 6 Editor（6000.0.x；本工程 `ProjectVersion.txt` 锁 6000.5.2f1——版本不一致时 Unity 会提示升级/降级，接受即可，或改该文件为你的版本）。
 
 1. 用 Unity Hub/Editor 打开本目录（`code/unity/`）作为工程；首次导入会自动还原包（uGUI + Test Framework）。
-2. 菜单 **YANTF → 呈现沙盘 → 创建 Demo 场景** → 打开生成的 `Assets/Scenes/DemoSandbox.unity` → 按 **Play**。
-3. 操作：WASD 走位靠近陪练（物攻射程 2.0m）→ `1` 物攻 / `3` 精攻 → `Space` 执行回合，观察 HUD 数值与受击反馈；`2` 防御观察「防御中 (物理-50%)」与冷却。
-4. 跑测试：**Window → General → Test Runner → PlayMode → Run All**（2 个冒烟测试：精攻确定性结算 59/14.5；防御回合推进与冷却口径）。
+2. 打开基准场景 **`Assets/Scenes/ActionLab.unity`** → 按 **Play**（其余 lab 场景由 `Assets/Editor/` 下各 builder 的菜单重建；🔧 `YANTF → 呈现沙盘 → 创建 Demo 场景` 那条菜单已随白盒沙盘退役，#155）。
+3. 操作见 §二·J/§二·M/§二·N 各节（动作系统、就座交互、持椅挂点）。
+4. 跑测试：**Window → General → Test Runner → PlayMode → Run All**（计数以最近一次实测为准，见 §二·O）。
 
 ### unity-cli 自动化（可选）
 
@@ -232,7 +232,7 @@ ActionLab 的 `Main Camera` **自带环绕跟随**：`ActionLabBuilder.CreateSce
 |---|---|
 | `Assets/Kevin Iglesias/`（**68 MB**） | 第三方资产包；来源已整条切 Mixamo（[动作库规格 §五](../../design/presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md)）；[#139](https://github.com/verystrongdog/game/issues/139) 的验收标准明写「干净检出下 `Assets/Kevin Iglesias/` 不存在」。`.gitignore` 已排除 |
 | `Assets/Temp/` | #137 站↔坐探针的过程物（`SitCheck.controller` + 两张截图），不是工程资产 |
-| `WalkerLab` / `KiWalkerLab` / `DemoSandbox` 三个 lab 场景 | 由 builder 菜单重建，随各自 issue 落地；`DemoSandbox` 是早期白盒演示（owner 裁定不作基准场景） |
+| `WalkerLab` / `KiWalkerLab` 两个 lab 场景 | 由 builder 菜单重建，随各自 issue 落地。（`DemoSandbox` 已于 2026-09-13 随白盒沙盘整体退役并删除，#155） |
 | `Assets/Settings/Pipeline/EditorPipelineManager.asset` | `com.unity.pipeline` 首次使用的自动产物，可再生 |
 
 ### 实测记录（改前 / 改后）
@@ -257,7 +257,7 @@ ActionLab 的 `Main Camera` **自带环绕跟随**：`ActionLabBuilder.CreateSce
 | `console` | **0 error**（仅 2 条与本主题无关的弃用警告：Input Manager / Dynamic Batching） |
 | 基准场景可打开 | `open_scene Assets/Scenes/ActionLab.unity` 返回 `guid: dee800a53d8d6934e91729219e7411f1`，与本仓库的 `ActionLab.unity.meta` **逐字一致** |
 | Play 后层级 | `ActionLab演示者(X Bot)` 带 `Animator`+`CharacterController`+`ActionPlayer`+`ActionLabDriver`，`Beta_Joints`/`Beta_Surface` 蒙皮 + 完整 `mixamorig` 骨架；`Main Camera` 带手挂的 `CameraOrbit` |
-| 抓帧 | 640×360 = **3625 种颜色**，均值 (193,220,219)；作为对照，早期 `DemoSandbox` 抓帧是 84% 纯白 |
+| 抓帧 | 640×360 = **3625 种颜色**，均值 (193,220,219)；作为对照，早期 `DemoSandbox` 抓帧是 84% 纯白（该场景已于 2026-09-13 退役，#155） |
 | `run_tests`（`--mode playmode --async_tests`） | `status: completed`，**16 项：14 过 / 2 败**（5.22 s） |
 | 2 项失败的真因 | `ActionPlayer_OneShotElapsed_Threshold`、`ActionPlayer_Play_PriorityAndLevelRules`——**纯逻辑断言，不碰任何 clip**（`ResetToIdle()` 后 `CurrentActionId` 仍为 `Down`）。**与资产缺失无关**，见下方残留缺口 ② |
 | 提交字节的来源证明 | 84 个入库文件逐个 `sha256` 与 Windows 工程比对：**84/84 一致**（`git show HEAD:<path>` vs 工程文件） |
@@ -641,7 +641,8 @@ python3 code/tools/validate_unity_assets.py                                     
 | 挂点"三者同时" | 父子到 `RightHand` ✓ · 椅子 `isKinematic` ✓ · `Physics.GetIgnoreCollision(cc, 椅子)` ✓——解除时三条一起还原 |
 | 阻尼摆动 | 刚度 120 / 阻尼 18（ζ≈0.82）→ 收敛 **0.800 s**，残差 0.0015 m / 0.00000°，随后**精确定位**到基准；刚度 0 → 耗时为 0 的刚性退化（A） |
 | 两种占用不互抢 | 就座占用中 → 挂点被拒（理由留痕"椅子正被就座占用 → 拒绝挂点"）；解除后挂点成功 |
-| 门禁 `unity` | `run_tests` **53/53 通过**（含挂点 6 条 + 镜像 4 条） |
+| 门禁 `unity` | `run_tests` **53/53 通过**（含挂点 6 条 + 镜像 4 条；这是 #152 当时的读数） |
+| 门禁 `unity`（🔧 2026-09-13 复跑 · #155） | `run_tests` **51/51 通过**——白盒 Demo 沙盘退役后 `DemoSmokeTests` 的 2 条随之删除（53 − 2 = 51，**实测非推断**）；强制重编译后新增 error **0** |
 | 门禁 `unity-assets` | 受控 Unity 文件 **161**（`.meta` 75）· A1 0 · A2 0 · A3 0 · A4 0（17 条受控 FBX 全 Humanoid） |
 
 ### ⚠️ 未闭合（诚实清单）
@@ -668,26 +669,18 @@ python3 code/tools/validate_unity_assets.py                                     
 code/unity/
 ├── Assets/
 │   ├── Editor/
-│   │   ├── SceneBuilder.cs        # 菜单/headless 生成 Demo 场景
 │   │   ├── WalkerLabBuilder.cs    # 菜单/headless 生成 Walker 移动实验场景
 │   │   ├── KiWalkerLabBuilder.cs  # 菜单/headless 生成 Ki 动画角色场景（含 controller）
 │   │   ├── ActionLabBuilder.cs    # 菜单/headless 生成 ActionLab（12 态 controller + X Bot 场景）
 │   │   └── MixamoSetup.cs         # 一键导入 Mixamo 资产（复制/改名/Rig Humanoid）+ 生成 ActionLab
 │   ├── Scripts/                      # 运行时（asmdef: YANTF.Demo）
-│   │   ├── DemoTypes.cs              # 动作/阶段枚举、结算请求/结果
-│   │   ├── DemoActor.cs              # 实体运行时状态（HP/SAN/防御/CD，事件）
-│   │   ├── CharacterVisual.cs        # 白盒人形 + 程序化动作（外部模型接入点）
-│   │   ├── DemoSolver.cs             # IDemoSolver + WhiteboxSolver（临时）
-│   │   ├── DemoCombatDriver.cs       # 回合沙盘驱动 + 输入
-│   │   ├── DemoHud.cs                # uGUI HUD（代码构建）
 │   │   ├── WalkerController.cs       # 几何体人体 + CharacterController 走/跑/跳（WalkerLab）
 │   │   ├── AnimatorWalker.cs         # Animator + CharacterController 走/跑/跳（KiWalkerLab）
 │   │   ├── ActionIds.cs              # 12 词条常量（词表三面对一锚）
 │   │   ├── ActionCatalog.cs          # 只读元数据（id → category/loop/priority/fade/clipFbxPath）
 │   │   ├── ActionPlayer.cs           # 契约 A 驱动（CrossFade 优先级 + 计时回退 + locomotion 通道）
 │   │   ├── ActionLabDriver.cs        # ActionLab 场景驱动（CC 物理 + 输入 + 就座判定/对齐/根位移/推椅 + HUD）
-│   │   ├── ChairSeat.cs              # 椅子组件（实时就座锚点 + 占用锁 + 碰撞忽略，就座交互 §四·丁）
-│   │   └── DemoBootstrapper.cs       # 运行时构建整个世界
+│   │   └── ChairSeat.cs              # 椅子组件（实时就座锚点 + 占用锁 + 碰撞忽略，就座交互 §四·丁）
 │   └── Tests/PlayMode/               # asmdef: YANTF.Demo.Tests（冒烟测试）
 │       ├── DemoSmokeTests.cs
 │       ├── WalkerLabSmokeTests.cs
@@ -702,9 +695,8 @@ code/unity/
 
 ## 四、替换/扩展指引
 
-- **外部人形模型**：`CharacterVisual.BuildWhitebox()`/动作接口（`PlayPhysicalAttack` 等）即接入点——替换为模型+Animator 实现，驱动层（DemoActor/DemoCombatDriver）零改动。
-- **引擎核接入（Q6b 已定案：裁定 A · 子集桥接）**：新建 `EngineSolver : IDemoSolver` 包装 `YouAreNotTheFish.Core.Unity`（`netstandard2.1`）的 `DamageCalculator`（`CalibrationConfig.Default` + Unity 侧 `IRng` 实现），替换 `DemoCombatDriver.solver` 默认值。
-  🔧 2026-09-13：裁定与准入条件见 [ARCHITECTURE.md §4.1](../../ARCHITECTURE.md)——桥接工程**链接** Core 的 3 个源文件（`Engine/DamageCalculator.cs` · `Types/CalibrationConfig.cs` · `Types/IRng.cs`）+ `IsExternalInit` 垫片，其中 `DamageCalculator.cs` 有 1 处 `ThrowIfNull` 需改写；桥接工程的编译要进 CI 当护栏。**不可省的反例**：只建工程不换手抄常量 = 反向污染点仍在，不算完成。
+- ~~**外部人形模型**：`CharacterVisual.BuildWhitebox()` 即接入点~~ → 🚫 随白盒沙盘退役（#155）。现行角色的载体是 X Bot + `Animator` + `ActionPlayer`（见 §二·H/§二·J）。
+- **引擎核接入（Q6b 定案 A · 桥接已就位、接线待做）**：桥接工程 `code/src/YouAreNotTheFish.Core.Unity/` 已按 [ARCHITECTURE.md §4.1](../../ARCHITECTURE.md) 建好（`netstandard2.1`，链接 Core 的 3 个源文件 + `IsExternalInit` 垫片），`DamageCalculator.cs` 的 1 处 `ThrowIfNull` 已改写，**构建进 CI 的 `engine` job 当护栏**。🔧 2026-09-13（#155）：原计划接的那个消费者（Demo 战斗沙盘）已整体退役，故 **Unity 侧暂无消费者**——将来需要接缝时（P4d / CP-01 准入后）照 §4.1 接线即可，Core 侧不必再动。
 - **状态面板细部规格 grilling**：以本 HUD 雏形为底子回炉。
 
 ## 五、已知简化（演示口径，非正典）
@@ -715,5 +707,5 @@ code/unity/
 
 ---
 
-*创建: 2026-09-06 | 更新: 2026-09-13（🔧 第八次：#137 按 superseded 关闭——KI 旧线坐/起实现「待合的分叉」改为**作废更正**、开工顺序 4→3 条；`SitPoint.cs` 随舍弃裁定删除（#137）；🔧 第七次：Q6b 裁定 A（子集桥接）——数值源行与 §四 接缝指引指向 ARCHITECTURE §4.1（#135）；🔧 第五次修正：§二·J 就座交互（先找到椅子才能坐，#141）——判定/对齐/占用锁/XZ 根位移/三张可推椅子 + PlayMode 33/33 + 六条实测读数 + 修掉"角色整体悬浮 80 mm"（`skinWidth`）+ 三条新坑；🔧 第四次修正：§二·I ActionLab 落地回切修复（`6bd8ddc`）红/绿实测 + 目视验证 + 运维补充；🔧 第三次修正：§二·H 资产身份与提交范围（#136）+ §二·G 的「场景不入库」加显式例外；🔧 第二次：§二·G 本轮工作 #137–#140 + KI 引用作废；§二·F 玫瑰花海场景 — Grilling #126；🔧 第六次修正（2026-09-13，owner 裁定移除花海 lab）：删 §二·F 全节 + 6 个源文件 + `Assets/Shaders/` + `Assets/Resources/YANTF/` 高度图 + 4 项 PlayMode 测试，§二·H 排除表与 §三 目录树同步，PlayMode 33 → 29（算术推断，未重跑 Editor）；地块数据/玫瑰株丛密度两篇口径文档标记 ⚠️ 已废弃，保留仅供 #126 冻结历史引用）*
+*创建: 2026-09-06 | 更新: 2026-09-13（🔧 第九次：白盒 Demo 战斗沙盘整套退役 + 桥接工程就位（#155）——§一/§二/§四/§二·H 与目录树同步；🔧 第八次：#137 按 superseded 关闭——KI 旧线坐/起实现「待合的分叉」改为**作废更正**、开工顺序 4→3 条；`SitPoint.cs` 随舍弃裁定删除（#137）；🔧 第七次：Q6b 裁定 A（子集桥接）——数值源行与 §四 接缝指引指向 ARCHITECTURE §4.1（#135）；🔧 第五次修正：§二·J 就座交互（先找到椅子才能坐，#141）——判定/对齐/占用锁/XZ 根位移/三张可推椅子 + PlayMode 33/33 + 六条实测读数 + 修掉"角色整体悬浮 80 mm"（`skinWidth`）+ 三条新坑；🔧 第四次修正：§二·I ActionLab 落地回切修复（`6bd8ddc`）红/绿实测 + 目视验证 + 运维补充；🔧 第三次修正：§二·H 资产身份与提交范围（#136）+ §二·G 的「场景不入库」加显式例外；🔧 第二次：§二·G 本轮工作 #137–#140 + KI 引用作废；§二·F 玫瑰花海场景 — Grilling #126；🔧 第六次修正（2026-09-13，owner 裁定移除花海 lab）：删 §二·F 全节 + 6 个源文件 + `Assets/Shaders/` + `Assets/Resources/YANTF/` 高度图 + 4 项 PlayMode 测试，§二·H 排除表与 §三 目录树同步，PlayMode 33 → 29（算术推断，未重跑 Editor）；地块数据/玫瑰株丛密度两篇口径文档标记 ⚠️ 已废弃，保留仅供 #126 冻结历史引用）*
 *关联: [战斗界面布局](../../design/presentation/%E6%88%98%E6%96%97%E7%95%8C%E9%9D%A2%E5%B8%83%E5%B1%80.md), [核心机制](../../design/rules/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md), [回合战斗流程](../../design/rules/%E5%9B%9E%E5%90%88%E6%88%98%E6%96%97%E6%B5%81%E7%A8%8B.md), [关键突破](../../design/rules/skill-tree/%E5%85%B3%E9%94%AE%E7%AA%81%E7%A0%B4.md), [动作库规格](../../design/presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md), [动作系统分解](../../design/engineering/%E5%8A%A8%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%88%86%E8%A7%A3-2026-09-12.md), [决策树](../../design/decisions/README.md)*
