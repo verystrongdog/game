@@ -408,6 +408,74 @@ U="/mnt/c/Users/9527/AppData/Local/Unity/bin/unity.exe"; P="C:\Users\9527\game\c
 2. **直接 `cp` 进 `Assets/` 的新文件由 Unity 生成 `.meta`**（GUID 由 Windows 侧定），仓库侧必须采用同 GUID——本次两个新文件：`ChairSeat.cs` = `31496bc4…`、`ActionLabChairTests.cs` = `e5c01136…`。
 3. **Editor 的 API Updater 会改写你同步过去的源文件**（`rb.velocity` → `rb.linearVelocity`）→ 两次同步之间会出现"两侧不一致"，先 diff 再判定是谁改了谁。
 
+## 二·K、脑壳资产入库（[#143](https://github.com/verystrongdog/game/issues/143)，2026-09-13）
+
+> 把 3D 脑区面板要用的**真实脑曲面**烘成一份可进工程的 mesh。资产身份契约（`.meta` GUID 由 Editor 定、仓库采用同 GUID）见 §二·H；本节的动线是它的第一次实战。
+
+### 交付物与接入位置
+
+| 项 | 值 |
+|---|---|
+| 资产 | `code/unity/Assets/SkillTree/Models/brain_shell.fbx`（6.4 MB · sha256 前 16 `e983c347471e0827`） |
+| 目录 | `Assets/SkillTree/`（GUID `44b2e4aa2db3ccb45bd480b630e04fc0`）· `Assets/SkillTree/Models/`（GUID `42a08dffda1b07d4890feda12e5e2026`） |
+| 资产 GUID | `6551384821590304e9bb1979565e9b4e`（**由 Editor 生成**，仓库采用同一值） |
+| 来源 | `code/tools/bake_brain_shell.py` ← `data/brain_regions.json` 的 40 个受控解剖载体（58 个 functional_id 共享） |
+| 接入位置 | 工程资产区。**未接进任何场景**：装配属视图实现，等归属与准入裁定（[#145](https://github.com/verystrongdog/game/issues/145)） |
+
+### 导入动线（实测跑通，2026-09-13）
+
+```bash
+# 1) 烘焙到 gitignored 的 build 目录（默认落 blender_assets/build/）
+blender.exe --background --factory-startup \
+  --python code/tools/bake_brain_shell.py
+
+# 2) 建目录 + 导入（Editor 在 Windows 侧执行，故经 unity-cli 而非 cp——
+#    沙箱把 /mnt/c 设为只读，且 .meta GUID 必须由 Editor 生成）
+./code/tools/unity-cli/uc.sh create_folder Assets/SkillTree
+./code/tools/unity-cli/uc.sh create_folder Assets/SkillTree/Models
+./code/tools/unity-cli/uc.sh import_asset \
+  --source '\\wsl.localhost\Ubuntu-22.04\home\dog\game\design\presentation\visualization-3d\blender_assets\build\brain_shell.fbx' \
+  --path   'Assets/SkillTree/Models/brain_shell.fbx'
+
+# 3) 把产物搬进仓库（Linux 侧）：FBX 字节与 Editor 侧逐字节一致（sha256 可核），
+#    .meta 采用 Editor 生成的 GUID
+```
+
+> **为什么不是 `cp` 进 `Assets/`**：本机沙箱把 `/mnt/c` 设为只读，写不进去；`import_asset` 由 Editor 自己执行，顺带完成 `.meta` 生成——与 §二·H 的"GUID 由 Windows 侧定"是同一件事。
+
+### 实测读数（Editor 6000.5.2f1，`unity-cli` 经 WSL interop 直驱）
+
+| 项 | 读数 | 判据 |
+|---|---|---|
+| 区域对象数 | **40** | `MeshFilter` 计数（= `obj_file` 去重后的载体数） |
+| 无 mesh 对象 | 0 | — |
+| 共享材质数 | **8** | `MeshRenderer.sharedMaterials` 去重（bake 侧同为 8） |
+| 顶点数 | 507,950 | Unity 侧 weld 后 |
+| 三角面（烘焙侧） | 199,966 | `bake_report.json`（预算 20 万，达成 100%） |
+| 导入设置 | `globalScale: 1` · `animationType: Generic` · `clipAnimations: []` | `.fbx.meta` |
+| 字节一致性 | Editor 侧与仓库侧 FBX sha256 逐字节相同 | 见上表 |
+
+### ⚠️ 本轮未闭合的三项（诚实清单）
+
+| # | 项 | 实测 | 归属 |
+|---|---|---|---|
+| 1 | **Console 非 0 错误**，但**与本次导入无关** | 最近一条是 `ActionLabDriver.cs` 的 `CS0103: The name 'chair' does not exist`（01:35:51Z，早于本次导入），来自 **Windows 拷贝里未提交的在制改动**；本次导入自身未产生错误 | 归 Windows 侧在制工作面；#143 的"Console 0 错误"判据因此**不能据当前工程状态声明通过** |
+| 2 | **FBX 未携带 `functional_ids`** | 对象名只带**主** `functional_id`（如 `AccumbensShell`），`functional_ids` / `lobe` 字符串在 FBX 中不存在（二进制检索 0 命中）——bake 侧的自定义属性**没进导出**（Blender FBX 需 `use_custom_props`） | bake 工具；#143 的 AC 第 4 条（"合计覆盖 58 个 id"）**未达成** |
+| 3 | **尺度口径矛盾**（本次新发现） | 资产是 **MNI 毫米**：世界包围盒 size ≈ **(72.5, 169.3, 121.6)**，即脑高 169 "单位"；而 [Unity接入设计 §五](../presentation/visualization-3d/Unity%E6%8E%A5%E5%85%A5%E8%AE%BE%E8%AE%A1.md) 写"单位 m"、设计坐标（脑功能层级模型 §14.1）假定大脑 ~2.2 游戏单位宽 → 差约 90 倍 | **设计口径未定**：网格与节点必须共用同一变换；需在接入设计里裁定（烘焙侧换算 vs Unity 侧根变换） |
+
+### 怎么复核
+
+```bash
+sha256sum code/unity/Assets/SkillTree/Models/brain_shell.fbx   # e983c347471e0827…
+grep '^guid:' code/unity/Assets/SkillTree*/**/*.meta 2>/dev/null || \
+  grep -h '^guid:' code/unity/Assets/SkillTree.meta \
+    code/unity/Assets/SkillTree/Models.meta \
+    code/unity/Assets/SkillTree/Models/brain_shell.fbx.meta
+./code/tools/unity-cli/uc.sh eval 'var go = UnityEditor.AssetDatabase.LoadAssetAtPath<UnityEngine.GameObject>("Assets/SkillTree/Models/brain_shell.fbx"); return go.GetComponentsInChildren<UnityEngine.MeshFilter>(true).Length;'
+```
+
+---
+
 ## 三、工程结构
 
 ```
