@@ -567,6 +567,48 @@ owner 反馈"用摄像机调整角度看大脑模型有点费劲"，故观察交
 
 ---
 
+## 二·M、派生件加「镜像」变换（[#150](https://github.com/verystrongdog/game/issues/150)，2026-09-13）
+
+> 给派生件机制加**第二种变换**：此前只有时间反转（`Derived/SitDown.anim`）。本条产出格挡 clip 的 **Humanoid L/R 镜像件**，把盾手从左手换到右手（规格 §四·戊·1#6：单手链统一右手）。
+
+### 交付物与接入位置
+
+| 项 | 值 |
+|---|---|
+| 生成器 | `code/unity/Assets/Editor/DerivedClipBuilder.cs` — 新增 `DeriveMirrored()`（纯函数）· `FixRootTranslation()`（实测根修正）· `MirrorCheck()`（骨骼级断言）；菜单 **YANTF → 动作演示 → 重建派生动画（格挡镜像）** |
+| 资产 | `code/unity/Assets/Animations/Derived/Defend_Carry1H_Mirrored.anim`（+ `.meta`）——130 曲线 / 1.4000 s / `humanMotion` ✓ / `loopTime` ✓ |
+| 断言 | `code/unity/Assets/Tests/PlayMode/ActionLabGripTests.cs`（新建，4 条）：镜像位姿 / 播放口径 / 非破坏对拍 / 二次镜像回原件 |
+| 接入 | **本条不接线**：controller 状态与按键属「持椅状态链接线」issue（§戊·1#4 的 `Variants` 解析） |
+
+### 实测读数（Editor 6000.5.2f1 · 基线 `C:\Users\9527\game\code\unity` @ 仓库 HEAD `6ea806a`）
+
+| 判据 | 读数 |
+|---|---|
+| 镜像变换三条口径 | 见 [动作库规格.md §戊·3](../../design/presentation/动作库规格.md) 实测块：肢体肌肉符号全 +（4.98–5.54 mm 基线 vs 反号 30–1400 mm）· 中轴含 `Left-Right` 取 −（4.98 mm vs 30–400 mm）· 根位移按载体实测解 |
+| 骨骼级镜像 | `LeftHand`↔`RightHand` 世界位差 **0.069 mm** · 全骨扣掉骨架自身不对称 **0.52 mm** · 世界旋转 **0.00000°** · **对照项**（不对拍左右）**1199 mm** |
+| 骨架自身不对称 | 无名指中节/末节 **2.283 / 1.68 mm**（rest 姿势同口径读数）——故全骨判据扣掉它，否则任何镜像都会"超差" |
+| 根位移 | 朴素的「`RootT.x` 取负」残差 **4.59 mm**（全骨一致）→ 实测求解后 **0.0002 mm** |
+| 非破坏 | 重建镜像件后 `Derived/SitDown.anim` **逐曲线不变**（`git status` 无该文件）· `VerifyDerived()` 覆盖两件并报 **0** |
+| 门禁 `unity` | `run_tests` **47/47 通过**（含本条 4 条）· 强制重编译后新增 error **0** |
+| 门禁 `unity-assets` | `validate_unity_assets.py` 四条规则全过（受控 Unity 文件 155、A1 0 · A2 0 · A3 0 · A4 0） |
+
+### ⚠️ 本轮两个新坑（已进[危险点表](../../design/engineering/危险点表.md) §七）
+
+1. **`bodyPosition → 根节点世界位` 是按 Avatar 不同的仿射映射**：`∂Hips/∂p = 1.050·I` 且 `p=0` 时 Hips 不在原点（X Bot 偏 `(−1.67, −25.0, −18.2) mm`）。所以"把 `RootT.x` 取负"**不等于**镜像根位移——必须按目标载体实测解。代价实测：不修则整体偏 4.59 mm（看着完全对，量出来超差）。⇒ 镜像件**与载体绑定**，换载体要重跑生成器。
+2. **`AnimationMode` 采样必须"窗口内读"**：`EndSampling` 会回滚上一次采样，跨窗口读骨骼拿到的是 rest——同一份 eval 因此把 4.6 mm 量成 26 mm、旋转量成 4°，方向完全错。
+
+### 怎么复核
+
+```bash
+./code/tools/unity-cli/uc.sh menu "YANTF/动作演示/重建派生动画（格挡镜像）"   # 幂等：重算 + 写盘
+./code/tools/unity-cli/uc.sh run_tests && ./code/tools/unity-cli/uc.sh test_status   # 47 条（含 ActionLabGripTests 4 条）
+python3 code/tools/validate_unity_assets.py                                        # A1–A4
+```
+
+> ⚠️ 跑 `unity` 门禁前先读 `editor_status` 的 `projectPath` 并核对与仓库 HEAD 的距离（危险点表 §七），跑 `run_tests` 前先 `focus.sh`。
+
+---
+
 ## 三、工程结构
 
 ```
