@@ -111,6 +111,8 @@ jobs:
       issues: read          # 只读拉取开放 issue；不需要 write
     steps:
       - uses: actions/checkout@v4
+      - name: 规则 fixture（14 条规则各一正一反 · 不联网）
+        run: python3 code/tools/test_validate_issues.py
       - name: 校验开放 issue 的字段/依赖/门禁/单线程（规则 I1–I12）
         env:
           GH_TOKEN: ${{ github.token }}

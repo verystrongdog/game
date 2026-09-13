@@ -35,6 +35,16 @@
       "note": "有副作用：会写 .checks-state.json（被 gitignore）。CI 里跑的是等价的显式循环，不用本编排器。"
     },
     {
+      "id": "issues-fixtures",
+      "kind": "script",
+      "ci_job": "issues-snapshot",
+      "command": "python3 code/tools/test_validate_issues.py",
+      "available": true,
+      "covers": "validate_issues.py 的 14 条规则各一正一反（36 条用例）+ 1 条快照键契约（规则读取的 snapshot 键 ⊆ fetch_snapshot 产出的键）",
+      "criterion": "退出码 0（全部用例符合预期）",
+      "note": "不联网、不需要 gh——直接调规则函数并用注入的 snapshot 构造输入。"
+    },
+    {
       "id": "unity-assets",
       "kind": "script",
       "ci_job": "docs-integrity",

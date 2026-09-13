@@ -906,7 +906,11 @@ def rule_i8(subjects, ctx):
             line = lines[lineno - 1] if 0 < lineno <= len(lines) else ""
             # §4.1.1 例外 4：正文**显式标注**了该产物尚不存在（缺失/待建/将新增…）
             # 时降为警告——这条路径是 issue 的**主题**，不是隐藏依赖。
-            if any(mk in line for mk in MISSING_MARKERS):
+            # 🔧 2026-09-13：标记须出现在**描述该路径的散文**里——先把路径本身从行内
+            # 摘掉再判，否则文件名自带的词（如 `根本不存在.py` 里的「不存在」）会
+            # 让一条真缺失的引用被静默降级为警告。由 test_validate_issues.py 的
+            # I8 用例抓出（原名含标记词的路径 → 期望 FAIL、实得 WARN）。
+            if any(mk in line.replace(token, "") for mk in MISSING_MARKERS):
                 out.append(Finding(WARN, f"{s.tag}:{lineno} {where}命名了尚不存在的产物"
                                          f"（已显式标注）: {token}"))
             else:
@@ -1254,8 +1258,13 @@ def fetch_snapshot(repo, limit):
         native_blocked[n] = {x.get("number") for x in nodes if x.get("number")}
         if states[n] == "OPEN":
             open_items.append(it)
+    # `closed_numbers` 是规则读取的键之一（I13 的「blocked-by 全部已关闭」判据）。
+    # 🔧 2026-09-13：此前**从未产出**该键，于是 I13 里 `all(n in closed_numbers ...)`
+    # 恒为假（空集）——凡带 blocked-by 的 issue 都被当作"未就绪"，即使其前置已全部关闭。
+    # 由 test_validate_issues.py 的「快照键契约」用例抓出（它静态比对：规则读的键 ⊆ 本函数产的键）。
+    closed_numbers = {n for n, st in states.items() if st == "CLOSED"}
     return {"numbers": numbers, "states": states, "open": open_items,
-            "native_blocked_by": native_blocked,
+            "native_blocked_by": native_blocked, "closed_numbers": closed_numbers,
             "total": len(items), "truncated": truncated}
 
 

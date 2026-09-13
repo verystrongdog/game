@@ -63,11 +63,14 @@ python3 code/tools/build_runtime_data_fixtures.py --check   # fixture 索引与�
 **issue 契约**（新建或修改 issue 后跑；需要 `gh` 已认证或 `GH_TOKEN`）：
 
 ```bash
+python3 code/tools/test_validate_issues.py                 # 规则 fixture：14 条规则各一正一反（36 条用例，不联网）
 python3 code/tools/validate_issues.py --from-github        # 校验开放 issue 的字段/依赖/门禁/单线程
 python3 code/tools/validate_issues.py --file <草稿.md>      # 创建前的门禁（草稿为临时文件，不入库）
 ```
 
 规则表 I1–I12 与字段定义见 [issue-process.md §5.2](issue-process.md)。
+
+> **为什么要 fixture**：`validate_issues.py` 是 1400+ 行、14 条规则的**元工具**——它错了没人替它把关。此前它没有任何自动化测试，代价已经付过两次：① §4.1.1 例外 1「门禁可引用尚不存在的脚本」**文档承诺了、代码从未实现**，存活到 #142 首次交付新门禁才被撞出；② #134 的门禁行因解析器从散文里误抓到一个**已存在的文档路径**而空过（越啰嗦越安全）。`test_validate_issues.py` 落地当天即抓出两处：**I13 读的 `snapshot["closed_numbers"]` 从未被 `fetch_snapshot` 产出**（恒为空集 → 「blocked-by 全部已关闭」判据永不成立）、**I8 的豁免标记会被路径自身的文件名命中**（`根本不存在.py` 让真缺失的引用被降级为警告）。两条都已修，并各有对应用例钉住。
 
 **干净检出检查**（CI 已纳入）：
 
@@ -136,7 +139,7 @@ sim 脚本用**扁平 import**（`from sim_consciousness_cs4_test import ...`）
 |---|---|---|
 | `docs-integrity` | 12 个校验器（与 §2.1 同一循环）+ fixture 索引契约 | ✅ |
 | `engine` | SDK 版本核对 → restore → Release build → Release test → **跨语言 fixture 判定比对** → trx artifact | ✅ |
-| `issues-snapshot` | 开放 issue 的契约校验（`validate_issues.py --from-github`，需 `issues: read`） | ✅ |
+| `issues-snapshot` | 规则 fixture（`test_validate_issues.py`，不联网）+ 开放 issue 的契约校验（`validate_issues.py --from-github`，需 `issues: read`） | ✅ |
 | `unity` | **显式报告 `NOT_AVAILABLE`** | ❌ 需 Editor |
 
 **为何 `unity` job 是一个"什么也不做"的 job**：按 [WORKFLOW.md §五](../../WORKFLOW.md)，**未运行不是通过**。若直接省略该 job，整个 workflow 会全绿，而 Unity 门禁（P4b/P4d/P5）实际未执行——那是静默跳过。因此它存在、具名标注 `NOT_AVAILABLE`、并在作业摘要里列出受影响的门禁。
