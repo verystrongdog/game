@@ -27,8 +27,10 @@
     ⚠️ 经 WSL interop 直驱 Windows Blender 时**环境变量不会传入**（2026-09-13 实测
     `os.environ.get(...)` 为 None）——配置一律走 `--` 之后的命令行参数。
 
-历史: 本脚本的 Blender 5 兼容修复此前只存在于未入库的
-  `C:/Users/9527/temp_build_brain_skill_tree.py`（2026-09-13 发现），已回植。
+历史: 本脚本的 Blender 5 兼容修复此前只存在于未入库的一份 Windows 临时脚本
+  （`temp_build_brain_skill_tree.py`，2026-09-13 发现），已回植。
+  ⚠️ 该临时脚本的完整位置是开发机路径，**不写在这里**——`.py` 里的机器绝对路径
+  会被 `check_clean_checkout.py` 判失败（干净检出必然跑不起来）。
 """
 
 import bpy
