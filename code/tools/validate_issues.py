@@ -829,12 +829,21 @@ def rule_i6(subjects, ctx):
 COMMAND_WORDS = ("python", "python3", "bash", "sh", "dotnet", "node", "npm", "pnpm",
                  "gh", "make", "pwsh", "powershell", "msbuild", "unity")
 
+# 只有这些后缀的路径才算「门禁脚本」。没有这一层时，一行散文里提到的**文档**路径
+# 会被当成被检查的脚本——实测 #134 的门禁行因此空过：它括号内的解释文字提到了
+# design/engineering/issue-process.md，解析器判 script 并因该文件存在而 PASS，
+# 而真正该检查的新门禁名 validate_ceiling_generator 从未被检查。
+SCRIPT_SUFFIX = re.compile(r"\.(py|sh|bash|ps1|cmd)$")
+
 
 def judge_gate_line(raw: str, gates: dict):
     """判定一行门禁：('gate', id) / ('script', [路径]) / ('unknown', None) / ('prose', None)。
 
     `prose` 是散文行（不含反引号/路径/命令词，也不是 id 形状）——调用方出 warning
     而不是 FAIL，避免把「本机不可用，替代验证方式见 …」这类说明误判成非法门禁。
+
+    **路径须像脚本**（`SCRIPT_SUFFIX`）才判 `script`：一行里抽到的非脚本路径（如文档）
+    不构成门禁，会继续下落——含反引号则判 `unknown`（FAIL），否则判 `prose`（warning）。
     """
     cleaned = raw.replace("`", "").strip()
     tokens = cleaned.split()
@@ -843,8 +852,9 @@ def judge_gate_line(raw: str, gates: dict):
         return "gate", (first if first in gates else cleaned)
     paths = re.findall(r"((?:code|design|data|reference|\.github|\.agents)/[^\s`）)，,；;：:]+)",
                        cleaned)
-    if paths:
-        return "script", paths
+    script_paths = [p for p in paths if SCRIPT_SUFFIX.search(p)]
+    if script_paths:
+        return "script", script_paths
     for gid, g in gates.items():
         cmd = g.get("command") or ""
         if cmd and cmd in cleaned:
