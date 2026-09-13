@@ -249,10 +249,10 @@ Unity 侧实测现状（2026-09-13，[code/unity/README.md](../../../code/unity/
 | # | 待办 | 为什么不在本文做 |
 |---|---|---|
 | 1 | 在 [脑功能层级模型](../../rules/skill-tree/%E8%84%91%E5%8A%9F%E8%83%BD%E5%B1%82%E7%BA%A7%E6%A8%A1%E5%9E%8B.md) §16.1 就地标注"节点颜色列已由 D23 取代" | §8.1 的裁定推论要落到被改写的那份文档里；本文越界改写会造成两个改写者 |
-| 2 | ~~把烘焙壳导入 Unity 工程（Windows Editor 步骤 + `.meta` GUID 契约）~~ → 已分解为 [#143](https://github.com/verystrongdog/game/issues/143) | 资产区单机所有权（[ARCHITECTURE.md §五](../../../ARCHITECTURE.md)）；入库前先查[危险点表](../../engineering/%E5%8D%B1%E9%99%A9%E7%82%B9%E8%A1%A8.md)导入期诸条 |
+| 2 | ~~把烘焙壳导入 Unity 工程（Windows Editor 步骤 + `.meta` GUID 契约）~~ → ✅ **已完成**：[#143](https://github.com/verystrongdog/game/issues/143) 闭合（2026-09-13，提交 `ed44ccd`），动线与判据见 [code/unity/README.md §二·K](../../../code/unity/README.md) | 资产区单机所有权（[ARCHITECTURE.md §五](../../../ARCHITECTURE.md)）；入库前先查[危险点表](../../engineering/%E5%8D%B1%E9%99%A9%E7%82%B9%E8%A1%A8.md)导入期诸条 |
 | 3 | 节点（71 上下文）与连线（1049 三体边）的运行时生成器 | 属实现；**卡在归属与准入**——见 [#145](https://github.com/verystrongdog/game/issues/145) |
 | 4 | 空间断言覆盖"3D 节点落在其脑区网格内" | §14.1 的硬要求目前无机械判据（[`validate_spatial.py`](../../../code/tools/validate_spatial.py) 未覆盖视图节点） |
-| 4b | **对齐 Windows 拷贝并重跑 `unity` 门禁**（#143 的 Console 判据挂在这里） | 危险点表 §七「`unity status` 的 `projectPath`」行：本机有两份拷贝、Editor 打开的是陈旧那份（落后 38 提交 / 112 个未提交改动），故门禁证据与仓库 HEAD 脱节 |
+| 4b | ~~对齐 Windows 拷贝并重跑 `unity` 门禁~~ → ✅ **已完成（2026-09-13）**：`fetch` + `reset --mixed` 使 Editor 侧 HEAD = 仓库 HEAD，强制重编译后**新增错误 0 条**，基线（拷贝 + commit + 脏条目 87）已写进 [#143](https://github.com/verystrongdog/game/issues/143) 的闭合证据 | 危险点表 §七「`unity status` 的 `projectPath`」行：本机有两份拷贝，门禁证据必须写明基线——**每轮跑 `unity` 门禁都要重做这一步**，它不是一个一次性的待办 |
 | ~~5~~ | ~~`obj_file` 存在性校验器~~ | ❌ **owner 2026-09-13 决定不做**——不加这条机械校验；缺口如实留在[脑模型资产登记](%E8%84%91%E6%A8%A1%E5%9E%8B%E8%B5%84%E4%BA%A7%E7%99%BB%E8%AE%B0.md) §八 缺陷 5 |
 
 ---
@@ -308,7 +308,7 @@ Unity 侧实测现状（2026-09-13，[code/unity/README.md](../../../code/unity/
 
 | # | 类型 | issue | 一句话 |
 |---|---|---|---|
-| ① | `Task` | [#143](https://github.com/verystrongdog/game/issues/143) | 烘焙脑壳进 Unity 工程——资产身份与导入动线 |
+| ① | `Task` | [#143](https://github.com/verystrongdog/game/issues/143) | 烘焙脑壳进 Unity 工程——资产身份与导入动线 ✅ **已闭合（2026-09-13）** |
 | ② | `Task` | [#144](https://github.com/verystrongdog/game/issues/144) | 正典同步——§16.1 节点颜色列口径回写（被 D23 取代） |
 | ③ | `RFC` | [#145](https://github.com/verystrongdog/game/issues/145) | 3D 脑区面板的切片归属与准入（第四块的未决问题） |
 
