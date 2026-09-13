@@ -9,6 +9,11 @@
     <IsTestProject>true</IsTestProject>
     <RootNamespace>YouAreNotTheFish.Core.Tests</RootNamespace>
     <AssemblyName>YouAreNotTheFish.Core.Tests</AssemblyName>
+
+    <!-- NuGet 依赖锁定（#129）：提交 packages.lock.json，并在 restore 时强制校验。
+         锁文件的更新做法见 design/engineering/build-and-test.md §1.2。 -->
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <RestoreLockedMode>true</RestoreLockedMode>
   </PropertyGroup>
 
   <ItemGroup>
