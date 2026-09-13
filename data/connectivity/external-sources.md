@@ -41,7 +41,7 @@
 | 许可 | **未登记**——见 [§二](#二已知缺口) |
 | 本仓文件 | `brainstemfc_Schaefer400.npy` · `mesulam_schaefer400.csv` · `region_info_Schaefer400.csv` · `subcortex_coords.csv` · `voneconomo_schaefer400.csv` · `brainstem_coords.txt` · `brainstem_coords_labels.txt` |
 | 用途 | 脑干核团（10/10 覆盖）的 MNI 坐标与皮层 FC 定性分层；**数值权威的裁定见 §二 缺口 1（2026-09-13：#132 裁定 C）** |
-| 消费方 | ⚠️ **无受控代码读取**——见 [§二](#二已知缺口) |
+| 消费方 | ✅ **已有受控消费者（只读）**：`code/tools/validate_hansen_intake.py`（#133）读 `region_info_Schaefer400.csv` · `subcortex_coords.csv` · `brainstem_coords.txt` · `brainstem_coords_labels.txt` 做结构校验；**`brainstemfc_Schaefer400.npy`（fc 矩阵）· `mesulam_*.csv` · `voneconomo_*.csv` 仍零消费者**——裁定 C 明确不读矩阵。见 [§二](#二已知缺口) |
 | 设计依据 | [决策树 §D8](../decisions/03-topics-2026-08-01-to-08-11.md)；脑干核团坐标的落库形式是 `data/brain_regions.json` |
 
 ### 1.3 `data/connectivity/cab-np/` — 皮层下网络分配（CAB-NP v1.1）
@@ -92,9 +92,9 @@ abagen 基因表达数据当前无任何 runtime 或生成链消费者。
 > 按 [WORKFLOW.md §五](../../WORKFLOW.md)：「本阶段产生的新问题不得事后倒填为『已知债务』」。
 > 以下条目是 **P4c 数据契约建立过程中发现并如实登记的缺口**。
 
-### 缺口 1 — `hansen2024/` 数据文件零消费者 + 数值权威（**2026-09-13 已裁定为 C**）
+### 缺口 1 — `hansen2024/` 数据接入与数值权威（裁定 C；**结构校验已于 2026-09-13 接入**）
 
-实测（2026-09-12，`git grep` 全受控文件）：
+实测（2026-09-12，`git grep` 全受控文件）——**当时的零消费者状态**：
 
 | 文件 | 受控代码引用数 |
 |---|---|
@@ -103,6 +103,13 @@ abagen 基因表达数据当前无任何 runtime 或生成链消费者。
 | `region_info_Schaefer400.csv` | 0 |
 | `subcortex_coords.csv` | 0 |
 | `voneconomo_schaefer400.csv` | 0 |
+
+**当前状态（2026-09-13 · [#133](https://github.com/verystrongdog/game/issues/133) 实施裁定 C 之后）**：
+
+| 文件 | 消费方 |
+|---|---|
+| `region_info_Schaefer400.csv` · `subcortex_coords.csv` · `brainstem_coords.txt` · `brainstem_coords_labels.txt` | ✅ `code/tools/validate_hansen_intake.py`（**只读**结构校验：配对完整性 / 16 条项目条目逐条有判定 / 两组坐标配对一致 / 运行前后指纹不变）；接进 `docs-integrity` |
+| `brainstemfc_Schaefer400.npy`（fc 矩阵）· `mesulam_schaefer400.csv` · `voneconomo_schaefer400.csv` | 仍 **0**——裁定 C 明确**不读 fc 矩阵**（那是被否决的 A）。这三条的零消费者状态是**有意保留**的，不再是缺口 |
 
 而 [`gen_modulation_ceiling.py`](../../code/tools/gen_modulation_ceiling.py) 当时用硬编码数值
 冒充该数据集的结果，来源标注写 `Hansen2024_brainstem` / `Hansen2024:PAG↔M1`。
@@ -150,14 +157,16 @@ abagen 基因表达数据当前无任何 runtime 或生成链消费者。
 **C 的实施条件**（由 [#133](https://github.com/verystrongdog/game/issues/133) 消费；该 issue 已于 2026-09-13 按本裁定**重写为「只读结构校验器」**，其原标题假设的 A 范围被撤销，标签回到 `state:ready-for-agent`）：
 
 - **前置**：本目录 7 个受控文件；项目核团清单取 `BRAINSTEM_COMMUNITY_GAIN_ESTIMATE` 的 16 条——其中复合条目（`VTA-NAcc` / `杏仁核-PAG` / `反射环路·*`）**不参与映射，须显式登记为"无对应"**
-- **做什么**：只读 `region_info_Schaefer400.csv` + `subcortex_coords.csv` + `brainstem_coords*.txt`，断言 ① 项目每个脑干核团在数据集标签中有对应（列出对应表；缺项显式豁免并写理由——已知 `小脑皮层` 缺）② 坐标一致性（同一核团两处坐标在容差内）③ **不写任何受控产物**
+- **做什么**：只读 `region_info_Schaefer400.csv` + `subcortex_coords.csv` + `brainstem_coords*.txt`，断言 ① 项目每个脑干核团在数据集标签中有对应（列出对应表；缺项显式豁免并写理由）② 坐标一致性（容差 1e-3）③ **不写任何受控产物**
+  - 🔧 **两处实测更正（2026-09-13，实施 #133 时）**：**(a)** 裁定原文写「已知 `小脑皮层` 缺」——那是按 **Brainstem Navigator 的 58 个脑干核**得出的；实测 `region_info` 全表**有** `L-Cereb-Ctx`/`R-Cereb-Ctx`（`structure=subcortex`），故它**判为有对应**。**(b)** 裁定原文的「`subcortex_coords.csv` ↔ `brainstem_coords.txt` 坐标一致」**按原文无从比对**：两文件**没有共同核团**（前者 14 个皮质下结构，后者 69 个脑干标签）。改测**实际存在的两组配对**：`brainstem_coords.txt` ↔ `region_info`（**x、y 反号**后一致，实测 67/67）· `subcortex_coords.csv` ↔ `region_info`（**同号**一致，实测 14/14）——两个约定都是**实测出来的**，写在 `code/tools/hansen_intake_mapping.json` 的 `_measured_conventions` 里
 - **验证方式**：新增一个只读校验器（退出码 0/1）并接进 `docs-integrity`；**不改生成器、不重算、不动两个产出 JSON**
 - **差分对比方法**（留给未来的 A）：重算前后对 v2 JSON 做**逐链路差分**（43 行 × `modulation_ceiling`/`gain_coeff`/`excitability`），并按第 5 条清单同步 pilot 引用；比对跑在临时 worktree，**不得顺手改数据**（#134 的 `--md-only` 正是为此存在）
 
 **数值权威声明**：无论 C 是否落地，两个产出 JSON 的脑干增益都来自 `BRAINSTEM_COMMUNITY_GAIN_ESTIMATE` / `load_brainstem_strength_estimates()`（本仓人工估计，依 Hansen et al. 2024 的**社区划分**）——设计侧引用时**必须写明"本仓估计"**，不得写成数据集读数（这正是 2026-09-12 那次标注修正要防的事）。
 
-**仍未闭合**（裁定不等于实施）：C **尚未实施**——生成器依然不读数据集，悬空状态在实施前仍然成立；
-两个产出 JSON 仍是 2026-07-27 快照（v1 已于 [#134](https://github.com/verystrongdog/game/issues/134) 解耦出 `--md-only`，重算仍会改写 273 行），快照的命运与 C 无关。
+**✅ 已实施（2026-09-13 · [#133](https://github.com/verystrongdog/game/issues/133)）**：只读结构校验器 `code/tools/validate_hansen_intake.py` 落地并接进 `docs-integrity`；对应表与实测约定见 `code/tools/hansen_intake_mapping.json`。**「登记了却不读」这一条归零**。
+
+**仍未闭合（各有归属，不是欠账）**：① **数值接入（A）未做**——这是本裁定的选择，前置（两张映射表 + FC→增益变换）留在上面；② fc 矩阵与 `mesulam_*` / `voneconomo_*` 三个文件的零消费者是**有意保留**；③ 两个产出 JSON 仍是 2026-07-27 快照（v1 已于 [#134](https://github.com/verystrongdog/game/issues/134) 解耦出 `--md-only`，重算仍会改写 273 行）；④ 「`SN_subregion1` = 黑质致密部」是按编号顺序的**推定**，仓内无文档证实——校验器只断言覆盖到标签，不为解剖等价性背书，该项登记在 mapping JSON 的 `_unverified`。
 
 > **本裁定为什么不落 `design/decisions/`**：该目录 2026-09-12 **已冻结只读**（其 README 明写"不再追加新条目；新决策写进 `design/` 对应正典文档 + 一条短记录"）。#132 的「允许变化」写的是往那里加记录，与之冲突——按冻结声明办：裁定落在本文件（正是 issue 要求的回写处），并在 [链路调制上限参考表-v2.md](../../design/rules/skill-tree/modulation/链路调制上限参考表-v2.md) 留一行指针。
 

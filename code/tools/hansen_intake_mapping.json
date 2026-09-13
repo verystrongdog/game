@@ -1,0 +1,33 @@
+{
+  "_comment": "项目脑干核团条目 ↔ hansen2024 数据集标签的对应表（#133，依 #132 裁定 C：只做结构校验，不改数值）。消费者：code/tools/validate_hansen_intake.py（只读）。",
+  "_created": "2026-09-13",
+  "_authority": "data/connectivity/external-sources.md §二 缺口 1 的 2026-09-13 裁定（C）",
+  "_measured_conventions": {
+    "brainstem_coords.txt ↔ region_info_Schaefer400.csv": "x、y **反号**（z 相同）——2026-09-13 实测 67/67 个同名标签如此，不是猜测；断言容差 1e-3",
+    "subcortex_coords.csv ↔ region_info_Schaefer400.csv": "**同号**直接一致——实测 14/14（容差 1e-3）",
+    "subcortex_coords.csv ↔ brainstem_coords.txt": "两文件**无共同核团**（前者 14 个皮质下结构：丘脑/尾状核/壳核/苍白球/伏隔核/海马/杏仁核 × L/R；后者 69 个脑干标签）——不构成可比的配对"
+  },
+  "mapped": {
+    "PAG": {"labels": ["PAG_2020"], "basis": "同名"},
+    "VTA": {"labels": ["VTA_PBP_l", "VTA_PBP_r"], "basis": "参考文档 §五（VTA/臂旁色素核）"},
+    "上丘": {"labels": ["SC_l", "SC_r"], "basis": "同名（SC = superior colliculus）"},
+    "中缝背核": {"labels": ["DR_2020"], "basis": "同名（DR = dorsal raphe）"},
+    "中缝正中核": {"labels": ["MnR"], "basis": "同名（MnR = median raphe）；**PMnR 是中缝旁正中核，不是本条目**"},
+    "蓝斑": {"labels": ["LC_l", "LC_r"], "basis": "同名（LC = locus coeruleus）"},
+    "蓝斑_R": {"labels": ["LC_r"], "basis": "同名 + 右半球后缀"},
+    "黑质致密部": {"labels": ["SN_subregion1_l", "SN_subregion1_r"], "basis": "推定：按 subregion 编号顺序取 1 = 致密部（subregion2 = 网状部）——**该对应关系仓内无文档证实**，见 _unverified"},
+    "黑质致密部_R": {"labels": ["SN_subregion1_r"], "basis": "同上（推定）"},
+    "脑桥网状核": {"labels": ["PnO_PnC_l", "PnO_PnC_r"], "basis": "标签名语义（PnO/PnC = 脑桥网状核口侧/尾侧部）+ 参考文档 §五「脑桥网状核(双)」"},
+    "小脑皮层": {"labels": ["L-Cereb-Ctx", "R-Cereb-Ctx"], "basis": "🔧 更正（2026-09-13 实测）：数据集 **有** 小脑皮层行（region_info 的 structure=subcortex）。裁定原文写「小脑皮层无对应」是按 Brainstem Navigator 的 58 个脑干核得出的——那 58 个里确实没有它，但 region_info 全表有。此条按全表判为**有对应**"}
+  },
+  "exempt": {
+    "VTA-NAcc": "复合条目（VTA→伏隔核通路），不是数据集的单一分区",
+    "杏仁核-PAG": "复合条目（杏仁核↔PAG 通路），不是单一分区",
+    "反射环路·PAG→杏仁核": "复合条目（反射环路），数据集无此分区",
+    "反射环路·冻结反应": "复合条目（行为态），非解剖分区",
+    "反射环路·快速闪避": "复合条目（行为态），非解剖分区"
+  },
+  "_unverified": [
+    "「SN_subregion1 = 黑质致密部」是**按编号顺序的推定**，仓内无文档证实。校验器只断言「覆盖到标签」，不对解剖等价性背书；要坐实它需要读数据集/图谱（Brainstem Navigator）的说明——属将来的独立事项。"
+  ]
+}
