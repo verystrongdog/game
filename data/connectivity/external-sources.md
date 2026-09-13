@@ -164,7 +164,7 @@ abagen 基因表达数据当前无任何 runtime 或生成链消费者。
 
 **数值权威声明**：无论 C 是否落地，两个产出 JSON 的脑干增益都来自 `BRAINSTEM_COMMUNITY_GAIN_ESTIMATE` / `load_brainstem_strength_estimates()`（本仓人工估计，依 Hansen et al. 2024 的**社区划分**）——设计侧引用时**必须写明"本仓估计"**，不得写成数据集读数（这正是 2026-09-12 那次标注修正要防的事）。
 
-**✅ 已实施（2026-09-13 · [#133](https://github.com/verystrongdog/game/issues/133)）**：只读结构校验器 `code/tools/validate_hansen_intake.py` 落地并接进 `docs-integrity`；对应表与实测约定见 `code/tools/hansen_intake_mapping.json`。**「登记了却不读」这一条归零**。
+**✅ 已实施（2026-09-13 · [#133](https://github.com/verystrongdog/game/issues/133)）**：只读结构校验器 `code/tools/validate_hansen_intake.py` 落地并接进 `docs-integrity`；对应表与实测约定见 `code/tools/hansen_intake_mapping.json`。**「登记了却不读」这一条归零**——CI run `34763125869` 的 `docs-integrity` 日志原文里有 `validate_hansen_intake ✅`（干净 runner 上同样成立）。
 
 **仍未闭合（各有归属，不是欠账）**：① **数值接入（A）未做**——这是本裁定的选择，前置（两张映射表 + FC→增益变换）留在上面；② fc 矩阵与 `mesulam_*` / `voneconomo_*` 三个文件的零消费者是**有意保留**；③ 两个产出 JSON 仍是 2026-07-27 快照（v1 已于 [#134](https://github.com/verystrongdog/game/issues/134) 解耦出 `--md-only`，重算仍会改写 273 行）；④ 「`SN_subregion1` = 黑质致密部」是按编号顺序的**推定**，仓内无文档证实——校验器只断言覆盖到标签，不为解剖等价性背书，该项登记在 mapping JSON 的 `_unverified`。
 
