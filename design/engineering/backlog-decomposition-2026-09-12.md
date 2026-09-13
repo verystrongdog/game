@@ -185,6 +185,8 @@ python3 code/tools/validate_issues.py --from-github
 | **Blender 工具纳入 CI** | 已在 [build-and-test.md §5.1](build-and-test.md) 登记为未验证项，不在切片关键路径 |
 | **处置 Kevin Iglesias 资产包缺失** | 需 `gate:unity` 才能确认失败范围（PlayMode 失败项**未确认**） |
 | **`.refactor-backup/` 清理** · **sim `--outdir` 落仓库外** · **`run_all_checks.py` 去副作用**（它仍会写 `.checks-state.json`——§7.2 修的是**路径 bug 与注册表**，不是副作用；两件事不许混为一谈） | 工程卫生，不阻塞任何门禁。`build-and-test.md` §2.1 的副作用警告仍然有效、不要照抄成"已解决" |
+| **`design/slices/CP-01-ward-1f/slice.md` 的状态回填（4 处，2026-09-13 发现）** | 记录态与实际矛盾，但**不阻塞任何门禁**，故不建 issue：① `Unity 资产身份` 行写 `NONE` + 「`.meta` 0 个、场景 0 个」，实测 **65 个受控 `.meta` / 1 个场景**（#136 的三个提交均未回填该行）——**此项随 [#142](https://github.com/verystrongdog/game/issues/142) 关闭一并回填**（其「能力增量」字段的既定消费时刻）② `就座交互` 行「owner 目视清单 ⑧ 未确认」，而 `ae33281` 已记通过 ③ `角色动作呈现` 行 `Health: REGRESSED` 的判据「PlayMode 2 项常红」，而今日实测 33/33 全过 ④ §三「KI 包引用**导致** PlayMode 2 项失败」的因果，已被 `code/unity/README.md` §二·H 明确否定（那两条是纯逻辑缺陷，落 clip 不会转绿）⑤ §四「无 Unity Editor 阻塞 P4b」，而 §二·G 已确立本机可直驱、`gates.json` 的 `unity` 为 `available: true`。**根因**：该表只在"新增行"时被改（`4b73388` / `fa83aa6` / `2b57b03`），**没有"状态变了就回填"的机制** |
+| **`code/tools/validate_issues.py` 的规则 fixture 测试（14 条规则各一正一反）**（2026-09-13 发现） | 该文件 **1459 行 / 14 条规则，无任何自动化测试**：不在 `run_all_checks.py` 的注册表内（它是独立的 `issues` CI job），`code/tools/` 下无 `test_*.py`（历史测试脚本只存在于归档与安全备份目录，不参与运行）。**后果实测**：一条"文档承诺了、代码没实现"的偏差存活至今——§4.1.1 例外 1 直到 #142 交付新门禁才被撞出；而 **#134 的门禁行因解析器从散文里误抓到一个已存在的文档路径而"空过"**（已修，见 [issue-process.md](issue-process.md) §5.3）。**为何此刻不建 issue**：① 不阻塞任何门禁——`issues` 快照 job 本身是它的回归面 ② 属独立设计决策（fixture 放哪、怎么进 CI），此刻导入会缺 [§2.2](issue-process.md) 的「决策表」与「受影响面」两块，属 R4 型。**形态先例**：`data/runtime-fixtures/` 的跨语言 fixture（53 条判定逐条相同、零豁免）+ `build_runtime_data_fixtures.py --check` 的索引校验模式 |
 
 ## 七、本次分解暴露的问题（诚实清单）
 
@@ -194,7 +196,7 @@ python3 code/tools/validate_issues.py --from-github
 
 | # | 逼出它的 issue | 例外 |
 |---|---|---|
-| 1 | I5 #134 | issue 交付的是**新门禁本身**——允许 `门禁:` 引用尚不存在但由本 issue 交付的脚本，前提是交付物明列且验收标准含登记动作 |
+| 1 | I5 #134 | issue 交付的是**新门禁本身**——允许 `门禁:` 引用尚不存在但由本 issue 交付的脚本，前提是交付物明列且验收标准含登记动作 · **🔧 2026-09-13 作废**：该豁免**从未在 `validate_issues.py` 中实现**，且原理上不可能有意义（尚不存在的门禁无法验证交付它的那个 issue）。见 [issue-process.md](issue-process.md) §4.1.1 例外 1 的校正记录。**#134 那一行当时是"空过"的**：实测 `judge_gate_line()` 从它括号内的解释文字中抓到 `design/engineering/issue-process.md` 这个**已存在**的路径，于是判 PASS——真正该检查的新门禁名 `validate_ceiling_generator` **从未被检查过** |
 | 2 | I6 #132 · I8 #135 | `RFC`/`Experiment` 无机器门禁——写 `门禁: none`，但验收标准必须写明谁在何处记录决策 |
 | 3 | I8 #135 · I9 #136 | 下游尚未创建——`consumed-by: 待建:<描述>`，校验器出警告而非失败 |
 | 4 | I9 #136 | 正文必须**命名一个尚不存在的产物**（issue 的主题）——同行显式标注"缺失/待建/将新增"即降为警告 |
