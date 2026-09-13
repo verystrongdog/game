@@ -252,7 +252,7 @@ Unity 侧实测现状（2026-09-13，[code/unity/README.md](../../../code/unity/
 |---|---|---|
 | 1 | 在 [脑功能层级模型](../../rules/skill-tree/%E8%84%91%E5%8A%9F%E8%83%BD%E5%B1%82%E7%BA%A7%E6%A8%A1%E5%9E%8B.md) §16.1 就地标注"节点颜色列已由 D23 取代" | §8.1 的裁定推论要落到被改写的那份文档里；本文越界改写会造成两个改写者 |
 | 2 | ~~把烘焙壳导入 Unity 工程（Windows Editor 步骤 + `.meta` GUID 契约）~~ → ✅ **已完成**：[#143](https://github.com/verystrongdog/game/issues/143) 闭合（2026-09-13，提交 `ed44ccd`），动线与判据见 [code/unity/README.md §二·K](../../../code/unity/README.md) | 资产区单机所有权（[ARCHITECTURE.md §五](../../../ARCHITECTURE.md)）；入库前先查[危险点表](../../engineering/%E5%8D%B1%E9%99%A9%E7%82%B9%E8%A1%A8.md)导入期诸条 |
-| 3 | 节点（71 上下文）与连线（1049 三体边）的运行时生成器 | 已按 [#145](https://github.com/verystrongdog/game/issues/145) 的裁定**拆成两层**：<br>· **只读骨架**（脑壳 + 脑区 + 链路 + 相机，零玩家行为）→ ✅ 已分解为 [#146](https://github.com/verystrongdog/game/issues/146)，可立即开工<br>· **玩家可操作面**（构建层聚焦配置 / 技能编排 / 链路操作）→ 随切片准入进入，届时声明 `requires: PLAYABLE:AUTHORIZED_PLAYABLE` |
+| 3 | 节点（71 上下文）与连线（1049 三体边）的运行时生成器 | 已按 [#145](https://github.com/verystrongdog/game/issues/145) 的裁定**拆成两层**：<br>· **只读骨架**（脑壳 + 脑区 + 链路 + 观察交互，零玩家行为）→ ✅ **已闭合**：[#146](https://github.com/verystrongdog/game/issues/146)（骨架）· [#147](https://github.com/verystrongdog/game/issues/147)（整脑）· [#148](https://github.com/verystrongdog/game/issues/148)（转模型）；现状 80 区域对象 / 1049 链路 / 相机固定<br>· **玩家可操作面**（构建层聚焦配置 / 技能编排 / 链路操作）→ 随切片准入进入，届时声明 `requires: PLAYABLE:AUTHORIZED_PLAYABLE` |
 | 4 | 空间断言覆盖"3D 节点落在其脑区网格内" | §14.1 的硬要求目前无机械判据（[`validate_spatial.py`](../../../code/tools/validate_spatial.py) 未覆盖视图节点） |
 | 4b | ~~对齐 Windows 拷贝并重跑 `unity` 门禁~~ → ✅ **已完成（2026-09-13）**：`fetch` + `reset --mixed` 使 Editor 侧 HEAD = 仓库 HEAD，强制重编译后**新增错误 0 条**，基线（拷贝 + commit + 脏条目 87）已写进 [#143](https://github.com/verystrongdog/game/issues/143) 的闭合证据 | 危险点表 §七「`unity status` 的 `projectPath`」行：本机有两份拷贝，门禁证据必须写明基线——**每轮跑 `unity` 门禁都要重做这一步**，它不是一个一次性的待办 |
 | 5b | ~~**整脑覆盖**~~ → ✅ **已完成（[#147](https://github.com/verystrongdog/game/issues/147)，2026-09-13）**：对侧按命名约定派生真实网格，40 载体 → 80 区域对象（左 40 / 右 40）；**未动数据契约** | 派生规则只依赖既有 `obj_file` 值，故不需要新字段；若将来偏侧化机制要求按半球区分几何/染色，再另立数据契约 issue |
@@ -316,8 +316,8 @@ Unity 侧实测现状（2026-09-13，[code/unity/README.md](../../../code/unity/
 | ② | `Task` | [#144](https://github.com/verystrongdog/game/issues/144) | 正典同步——§16.1 节点颜色列口径回写（被 D23 取代） |
 | ③ | `RFC` | [#145](https://github.com/verystrongdog/game/issues/145) | 3D 脑区面板的切片归属与准入 ✅ **已闭合（2026-09-13）**：性质 = **玩法承载面**；归属 = 需切片承载、当前不指定（触发条件：owner 指定下一个 current playable） |
 | ④ | `Task` | [#146](https://github.com/verystrongdog/game/issues/146) | 只读骨架——BrainViewLab 演示场（脑壳 + 脑区 + 链路，**零玩家行为**）｜✅ **已闭合（2026-09-13）**：实测 40/8/1049/16 · PlayMode 38/38 |
-| ⑤ | `Task` | [#147](https://github.com/verystrongdog/game/issues/147) | 整脑覆盖——对侧按命名约定派生（不改数据契约）｜✅ **已交付**：40 载体 → 80 区域对象（左 40 / 右 40）· PlayMode **39/39** |
-| ⑥ | `Task` | [#148](https://github.com/verystrongdog/game/issues/148) | 观察方式改为**旋转模型本身**（相机固定）｜✅ **已交付**：`Spin` → `BrainView`（资产基线）两级结构 · PlayMode **43/43** |
+| ⑤ | `Task` | [#147](https://github.com/verystrongdog/game/issues/147) | 整脑覆盖——对侧按命名约定派生（不改数据契约）｜✅ **已闭合（2026-09-13）**：40 载体 → 80 区域对象（左 40 / 右 40）· PlayMode 39/39 · owner 目视通过 |
+| ⑥ | `Task` | [#148](https://github.com/verystrongdog/game/issues/148) | 观察方式改为**旋转模型本身**（相机固定）｜✅ **已闭合（2026-09-13）**：`Spin` → `BrainView`（资产基线）两级结构 · PlayMode 43/43 · owner 目视通过 |
 
 **暂不导入**：视图运行时生成器。它是 `Implementation`，前置（归属）由 #145 决定——按 issue-process §六 R7 的正解，先出裁定，再由切片或独立通道分解。**不得**在裁定前抢开。
 
