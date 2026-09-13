@@ -523,7 +523,18 @@ owner 反馈"用摄像机调整角度看大脑模型有点费劲"，故观察交
 | yaw 45 · pitch 20 | **(20, 45, 0)** | **(12, 0, 0)** | 2.80 | `efd18a53e4` · 403×311 · 10.1% |
 | yaw −60 · pitch 35 | **(35, 300, 0)** | **(12, 0, 0)** | 2.80 | `2f7a67521c` · 388×361 · 10.4% |
 
-⚠️ **"拖动 → 角度"这一段无法机器验证**：本工程输入是**旧版 Input**（`ProjectSettings.activeInputHandler = 0`），而 Unity 的 `simulate_pointer` **只支持新输入系统**（实测报 `Legacy input injection is not supported.`）。故可机器验证的是 `SetView()` 之后的链路（角度 → 变换 → 相机不动），拖动手感由 owner 目视。
+⚠️ **"拖动 → 角度"这一段无法机器验证**：本工程输入是**旧版 Input**（`ProjectSettings.activeInputHandler = 0`），而 Unity 的 `simulate_pointer` **只支持新输入系统**（实测报 `Legacy input injection is not supported.`）。故可机器验证的是 `SetView()` 之后的链路（角度 → 变换 → 相机不动），**拖动手感由 owner 目视**——见下方记录。
+
+### owner 目视验证（2026-09-13）
+
+> owner 原话：**"目视没有问题"**。
+
+| 验证项 | 载体 | 结论 |
+|---|---|---|
+| 观察交互：右键拖动转模型 / 滚轮缩放 / `R` 复位的手感与方向 | `Assets/Scenes/BrainViewLab.unity`（Play） | ✅ 无问题 |
+| 整脑观感（对侧半球补齐后的完整形态） | 同上 | ✅ 无问题 |
+
+这条同时补上了两处机器判不了的空白：**#148 的"拖动 → 角度"**（旧版 Input 不支持注入）与 **#147 的"看起来是不是一整颗脑"**（形状/比例属目视范畴）。
 
 ### 坐标口径（实测，非推导）
 
