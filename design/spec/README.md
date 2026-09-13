@@ -60,7 +60,7 @@ NPC / 病种起草的输入材料与实例化产物。`design/rules/skill-tree/�
 | `konza_plot_101x101_r16.raw` | 高度图原始副本（16 bit，101×101） |
 | `3dep_info.json` 等 | USGS 3DEP ImageServer / TNM API 响应存档（证明 1 m 源可用） |
 
-消费方：[design/presentation/地块数据-Konza草原.md](../presentation/%E5%9C%B0%E5%9D%97%E6%95%B0%E6%8D%AE-Konza%E8%8D%89%E5%8E%9F.md)、[design/presentation/玫瑰株丛密度.md](../presentation/%E7%8E%AB%E7%91%B0%E6%A0%AA%E4%B8%9B%E5%AF%86%E5%BA%A6.md)。入库状态为 `code/unity/Assets/Resources/YANTF/konza_plot_101x101_r16.bytes`。
+消费方：[design/presentation/地块数据-Konza草原.md](../presentation/%E5%9C%B0%E5%9D%97%E6%95%B0%E6%8D%AE-Konza%E8%8D%89%E5%8E%9F.md)、[design/presentation/玫瑰株丛密度.md](../presentation/%E7%8E%AB%E7%91%B0%E6%A0%AA%E4%B8%9B%E5%AF%86%E5%BA%A6.md)——⚠️ 2026-09-13 两篇均已标记**已废弃**（#126 花海 lab 按 owner 裁定移除）。Unity 侧入库副本 `code/unity/Assets/Resources/YANTF/konza_plot_101x101_r16.bytes` 已随之删除；本节原始数据仅作为 USGS 公开数据源的**复算依据**保留。
 
 ---
 *创建: 2026-09-12 | 更新: 2026-09-12*

@@ -29,7 +29,7 @@
 ./uc.sh console --level error --tail 20            # 读控制台
 ./uc.sh list_tests                                 # 列出测试
 ./uc.sh run_tests && ./uc.sh test_status           # 跑测试 + 取结果
-./uc.sh menu "YANTF/玫瑰实验/创建玫瑰花海场景"        # 执行菜单项（中文路径可）
+./uc.sh menu "YANTF/动作演示/创建 ActionLab 场景"      # 执行菜单项（中文路径可）
 ./uc.sh editor_play ; ./uc.sh editor_stop          # 进出 Play
 ./uc.sh list_open_scenes                           # 打开的场景 + isDirty
 ./uc.sh get_scene_hierarchy                        # 场景层级

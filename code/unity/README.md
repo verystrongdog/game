@@ -218,7 +218,7 @@ ActionLab 的 `Main Camera` **自带环绕跟随**：`ActionLabBuilder.CreateSce
 | 类别 | 内容 | 为什么是它 |
 |---|---|---|
 | `.meta` ×51（新） | 每个**已跟踪**资产一份 + 干净检出里会存在的目录各一份 | 锁 GUID。**未入库资产不给 `.meta`**——孤儿 `.meta` 会制造"引用了不存在资产"的假象 |
-| `ProjectSettings/` ×23 | 含 `ProjectVersion.txt`（补 `m_EditorVersionWithRevision: 6000.5.2f1 (eb73d3b415a1)`）、`EditorSettings.asset`（`m_SerializationMode: 2` = **Force Text**，资产是文本才可合并）、`ProjectSettings.asset`（`runInBackground: 1`，§二·F 的失焦冻结坑从此随工程走） | 工程身份：换机/重装后行为一致 |
+| `ProjectSettings/` ×23 | 含 `ProjectVersion.txt`（补 `m_EditorVersionWithRevision: 6000.5.2f1 (eb73d3b415a1)`）、`EditorSettings.asset`（`m_SerializationMode: 2` = **Force Text**，资产是文本才可合并）、`ProjectSettings.asset`（`runInBackground: 1`，编辑器失焦不冻结 Update 循环） | 工程身份：换机/重装后行为一致 |
 | `Packages/manifest.json` + `packages-lock.json` | manifest 新增 `com.unity.pipeline: 0.6.0-exp.1`（unity-cli 直驱用） | 锁是在**这份 manifest** 下由 Editor 生成的；只提交锁会让两者立刻不一致 |
 | `Assets/Scenes/ActionLab.unity` + `Assets/ActionLab/ActionLab.controller`（+4 个 `.meta`） | 基准场景 + 12 态控制器 | 5 条 combat clip 的 FBX 早已在 git，缺的只是 `.meta`；补齐后这两件一入库，干净检出即可打开并 Play。controller 正是缺口行抱怨的「Blend Tree 阈值 / transition 参数无处安放」那份手调成果 |
 
@@ -228,7 +228,7 @@ ActionLab 的 `Main Camera` **自带环绕跟随**：`ActionLabBuilder.CreateSce
 |---|---|
 | `Assets/Kevin Iglesias/`（**68 MB**） | 第三方资产包；来源已整条切 Mixamo（[动作库规格 §五](../../design/presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md)）；[#139](https://github.com/verystrongdog/game/issues/139) 的验收标准明写「干净检出下 `Assets/Kevin Iglesias/` 不存在」。`.gitignore` 已排除 |
 | `Assets/Temp/` | #137 站↔坐探针的过程物（`SitCheck.controller` + 两张截图），不是工程资产 |
-| `WalkerLab` / `KiWalkerLab` / `RoseFieldLab` / `DemoSandbox` 四个 lab 场景 | 由 builder 菜单重建，随各自 issue 落地；`DemoSandbox` 是早期白盒演示（owner 裁定不作基准场景） |
+| `WalkerLab` / `KiWalkerLab` / `DemoSandbox` 三个 lab 场景 | 由 builder 菜单重建，随各自 issue 落地；`DemoSandbox` 是早期白盒演示（owner 裁定不作基准场景） |
 | `Assets/Settings/Pipeline/EditorPipelineManager.asset` | `com.unity.pipeline` 首次使用的自动产物，可再生 |
 
 ### 实测记录（改前 / 改后）
@@ -385,7 +385,7 @@ U="/mnt/c/Users/9527/AppData/Local/Unity/bin/unity.exe"; P="C:\Users\9527\game\c
 | 项 | 实测 |
 |---|---|
 | 编译 | **0 error**（`FindObjectsByType` 弃用告警已改；`rb.velocity` 由 Editor 的 API Updater 自动改写为 `linearVelocity`——**仓库侧随后采用了改写后的写法**） |
-| PlayMode | **33 项：33 过 / 0 红**（既有 23 + 新增 10） |
+| PlayMode | **29 项：29 过 / 0 红**（原 33 = 既有 23 + #141 新增 10，减去 #126 花海移除的 4 项；花海移除后未重跑 Editor，此项为算术推断） |
 | 判定链路 | 无椅子 → `TrySitOnNearestChair()` 返回 false、不切态、HUD 提示；有椅子 → 对齐 → `Sit` → `SitIdle`，椅子 `isKinematic=true` |
 | 对齐残差 | **0.6 mm**（`LastAlignmentError`） |
 | 坐姿落点 | 髋 ↔ 坐面中心水平偏差 **48.6 mm**（沿椅子 forward 44.0）；臀部（髋下 r≤0.30 m 蒙皮最低点）↔ 坐面上表面 **+4.8 mm**；足底 **+1.6 mm** |
@@ -408,42 +408,6 @@ U="/mnt/c/Users/9527/AppData/Local/Unity/bin/unity.exe"; P="C:\Users\9527\game\c
 2. **直接 `cp` 进 `Assets/` 的新文件由 Unity 生成 `.meta`**（GUID 由 Windows 侧定），仓库侧必须采用同 GUID——本次两个新文件：`ChairSeat.cs` = `31496bc4…`、`ActionLabChairTests.cs` = `e5c01136…`。
 3. **Editor 的 API Updater 会改写你同步过去的源文件**（`rb.velocity` → `rb.linearVelocity`）→ 两次同步之间会出现"两侧不一致"，先 diff 再判定是谁改了谁。
 
-## 二·F、玫瑰花海场景（真实草原 DEM + 商业化密度株丛 + 小人穿行）
-
-> 独立实验场（Grilling #126）：把「100×100 m 草原地形 + 整片玫瑰覆盖 + 小人穿行」落成可跑场景。地形取自**真实 1 m lidar 高程数据**（非参数化描述），株距密度取自**商业化种植文献**——两者都把模糊描述换成了可机械核验的取值。维度：呈现 + 管线。
-
-| 项 | 内容 |
-|----|------|
-| 场景 | `RoseFieldLab.unity`（新）：真实地形地面 + 4563 株玫瑰株丛 + 几何体小人 |
-| 操作 | **WASD/方向键** 移动（相对相机）、**Shift** 奔跑、**Space** 跳跃（复用 `WalkerController`） |
-| 地块 | 100×100 m，101×101 采样 @ 1.0 m；**高差 3.1075 m**，最大 1 m 高差 0.1145 m（6.53°） |
-| 地形源 | USGS 3DEP **1 m lidar** DEM（Konza Prairie 高草草原，公有领域）——见 [地块数据-Konza草原.md](../../design/presentation/%E5%9C%B0%E5%9D%97%E6%95%B0%E6%8D%AE-Konza%E8%8D%89%E5%8E%9F.md) |
-| 株丛 | **4563 株**，六角错行 s = 1.602 m，蓬径 D = 1.85 m → 覆盖率 1.0；密度 **304 株/亩**（文献区间 180–330）——见 [玫瑰株丛密度.md](../../design/presentation/%E7%8E%AB%E7%91%B0%E6%A0%AA%E4%B8%9B%E5%AF%86%E5%BA%A6.md) |
-| 渲染 | 程序化低模株丛（106 tri），**每株一个 GameObject**（MeshFilter + MeshRenderer 共享网格与材质，开 GPU Instancing 自动合批 —— 运行时生成 4563 个）；株丛无碰撞体 |
-| 小人 | `WalkerController`（几何体白盒 + 程序化步态，**零外部资产**） |
-| HUD | IMGUI：地块/采样/高差/株数/密度/间距/蓬径/全覆盖判据/小人坐标 |
-| 测试 | `RoseFieldSmokeTests`（4 个 PlayMode）：高度图解码 / 地面网格法线朝上 / 六角格间距与密度判据 / 小人落在实际地形上 |
-
-**生成/运行**：菜单 **YANTF → 玫瑰实验 → 创建玫瑰花海场景**（`Assets/Editor/RoseFieldLabBuilder.cs`）→ 打开 `Assets/Scenes/RoseFieldLab.unity` → 按 **Play**。
-
-### 本机实测结论（2026-09-12，Unity 6000.5.2f1）
-
-用 Unity CLI（`com.unity.pipeline`）直驱编辑器跑通全链路：编译 0 error → 菜单生成场景 → PlayMode 测试 4/4 绿 → Play → 截图回读像素统计。
-
-| 实测项 | 结果 |
-|--------|------|
-| 构建日志 | 株数 **4563** / 密度 **304 株/亩** / 间距 1.602 m / 蓬径 1.85 m = 判据 1.850 m → **覆盖率 1.0** / 地块高差 3.1075 m |
-| 运行时层级 | `RoseField(玫瑰花海)/Roses` 下 **4563 个 MeshRenderer**；地面 MeshCollider 正常 |
-| 渲染画面 | 红色（玫瑰）像素占比 **8.04%**，草地 68.4% —— 地平线以上为天，以下整片红绿交错，远处透视压缩成实心红带 |
-| PlayMode 测试 | `RoseFieldSmokeTests` **4/4 通过**（全项目 16 项：14 过 / 2 败；败项为 ActionLab 既有问题，与本次无关） |
-
-### ⚠️ 两个踩过的坑（都已修复并写进代码注释）
-
-1. **失焦冻结玩家循环**：`Project Settings → Player → Run In Background` 默认关闭时，编辑器窗口失去焦点会**停止 Update 循环**（`Time.frameCount` 不再增长），场景照常渲染但所有动态内容静止 —— 表现为「玫瑰一株都不渲染」。`RoseFieldLabBuilder` 现在显式设 `PlayerSettings.runInBackground = true`。
-2. **即时模式绘制不进抓帧路径**：`Graphics.DrawMesh / DrawMeshInstanced / RenderMeshInstanced` 在 `capture_game_view --source camera` 抓到的帧里**不存在**（`source=screen` 的差异经比对确认是编辑器 UI 红色，非场景内容）。故株丛改用真实 GameObject 渲染 —— 顺带在编辑器 Scene View 里不按 Play 也能直接看层级。
-
-> ⚠️ 已知简化：① 株丛叶/瓣为单面几何 + `Cull Off`，背面在 Lambert 下偏暗；② 阴影投射关闭（4563 株）；③ 逐株仅有偏航与缩放差异（无异形变）；④ 地块为真实地形的一块切片，与游戏正典空间**无关**（本实验不入正典）；⑤ 株丛对象运行时生成（不烘焙进场景，避免 .unity 膨胀到数 MB）。
-
 ## 三、工程结构
 
 ```
@@ -454,12 +418,7 @@ code/unity/
 │   │   ├── WalkerLabBuilder.cs    # 菜单/headless 生成 Walker 移动实验场景
 │   │   ├── KiWalkerLabBuilder.cs  # 菜单/headless 生成 Ki 动画角色场景（含 controller）
 │   │   ├── ActionLabBuilder.cs    # 菜单/headless 生成 ActionLab（12 态 controller + X Bot 场景）
-│   │   ├── MixamoSetup.cs         # 一键导入 Mixamo 资产（复制/改名/Rig Humanoid）+ 生成 ActionLab
-│   │   └── RoseFieldLabBuilder.cs # 菜单/headless 生成玫瑰花海场景（Grilling #126）
-│   ├── Shaders/
-│   │   └── RoseInstanced.shader   # 实例化玫瑰材质（顶点色 + multi_compile_instancing + Cull Off）
-│   ├── Resources/YANTF/
-│   │   └── konza_plot_101x101_r16.bytes  # 地块高度图（LE uint16，行 0 = 北，20 402 B）
+│   │   └── MixamoSetup.cs         # 一键导入 Mixamo 资产（复制/改名/Rig Humanoid）+ 生成 ActionLab
 │   ├── Scripts/                      # 运行时（asmdef: YANTF.Demo）
 │   │   ├── DemoTypes.cs              # 动作/阶段枚举、结算请求/结果
 │   │   ├── DemoActor.cs              # 实体运行时状态（HP/SAN/防御/CD，事件）
@@ -474,14 +433,10 @@ code/unity/
 │   │   ├── ActionPlayer.cs           # 契约 A 驱动（CrossFade 优先级 + 计时回退 + locomotion 通道）
 │   │   ├── ActionLabDriver.cs        # ActionLab 场景驱动（CC 物理 + 输入 + 就座判定/对齐/根位移/推椅 + HUD）
 │   │   ├── ChairSeat.cs              # 椅子组件（实时就座锚点 + 占用锁 + 碰撞忽略，就座交互 §四·丁）
-│   │   ├── HeightField.cs            # 地块高度图解码/双线性采样/地面网格（玫瑰实验）
-│   │   ├── RoseMeshFactory.cs        # 程序化低模玫瑰株丛网格（106 tri，零外部资产）
-│   │   ├── RoseFieldLab.cs           # 玫瑰花海实例化驱动（六角错行 + DrawMeshInstanced + HUD）
 │   │   └── DemoBootstrapper.cs       # 运行时构建整个世界
 │   └── Tests/PlayMode/               # asmdef: YANTF.Demo.Tests（冒烟测试）
 │       ├── DemoSmokeTests.cs
 │       ├── WalkerLabSmokeTests.cs
-│       ├── RoseFieldSmokeTests.cs    # 高度图/地面网格/六角格密度判据/小人贴合地形
 │       ├── ActionLabChairTests.cs    # 就座交互：判定口径 / 实时锚点 / 占用锁 / 对齐 / 离座先起身
 │       └── ActionLabSmokeTests.cs    # 防漂移分档断言 + ActionPlayer 优先级冒烟
 ├── Packages/manifest.json            # uGUI + Test Framework + com.unity.pipeline（unity-cli）
@@ -505,5 +460,5 @@ code/unity/
 
 ---
 
-*创建: 2026-09-06 | 更新: 2026-09-13（🔧 第五次修正：§二·J 就座交互（先找到椅子才能坐，#141）——判定/对齐/占用锁/XZ 根位移/三张可推椅子 + PlayMode 33/33 + 六条实测读数 + 修掉"角色整体悬浮 80 mm"（`skinWidth`）+ 三条新坑；🔧 第四次修正：§二·I ActionLab 落地回切修复（`6bd8ddc`）红/绿实测 + 目视验证 + 运维补充；🔧 第三次修正：§二·H 资产身份与提交范围（#136）+ §二·G 的「场景不入库」加显式例外；🔧 第二次：§二·G 本轮工作 #137–#140 + KI 引用作废；§二·F 玫瑰花海场景 — Grilling #126）*
-*关联: [战斗界面布局](../../design/presentation/%E6%88%98%E6%96%97%E7%95%8C%E9%9D%A2%E5%B8%83%E5%B1%80.md), [核心机制](../../design/rules/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md), [回合战斗流程](../../design/rules/%E5%9B%9E%E5%90%88%E6%88%98%E6%96%97%E6%B5%81%E7%A8%8B.md), [关键突破](../../design/rules/skill-tree/%E5%85%B3%E9%94%AE%E7%AA%81%E7%A0%B4.md), [动作库规格](../../design/presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md), [动作系统分解](../../design/engineering/%E5%8A%A8%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%88%86%E8%A7%A3-2026-09-12.md), [地块数据-Konza草原](../../design/presentation/%E5%9C%B0%E5%9D%97%E6%95%B0%E6%8D%AE-Konza%E8%8D%89%E5%8E%9F.md), [玫瑰株丛密度](../../design/presentation/%E7%8E%AB%E7%91%B0%E6%A0%AA%E4%B8%9B%E5%AF%86%E5%BA%A6.md), [决策树](../../design/decisions/README.md)*
+*创建: 2026-09-06 | 更新: 2026-09-13（🔧 第五次修正：§二·J 就座交互（先找到椅子才能坐，#141）——判定/对齐/占用锁/XZ 根位移/三张可推椅子 + PlayMode 33/33 + 六条实测读数 + 修掉"角色整体悬浮 80 mm"（`skinWidth`）+ 三条新坑；🔧 第四次修正：§二·I ActionLab 落地回切修复（`6bd8ddc`）红/绿实测 + 目视验证 + 运维补充；🔧 第三次修正：§二·H 资产身份与提交范围（#136）+ §二·G 的「场景不入库」加显式例外；🔧 第二次：§二·G 本轮工作 #137–#140 + KI 引用作废；§二·F 玫瑰花海场景 — Grilling #126；🔧 第六次修正（2026-09-13，owner 裁定移除花海 lab）：删 §二·F 全节 + 6 个源文件 + `Assets/Shaders/` + `Assets/Resources/YANTF/` 高度图 + 4 项 PlayMode 测试，§二·H 排除表与 §三 目录树同步，PlayMode 33 → 29（算术推断，未重跑 Editor）；地块数据/玫瑰株丛密度两篇口径文档标记 ⚠️ 已废弃，保留仅供 #126 冻结历史引用）*
+*关联: [战斗界面布局](../../design/presentation/%E6%88%98%E6%96%97%E7%95%8C%E9%9D%A2%E5%B8%83%E5%B1%80.md), [核心机制](../../design/rules/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md), [回合战斗流程](../../design/rules/%E5%9B%9E%E5%90%88%E6%88%98%E6%96%97%E6%B5%81%E7%A8%8B.md), [关键突破](../../design/rules/skill-tree/%E5%85%B3%E9%94%AE%E7%AA%81%E7%A0%B4.md), [动作库规格](../../design/presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md), [动作系统分解](../../design/engineering/%E5%8A%A8%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%88%86%E8%A7%A3-2026-09-12.md), [决策树](../../design/decisions/README.md)*

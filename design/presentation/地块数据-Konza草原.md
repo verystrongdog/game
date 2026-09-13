@@ -1,4 +1,6 @@
-# 玫瑰花海地块数据 — Konza 高草草原（USGS 3DEP 1 m lidar）
+# 玫瑰花海地块数据 — Konza 高草草原（USGS 3DEP 1 m lidar）⚠️ 已废弃
+
+> ⚠️ 已废弃（2026-09-13）：本文件描述的 #126 花海 lab 已按 owner 裁定从 `code/unity/` 整体移除（6 个源文件 + `Assets/Shaders/` + `Assets/Resources/YANTF/` 高度图 + 4 项 PlayMode 测试）。**本文件不再对应任何现存实现**——文中「位置」列引用的 `RoseFieldLab.*` 符号已不存在。保留原因：决策树 #126 与 `design/archive/grilling/grilling-126-rosefield/` 是**冻结历史**，以稳定路径引用本文件，删除会打断历史引用。USGS 数据获取管线本身可复用，记录见[六维状态 §管线](../framework/six-dimensions.md)。
 
 > 玫瑰花海实验场景（Grilling #126）的地形数据来源、地块选取判据与复现命令。数据为美国公有领域（USGS），可入版本控制。
 
