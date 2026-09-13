@@ -221,6 +221,7 @@ MD 参考表的默认落点是被 gitignore 的 `artifacts/链路调制上限参
 | 3 | `validate_ceiling_generator.py` | 0 | 通过侧：数据契约不变 · MD 已写出 · 历史快照未被动 |
 | 4 | 同校验器 + **注入缺陷 1**（让 `--md-only` 不生效） | **1** | `❌ 数据契约被改写：link_modulation_ceiling.json`（带 before/after SHA256） |
 | 5 | 同校验器 + **注入缺陷 2**（把 MD 写回那份历史快照） | **1** | `❌ 历史快照被动过：design/rules/skill-tree/deprecated/链路调制上限参考表.md` |
+| 6 | **真实 CI**（`docs-integrity` job 的循环，13 个校验器） | 0 | run `34762173574` 日志原文里有 `validate_ceiling_generator ✅`——干净 runner（numpy 由 `code/tools/requirements.txt` 装）上同样成立 |
 
 第 4/5 行是**在临时 worktree 里注入缺陷后跑的**（跑完即删）——「两侧都要演示」不许只演通过侧。
 校验器把 MD 写到 `<临时目录>`，**自己绝不写工作树**（§四「工作树」判据）。
@@ -245,9 +246,14 @@ MD 参考表的默认落点是被 gitignore 的 `artifacts/链路调制上限参
 ## 四、判据
 
 > **测试计数的唯一权威处就是本节**（2026-09-13 实跑：`416 passed / 0 failed`，命令与工具口径见 §2.2；
-> 同 commit 的 CI `engine` job 亦绿，run `34761515884`——干净 runner 上可复现）。
+> **同 commit 的 CI `engine` job 里也是 416/0**——run `34761515884` 的日志原文，不是"job 绿"的推论）。
 > 其余文档**引用本节、不复述数字**——复述就是下一次漂移的入口（[#130](https://github.com/verystrongdog/game/issues/130) 的成因：
 > `ARCHITECTURE.md` / `README.md` / `slice.md` 三处停在 `353`，与本节判据不一致）。
+>
+> **怎么在 CI 上核实一条判据**（2026-09-13 踩过）：`gh run view <run> --log` 在本环境**取不到正文**（返回空）。
+> 取 job 日志用两步 API：`gh api /repos/<owner>/<repo>/actions/runs/<run_id>/jobs`（拿 job id）→
+> `gh api --allow-escape-sequences /repos/<owner>/<repo>/actions/jobs/<job_id>/logs | sed -e 's/\x1b\[[0-9;]*m//g'`
+> （少了 `--allow-escape-sequences` 会直接 exit 1 且不输出）。**"CI 表面绿色"不能代替日志原文**——见 [WORKFLOW.md §六](../../WORKFLOW.md)。
 >
 > **历史时点读数不改写**：`REFACTOR-PLAN.md` 各 Phase 结果表（4 处 `353 passed`）、`design/README.md` 路线图日志里
 > `2026-09-03 … 353/353 绿`、`design/archive/`、以及 `evidence/` 里绑定 base/head 的读数——
