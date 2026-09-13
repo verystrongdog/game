@@ -362,6 +362,51 @@ U="/mnt/c/Users/9527/AppData/Local/Unity/bin/unity.exe"; P="C:\Users\9527\game\c
 | `test_status` / `run_tests --mode playmode --async_tests` | PlayMode 测试**只能异步跑**（同步会因进 Play 触发域重载而断连），再轮询 `test_status` |
 | 新增 `.cs` | Unity 导入时**自动生成 `.meta`**（GUID 由 Windows 侧决定）→ 仓库侧 `.meta` 必须采用该 GUID（[动作库规格.md §八](../../design/presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md) 资产区单机所有权） |
 
+## 二·J、ActionLab 就座交互——先找到椅子才能坐（[#141](https://github.com/verystrongdog/game/issues/141)，2026-09-13）
+
+> **要解决什么**：按 `6` 就播 `Sit`——**不看有没有椅子，也不看人在哪**。凳子位置是烘死的常量（`StoolCenterZ = −0.104`，按"角色 transform 在原点"实测摆位），所以"坐到椅子上"只在出生点成立；走开一步再按 6，人坐在空气里。本轮把"坐"变成**有前提的交互**：走到椅子前（距离 + 前侧 + 空闲三条件命中）才允许坐，命中后先对齐到**由椅子 transform 实时求得**的锚点再播坐下；起身同样要走完整动作。
+
+**口径（正典）**：[动作库规格.md §四·丁](../../design/presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md) 新增就座交互契约（判定/对齐/占用锁/`ExitVia`）+ §四·乙 再修正（坐立三段重新启用 XZ 根位移）+ §七 参数行；`data/action_set.json` 同步两个新字段（`exit_via` / `root_motion_xz`，带 `_sources`）。
+
+### 交付物与接入位置
+
+| 件 | 干了什么 |
+|---|---|
+| `Assets/Scripts/ChairSeat.cs`（新） | 椅子组件：**实时**就座锚点（`坐面中心 + forward × 0.423`）· 判定纯函数 `IsUsable`（距离 + 前侧 + 空闲）· `FindBest`/`FindNearest` · 占用锁（`isKinematic`）· 与角色 CC 的碰撞忽略开关 |
+| `Assets/Scripts/ActionCatalog.cs` | 词条新增 `ExitVia`（持续态退出先播的一次性动作）与 `RootMotionXZ`（XZ 根位移）两字段；`Sit`/`SitIdle`/`Stand` 声明 |
+| `Assets/Scripts/ActionPlayer.cs` | 持续态退出走 `ExitVia`（坐姿下按 WASD **先起身**）· 暴露 `ApplyRootMotionXZ` · 一次性动作回退档位改按当前速度取 |
+| `Assets/Scripts/ActionLabDriver.cs` | 按键 6 从"直接 `Play(Sit)`"改为**判定 → 对齐 → 坐下**；新增 `OnAnimatorMove`（XZ 根位移经 CC）与 `OnControllerColliderHit`（推椅）；HUD 显示椅子状态与拒绝理由；`TrySitOnNearestChair()` / `OccupiedChair` / `LastSitHint` / `LastAlignmentError` 为测试与读数面 |
+| `Assets/Editor/ActionLabBuilder.cs` | 一张无碰撞凳子 → **三张实心可推椅子**（坐板 + 四腿 + 靠背 + Rigidbody + `ChairSeat`），摆位为演示常量 |
+| `Assets/Tests/PlayMode/ActionLabChairTests.cs`（新） | 10 项断言 |
+| `Assets/Scenes/ActionLab.unity` | 基准场景重建（椅子随 `.meta` GUID 入库；重建会覆盖，差异须显式提交——§二·H） |
+
+### Unity 门禁实测（Editor 6000.5.2f1，WSL interop 直驱）
+
+| 项 | 实测 |
+|---|---|
+| 编译 | **0 error**（`FindObjectsByType` 弃用告警已改；`rb.velocity` 由 Editor 的 API Updater 自动改写为 `linearVelocity`——**仓库侧随后采用了改写后的写法**） |
+| PlayMode | **33 项：33 过 / 0 红**（既有 23 + 新增 10） |
+| 判定链路 | 无椅子 → `TrySitOnNearestChair()` 返回 false、不切态、HUD 提示；有椅子 → 对齐 → `Sit` → `SitIdle`，椅子 `isKinematic=true` |
+| 对齐残差 | **0.6 mm**（`LastAlignmentError`） |
+| 坐姿落点 | 髋 ↔ 坐面中心水平偏差 **48.6 mm**（沿椅子 forward 44.0）；臀部（髋下 r≤0.30 m 蒙皮最低点）↔ 坐面上表面 **+4.8 mm**；足底 **+1.6 mm** |
+| 根位移 | Sit 段 transform 水平行程 **0.3206 m**（沿椅子 forward **−0.3188**）——即 clip 自带的"退到椅子上" |
+| 推椅 | 椅子位移 **36.3 mm** → 锚点位移 **36.3 mm**（锚点确实实时） |
+| 抓帧 | `capture_game_view` 640×360；`.scratch/sit-seated.png`（不入库，过程物） |
+
+### 🔧 本轮踩到并修掉的一处既有缺陷：角色整体悬浮 80 mm
+
+**症状（owner 目视）**：「椅子本身好像不够高」。**真因不是椅子矮，是人高**——`CharacterController.skinWidth` 默认 `0.08`，而 CC 静止时 `transform.y ≈ skinWidth` → 整个角色被抬到地面上方 80 mm（实测站姿蒙皮足底 **+45.8 mm**、坐姿髋 **0.6790**，按 transform 在原点应为 0.5990）。坐面高 0.4449 是"transform 在原点"时测的，于是臀部比坐面高 80 mm。
+
+**为何此前没暴露**：[动作库规格.md §四·乙](../../design/presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md) 的足 IK 假定 `groundY = 0` 且**只上抬不下压**——transform 抬高后足底本就"在地面之上"，IK 判"需要量 ≤ 0"而不介入（既有读数"逐位一致"正是这条规则的结果，不是没问题）。
+
+**修法**：`ActionLabDriver.SizeControllerToModel()` 里把 `skinWidth` 收到 **0.005**（**必须在 Awake / CC 落定前设**；中途改无效——实测改到 0.02 后 3 s 仍停在 0.08，CC 只排开穿插、不会自己往下坐）。修后：站姿足底 **+4.9 mm**、站姿髋高 **1.025**、坐姿臀↔坐面 **+4.8 mm**、坐姿足底 **+1.6 mm**。
+
+### 三条新踩的坑（已写进 [unity-cli README §四](../../code/tools/unity-cli/README.md)）
+
+1. **Unity 6 在窗口处于后台时节流主线程** → 所有 `unity command` 报「Main thread operation timed out after 30000ms」，而 `unity status` 仍 `ready`（健康检查走后台线程）。**`editor_focus` 自己也走主线程**（所以节流后救不回来）→ 用新增的 `code/tools/unity-cli/focus.sh` 从 Windows 侧把窗口调到前台。
+2. **直接 `cp` 进 `Assets/` 的新文件由 Unity 生成 `.meta`**（GUID 由 Windows 侧定），仓库侧必须采用同 GUID——本次两个新文件：`ChairSeat.cs` = `31496bc4…`、`ActionLabChairTests.cs` = `e5c01136…`。
+3. **Editor 的 API Updater 会改写你同步过去的源文件**（`rb.velocity` → `rb.linearVelocity`）→ 两次同步之间会出现"两侧不一致"，先 diff 再判定是谁改了谁。
+
 ## 二·F、玫瑰花海场景（真实草原 DEM + 商业化密度株丛 + 小人穿行）
 
 > 独立实验场（Grilling #126）：把「100×100 m 草原地形 + 整片玫瑰覆盖 + 小人穿行」落成可跑场景。地形取自**真实 1 m lidar 高程数据**（非参数化描述），株距密度取自**商业化种植文献**——两者都把模糊描述换成了可机械核验的取值。维度：呈现 + 管线。
@@ -426,7 +471,8 @@ code/unity/
 │   │   ├── ActionIds.cs              # 12 词条常量（词表三面对一锚）
 │   │   ├── ActionCatalog.cs          # 只读元数据（id → category/loop/priority/fade/clipFbxPath）
 │   │   ├── ActionPlayer.cs           # 契约 A 驱动（CrossFade 优先级 + 计时回退 + locomotion 通道）
-│   │   ├── ActionLabDriver.cs        # ActionLab 场景驱动（CC 物理 + 输入 + HUD 动作名）
+│   │   ├── ActionLabDriver.cs        # ActionLab 场景驱动（CC 物理 + 输入 + 就座判定/对齐/根位移/推椅 + HUD）
+│   │   ├── ChairSeat.cs              # 椅子组件（实时就座锚点 + 占用锁 + 碰撞忽略，就座交互 §四·丁）
 │   │   ├── HeightField.cs            # 地块高度图解码/双线性采样/地面网格（玫瑰实验）
 │   │   ├── RoseMeshFactory.cs        # 程序化低模玫瑰株丛网格（106 tri，零外部资产）
 │   │   ├── RoseFieldLab.cs           # 玫瑰花海实例化驱动（六角错行 + DrawMeshInstanced + HUD）
@@ -435,6 +481,7 @@ code/unity/
 │       ├── DemoSmokeTests.cs
 │       ├── WalkerLabSmokeTests.cs
 │       ├── RoseFieldSmokeTests.cs    # 高度图/地面网格/六角格密度判据/小人贴合地形
+│       ├── ActionLabChairTests.cs    # 就座交互：判定口径 / 实时锚点 / 占用锁 / 对齐 / 离座先起身
 │       └── ActionLabSmokeTests.cs    # 防漂移分档断言 + ActionPlayer 优先级冒烟
 ├── Packages/manifest.json            # uGUI + Test Framework + com.unity.pipeline（unity-cli）
 ├── Packages/packages-lock.json      # 包版本可复现（#136 起入库）
@@ -457,5 +504,5 @@ code/unity/
 
 ---
 
-*创建: 2026-09-06 | 更新: 2026-09-12（🔧 第四次修正：§二·I ActionLab 落地回切修复（`6bd8ddc`）红/绿实测 + 目视验证 + 运维补充；🔧 第三次修正：§二·H 资产身份与提交范围（#136）+ §二·G 的「场景不入库」加显式例外；🔧 第二次：§二·G 本轮工作 #137–#140 + KI 引用作废；§二·F 玫瑰花海场景 — Grilling #126）*
+*创建: 2026-09-06 | 更新: 2026-09-13（🔧 第五次修正：§二·J 就座交互（先找到椅子才能坐，#141）——判定/对齐/占用锁/XZ 根位移/三张可推椅子 + PlayMode 33/33 + 六条实测读数 + 修掉"角色整体悬浮 80 mm"（`skinWidth`）+ 三条新坑；🔧 第四次修正：§二·I ActionLab 落地回切修复（`6bd8ddc`）红/绿实测 + 目视验证 + 运维补充；🔧 第三次修正：§二·H 资产身份与提交范围（#136）+ §二·G 的「场景不入库」加显式例外；🔧 第二次：§二·G 本轮工作 #137–#140 + KI 引用作废；§二·F 玫瑰花海场景 — Grilling #126）*
 *关联: [战斗界面布局](../../design/presentation/%E6%88%98%E6%96%97%E7%95%8C%E9%9D%A2%E5%B8%83%E5%B1%80.md), [核心机制](../../design/rules/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md), [回合战斗流程](../../design/rules/%E5%9B%9E%E5%90%88%E6%88%98%E6%96%97%E6%B5%81%E7%A8%8B.md), [关键突破](../../design/rules/skill-tree/%E5%85%B3%E9%94%AE%E7%AA%81%E7%A0%B4.md), [动作库规格](../../design/presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md), [动作系统分解](../../design/engineering/%E5%8A%A8%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%88%86%E8%A7%A3-2026-09-12.md), [地块数据-Konza草原](../../design/presentation/%E5%9C%B0%E5%9D%97%E6%95%B0%E6%8D%AE-Konza%E8%8D%89%E5%8E%9F.md), [玫瑰株丛密度](../../design/presentation/%E7%8E%AB%E7%91%B0%E6%A0%AA%E4%B8%9B%E5%AF%86%E5%BA%A6.md), [决策树](../../design/decisions/README.md)*

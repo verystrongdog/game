@@ -4,8 +4,8 @@
 set -uo pipefail
 U="${UNITY_CLI:-/mnt/c/Users/9527/AppData/Local/Unity/bin/unity.exe}"
 PS="${POWERSHELL:-/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe}"
-PROJ_WIN="${UNITY_PROJECT_WIN:-C:\\Users\\9527\\game\\unity}"
-PROJ_WSL="${UNITY_PROJECT_WSL:-/mnt/c/Users/9527/game/unity}"
+PROJ_WIN="${UNITY_PROJECT_WIN:-C:\\Users\\9527\\game\\code\\unity}"
+PROJ_WSL="${UNITY_PROJECT_WSL:-/mnt/c/Users/9527/game/code/unity}"
 OUT="${1:?用法: shot.sh <输出png> [camera|screen]}"
 SRC="${2:-camera}"
 "$PS" -NoProfile -Command "\$p = Get-Process Unity -ErrorAction SilentlyContinue | Where-Object { \$_.MainWindowTitle -ne '' } | Select-Object -First 1; if (\$p) { (New-Object -ComObject WScript.Shell).AppActivate(\$p.Id) | Out-Null }" >/dev/null 2>&1
