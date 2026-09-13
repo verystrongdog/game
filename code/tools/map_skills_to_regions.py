@@ -9,12 +9,12 @@
 
 用法:
   python code/tools/map_skills_to_regions.py
-"""
-
 ⚠️ 世代定位（2026-09-13）：本脚本产出 data/skill_coords.json（74 技能 · PAD 推导坐标 ·
 "认知/情绪/行为/终极"四分支）——该文件在数据契约里登记为 LEGACY / deprecated。本脚本
 保留为那一代的生成器记录，**不是当前技能坐标口径**（当前见 design/rules/skill-tree/ 的
 链路上下文：14 网络 × 8 角色）。资产身份见 design/presentation/visualization-3d/脑模型资产登记.md。
+"""
+
 
 import json
 import re

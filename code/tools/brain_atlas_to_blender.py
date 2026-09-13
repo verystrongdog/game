@@ -17,13 +17,13 @@
   python code/tools/brain_atlas_to_blender.py          # 只查文献坐标 (无需下载)
   python code/tools/brain_atlas_to_blender.py --download  # 下载 OBJ 并计算质心
   python code/tools/brain_atlas_to_blender.py --blender    # 输出可直接在 Blender 中运行的 bpy 脚本
-"""
-
 ⚠️ 世代定位（2026-09-13）：本脚本是 **57 脑区那一代**的历史生成器。当前 brain_regions.json
 是 69 个 functional_id / 50 解剖实体，登记生成器为 rebuild_brain_regions.py（见 data/manifest.json）。
 `--blender` 模式会写出 `code/tools/place_skill_nodes_blender.py`——**该文件从未生成，其职责已由
 build_brain_skill_tree_windows.py（当前世代）+ build_brain_skill_tree.py（v1 世代）取代**。
 勿重跑覆盖受控契约；资产身份与重建见 design/presentation/visualization-3d/脑模型资产登记.md。
+"""
+
 
 import json
 import os

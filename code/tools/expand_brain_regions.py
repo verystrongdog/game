@@ -13,11 +13,11 @@
   - obj_centroid: 从 brain-for-blender OBJ 计算的质心
   - literature_mni: 文献报告的 MNI 坐标
   - literature_approx: 文献近似值（无精确坐标的核团）
-"""
-
 ⚠️ 世代定位（2026-09-13）：本脚本是**历史一次性工具**（"从 59 区扩展"那一代）。当前
 brain_regions.json 的登记生成器是 rebuild_brain_regions.py（见 data/manifest.json）。
 obj_file 字面量已随仓库重构改为新路径，**但计数与分区口径仍是旧的**——勿重跑覆盖契约。
+"""
+
 
 import json
 import os
