@@ -7,6 +7,8 @@
 //   ④ 链路顶点落在脑壳的世界包围盒内（网格与链路共用同一变换的机器判据）
 //   ⑤ 只读骨架的边界：场景里不得出现玩家输入组件（本条零玩家可操作行为）
 //   ⑥ 整脑覆盖（#147）：契约的 obj_file 全为左半球，烘焙侧按命名约定补对侧 → 期望 = 载体 ×2
+//   ⑦ 观察方式（#148）：观察角是**绕世界轴**的旋转（水平拖动绕世界 Y、垂直绕世界 X），
+//      且 pitch=0 时模型的"上"仍对齐世界 Y——资产基线由 BrainViewRig 承担，两者不复合
 //
 // 口径来源：design/presentation/visualization-3d/Unity接入设计.md §3.3/§3.4/§8.5
 using System.Collections.Generic;
@@ -69,6 +71,69 @@ namespace YANTF.Demo.Tests
             int expectNeutral = ((List<object>)tm["brainstem"]).Count + ((List<object>)tm["cstc"]).Count;
             Assert.AreEqual(expectNeutral, neutral,
                 "无上下文网络归属的边（脑干广播 + CSTC）应恰好落在两个中性槽");
+        }
+
+        [Test]
+        public void ObservationRotation_AtZeroPitch_KeepsUpAlignedWithWorldUp()
+        {
+            var q = BrainViewSpin.ObservationRotation(0f, 0f);
+            Assert.Less(Vector3.Angle(q * Vector3.up, Vector3.up), 0.01f,
+                "pitch=0 时模型的上方向应对齐世界 Y（资产基线由 BrainViewRig 承担，不得被自转复合）");
+        }
+
+        [Test]
+        public void ObservationRotation_YawSpinsAboutWorldY_PitchAboutWorldX()
+        {
+            var yaw90 = BrainViewSpin.ObservationRotation(90f, 0f);
+            Assert.Less(Vector3.Angle(yaw90 * Vector3.forward, Vector3.right), 0.01f,
+                "yaw=90° 应把 forward 转到世界 X —— 即绕世界 Y 自转");
+
+            var pitch90 = BrainViewSpin.ObservationRotation(0f, 90f);
+            Assert.Less(Vector3.Angle(pitch90 * Vector3.forward, Vector3.down), 0.01f,
+                "pitch=90° 应把 forward 转到世界 -Y —— 即绕世界 X 俯仰");
+        }
+
+        [Test]
+        public void ClampPitch_StaysWithinLimits()
+        {
+            Assert.AreEqual(-85f, BrainViewSpin.ClampPitch(-200f, -85f, 85f), 0.001f, "下界夹取");
+            Assert.AreEqual(85f, BrainViewSpin.ClampPitch(200f, -85f, 85f), 0.001f, "上界夹取");
+            Assert.AreEqual(30f, BrainViewSpin.ClampPitch(30f, -85f, 85f), 0.001f, "区间内不动");
+        }
+
+        [Test]
+        public void Spin_RotatesModel_AndLeavesCameraRotationUntouched()
+        {
+            var spinGo = new GameObject("SpinTest");
+            var camGo = new GameObject("CamTest");
+            try
+            {
+                var spin = spinGo.AddComponent<BrainViewSpin>();
+                var cam = camGo.AddComponent<Camera>();
+                camGo.transform.rotation = Quaternion.Euler(12f, 0f, 0f);   // builder 的固定机位
+                var camRotBefore = camGo.transform.rotation;
+
+                spin.Bind(cam, 3f);
+                spin.SetView(45f, 20f, 2.5f);
+
+                Assert.Less(Quaternion.Angle(spinGo.transform.localRotation, Quaternion.Euler(20f, 45f, 0f)), 0.01f,
+                    "拖动应改变**模型**的观察角（绕世界轴）");
+                Assert.Less(Quaternion.Angle(camGo.transform.rotation, camRotBefore), 0.01f,
+                    "**相机朝向不得随观察角变化**（#148 的核心判据：转模型，不转相机）");
+                Assert.AreEqual(2.5f, Vector3.Distance(camGo.transform.position, spinGo.transform.position), 0.01f,
+                    "距离应等于设定值（缩放改的是相机距离）");
+
+                spin.ResetView();
+                Assert.Less(Quaternion.Angle(spinGo.transform.localRotation, Quaternion.identity), 0.01f,
+                    "复位后观察角归零");
+                Assert.Less(Quaternion.Angle(camGo.transform.rotation, camRotBefore), 0.01f,
+                    "复位也不得改变相机朝向");
+            }
+            finally
+            {
+                Object.DestroyImmediate(spinGo);
+                Object.DestroyImmediate(camGo);
+            }
         }
 
         [Test]

@@ -16,7 +16,6 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using YANTF.BrainView;
-using YANTF.WalkerLab;
 
 namespace YANTF.EditorTools
 {
@@ -50,8 +49,13 @@ namespace YANTF.EditorTools
 
             var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
 
-            // ---- 根：取向 + 等比缩放（Unity接入设计 §8.5）----
+            // ---- 结构（#148）：Spin（观察角）→ BrainView（资产基线 −90°X + 等比 1/90）→ Shell/Links
+            // 为什么分两层：自转与"资产躺着→立起"是两件事，复合在一个 transform 里既难读也难验。
+            var spinGo = new GameObject("Spin");
+            var spin = spinGo.AddComponent<BrainViewSpin>();
+
             var root = new GameObject("BrainView");
+            root.transform.SetParent(spinGo.transform, false);
             var rig = root.AddComponent<BrainViewRig>();
 
             // ---- 脑壳（只消费 #143 入库的资产，不改它）----
@@ -75,13 +79,11 @@ namespace YANTF.EditorTools
             cam.backgroundColor = new Color(0.03f, 0.04f, 0.06f);
             cam.nearClipPlane = 0.05f;
             camGo.AddComponent<AudioListener>();          // 恰好一个，避免 2 listeners 警告
-            var orbit = camGo.AddComponent<CameraOrbit>();
-            orbit.target = root.transform;                 // ⚠️ 必须显式设：留空时 Start() 兜底成自身 → 绕自己打转
-            orbit.distance = CameraDistance;
-            orbit.pitch = 12f;
-            orbit.yaw = 0f;
-            orbit.minDistance = 1.2f;
-            orbit.maxDistance = 12f;
+            // 观察方式（#148）：相机**固定**机位，拖动旋转的是模型本身；缩放改相机距离。
+            // 相机朝向：俯视 12°、正对模型中心（与 #146 的初始观感一致）。
+            camGo.transform.rotation = Quaternion.Euler(12f, 0f, 0f);
+            spin.Bind(cam, CameraDistance);
+            spin.ResetView();
 
             // ---- 光（双光源：主光给形，补光防黑面）----
             var keyGo = new GameObject("Key Light");
