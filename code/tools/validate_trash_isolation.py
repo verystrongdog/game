@@ -3,9 +3,16 @@
 垃圾桶隔离校验 — 验证"活跃文档不引用垃圾桶内容"规则。
 
 检查项:
-  1. 活跃 .md 文件中是否引用了垃圾桶中的文件
+  1. 活跃 .md 文件中是否引用了**已移出的垃圾桶内容**（`design/archive/trash/<子路径>` / `.trash/<子路径>`）
   2. 活跃 .md 文件中是否出现了 #20 已废弃的术语
   3. 活跃 .md 文件中的链接是否指向垃圾桶
+
+**2026-09-13 变更**：原 `design/archive/trash/` 的 26 个文件已**整份移出仓库**，
+本地保留在 `.trash/`（见 `.gitignore`）。因此本校验**不再维护"垃圾桶里有哪些文件"的
+枚举清单**——那类清单只能守住被枚举过的实例：实测一份**行内代码形式的新子路径引用**
+（`design/archive/trash/deprecated-scripts/test_evolved_cog.py`）正是这样空过的
+（旧的 `FILES_IN_TRASH` 只有 7 个文件名，且只比对 markdown 链接）。现在只判一件事：
+**活跃文档不得指向垃圾桶下的任何内容**，与桶里当时有什么无关。
 
 用法: python code/tools/validate_trash_isolation.py [--verbose]
 退出码: 0 = 全部通过, 1 = 有问题
@@ -17,20 +24,18 @@ from pathlib import Path
 
 ROOT = Path(__file__).parent.parent.parent
 
-# ── 垃圾桶中的文件 (#20 批次2移动) ────────────────────────
+# ── 已移出的垃圾桶（2026-09-13） ──────────────────────────
+# 判据 = 「指向垃圾桶下的内容」，与桶里有哪些文件无关：
+#   · `design/archive/trash/<子路径>`（原位置，已移出仓库）
+#   · `.trash/<子路径>`（新位置，本地保留、gitignore——引用它对别人就是死引用）
+#   · `垃圾桶/<子路径>`（历史叫法）
+# 只写目录本身（`design/archive/trash/`，用于定义该规则/记载变迁）**不算引用**；
+# **占位写法也不算**——`<`/`>` 已从匹配字符类中排除，故 `design/archive/trash/<子路径>`
+# 这种"描述规则"的写法不会误报（制定本检查时自己踩到，见下）。
+TRASH_REF = re.compile(r"(?:design/archive/trash/|\.trash/|垃圾桶/)[^\s)`\"（），,；;：:<>]{2,}")
 
-FILES_IN_TRASH = [
-    "design/archive/trash/deprecated-skill-tree/L0-脑干技能设计.md",
-    "design/archive/trash/deprecated-skill-tree/L1-边缘系统技能设计.md",
-    "design/archive/trash/deprecated-skill-tree/L2-旁边缘技能设计.md",
-    "design/archive/trash/deprecated-skill-tree/L3-初级感觉技能设计.md",
-    "design/archive/trash/deprecated-skill-tree/L4-高级单模态技能设计.md",
-    "design/archive/trash/deprecated-skill-tree/L5-跨模态认知技能设计.md",
-    "design/archive/trash/deprecated-skill-tree/L6-跨模态整合技能设计.md",
-]
-
-# 路径片段形式的垃圾桶引用
-TRASH_PATH_FRAGMENTS = [f.replace(".md", "") for f in FILES_IN_TRASH]
+# 行内含这些标记 = 该行是在**记载变迁或标注废弃**，不判违规（沿用旧检查的豁免惯例）
+DEPRECATION_MARKERS = ("⚠️", "已废弃", "已移出", "迁出", "迁至")
 
 # ── 废弃术语 (#20) ────────────────────────────────────────
 
@@ -139,34 +144,25 @@ def find_md_files():
     return files
 
 
-def check_trash_refs(md_files):
+def check_refs_to_moved_trash(md_files):
+    """活跃文档不得指向垃圾桶下的任何内容（与桶里当时有什么文件无关）。
+
+    这是 2026-09-13 替换掉 `check_trash_refs` / `check_trash_paths` 的检查：那两道以
+    `FILES_IN_TRASH`（7 个硬编码文件名）为判据，垃圾桶移出后它们只会静默通过。
+    """
     errors = []
     for rel_path, abs_path in md_files:
         content = abs_path.read_text(encoding="utf-8")
-        lines = content.split("\n")
-        for trash_file in FILES_IN_TRASH:
-            fragment = Path(trash_file).name.replace(".md", "")
-            if fragment not in content:
+        for i, line in enumerate(content.split("\n"), 1):
+            m = TRASH_REF.search(line)
+            if not m:
                 continue
-            for i, line in enumerate(lines, 1):
-                if fragment in line and "⚠️" not in line and "废弃" not in line:
-                    errors.append(f"🔴 {rel_path}:{i} — 引用垃圾桶文件: {fragment}")
-    return errors
-
-
-def check_trash_paths(md_files):
-    errors = []
-    for rel_path, abs_path in md_files:
-        content = abs_path.read_text(encoding="utf-8")
-        lines = content.split("\n")
-        for fragment in TRASH_PATH_FRAGMENTS:
-            short = fragment.split("/")[-1]
-            for i, line in enumerate(lines, 1):
-                if fragment in line and "⚠️" not in line and "废弃" not in line:
-                    errors.append(
-                        f"🔴 {rel_path}:{i} — 垃圾桶路径片段: ...{fragment[-40:]}\n"
-                        f"   {line.strip()[:130]}"
-                    )
+            if any(mark in line for mark in DEPRECATION_MARKERS):
+                continue
+            errors.append(
+                f"🔴 {rel_path}:{i} — 引用已移出的垃圾桶内容: {m.group(0)[:90]}\n"
+                f"   {line.strip()[:130]}"
+            )
     return errors
 
 
@@ -223,8 +219,7 @@ def main():
 
     all_errors = []
     for name, fn in [
-        ("垃圾桶文件引用", check_trash_refs),
-        ("垃圾桶路径片段", check_trash_paths),
+        ("引用已移出的垃圾桶内容", check_refs_to_moved_trash),
         ("废弃术语残留", check_terms),
         ("链接指向垃圾桶", check_links_to_trash),
     ]:

@@ -222,7 +222,9 @@ READY_LABELS = {"state:ready-for-agent", "status:ready-for-agent", "ready-for-ag
 
 # ── 仓库相对路径的顶层前缀（I8 只认这些，避免把 URL/绝对路径当仓库路径） ──
 REPO_PATH_PREFIXES = ("design/", "code/", "data/", "reference/", ".github/", ".agents/")
-TRASH_PATH = "design/archive/trash"
+# 垃圾桶路径。2026-09-13：原 design/archive/trash/ 已整份移出仓库（本地 .trash/，见 .gitignore）——
+# 该规则不变（仍不得指向它），并扩到新位置 .trash/：引用它对别人就是死引用。
+TRASH_PATH = ("design/archive/trash", ".trash")
 
 CN_NUM = {"一": "1", "二": "2", "三": "3", "四": "4", "五": "5", "六": "6",
           "七": "7", "八": "8", "九": "9", "十": "10", "十一": "11", "十二": "12",
@@ -1014,12 +1016,13 @@ def rule_i9(subjects, ctx):
 
 
 def rule_i10(subjects, ctx):
-    """I10 不得引用 design/archive/trash/（FAIL）；不得使用已废弃术语（警告）。"""
+    """I10 不得引用垃圾桶路径（`design/archive/trash/` / `.trash/`，FAIL）；不得使用已废弃术语（警告）。"""
     out = []
     for s in subjects:
         for i, line, _ in strip_code_fences(s.body):
-            if TRASH_PATH in line:
-                out.append(Finding(FAIL, f"{s.tag}:{i} 引用垃圾桶路径 {TRASH_PATH}/ "
+            hit = next((t for t in TRASH_PATH if t in line), None)
+            if hit:
+                out.append(Finding(FAIL, f"{s.tag}:{i} 引用垃圾桶路径 {hit}/ "
                                          f"（归档隔离，见 AGENTS.md §二）"))
         for term, replacement in ctx.deprecated_terms:
             rx = term_regex(term)

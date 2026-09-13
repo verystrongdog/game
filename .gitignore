@@ -61,6 +61,11 @@ data/sim_results/
 # 子代理临时文件、以及未被任何活跃文档引用的过程残留。
 .scratch/
 
+# .trash——垃圾桶。2026-09-13 整份移出仓库（原 design/archive/trash/，26 个文件 848K）。
+# 本地保留、可查，但不入库：归档隔离由「不在场」保证，不再靠校验器守一份枚举清单。
+# 历史仍可从 git 历史取回（`git show <sha>:design/archive/trash/<路径>`）。
+.trash/
+
 # 校验器运行状态（原 .scratch/.last_check_state.json）
 .checks-state.json
 

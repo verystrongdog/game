@@ -43,7 +43,7 @@ data/        结构化数据契约
 
 ### 归档隔离
 
-活跃文档**不得引用** `design/archive/trash/` 下的路径，也不得使用已废弃的数字/术语（只允许出现在 [决策树](design/decisions/README.md) 历史记录或标注 `⚠️ 已废弃` 的段落中）。
+活跃文档**不得引用垃圾桶下的路径**——原 `design/archive/trash/` 已于 2026-09-13 整份移出仓库，现本地保留在 `.trash/`（被忽略），**两个位置都不得指向**；也不得使用已废弃的数字/术语（只允许出现在 [决策树](design/decisions/README.md) 历史记录或标注 `⚠️ 已废弃` 的段落中）。详见 [项目规约 §六](design/conventions/README.md)。
 
 ## 三、改动前自检（提交底线）
 
