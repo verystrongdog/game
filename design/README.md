@@ -191,7 +191,7 @@
 - [3D可视化](presentation/visualization-3d) — 可视化规范/Blender管线/HTML原型（目录在规则/下）
 - [Unity 呈现沙盘工程](../code/unity/README.md) — 白盒回合沙盘/KiWalkerLab 真人动画演示（2026-09-06 grilling #122）
 - [Unity 沙盘动作集规格](presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md) — 动作受控词表/引用契约/来源矩阵/扩展协议（2026-09-07 grilling #123）
-- [X Bot 动画处理能力对照实验](presentation/%E5%8A%A8%E7%94%BB%E5%A4%84%E7%90%86%E8%83%BD%E5%8A%9B%E5%AF%B9%E7%85%A7%E5%AE%9E%E9%AA%8C.md) — 三条线（Unity/Blender/Unreal）共用的共同样本与观测口径（2026-09-14 立，**草案待裁定** #156/#157/#158）
+- [X Bot 动画处理能力对照实验](presentation/%E5%8A%A8%E7%94%BB%E5%A4%84%E7%90%86%E8%83%BD%E5%8A%9B%E5%AF%B9%E7%85%A7%E5%AE%9E%E9%AA%8C.md) — 三条线（Unity/Blender/Unreal）共用的共同样本与观测口径（2026-09-14 立并接受 #156/#157/#158）
 - [ActionLab 实施执行层](archive/grilling/grilling-124-actionlab/%E5%86%B3%E7%AD%96%E8%AE%B0%E5%BD%95.md) — 载体锚定 Mixamo X Bot/Y Bot + Batch0 执行契约（2026-09-08 grilling #124）
 - [玫瑰花海场景（实验 lab）](archive/grilling/grilling-126-rosefield/%E5%86%B3%E7%AD%96%E8%AE%B0%E5%BD%95.md) — 真实 1 m lidar 草原地形 + 商业化密度株丛 + 小人穿行（2026-09-12 grilling #126，**不入正典**）
 
