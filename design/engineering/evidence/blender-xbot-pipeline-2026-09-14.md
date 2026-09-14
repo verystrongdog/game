@@ -1,5 +1,7 @@
 # Blender X Bot 动画制作与回导调试管线证据
 
+> 🔧 **2026-09-14 后续**：本条交付的**产物已由 Blender 5.1.2 重建**（验证基线由 4.5.13 LTS 切换为 5.1.2，见[双版本证据](blender-pipeline-dual-version-2026-09-14.md) §八）。本文的读数与结论保持当时原样（4.5.13 侧），**未改写**；两侧产物内容等价 **0.000967 mm**。
+
 > [#156](https://github.com/verystrongdog/game/issues/156) 的收口证据。口径权威是 [Blender动作制作管线](../../presentation/Blender%E5%8A%A8%E4%BD%9C%E5%88%B6%E4%BD%9C%E7%AE%A1%E7%BA%BF.md)（Blender 线）与 [动画处理能力对照实验](../../presentation/动画处理能力对照实验.md)（两线共用）；必填字段按 [WORKFLOW.md §五/§六](../../../WORKFLOW.md) 与 [阶段证据说明](README.md) 记录。
 
 ## 一、结论（先读这一段）

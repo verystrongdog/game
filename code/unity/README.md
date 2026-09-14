@@ -803,13 +803,13 @@ python3 code/tools/validate_unity_assets.py
 | 件 | 值 |
 |---|---|
 | 探针 FBX | `Assets/Animations/Blender/RigRoundTripProbe.fbx`（**入库**）+ `.fbx.meta`；目录 `Assets/Animations/Blender/`（GUID `7dd0a64c67b92a44fb198d534968cc1c`）· 资产 GUID `fea37d37d0d6ded459704d6132b4ee9d`（**由 Editor 生成**，仓库采用同值） |
-| 生成链 | `code/tools/build_xbot_animation_template.py`（母版）→ `code/tools/export_xbot_action.py`（烘焙 + animation-only FBX）；**Blender 4.5.13 LTS 与 5.x 双兼容**（差异收进 `code/tools/blender_action_compat.py`）——4.5 走 `.scratch/` 便携包，5.1 走 Windows 已装版，两侧实测均全绿 |
+| 生成链 | `code/tools/build_xbot_animation_template.py`（母版）→ `code/tools/export_xbot_action.py`（烘焙 + animation-only FBX）；**基线 = Windows 已装的 Blender 5.1.2**，并保留 4.5.x 兼容分支（差异收进 `code/tools/blender_action_compat.py`）——两侧曾各自实测全绿 |
 | builder | `Assets/Editor/BlenderAnimationDebugBuilder.cs` — 菜单 **YANTF → 动作演示 → 创建 Blender 回导调试 lab**（幂等；含导入设置纠正与四项自检） |
 | 运行时 | `Assets/Scripts/BlenderAnimationDebugger.cs` — 播放/暂停 · ←/→ 单帧 · `R` 回首帧 · HUD 显示 clip/帧号/Hips·双手·双脚读数；`Attach(...)` 是菜单与断言**共用**的装配入口 |
 | 断言 | `Assets/Tests/PlayMode/BlenderAnimationDebugTests.cs`（**8 条**：Rig 3 · 采样稳定性 1 · 调试控制 3 · 资产身份 1） |
 | 生成物 | `Assets/Temp/BlenderRoundTripDebug.unity` + `.controller`——**只落 `Assets/Temp/`，不入库**（`.gitignore` 的 `[Tt]emp/`） |
 
-### 实测读数（Editor 6000.5.2f1 · Blender 4.5.13 LTS）
+### 实测读数（Editor 6000.5.2f1 · Blender **5.1.2**（基线）；4.5.13 为已验兼容分支）
 
 | 判据 | 读数 |
 |---|---|
@@ -825,7 +825,7 @@ python3 code/tools/validate_unity_assets.py
 | 门禁 `unity` | `run_tests` **64 项：63 过 / 0 败 / 1 跳过**（56 → 64，新增 8 条全过；跳过的是既有的 `ActionLabGuardVariantTests`） |
 | 门禁 `unity-assets` | 受控 FBX 18 → **19**（+ 探针）· A1–A4 全 0 |
 | 回滚演练 | 见证据 §七 |
-| 双版本（🔧 2026-09-14 后续） | 4.5.13 与 Windows **5.1.2** 各自跑通 V1–V9 + E0–E6；两侧产物**内容等价**（逐骨逐帧最大差 **0.000967 mm**）；5.1 产物导入 Unity `humanMotion=True` / 三条告警串空；**已入库探针 FBX 一字未改**（与 4.5 重导件差 **0.000000 mm**） |
+| 基线切换（🔧 2026-09-14 后续） | **基线 = Blender 5.1.2**；入库探针 FBX 由 5.1.2 **重建并替换**（与 4.5 产物内容等价 **0.000967 mm**，GUID `fea37d37…` 不变）；4.5.13 作为兼容分支曾各自跑通 V1–V9 + E0–E6 |
 
 ### ⚠️ 三条实测坑（已写进管线文档 §六·2 / §七·3）
 
@@ -838,11 +838,12 @@ python3 code/tools/validate_unity_assets.py
 
 ### 怎么复核
 
-```bash
-# Blender 侧（便携包，见管线文档 §七·1）
-B=.scratch/blender-lts/blender-4.5.13-linux-x64/blender
-$B --background --factory-startup --python-exit-code 1 --python code/tools/build_xbot_animation_template.py -- --force
-$B --background --factory-startup --python-exit-code 1 --python code/tools/export_xbot_action.py -- --force
+```powershell
+# Blender 侧（基线 = Windows 已装的 5.1.2；完整命令见管线文档 §七·1）
+$BL = "C:\Program Files\Blender Foundation\Blender 5.1\blender.exe"
+$R  = '\\wsl.localhost\Ubuntu-22.04\home\dog\game'
+& $BL --background --factory-startup --python-exit-code 1 --python "$R\code\tools\build_xbot_animation_template.py" -- --force
+& $BL --background --factory-startup --python-exit-code 1 --python "$R\code\tools\export_xbot_action.py" -- --force
 # Unity 侧
 ./code/tools/unity-cli/uc.sh editor_stop                      # ⚠️ Play 态下跑菜单会抛 InvalidOperationException
 ./code/tools/unity-cli/uc.sh menu "YANTF/动作演示/创建 Blender 回导调试 lab"
@@ -853,7 +854,7 @@ python3 code/tools/validate_unity_assets.py                   # A1–A4
 ### ⚠️ 未闭合（诚实清单）
 
 1. **Unity 侧骨盆读数低于 Blender 侧**（16.94 mm vs 40.0 mm）：量的是两个不同的量（Unity 把髋位移重定向进人形 body position 归一化空间后再落到 Hips 节点）——**峰值帧与趋势一致，绝对量不可逐值比对**。详见管线文档 §5.4。
-2. **只验了 Blender 4.5.13 LTS**；本机 Windows 侧装的是 5.1.2，未做横向对照。
+2. **基线 = Blender 5.1.2**（2026-09-14 由 4.5.13 切换）；4.5 分支保留在取道层，但本机**不再保留 4.5 便携包** ⇒ 该分支此后无本机回归。
 3. **未做完整 Editor 重启后的复现**（幂等与确定性读数在同一 Editor 会话内实测）。
 4. **"逐帧目视"的目视部分未由人完成**：本条的图像判据只到"两端截图已产出 + 三项数值代理"（比例/翻转/多余节点），**截图未经人眼复核**。
 5. **基线**：Unity 读数取自 Windows 工作拷贝（其 git HEAD 落后仓库 HEAD，见[危险点表](../../design/engineering/危险点表.md) §七）；补偿证据是探针 FBX 与两份 `.meta` 三侧同哈希。

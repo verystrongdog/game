@@ -68,7 +68,7 @@
 
 `build_xbot_animation_template.py` 每次运行都跑这 8 条，任一不过即非 0 退出并写进报告 JSON。
 
-| # | 判据 | 阈值 / 口径 | 实测（2026-09-14，Blender 4.5.13 LTS） |
+| # | 判据 | 阈值 / 口径 | 实测（2026-09-14，**基线 Blender 5.1.2**；4.5.13 为已验的第二版本） |
 |---|---|---|---|
 | V1 | 输入 FBX 字节哈希运行前后一致 | 相等 | `cd60e515…8deab` ✓ |
 | V2 | 骨数 65 · 单一根 `mixamorig:Hips` · 全 `mixamorig:*` 前缀 | 硬判 | 65 / `['mixamorig:Hips']` / ✓ |
@@ -248,21 +248,24 @@ controller 名 / clip 名 / frameCount / avatar 名**逐字节相同**。判据�
 
 ### 7.1 怎么跑（本机实测口径）· **4.5 与 5.x 双兼容**
 
+**基线 = Blender 5.1.2**（本机 Windows 已装的那个）；脚本经 UNC 读、产物写回 WSL 侧：
+
+```powershell
+& "C:\Program Files\Blender Foundation\Blender 5.1\blender.exe" --background --factory-startup --python-exit-code 1 `
+  --python '\\wsl.localhost\Ubuntu-22.04\home\dog\game\code\tools\<脚本>.py' -- <参数>
+```
+
+**兼容分支 = Blender 4.5.13 LTS**（取道层仍支持；本机**不再保留**便携包，要用得自行下载解压到 Windows 本地卷）：
+
 ```bash
-# Linux / WSL：4.5.13 LTS 便携包（落被 gitignore 的 .scratch/）
-B=.scratch/blender-lts/blender-4.5.13-linux-x64/blender
+B=<解压目录>/blender-4.5.13-linux-x64/blender
 "$B" --background --factory-startup --python-exit-code 1 \
      --python code/tools/<脚本>.py -- <脚本自己的参数>
-
-# Windows：已装的 5.1.2（脚本经 UNC 读，产物也写回 WSL 侧）
-BL="C:\Program Files\Blender Foundation\Blender 5.1\blender.exe"
-"$BL" --background --factory-startup --python-exit-code 1 \
-      --python '\\wsl.localhost\Ubuntu-22.04\home\dog\game\code\tools\<脚本>.py' -- <参数>
 ```
 
 **版本差异全部收在 `code/tools/blender_action_compat.py`**（两个脚本都只调它）。两侧实测（2026-09-14）：
 
-| 差异点 | Blender 4.5.13 | Blender 5.1.2 | 取道层怎么办 |
+| 差异点 | Blender 4.5.13（兼容分支） | Blender 5.1.2（**基线**） | 取道层怎么办 |
 |---|---|---|---|
 | 曲线容器 | `Action.fcurves` | **已移除** → `action.layers[0].strips[0].channelbag(slot).fcurves`（slotted actions） | `action_fcurves()` 按实例探测，取不到返回 `None`（**不当成「0 条曲线」**） |
 | 指派后的 slot | 无此概念 | 必须再设 `animation_data.action_slot`，否则**不驱动任何东西** | `assign_action()`：有 slot 指第一个，没 slot 先建一个 |
@@ -311,12 +314,12 @@ BL="C:\Program Files\Blender Foundation\Blender 5.1\blender.exe"
 1. **Unity 侧骨盆读数低于 Blender 侧**（16.94 mm vs 40.0 mm）——量的是两个不同的量（§5.4·1）。
    本条的验收面是"探针覆盖骨盆控制"，已由**母版侧 V8（42.05 mm）** 与 **回导保真 E6（0.0014 mm）**
    成立；Unity 侧只主张"趋势与峰值帧一致"。
-2. **只验了 Blender 4.5.13 LTS（linux-x64 便携包）**。本机 Windows 侧装的是 5.1.2，
-   **未做 5.1 的横向对照**；FBX 版本差异（7400 vs 既有 7700）也**未做 Unity 侧兼容性专项验证**，
+2. **基线是 Blender 5.1.2**（2026-09-14 由 4.5.13 切换，见[双版本证据](../engineering/evidence/blender-pipeline-dual-version-2026-09-14.md) §八）；
+   4.5.13 作为**兼容分支**曾全链验过（V1–V9 + E0–E6 全绿、产物内容等价 0.000967 mm），但本机**不再保留其便携包**，
+   故 4.5 分支此后**不再有本机回归**。FBX 版本差异（导出 7400 vs 既有 Mixamo 7700）**未做 Unity 侧兼容性专项验证**，
    只验了"本机 Unity 6000.5.2f1 能吃"。
 3. **未做完整 Editor 重启后的复现**：幂等与确定性读数是在同一 Editor 会话内实测的。
-4. **危险点表未登记本条的三条坑**——`design/engineering/危险点表.md` 不在本条的「预期差分」内，
-   按 [WORKFLOW.md §一](../../WORKFLOW.md) 非阻塞发现进候选队列，不在本条顺手改。
+4. ~~危险点表未登记本条的三条坑~~ → **✅ 2026-09-14 已登记**（#156 关闭后按 owner 指示补：§三 1 行 / §四 3 行 / §七 2 行 + 扩写 1 行）。
 5. **基线**：Unity 侧读数取自 Windows 工作拷贝（`C:\Users\9527\game\code\unity`，其 git HEAD 落后
    仓库 HEAD，见[危险点表](../engineering/%E5%8D%B1%E9%99%A9%E7%82%B9%E8%A1%A8.md) §七），
    补偿证据是逐字节内容比对（探针 FBX 与 `.meta` 三侧同哈希）。
@@ -350,6 +353,6 @@ BL="C:\Program Files\Blender Foundation\Blender 5.1\blender.exe"
 | X Bot 的 Unity 导入设置口径（`animationType: 3` / `avatarSetup: 1`） | `code/tools/validate_unity_assets.py` A4 规则注释 |
 
 ---
-*创建: 2026-09-14 | 更新: 2026-09-14（🔧 第二次：**移植为 Blender 4.5 / 5.x 双兼容**（新增取道层 `code/tools/blender_action_compat.py`：slotted actions 曲线取道 · `action_slot` 指派 · 姿态骨选择位）+ **母版 GUI 可用性**（骨骼集合 `CTRL`/`MIXAMORIG` + 配色，V9 自检；已复核导出物内容等价 **0.000000 mm**）+ 新增 §4.4「导出物不可逐字节复现」与 §7.1 双版本差异表；E5 判据由矩阵元素改为骨端点坐标）*
+*创建: 2026-09-14 | 更新: 2026-09-14（🔧 第三次：**验证基线由 4.5.13 LTS 切换为 Blender 5.1.2**——入库探针 FBX 由 5.1.2 重建（与 4.5 产物内容等价 **0.000967 mm**）、Unity 侧重跑全量断言转绿；4.5 分支保留在取道层但本机不再保留便携包。🔧 第二次：**移植为 Blender 4.5 / 5.x 双兼容**（新增取道层 `code/tools/blender_action_compat.py`：slotted actions 曲线取道 · `action_slot` 指派 · 姿态骨选择位）+ **母版 GUI 可用性**（骨骼集合 `CTRL`/`MIXAMORIG` + 配色，V9 自检；已复核导出物内容等价 **0.000000 mm**）+ 新增 §4.4「导出物不可逐字节复现」与 §7.1 双版本差异表；E5 判据由矩阵元素改为骨端点坐标）*
 *状态: 与 [动画处理能力对照实验](%E5%8A%A8%E7%94%BB%E5%A4%84%E7%90%86%E8%83%BD%E5%8A%9B%E5%AF%B9%E7%85%A7%E5%AE%9E%E9%AA%8C.md) 同为**两条线共用的口径正典**；本文只覆盖 Blender 线。*
 *关联: [动画处理能力对照实验](%E5%8A%A8%E7%94%BB%E5%A4%84%E7%90%86%E8%83%BD%E5%8A%9B%E5%AF%B9%E7%85%A7%E5%AE%9E%E9%AA%8C.md), [动作库规格](%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md), [code/unity/README.md](../../code/unity/README.md), [危险点表](../engineering/%E5%8D%B1%E9%99%A9%E7%82%B9%E8%A1%A8.md)*
