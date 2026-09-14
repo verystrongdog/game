@@ -55,9 +55,14 @@
 1. **4.5 便携包在 Windows 上无法从 WSL 路径启动**：`\wsl.localhost\...\blender.exe`（以及 `net use Z:` 映射盘符后）一律报
    **「应用程序无法启动，因为应用程序的并行配置不正确」（SxS）**——app-local 依赖解析在 9p 文件系统上不成立。
    要用 4.5 的 GUI，**必须把便携包复制到真正的 Windows 卷**（约 900 MB，本轮未做）。
-2. **WSLg 的 GUI 在沙箱内起不来**：命令行开 Linux 版 Blender 时 `The Wayland connection broke`（X11 亦然）。
-   ⇒ agent 侧**无法**替 owner 验证 WSLg 图形界面；要用 Linux 版 GUI 得由 owner 自己在 Windows 终端里起。
-3. 因此 owner 选的路线（**移植脚本到已装的 5.1.2**）是当前唯一零复制、且本轮**已实测跑通**的路。
+2. **WSLg 的 GUI 在沙箱内起不来**：命令行开 **Linux 版** Blender 时 `The Wayland connection broke`（X11 亦然）。
+3. **但 Windows 版 GUI 可以起**（2026-09-14 补测）：`Start-Process` 启动已装的 5.1.2 并传入母版路径，
+   `Get-Process blender` 回读到窗口标题 `XBot_AnimationTemplate [...\XBot_AnimationTemplate.blend] - Blender 5.1.2`、
+   `Responding=True`，`SetForegroundWindow` 亦可成功置前 ⇒ **agent 侧能把 GUI 打开给 owner 看**，
+   差的只是"替 owner 看画面"（无图像输入）。
+   ⚠️ 启动写法有坑：GUI 进程继承调用方 stdout/stderr 句柄 ⇒ `cmd /c start` 不重定向会让调用方**一直等 EOF**
+   （实测卡满 5 分钟超时，而进程早已独立运行）。用 `Start-Process`（实测 0.54 s 返回）。
+4. 因此 owner 选的路线（**移植脚本到已装的 5.1.2**）是当前唯一零复制、且本轮**已实测跑通**的路。
 
 ## 六、门禁
 

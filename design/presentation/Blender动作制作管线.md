@@ -255,6 +255,19 @@ controller 名 / clip 名 / frameCount / avatar 名**逐字节相同**。判据�
   --python '\\wsl.localhost\Ubuntu-22.04\home\dog\game\code\tools\<脚本>.py' -- <参数>
 ```
 
+**打开 GUI 调动作**（实测 2026-09-14：从 WSL 侧就能把 Windows 的 Blender 窗口开起来，文件经 UNC 直接读写，
+窗口标题回读为 `XBot_AnimationTemplate [...\xbot\XBot_AnimationTemplate.blend] - Blender 5.1.2`）：
+
+```powershell
+Start-Process -FilePath "C:\Program Files\Blender Foundation\Blender 5.1\blender.exe" `
+  -ArgumentList '\\wsl.localhost\Ubuntu-22.04\home\dog\game\.scratch\blender_assets\xbot\XBot_AnimationTemplate.blend'
+```
+
+> ⚠️ **必须用 `Start-Process`（或 `cmd /c start` 并把句柄重定向掉）**：GUI 进程会继承调用方的
+> stdout/stderr 句柄，直接前台跑会让调用方**一直等 EOF**（实测：`cmd /c start` 不重定向时命令行卡满 5 分钟超时，
+> 而进程其实早已独立运行——用 `Get-Process blender` 的 `MainWindowTitle` 可判）。
+> 反过来：**Linux 版（WSLg）的 GUI 起不来**（`The Wayland connection broke`），所以 GUI 一律走 Windows 侧那个已装版。
+
 **兼容分支 = Blender 4.5.13 LTS**（取道层仍支持；本机**不再保留**便携包，要用得自行下载解压到 Windows 本地卷）：
 
 ```bash
@@ -319,6 +332,8 @@ B=<解压目录>/blender-4.5.13-linux-x64/blender
    故 4.5 分支此后**不再有本机回归**。FBX 版本差异（导出 7400 vs 既有 Mixamo 7700）**未做 Unity 侧兼容性专项验证**，
    只验了"本机 Unity 6000.5.2f1 能吃"。
 3. **未做完整 Editor 重启后的复现**：幂等与确定性读数是在同一 Editor 会话内实测的。
+   ⚠️ 另：**GUI 已能自动打开**（§7.1），但"骨骼集合好不好用、控制骨点得到点不到"这一层**只能目视**——
+   agent 无图像输入，故 §二 的 GUI 行只主张"显示层已落盘（V9）"，不主张手感。
 4. ~~危险点表未登记本条的三条坑~~ → **✅ 2026-09-14 已登记**（#156 关闭后按 owner 指示补：§三 1 行 / §四 3 行 / §七 2 行 + 扩写 1 行）。
 5. **基线**：Unity 侧读数取自 Windows 工作拷贝（`C:\Users\9527\game\code\unity`，其 git HEAD 落后
    仓库 HEAD，见[危险点表](../engineering/%E5%8D%B1%E9%99%A9%E7%82%B9%E8%A1%A8.md) §七），
