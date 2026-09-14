@@ -253,6 +253,29 @@ public class BlenderAnimationDebugTests
         Assert.AreEqual(0, dbg.CurrentFrame, "末帧后 Play 应回到首帧续播");
     }
 
+    /// <summary>
+    /// 连续播放必须**接成环**：走到末帧后自己回到首帧，而不是停在末帧。
+    /// 理由（2026-09-14 实测）：探针首末帧同为静止姿势 ⇒ 不接环的话按 Play 一秒后画面就"没动静"，
+    /// 而 lab 的用途正是逐帧目视。接环只在**播放层面**做：不改 FBX、不改导入设置，样本仍是一次性。
+    /// </summary>
+    [UnityTest]
+    public System.Collections.IEnumerator DebugControls_PlaybackWrapsAtLastFrame()
+    {
+        var dbg = BuildActor();
+        Assert.IsTrue(dbg.LoopInPlay, "lab 默认应接环（关掉它等于让 lab 停在末帧）");
+        dbg.Play();
+
+        // 把状态直接推到末帧之后（不必真等 2 秒）
+        dbg.Animator.Play(Animator.StringToHash(ProbeClipName), 0, 1f);
+        dbg.Animator.Update(0f);
+        yield return null;   // 让 BlenderAnimationDebugger.Update 跑一次
+        yield return null;
+
+        Assert.IsTrue(dbg.IsPlaying, "接环不应把播放态关掉");
+        Assert.Less(dbg.CurrentFrame, dbg.FrameCount,
+            $"末帧后应接回首帧，实测停在 frame={dbg.CurrentFrame}/{dbg.FrameCount}");
+    }
+
     // ================= ④ 资产身份 =================
 
     [Test]

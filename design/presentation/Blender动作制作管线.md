@@ -188,8 +188,9 @@ Unity 侧是 `BlenderAnimationDebugger.ReadoutBones`（`HumanBodyBones` 枚举�
 | controller | `Assets/Temp/BlenderRoundTripDebug.controller`（单状态 = 探针 clip，同属生成物） |
 | 载体 | X Bot 实例 + `Animator`（avatar 取自 X Bot）+ `BlenderAnimationDebugger`，站在原点、`applyRootMotion = false` |
 | 逐帧控制 | 空格 播放/暂停 · ←/→ 前后单帧 · `R` 回首帧；HUD 显示 `clip / 帧号 / 五个读数点` |
+| 连续播放 | **在播放层面接成环**（走到末帧自动回首帧）——探针首末帧同为静止姿势，不接环的话按 Play 一秒后画面就"没动静"。接环**只改播放行为**：不动 FBX、不动导入设置，样本本身仍是一次性 |
 | 与既有 lab 的关系 | **互不引用、互不修改**：不动 `ActionLab` / `AnimationRiggingLab` 场景、controller 与脚本 |
-| 断言 | `Assets/Tests/PlayMode/BlenderAnimationDebugTests.cs`（7 条：Rig 2 + 采样 1 + 控制 2 + 形状 1 + 资产身份 1） |
+| 断言 | `Assets/Tests/PlayMode/BlenderAnimationDebugTests.cs`（**8 条**：Rig 3 + 采样 1 + 控制 3 + 资产身份 1） |
 
 ### 6.1 幂等怎么判
 
@@ -205,7 +206,8 @@ controller 名 / clip 名 / frameCount / avatar 名**逐字节相同**。判据�
    现在的做法是"内容已经对就复用"（按 clip **名**比对，不按引用比对）。
 2. **在 Play 态下跑菜单会报 `InvalidOperationException`**（"This cannot be used during play mode"）——
    生成 lab 前先退出 Play。
-3. **`recompile_status` 报 `up_to_date` 不等于没有编译错误**：同步过去的新 `.cs` 若编译失败，
+3. **`MonoBehaviour.Start` 在下一帧才跑，会静默取消调用方刚开的播放**：装配方在同一帧里 `Play()`/`SampleAtFrame()` 之后，`Start` 再按 `_playOnStart` 兜一次就把状态冲掉了（实测表现："接环把播放态关掉了"）。组件用 `_driven` 标记挡住这条。
+4. **`recompile_status` 报 `up_to_date` 不等于没有编译错误**：同步过去的新 `.cs` 若编译失败，
    该命令仍回 `failed: false`，但 `list_tests` 里看不到新测试。**判据要读 `console --level error`。**
 
 ### 6.3 实测读数（Editor 6000.5.2f1）

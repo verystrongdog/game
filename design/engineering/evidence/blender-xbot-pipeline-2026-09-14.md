@@ -16,7 +16,7 @@
 | 字段 | 值 |
 |---|---|
 | base SHA | `a38ba15`（#157 的末次提交） |
-| head SHA | 本轮 **6 个提交**：`3e72d30`（管线正典）· `2e5dcb0`（母版生成器 + 导出器）· `7a7b860`（探针 FBX 入库）· `cd36cca`（Unity lab + 7 条断言）· `dcdb80c`（README §二·Q）· `2c5f390`（切片四轴回填 + 版本口径）· **本证据为第 7 个** |
+| head SHA | 本轮 **9 个提交**：`3e72d30`（管线正典）· `2e5dcb0`（母版生成器 + 导出器）· `7a7b860`（探针 FBX 入库）· `cd36cca`（Unity lab + 7 条断言）· `dcdb80c`（README §二·Q）· `2c5f390`（切片四轴回填 + 版本口径）· `42541b9`（证据落库）· **接环与 `_driven` 修复 + 文档同步为第 8–9 个** |
 | 阶段 | [#156](https://github.com/verystrongdog/game/issues/156)（Task） |
 | 执行者 | DSH agent（本机） |
 | 工具版本 | Blender **4.5.13 LTS**（`blender-v4.5-release` · build hash `daeeeca98fb0` · linux-x64 便携包）· Unity **6000.5.2f1** · Python 3.10.12 · WSL2（Ubuntu 22.04） |
@@ -93,7 +93,7 @@ controller 名 · clip 名 · `frameCount=60` · avatar 名——连续两次 `C
 | `docs-integrity` | `python3 code/tools/run_all_checks.py` | **0** | **14/14 校验器通过**（含 `validate_cross_refs.py`：1780 引用 / 0 死链 / 0 段引用警告） |
 | `clean-checkout` | `python3 code/tools/check_clean_checkout.py` | **0** | ✅ 干净检出可完全解析（收尾前唯一 ❌ 是"README 指向尚未提交的管线文档"，提交后转绿） |
 | `unity-assets` | `python3 code/tools/validate_unity_assets.py` | **0** | 受控文件 **164**（`.meta` 77）· A1 0 · A2 0 · A3 悬空 0 · A4 **受控 FBX 18**、非 Humanoid 0、非人形豁免 1（`brain_shell.fbx`） |
-| `unity` | `run_tests --mode playmode --async_tests true` | — | **63 项：62 过 / 0 败 / 1 跳过**（基线 **56 项 55 过/0 败/1 跳过**；新增 7 条全过；跳过的是既有的 `ActionLabGuardVariantTests`） |
+| `unity` | `run_tests --mode playmode --async_tests true` | — | **64 项：63 过 / 0 败 / 1 跳过**（基线 **56 项 55 过/0 败/1 跳过**；新增 **8** 条全过；跳过的是既有的 `ActionLabGuardVariantTests`） |
 | `issues-fixtures`（旁证） | `python3 code/tools/validate_issues.py --from-github` | 0 | 14 规则 10 过 0 败 4 警告（警告全为存量） |
 
 编译：新推 3 个 `.cs` 后 `console --level error` **无新增 error**（期间出现的 3 条 `CS0246` 是漏 `using UnityEngine.TestTools;`，已修并复跑）。
@@ -133,7 +133,7 @@ controller 名 · clip 名 · `frameCount=60` · avatar 名——连续两次 `C
 | Unity 包与锁文件 | 本轮 git diff | **未触碰** |
 | lab 生成物 | 落点 | **只落 `Assets/Temp/`**（`.gitignore` 第 106 行 `code/unity/Assets/Temp/` 命中，未入库） |
 
-### 6.2 新发现（4 条，全部在本条内处置）
+### 6.2 新发现（6 条，全部在本条内处置）
 
 | # | 发现 | 处置 |
 |---|---|---|
@@ -141,6 +141,9 @@ controller 名 · clip 名 · `frameCount=60` · avatar 名——连续两次 `C
 | 2 | **`nla.bake(use_current_action=False)` 会摘掉正在驱动骨头的 action** ⇒ 烘出常量曲线（症状：FBX 有时长但 Unity 侧 130 条曲线**全 constant**） | 改 `use_current_action=True` 就地烘焙 + 烘后剥掉控制通道 —— §四·1 |
 | 3 | **`EnsureController` 无条件删了重建 ⇒ 换 GUID ⇒ 已存盘 lab 场景的 controller 引用 missing**（症状：场景在、`clip=(none) frameCount=0`、姿势永不动） | 改为"内容已对就复用"（按 clip **名**比对）；`ResolveClip` 补 error 留痕 —— §六·2 |
 | 4 | **Unity 默认关键帧压缩把骨盆位移从 61 键降到 3 键**（`RootT.y`），使"探针覆盖骨盆"在 Unity 侧只剩 17 mm | 探针导入设置固定 `animationCompression = Off`，并进 builder 自检 —— §5.4·2 |
+
+| 5 | **`MonoBehaviour.Start` 在下一帧才跑 ⇒ 会静默取消调用方刚开的播放**（`_playOnStart` 兜底把状态冲掉；实测表现：「接环把播放态关掉了」） | 组件加 `_driven` 标记：被外部驱动过就不再兜底；新增接环断言把它钉住 —— §六·2 |
+| 6 | **连续播放需要「播放层面接环」**：探针首末帧同为静止姿势，不接环时按 Play 一秒后画面就「没动静」，而 lab 的用途正是逐帧目视 | `BlenderAnimationDebugger` 加 `_loopInPlay`（默认开）+ 1 条断言；**只改播放行为**，FBX 与导入设置不动，样本仍是一次性 —— §六·2 |
 
 **未在本条处置的候选**（[WORKFLOW.md §一](../../../WORKFLOW.md) 非阻塞发现进候选队列）：
 
@@ -169,9 +172,9 @@ git revert --no-commit a38ba15..HEAD                  # 反做本轮 6 个提交
 
 | 轴 | 从 → 到 | 判据 |
 |---|---|---|
-| Implementation | `NONE → DONE_FOR_SLICE` | 交付物存在且接入目标位置：两个 Blender 脚本（8 + 7 条自检全绿）、探针 FBX 入库（E2/E3/E4 形状判据）、Unity builder/debugger/断言三件落地；`run_tests` 63 项全绿 |
+| Implementation | `NONE → DONE_FOR_SLICE` | 交付物存在且接入目标位置：两个 Blender 脚本（8 + 7 条自检全绿）、探针 FBX 入库（E2/E3/E4 形状判据）、Unity builder/debugger/断言三件落地；`run_tests` 64 项全绿 |
 | Integration | `ISOLATED`（保持） | 探针**未接**正式玩家状态机：`ActionLab` / `ActionRiggingLab` 与其 controller、场景一字未改；lab 是隔离工作面（#156「明确排除」） |
-| Health | `UNKNOWN → PASS` | 本轮全量相关回归：`run_tests` 63/62/0/1 · `docs-integrity` 14/14 · `clean-checkout` 0 · `unity-assets` A1–A4 全 0 · 回滚演练通过。⚠️ 范围限定见 §九 |
+| Health | `UNKNOWN → PASS` | 本轮全量相关回归：`run_tests` 64/63/0/1 · `docs-integrity` 14/14 · `clean-checkout` 0 · `unity-assets` A1–A4 全 0 · 回滚演练通过。⚠️ 范围限定见 §九 |
 | Design | `ACCEPTED`（保持） | 设计面是[动作库规格 §四·戊·5](../../presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md) 的**分工口径**（2026-09-14 owner 定）与[对照实验](../../presentation/动画处理能力对照实验.md)（`Design: ACCEPTED`）；管线内部形态（控制骨母版/导出预设/回导判据）属工程交付物，其正典落 [Blender动作制作管线](../../presentation/Blender%E5%8A%A8%E4%BD%9C%E5%88%B6%E4%BD%9C%E7%AE%A1%E7%BA%BF.md) |
 
 ### 验收标准逐条对照
@@ -181,7 +184,7 @@ git revert --no-commit a38ba15..HEAD                  # 反做本轮 6 个提交
 | 1 | Blender 4.5 LTS 从干净检出的 `X Bot.fbx` 生成 `.blend`；输入哈希不变；`mixamorig:*` 名称/父子/Rest Pose 不变；`CTRL_*` 均 `Deform=false` | ✅ | §三（V1–V5；实测版本 **4.5.13 LTS**） |
 | 2 | 导出 `RigRoundTripProbe.fbx`，覆盖骨盆/双腿/双臂控制；animation-only 中无 `CTRL_*`、无新增 Leaf Bone、无额外 Root 骨 | ✅ | §三（V6/V7/V8 + E2/E3/E4） |
 | 3 | 探针在 Unity 满足 `animationType=Human`、`avatarSetup=CreateFromThisModel`、`clip.humanMotion=true`，且无 animation import/retarget warning | ✅ | §四 |
-| 4 | 独立 lab 由 Editor 菜单**幂等**生成，支持播放/暂停、前后单帧、回首帧，显示当前 clip、帧号及 Hips/双手/双脚读数 | ✅ | §四（幂等结构指纹）+ `BlenderAnimationDebugTests` 2 条控制断言 |
+| 4 | 独立 lab 由 Editor 菜单**幂等**生成，支持播放/暂停、前后单帧、回首帧，显示当前 clip、帧号及 Hips/双手/双脚读数 | ✅ | §四（幂等结构指纹）+ `BlenderAnimationDebugTests` 3 条控制断言（含「连续播放在末帧接回首帧」——否则探针停在静止末帧，lab 看起来没动静） |
 | 5 | 同 clip 同帧重复采样读数逐次一致；逐帧目视确认无比例跳变/骨架翻转/控制骨多余节点，并记录两端截图或日志 | ⚠️ **部分** | 重复采样逐次一致 ✅；三项"目视"给的是**数值代理**（骨长量程 ≤ 0.0004 mm · 胸骨 `up.y` 恒 0.9837–0.9891 · 导出物 0 控制骨节点）+ 两端截图已产出（Unity `capture_game_view` 1280×720 连拍两张 md5 不同 = 非冻结帧；Blender Cycles CPU 420×560）——**人眼复核未做**，见 §九·4 |
 | 6 | `X Bot.fbx`、15 条 Mixamo FBX、`ActionLab.controller`、`ActionLab.unity` 不变；生成物只落 `Assets/Temp/` 不入库 | ✅ | §6.1 |
 | 7 | 三条门禁退出码均为 0，且回滚演练恢复到无 Blender 调试管线的前态 | ✅ | §五 + §七 |

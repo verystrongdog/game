@@ -54,11 +54,14 @@ namespace YANTF.ActionLab
         [SerializeField] private string _clipName = "RigRoundTripProbe";
         [SerializeField] private bool _playOnStart = true;
         [SerializeField] private bool _acceptInput = true;
+        [SerializeField] private bool _loopInPlay = true;
 
         private int _stateHash;
         private AnimationClip _clip;
         private int _frame;
         private bool _playing;
+        /// <summary>是否已被外部驱动过。`Start` 的自动播放/停首帧只在**没人驱动过**时才做。</summary>
+        private bool _driven;
         private readonly BoneReadout[] _readout = new BoneReadout[ReadoutBones.Length];
 
         // ---------------- 只读面（供断言与 eval 读数）----------------
@@ -115,8 +118,19 @@ namespace YANTF.ActionLab
             set => _playOnStart = value;
         }
 
+        /// <summary>连续播放时是否在末帧接回首帧（lab 用 true；逐帧定位路径不受影响）。</summary>
+        public bool LoopInPlay
+        {
+            get => _loopInPlay;
+            set => _loopInPlay = value;
+        }
+
         private void Start()
         {
+            // ⚠️ `Start` 在**下一帧**才跑：调用方（菜单装配、PlayMode 断言）可能已经在同一帧里
+            //    Play / SampleAtFrame 过了。此时再按 `_playOnStart` 兜一次会**静默取消**刚开的播放
+            //    ——2026-09-14 实测踩到（新增的接环断言就死在这条上，表现为"接环把播放态关掉了"）。
+            if (_driven) return;
             if (_playOnStart) Play();
             else SampleAtFrame(0);
         }
@@ -153,7 +167,20 @@ namespace YANTF.ActionLab
         {
             if (_acceptInput) HandleInput();
             if (!_playing || _animator == null || _clip == null) return;
-            _frame = FrameFromNormalized(_animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
+
+            var st = _animator.GetCurrentAnimatorStateInfo(0);
+            if (_loopInPlay && st.normalizedTime >= 1f)
+            {
+                // 回导样本本身是**一次性**的（探针首末帧同为静止姿势），停在末帧等于"看起来没动静"——
+                // lab 的用途是逐帧目视，故**播放层面**接成环（不改 FBX、不改导入设置，样本仍是一次性）。
+                _frame = 0;
+                _animator.Play(_stateHash, 0, 0f);
+                _animator.Update(0f);
+            }
+            else
+            {
+                _frame = FrameFromNormalized(st.normalizedTime);
+            }
             CaptureReadout();
         }
 
@@ -172,6 +199,7 @@ namespace YANTF.ActionLab
         public void Play()
         {
             if (_animator == null || _clip == null) return;
+            _driven = true;
             if (_frame >= FrameCount) _frame = 0;
             _animator.speed = 1f;
             _animator.Play(_stateHash, 0, NormalizedFromFrame(_frame));
@@ -182,6 +210,7 @@ namespace YANTF.ActionLab
         /// <summary>暂停在当前帧。</summary>
         public void Pause()
         {
+            _driven = true;
             if (_animator != null) _animator.speed = 0f;
             _playing = false;
         }
@@ -206,6 +235,7 @@ namespace YANTF.ActionLab
         public void SampleAtFrame(int frame)
         {
             if (_animator == null || _clip == null) return;
+            _driven = true;
             _frame = Mathf.Clamp(frame, 0, FrameCount);
             _animator.speed = 1f;
             _animator.Play(_stateHash, 0, NormalizedFromFrame(_frame));
