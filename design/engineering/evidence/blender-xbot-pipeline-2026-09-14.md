@@ -18,6 +18,7 @@
 | base SHA | `a38ba15`（#157 的末次提交） |
 | head SHA | 本轮 **9 个提交**：`3e72d30`（管线正典）· `2e5dcb0`（母版生成器 + 导出器）· `7a7b860`（探针 FBX 入库）· `cd36cca`（Unity lab + 7 条断言）· `dcdb80c`（README §二·Q）· `2c5f390`（切片四轴回填 + 版本口径）· `42541b9`（证据落库）· **接环与 `_driven` 修复 + 文档同步为第 8–9 个** |
 | 阶段 | [#156](https://github.com/verystrongdog/game/issues/156)（Task） |
+| 收口 | **[#156](https://github.com/verystrongdog/game/issues/156) 已按 owner 指示关闭**（2026-09-14，reason = completed）——收口评论：<https://github.com/verystrongdog/game/issues/156#issuecomment-5664593878>。授权范围 = 该条收口评论 + `close` 动作；**标签按仓库惯例保留**（参照已关闭的 #149 / #142） |
 | 执行者 | DSH agent（本机） |
 | 工具版本 | Blender **4.5.13 LTS**（`blender-v4.5-release` · build hash `daeeeca98fb0` · linux-x64 便携包）· Unity **6000.5.2f1** · Python 3.10.12 · WSL2（Ubuntu 22.04） |
 | 依赖 | 包**未改**（`com.unity.animation.rigging` 1.4.1 等沿用 `packages-lock.json`） |
