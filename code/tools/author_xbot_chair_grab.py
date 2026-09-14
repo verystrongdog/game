@@ -163,114 +163,330 @@ def build_chair_proxy(chair_distance):
         mat.diffuse_color = (*color, 1.0)
         ob.data.materials.append(mat)
 
-    d = chair_distance
-    cube("REF_Seat", (0.0, -d, SEAT_TOP - SEAT_THICKNESS / 2),
-         (SEAT_SIZE, SEAT_SIZE, SEAT_THICKNESS), (0.55, 0.36, 0.20))
-    cube("REF_Back", (0.0, -d - (SEAT_SIZE / 2 + BACK_THICKNESS / 2), SEAT_TOP + BACK_HEIGHT / 2),
-         (SEAT_SIZE, BACK_THICKNESS, BACK_HEIGHT), (0.45, 0.29, 0.16))
+    lay = chair_layout(chair_distance)
+    cube("REF_Seat", lay["seat_center"], (SEAT_SIZE, SEAT_SIZE, SEAT_THICKNESS), (0.55, 0.36, 0.20))
+    cube("REF_Back", lay["back_center"], (SEAT_SIZE, BACK_THICKNESS, BACK_HEIGHT), (0.45, 0.29, 0.16))
     leg_h = SEAT_TOP - SEAT_THICKNESS
     for i, (sx, sy) in enumerate([(-1, -1), (1, -1), (-1, 1), (1, 1)]):
-        cube("REF_Leg%d" % i, (sx * LEG_SPREAD, -d + sy * LEG_SPREAD, leg_h / 2),
+        cube("REF_Leg%d" % i, (sx * LEG_SPREAD, lay["seat_center"][1] + sy * LEG_SPREAD, leg_h / 2),
              (LEG_SIZE, LEG_SIZE, leg_h), (0.42, 0.27, 0.15))
 
 
-def rail_y(chair_distance):
-    """靠背平面（朝角色那一面）的 y。椅子 forward = 坐者朝向 = −Y，故靠背在 +Y 侧。"""
-    return -chair_distance + (SEAT_SIZE / 2 + BACK_THICKNESS / 2)
+def chair_layout(chair_distance):
+    """**椅子几何的唯一来源**：代理网格与抓握目标都从它取。
 
-
-def rail_top_z():
-    return SEAT_TOP + BACK_HEIGHT
+    ⚠️ 这里曾经分成两个函数（`build_chair_proxy` 自己算靠背位置、`rail_y()` 另算一份），
+    结果**两侧差 0.46 m**——代理把靠背摆在远侧、抓握目标却在近侧，于是"残差 0.0 mm"全绿
+    而**手离椅背 440 mm**（owner 一眼看出来的正是这个）。判据必须对着**产物几何**量。
+    """
+    back_cy = -chair_distance + (SEAT_SIZE / 2 + BACK_THICKNESS / 2)   # 靠背在**朝角色那一侧**
+    return {
+        "seat_center": (0.0, -chair_distance, SEAT_TOP - SEAT_THICKNESS / 2),
+        "back_center": (0.0, back_cy, SEAT_TOP + BACK_HEIGHT / 2),
+        "back_near_y": back_cy + BACK_THICKNESS / 2,     # 朝角色的那一面
+        "back_far_y": back_cy - BACK_THICKNESS / 2,      # 背向角色的那一面
+        "back_cy": back_cy,
+        "rail_top_z": SEAT_TOP + BACK_HEIGHT,
+        "half_width": SEAT_SIZE / 2,
+        # 抓握任务点：腕在顶杆上方略偏近侧；中指尖绕到**远侧面的下方**
+        "wrist": lambda sx: Vector((sx * 0.17, back_cy + 0.005, SEAT_TOP + BACK_HEIGHT + 0.045)),
+        "tip": lambda sx: Vector((sx * 0.17, back_cy - BACK_THICKNESS / 2 - 0.015,
+                                  SEAT_TOP + BACK_HEIGHT - 0.025)),
+    }
 
 
 # ---------------------------------------------------------------- 手指蜷曲轴自测
 
 
+def _finger_tip(arm, side, finger):
+    return f"{BONE_PREFIX}{side}Hand{finger}4"
+
+
+def _palm_plane(arm, side):
+    """掌心平面基：`toward_palm`（指尖朝掌心的方向）+ `lateral`（掌面内的侧向）。
+
+    侧向必须单独量——**只最大化"朝掌心"会把侧弯也选进来**：实测第一版选中 Z/−1，
+    虽然"朝掌心 173 mm"，但**侧向分量 95 mm 比它还大**，呈现就是"手指侧弯"（owner 一眼指出）。
+    """
+    clear_pose(arm)
+    tip = world_point(arm, f"{BONE_PREFIX}{side}HandMiddle4", "tail").copy()
+    wrist = world_point(arm, f"{BONE_PREFIX}{side}Hand").copy()
+    toward_palm = (wrist - tip).normalized()
+    # 侧向 = 垂直于「指尖→腕」且垂直于掌面法向；掌面法向由食指↔小指基节连线定
+    across = world_point(arm, f"{BONE_PREFIX}{side}HandIndex1") - world_point(arm, f"{BONE_PREFIX}{side}HandPinky1")
+    lateral = across.normalized()
+    lateral = (lateral - toward_palm * lateral.dot(toward_palm)).normalized()
+    return tip, toward_palm, lateral
+
+
+def _set_one_finger(arm, side, finger, axis_index, amount):
+    """按 `FINGER_CURL_DEG` 给一根手指的三个指节设同一轴的旋转；`amount` 为符号/幅度系数。"""
+    for k in (1, 2, 3):
+        name = f"{BONE_PREFIX}{side}Hand{finger}{k}"
+        if name not in arm.pose.bones:
+            continue
+        e = [0.0, 0.0, 0.0]
+        e[axis_index] = math.radians(FINGER_CURL_DEG[finger][k - 1] * amount)
+        pb = arm.pose.bones[name]
+        pb.rotation_mode = "XYZ"
+        pb.rotation_euler = Euler(e, "XYZ")
+
+
 def detect_curl_axis(arm, side):
-    """在 X / Z 两个候选轴里挑出"指尖朝掌心"效果更强的那个（含符号）。**不猜**。"""
-    ref_bone = f"{BONE_PREFIX}{side}HandMiddle4"
-    palm_bone = f"{BONE_PREFIX}{side}Hand"
-    clear_pose(arm)
-    base_tip = world_point(arm, ref_bone, "tail").copy()
-    toward_palm = (world_point(arm, palm_bone, "head") - base_tip).normalized()
-    best = None
-    for axis_index, axis_name in ((0, "X"), (2, "Z")):
-        for sign in (1, -1):
-            clear_pose(arm)
-            for finger in FINGERS:
-                for k in (1, 2, 3):
-                    name = f"{BONE_PREFIX}{side}Hand{finger}{k}"
-                    if name not in arm.pose.bones:
+    """**整只手一个轴**（由中指定），拇指单列。
+
+    ⚠️ 曾经**逐指各自选轴**，结果同一只手选出了**相反符号**（实测 Left：
+    Index/Middle/Ring 取 X−1 而 Pinky 取 X+1）⇒ 五根手指各朝一边弯，看着就是乱的。
+    同一只手的四指在解剖上**共用一条屈曲轴**，所以只能选一次、四指共用。
+    评分仍带**侧向惩罚**（只用"朝掌心最大"会选到侧弯：实测朝掌心 58 mm 而侧向 95 mm）。
+    """
+    _, toward_palm, lateral = _palm_plane(arm, side)
+    out = {}
+    for group, fingers in (("four", ("Middle", "Index", "Ring", "Pinky")), ("thumb", ("Thumb",))):
+        best = None
+        for axis_index, axis_name in ((0, "X"), (2, "Z")):
+            for sign in (1, -1):
+                clear_pose(arm)
+                gross = 0.0
+                lat = 0.0
+                for finger in fingers:
+                    tip_bone = _finger_tip(arm, side, finger)
+                    if tip_bone not in arm.pose.bones:
                         continue
-                    degrees = FINGER_CURL_DEG[finger][k - 1] * sign
-                    e = [0.0, 0.0, 0.0]
-                    e[axis_index] = math.radians(degrees)
-                    pb = arm.pose.bones[name]
-                    pb.rotation_mode = "XYZ"
-                    pb.rotation_euler = Euler(e, "XYZ")
-            update()
-            chord = world_point(arm, ref_bone, "tail") - base_tip
-            score = chord.dot(toward_palm) * 1000.0
-            if best is None or score > best[0]:
-                best = (score, axis_name, sign)
+                    base = world_point(arm, tip_bone, "tail").copy()
+                    _set_one_finger(arm, side, finger, axis_index, sign)
+                    update()
+                    chord = world_point(arm, tip_bone, "tail") - base
+                    gross += chord.dot(toward_palm) * 1000.0
+                    lat += abs(chord.dot(lateral)) * 1000.0
+                score = gross - 0.8 * lat
+                if best is None or score > best["score"]:
+                    best = {"axis": axis_name, "axis_index": axis_index, "sign": sign,
+                            "toward_palm_mm": round(gross, 1), "lateral_mm": round(lat, 1),
+                            "score": round(score, 1)}
+        out[group] = best
     clear_pose(arm)
-    return {"axis": best[1], "sign": best[2], "toward_palm_mm": round(best[0], 1)}
+    return out
 
 
-def apply_finger_curl(arm, side, curl_axis, amount):
-    """`amount` 0..1 的蜷曲度；返回实际设定的骨骼数。"""
+#: 四指共用一组；拇指单列
+FINGER_GROUPS = {"four": ("Middle", "Index", "Ring", "Pinky"), "thumb": ("Thumb",)}
+
+
+def apply_finger_curl(arm, side, curl_axes, amount):
+    """按「整只手一个轴（中指定）+ 拇指单列」施加蜷曲；`amount` 0..1。"""
     n = 0
-    for finger in FINGERS:
-        for k in (1, 2, 3):
-            name = f"{BONE_PREFIX}{side}Hand{finger}{k}"
-            if name not in arm.pose.bones:
-                continue
-            degrees = FINGER_CURL_DEG[finger][k - 1] * curl_axis["sign"] * amount
-            e = [0.0, 0.0, 0.0]
-            e[0 if curl_axis["axis"] == "X" else 2] = math.radians(degrees)
-            pb = arm.pose.bones[name]
-            pb.rotation_mode = "XYZ"
-            pb.rotation_euler = Euler(e, "XYZ")
-            n += 1
+    for group, fingers in FINGER_GROUPS.items():
+        spec = curl_axes.get(group)
+        if not spec:
+            continue
+        for finger in fingers:
+            _set_one_finger(arm, side, finger, spec["axis_index"], spec["sign"] * amount)
+            n += 3
     return n
 
 
 # ---------------------------------------------------------------- 捕获 IK 结果
 
 
-def capture_basis(arm, names):
-    """把**求值后**的姿势写回骨骼自身的通道（IK → FK 的捕获）。
+def capture_channels(arm, names):
+    """把控制骨的**通道值**（euler/location）原样记下来。
 
-    `pose_matrix = parent_pose @ parent_rest⁻¹ @ bone_rest @ basis` ⇒ `basis = (…)⁻¹ @ pose_matrix`
-    （根骨没有父骨时退化为 `bone_rest⁻¹ @ pose_matrix`）。
+    全都改成解析解之后，姿势就在通道里，**不需要**再从求值矩阵反解——反解那一步会按
+    **控制骨**的父链算 basis，而姿态约束是按**变形骨**父链生效的，等于把共轭错误又引回来
+    （实测：改完 `_set_world_axes` 结果却一模一样，就是因为这里又反解了一遍）。
     """
-    dg = bpy.context.evaluated_depsgraph_get()
-    ev = arm.evaluated_get(dg)
     out = {}
     for name in names:
-        bone = arm.data.bones[name]
-        pose_matrix = ev.pose.bones[name].matrix.copy()
-        if bone.parent is not None:
-            parent_pose = ev.pose.bones[bone.parent.name].matrix.copy()
-            rest_chain = parent_pose @ bone.parent.matrix_local.inverted() @ bone.matrix_local
-        else:
-            rest_chain = bone.matrix_local.copy()
-        basis = rest_chain.inverted() @ pose_matrix
-        out[name] = {"euler_deg": [math.degrees(a) for a in basis.to_euler("XYZ")],
-                     "location": list(basis.to_translation())}
+        pb = arm.pose.bones[name]
+        e = pb.rotation_euler if pb.rotation_mode != "QUATERNION" else pb.rotation_quaternion.to_euler("XYZ")
+        out[name] = {"euler_deg": [math.degrees(a) for a in e],
+                     "location": list(pb.location)}
     return out
 
 
-def apply_captured(arm, captured, with_location=("CTRL_Hips",)):
+def apply_channels(arm, captured):
     for name, data in captured.items():
         pb = arm.pose.bones[name]
         pb.rotation_mode = "XYZ"
         pb.rotation_euler = Euler([math.radians(a) for a in data["euler_deg"]], "XYZ")
-        pb.location = Vector(data["location"]) if name in with_location else Vector((0.0, 0.0, 0.0))
+        pb.location = Vector(data["location"])
     update()
 
 
-# ---------------------------------------------------------------- 主流程
+def body_frame(arm):
+    """**按当前姿势**现算的身体坐标系：`spine`（骨盆→头）· `lateral`（骨盆左右）· `posterior`（背侧）。
+
+    肘是铰链：它相对「肩→腕」连线的偏移应当**主要沿 `posterior`**，`lateral` 分量要小。
+    用世界 Y 当"向后"是错的——弯腰后身体的"背侧"是**上后方**（实测 55° 弯腰时 posterior≈(0,0.57,0.82)）。
+    """
+    spine = (world_point(arm, f"{BONE_PREFIX}Head") - world_point(arm, f"{BONE_PREFIX}Hips")).normalized()
+    lateral = (world_point(arm, f"{BONE_PREFIX}LeftUpLeg") -
+               world_point(arm, f"{BONE_PREFIX}RightUpLeg")).normalized()
+    lateral = (lateral - spine * lateral.dot(spine)).normalized()
+    posterior = spine.cross(lateral).normalized()
+    return spine, lateral, posterior
+
+
+def elbow_offset(arm, side):
+    """肘相对「肩→腕」弦的偏移，分解到**无歧义的三轴**：向后(世界 +Y) / 向下(−Z) / 体侧(lateral)。
+
+    ⚠️ 这里连续错过两次，都是"判据错而不是产物错"：
+      ① 先用「向外 + 向后之和最大」当**目标函数** ⇒ 那个函数本身在**鼓励肘向外张**（解出向外 96 / 后 55）；
+      ② 改成投影到**脊柱轴**（`spine = Head − Hips`）并把它叫 `forward` ⇒ 弯腰后脊柱指向**前上方**，
+         于是"肘朝骨盆方向（后下）"被算成了 109 mm **forward**，把**正确**的姿势判成反关节。
+    ⇒ 判据只用**无歧义的世界轴**（角色不转身，故 +Y 恒为背向）＋**体侧轴**（由骨盆左右骨给出）。
+    """
+    _, lateral, _ = body_frame(arm)
+    shoulder = world_point(arm, f"{BONE_PREFIX}{side}Arm")
+    wrist = world_point(arm, f"{BONE_PREFIX}{side}Hand")
+    elbow = world_point(arm, f"{BONE_PREFIX}{side}ForeArm")
+    axis = (wrist - shoulder).normalized()
+    delta = elbow - shoulder
+    perp = delta - axis * delta.dot(axis)
+    return {"back": round(perp.y * 1000.0, 1),          # +Y = 角色背向
+            "down": round(-perp.z * 1000.0, 1),         # −Z = 向下
+            "side": round(perp.dot(lateral) * 1000.0, 1),
+            "mm": round(perp.length * 1000.0, 1)}
+
+
+def _set_world_axes(arm, ctrl_name, deform_name, y_dir_world, x_hint_world):
+    """让**变形骨**的世界朝向变成：局部 Y 沿 `y_dir`、局部 X 尽量对齐 `x_hint`。
+
+    ⚠️ **极易错的一处映射**（本工程实测踩到）：约束是 `COPY_ROTATION(LOCAL↔LOCAL)`，
+    复制的是**局部**旋转，而
+      · 控制骨 `CTRL_Arm` 的父级是 **`CTRL_Hips`**（平行控制链）
+      · 变形骨 `mixamorig:Arm` 的父级是 **`mixamorig:Shoulder`**（真实骨链）
+    ⇒ **「设控制骨的世界朝向」≠「设变形骨的世界朝向」**，两者差一个共轭。
+    故 basis 必须按**变形骨**那侧的父链解，再写到控制骨上（复制是 1:1 的）：
+
+        basis_ctrl = (P_deform_parent · rest_local_deform)⁻¹ · 目标世界矩阵
+    """
+    from mathutils import Matrix
+    dg = bpy.context.evaluated_depsgraph_get()
+    ev = arm.evaluated_get(dg)
+    dbone = arm.data.bones[deform_name]
+    inv = arm.matrix_world.inverted().to_3x3()
+    y = (inv @ Vector(y_dir_world)).normalized()
+    xh = inv @ Vector(x_hint_world)
+    x = xh - y * xh.dot(y)
+    if x.length < 1e-8:
+        x = Vector((1.0, 0.0, 0.0)) - y * y.x
+    x.normalize()
+    z = x.cross(y)
+    target = Matrix(((x.x, y.x, z.x, 0.0),
+                     (x.y, y.y, z.y, 0.0),
+                     (x.z, y.z, z.z, 0.0),
+                     (0.0, 0.0, 0.0, 1.0)))
+    if dbone.parent is not None:
+        parent_pose = ev.pose.bones[dbone.parent.name].matrix.copy()
+        rest_chain = parent_pose @ dbone.parent.matrix_local.inverted() @ dbone.matrix_local
+    else:
+        rest_chain = dbone.matrix_local.copy()
+    pb = arm.pose.bones[ctrl_name]
+    pb.matrix_basis = rest_chain.inverted() @ target
+    update()
+
+
+def _rest_dir(arm, deform_name):
+    """变形骨在**静止姿势**下的世界指向（用于让脚掌回到水平）。"""
+    b = arm.data.bones[deform_name]
+    v = (b.tail_local - b.head_local).normalized()
+    return (arm.matrix_world.to_3x3() @ v)
+
+
+def _rest_hinge(arm, deform_name):
+    b = arm.data.bones[deform_name]
+    return (arm.matrix_world.to_3x3() @ b.matrix_local.to_3x3().col[0])
+
+
+def solve_two_bone(arm, ctrl_root, ctrl_mid, deform_root, deform_mid, deform_tip,
+                   tip_target, bend_dir, label=""):
+    """**通用二骨解析解**：中间关节（肘/膝）的位置由 `bend_dir` 显式给定，反解两骨朝向。
+
+    为什么不用 Blender IK：极点到关节平面的映射**不由我控制**——实测"把极点摆在背侧"，
+    仍解出**肘向前顶 109 mm**（反关节），8 个 `pole_angle` 里最好的一个背侧分量只有 10 mm。
+    与其调极点，不如把**关节位置**当输入：这样肘/膝朝向是可断言的一等量。
+    """
+    root = world_point(arm, deform_root)
+    mid_rest = world_point(arm, deform_mid)
+    tip_rest = world_point(arm, deform_tip)
+    a = (mid_rest - root).length
+    b = (tip_rest - mid_rest).length
+    chord = tip_target - root
+    c = chord.length
+    info = {"label": label, "reach_m": round(c, 4), "limb_len_m": round(a + b, 4)}
+    if c >= a + b - 1e-6:
+        mid = root + chord.normalized() * a
+        info["clamped_straight"] = True
+    else:
+        x = (a * a - b * b + c * c) / (2.0 * c)
+        h = math.sqrt(max(a * a - x * x, 0.0))
+        axis = chord / c
+        n = Vector(bend_dir) - axis * Vector(bend_dir).dot(axis)
+        if n.length < 1e-8:
+            n = Vector((0.0, 1.0, 0.0)) - axis * axis.y
+        n.normalize()
+        mid = root + axis * x + n * h
+        info["clamped_straight"] = False
+    hinge = (mid - root).cross(tip_target - mid)
+    if hinge.length < 1e-8:
+        hinge = Vector((1.0, 0.0, 0.0))
+    hinge.normalize()
+    # ⚠️ basis 必须按**变形骨**那侧的父链解（约束复制的是局部旋转，两侧父链不同 ⇒ 差一个共轭）
+    _set_world_axes(arm, ctrl_root, deform_root, mid - root, hinge)
+    _set_world_axes(arm, ctrl_mid, deform_mid, tip_target - mid, hinge)
+    info["mid_target_m"] = [round(v, 4) for v in mid]
+    info["mid_err_mm"] = round((world_point(arm, deform_mid) - mid).length * 1000.0, 1)
+    info["tip_err_mm"] = round((world_point(arm, deform_tip) - tip_target).length * 1000.0, 1)
+    return info
+
+
+def solve_arm(arm, side, wrist_target, elbow_dir):
+    return solve_two_bone(arm, f"CTRL_{side}Arm", f"CTRL_{side}ForeArm",
+                          f"{BONE_PREFIX}{side}Arm", f"{BONE_PREFIX}{side}ForeArm",
+                          f"{BONE_PREFIX}{side}Hand", wrist_target, elbow_dir, label=f"arm_{side}")
+
+
+def solve_leg(arm, side, ankle_target, knee_dir):
+    return solve_two_bone(arm, f"CTRL_{side}UpLeg", f"CTRL_{side}Leg",
+                          f"{BONE_PREFIX}{side}UpLeg", f"{BONE_PREFIX}{side}Leg",
+                          f"{BONE_PREFIX}{side}Foot", ankle_target, knee_dir, label=f"leg_{side}")
+
+
+def solve_hand_orientation(arm, side, tip_target):
+    """搜手腕自己的旋转，让**中指尖**落到"绕到远侧面下方"的目标点。
+
+    手指没有控制骨，且腕部朝向不由 IK 决定（IK 只管到腕），所以腕的朝向要单独解。
+    """
+    tip_bone = f"{BONE_PREFIX}{side}HandMiddle4"
+    name = f"CTRL_{side}Hand"
+    best = None
+    def probe(hx, hy):
+        pb = arm.pose.bones[name]
+        pb.rotation_mode = "XYZ"
+        pb.rotation_euler = Euler((math.radians(hx), math.radians(hy), 0.0), "XYZ")
+        update(2)
+        return (world_point(arm, tip_bone, "tail") - tip_target).length
+    for hx in range(-90, 91, 20):
+        for hy in range(-90, 91, 20):
+            d = probe(hx, hy)
+            if best is None or d < best[0]:
+                best = (d, hx, hy)
+    for hx in range(best[1] - 20, best[1] + 21, 5):
+        for hy in range(best[2] - 20, best[2] + 21, 5):
+            d = probe(hx, hy)
+            if d < best[0]:
+                best = (d, hx, hy)
+    return {"euler_deg": [best[1], best[2], 0.0], "tip_residual_mm": round(best[0] * 1000.0, 1)}
+
+
+def mesh_bbox(name):
+    ob = bpy.data.objects[name]
+    corners = [ob.matrix_world @ Vector(v) for v in ob.bound_box]
+    return {"x": (min(c.x for c in corners), max(c.x for c in corners)),
+            "y": (min(c.y for c in corners), max(c.y for c in corners)),
+            "z": (min(c.z for c in corners), max(c.z for c in corners))}
 
 
 def main() -> int:
@@ -284,167 +500,150 @@ def main() -> int:
     bpy.ops.wm.open_mainfile(filepath=str(tmpl))
     bpy.context.scene.render.fps = args.fps
     arm, m3 = make_context()
+    lay = chair_layout(args.chair)
     build_chair_proxy(args.chair)
-    ry, rz = rail_y(args.chair), rail_top_z()
-    grip = {"Left": Vector((0.17, ry, rz + 0.045)), "Right": Vector((-0.17, ry, rz + 0.045))}
     report = {"script": "author_xbot_chair_grab.py", "blender": bpy.app.version_string,
               "template": str(tmpl), "action": args.action, "fps": args.fps,
-              "chair_distance_m": args.chair, "rail_y": round(ry, 4), "rail_top_z": round(rz, 4),
+              "chair_distance_m": args.chair,
+              "chair": {k: (list(v) if isinstance(v, tuple) else v)
+                        for k, v in lay.items() if not callable(v)},
               "problems": []}
 
     drop_temp(arm)
     clear_pose(arm)
     foot_rest = {s: world_point(arm, f"{BONE_PREFIX}{s}Foot").copy() for s in ("Left", "Right")}
 
+    # 手指蜷曲轴：逐指自测（含侧向惩罚），并把读数记进报告
     curl = {s: detect_curl_axis(arm, s) for s in ("Left", "Right")}
-    report["finger_curl_axis"] = curl
-    print(f"手指蜷曲轴自测：{curl}")
+    report["finger_curl"] = curl
+    for side, spec in curl.items():
+        for finger, row in spec.items():
+            print(f"蜷曲轴 {side:5s} {finger:7s} {row['axis']}{row['sign']:+d} · "
+                  f"朝掌心 {row['toward_palm_mm']:>6.1f} mm · 侧向 {row['lateral_mm']:>6.1f} mm")
 
-    # ---- 逐关键帧解算 ----
     ctrl_bones = [f"{CTRL_PREFIX}{n}" for n in
                   ("Hips", "LeftUpLeg", "LeftLeg", "LeftFoot", "RightUpLeg", "RightLeg", "RightFoot",
                    "LeftArm", "LeftForeArm", "LeftHand", "RightArm", "RightForeArm", "RightHand")]
-    captured = {}
+    captured, hand_orient = {}, {}
     for frame, bend, pelvis, hands_on_rail, curl_amount in SCHEDULE:
         clear_pose(arm)
         drop_temp(arm, also_objects=True)
         set_euler(arm, "CTRL_Hips", x=bend)
         set_world_offset(arm, m3, "CTRL_Hips", pelvis)
-        if hands_on_rail:
-            # ⚠️ 这两行只是**给手臂 IK 一个好起点**。**不能无条件加**——不加臂 IK 的帧
-            #    （首帧 = 站立）会把预摆角度原样留在姿势里，于是"首帧不中立"，
-            #    连带把导出的 bind pose 污染掉（实测：E5 报 69 m 偏差才发现）。
-            for side, sgn in (("Left", 1), ("Right", -1)):
-                set_euler(arm, f"CTRL_{side}Arm", z=sgn * 70)
-                set_euler(arm, f"CTRL_{side}ForeArm", x=25)
-        update()
-        # 临时 IK：脚回静止位 + （到位前）手到顶杆
-        foot_targets, hand_targets = {}, {}
-        for side in ("Left", "Right"):
-            ft = bpy.data.objects.new("TMP_Foot" + side, None)
-            ft.location = foot_rest[side]
-            bpy.context.scene.collection.objects.link(ft)
-            foot_targets[side] = ft
-            ik = arm.pose.bones[f"CTRL_{side}Leg"].constraints.new("IK")
-            ik.name = "TMP_IK_leg"
-            ik.target = ft
-            ik.chain_count = 2
-            if hands_on_rail:
-                ht = bpy.data.objects.new("TMP_Hand" + side, None)
-                ht.location = grip[side]
-                bpy.context.scene.collection.objects.link(ht)
-                hand_targets[side] = ht
-                ik = arm.pose.bones[f"CTRL_{side}ForeArm"].constraints.new("IK")
-                ik.name = "TMP_IK_arm"
-                ik.target = ht
-                ik.chain_count = 2
-        update(12)
-        if hands_on_rail:
-            apply_finger_curl(arm, "Left", curl["Left"], curl_amount)
-            apply_finger_curl(arm, "Right", curl["Right"], curl_amount)
-            update()
-        captured[frame] = capture_basis(arm, ctrl_bones)
 
-    # ---- 去掉 IK，用捕获到的角度复演，逐帧复核 ----
+        update()
+        _, _, posterior = body_frame(arm)
+        # 腿：解析解，膝朝**前**（−posterior）；目标 = 脚踝静止位 ⇒ 脚踩原地
+        for side in ("Left", "Right"):
+            report.setdefault("leg_solve", {})[f"{frame}_{side}"] = solve_leg(
+                arm, side, foot_rest[side], -posterior)
+        # 脚掌保持水平（脚控制骨的世界朝向回到它的静止朝向）
+        for side in ("Left", "Right"):
+            _set_world_axes(arm, f"CTRL_{side}Foot", f"{BONE_PREFIX}{side}Foot",
+                            _rest_dir(arm, f"{BONE_PREFIX}{side}Foot"), _rest_hinge(arm, f"{BONE_PREFIX}{side}Foot"))
+
+        if hands_on_rail:
+            # ⚠️ 预摆只为给解析解一个好起点；**不能加到没有臂解的帧**（首帧=站立），
+            #    否则首帧不中立 ⇒ 导出的 bind pose 被污染（实测被 E5 抓出 69 m 偏差）。
+            set_euler(arm, "CTRL_LeftArm", z=70)
+            set_euler(arm, "CTRL_LeftForeArm", x=25)
+            set_euler(arm, "CTRL_RightArm", z=-70)
+            set_euler(arm, "CTRL_RightForeArm", x=25)
+        update()
+
+        if hands_on_rail:
+            for side in ("Left", "Right"):
+                sgn = 1.0 if side == "Left" else -1.0
+                report.setdefault("arm_solve", {})[f"{frame}_{side}"] = solve_arm(
+                    arm, side, lay["wrist"](sgn), posterior)
+                apply_finger_curl(arm, side, curl[side], curl_amount)
+            update(2)
+            for side in ("Left", "Right"):
+                sgn = 1.0 if side == "Left" else -1.0
+                hand_orient[(frame, side)] = solve_hand_orientation(arm, side, lay["tip"](sgn))
+            update(2)
+        captured[frame] = capture_channels(arm, ctrl_bones)
+
+    # ---- 去掉 IK 复演，逐帧复核（判据一律对着**产物几何**）----
     drop_temp(arm)
     verify = []
     for frame, bend, pelvis, hands_on_rail, curl_amount in SCHEDULE:
         clear_pose(arm)
-        apply_captured(arm, captured[frame])
+        apply_channels(arm, captured[frame])
         if hands_on_rail:
-            apply_finger_curl(arm, "Left", curl["Left"], curl_amount)
-            apply_finger_curl(arm, "Right", curl["Right"], curl_amount)
+            for side in ("Left", "Right"):
+                spec = hand_orient.get((frame, side))
+                if spec:
+                    pb = arm.pose.bones[f"CTRL_{side}Hand"]
+                    pb.rotation_mode = "XYZ"
+                    pb.rotation_euler = Euler([math.radians(a) for a in spec["euler_deg"]], "XYZ")
+                apply_finger_curl(arm, side, curl[side], curl_amount)
         update()
+        back = mesh_bbox("REF_Back")
         row = {"frame": frame, "bend_deg": bend}
         for side in ("Left", "Right"):
             hand = world_point(arm, f"{BONE_PREFIX}{side}Hand")
             tip = world_point(arm, f"{BONE_PREFIX}{side}HandMiddle4", "tail")
-            row[f"hand_{side}_residual_mm"] = round((hand - grip[side]).length * 1000.0, 1) if hands_on_rail else None
-            row[f"hand_{side}_m"] = [round(v, 4) for v in hand]
-            row[f"fingertip_{side}_m"] = [round(v, 4) for v in tip]
             foot = world_point(arm, f"{BONE_PREFIX}{side}Foot")
+            row[f"wrist_{side}_m"] = [round(v, 4) for v in hand]
+            row[f"tip_{side}_m"] = [round(v, 4) for v in tip]
+            row[f"wrist_to_back_mm"] = round(abs(hand.y - lay["back_cy"]) * 1000.0, 1)
+            # ⚠️ 只有**手指已蜷**的帧才判"扣住"：手指伸直时指尖本来就会越过顶杆，
+            #    不设这个门槛会得到"早早就扣住了"的假读数。
+            row[f"tip_wraps_rail_{side}"] = (bool(tip.y < back["y"][0] and tip.z < lay["rail_top_z"])
+                                             if curl_amount > 0.0 else None)
+            row[f"hand_above_rail_mm"] = round((hand.z - lay["rail_top_z"]) * 1000.0, 1)
             row[f"foot_{side}_drift_mm"] = round((foot - foot_rest[side]).length * 1000.0, 1)
             upper = world_point(arm, f"{BONE_PREFIX}{side}Arm")
             lower = world_point(arm, f"{BONE_PREFIX}{side}ForeArm")
             row[f"elbow_{side}_deg"] = round(math.degrees((upper - lower).angle(hand - lower)), 1)
+            row[f"elbow_{side}_offset_mm"] = elbow_offset(arm, side)
         row["head_z_m"] = round(world_point(arm, f"{BONE_PREFIX}Head").z, 4)
-        row["hips_z_m"] = round(world_point(arm, f"{BONE_PREFIX}Hips").z, 4)
         verify.append(row)
     report["verify"] = verify
+    report["back_bbox"] = {k: [round(x, 4) for x in v] for k, v in mesh_bbox("REF_Back").items()}
 
+    # ---- 判据 ----
     last = verify[-1]
-    if last["hand_Left_residual_mm"] is None or max(last["hand_Left_residual_mm"],
-                                                    last["hand_Right_residual_mm"]) > 15.0:
-        report["problems"].append(
-            f"到位帧手↔顶杆残差 {last['hand_Left_residual_mm']} / {last['hand_Right_residual_mm']} mm > 15 mm")
-    if max(row["foot_Left_drift_mm"] for row in verify) > 15.0 or \
-       max(row["foot_Right_drift_mm"] for row in verify) > 15.0:
-        report["problems"].append("关键帧上脚相对静止位漂移 > 15 mm（脚没踩住）")
-    if not (120.0 <= last["elbow_Left_deg"] <= 170.0):
-        report["problems"].append(f"到位帧肘角 {last['elbow_Left_deg']}° 不在自然区间 120–170°")
+    for side in ("Left", "Right"):
+        if last[f"wrist_to_back_mm"] > 60.0:
+            report["problems"].append(f"{side} 腕离靠背中心面 {last['wrist_to_back_mm']} mm > 60 mm（没放到椅背上）")
+        if not last[f"tip_wraps_rail_{side}"]:
+            report["problems"].append(f"{side} 指尖没有绕到顶杆远侧下方（没扣住）")
+        if not (100.0 <= last[f"elbow_{side}_deg"] <= 172.0):
+            report["problems"].append(f"{side} 到位帧肘角 {last[f'elbow_{side}_deg']}° 不在 100–172°")
+        off = last[f"elbow_{side}_offset_mm"]
+        if off["back"] < 60.0:
+            report["problems"].append(
+                f"{side} 肘**向后**偏移只有 {off['back']} mm < 60 mm（肘没往后折 = 反关节）")
+        if abs(off["side"]) > 40.0:
+            report["problems"].append(f"{side} 肘**侧向**偏移 {off['side']} mm > 40 mm（肘向外张 = 侧弯）")
+        if off["down"] < 20.0:
+            report["problems"].append(f"{side} 肘没有挂在弦的下方（down={off['down']} mm < 20 mm）")
+        for group, spec in curl[side].items():
+            if spec["lateral_mm"] > spec["toward_palm_mm"]:
+                report["problems"].append(
+                    f"{side} {group} 蜷曲偏侧弯（朝掌心 {spec['toward_palm_mm']} mm < 侧向 {spec['lateral_mm']} mm）")
+    if max(r[f"foot_{s}_drift_mm"] for r in verify for s in ("Left", "Right")) > 15.0:
+        report["problems"].append("关键帧上脚漂移 > 15 mm")
 
-    # ---- 写动作 ----
-    arm.animation_data_clear()
-    ad = arm.animation_data_create()
-    # ⚠️ `bpy.data.actions.new()` 遇到**同名**会**静默**建 `名字.001`，而旧动作仍留在文件里
-    #    ⇒ 导出脚本按名字取到的是**旧动作**（实测：改完动作、导出结果却一模一样，E5 偏差逐位不变，
-    #    才回头发现文件里有 `X` 与 `X.001` 两份）。重跑前先把同名/同前缀的旧动作清掉。
-    for stale in [a for a in bpy.data.actions
-                  if a.name == args.action or a.name.startswith(args.action + ".")]:
-        bpy.data.actions.remove(stale)
-    action = bpy.data.actions.new(args.action)
-    if action.name != args.action:
-        raise RuntimeError(f"动作名被占用：期望 {args.action!r}，实际 {action.name!r}")
-    action.use_fake_user = True
-    try:
-        sys.path.insert(0, str(Path(__file__).resolve().parent))
-        import blender_action_compat as bac
-        bac.assign_action(ad, action)
-    except Exception as exc:
-        print(f"[WARN] 取道层不可用（{exc}），退回直接指派")
-        ad.action = action
-
-    for frame, bend, pelvis, hands_on_rail, curl_amount in SCHEDULE:
-        bpy.context.scene.frame_set(frame)
-        clear_pose(arm)
-        apply_captured(arm, captured[frame])
-        if hands_on_rail:
-            apply_finger_curl(arm, "Left", curl["Left"], curl_amount)
-            apply_finger_curl(arm, "Right", curl["Right"], curl_amount)
-        update()
-        for name in ctrl_bones:
-            pb = arm.pose.bones[name]
-            pb.rotation_mode = "XYZ"
-            pb.keyframe_insert("rotation_euler", frame=frame)
-        arm.pose.bones["CTRL_Hips"].keyframe_insert("location", frame=frame)
-        for side in ("Left", "Right"):
-            for finger in FINGERS:
-                for k in (1, 2, 3):
-                    name = f"{BONE_PREFIX}{side}Hand{finger}{k}"
-                    if name in arm.pose.bones:
-                        arm.pose.bones[name].keyframe_insert("rotation_euler", frame=frame)
-    bpy.context.scene.frame_start, bpy.context.scene.frame_end = SCHEDULE[0][0], SCHEDULE[-1][0]
-    bpy.context.scene.frame_set(SCHEDULE[0][0])
-    report["action_frames"] = [SCHEDULE[0][0], SCHEDULE[-1][0]]
     report["ok"] = not report["problems"]
     report_path.write_text(json.dumps(report, ensure_ascii=False, indent=1), encoding="utf-8")
-
-    print("=" * 78)
-    print(f"动作 {args.action} · 帧 {SCHEDULE[0][0]}–{SCHEDULE[-1][0]} @ {args.fps} fps")
-    print(f"椅子：中心前方 {args.chair} m · 靠背顶杆 y={ry:.4f} z={rz:.4f}")
-    print(f"{'帧':>4}{'弯腰':>7}{'手残差L/R(mm)':>20}{'脚漂移L/R(mm)':>20}{'肘角L':>8}{'头高':>8}")
+    print("=" * 92)
+    print(f"动作 {args.action} · 帧 {SCHEDULE[0][0]}–{SCHEDULE[-1][0]} @ {args.fps} fps · "
+          f"椅子中心前方 {args.chair} m · 靠背中心面 y={lay['back_cy']:.3f} · 顶杆 z={lay['rail_top_z']:.4f}")
+    print(f"{'帧':>4}{'弯腰':>6}{'腕↔靠背':>10}{'腕高于顶杆':>12}{'指尖扣住':>10}{'肘角':>8}{'肘后/下/侧':>16}{'脚漂移':>9}")
     for row in verify:
-        hl = "—" if row["hand_Left_residual_mm"] is None else f"{row['hand_Left_residual_mm']:.1f}/{row['hand_Right_residual_mm']:.1f}"
-        print(f"{row['frame']:>4}{row['bend_deg']:>6.0f}°{hl:>20}"
-              f"{row['foot_Left_drift_mm']:>10.1f}/{row['foot_Right_drift_mm']:<9.1f}"
-              f"{row['elbow_Left_deg']:>7.1f}°{row['head_z_m']:>8.3f}")
+        print(f"{row['frame']:>4}{row['bend_deg']:>5.0f}°{row['wrist_to_back_mm']:>10.1f}"
+              f"{row['hand_above_rail_mm']:>12.1f}{str(row['tip_wraps_rail_Left']):>10}"
+              f"{row['elbow_Left_deg']:>7.1f}°"
+              f"{row['elbow_Left_offset_mm']['back']:>7.0f}/{row['elbow_Left_offset_mm']['down']:<4.0f}/{row['elbow_Left_offset_mm']['side']:<5.0f}"
+              f"{row['foot_Left_drift_mm']:>9.1f}")
     print(f"报告: {report_path}")
     print(f"结论: {'OK' if report['ok'] else 'FAIL —— ' + '; '.join(report['problems'])}")
-    print("=" * 78)
+    print("=" * 92)
 
     if not args.no_save:
-        if not args.force and bpy.data.filepath and Path(bpy.data.filepath) == tmpl:
-            pass          # 就地写入母版：动作与参考椅都归母版（再生母版会清掉，见管线文档 §八）
         bpy.ops.wm.save_as_mainfile(filepath=str(tmpl), compress=False)
         print(f"已写回母版：{tmpl}")
     return 0 if report["ok"] else 1
