@@ -24,7 +24,7 @@
 | [`design/entities/`](design/entities) | 角色与面具、敌人与事件、疾病目录、武器装备、消耗品 |
 | [`design/space/`](design/space) | 三层空间模型、关卡设计、治疗中心建模 |
 | [`design/events/`](design/events) | 游戏循环、世界观与叙事、任务 / 剧情 / 奖励系统、NPC 人生生成器 |
-| [`design/presentation/`](design/presentation) | 战斗界面布局、动作库规格、3D 可视化（规范 + HTML 原型 + Blender 资产） |
+| [`design/presentation/`](design/presentation) | 战斗界面布局、动作库规格、**X Bot 动画处理能力对照实验（共同样本与观测口径）**、3D 可视化（规范 + HTML 原型 + Blender 资产） |
 | [`design/pipeline/`](design/pipeline) | 预烘焙管线（已废弃）、引擎实施路线图 |
 | [`design/spec/`](design/spec/README.md) | 实现规格与输入素材：C# 子系统规格 / NPC 起草素材 / 特征数据源 |
 | [`design/framework/`](design/framework) | 六维状态路由表 + 六维度索引 |
