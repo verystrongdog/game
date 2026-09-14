@@ -257,31 +257,46 @@ def main() -> int:
     }
 
     # ---- 2) 导出：animation-only
+    #
+    # ⚠️ **导出前必须把场景帧设回「导出范围的首帧」**（2026-09-14 实测，代价：一整轮排查）：
+    #    Blender 的 FBX 导出把**导出那一刻当前帧的姿势**写进骨节点的默认变换（Lcl Translation/Rotation），
+    #    而回导端（以及 Unity 的 ModelImporter 建 Avatar 时）**把那个默认变换当作 Rest/Bind Pose**。
+    #    ⇒ 动作若在**非中立姿势**上导出，产物的**骨架身份被污染**：动画本身照旧正确（E1/E6 全绿），
+    #    只有 E5（骨端点比对）会报出与姿势同量级的偏差（实测 **86 m**）。
+    #    ⛔ 试过 `armature.pose_position = "REST"`：bind pose 是对了，但 depsgraph 每帧都按静止求值 ⇒
+    #    **动画被压成常量**（E6 偏差恰好等于整个动作幅度，一眼可辨）。**别那么做。**
+    #    ✅ 正解：回到首帧导出。**配套约定：动作首帧应是中立姿势**——E5 就是这条约定的机器判据。
     out_fbx.parent.mkdir(parents=True, exist_ok=True)
-    bpy.ops.export_scene.fbx(
-        filepath=str(out_fbx),
-        use_selection=False,
-        object_types={"ARMATURE"},          # 无网格 ⇒ animation-only
-        axis_forward="-Z", axis_up="Y",     # Unity 约定（既有 15 条 Mixamo FBX 同口径）
-        global_scale=1.0,
-        apply_unit_scale=True,
-        apply_scale_options="FBX_SCALE_NONE",
-        bake_space_transform=False,
-        add_leaf_bones=False,               # 不新增 Leaf Bone
-        use_armature_deform_only=True,      # 控制骨不外泄
-        primary_bone_axis="Y", secondary_bone_axis="X",
-        armature_nodetype="NULL",
-        bake_anim=True,
-        bake_anim_use_all_bones=True,
-        bake_anim_use_nla_strips=False,
-        bake_anim_use_all_actions=False,
-        bake_anim_force_startend_keying=True,
-        bake_anim_step=1.0,
-        bake_anim_simplify_factor=0.0,      # 不做关键帧简化 ⇒ 可复现
-        use_custom_props=False,
-        path_mode="AUTO",
-        embed_textures=False,
-    )
+    bpy.context.scene.frame_set(f0 + shifted)
+    bpy.context.view_layer.update()
+    try:
+        bpy.ops.export_scene.fbx(
+            filepath=str(out_fbx),
+            use_selection=False,
+            object_types={"ARMATURE"},          # 无网格 ⇒ animation-only
+            axis_forward="-Z", axis_up="Y",     # Unity 约定（既有 15 条 Mixamo FBX 同口径）
+            global_scale=1.0,
+            apply_unit_scale=True,
+            apply_scale_options="FBX_SCALE_NONE",
+            bake_space_transform=False,
+            add_leaf_bones=False,               # 不新增 Leaf Bone
+            use_armature_deform_only=True,      # 控制骨不外泄
+            primary_bone_axis="Y", secondary_bone_axis="X",
+            armature_nodetype="NULL",
+            bake_anim=True,
+            bake_anim_use_all_bones=True,
+            bake_anim_use_nla_strips=False,
+            bake_anim_use_all_actions=False,
+            bake_anim_force_startend_keying=True,
+            bake_anim_step=1.0,
+            bake_anim_simplify_factor=0.0,      # 不做关键帧简化 ⇒ 可复现
+            use_custom_props=False,
+            path_mode="AUTO",
+            embed_textures=False,
+        )
+    finally:
+        bpy.context.scene.frame_set(f0 + shifted)
+
     report["checks"]["E_export_bytes"] = {"size": out_fbx.stat().st_size}
 
     # ---- 3) 回读校验
