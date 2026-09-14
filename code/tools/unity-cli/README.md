@@ -24,7 +24,7 @@
 ## 三、常用命令
 
 ```bash
-./uc.sh status                                     # Editor 端口/工程/版本
+./uc.sh editor_status                              # Editor 状态（ready / 工程路径 / 版本）⚠️ 没有 status 这个命令
 ./uc.sh recompile && ./uc.sh recompile_status      # 重编译 + 轮询
 ./uc.sh console --level error --tail 20            # 读控制台
 ./uc.sh list_tests                                 # 列出测试
@@ -35,6 +35,22 @@
 ./uc.sh get_scene_hierarchy                        # 场景层级
 ./shot.sh out.png camera                           # 抓 Game View（实时性见 §四）
 ```
+
+### 装包 / 卸包（🔧 2026-09-14 实测）
+
+pipeline 有**专门的包命令**——不要手改 `Packages/manifest.json`：资产区由 Windows 侧独占生成，且 WSL 沙箱把 `/mnt/c` 设成只读（实测 `touch` → `Read-only file system`）。
+
+```bash
+./uc.sh package_list                                                   # 已解析的包清单（含 BuiltIn / Registry 来源）
+./uc.sh package_add --name com.unity.animation.rigging --dry_run true   # 先预览 plan
+./uc.sh package_add --name com.unity.animation.rigging --confirm true   # 落盘
+./uc.sh package_remove --name com.unity.formats.fbx --confirm true
+./uc.sh package_status                                                  # 轮询到 completed / failed
+```
+
+- ⚠️ **参数名是 `name`**（不是 `--package`）；写操作必须带 `--confirm true`，否则回 `Refused: this changes project packages. Re-run with confirm=true to apply, or dry_run=true to preview.`
+- ⚠️ **装包会连带整条依赖链进 `packages-lock.json`**（实测：装 `animation.rigging` 连带 `burst` + `mathematics`；装 `formats.fbx` 连带 `autodesk.fbx` + `timeline` + `modules.director`）。不要的必须 `package_remove` 撤掉——**只从 manifest 手删会留下锁里的孤儿**。
+- 落盘后**把两份文件镜像回仓库**（`manifest.json` + `packages-lock.json` 都是入库件），做法：`cp` 回仓库 + 双侧 `sha256sum` 核对。⚠️ 提交信息里要写明**证据基线**（Editor 的 `projectPath` 与那份拷贝的 git HEAD / dirty 数），见危险点表 §七。
 
 ## 四、⚠️ 五个坑（#126 / #137 / #141 实测踩过，代价很大）
 
