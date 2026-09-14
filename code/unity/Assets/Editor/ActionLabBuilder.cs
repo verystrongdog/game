@@ -118,6 +118,8 @@ namespace YANTF.EditorTools
             if (actor.GetComponent<FootGroundingIK>() == null) actor.AddComponent<FootGroundingIK>();
             // Animation Rigging 接入点（2026-09-14）：**惰性**骨架，权重 0，不产生任何行为
             BuildRigInfrastructure(actor, animator);
+            // 持握调台（2026-09-14，非正典）：Play 中拖 Inspector 手调姿势 + curl 包握；场景里保持惰性
+            if (actor.GetComponent<GripTuningStand>() == null) actor.AddComponent<GripTuningStand>();
 
             // ---- 相机：环绕跟随（owner 裁定 2026-09-12 折进 builder —— 不再靠"每次重建手工挂"）----
             // 背景：观察相机原定"手动挂载、不改 builder"（README §二·G 裁定）。但场景自 #136 起已入库、

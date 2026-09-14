@@ -160,6 +160,7 @@ namespace YANTF.ActionLab
                 player.Play(ActionIds.Stand);
             if (Input.GetKeyDown(KeyCode.Alpha8)) ToggleChairGripProbe();   // 持椅探针（§戊·6，非正典）
             if (Input.GetKeyDown(KeyCode.Alpha9)) LogGripContact();         // 判据 4/5 实时读数（§戊·5，非正典）
+            if (Input.GetKeyDown(KeyCode.Alpha0)) ToggleTuningStand();      // 调台开关（§戊·5 补记，非正典）
             if (Input.GetKeyDown(KeyCode.R)) player.ResetToIdle();
         }
 
@@ -396,10 +397,35 @@ namespace YANTF.ActionLab
             { SetHint("挂点被拒：" + grip.LastAttachReport); return; }
 
             _grip = grip;
+            var stand = GetComponent<GripTuningStand>();
+            if (stand != null) stand.Bind(grip);
             player.IsHoldingChair = true;
             SetHint($"已持椅（Wield2H；最近椅子 {nd:F2} m）——按 3 格挡（持握变体），再按 8 放下");
         }
 
+
+        /// <summary>
+        /// 调台开关（键 `0`；非正典）：把 Animation Rigging 接入点的权重由 0 提到 1，让左臂跟着
+        /// `LeftHandTarget` 走——配合 Inspector 的 `chairYaw/Pitch/Roll` 与 `curl` 手调姿势。
+        /// 场景里那两份权重必须仍是 0（`ActionLabBuilder.VerifyRigInfrastructure` 会拦）。
+        /// </summary>
+        private void ToggleTuningStand()
+        {
+            var stand = GetComponent<GripTuningStand>();
+            if (stand == null) { SetHint("本对象上没有 GripTuningStand（重跑菜单重建场景）"); return; }
+            var grip = _grip != null ? _grip : FindNearestGrip();
+            if (grip != null) stand.Bind(grip);
+            stand.ToggleTuning();
+            SetHint(stand.tuning
+                ? "调台已开（IK 权重 1）——拖 LeftHandTarget / Inspector 的 chairYaw·curl，按 9 读判据 4/5"
+                : "调台已关（IK 权重 0，接入点回到惰性）");
+        }
+
+        private ChairGrip FindNearestGrip()
+        {
+            var seat = ChairSeat.FindNearest(transform.position, out float _);
+            return seat != null ? seat.GetComponent<ChairGrip>() : null;
+        }
 
         /// <summary>
         /// 判据 4/5 的**实时读数**（规格 §戊·5；非正典，给手调当尺子用）：键 `9`。
