@@ -63,6 +63,10 @@ lab 载体的两条 `SkinnedMeshRenderer.sharedMaterials` 与 `X Bot.fbx` **逐�
 
 ### 三处同哈希（资产身份，`code/unity/README.md` §二·H 口径）
 
+> ⚠️ **只对"本次那份文件"成立**：探针 FBX 是**生成物**，FBX 头带 `CreationTimeStamp` + UID 计数器派生 ⇒
+> **重跑导出无法复现同一哈希**（实测连导三次三个哈希）。它的判据是**内容等价**（回导逐骨比 + E0–E6），
+> 见[双版本证据](blender-pipeline-dual-version-2026-09-14.md) §三。`X Bot.fbx` 等**源资产**不受此限。
+
 | 文件 | 三侧（Blender 输出 / 仓库 / Editor 工程）sha256 |
 |---|---|
 | `Assets/Animations/Blender/RigRoundTripProbe.fbx` | `b8cb1c96a508df73dd6ec0f168094e51844c37d6abac39014340b1ccf4e50356`（**逐字节一致**） |

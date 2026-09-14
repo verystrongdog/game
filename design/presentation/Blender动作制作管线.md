@@ -54,6 +54,7 @@
 | 控制链 | 控制骨自成一**平行链**（`CTRL_Hips` 为根），**不插进** `mixamorig` 链 | 插进去会改变变形骨的父子关系，破坏 V3 |
 | 驱动方式 | 变形骨加 Bone Constraint：`COPY_ROTATION`（`LOCAL`↔`LOCAL`，`REPLACE`）；骨盆另加 `COPY_LOCATION`（同空间口径） | 控制骨因此**真的**驱动身体（V6 逐根实测） |
 | 不带源动画 | 导入时 `use_anim=False` | 控制层用约束覆盖变形骨；若同一条骨上同时有源 action 的位移/缩放通道，就有两个写者，读数无法归属。源动画仍可从 X Bot.fbx 取，不存第二份 |
+| GUI 可用性 | 13 根控制骨归入骨骼集合 **`CTRL`**（配色 `THEME04`、八面体显示），65 根变形骨归入 **`MIXAMORIG`**；两个集合**默认都可见**。⚠️ 控制骨与目标骨 head/tail/roll **完全重合**，同屏时点不准——**要"只点控制骨"就把 `MIXAMORIG` 集合关掉**。纯显示层：不进 FBX、不改约束映射（已复核导出物等价，§四·4） | V9 自检 |
 | 场景帧率 | 30 fps（与既有 15 条 Mixamo FBX 实测一致） | 实测 |
 | 母版自带动作 | `RigRoundTripProbe`：4 个关键帧（1 / 21 / 41 / 61），键在**控制骨**上 | 既是控制层的接线自检（V8），也是导出的输入 |
 | 探针动作幅度 | 骨盆 ±（+2.5 / −1.5）**骨架局部单位**；四肢 16°–32° | 演示常量，非正典参数 |
@@ -77,6 +78,7 @@
 | V6 | 每根控制骨都能真实驱动对应变形骨 | 骨尖位移 ≥ **20 mm**（摆 25°） | 最小 **35.6121 mm** ✓ |
 | V7 | 探针动作覆盖 13 根控制骨 | 逐根有键 | 13/13，42 条 F-Curve ✓ |
 | V8 | 探针动作**非退化**：每个读数点都在动 | 逐点 ≥ **20 mm** | 最大 **820.21 mm**；逐点 Hips 42.05 / 左手 746.38 / 右手 820.21 / 左脚 608.26 / 右脚 601.19 ✓ |
+| V9 | 显示层：骨骼集合 `CTRL`/`MIXAMORIG` 分别是 13 / 65 根 | 硬判 | `{'CTRL': 13, 'MIXAMORIG': 65}` ✓ |
 
 ### 为什么单独有 V8（一次真实的假绿）
 
@@ -129,13 +131,27 @@ blender --background --factory-startup --python-exit-code 1 \
 | E2 | 骨集：65 变形骨 · `CTRL_` **0** 条 · 无多余骨 | 硬判 | 65 / 0 / 0 ✓ |
 | E3 | 单一根骨 `mixamorig:Hips`（无额外 Root 骨 / 无新增 Leaf Bone） | 硬判 | `['mixamorig:Hips']` ✓ |
 | E4 | 不含网格（animation-only） | 硬判 | `[]` ✓ |
-| E5 | Rest Pose 与源逐元素一致 | ≤ 1e-4 | 最大元素差 **9.2e-05** ✓ |
+| E5 | Rest Pose 与源一致（**骨端点坐标**） | ≤ 0.5 mm | 4.5 侧 **0.092 mm** · 5.1 侧 **0.122 mm** ✓（矩阵元素差仅作噪声读数：9.2e-05 / 1.22e-04） |
 | E6 | 回导保真：FBX 重新导入后逐帧姿势 vs 母版 | ≤ 0.5 mm | **0.0014 mm**（帧号 offset 0）✓ |
 
 导出物：`RigRoundTripProbe.fbx` · 684 044 字节 · take `Armature|RigRoundTripProbe` ·
 导出帧 0–60（61 键 @30 fps = 2.000 s）· 烘焙 715 条 F-Curve，剥掉 42 条控制通道，解除 14 条约束。
 
 > ⚠️ **E1/E6 只证明"Blender 侧往返无损"**，不证明 Unity 侧的重定向行为——后者见 §五。
+
+### 4.4 ⚠️ 导出物**不可逐字节复现**——判据取「内容等价」
+
+FBX 头部带 `CreationTimeStamp`，且对象 UID 是计数器派生 ⇒ **同一母版连导三次得到三个不同哈希**
+（实测 2026-09-14：`1fafa792…` / `f2524de1…` / `f0f55d65…`，三次字节数相同、`diff` 遍布全文）。
+
+⇒ 对**生成物** FBX **不得**用 `sha256` 当"没改动"的判据。可用的判据是**内容等价**：
+
+| 核验方式 | 判据 | 实测 |
+|---|---|---|
+| 回导到 Blender 逐骨比对 | 65 骨 · Rest Pose 端点差 · 逐帧姿势差 | **0.000000 mm**（GUI 显示层改动前后）· **0.000967 mm**（4.5 产物 vs 5.1 产物） |
+| 导出侧自检 | E0–E6 全绿 | 两侧皆绿 |
+
+> 注：**源资产**（`X Bot.fbx` 等入库输入）的 `sha256` 照旧可用——它们是字节冻结的输入，不重生成。
 
 ## 五、回导判据
 
@@ -230,13 +246,31 @@ controller 名 / clip 名 / frameCount / avatar 名**逐字节相同**。判据�
 > 本节是 Blender 侧脚本的 **SDK 参考**（运行方式、用到的 API、踩过的坑）。落地位置由 owner
 > 2026-09-14 裁定：折进本文作附节，不另开 `docs/` 顶层目录、不做第二份真相源。
 
-### 7.1 怎么跑（本机实测口径）
+### 7.1 怎么跑（本机实测口径）· **4.5 与 5.x 双兼容**
 
 ```bash
-B=.scratch/blender-lts/blender-4.5.13-linux-x64/blender   # 便携包，落被 gitignore 的 .scratch/
+# Linux / WSL：4.5.13 LTS 便携包（落被 gitignore 的 .scratch/）
+B=.scratch/blender-lts/blender-4.5.13-linux-x64/blender
 "$B" --background --factory-startup --python-exit-code 1 \
      --python code/tools/<脚本>.py -- <脚本自己的参数>
+
+# Windows：已装的 5.1.2（脚本经 UNC 读，产物也写回 WSL 侧）
+BL="C:\Program Files\Blender Foundation\Blender 5.1\blender.exe"
+"$BL" --background --factory-startup --python-exit-code 1 \
+      --python '\\wsl.localhost\Ubuntu-22.04\home\dog\game\code\tools\<脚本>.py' -- <参数>
 ```
+
+**版本差异全部收在 `code/tools/blender_action_compat.py`**（两个脚本都只调它）。两侧实测（2026-09-14）：
+
+| 差异点 | Blender 4.5.13 | Blender 5.1.2 | 取道层怎么办 |
+|---|---|---|---|
+| 曲线容器 | `Action.fcurves` | **已移除** → `action.layers[0].strips[0].channelbag(slot).fcurves`（slotted actions） | `action_fcurves()` 按实例探测，取不到返回 `None`（**不当成「0 条曲线」**） |
+| 指派后的 slot | 无此概念 | 必须再设 `animation_data.action_slot`，否则**不驱动任何东西** | `assign_action()`：有 slot 指第一个，没 slot 先建一个 |
+| 姿态骨选择位 | `Bone.select` | `Bone.select` **已移除** → `PoseBone.select` | `select_pose_bones()` 按属性存在性二选一，并把实际用的属性记进报告 |
+| 类型级探测 | `hasattr(bpy.types.Action, "fcurves")` **在 4.5 上也是 False** | 同左 | 判据改查 `bl_rna.properties`（**4.5 = 有 / 5.1 = 无**） |
+
+⚠️ **创作基线可以自选，但不能降级**：Blender 保存是单向的——用 5.1 存过的 `.blend`，4.5 **打不开**。
+所以「用哪个版本的 GUI 调动作」要固定下来；两侧脚本都能跑，故换版本只需**重建一次母版**。
 
 | 开关 | 为什么必须 |
 |---|---|
@@ -260,13 +294,17 @@ B=.scratch/blender-lts/blender-4.5.13-linux-x64/blender   # 便携包，落被 g
 | 关键帧平移 | 直接改 `kp.co.x` / `kp.handle_left.x` / `kp.handle_right.x`，改完 `fc.update()` |
 | 存盘后重新读回校验 | `bpy.ops.wm.save_as_mainfile(...)` → `bpy.ops.wm.open_mainfile(...)` → 重新取指纹比对。⚠️ 旧对象引用会失效（`ReferenceError: StructRNA ... has been removed`），先把要打印的摘要取成局部变量 |
 | 姿态骨位移单位 | 骨架局部单位（本骨架 cm；见 §二 的 ⚠️） |
-| FBX 版本 | Blender 4.5 导出 **7400**；既有 Mixamo FBX 是 **7700**。Unity 两者都吃 |
+| FBX 版本 | 4.5 与 5.1 **导出都是 7400**；既有 Mixamo FBX 是 **7700**。Unity 两者都吃（5.1 的产物已实测导入 Unity 无告警，见证据 §三） |
 
-### 7.3 三条踩过的坑（本管线实测）
+### 7.3 五条踩过的坑（本管线实测）
 
 1. **`use_current_action=False` 会摘掉正在驱动骨头的 action** ⇒ 烘出常量曲线（§四·1 步 2）。
 2. **`rotation_mode` 被打回 `QUATERNION` 会让 euler 关键帧失效**（§三 的 V8 由来）。
-3. **"两侧比对"型判据必须配非退化判据**（V8 / E0），否则源静止时全部平凡通过。
+3. **「两侧比对」型判据必须配非退化判据**（V8 / E0），否则源静止时全部平凡通过。
+4. **`arm.edit_bones` 在 OBJECT 模式下是空的** ⇒ 在 OBJECT 模式里按 `edit_bones` 建骨骼集合并赋值，会得到一个
+   **0 根骨**的集合而**不报错**（实测：`MIXAMORIG` 集合 0 根，被 V9 拦下）。
+5. **`matrix_local` 的逐元素比对不是「Rest Pose 不变」的判据**：它是浮点噪声敏感量，同一份骨架跨版本
+   （4.5 → 5.1）就从 9.2e-05 变到 1.22e-04、**越过 1e-4 阈值却什么都没变**。判据要取**骨端点坐标（mm）**。
 
 ## 八、未闭合（诚实清单）
 
@@ -295,7 +333,7 @@ B=.scratch/blender-lts/blender-4.5.13-linux-x64/blender   # 便携包，落被 g
 | 探针非退化阈值 | — | `20` mm | 同上 `V8_MIN_MOTION_MM` |
 | 源动作非退化阈值 | — | `20` mm | `export_xbot_action.py` `E0_MIN_MOTION_MM` |
 | 烘焙保真容差 | — | `0.5` mm | 同上 `E1_TOL_MM` |
-| Rest Pose 元素容差 | — | `1e-4` | 同上 `E5_TOL` |
+| Rest Pose **端点坐标**容差 | — | `0.5` mm | 同上 `E5_TOL_MM` |
 | 回导保真容差 | — | `0.5` mm | 同上 `E6_TOL_MM` |
 | 逐点帧间位移下限 | — | Hips `10` · 手 `300` · 脚 `200` mm | `BlenderAnimationDebugTests.MotionMinMm` |
 
@@ -312,6 +350,6 @@ B=.scratch/blender-lts/blender-4.5.13-linux-x64/blender   # 便携包，落被 g
 | X Bot 的 Unity 导入设置口径（`animationType: 3` / `avatarSetup: 1`） | `code/tools/validate_unity_assets.py` A4 规则注释 |
 
 ---
-*创建: 2026-09-14 | 更新: 2026-09-14*
+*创建: 2026-09-14 | 更新: 2026-09-14（🔧 第二次：**移植为 Blender 4.5 / 5.x 双兼容**（新增取道层 `code/tools/blender_action_compat.py`：slotted actions 曲线取道 · `action_slot` 指派 · 姿态骨选择位）+ **母版 GUI 可用性**（骨骼集合 `CTRL`/`MIXAMORIG` + 配色，V9 自检；已复核导出物内容等价 **0.000000 mm**）+ 新增 §4.4「导出物不可逐字节复现」与 §7.1 双版本差异表；E5 判据由矩阵元素改为骨端点坐标）*
 *状态: 与 [动画处理能力对照实验](%E5%8A%A8%E7%94%BB%E5%A4%84%E7%90%86%E8%83%BD%E5%8A%9B%E5%AF%B9%E7%85%A7%E5%AE%9E%E9%AA%8C.md) 同为**两条线共用的口径正典**；本文只覆盖 Blender 线。*
 *关联: [动画处理能力对照实验](%E5%8A%A8%E7%94%BB%E5%A4%84%E7%90%86%E8%83%BD%E5%8A%9B%E5%AF%B9%E7%85%A7%E5%AE%9E%E9%AA%8C.md), [动作库规格](%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md), [code/unity/README.md](../../code/unity/README.md), [危险点表](../engineering/%E5%8D%B1%E9%99%A9%E7%82%B9%E8%A1%A8.md)*

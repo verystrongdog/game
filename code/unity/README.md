@@ -803,7 +803,7 @@ python3 code/tools/validate_unity_assets.py
 | 件 | 值 |
 |---|---|
 | 探针 FBX | `Assets/Animations/Blender/RigRoundTripProbe.fbx`（**入库**）+ `.fbx.meta`；目录 `Assets/Animations/Blender/`（GUID `7dd0a64c67b92a44fb198d534968cc1c`）· 资产 GUID `fea37d37d0d6ded459704d6132b4ee9d`（**由 Editor 生成**，仓库采用同值） |
-| 生成链 | `code/tools/build_xbot_animation_template.py`（母版）→ `code/tools/export_xbot_action.py`（烘焙 + animation-only FBX），基线 Blender **4.5.13 LTS**（便携包，落 `.scratch/`） |
+| 生成链 | `code/tools/build_xbot_animation_template.py`（母版）→ `code/tools/export_xbot_action.py`（烘焙 + animation-only FBX）；**Blender 4.5.13 LTS 与 5.x 双兼容**（差异收进 `code/tools/blender_action_compat.py`）——4.5 走 `.scratch/` 便携包，5.1 走 Windows 已装版，两侧实测均全绿 |
 | builder | `Assets/Editor/BlenderAnimationDebugBuilder.cs` — 菜单 **YANTF → 动作演示 → 创建 Blender 回导调试 lab**（幂等；含导入设置纠正与四项自检） |
 | 运行时 | `Assets/Scripts/BlenderAnimationDebugger.cs` — 播放/暂停 · ←/→ 单帧 · `R` 回首帧 · HUD 显示 clip/帧号/Hips·双手·双脚读数；`Attach(...)` 是菜单与断言**共用**的装配入口 |
 | 断言 | `Assets/Tests/PlayMode/BlenderAnimationDebugTests.cs`（**8 条**：Rig 3 · 采样稳定性 1 · 调试控制 3 · 资产身份 1） |
@@ -825,14 +825,16 @@ python3 code/tools/validate_unity_assets.py
 | 门禁 `unity` | `run_tests` **64 项：63 过 / 0 败 / 1 跳过**（56 → 64，新增 8 条全过；跳过的是既有的 `ActionLabGuardVariantTests`） |
 | 门禁 `unity-assets` | 受控 FBX 18 → **19**（+ 探针）· A1–A4 全 0 |
 | 回滚演练 | 见证据 §七 |
+| 双版本（🔧 2026-09-14 后续） | 4.5.13 与 Windows **5.1.2** 各自跑通 V1–V9 + E0–E6；两侧产物**内容等价**（逐骨逐帧最大差 **0.000967 mm**）；5.1 产物导入 Unity `humanMotion=True` / 三条告警串空；**已入库探针 FBX 一字未改**（与 4.5 重导件差 **0.000000 mm**） |
 
 ### ⚠️ 三条实测坑（已写进管线文档 §六·2 / §七·3）
 
 1. **`nla.bake(use_current_action=False)` 会摘掉正在驱动骨头的 action** ⇒ 烘出常量曲线，而"两侧同样静止"让烘焙保真/回导保真**平凡通过**。⇒ 凡是"两侧比对"型判据，必须配一条**非退化**判据（母版侧 V8 / 导出侧 E0）。
 2. **`EnsureController` 不得无条件删了重建**：`DeleteAsset` + 重建会换 GUID，已存盘 lab 场景的 controller 引用随即 **missing**（症状：场景在、Animator 在、`clip=(none) frameCount=0`、姿势永远不动）。现在的做法是"内容已对就复用"。
 3. **Unity 默认关键帧压缩会把骨盆位移降采样掉**：`RootT.y` 从 61 键降到 **3 键**，峰值还在、低谷被抹平 ⇒ 探针导入设置固定 `animationCompression = Off`。
-4. **`MonoBehaviour.Start` 在下一帧才跑**：装配方在同一帧里 `Play()` / `SampleAtFrame()` 之后，`Start` 再按 `_playOnStart` 兜一次就会**静默取消**刚开的播放（实测表现："接环把播放态关掉了"）⇒ 组件用 `_driven` 标记挡住。
-5. **连续播放要在播放层面接环**：探针首末帧同为静止姿势，不接环则按 Play 一秒后画面"没动静"——lab 的用途正是逐帧目视。接环**只改播放行为**，样本本身仍是一次性。
+4. **FBX 导出不可逐字节复现**：头部带 `CreationTimeStamp`、UID 计数器派生 ⇒ 同一母版连导三次三个哈希。**生成物不得用 `sha256` 当"没改动"的判据**，改判内容等价（回导逐骨比 + E0–E6）。
+5. **`MonoBehaviour.Start` 在下一帧才跑**：装配方在同一帧里 `Play()` / `SampleAtFrame()` 之后，`Start` 再按 `_playOnStart` 兜一次就会**静默取消**刚开的播放（实测表现："接环把播放态关掉了"）⇒ 组件用 `_driven` 标记挡住。
+6. **连续播放要在播放层面接环**：探针首末帧同为静止姿势，不接环则按 Play 一秒后画面"没动静"——lab 的用途正是逐帧目视。接环**只改播放行为**，样本本身仍是一次性。
 
 ### 怎么复核
 
