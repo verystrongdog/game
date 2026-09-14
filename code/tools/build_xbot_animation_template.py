@@ -33,6 +33,8 @@ V8 探针动作**非退化**：Hips/双手/双脚在每个关键帧上的位移�
     --out-dir DIR   输出目录（默认 <repo>/.scratch/blender_assets/xbot，被 gitignore）
     --force         允许覆盖已存在的 .blend（默认拒绝覆盖）
     --report PATH   自检报告 JSON 路径（默认 <out-dir>/build_report.json）
+
+版本：本脚本 **Blender 4.5 LTS 与 5.x 双兼容**（差异收在 `blender_action_compat.py`）。
 """
 
 import argparse
@@ -43,6 +45,9 @@ import sys
 from pathlib import Path
 
 import bpy
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import blender_action_compat as bac          # noqa: E402  4.5 / 5.x 动作 API 取道层
 from mathutils import Euler, Quaternion, Vector
 
 # ---------------------------------------------------------------- 常量（皆有来源）
@@ -56,6 +61,11 @@ BONE_PREFIX = "mixamorig:"
 
 # 来源：既有 15 条 Mixamo 动画 FBX 实测帧率（design/presentation/Blender动作制作管线.md §二）
 SCENE_FPS = 30
+
+# GUI 可用性：骨骼集合名与控制骨配色（**只影响显示**，不进 FBX）
+CTRL_COLLECTION = "CTRL"
+DEFORM_COLLECTION = "MIXAMORIG"
+CTRL_BONE_COLOR = "THEME04"
 
 TEMPLATE_NAME = "XBot_AnimationTemplate"
 PROBE_ACTION_NAME = "RigRoundTripProbe"
@@ -270,7 +280,27 @@ def build_control_layer(arm_obj: bpy.types.Object) -> None:
         if ctrl_parent is not None:
             eb.parent = arm.edit_bones[ctrl_parent]
 
+    # ---- GUI 可用性：控制骨与变形骨**完全重合**，不加点标记在视口里根本点不到 ----
+    # 只动**显示层**（骨骼集合 / 配色 / 显示模式）：head/tail/roll 一字不改，故约束映射与导出物都不受影响。
+    # ⚠️ 必须在 **EDIT 模式**下读 `arm.edit_bones`——在 OBJECT 模式下它是**空的**（实测踩到：变形骨集合 0 根）。
+    ctrl_bones = [n for n, _, _ in CTRL_PLAN]
+    deform_bones = [b.name for b in arm.edit_bones if b.name.startswith(BONE_PREFIX)]
+    for coll in list(arm.collections):
+        if coll.name in (CTRL_COLLECTION, DEFORM_COLLECTION):
+            arm.collections.remove(coll)
+    coll_ctrl = arm.collections.new(CTRL_COLLECTION)
+    coll_deform = arm.collections.new(DEFORM_COLLECTION)
+    for name in ctrl_bones:
+        eb = arm.edit_bones[name]
+        coll_ctrl.assign(eb)
+        eb.color.palette = CTRL_BONE_COLOR
+        if hasattr(eb, "display_type"):
+            eb.display_type = "OCTAHEDRAL"
+    for name in deform_bones:
+        coll_deform.assign(arm.edit_bones[name])
     bpy.ops.object.mode_set(mode="OBJECT")
+    # 集合默认可见：不改用户的显示习惯；要"只点控制骨"就把 DEFORM 集合关掉
+    coll_ctrl.is_visible, coll_deform.is_visible = True, True
 
     # 控制骨的旋转模式固定为 XYZ 欧拉——探针动作写的是 rotation_euler 通道（见 reset_pose 的注）
     for ctrl_name, _, _ in CTRL_PLAN:
@@ -321,7 +351,7 @@ def author_probe_action(arm_obj: bpy.types.Object) -> None:
     ad = arm_obj.animation_data_create()
     act = bpy.data.actions.new(PROBE_ACTION_NAME)
     act.use_fake_user = True
-    ad.action = act
+    bac.assign_action(ad, act)
 
     for ctrl_name, _, _ in CTRL_PLAN:
         arm_obj.pose.bones[ctrl_name].rotation_mode = "XYZ"
@@ -338,7 +368,7 @@ def author_probe_action(arm_obj: bpy.types.Object) -> None:
                 pb.location = Vector(loc or (0.0, 0.0, 0.0))
                 pb.keyframe_insert("location", frame=frame)
 
-    for fc in act.fcurves:
+    for fc in bac.iter_fcurves(act):
         for kp in fc.keyframe_points:
             kp.interpolation = "BEZIER"
     bpy.context.scene.frame_start = PROBE_FRAMES[0]
@@ -383,7 +413,7 @@ def verify_probe_motion(arm_obj: bpy.types.Object) -> dict:
 
 def probe_action_coverage(act) -> dict:
     keyed = {}
-    for fc in act.fcurves:
+    for fc in bac.iter_fcurves(act):
         if '"' not in fc.data_path:
             continue
         keyed.setdefault(fc.data_path.split('"')[1], set()).add(fc.data_path.rsplit(".", 1)[-1])
@@ -399,7 +429,7 @@ def main() -> int:
 
     report = {
         "script": "build_xbot_animation_template.py",
-        "blender": bpy.app.version_string,
+        **bac.describe(),
         "input_fbx": str(in_path),
         "output_blend": str(blend_path),
         "checks": {},
@@ -463,7 +493,7 @@ def main() -> int:
     coverage = probe_action_coverage(act)
     report["checks"]["V7_probe_action"] = {
         "action": act.name,
-        "fcurves": len(act.fcurves),
+        "fcurves": bac.fcurve_count(act),
         "frame_range": list(act.frame_range),
         "fps": SCENE_FPS,
         "keyed_bones": coverage,
@@ -472,7 +502,7 @@ def main() -> int:
     if missing:
         fail(f"V7 探针动作缺少控制骨关键帧：{missing}")
     # 重新打开 .blend 会让 action 引用失效，先取好摘要
-    probe_summary = {"name": act.name, "range": [float(v) for v in act.frame_range]}
+    probe_summary = {"name": act.name, "range": list(bac.action_frame_range(act))}
 
     motion = verify_probe_motion(arm_obj)
     report["checks"]["V8_probe_motion"] = motion
@@ -488,6 +518,14 @@ def main() -> int:
     report["checks"]["V5_ctrl_deform"] = ctrl_deform
     if any(ctrl_deform.values()):
         fail(f"V5 有控制骨 use_deform=True：{[n for n, v in ctrl_deform.items() if v]}")
+
+    # V9：显示层（骨骼集合 / 配色）已落——GUI 里能一键区分控制骨与变形骨
+    colls = {c.name: len(c.bones) for c in arm_obj.data.collections}
+    report["checks"]["V9_display"] = {"collections": colls,
+                                      "expected": {CTRL_COLLECTION: len(CTRL_PLAN),
+                                                   DEFORM_COLLECTION: EXPECTED_BONE_COUNT}}
+    if colls.get(CTRL_COLLECTION) != len(CTRL_PLAN) or colls.get(DEFORM_COLLECTION) != EXPECTED_BONE_COUNT:
+        fail(f"V9 骨骼集合不对：{colls}")
 
     # 保存
     bpy.ops.wm.save_as_mainfile(filepath=str(blend_path), compress=False)
@@ -524,6 +562,8 @@ def main() -> int:
 
     print("=" * 72)
     print(f"母版: {blend_path}")
+    print(f"Blender {bac.describe()['blender']} · 动作取道 {bac.describe()['fcurve_access']} · "
+          f"骨骼集合 {report['checks']['V9_display']['collections']}")
     print(f"输入 sha256: {hash_before}（运行前后一致={report['checks']['V1_input_unchanged']}）")
     print(f"骨数 {report['checks']['V2_source_rig']['bones']} · 控制骨 {len(CTRL_PLAN)} 根 · "
           f"探针动作 {probe_summary['name']} {probe_summary['range']} @ {SCENE_FPS}fps")

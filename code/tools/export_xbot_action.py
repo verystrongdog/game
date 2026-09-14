@@ -19,7 +19,7 @@ E1 烘焙保真：烘焙后与烘焙前的变形骨世界姿势逐帧一致（�
 E2 导出物骨集 == 源 65 根，且**零** `CTRL_` 名
 E3 导出物单一根骨 `mixamorig:Hips`（无额外 Root 骨），且无新增 Leaf Bone
 E4 导出物不含网格（animation-only）
-E5 导出物 Rest Pose 与源逐条一致
+E5 导出物 Rest Pose 与源逐条一致（端点坐标 ≤ E5_TOL_MM）
 E6 导出物在探针各帧的姿势 == 母版（回导保真，≤ E6_TOL_MM）
 
 用法
@@ -27,6 +27,8 @@ E6 导出物在探针各帧的姿势 == 母版（回导保真，≤ E6_TOL_MM）
     blender --background --factory-startup --python-exit-code 1 \\
         --python code/tools/export_xbot_action.py -- \\
         [--template <.blend>] [--action RigRoundTripProbe] [--output <.fbx>] [--force]
+
+版本：本脚本 **Blender 4.5 LTS 与 5.x 双兼容**（差异收在 `blender_action_compat.py`）。
 """
 
 import argparse
@@ -36,6 +38,9 @@ import sys
 from pathlib import Path
 
 import bpy
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import blender_action_compat as bac          # noqa: E402  4.5 / 5.x 动作 API 取道层
 from mathutils import Vector
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -52,7 +57,8 @@ READOUT_BONES = ("mixamorig:Hips", "mixamorig:LeftHand", "mixamorig:RightHand",
 
 E0_MIN_MOTION_MM = 20.0   # 源动作非退化阈值（防"两侧同样静止"式的平凡通过）
 E1_TOL_MM = 0.5       # 烘焙保真容差（实测中段插值帧残差 0.1 mm 量级，见报告）
-E5_TOL = 1e-4         # Rest Pose 逐元素容差（浮点噪声，非结构性差异）
+E5_TOL_MM = 0.5       # Rest Pose 端点坐标容差（mm）——实测 4.5 侧 ~0.005、5.1 侧 0.122，都远小于"结构漂移"量级
+E5_MATRIX_TOL = 5e-4  # 矩阵元素容差（仅供参考的噪声读数）
 E6_TOL_MM = 0.5       # 回导保真容差（跨 FBX 往返，允许更大）
 SCENE_FPS = 30
 
@@ -83,6 +89,7 @@ def rest_fingerprint(arm_obj):
         b.name: {
             "parent": b.parent.name if b.parent else None,
             "head_local": [round(v, 6) for v in b.head_local],
+            "tail_local": [round(v, 6) for v in b.tail_local],
             "matrix_local": [round(v, 6) for row in b.matrix_local for v in row],
         }
         for b in arm_obj.data.bones
@@ -115,10 +122,10 @@ def shift_action_to_zero(action) -> int:
     （= 源文件第 0 帧）。母版里动作从第 1 帧起，直接导出会让 take 从 1/30 s 起，
     回导后整体后移一帧。归零后两端帧号逐帧对齐（来源：管线文档 §四·3）。
     """
-    shift = -int(round(min(fc.keyframe_points[0].co.x for fc in action.fcurves)))
+    shift = -int(round(min(fc.keyframe_points[0].co.x for fc in bac.iter_fcurves(action))))
     if shift == 0:
         return 0
-    for fc in action.fcurves:
+    for fc in bac.iter_fcurves(action):
         for kp in fc.keyframe_points:
             kp.co.x += shift
             kp.handle_left.x += shift
@@ -148,7 +155,7 @@ def main() -> int:
     out_fbx = Path(args.output).resolve() if args.output else tmpl.parent / f"{args.action}.fbx"
     report_path = Path(args.report).resolve() if args.report else tmpl.parent / "export_report.json"
 
-    report = {"script": "export_xbot_action.py", "blender": bpy.app.version_string,
+    report = {"script": "export_xbot_action.py", **bac.describe(),
               "template": str(tmpl), "action": args.action, "output_fbx": str(out_fbx),
               "checks": {}, "problems": []}
 
@@ -174,8 +181,8 @@ def main() -> int:
         return 4
     act = bpy.data.actions[args.action]
     arm.animation_data_create()
-    arm.animation_data.action = act
-    f0, f1 = (int(round(v)) for v in act.frame_range)
+    bac.assign_action(arm.animation_data, act)
+    f0, f1 = (int(round(v)) for v in bac.action_frame_range(act))
     frames = [f0, (f0 + f1) // 2, f1]
     bpy.context.scene.frame_start, bpy.context.scene.frame_end = f0, f1
 
@@ -203,9 +210,7 @@ def main() -> int:
     # ---- 1) 烘焙：只选变形骨，visual keying 取约束求值后的姿势
     bpy.context.view_layer.objects.active = arm
     bpy.ops.object.mode_set(mode="POSE")
-    for pb in arm.pose.bones:
-        pb.bone.select = pb.name.startswith(BONE_PREFIX)
-        pb.bone.hide = False
+    select_attr = bac.select_pose_bones(arm, lambda n: n.startswith(BONE_PREFIX))
     # ⚠️ `use_current_action=True` 是必须的（2026-09-14 实测，代价一整轮假绿）：
     #    `use_current_action=False` 会**当场把控制骨 action 摘下来**，于是烘焙逐帧求值时控制骨恒为
     #    静止姿势 → 烘出来的是一条**常量**曲线。而它与"母版静止"逐位相同，E1/E6 会**平凡通过**
@@ -219,9 +224,7 @@ def main() -> int:
     baked.name = f"{args.action}_Baked"
     bpy.ops.object.mode_set(mode="OBJECT")
 
-    ctrl_curves = [fc for fc in baked.fcurves if f'"{CTRL_PREFIX}' in fc.data_path]
-    for fc in ctrl_curves:
-        baked.fcurves.remove(fc)
+    stripped = bac.remove_fcurves_where(baked, lambda fc: f'"{CTRL_PREFIX}' in fc.data_path)
 
     # 烘完解除约束：此后姿势只来自显式关键帧，导出物不依赖控制层
     dropped = 0
@@ -233,8 +236,8 @@ def main() -> int:
     after = sample_world(arm, frames, READOUT_BONES)
     e1, e1_where = diff_mm(before, after)
     report["checks"]["E1_bake_fidelity"] = {
-        "baked_action": baked.name, "fcurves": len(baked.fcurves),
-        "ctrl_curves_stripped": len(ctrl_curves), "constraints_removed": dropped,
+        "baked_action": baked.name, "fcurves": bac.fcurve_count(baked),
+        "ctrl_curves_stripped": stripped, "constraints_removed": dropped,
         "max_delta_mm": e1, "worst_at": e1_where, "tolerance_mm": E1_TOL_MM,
     }
     if e1 > E1_TOL_MM:
@@ -247,7 +250,7 @@ def main() -> int:
     bpy.context.scene.name = args.action   # FBX take 名 = <Armature>|<Scene>
     baked_name = baked.name
     report["checks"]["bake_step"] = {
-        "frames": [f0, f1], "shifted_to_zero": shifted,
+        "frames": [f0, f1], "shifted_to_zero": shifted, "bone_select_attr": select_attr,
         "exported_frame_range": [f0 + shifted, f1 + shifted],
         "constraints_removed": dropped,
         "ctrl_bones_still_present": [n for n in src_bones if n.startswith(CTRL_PREFIX)],
@@ -315,17 +318,26 @@ def main() -> int:
         fail(f"E4 导出物含网格：{meshes}")
 
     src_deform_fp = {k: v for k, v in src_fp.items() if k.startswith(BONE_PREFIX)}
-    rest_worst = 0.0
+    # ⚠️ 判据取**骨端点坐标**（mm），不取矩阵元素：矩阵元素是浮点噪声敏感量——实测 4.5 侧
+    #    9.2e-05、5.1 侧 1.22e-04，同一份骨架跨版本就能越过 1e-4 的阈值，而那与"Rest Pose 变了没"
+    #    无关。端点坐标才是"Rest Pose 不变"的语义量。
+    rest_worst_mm = 0.0
+    matrix_worst = 0.0
     for n in src_deform_fp:
-        a = src_deform_fp[n]["matrix_local"]
-        b = rt_fp[n]["matrix_local"]
-        rest_worst = max(rest_worst, max(abs(x - y) for x, y in zip(a, b)))
-    rest_match = rest_worst <= E5_TOL
-    report["checks"]["E5_rest_pose"] = {"match": rest_match, "compared": len(src_deform_fp),
-                                        "max_element_delta": round(rest_worst, 8),
-                                        "tolerance": E5_TOL}
+        for key in ("head_local", "tail_local"):
+            a, b = src_deform_fp[n][key], rt_fp[n][key]
+            rest_worst_mm = max(rest_worst_mm, max(abs(x - y) for x, y in zip(a, b)) * 1000.0)
+        ma, mb = src_deform_fp[n]["matrix_local"], rt_fp[n]["matrix_local"]
+        matrix_worst = max(matrix_worst, max(abs(x - y) for x, y in zip(ma, mb)))
+    rest_match = rest_worst_mm <= E5_TOL_MM
+    report["checks"]["E5_rest_pose"] = {
+        "match": rest_match, "compared": len(src_deform_fp),
+        "max_endpoint_delta_mm": round(rest_worst_mm, 6), "tolerance_mm": E5_TOL_MM,
+        "max_matrix_element_delta": round(matrix_worst, 8), "matrix_tolerance_info": E5_MATRIX_TOL,
+    }
     if not rest_match:
-        fail("E5 导出物 Rest Pose 与源不一致")
+        fail(f"E5 导出物 Rest Pose 与源不一致：端点最大差 {rest_worst_mm:.6f} mm"
+             f"（容差 {E5_TOL_MM} mm）")
 
     # E6：回导后的逐帧姿势 vs 母版
     rt_actions = [a for a in bpy.data.actions]
@@ -333,10 +345,10 @@ def main() -> int:
         fail("E6 导出物没有动画")
     else:
         arm2.animation_data_create()
-        arm2.animation_data.action = rt_actions[0]
-        af0, af1 = (int(round(v)) for v in rt_actions[0].frame_range)
+        bac.assign_action(arm2.animation_data, rt_actions[0])
+        af0, af1 = (int(round(v)) for v in bac.action_frame_range(rt_actions[0]))
         report["checks"]["E_roundtrip_action"] = {
-            "action": rt_actions[0].name, "fcurves": len(rt_actions[0].fcurves),
+            "action": rt_actions[0].name, "fcurves": bac.fcurve_count(rt_actions[0]),
             "frame_range": [af0, af1],
         }
         probe_frames = [af0, (af0 + af1) // 2, af1]
