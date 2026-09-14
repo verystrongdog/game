@@ -45,6 +45,7 @@
 | 项 | 取值 | 依据 |
 |---|---|---|
 | 输入载体 | `code/unity/Assets/Mixamo/Characters/X Bot.fbx`（**只读**） | [对照实验](%E5%8A%A8%E7%94%BB%E5%A4%84%E7%90%86%E8%83%BD%E5%8A%9B%E5%AF%B9%E7%85%A7%E5%AE%9E%E9%AA%8C.md) §2.1 |
+| ⚠️ 别把载体认错 | X Bot 与 Y Bot **不是同一套网格**：X Bot = `Beta_Joints`/`Beta_Surface`（主材质 `#AB3E36`，**砖红偏粉**）；Y Bot = `Alpha_Body`/`Alpha_Joints`（主材质 `#14566A`，**青蓝**）。两者是两套外观近乎相同的 Mixamo 男模，**看颜色比看名字可靠**（实测 2026-09-14） | `Assets/Mixamo/Characters/*.fbx` 的共享材质 |
 | 输入指纹 | `sha256 = cd60e51571bb7c0c1988ec58b3be174c91bd193b6372a9064f1ec2553bc8deab` | 实测（运行前后一致，由 V1 每次核） |
 | 生成命令 | `blender --background --factory-startup --python-exit-code 1 --python code/tools/build_xbot_animation_template.py -- [--force]` | 本文 §七·1 |
 | 默认输出 | `.scratch/blender_assets/xbot/XBot_AnimationTemplate.blend`（被 `.gitignore` 排除） | 过程物不入库；入库的是脚本与探针 FBX |
@@ -56,6 +57,7 @@
 | 场景帧率 | 30 fps（与既有 15 条 Mixamo FBX 实测一致） | 实测 |
 | 母版自带动作 | `RigRoundTripProbe`：4 个关键帧（1 / 21 / 41 / 61），键在**控制骨**上 | 既是控制层的接线自检（V8），也是导出的输入 |
 | 探针动作幅度 | 骨盆 ±（+2.5 / −1.5）**骨架局部单位**；四肢 16°–32° | 演示常量，非正典参数 |
+| ⚠️ 探针**观感**（实测几何） | 关键帧绕的是**骨的局部 X 轴**，在这套 Mixamo 骨轴上那是**竖直面内的抬摆**而非前后摆：实测左手**相对肩 −0.1824 → +0.4450 m**（摆到过头）；双脚 y 只在 **0.0868–0.1496 m**（**贴地前刮、几乎不抬脚**）；骨盆只做起落。合起来的观感**类似走钢丝**——这是覆盖性探针的必然长相，不是缺陷（审美与脚滑在本条「明确排除」内；owner 2026-09-14 目视确认为「没有发现明显问题」） | Play 内逐帧读数，见本文 §六·3 |
 
 ⚠️ **单位口径**（踩过）：本骨架是 Mixamo 的**厘米制** + Armature 对象 `scale = 0.01`，因此
 **姿态骨的 `location` 单位是骨架局部单位 = 1 cm = 10 mm 世界**，不是米。把"20 mm"写成 `0.02`
