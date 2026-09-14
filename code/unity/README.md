@@ -735,6 +735,64 @@ python3 code/tools/validate_unity_assets.py                                     
 
 ---
 
+## 二·P、接触修正 lab（Animation Rigging，[#157](https://github.com/verystrongdog/game/issues/157)，2026-09-14）
+
+> 给「Unity 动画约束与接触修正」这条能力一个**隔离、可重复生成**的工作面：右手 / 左腿 / 右腿三条最小 `TwoBoneIK`，
+> 约束权重可切（0 ↔ 1），按共同口径读 M1–M7，并把修正结果烘成**独立 Animation Sequence**。
+> 口径权威：[动画处理能力对照实验](../../design/presentation/动画处理能力对照实验.md) §二–§四；本条读数证据：[unity-animation-rigging-2026-09-14](../../design/engineering/evidence/unity-animation-rigging-2026-09-14.md)。
+
+### 交付物与接入位置
+
+| 项 | 值 |
+|---|---|
+| 场景 | `Assets/Scenes/AnimationRiggingLab.unity`（**入库**）+ `EditorBuildSettings.asset` 登记为 **index 1**（`ActionLab` 仍是 index 0） |
+| builder | `Assets/Editor/AnimationRiggingLabBuilder.cs` — `CreateScene()`（幂等：地面 + X Bot + `ActionLab.controller` + 1 Rig/3 约束/3 目标 + 探针 + 相机）、`VerifyLabInfrastructure()` 自检、`ApplyCalibrationFromFile()` 写回校准、`BakeFromCapture()` 烘焙 |
+| 探针 | `Assets/Scripts/AnimationRiggingProbe.cs` — 取帧（41 点 + 整帧细化）、目标布置、权重开关、M1–M6 快照、逐帧姿势采集 |
+| 派生件 | `Assets/Animations/Derived/PhysicalAttack_ContactCorrected.anim`（102 曲线 = 95 肌肉 + 7 根；全段 65 帧） |
+| 断言 | `Assets/Tests/PlayMode/AnimationRiggingProbeTests.cs` — 既有 2 条（`ActionLab` 惰性接入点）**判据未改**；新增 3 条（lab 结构 / 关开同帧 / 派生件复现） |
+| 工序 | PlayMode **56 项：55 过 / 0 败 / 1 跳过**（跳过的是既有的 `ActionLabGuardVariantTests`） |
+
+### ⚠️ lab 场景为什么入库（对 §二·H「其余 lab 场景不入库」的显式例外）
+
+`RigBuilder` 只在真场景的 `Awake` 拿到**已序列化**的 layers 时才建图；运行时合成搭建（先 `AddComponent`、后 `Add layer`）
+**静默不生效**（危险点表 §六）。而断言只能按名 `SceneManager.LoadScene` ⇒ lab 必须是仓库内场景资产。
+该例外已由 owner 在 [对照实验](../../design/presentation/动画处理能力对照实验.md) §七.3 确认。
+
+### 实测读数（Editor 6000.5.2f1，接触帧 = frame 21 / t = 0.7 s，30 fps，clip 长 2.1333 s）
+
+| id | 量 | 约束关 | 约束开 |
+|---|---|---|---|
+| M1 | 右手 ↔ 目标 | **187.12 mm** | **96.45 mm**（拉近 90.67 mm；**未到 0**——该靶超出臂长可达域，见证据 §四） |
+| M2 | 足底相对地面（左/右） | −24.01 / −34.91 mm | **+2.83 / +2.77 mm**（= `soleMargin` 2.8 mm） |
+| M3a / M3b | 根漂移 / 根朝向 | 19.375 mm / 21.742° | **逐位不变** |
+| M4 | 四骨骨长 | — | 关开之差 **≤ 0.0001 mm** |
+| M5 | 脚滑代理量（左/右） | 10.66 / 2.36 mm | **0.0014 / 0.0016 mm** |
+| M6 | 肘 / 膝屈曲量 | 肘 34.46° · 膝 39.20/29.60° | 肘 **0°** · 膝 47.96/42.97° |
+| M7 | 重开可复现 | — | Play 重启 + 域重载 + 跑完测试后**逐位一致**（完整 Editor 重启未测） |
+| 派生件 | 约束关下采样接触帧 | — | 96.4522 / 2.8175 / 2.7170 mm（与"约束开"差 **≤ 0.06 mm**） |
+
+### 怎么复核
+
+```bash
+./code/tools/unity-cli/uc.sh menu "YANTF/动作演示/创建 AnimationRiggingLab 场景"   # 幂等重建 + 自检（Console 打 trace）
+./code/tools/unity-cli/uc.sh run_tests --mode playmode --async_tests true && ./code/tools/unity-cli/uc.sh test_status
+python3 code/tools/validate_unity_assets.py
+# Play 内读数（关/开同帧矩阵）：
+./code/tools/unity-cli/uc.sh editor_play
+./code/tools/unity-cli/uc.sh eval 'YANTF.EditorTools.AnimationRiggingLabBuilder.StartMeasureInPlay(); return "ok";'
+# 派生件链路：StartCalibrateInPlay() → 停 Play → ApplyCalibrationFromFile() → Play → StartCaptureInPlay()
+#             → 停 Play → 菜单「烘焙接触修正 clip」→ Play → VerifyBakedInPlay()
+```
+
+### ⚠️ 未闭合（诚实清单）
+
+1. **M1「开」不是 0**：固定目标偏移（187.08 mm）从该接触帧出发超出两骨链可达域（肩→靶 658 mm > 臂长 562 mm）。腿链在同一 lab 残差 0.0008 mm，说明不是"约束没生效"。含义与横向对照读法见证据 §四。
+2. **派生件与载体绑定**：烘的是 X Bot 上的姿势（非纯函数产物），换载体重烘；**不纳入** `DerivedClipBuilder.VerifyDerived()` 的逐曲线自检。
+3. **M6 符号口径收窄**：只报屈曲量，未定"与源 clip 同号"的符号。
+4. **M7 未做完整 Editor 重启**（只做 Play 重启 + 域重载）。
+5. **基线**：读数取自 Windows 拷贝（其 git HEAD 落后仓库 53 提交）；补偿证据是逐字节内容比对（`code/unity/**` 141 一致 / 14 既有分叉 / 0 缺失），见证据 §二。
+6. **大文件推送**：`write_text_file` 有命令行长度上限、**静默失败**——用 `code/tools/unity-cli/push_file.sh`（§二·O 的坑表已并入[危险点表](../../design/engineering/危险点表.md) §七）。
+
 ## 三、工程结构
 
 ```
@@ -744,6 +802,7 @@ code/unity/
 │   │   ├── WalkerLabBuilder.cs    # 菜单/headless 生成 Walker 移动实验场景
 │   │   ├── KiWalkerLabBuilder.cs  # 菜单/headless 生成 Ki 动画角色场景（含 controller）
 │   │   ├── ActionLabBuilder.cs    # 菜单/headless 生成 ActionLab（12 态 controller + X Bot 场景）
+│   │   ├── AnimationRiggingLabBuilder.cs # 接触修正 lab：建场景/自检/校准写回/烘焙派生 clip（#157）
 │   │   └── MixamoSetup.cs         # 一键导入 Mixamo 资产（复制/改名/Rig Humanoid）+ 生成 ActionLab
 │   ├── Scripts/                      # 运行时（asmdef: YANTF.Demo）
 │   │   ├── WalkerController.cs       # 几何体人体 + CharacterController 走/跑/跳（WalkerLab）
@@ -752,13 +811,14 @@ code/unity/
 │   │   ├── ActionCatalog.cs          # 只读元数据（id → category/loop/priority/fade/clipFbxPath）
 │   │   ├── ActionPlayer.cs           # 契约 A 驱动（CrossFade 优先级 + 计时回退 + locomotion 通道）
 │   │   ├── ActionLabDriver.cs        # ActionLab 场景驱动（CC 物理 + 输入 + 就座判定/对齐/根位移/推椅 + HUD）
-│   │   └── ChairSeat.cs              # 椅子组件（实时就座锚点 + 占用锁 + 碰撞忽略，就座交互 §四·丁）
+│   │   ├── ChairSeat.cs              # 椅子组件（实时就座锚点 + 占用锁 + 碰撞忽略，就座交互 §四·丁）
+│   │   └── AnimationRiggingProbe.cs  # 接触修正探针：取帧/目标布置/权重开关/M1–M6 读数（#157）
 │   └── Tests/PlayMode/               # asmdef: YANTF.Demo.Tests（冒烟测试）
 │       ├── ActionLabChairTests.cs    # 就座交互：判定口径 / 实时锚点 / 占用锁 / 对齐 / 离座先起身
 │       ├── ActionLabGripTests.cs     # 持椅交互：镜像派生件 + 挂点六条（#150 / #152）
 │       ├── ActionLabLocomotionTests.cs # locomotion 连续混合
 │       ├── ActionLabSmokeTests.cs    # 防漂移分档断言 + ActionPlayer 优先级冒烟
-│       ├── AnimationRiggingProbeTests.cs # Animation Rigging 接入点：结构与能力（真场景）
+│       ├── AnimationRiggingProbeTests.cs # Animation Rigging：ActionLab 惰性接入点 2 条 + 接触修正 lab 3 条（#157）
 │       ├── BrainViewSmokeTests.cs    # 脑壳只读骨架视图
 │       └── WalkerLabSmokeTests.cs    # 白盒人形移动/落体
 ├── Packages/manifest.json            # uGUI + Test Framework + com.unity.pipeline（unity-cli）+ Animation Rigging
@@ -766,7 +826,7 @@ code/unity/
 └── ProjectSettings/                  # 工程身份 23 个文件（#136 起入库，含 Editor 版本与序列化模式）
 ```
 
-> 场景与控制器：`Assets/Scenes/ActionLab.unity` + `Assets/ActionLab/ActionLab.controller` 已入库（基准场景，#136）；其余 lab 场景由 builder 菜单重建，不入库——范围与理由见 §二·H。
+> 场景与控制器：`Assets/Scenes/ActionLab.unity` + `Assets/ActionLab/ActionLab.controller` 已入库（基准场景，#136）；**`Assets/Scenes/AnimationRiggingLab.unity` 也已入库**（#157 的显式例外：约束只认已序列化场景，断言须按名 `LoadScene`——理由见 §二·P 与 §二·H）；其余 lab 场景由 builder 菜单重建，不入库。
 
 ## 四、替换/扩展指引
 
@@ -782,5 +842,5 @@ code/unity/
 
 ---
 
-*创建: 2026-09-06 | 更新: 2026-09-14（🔧 第十四次：**采纳 `2hand Idle` 当格挡 + 退役镜像件**——owner 指示「用双持静息待机的动画试一试」，实测三条判据全绿（两手 17.1–17.4 cm / 左手落在靠背面 0.2–0.7 cm / 漂移 3.8 mm，对照原镜像件 99.9 cm 与 74.2 cm），§戊·3 镜像变换退役、§戊·4 素材表改源、§二·M 加状态注；`DerivedClipBuilder.cs` 623 → 231 行、资产删除、三条镜像断言删除，**run_tests 53 → 50/50**；🔧 第十三次：**Animation Rigging 接入**（§二·O）——`com.unity.animation.rigging` 1.4.1 入库 + 惰性接入点（`RigBuilder`/`Rig`/左臂 `TwoBoneIK`，权重 0）+ 2 条**真场景**断言 + build settings 登记 index 0 + 资产白名单新增 `package_guids` 段；run_tests 53/53；⚠️ 副手 IK 属被暂停的线，**未实现**；🔧 第十二次：Unity 依赖入库——`com.unity.animation.rigging` 1.4.1（连带 `burst` 1.8.29 / `mathematics` 1.4.0），§二·N 加 `unity-assets` 计数**复测状态注**（141，差额 20 = #155 退役；历史读数 161 保留不改）；同批装入的 `com.unity.formats.fbx` 已按裁定 `package_remove` 撤除；🔧 第十一次：owner 裁定「手里有东西」这条线**暂停**（设计思路待重审）；§二·M 加「镜像目视不通过」、§二·N 加「已裁定」；🔧 第十次：owner 目视持椅挂点**不通过**——「不是用人类的方式跟椅子互动」；§二·N 未闭合项 1 改为实测结论 + 升级为待裁定设计问题；🔧 第九次：白盒 Demo 战斗沙盘整套退役 + 桥接工程就位（#155）——§一/§二/§四/§二·H 与目录树同步；🔧 第八次：#137 按 superseded 关闭——KI 旧线坐/起实现「待合的分叉」改为**作废更正**、开工顺序 4→3 条；`SitPoint.cs` 随舍弃裁定删除（#137）；🔧 第七次：Q6b 裁定 A（子集桥接）——数值源行与 §四 接缝指引指向 ARCHITECTURE §4.1（#135）；🔧 第五次修正：§二·J 就座交互（先找到椅子才能坐，#141）——判定/对齐/占用锁/XZ 根位移/三张可推椅子 + PlayMode 33/33 + 六条实测读数 + 修掉"角色整体悬浮 80 mm"（`skinWidth`）+ 三条新坑；🔧 第四次修正：§二·I ActionLab 落地回切修复（`6bd8ddc`）红/绿实测 + 目视验证 + 运维补充；🔧 第三次修正：§二·H 资产身份与提交范围（#136）+ §二·G 的「场景不入库」加显式例外；🔧 第二次：§二·G 本轮工作 #137–#140 + KI 引用作废；§二·F 玫瑰花海场景 — Grilling #126；🔧 第六次修正（2026-09-13，owner 裁定移除花海 lab）：删 §二·F 全节 + 6 个源文件 + `Assets/Shaders/` + `Assets/Resources/YANTF/` 高度图 + 4 项 PlayMode 测试，§二·H 排除表与 §三 目录树同步，PlayMode 33 → 29（算术推断，未重跑 Editor）；地块数据/玫瑰株丛密度两篇口径文档标记 ⚠️ 已废弃，保留仅供 #126 冻结历史引用）*
+*创建: 2026-09-06 | 更新: 2026-09-14（🔧 第十五次：**#157 接触修正 lab**（§二·P 新增）——入库 lab 场景 + 探针 + 派生件 `PhysicalAttack_ContactCorrected.anim`，M1–M7 关/开同帧读数齐、派生件关约束下复现（差 ≤0.06 mm）、PlayMode 53 → **56 项 55 过/0 败/1 跳过**；新增工具 `code/tools/unity-cli/push_file.sh`（大文件静默推送失败的处置）；🔧 第十四次：**采纳 `2hand Idle` 当格挡 + 退役镜像件**——owner 指示「用双持静息待机的动画试一试」，实测三条判据全绿（两手 17.1–17.4 cm / 左手落在靠背面 0.2–0.7 cm / 漂移 3.8 mm，对照原镜像件 99.9 cm 与 74.2 cm），§戊·3 镜像变换退役、§戊·4 素材表改源、§二·M 加状态注；`DerivedClipBuilder.cs` 623 → 231 行、资产删除、三条镜像断言删除，**run_tests 53 → 50/50**；🔧 第十三次：**Animation Rigging 接入**（§二·O）——`com.unity.animation.rigging` 1.4.1 入库 + 惰性接入点（`RigBuilder`/`Rig`/左臂 `TwoBoneIK`，权重 0）+ 2 条**真场景**断言 + build settings 登记 index 0 + 资产白名单新增 `package_guids` 段；run_tests 53/53；⚠️ 副手 IK 属被暂停的线，**未实现**；🔧 第十二次：Unity 依赖入库——`com.unity.animation.rigging` 1.4.1（连带 `burst` 1.8.29 / `mathematics` 1.4.0），§二·N 加 `unity-assets` 计数**复测状态注**（141，差额 20 = #155 退役；历史读数 161 保留不改）；同批装入的 `com.unity.formats.fbx` 已按裁定 `package_remove` 撤除；🔧 第十一次：owner 裁定「手里有东西」这条线**暂停**（设计思路待重审）；§二·M 加「镜像目视不通过」、§二·N 加「已裁定」；🔧 第十次：owner 目视持椅挂点**不通过**——「不是用人类的方式跟椅子互动」；§二·N 未闭合项 1 改为实测结论 + 升级为待裁定设计问题；🔧 第九次：白盒 Demo 战斗沙盘整套退役 + 桥接工程就位（#155）——§一/§二/§四/§二·H 与目录树同步；🔧 第八次：#137 按 superseded 关闭——KI 旧线坐/起实现「待合的分叉」改为**作废更正**、开工顺序 4→3 条；`SitPoint.cs` 随舍弃裁定删除（#137）；🔧 第七次：Q6b 裁定 A（子集桥接）——数值源行与 §四 接缝指引指向 ARCHITECTURE §4.1（#135）；🔧 第五次修正：§二·J 就座交互（先找到椅子才能坐，#141）——判定/对齐/占用锁/XZ 根位移/三张可推椅子 + PlayMode 33/33 + 六条实测读数 + 修掉"角色整体悬浮 80 mm"（`skinWidth`）+ 三条新坑；🔧 第四次修正：§二·I ActionLab 落地回切修复（`6bd8ddc`）红/绿实测 + 目视验证 + 运维补充；🔧 第三次修正：§二·H 资产身份与提交范围（#136）+ §二·G 的「场景不入库」加显式例外；🔧 第二次：§二·G 本轮工作 #137–#140 + KI 引用作废；§二·F 玫瑰花海场景 — Grilling #126；🔧 第六次修正（2026-09-13，owner 裁定移除花海 lab）：删 §二·F 全节 + 6 个源文件 + `Assets/Shaders/` + `Assets/Resources/YANTF/` 高度图 + 4 项 PlayMode 测试，§二·H 排除表与 §三 目录树同步，PlayMode 33 → 29（算术推断，未重跑 Editor）；地块数据/玫瑰株丛密度两篇口径文档标记 ⚠️ 已废弃，保留仅供 #126 冻结历史引用）*
 *关联: [战斗界面布局](../../design/presentation/%E6%88%98%E6%96%97%E7%95%8C%E9%9D%A2%E5%B8%83%E5%B1%80.md), [核心机制](../../design/rules/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6.md), [回合战斗流程](../../design/rules/%E5%9B%9E%E5%90%88%E6%88%98%E6%96%97%E6%B5%81%E7%A8%8B.md), [关键突破](../../design/rules/skill-tree/%E5%85%B3%E9%94%AE%E7%AA%81%E7%A0%B4.md), [动作库规格](../../design/presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md), [动作系统分解](../../design/engineering/%E5%8A%A8%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%88%86%E8%A7%A3-2026-09-12.md), [决策树](../../design/decisions/README.md)*
