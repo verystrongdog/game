@@ -2,6 +2,7 @@
   "_description": "validate_unity_assets.py 的允许清单。三段的生命周期**各不相同**，不要混用——混用会让它从『例外登记』长成『永久豁免名单』。",
   "_maintenance": [
     "builtin_guids  —— Unity 内置资源 guid，恒等成立，不随项目变化。",
+    "package_guids  —— 来自 Registry 包的脚本 guid（包不入库 → 干净检出里解析不到）。生命周期**跟锁文件走**：Packages/packages-lock.json 钉住的版本不变则恒等成立；**换包版本必须回来核这一节**。",
     "non_humanoid_ok—— 非人形用途的 FBX（静态模型/道具），长期豁免；每条必须写清『为什么不驱动 Humanoid 载体』。",
     "known_dangling —— 已知缺口引用：每条必须带 reason 与 issue 编号，**该 issue 关闭后必须删除该条**（新增同类缺口也应先修根因，而不是先加条目）。"
   ],
@@ -23,6 +24,27 @@
     {
       "asset": "code/unity/Assets/SkillTree/Models/brain_shell.fbx",
       "reason": "静态脑壳模型（6.4 MB），不驱动 Humanoid 角色，无根位移需求——Generic + NoAvatar 是**正确**导入设置，不属 A4 的适用对象。来源：脑模型资产登记（#143）。"
+    }
+  ],
+
+  "package_guids": [
+    {
+      "guid": "fff0960ef4ea6e04eac66b4a7fd2189d",
+      "subject": "ActionLab.unity ← 载体 (X Bot) 上的 RigBuilder 组件",
+      "reason": "来自 Registry 包 com.unity.animation.rigging@1.4.1 的脚本 RigBuilder.cs。包不入库 → 干净检出里没有定义它的 .meta，故 A3 判悬空。版本由 Packages/packages-lock.json 钉死（1.4.1）。",
+      "source": "2026-09-14 Animation Rigging 接入（code/unity/README.md §二·O）"
+    },
+    {
+      "guid": "70b342d8ce5c2fd48b8fa3147d48d1d1",
+      "subject": "ActionLab.unity ← Rig 层级根节点 Rig(AnimationRigging) 上的 Rig 组件",
+      "reason": "同包脚本 Rig.cs，理由同上。",
+      "source": "2026-09-14 Animation Rigging 接入（code/unity/README.md §二·O）"
+    },
+    {
+      "guid": "aeda7bfbf984f2a4da5ab4b8967b115d",
+      "subject": "ActionLab.unity ← LeftArmIK 上的 TwoBoneIKConstraint 组件",
+      "reason": "同包脚本 TwoBoneIKConstraint.cs，理由同上。",
+      "source": "2026-09-14 Animation Rigging 接入（code/unity/README.md §二·O）"
     }
   ],
 

@@ -70,6 +70,7 @@ def load_exceptions():
     data = json.loads(EXCEPTIONS.read_text(encoding="utf-8"))
     return {
         "builtin_guids": {e["guid"]: e.get("reason", "") for e in data.get("builtin_guids", [])},
+        "package_guids": {e["guid"]: e.get("reason", "") for e in data.get("package_guids", [])},
         "non_humanoid_ok": {e["asset"]: e.get("reason", "") for e in data.get("non_humanoid_ok", [])},
         "known_dangling": {e["guid"]: e for e in data.get("known_dangling", [])},
     }
@@ -121,6 +122,9 @@ def check_refs(unity_files, defined_guids, exceptions):
                 continue
             if g in exceptions["builtin_guids"]:
                 allowed_hits.append((g, f, "builtin"))
+                continue
+            if g in exceptions["package_guids"]:
+                allowed_hits.append((g, f, "package"))
                 continue
             if g in exceptions["known_dangling"]:
                 allowed_hits.append((g, f, "known"))
@@ -183,6 +187,7 @@ def main():
     print(f"  A3 引用可解析  悬空 {len(dangling)}"
           f" · 经允许清单放行 {len(allowed_hits)}"
           f"（builtin {sum(1 for _, _, k in allowed_hits if k == 'builtin')}"
+          f" / package {sum(1 for _, _, k in allowed_hits if k == 'package')}"
           f" / known {sum(1 for _, _, k in allowed_hits if k == 'known')}）")
     print(f"  A4 Rig 断言    受控 FBX {rig_total} · 非 Humanoid {len(rig_bad)}"
           f" · 非人形豁免 {len(rig_exempt)}")
@@ -190,6 +195,7 @@ def main():
         print("\n  允许清单放行明细：")
         for g, f, kind in allowed_hits:
             entry = exceptions["builtin_guids"].get(g) if kind == "builtin" \
+                else exceptions["package_guids"].get(g, "") if kind == "package" \
                 else exceptions["known_dangling"].get(g, {}).get("reason", "")
             print(f"    [{kind}] {g} ← {f}\n           {entry}")
 

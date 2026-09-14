@@ -15,6 +15,7 @@ using UnityEditor;
 using UnityEditor.Animations;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;   // Animation Rigging 接入（2026-09-14）
 using YANTF.ActionLab;
 using YANTF.WalkerLab;   // CameraOrbit（环绕观察相机）
 
@@ -115,6 +116,8 @@ namespace YANTF.EditorTools
             if (actor.GetComponent<ActionLabDriver>() == null) actor.AddComponent<ActionLabDriver>();
             // 足底接地（规格 §四·乙）：需 controller 层 iKPass 打开，二者缺一不生效
             if (actor.GetComponent<FootGroundingIK>() == null) actor.AddComponent<FootGroundingIK>();
+            // Animation Rigging 接入点（2026-09-14）：**惰性**骨架，权重 0，不产生任何行为
+            BuildRigInfrastructure(actor, animator);
 
             // ---- 相机：环绕跟随（owner 裁定 2026-09-12 折进 builder —— 不再靠"每次重建手工挂"）----
             // 背景：观察相机原定"手动挂载、不改 builder"（README §二·G 裁定）。但场景自 #136 起已入库、
@@ -131,6 +134,9 @@ namespace YANTF.EditorTools
 
             if (!Directory.Exists("Assets/Scenes")) Directory.CreateDirectory("Assets/Scenes");
             EditorSceneManager.SaveScene(scene, ScenePath);
+
+            // ---- 接入自检（口径同 VerifyDerived）：接入点必须在，且必须**仍是惰性**----
+            VerifyRigInfrastructure(actor);
 
             Debug.Log($"[ActionLab] 场景已保存: {ScenePath} — Play：WASD 走 / Shift 跑 / Space 跳 / 1物攻 2精攻 3防御 4受击 5倒下 6坐（需走到椅子前）7起身 / R 重置");
             Debug.Log($"[ActionLab] 椅子 {ChairPositions.Length} 张（实心可推；就座锚点 = 坐面中心沿椅子 forward 前方 {ChairSeat.DefaultAnchorDistance} m，交互半径 {ChairSeat.DefaultInteractRadius} m）");
@@ -262,6 +268,129 @@ namespace YANTF.EditorTools
         /// <summary>同上：取载体预制（X Bot），断言侧再 Instantiate 得到带 Humanoid Avatar 的骨架。</summary>
         public static GameObject LoadCarrierForProbe()
             => AssetDatabase.LoadAssetAtPath<GameObject>(XBotPath);
+
+        // ================= Animation Rigging 接入（2026-09-14）=================
+        // 位置：`com.unity.animation.rigging` 1.4.1 已入库（Packages/manifest.json + lock，净 +3）。
+        // 边界（重要，别绕过）：owner 已裁定「手里有东西」整条线**暂停**（code/unity/README.md §二·N
+        //   未闭合 1′），而规格 §戊·2 #11 的副手 IK 正属该线。故本次**只接基础设施 + 能力探针**：
+        //   Rig 与约束权重恒为 0 → 求值结果与「没有约束」一致；目标节点挂在约束节点下，**不指向椅子**。
+        //   真正的约束（副手拉向椅子第二锚点）须等该线重新设计并形成新决策后再挂。
+
+        /// <summary>Rig 层级根节点名（场景内可检索的稳定标识，改名等于破坏下游断言）。</summary>
+        public const string RigRootName = "Rig(AnimationRigging)";
+        /// <summary>接入点约束节点名（左臂 TwoBoneIK；肩不动，与 §戊·2 副手 IK 的链口径一致）。</summary>
+        public const string LeftArmIKName = "LeftArmIK";
+        /// <summary>探针目标节点名——挂在约束节点下的**哑目标**，不是椅子上任何锚点。</summary>
+        public const string LeftArmIKTargetName = "LeftHandTarget";
+
+        /// <summary>
+        /// 接入 Animation Rigging：在载体上建「RigBuilder + Rig + 一条**权重 0** 的 TwoBoneIK 约束」。
+        /// 幂等（可重复执行）；**折进 builder** 是硬要求——场景每次 `NewScene` 整文件重写，
+        /// 手挂的 Rig 会被冲掉（危险点表 §四「场景 builder 幂等性」）。
+        /// </summary>
+        public static GameObject BuildRigInfrastructure(GameObject actor, Animator animator)
+        {
+            if (actor == null || animator == null)
+            {
+                Debug.LogError("[ActionLab] Animation Rigging 接入失败：actor 或 animator 为空");
+                return null;
+            }
+
+            var rigBuilder = actor.GetComponent<RigBuilder>();
+            if (rigBuilder == null) rigBuilder = actor.AddComponent<RigBuilder>();
+
+            // 幂等：清掉旧 layers 引用与旧 Rig 层级（builder 会被反复执行）
+            rigBuilder.layers.Clear();
+            var stale = actor.transform.Find(RigRootName);
+            if (stale != null) Object.DestroyImmediate(stale.gameObject);
+
+            var rigGo = new GameObject(RigRootName);
+            rigGo.transform.SetParent(actor.transform, false);
+            var rig = rigGo.AddComponent<Rig>();
+
+            var ikGo = new GameObject(LeftArmIKName);
+            ikGo.transform.SetParent(rigGo.transform, false);
+            var ik = ikGo.AddComponent<TwoBoneIKConstraint>();
+
+            var targetGo = new GameObject(LeftArmIKTargetName);
+            targetGo.transform.SetParent(ikGo.transform, false);
+            targetGo.transform.position = animator.GetBoneTransform(HumanBodyBones.LeftHand) != null
+                ? animator.GetBoneTransform(HumanBodyBones.LeftHand).position
+                : actor.transform.position;
+
+            ik.data.root = animator.GetBoneTransform(HumanBodyBones.LeftUpperArm);
+            ik.data.mid = animator.GetBoneTransform(HumanBodyBones.LeftLowerArm);
+            ik.data.tip = animator.GetBoneTransform(HumanBodyBones.LeftHand);
+            ik.data.target = targetGo.transform;
+
+            // 惰性口径：Rig 与约束权重都是 0 → 不改变任何既有姿势、不与足 IK 争骨链
+            rig.weight = 0f;
+            ik.weight = 0f;
+
+            rigBuilder.layers.Add(new RigLayer(rig, true));
+
+            // ⚠️ 运行时挂载必须**显式 Build**：RigBuilder 在 `Awake`/`OnEnable` 里建图，而此处是
+            //   "先 AddComponent、后 Add layer"——那一轮 Awake 看到的 layers 还是空的，
+            //   `Build()` 直接 `return false`，约束永不求值（2026-09-14 实测：手对目标距离恒为初始
+            //   偏移 187.1 mm，四组权重/冻结组合读数**逐位相同**，看起来像"约束语法不对"）。
+            //   编辑期建场景不调（此时不该建图）；Play 时的 Awake 会拿着**已序列化的 layers** 自己建。
+            if (Application.isPlaying) rigBuilder.Build();
+
+            return rigGo;
+        }
+
+        /// <summary>
+        /// 接入自检（口径同 <see cref="DerivedClipBuilder.VerifyDerived"/>）：接入点按契约存在、骨链绑定非空、
+        /// 且**仍然惰性**。三类漂移都会 LogError，因为它们都会让下游误判：
+        /// ① Rig 静默失效（骨链为空——Humanoid 载体换过、或 FBX 开了 Optimize Game Objects）；
+        /// ② 权重被谁改成非 0（那就在没人设计的情况下改动了角色姿势）；
+        /// ③ layers 数不对（有人手工往场景里加了 Rig）。
+        /// </summary>
+        public static bool VerifyRigInfrastructure(GameObject actor)
+        {
+            if (actor == null) { Debug.LogError("[ActionLab] Rig 接入自检失败：actor 为空"); return false; }
+
+            var rigBuilder = actor.GetComponent<RigBuilder>();
+            if (rigBuilder == null)
+            { Debug.LogError("[ActionLab] Rig 接入自检失败：载体上没有 RigBuilder"); return false; }
+
+            if (rigBuilder.layers.Count != 1)
+            {
+                Debug.LogError($"[ActionLab] Rig 接入自检失败：layers 应为 1，实测 {rigBuilder.layers.Count}" +
+                               "（手工往场景加 Rig 会被下次重建冲掉，应改 builder）");
+                return false;
+            }
+
+            var rig = rigBuilder.layers[0].rig;
+            if (rig == null) { Debug.LogError("[ActionLab] Rig 接入自检失败：layer[0].rig 为空"); return false; }
+
+            var ik = rig.GetComponentInChildren<TwoBoneIKConstraint>();
+            if (ik == null) { Debug.LogError("[ActionLab] Rig 接入自检失败：找不到 TwoBoneIKConstraint"); return false; }
+
+            var missing = new List<string>();
+            if (ik.data.root == null) missing.Add("root(LeftUpperArm)");
+            if (ik.data.mid == null) missing.Add("mid(LeftLowerArm)");
+            if (ik.data.tip == null) missing.Add("tip(LeftHand)");
+            if (ik.data.target == null) missing.Add("target");
+            if (missing.Count > 0)
+            {
+                Debug.LogError("[ActionLab] Rig 接入自检失败：骨链绑定为空 → " + string.Join(" / ", missing) +
+                               "（Humanoid 载体换过？FBX 是否开了 Optimize Game Objects？）");
+                return false;
+            }
+
+            if (ik.weight != 0f || rig.weight != 0f)
+            {
+                Debug.LogError($"[ActionLab] Rig 接入自检失败：惰性口径被破（rig.weight={rig.weight}, ik.weight={ik.weight}，" +
+                               "应恒为 0）——本接入点尚未有消费方，非 0 权重等于在无人设计的情况下改动角色姿势");
+                return false;
+            }
+
+            Debug.Log($"[ActionLab] Animation Rigging 接入自检 ✅ {RigRootName}/{LeftArmIKName}：" +
+                      $"骨链 {ik.data.root.name} → {ik.data.mid.name} → {ik.data.tip.name} 绑定非空，" +
+                      $"rig.weight={rig.weight} / ik.weight={ik.weight}（惰性：不产生行为，消费方待定）");
+            return true;
+        }
 
         /// <summary>
         /// 三张椅子（规格 §四·丁#8）：坐板 + 四条腿 + 靠背 + Rigidbody + `ChairSeat` 锚点组件。
