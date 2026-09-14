@@ -183,9 +183,18 @@ public class ActionLabChairTests
         Assert.AreEqual(ActionIds.Stand, ActionCatalog.Get(ActionIds.SitIdle).ExitVia,
             "SitIdle 必须声明 ExitVia=Stand：离座要先起身（规格 §四·丁#7）");
 
+        // 持握态（Carry1H / Wield2H）按规格 §戊·1#3 **应当**声明 ExitVia=PutDown：
+        // 持握是原地态，收到移动意图即经 PutDown 放下（不是"不应有 ExitVia"）。
+        Assert.AreEqual(ActionIds.PutDown, ActionCatalog.Get(ActionIds.Carry1H).ExitVia,
+            "Carry1H 必须声明 ExitVia=PutDown（规格 §戊·1#3）");
+        Assert.AreEqual(ActionIds.PutDown, ActionCatalog.Get(ActionIds.Wield2H).ExitVia,
+            "Wield2H 必须声明 ExitVia=PutDown（规格 §戊·1#3）");
+
+        var exempt = new[] { ActionIds.Sit, ActionIds.SitIdle, ActionIds.Stand,
+                             ActionIds.Carry1H, ActionIds.Wield2H };
         foreach (var entry in ActionCatalog.All)
         {
-            if (entry.Id == ActionIds.Sit || entry.Id == ActionIds.SitIdle || entry.Id == ActionIds.Stand) continue;
+            if (System.Array.IndexOf(exempt, entry.Id) >= 0) continue;
             Assert.IsFalse(entry.RootMotionXZ, entry.Id + " 不应声明 XZ 根位移（locomotion 位移全由输入驱动）");
             Assert.IsNull(entry.ExitVia, entry.Id + " 不应声明 ExitVia");
         }

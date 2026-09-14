@@ -31,6 +31,8 @@ public class ActionLabSmokeTests
         ActionIds.PhysicalAttack, ActionIds.MentalAttack, ActionIds.Defend,
         ActionIds.HitReaction, ActionIds.Down,
         ActionIds.Sit, ActionIds.SitIdle, ActionIds.Stand,
+        // 持椅四词条（规格 §四·戊·1#5 手数显式 id；§戊·6 最小切片：状态与 clip 就位，行为只接格挡变体）
+        ActionIds.Lift1H, ActionIds.Carry1H, ActionIds.Wield2H, ActionIds.PutDown,
     };
 
     private static readonly string[] SpecL2 = {
@@ -40,9 +42,9 @@ public class ActionLabSmokeTests
     [Test]
     public void Catalog_L1_L2_MatchSpecWordList()
     {
-        CollectionAssert.AreEquivalent(SpecL1, Ids(ActionCatalog.Level1), "L1 应等于规格 §二 落地 12 词条");
+        CollectionAssert.AreEquivalent(SpecL1, Ids(ActionCatalog.Level1), "L1 应等于规格 §二 落地 16 词条");
         CollectionAssert.AreEquivalent(SpecL2, Ids(ActionCatalog.Level2), "L2 应等于规格 §二 登记 1 词条（Talk）");
-        Assert.AreEqual(13, ActionCatalog.All.Count, "词表应为 13 词条");
+        Assert.AreEqual(17, ActionCatalog.All.Count, "词表应为 17 词条（§二：13 + 持椅四词条）");
         foreach (var e in ActionCatalog.All)
         {
             Assert.IsFalse(string.IsNullOrWhiteSpace(e.DisplayName), "词条需有中文呈现词: " + e.Id);

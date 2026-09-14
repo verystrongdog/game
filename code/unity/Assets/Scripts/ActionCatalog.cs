@@ -40,10 +40,17 @@ namespace YANTF.ActionLab
         public readonly string NextState;     // 一次性动作播完切到的状态；null = 回退 locomotion
         public readonly string ExitVia;       // 持续态被移动意图打断时先播的一次性动作；null = 直接回 locomotion
         public readonly bool RootMotionXZ;    // 播放期间施加 clip 的 XZ 根位移（经 CC）
+        /// <summary>
+        /// 持握态变体（规格 §四·戊·1#4「状态用词条、动作用变体」的落地形态）：
+        /// **持握中**请求本词条时，实际播放这里给的状态 id（按字段判定，不硬编码 id）。
+        /// null = 无变体。「是否持握中」由驱动层置 `ActionPlayer.IsHoldingChair`。
+        /// </summary>
+        public readonly string HoldVariantState;
 
         public ActionEntry(string id, string displayName, ActionCategory category, int level,
                            bool loop, int priority, float fade, string clipAssetPath,
-                           string nextState = null, string exitVia = null, bool rootMotionXz = false)
+                           string nextState = null, string exitVia = null, bool rootMotionXz = false,
+                           string holdVariantState = null)
         {
             Id = id;
             DisplayName = displayName;
@@ -56,6 +63,7 @@ namespace YANTF.ActionLab
             NextState = nextState;
             ExitVia = exitVia;
             RootMotionXZ = rootMotionXz;
+            HoldVariantState = holdVariantState;
         }
     }
 
@@ -87,6 +95,9 @@ namespace YANTF.ActionLab
         /// <summary>未经采用的坐下原件：其坐姿端与另两条不同族（踝前后差 149 mm、膝角差 17.6°），见规格 §二 修正块。</summary>
         public const string StandToSitFbx = "Assets/Animations/Mixamo/Stand To Sit.fbx";
 
+        /// <summary>持椅素材目录（规格 §戊·3：变体 clip 命名 = 词条 id_变体键.fbx）。</summary>
+        public const string ChairholdDir = "Assets/Animations/Mixamo/Chairhold/";
+
         private static readonly ActionEntry[] AllEntries =
         {
             // L1 locomotion
@@ -97,7 +108,10 @@ namespace YANTF.ActionLab
             // L1 combat
             new ActionEntry(ActionIds.PhysicalAttack, "物攻", ActionCategory.Combat, 1, loop: false, priority: 2, fade: 0.10f, clipAssetPath: MixamoCombatDir + ActionIds.PhysicalAttack + ".fbx"),
             new ActionEntry(ActionIds.MentalAttack, "精攻", ActionCategory.Combat, 1, loop: false, priority: 2, fade: 0.10f, clipAssetPath: MixamoCombatDir + ActionIds.MentalAttack + ".fbx"),
-            new ActionEntry(ActionIds.Defend, "防御", ActionCategory.Combat, 1, loop: true, priority: 1, fade: 0.10f, clipAssetPath: MixamoCombatDir + ActionIds.Defend + ".fbx"),
+            // 格挡持握变体（规格 §戊·6）：持握中请求 Defend → 播 Wield2H 那条 clip（2hand Idle，实测两手 17.1–17.4 cm）。
+            // 数值一个字不改（§戊·1#7）：手里拿着什么不影响能不能防御。
+            new ActionEntry(ActionIds.Defend, "防御", ActionCategory.Combat, 1, loop: true, priority: 1, fade: 0.10f,
+                            clipAssetPath: MixamoCombatDir + ActionIds.Defend + ".fbx", holdVariantState: ActionIds.Wield2H),
             // L1 reaction
             new ActionEntry(ActionIds.HitReaction, "受击", ActionCategory.Reaction, 1, loop: false, priority: 3, fade: 0.10f, clipAssetPath: MixamoCombatDir + ActionIds.HitReaction + ".fbx"),
             new ActionEntry(ActionIds.Down, "倒下", ActionCategory.Reaction, 1, loop: false, priority: 4, fade: 0.10f, clipAssetPath: MixamoCombatDir + ActionIds.Down + ".fbx"),
@@ -110,6 +124,16 @@ namespace YANTF.ActionLab
                             clipAssetPath: SittingIdleFbx, exitVia: ActionIds.Stand, rootMotionXz: true),
             new ActionEntry(ActionIds.Stand, "站起", ActionCategory.Interaction, 1, loop: false, priority: 2, fade: 0.10f,
                             clipAssetPath: SitToStandFbx, rootMotionXz: true),
+            // L1 interaction·持椅四词条（§戊·6 最小切片：状态与 clip 就位，**行为只接格挡变体**）
+            // Lift1H/PutDown 的裁帧已在 .meta（28–168 / 63–259）；Carry1H/Wield2H 为完美循环（§戊·4）。
+            new ActionEntry(ActionIds.Lift1H, "拎起", ActionCategory.Interaction, 1, loop: false, priority: 2, fade: 0.10f,
+                            clipAssetPath: ChairholdDir + ActionIds.Lift1H + ".fbx", nextState: ActionIds.Carry1H),
+            new ActionEntry(ActionIds.Carry1H, "单手提携", ActionCategory.Interaction, 1, loop: true, priority: 1, fade: 0.12f,
+                            clipAssetPath: ChairholdDir + ActionIds.Carry1H + ".fbx", exitVia: ActionIds.PutDown),
+            new ActionEntry(ActionIds.Wield2H, "双手持握准备", ActionCategory.Interaction, 1, loop: true, priority: 1, fade: 0.12f,
+                            clipAssetPath: ChairholdDir + ActionIds.Wield2H + ".fbx", exitVia: ActionIds.PutDown),
+            new ActionEntry(ActionIds.PutDown, "放下", ActionCategory.Interaction, 1, loop: false, priority: 2, fade: 0.10f,
+                            clipAssetPath: ChairholdDir + ActionIds.PutDown + ".fbx"),
             // L2 登记（不接线；clipAssetPath 资产锚在 L2→L1 迁移时填写）
             new ActionEntry(ActionIds.Talk, "对话言语", ActionCategory.Social, 2, loop: true, priority: 0, fade: 0.12f, clipAssetPath: null),
         };

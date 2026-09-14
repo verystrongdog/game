@@ -40,6 +40,9 @@ namespace YANTF.ActionLab
         public Animator animator;
         public ActionPlayer player;
 
+        /// <summary>持椅探针当前挂着的椅子（§戊·6；非正典）。</summary>
+        private ChairGrip _grip;
+
         // 脚本/测试驱动
         private Vector3 _scriptDir;
         private float _scriptSpeed;
@@ -139,7 +142,10 @@ namespace YANTF.ActionLab
             if (Input.GetKeyDown(KeyCode.Alpha2)) player.Play(ActionIds.MentalAttack);
             if (Input.GetKeyDown(KeyCode.Alpha3))
             {
-                if (player.CurrentActionId == ActionIds.Defend) player.ResetToIdle();
+                // 持握中「格挡」解析到变体状态 `Wield2H`（§戊·6）⇒ 守卫条件要把变体态也算作"正在防御"
+                bool defending = player.CurrentActionId == ActionIds.Defend
+                                 || (player.IsHoldingChair && player.CurrentActionId == ActionIds.Wield2H);
+                if (defending) player.ResetToIdle();
                 else player.Play(ActionIds.Defend);
             }
             if (Input.GetKeyDown(KeyCode.Alpha4)) player.Play(ActionIds.HitReaction);
@@ -152,6 +158,7 @@ namespace YANTF.ActionLab
             if (Input.GetKeyDown(KeyCode.Alpha6)) TrySitOnNearestChair();
             if (Input.GetKeyDown(KeyCode.Alpha7) && player.CurrentActionId == ActionIds.SitIdle)
                 player.Play(ActionIds.Stand);
+            if (Input.GetKeyDown(KeyCode.Alpha8)) ToggleChairGripProbe();   // 持椅探针（§戊·6，非正典）
             if (Input.GetKeyDown(KeyCode.R)) player.ResetToIdle();
         }
 
@@ -352,6 +359,44 @@ namespace YANTF.ActionLab
                 ? $"椅子: 可就座（锚点距离 {nd:F2} m）— 按 6"
                 : $"椅子: 未命中（锚点距离 {nd:F2} m · 需 ≤ {nearest.interactRadius:F2} m 且在椅子前侧）";
             if (nearest.IsOccupied) _chairStatus = _chair != null ? "椅子: 就座中" : "椅子: 已被占用";
+        }
+
+
+        /// <summary>
+        /// **持椅探针**（规格 §戊·6 最小可验收切片；**不是正典机制**）：8 键把最近的椅子挂到右手并进入
+        /// `Wield2H`，再按一次放下。**跳过** `Lift1H` 与换握——那属 #153/#154。
+        /// 挂点后置 `player.IsHoldingChair = true` ⇒ 按 3 会走**格挡持握变体**（`2hand Idle`）。
+        /// </summary>
+        private void ToggleChairGripProbe()
+        {
+            var animator = GetComponent<Animator>();
+            var cc = GetComponent<CharacterController>();
+
+            if (_grip != null && _grip.IsHeld)
+            {
+                _grip.Detach();
+                _grip = null;
+                player.IsHoldingChair = false;
+                player.ResetToIdle();
+                SetHint("已放下椅子（持握态解除）");
+                return;
+            }
+
+            var near = ChairSeat.FindNearest(transform.position, out float nd);
+            if (near == null) { SetHint("附近没有椅子（8 = 持椅探针）"); return; }
+            var grip = near.GetComponent<ChairGrip>();
+            if (grip == null) { SetHint("最近那把椅子没有 ChairGrip 组件"); return; }
+
+            // 先切到 Wield2H（其 clip = 2hand Idle），再按该状态解手骨位姿后挂点
+            if (!player.Play(ActionIds.Wield2H))
+            { SetHint("切 Wield2H 失败——controller 里没有该状态？（重跑菜单 YANTF/动作演示/创建 ActionLab 场景）"); return; }
+            animator.Update(0f);
+            if (!grip.Attach(animator, GripState.Wield2H, cc))
+            { SetHint("挂点被拒：" + grip.LastAttachReport); return; }
+
+            _grip = grip;
+            player.IsHoldingChair = true;
+            SetHint($"已持椅（Wield2H；最近椅子 {nd:F2} m）——按 3 格挡（持握变体），再按 8 放下");
         }
 
         private void SetHint(string text)

@@ -7,7 +7,8 @@
     "consumer": "code/unity/Assets/Editor/（生成期；见 design/presentation/动作库规格.md §四·丙）",
     "runtime_note": "运行时 Unity 不读本文件——运行时消费的是生成器写出的 C# 静态表。依赖边声明见 ARCHITECTURE.md §二（data/ → code/unity/ 仅生成期）。",
     "role_justification": "role=generator-input 由 code/tools/build_data_manifest.py 的 GENERATOR_INPUT 声明式登记（不是引用计数推导）——理由见该文件内注释。",
-    "created": "2026-09-12"
+    "created": "2026-09-12",
+    "note_word_list": "17 词条（13 + 持椅四词条，规格 §二 / §四·戊·1#5）"
   },
   "_sources": {
     "_rule": "本仓硬约束：每个数值常量必须有来源。键为 JSON 路径，值为来源。",
@@ -32,9 +33,18 @@
     "walk_speed_mps": 3.0,
     "run_speed_mps": 6.0,
     "samples": [
-      { "action": "Idle", "threshold": 0.0 },
-      { "action": "Walk", "threshold": 3.0 },
-      { "action": "Run", "threshold": 6.0 }
+      {
+        "action": "Idle",
+        "threshold": 0.0
+      },
+      {
+        "action": "Walk",
+        "threshold": 3.0
+      },
+      {
+        "action": "Run",
+        "threshold": 6.0
+      }
     ]
   },
   "actions": [
@@ -93,7 +103,7 @@
       "level": 1,
       "loop": false,
       "priority": 2,
-      "fade": 0.10,
+      "fade": 0.1,
       "clip_asset": "Assets/Animations/Mixamo/Combat/PhysicalAttack.fbx",
       "asset_status": "present",
       "source_clip": "Mixamo `Jab Cross`",
@@ -106,7 +116,7 @@
       "level": 1,
       "loop": false,
       "priority": 2,
-      "fade": 0.10,
+      "fade": 0.1,
       "clip_asset": "Assets/Animations/Mixamo/Combat/MentalAttack.fbx",
       "asset_status": "present",
       "source_clip": "Mixamo `Charge`",
@@ -119,11 +129,12 @@
       "level": 1,
       "loop": true,
       "priority": 1,
-      "fade": 0.10,
+      "fade": 0.1,
       "clip_asset": "Assets/Animations/Mixamo/Combat/Defend.fbx",
       "asset_status": "present",
       "source_clip": "Mixamo `Short Left Side Step`",
-      "notes": "实证为循环格挡（#124：文件名陷阱）。M1 运动抑制的持续态。"
+      "notes": "实证为循环格挡（#124：文件名陷阱）。M1 运动抑制的持续态。",
+      "hold_variant_state": "Wield2H"
     },
     {
       "id": "HitReaction",
@@ -132,7 +143,7 @@
       "level": 1,
       "loop": false,
       "priority": 3,
-      "fade": 0.10,
+      "fade": 0.1,
       "clip_asset": "Assets/Animations/Mixamo/Combat/HitReaction.fbx",
       "asset_status": "present",
       "source_clip": "Mixamo `Head Hit`",
@@ -145,7 +156,7 @@
       "level": 1,
       "loop": false,
       "priority": 4,
-      "fade": 0.10,
+      "fade": 0.1,
       "clip_asset": "Assets/Animations/Mixamo/Combat/Down.fbx",
       "asset_status": "present",
       "source_clip": "Mixamo `Dying`",
@@ -158,7 +169,7 @@
       "level": 1,
       "loop": false,
       "priority": 2,
-      "fade": 0.10,
+      "fade": 0.1,
       "clip_asset": "Assets/Animations/Derived/SitDown.anim",
       "asset_status": "present",
       "derived_from": {
@@ -192,7 +203,7 @@
       "level": 1,
       "loop": false,
       "priority": 2,
-      "fade": 0.10,
+      "fade": 0.1,
       "clip_asset": "Assets/Animations/Mixamo/Sit To Stand.fbx",
       "asset_status": "present",
       "notes": "起身段用 Mixamo 原件（同时是 SitDown 派生件的源）。**末帧已裁**：`lastFrame` 68 → 54（clip 2.2667 → 1.8000 s）——原末 20% 是一段「漂」（t=0.80 躯干 3.8°、足底 +0.0042 → t=1.00 躯干 13.9°、足离地 +0.0175、髋继续升）。裁后末帧躯干 4.0°、足底 +0.0021/+0.0105（接地）。",
@@ -209,6 +220,53 @@
       "clip_asset": "Assets/Animations/Mixamo/Social/Talk.fbx",
       "asset_status": "pending-download",
       "notes": "来源从 KI 切 Mixamo（动作库规格.md §五）；候选类目未核验。"
+    },
+    {
+      "id": "Lift1H",
+      "display_name": "拎起",
+      "category": "interaction",
+      "level": 1,
+      "loop": false,
+      "priority": 2,
+      "fade": 0.1,
+      "clip_asset": "Assets/Animations/Mixamo/Chairhold/Lift1H.fbx",
+      "next_state": "Carry1H",
+      "notes": "单手（实测两手间距全程 ≥0.46 m）；裁帧 28–168 → 4.6667 s（规格 §戊·4）"
+    },
+    {
+      "id": "Carry1H",
+      "display_name": "单手提携",
+      "category": "interaction",
+      "level": 1,
+      "loop": true,
+      "priority": 1,
+      "fade": 0.12,
+      "clip_asset": "Assets/Animations/Mixamo/Chairhold/Carry1H.fbx",
+      "exit_via": "PutDown",
+      "notes": "完美循环（首末帧差 0.0007 m）；持握态是原地态，收到移动意图经 ExitVia 放下（§戊·1#3）"
+    },
+    {
+      "id": "Wield2H",
+      "display_name": "双手持握准备",
+      "category": "interaction",
+      "level": 1,
+      "loop": true,
+      "priority": 1,
+      "fade": 0.12,
+      "clip_asset": "Assets/Animations/Mixamo/Chairhold/Wield2H.fbx",
+      "exit_via": "PutDown",
+      "notes": "完美循环（首末帧差 0.0000 m）；同时承载格挡持握变体（§戊·6）"
+    },
+    {
+      "id": "PutDown",
+      "display_name": "放下",
+      "category": "interaction",
+      "level": 1,
+      "loop": false,
+      "priority": 2,
+      "fade": 0.1,
+      "clip_asset": "Assets/Animations/Mixamo/Chairhold/PutDown.fbx",
+      "notes": "单手原件；裁帧 63–259 → 6.5333 s；变体 1H/2H 解析属 #153/#154（§戊·1#4）"
     }
   ]
 }

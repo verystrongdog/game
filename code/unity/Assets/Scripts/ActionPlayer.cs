@@ -29,6 +29,12 @@ namespace YANTF.ActionLab
 
         // ---- 只读状态（HUD/测试）----
         public string CurrentActionId { get; private set; }
+
+        /// <summary>
+        /// 是否「持握中」（手里有椅子）。**由驱动层在挂点/解除时置位**——本类不自己找场景（保持可测）。
+        /// 用途：持握态变体解析（规格 §四·戊·1#4 / §戊·6 格挡变体）。
+        /// </summary>
+        public bool IsHoldingChair { get; set; }
         public string CurrentActionDisplay => CurrentActionId != null ? ActionCatalog.Get(CurrentActionId).DisplayName : "—";
         public bool IsLocked { get; private set; }          // 一次性动作播放期间（含 Down 终态）锁移动切态
         public bool IsAirborne { get; private set; }
@@ -136,6 +142,15 @@ namespace YANTF.ActionLab
                 Debug.LogWarning("[ActionPlayer] 词表外动作: " + id + "（新增须走扩展协议）", this);
                 return false;
             }
+            // 持握态变体（规格 §戊·1#4 / §戊·6）：持握中请求本词条 → 实际播变体状态。
+            // 按字段判定、不硬编码 id；变体缺失时**按原词条播**（不静默吞掉请求）。
+            if (entry.HoldVariantState != null && IsHoldingChair
+                && ActionCatalog.TryGet(entry.HoldVariantState, out var variant)
+                && variant.Level == 1)
+            {
+                entry = variant;
+            }
+
             if (entry.Level == 2)
             {
                 Debug.LogWarning("[ActionPlayer] L2 登记未接线: " + id + "（" + entry.DisplayName + "；消费端就绪后走 L2→L1）", this);
