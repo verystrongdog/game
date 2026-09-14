@@ -128,7 +128,42 @@ new_finding = after − mapped(before) − expected_delta = 空
 
 ## 九、回滚演练、工作树与门禁复跑
 
-（本节在提交后填实测结论。）
+| 字段 | 值 |
+|---|---|
+| base SHA | `eae5fd0` |
+| head SHA | `fed33fc`（本证据收口提交）；线数裁定提交 `1b0833b` |
+| 工具版本 | Python 3.10.12 · gh 2.100.0 · Windows PowerShell / `reg.exe`（经 WSL interop）· .NET 与 Unity **本轮未参与** |
+| 测试报告定位 | `artifacts/probe-158-raw.txt`（全量探针原始输出）· `artifacts/probe-158-fast.txt`（快段复跑）· 可复现命令 `bash artifacts/probe158.sh`——`artifacts/` 在 `.gitignore` 内 |
+
+### 9.1 门禁复跑（改动后，工作树干净）
+
+| # | 命令 | 退出码 | 读数 |
+|---|---|---|---|
+| 1 | `python3 code/tools/validate_cross_refs.py` | 0 | 1752 refs / 1751 passed / **0 dead** / 0 section warnings（base 为 1739 / 1738 / 0） |
+| 2 | `python3 code/tools/validate_trash_isolation.py` | 0 | 291 个活跃 `.md` 全部通过（base 为 290——新增本文件） |
+| 3 | `python3 code/tools/validate_params.py` | 0 | 49 passed / 0 failed / 7 warnings（与 base 同） |
+| 4 | `python3 code/tools/validate_issues.py --from-github` | 0 | 10 passed / 0 failed / 4 warnings（与 base 同） |
+
+第一轮 `validate_cross_refs` 曾在本**新增文件里报 3 条死链**（`../presentation/动画处理能力对照实验.md` 的相对层级少写了一层），改为 `../../presentation/…` 后归零——记在这里，因为"0 死链"是底线、不是自动成立的。
+
+### 9.2 回滚演练（实测）
+
+方式：临时 worktree + `git revert`（不改主干）。
+
+| 步 | 命令 | 退出码 | 结果 |
+|---|---|---|---|
+| 1 | `git worktree add --detach /tmp/revertwt2 HEAD` | 0 | 在收口提交 `fed33fc` 上取得干净检出 |
+| 2 | `git revert --no-edit fed33fc` | 0 | 生成 `4f2906c Revert "docs: #158 收口为证据不足…"` |
+| 3 | `ls design/engineering/evidence/unreal-animation-probe-2026-09-14.md` | 非 0 | 文件消失（`No such file or directory`）⇒ 恢复上一状态 |
+| 4 | `validate_cross_refs.py`（回滚态） | 0 | 1739 refs / 1738 passed / **0 dead**——与 base 逐字同值 |
+| 5 | `validate_trash_isolation.py`（回滚态） | 0 | 全部通过 |
+| 6 | `git worktree remove --force /tmp/revertwt2` | 0 | 临时工作树清理完毕；主干 `HEAD` 仍为 `fed33fc` |
+
+结论：`git revert` 能恢复上一状态；回滚只影响本证据文件与其登记行，不触及 Unity 工程 / Core / 资产 / 门禁口径。
+
+### 9.3 工作树
+
+收口提交与裁定提交之后 `git status --short` **无输出**——无非预期变化；未向 git 提交任何 Unreal 二进制、`.uproject`、缓存或截图。
 
 ---
 
