@@ -1,6 +1,6 @@
 # term_registry 候补候选清单
 
-> 本文件是 `data/term_registry.json` `_pending_candidates` 字段指向的候补清单——已出现但未达入库标准（P3 级/单文档/待裁决）的术语登记处。达标准则后由对应 grilling 逐批移入主表。
+> 本文件是 `data/term_registry.json` `_pending_candidates` 字段指向的候补清单——已出现但未达入库标准（P3 级/单文档/待裁决）的术语登记处。达标后**由 owner 裁决、结论落 `design/` 正典，再移入主表**（🔧 2026-09-14：原表述为"由对应 grilling 逐批移入主表"，而 grilling 已于 2026-09-12 停用 ⇒ 该出口曾失效；现行口径见 [项目规约 §五](../design/conventions/README.md) 第 3 条）。
 
 ## 待裁决/推迟项（Grilling #111 登记，2026-09-03）
 

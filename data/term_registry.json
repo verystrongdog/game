@@ -1,8 +1,8 @@
 {
   "_description": "术语注册表 — 术语定义 / 旧模型 / 偏离原因集中管理，避免在撰写设计内容时被术语的现实世界默认含义劫持（例：项目内的「态度」不是社会心理学的 attitude）。status 字段区分活跃与已废弃术语，是本表唯一权威状态。",
-  "_maintenance": "入库触发: (a) 新核心术语且项目内有自定义含义 (b) definition/old_model/deviation_reason 被实质修改 (c) 两个术语边界被重新划分。numerical_locations 在入库时填充、定义变更时遍历复查。覆盖范围: 设计文档表格列头与参数名中 ≤4 ASCII 字符短标识符。",
+  "_maintenance": "入库触发: (a) 新核心术语且项目内有自定义含义 (b) definition/old_model/deviation_reason 被实质修改 (c) 两个术语边界被重新划分。numerical_locations 在入库时填充、定义变更时遍历复查。覆盖范围: 设计文档表格列头与参数名中 ≤4 ASCII 字符短标识符。 修订流程（改定义 / 废弃 / 候补三条短规则）见 design/conventions/README.md §五。",
   "_created": "2026-08-03",
-  "_updated": "2026-09-06",
+  "_updated": "2026-09-14",
   "_batch": "grilling-113-disease-eligibility-2026-09-03",
   "_pending_candidates": "见 data/term_registry_candidates.md — 候补候选清单：P3级/单文档/待裁决术语登记处。Grilling #111 登记：降级协议（否决态）/单一事实源（推迟态）/语义层兜底（推迟）/#70 路线图模块化重构（推迟）。Grilling #26-27: CSTC/EDR/CTC/三体神经模型/function_profile/cstc_loop/cstc_role/signal_type/gameplay_domain/STN/脑干广播/皮层-皮层连接/功能剖面/基底节门控 (14条已入库).",
   "terms": {
@@ -4166,13 +4166,89 @@
       ],
       "added": "2026-09-06",
       "updated": "2026-09-06"
+    },
+    "回显卡": {
+      "definition": "每轮改完姿势后 agent 必出的对照卡：逐条列「owner 的原话 → 解成的度量对象 + 世界坐标/参考系 → 判据量 → 产物侧读数 → 状态」；owner 只回「对 / 不对 / 改哪个量」。是「翻译责任在 AI 侧」这一裁定的载体。",
+      "source": "design/presentation/动作描述口径.md §四",
+      "old_model": "在对话里用自然语言汇报「改好了」——没有逐项读数，出错无法归因",
+      "deviation_reason": "把「改好了」变成可核对的表，且读数必须取自产物而非中间量（自证式判据的教训：残差 0.0 mm 而手离椅背 440 mm）",
+      "status": "active",
+      "numerical_locations": [
+        "design/presentation/动作描述口径.md §四"
+      ],
+      "added": "2026-09-14",
+      "updated": "2026-09-14"
+    },
+    "自由度表": {
+      "definition": "每个动作开工产出的第一张表：列出该动作的全部自由量，逐项标「由 owner 定 / 由 agent 解」、建议值、依据、以及与其它自由量的耦合；owner 圈定后才进关键帧表。",
+      "source": "design/presentation/动作描述口径.md §五",
+      "old_model": "未言明的量由 agent 自行决定并直接写进脚本（弯多少、站多远、几帧到位）",
+      "deviation_reason": "上一轮返工中站位与弯腰角是 agent 扫描反解后自填的，owner 从未见过该解空间",
+      "status": "active",
+      "numerical_locations": [
+        "design/presentation/动作描述口径.md §五"
+      ],
+      "added": "2026-09-14",
+      "updated": "2026-09-14"
+    },
+    "命名面": {
+      "definition": "道具几何上的具名表面（例：靠背面-近侧 / 靠背面-远侧 / 顶面 / 坐面），名与坐标同出一个布局函数。需求里禁用「正面 / 背面 / 前面」这类视角词——它们随说话人漂移，且「谁在看」在对话中永远不会被说出来。",
+      "source": "design/presentation/动作描述口径.md §6.3；常量权威 design/presentation/动作库规格.md §七",
+      "old_model": "用视角词描述方位（「手放在椅子前面」「贴住椅背背面」）——同一句在角色系与道具系里是两个相反的落点",
+      "deviation_reason": "命名面消掉「视角」这个隐含自变量；视角词只允许出现在 agent 的解里，不允许出现在需求里",
+      "status": "active",
+      "numerical_locations": [
+        "design/presentation/动作描述口径.md §6.3",
+        "design/presentation/动作库规格.md §七"
+      ],
+      "added": "2026-09-14",
+      "updated": "2026-09-14"
+    },
+    "容差 ε": {
+      "definition": "「贴合 / 贴住 / 到位」这类词的判定尺度。口径 = 「骨 → 蒙皮表面」的实测偏移（与足底余量 soleMargin 同来历），不是审美拍出来的阈值；接触 / 朝向 / 到位三档分立。ε 实测值取得之前，过渡做法是只报读数、由 owner 目视判。",
+      "source": "design/presentation/动作描述口径.md §八",
+      "old_model": "随手定一个「几毫米以内算贴合」当通过线",
+      "deviation_reason": "本仓禁止无来源阈值（动画处理能力对照实验 §三 / §六.2）；ε 必须有可复核的来历",
+      "status": "active",
+      "numerical_locations": [
+        "design/presentation/动作描述口径.md §八",
+        "design/presentation/动画处理能力对照实验.md §2.1"
+      ],
+      "added": "2026-09-14",
+      "updated": "2026-09-14"
+    },
+    "活体桥": {
+      "definition": "让外部进程驱动「owner 正开着」的那个 Blender 会话的自有直驱桥：往窗口里送代码并读回结果，owner 实时看见变化。分工 = headless 脚本负责量产与可复现，活体桥负责调试与「我说你动」。",
+      "source": "code/tools/blender-bridge/README.md §一；design/presentation/Blender动作制作管线.md §7.5",
+      "old_model": "编辑器插件 / MCP 那类「新会话工具」——答不了「就在现在这个会话里帮我摆个姿势」",
+      "deviation_reason": "本工程要的是同进程内的实时回路；那类工具只在新会话里出现，且多一层第三方依赖与版本跟随",
+      "status": "active",
+      "numerical_locations": [
+        "code/tools/blender-bridge/README.md §三",
+        "design/presentation/Blender动作制作管线.md §7.5"
+      ],
+      "added": "2026-09-14",
+      "updated": "2026-09-14"
+    },
+    "变形骨 / 控制骨": {
+      "definition": "按 use_deform 划分的一对。变形骨（use_deform=True）参与蒙皮，转它皮肤就动；控制骨（CTRL_*，use_deform=False）自己不带动顶点，靠 Bone Constraint 去推对应的变形骨。母版里控制骨自成一条平行链（不插进 mixamorig 链）；**无约束的那部分变形骨（脊柱 / 颈 / 头 / 手指 / 脚趾）可以直接打关键帧**。「控制层」即那 13 根控制骨与约束构成的层；逐项数目见管线 §三 的 V2/V9。",
+      "source": "design/presentation/Blender动作制作管线.md §二 / §三",
+      "old_model": "把「骨骼」当成一类——以为转任何一根骨都直接带动身体",
+      "deviation_reason": "本母版对变形骨挂了覆盖式约束（COPY_ROTATION REPLACE），转被约束的变形骨画面完全不动；「转了没反应」要先分清是哪种骨",
+      "status": "active",
+      "numerical_locations": [
+        "design/presentation/Blender动作制作管线.md §二",
+        "design/presentation/Blender动作制作管线.md §2.1.1"
+      ],
+      "added": "2026-09-14",
+      "updated": "2026-09-14"
     }
   },
   "_metadata": {
-    "last_updated": "2026-09-12",
-    "last_batch": "2026-09-12 删除「数学语言」「模糊量词」两条——owner 裁定停用数学语言约束，其规范 design/conventions/agents/math-language-writing.md 一并删除；重算计数 total → 309、active → 286",
-    "total_terms": 309,
-    "active_terms": 286,
+    "last_updated": "2026-09-14",
+    "last_batch": "2026-09-14 入库 6 条动作描述口径术语（回显卡 / 自由度表 / 命名面 / 容差 ε / 活体桥 / 变形骨 / 控制骨）——来源 design/presentation/动作描述口径.md（owner 逐题接受 D1–D10）；重算计数 total → 315、active → 292",
+    "total_terms": 315,
+    "active_terms": 292,
     "deprecated_terms": 23
   }
 }

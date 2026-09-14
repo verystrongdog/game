@@ -114,6 +114,12 @@ data/       结构化数据契约           ← 参数真值源
 
 **状态**：注册表是**术语参考**，不是准入门禁。它不阻塞任何改动，只用于核对术语是否已被否决。
 
+**修订流程**（三条短规则，2026-09-14 增）：
+
+1. **改定义**：`definition` / `old_model` / `deviation_reason` 的实质修改属触发更新第 2 条 ⇒ 改字段的同时刷 `updated`、遍历复查 `numerical_locations`，并**全项目 grep 该术语**后跑 [§八 工具链](#八工具链) 的三个校验器（`numerical_locations` 只覆盖"数字出现在哪"，**不覆盖术语被文字引用的地方**）。
+2. **废弃**：**保留条目、不删**（删了就没有"这个词曾被用过"的记录）；`status` 改 `deprecated`，并把**替代物写进 `definition`**（先例：「7驱动」写"NPC AI 改用脑区链路模型"）；**并且**让机械门禁覆盖它——`validate_trash_isolation.py` 的废弃术语表是**硬编码的、不读 `status`**，故当前须手工加正则。**只标 `status` 不加门禁 = 记了一笔没人查的账。**
+3. **不够格 / 待裁决**：登记进 [`data/term_registry_candidates.md`](../../data/term_registry_candidates.md)；达标后由 **owner 裁决**、结论落 `design/` 正典，再移入主表。
+
 ## 六、归档与隔离
 
 | 目录 | 语义 | 活跃文档可否引用 |
