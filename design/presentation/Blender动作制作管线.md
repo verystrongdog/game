@@ -336,6 +336,14 @@ Start-Process -FilePath "C:\Program Files\Blender Foundation\Blender 5.1\blender
 3. **`--python` 也不吃 `//wsl.localhost/...` 形式的路径**（实测：脚本根本没跑，窗口是 `(未命名)` 默认场景）。
    ⇒ 启动脚本先 `Copy-Item` 到 Windows 本地（如 `$env:TEMP`）再传给 `--python`。
 
+> ⚠️ **两条补充实测**（2026-09-14，代价：一轮"改了没生效"的误判）：
+> ① **母版路径必须放在 `--python` 之前**——`--python` 排在 `.blend` 前面时，脚本在**文件加载之前**就跑了，
+> 它看到的 `bpy.data.filepath` 是空串、`bpy.data.objects` 是默认的 `Camera/Cube/Light`。
+> 判据就是读这两个值。
+> ② **截图要强制重绘**：`bpy.ops.screen.screenshot` 抓到的是**重绘前**的帧，摆完姿势立刻连拍会得到**两张字节相同**的图；
+> 截图前调 `bpy.ops.wm.redraw_timer(type="DRAW_WIN_SWAP")`。另外 **GUI 截图本来就不逐位可复现**——
+> 把物体隐藏再恢复，像素也不会与初次逐位相同，所以像素判据只能比**差异量的量级与位置**。
+
 > 另两条：**必须用 `Start-Process`**（GUI 进程继承调用方 stdout/stderr 句柄，直接前台跑或 `cmd /c start` 不重定向
 > 会让调用方**一直等 EOF**——实测卡满 5 分钟超时，而进程早已独立运行，`Start-Process` 实测 **0.54 s** 返回）；
 > **Linux 版（WSLg）的 GUI 起不来**（`The Wayland connection broke`），GUI 一律走 Windows 侧已装版。
