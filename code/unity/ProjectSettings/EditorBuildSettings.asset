@@ -8,4 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ActionLab.unity
     guid: dee800a53d8d6934e91729219e7411f1
+  - enabled: 1
+    path: Assets/Scenes/AnimationRiggingLab.unity
+    guid: 9b3e5a3907f91654ca0f03fce433353b
   m_configObjects: {}
