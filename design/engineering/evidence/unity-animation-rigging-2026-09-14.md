@@ -17,7 +17,7 @@
 | 字段 | 值 |
 |---|---|
 | base SHA | `b7f6b02`（#158 收口提交） |
-| head SHA | 见本文件所在提交（`docs: #157 …` 一串，§八 逐条列出） |
+| head SHA | 本轮 5 个提交：`3b5ee5c`（工具 push_file.sh）· `fc4e200`（lab builder + 探针 + 场景 + build settings）· `62d0490`（派生件 + 测试）· `cc78dff`（证据 + 四轴表 + 危险点表 + README）· 本回填提交 |
 | 阶段 | [#157](https://github.com/verystrongdog/game/issues/157)（Task） |
 | 执行者 | DSH agent（本机） |
 | 工具版本 | Unity **6000.5.2f1**（`ProjectVersion.txt` 锁 6000.5.2f1 · `eb73d3b415a1`）· Windows 11 家庭中文版 build 26200 · Python 3.10.12 · gh 2.100.0 |
@@ -149,14 +149,18 @@ new_finding = after − mapped(before) − expected_delta = 空
 
 ### 回滚演练（实测）
 
-方式：临时 worktree + `git revert`（不改主干）。结论见提交后的回填（本轮演练命令与读数如下）。
+方式：临时 worktree + `git revert`（不改主干），回滚**本轮 4 个交付提交**。
 
 | 步 | 命令 | 退出码 | 结果 |
 |---|---|---|---|
-| 1 | `git worktree add --detach /tmp/revert157 HEAD` | 0 | 在 head 上取得干净检出 |
-| 2 | `git revert --no-edit <head>` | 0 | 生成 revert 提交 |
-| 3 | 核对 lab 场景/探针/builder/派生件是否消失，`EditorBuildSettings.asset` 是否回到只有 `ActionLab` | — | 见 §九·回填 |
-| 4 | `run_all_checks.py`（回滚态） | — | 见 §九·回填 |
+| 1 | `git worktree add --detach /tmp/revert157 HEAD` | 0 | 在 head `cc78dff` 上取得干净检出（回滚前：lab 场景与派生件都在，`EditorBuildSettings` 含 1 条 lab 引用） |
+| 2 | `git revert --no-edit fc4e200 62d0490 cc78dff 3b5ee5c` | 0 | 4 条 revert 提交，无冲突 |
+| 3 | 核对产物 | — | lab 场景 / 派生件 / 探针 / builder / `push_file.sh` **全部消失**；`EditorBuildSettings.asset` 里 lab 引用 **1 → 0**，`ActionLab.unity` **仍在**（未被误删） |
+| 4 | `validate_cross_refs.py`（回滚态） | 0 | 1752 refs / 1751 passed / **0 dead**——与本条开工前的读数逐字同值 |
+| 5 | `validate_unity_assets.py`（回滚态） | 0 | ✅ 全部通过（受控 FBX 17 · 非 Humanoid 0 · 非人形豁免 1） |
+| 6 | `git worktree remove --force /tmp/revert157` | 0 | 临时工作树清理；主干 `HEAD` 仍为 `cc78dff` |
+
+> 回滚**不**回退 `Packages/manifest.json` 与锁文件（`animation.rigging` 1.4.1 早于本条入库，`ActionLab` 的惰性接入点依赖它）——本轮 4 个提交本就未触碰这两个文件，实测回滚后仍保持一致。
 
 ### 工作树
 
