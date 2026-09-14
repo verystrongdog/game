@@ -75,6 +75,9 @@ data/sim_results/
 # 校验器运行状态（原 .scratch/.last_check_state.json）
 .checks-state.json
 
+# blender-bridge 的运行状态（含 token，绝不入库）
+blender-ai-bridge.json
+
 # Unity editor install (local headless validation, Grilling #122)
 .unity-editor/
 .nuget-packages/

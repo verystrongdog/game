@@ -339,7 +339,7 @@ Start-Process -FilePath "C:\Program Files\Blender Foundation\Blender 5.1\blender
 > ⚠️ **两条补充实测**（2026-09-14，代价：一轮"改了没生效"的误判）：
 > ① **母版路径必须放在 `--python` 之前**——`--python` 排在 `.blend` 前面时，脚本在**文件加载之前**就跑了，
 > 它看到的 `bpy.data.filepath` 是空串、`bpy.data.objects` 是默认的 `Camera/Cube/Light`。
-> 判据就是读这两个值。
+> 判据就是读这两个值（§7.5 的桥自证也会打印它们）。
 > ② **截图要强制重绘**：`bpy.ops.screen.screenshot` 抓到的是**重绘前**的帧，摆完姿势立刻连拍会得到**两张字节相同**的图；
 > 截图前调 `bpy.ops.wm.redraw_timer(type="DRAW_WIN_SWAP")`。另外 **GUI 截图本来就不逐位可复现**——
 > 把物体隐藏再恢复，像素也不会与初次逐位相同，所以像素判据只能比**差异量的量级与位置**。
@@ -425,6 +425,33 @@ B=<解压目录>/blender-4.5.13-linux-x64/blender
 
 > ⚠️ **扭转的效果取决于下游是否偏轴**：直臂时上臂扭转对指尖位移为 **0**，但**肘一弯**，同样的扭转会把小臂大幅摆出去。表里的 "0 mm" 是**静止 T-pose 下**的读数，不是"这根轴没用"。
 
+### 7.5 活体桥：让外部进程驱动**你正开着**那个会话
+
+`code/tools/blender-bridge/`（与 [`unity-cli`](../../code/tools/unity-cli/README.md) 同一地位的项目自有直驱桥）。
+
+| 方式 | 能做什么 | 缺什么 |
+|---|---|---|
+| `--background --python x.py` | 脚本化生成/导出，完全可复现 | 每次都是**新会话**：看不见你手改到一半的场景 |
+| **活体桥** | 往**你眼前那个窗口**送代码并读回结果，你实时看见变化 | 需要 Blender 以本桥启动；窗口关了就没 |
+
+```bash
+./code/tools/blender-bridge/bb-launch.sh          # 起（自动处理 Z: / WSL IP / BB_STATE / 参数顺序）
+./code/tools/blender-bridge/bb.py 'bpy.data.filepath'
+./code/tools/blender-bridge/bb.py @my_probe.py    # 多行 exec，print 一并回传
+```
+
+**为什么 `bb-launch.sh` 不是可有可无的包装**：它替你做掉四件每一步都能踩空的事——
+`net use Z:`（UNC 过 bash 双引号会被折掉 ⇒ Blender 静默回落默认场景）· 取 **WSL 网卡在 Windows 侧的 IP**
+（默认 `127.0.0.1` 时 WSL 连不进来）· 状态文件写到仓库可见处（客户端靠它拿 host/port/token，不靠猜）·
+把 addon 拷到 Windows 本地再 `--python`、且 **`.blend` 排在 `--python` 前面**。
+
+### 7.6 边界与安全（活体桥）
+
+1. **它执行任意 Python、无沙箱**——等于交出那个 Blender 进程的全部能力。门禁只有 **token**（启动时随机生成、写进状态文件）⇒ 状态文件别提交、别放共享盘（`.gitignore` 已排除）。
+2. **默认只绑 `127.0.0.1`**；要从 WSL 连必须显式把 `BB_HOST` 设成 WSL 网卡 IP，**那之后同网段其他机器也能连**（有 token 就行）。用完关窗口。
+3. **不是常驻服务**：Blender 一关桥就没了——这正是「活体」的含义，别拿它当自动化后端。
+4. **为什么不用现成的 Blender MCP**：MCP 生态确实有（[harveyxiacn/blender-mcp](https://github.com/harveyxiacn/blender-mcp) · [Blender_mcp](https://github.com/Immunogenic-prismspectroscope589/Blender_mcp) · [blender-mcp-bridge](https://pypi.org/project/blender-mcp-bridge/) · [blender-agent](https://projects.blender.org/Rich-Siomporas/blender-agent)），DSH 也支持 MCP（`@deepseek-ai/dsh-mcp-client`，工具以 `mcp__<server>__<tool>` 出现）。不选它的理由具体：① 那类 MCP 的 Blender 侧内核也是监听 socket 的插件，本桥 120 行就覆盖了本工程要用的那一格；② 多一层第三方依赖（要装、跟版本、信任其代码；本机还没有 `uv`/`uvx`）；③ **MCP 工具只在新会话里出现**，「现在这个会话里帮我摆个姿势」它答不了；④ 本工程已有 [`unity-cli`](../../code/tools/unity-cli/README.md) 这个自建直驱先例。**若将来要接 MCP，本 addon 可直接当它的后端。**
+
 ## 八、未闭合（诚实清单）
 
 1. **Unity 侧骨盆读数低于 Blender 侧**（16.94 mm vs 40.0 mm）——量的是两个不同的量（§5.4·1）。
@@ -471,6 +498,6 @@ B=<解压目录>/blender-4.5.13-linux-x64/blender
 | X Bot 的 Unity 导入设置口径（`animationType: 3` / `avatarSetup: 1`） | `code/tools/validate_unity_assets.py` A4 规则注释 |
 
 ---
-*创建: 2026-09-14 | 更新: 2026-09-14（🔧 第四次：**新增 §2.1 GUI 操作手册**（打开方式 · 六步动作序列 · 两条红线）+ **§2.1.1 逐根控制骨的实测轴向语义表**（13 根 × 3 轴，链末标志点位移）+ **§2.1.2 符号规则**（实测：腿左右同轴、臂左右镜像 ⇒ 不能整套取负号）+ §2.1.3 三个自查。测量脚本口径见 §7.4。🔧 第三次：**验证基线由 4.5.13 LTS 切换为 Blender 5.1.2**——入库探针 FBX 由 5.1.2 重建（与 4.5 产物内容等价 **0.000967 mm**）、Unity 侧重跑全量断言转绿；4.5 分支保留在取道层但本机不再保留便携包。🔧 第二次：**移植为 Blender 4.5 / 5.x 双兼容**（新增取道层 `code/tools/blender_action_compat.py`：slotted actions 曲线取道 · `action_slot` 指派 · 姿态骨选择位）+ **母版 GUI 可用性**（骨骼集合 `CTRL`/`MIXAMORIG` + 配色，V9 自检；已复核导出物内容等价 **0.000000 mm**）+ 新增 §4.4「导出物不可逐字节复现」与 §7.1 双版本差异表；E5 判据由矩阵元素改为骨端点坐标）*
+*创建: 2026-09-14 | 更新: 2026-09-14（🔧 第五次：**新增 §7.5 活体桥 + §7.6 边界与安全**——落库 `code/tools/blender-bridge/`（`blender_ai_bridge.py` + `bb.py` + `bb-launch.sh` + README），实测驱动已开着的窗口：摆 `CTRL_LeftArm` Z+40° → 左手位移 **384.2 mm**，并读回 13 根控制骨与两组集合；含「为什么不用现成 Blender MCP」的四条具体理由。🔧 第四次：**新增 §2.1 GUI 操作手册**（打开方式 · 六步动作序列 · 两条红线）+ **§2.1.1 逐根控制骨的实测轴向语义表**（13 根 × 3 轴，链末标志点位移）+ **§2.1.2 符号规则**（实测：腿左右同轴、臂左右镜像 ⇒ 不能整套取负号）+ §2.1.3 三个自查。测量脚本口径见 §7.4。🔧 第三次：**验证基线由 4.5.13 LTS 切换为 Blender 5.1.2**——入库探针 FBX 由 5.1.2 重建（与 4.5 产物内容等价 **0.000967 mm**）、Unity 侧重跑全量断言转绿；4.5 分支保留在取道层但本机不再保留便携包。🔧 第二次：**移植为 Blender 4.5 / 5.x 双兼容**（新增取道层 `code/tools/blender_action_compat.py`：slotted actions 曲线取道 · `action_slot` 指派 · 姿态骨选择位）+ **母版 GUI 可用性**（骨骼集合 `CTRL`/`MIXAMORIG` + 配色，V9 自检；已复核导出物内容等价 **0.000000 mm**）+ 新增 §4.4「导出物不可逐字节复现」与 §7.1 双版本差异表；E5 判据由矩阵元素改为骨端点坐标）*
 *状态: 与 [动画处理能力对照实验](%E5%8A%A8%E7%94%BB%E5%A4%84%E7%90%86%E8%83%BD%E5%8A%9B%E5%AF%B9%E7%85%A7%E5%AE%9E%E9%AA%8C.md) 同为**两条线共用的口径正典**；本文只覆盖 Blender 线。*
 *关联: [动画处理能力对照实验](%E5%8A%A8%E7%94%BB%E5%A4%84%E7%90%86%E8%83%BD%E5%8A%9B%E5%AF%B9%E7%85%A7%E5%AE%9E%E9%AA%8C.md), [动作库规格](%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md), [code/unity/README.md](../../code/unity/README.md), [危险点表](../engineering/%E5%8D%B1%E9%99%A9%E7%82%B9%E8%A1%A8.md)*
