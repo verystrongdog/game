@@ -112,7 +112,7 @@ coarseBestIndex=13  refineWindowFrames=[19,23]  contactFrame=21  contactTime=0.7
 | C8 | 资产结果 | 派生件**脱离约束状态可独立采样复现**（§五）· 重开 Play 后可复现 · 导出物 `Assets/Animations/Derived/PhysicalAttack_ContactCorrected.anim`（Unity 文本序列化 `.anim`） |
 | C9 | 回滚演练 | 见 §九（`git revert` 实测） |
 
-## 七、踩到的坑（全部已回写 [危险点表](../危险点表.md)）
+## 七、踩到的坑（全部已回写 [危险点表](../危险点表.md)，共 6 条）
 
 | # | 症状 | 根因 | 代价 |
 |---|---|---|---|
@@ -121,6 +121,7 @@ coarseBestIndex=13  refineWindowFrames=[19,23]  contactFrame=21  contactTime=0.7
 | 3 | 请求 `norm=0.7`，状态时间却停在 `22/64`（0.34375） | `Animator.Play(state, layer, normalizedTime)` 的定位：**必须先 `Update(0f)` 才生效**；先 `speed = 0` 再 Play 也不生效 | 整片读数错（M1 恒 762 mm）。处置：`PoseAtFrame()` 统一 Play → `Update(0f)` → 冻结 |
 | 4 | 踝明明精确到位（残差 0.0008 mm），脚趾却被抬到 **+220 mm**，M2 报 +81.6 mm | 约束 `maintainTargetRotationOffset = false` ⇒ 把 tip 朝向**设成目标的朝向**；目标是 `new GameObject` 的 identity 朝向 → 脚被硬拧过去 | 假读数。处置：布置目标时**连朝向一起摆**（`target.rotation = 骨.rotation`），校准 JSON 里带上四元数 |
 | 5 | 脚滑量在约束开时 ≈ 0 | （不是坑，是要读的事实）脚靶是**静态**物体 ⇒ 约束开时两脚被钉住，M5 从 10.66 mm 降到 0.0014 mm | — |
+| 6 | `run_tests` 启动即报 `InvalidOperationException: This cannot be used during play mode.` + `Too many instant steps … Current task ExitPlayModeTask.`，`test_status` 一直 `running` | 测试框架自己要走 Enter/ExitPlayMode，而 Editor 已停在 Play（上一轮用 `eval` 驱动过 Play 态探针） | 时间（实测 4 分钟无结果，`cancel_tests` 后才发现）；处置：跑测试**前**先 `editor_stop` |
 
 ## 八、门禁与命令（逐条实跑）
 
