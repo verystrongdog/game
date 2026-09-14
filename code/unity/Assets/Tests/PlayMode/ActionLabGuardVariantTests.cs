@@ -197,4 +197,45 @@ public class ActionLabGuardVariantTests
         Assert.LessOrEqual(maxDrift, MaxDriftM,
             $"判据 3：副手在椅子局部坐标的漂移 {maxDrift * 1000f:F1} mm（应 ≤ {MaxDriftM * 1000f:F0} mm）");
     }
+
+    // ---------------- ③ 尺子自检（判据 4/5 的测量件本身，不是姿势） ----------------
+
+    /// <summary>
+    /// **验证尺子**（不是验证姿势）：故意造一个罩住右手骨的盒子 → 测量件必须报出穿透；挪到 1 m 外 → 必须归零。
+    /// 为什么只测尺子：当前姿势本来就红（owner 目视「一直在穿模」「手没有包构件」），
+    /// 判据 4/5 的**达标断言**要等手调之后再立（口径见规格 §戊·5）。
+    /// </summary>
+    [UnityTest]
+    public IEnumerator ContactMeasure_DetectsKnownPenetration_AndReadsZeroWhenClear()
+    {
+        yield return LoadBaseScene();
+
+        var player = FindPlayer();
+        var anim = player.GetComponent<Animator>();
+        var driver = player.GetComponent<ActionLabDriver>();
+        if (driver != null) driver.enabled = false;
+        yield return null;
+
+        var hand = anim.GetBoneTransform(HumanBodyBones.RightHand);
+        Assert.IsNotNull(hand, "取不到 RightHand 骨");
+
+        var boxGo = new GameObject("RulerProbeBox");
+        var bc = boxGo.AddComponent<BoxCollider>();
+        bc.size = new Vector3(0.1f, 0.1f, 0.1f);
+        boxGo.transform.position = hand.position;
+        yield return null;
+
+        var hit = GripContactMeasure.Measure(boxGo.transform, anim);
+        Assert.Greater(hit.HandPenetrationM, 0.01f, "手骨被盒子罩住时应报出穿透 >1 cm：" + hit);
+        Assert.AreEqual(0f, hit.BodyPenetrationM, 0.0001f, "躯干骨段不应被这个小盒子判成穿透：" + hit);
+        Assert.Greater(hit.SampleCount, 0, "应有采样点：" + hit);
+
+        boxGo.transform.position = hand.position + Vector3.right * 1f;
+        yield return null;
+        var clear = GripContactMeasure.Measure(boxGo.transform, anim);
+        Assert.AreEqual(0f, clear.HandPenetrationM, 0.0001f, "挪走后不应再有穿透：" + clear);
+        Assert.Greater(clear.MinClearanceM, 0.8f, "挪走后最小间隙应接近 1 m：" + clear);
+
+        Object.DestroyImmediate(boxGo);
+    }
 }

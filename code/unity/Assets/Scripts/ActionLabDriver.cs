@@ -159,6 +159,7 @@ namespace YANTF.ActionLab
             if (Input.GetKeyDown(KeyCode.Alpha7) && player.CurrentActionId == ActionIds.SitIdle)
                 player.Play(ActionIds.Stand);
             if (Input.GetKeyDown(KeyCode.Alpha8)) ToggleChairGripProbe();   // 持椅探针（§戊·6，非正典）
+            if (Input.GetKeyDown(KeyCode.Alpha9)) LogGripContact();         // 判据 4/5 实时读数（§戊·5，非正典）
             if (Input.GetKeyDown(KeyCode.R)) player.ResetToIdle();
         }
 
@@ -397,6 +398,20 @@ namespace YANTF.ActionLab
             _grip = grip;
             player.IsHoldingChair = true;
             SetHint($"已持椅（Wield2H；最近椅子 {nd:F2} m）——按 3 格挡（持握变体），再按 8 放下");
+        }
+
+
+        /// <summary>
+        /// 判据 4/5 的**实时读数**（规格 §戊·5；非正典，给手调当尺子用）：键 `9`。
+        /// 持握中才有意义——按 `8` 持椅后再按 `9`，读数同时进 Console 与 HUD。
+        /// </summary>
+        private void LogGripContact()
+        {
+            if (_grip == null || !_grip.IsHeld)
+            { SetHint("判据 4/5 读数：当前没有持握椅子（先按 8 持椅）"); return; }
+            var reading = GripContactMeasure.Measure(_grip.transform, GetComponent<Animator>());
+            Debug.Log("[判据4/5] " + reading);
+            SetHint("判据 4/5 读数已打到 Console（躯干/手穿透 · 最小间隙 · 指尖距与包握）");
         }
 
         private void SetHint(string text)
