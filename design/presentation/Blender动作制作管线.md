@@ -259,14 +259,32 @@ controller 名 / clip 名 / frameCount / avatar 名**逐字节相同**。判据�
 窗口标题回读为 `XBot_AnimationTemplate [...\xbot\XBot_AnimationTemplate.blend] - Blender 5.1.2`）：
 
 ```powershell
+# 1) 先把 WSL 目录映射成盘符（一次即可，实测可映射成功）
+net use Z: \\wsl.localhost\Ubuntu-22.04
+# 2) 用盘符路径打开母版——**不要**在这条命令里直接写 UNC（见下方三条坑）
 Start-Process -FilePath "C:\Program Files\Blender Foundation\Blender 5.1\blender.exe" `
-  -ArgumentList '\\wsl.localhost\Ubuntu-22.04\home\dog\game\.scratch\blender_assets\xbot\XBot_AnimationTemplate.blend'
+  -ArgumentList 'Z:\home\dog\game\.scratch\blender_assets\xbot\XBot_AnimationTemplate.blend'
 ```
 
-> ⚠️ **必须用 `Start-Process`（或 `cmd /c start` 并把句柄重定向掉）**：GUI 进程会继承调用方的
-> stdout/stderr 句柄，直接前台跑会让调用方**一直等 EOF**（实测：`cmd /c start` 不重定向时命令行卡满 5 分钟超时，
-> 而进程其实早已独立运行——用 `Get-Process blender` 的 `MainWindowTitle` 可判）。
-> 反过来：**Linux 版（WSLg）的 GUI 起不来**（`The Wayland connection broke`），所以 GUI 一律走 Windows 侧那个已装版。
+⚠️ **三条实测坑**（2026-09-14，代价：一扇"标题写着母版、画面却是默认立方体"的窗口）：
+
+1. **bash 双引号会把 `\\` 折成单个 `\`**：从 WSL 传 UNC 给 `cmd`/PowerShell 时若用双引号，路径退化成
+   **相对路径**，再按调用方的兜底工作目录（cmd 遇到 UNC 会把 cwd 设成 `C:\Windows`）解析 ⇒ 找不到文件。
+   ⇒ 传路径一律用**单引号**，或干脆走 `Z:` 盘符（推荐）。
+2. **Blender 打不开文件时是「静默回落默认启动场景」，而窗口标题仍显示它尝试打开的路径**——
+   于是"标题对了"完全不能证明"画面对了"（实测：标题 `XBot_AnimationTemplate [C:\Windows\wsl.localhost\...]`，
+   画面是默认立方体）。**判据要么看图，要么让窗口自证**：启动脚本里读 `bpy.data.filepath` / `bpy.data.objects` 写进文件。
+3. **`--python` 也不吃 `//wsl.localhost/...` 形式的路径**（实测：脚本根本没跑，窗口是 `(未命名)` 默认场景）。
+   ⇒ 启动脚本先 `Copy-Item` 到 Windows 本地（如 `$env:TEMP`）再传给 `--python`。
+
+> 另两条：**必须用 `Start-Process`**（GUI 进程继承调用方 stdout/stderr 句柄，直接前台跑或 `cmd /c start` 不重定向
+> 会让调用方**一直等 EOF**——实测卡满 5 分钟超时，而进程早已独立运行，`Start-Process` 实测 **0.54 s** 返回）；
+> **Linux 版（WSLg）的 GUI 起不来**（`The Wayland connection broke`），GUI 一律走 Windows 侧已装版。
+
+> **窗口自证脚本**（本机用 `.scratch/open_template_gui.py`，过程物不入库）：打开母版后把
+> `blender / filepath / objects / actions / bone_collections` 写进 `.scratch/gui-open-proof.txt`。
+> 实测输出：`objects=[('Armature','ARMATURE'), ('Beta_Joints','MESH'), ('Beta_Surface','MESH')]` ·
+> `bone_collections=[('CTRL', 13), ('MIXAMORIG', 65)]`——**这才是"窗口里有人体"的判据**。
 
 **兼容分支 = Blender 4.5.13 LTS**（取道层仍支持；本机**不再保留**便携包，要用得自行下载解压到 Windows 本地卷）：
 
