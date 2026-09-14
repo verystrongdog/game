@@ -58,10 +58,14 @@ Start-Process "C:\Program Files\Blender Foundation\Blender 5.1\blender.exe" `
 | `code` | 要跑的代码。`mode=eval` 时是**表达式**（返回值即结果）；`mode=exec` 时是多行语句，用 `__result__` 交出返回值 |
 | `mode` | `eval`（默认）/ `exec` |
 | `token` | 必须与状态文件里的一致，否则回 `token mismatch` |
-| `timeout` | 秒；`bb.py` 固定发 60 |
+| `timeout` | 秒；**可配**：`bb.py --timeout N`（或环境变量 `BB_TIMEOUT`），默认 60。⚠️ 2026-09-14 前是**写死 60**——真实产姿势的脚本一超 60 s 就被掐断，而"真超时"与"脚本自己报错"从前分不开（[#162](https://github.com/verystrongdog/game/issues/162)） |
 
 回包：`{"ok":true,"result":…,"stdout":…}` 或 `{"ok":false,"error":…,"trace":…}`。
-`exec` 模式会**捕获 print**（省得再写中间文件）；结果字符串封顶 20 000 字符，超了会标"截断"。
+`exec` 模式会**捕获 print**（省得再写中间文件）。
+
+**超长输出不丢（2026-09-14 改，[#162](https://github.com/verystrongdog/game/issues/162)）**：回包里的 `result`/`stdout` 仍封顶 20 000 字符，但**超长时整份落进状态文件同级的 `bb-outbox/`**，回包附 `stdout_file_name` / `stdout_chars`，`bb.py` 会把对应的 WSL 路径打出来。⚠️ 改前是 `captured[-20000:]`——只留**尾部**，长报告的开头被吃掉。
+
+**每次请求的 `id` 唯一**（`uuid4().hex[:12]`）：服务端按 `id` 存结果，从前写死 `id: 1` ⇒ **一次超时留下的残留结果会被下一次请求立刻取走**（拿到的是上一次的输出，且 `ok: true`）。
 
 ## 四、⚠️ 安全与边界（先读再开）
 
@@ -72,7 +76,20 @@ Start-Process "C:\Program Files\Blender Foundation\Blender 5.1\blender.exe" `
    WSL 网卡在 Windows 侧的 IP —— 那样**同网段的其他机器也能连**（只要有 token）。用完关掉窗口即可。
 4. **不是长驻服务**：Blender 一关，桥就没了（这正是"活体"的含义，也别拿它当自动化后端）。
 
-## 五、⚠️ 五条实测坑（都在[危险点表](../../../design/engineering/%E5%8D%B1%E9%99%A9%E7%82%B9%E8%A1%A8.md) §七 有行）
+## 五、⚠️ 实测坑（都在[危险点表](../../../design/engineering/%E5%8D%B1%E9%99%A9%E7%82%B9%E8%A1%A8.md) §七 有行）
+
+> **2026-09-14 新增五条**（[#162](https://github.com/verystrongdog/game/issues/162) 实测）：
+>
+> | 坑 | 判据 | 规避 |
+> |---|---|---|
+> | **起桥默认不再杀已有 Blender** | 想"清场重起"却什么也没发生 | 旧行为（`Stop-Process -Force`）现为**显式开关** `BB_KILL_EXISTING=1`；默认保留，若有**活桥**则直接**复用**（端口是单个的，抢端口会两败俱伤） |
+> | **WSL → Windows 的环境变量不自动传递** | `BB_KILL_EXISTING=1 ./bb-launch.sh` 里 PowerShell 看到**空串** ⇒ 开关静默失效（实测进程数 2→3） | 在 **bash 侧**取值再嵌进 PowerShell 命令串（同 `$PORT` 的写法）；要真传环境变量得走 `WSLENV` |
+> | **客户端 socket 超时不能贴着应用超时** | 客户端只看到"连不上/超时"，而服务端的"超时"回包**根本没到** | 服务端等**单调时钟死线**（不用"轮询次数×0.05"，那会随 GIL 竞争漂移）；客户端 socket 超时 = 应用超时 **+30 s** |
+> | **超时不取消在飞脚本** | 超时后脚本仍在会话里跑完，结果留在服务端 pending | 靠"`id` 唯一 + 残留 TTL 600 s 清理"防污染；要真停就重起会话 |
+> | **addon 自身热升级不可靠** | 用桥把新版本 `exec` 进会话并重启监听**看似成功**，随后 `token mismatch`/无响应 | Windows `SO_REUSEADDR` 允许**旧监听器继续占端口** ⇒ 新旧服务端并存。**升级桥自身仍要重起会话**（改母版/摆姿势不需要） |
+> | **长任务冻结 GUI** | 一个 67 s 的脚本让画面卡住 67 s | `bpy` 只能在主线程调（本桥的设计前提）；长活请分片成多次请求（未实现，见 #162 未闭合 1） |
+
+
 
 | 坑 | 判据 | 规避 |
 |---|---|---|
