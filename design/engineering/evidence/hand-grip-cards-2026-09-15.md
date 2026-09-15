@@ -226,9 +226,29 @@ T='Z:\home\dog\game\.scratch\blender_assets\xbot\XBot_AnimationTemplate.blend'
 
 ## 十二、回滚演练与复现
 
-- 方式：`git revert` 本 issue 的提交组（产物以新增为主；对 `run_all_checks.py` / `build_data_manifest.py` / `ci.yml` / `manifest.json` 的改动均为**追加式登记**）。
-- 演练：临时 worktree 中 revert 后跑三个既有校验器 + `issues` 门禁，确认仍绿、工作树干净（结论见 §三 与提交记录）。
-- 复现：§三 的四条命令；原始报告 `.scratch/grip-cards/{card1,door}_report.json`（过程物，不入库）。
+**方式**：`git revert` 本 issue 的提交组（提交 `d5a2d10`；产物以新增为主，对 `run_all_checks.py` / `build_data_manifest.py` / `ci.yml` / `manifest.json` 的改动均为**追加式登记**）。
+
+**演练（实做，非承诺）**：
+
+```bash
+git worktree add -q --detach /tmp/rev164 HEAD    # 临时 worktree
+cd /tmp/rev164 && git revert --no-commit HEAD
+python3 code/tools/validate_cross_refs.py        # 1936 refs: 1935 passed, 0 dead, 0 section warnings
+python3 code/tools/validate_trash_isolation.py   # ✅ 全部通过
+python3 code/tools/validate_params.py            # 56 checks: 49 passed, 0 failed
+python3 code/tools/validate_issues.py --from-github   # 14 rules: 10 passed, 0 failed
+git diff --name-only 32a450b | wc -l             # → 0（revert 后与 base 逐文件相同）
+```
+
+⇒ **revert 后四个门禁仍绿，且工作树内容与 base `32a450b` 逐文件相同**；演练用的 worktree 已移除，主工作树干净。
+
+**复现**：§三 的四条命令；原始报告 `.scratch/grip-cards/{card1,door}_report.json`（过程物，不入库）。
+
+**活体预览（口径 §九 的预览回路）**：本轮把卡 1 与门边的到位姿势经 `code/tools/blender-bridge/bb.py` 推进**已开着**的会话供 owner 目视。
+⚠️ 两条实测坑（都写进 `.scratch` 的推送脚本）：① 活体会话里模块是**缓存**的——改了 `code/tools/*.py` 必须 `importlib.reload`，
+否则报 `has no attribute` 而看起来像"脚本没写完"；② **显示层**：母版生成器把 `CTRL`(13) 与 `MIXAMORIG`(65) 两个骨骼集合都设成可见
+（`V9_display` 契约），目视时会看成"多套骨骼重叠" ⇒ 预览脚本统一收敛为**只显示 `MIXAMORIG` 一套**；
+`Beta_Joints` 是**人体网格**（10514 顶点）不是骨骼显示件——隐藏它会把腰部蒙皮一起去掉（实测踩到一次）。
 
 ## 十三、未闭合（诚实清单）
 
