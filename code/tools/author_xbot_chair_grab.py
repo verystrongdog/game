@@ -2841,40 +2841,133 @@ def door_push_offhand(arm, side, yaw_deg, hips_world, hips_rest, curl_axis, t, p
             "curl_amount": curl_amount * t}
 
 
-def door_push_preview_cleanup(arm):
-    """预览场景收拾干净（**只动显示与残留代理，不动任何数据**）。
+#: 骨集合的**显示契约**：母版生成器把 `CTRL`(13) 与 `MIXAMORIG`(65) **两个集合都设成可见**
+#: （`V9_display`），于是**每一条预览都像"多套骨骼重叠"**。本仓早有处置口径——**预览收敛成一套**：
+#: 来源 `design/engineering/evidence/hand-grip-cards-2026-09-15.md` §十二 的实测坑 ②
+#: （原文：「目视时会看成『多套骨骼重叠』 ⇒ 预览脚本统一收敛为**只显示 `MIXAMORIG` 一套**」）。
+DOOR_PUSH_VISIBLE_BONE_COLLECTION = "MIXAMORIG"
 
-    owner 2026-09-16 目视两条：
-    ① 「**Armature 里面重复骨骼**」——实测骨架里**没有**同名/`.001` 重复骨（78 = 13 `CTRL_` +
-       65 `mixamorig:`）；真正的观感来源是 **(a) `Beta_Joints`（骨骼可视化网格）与皮肤网格叠着画**、
-       **(b) 13 根控制骨与它驱动的变形骨完全重合地画在一起**。⇒ 本函数把 `Beta_Joints` 隐藏、
-       把 `CTRL_*` 骨设为隐藏（**显示开关，不影响姿势与导出**）。
-    ② 「**门和椅子重叠在一起**」——场景里还留着 **#163 的椅子残留代理**（`REF_Back` / `REF_Seat` /
-       `REF_Leg0..3`，证据里早有登记"母版残留 `REF_*`"）。门板绕铰链扫过的扇区**正好覆盖**它
-       ⇒ 预览里门穿椅子。本函数把 `REF_Chair` / `REF_Board` 两个集合整体删掉（它们是**参考件**、
-       不进 FBX、也不参与任何判据——判据目标一律由 `door_layout_*` 现算）。
+#: 判据 `visible_bone_outliers` 的**已知例外**（逐次重测、不是免检）：资产自带、且**不是**"多出来的骨头"。
+#: `mixamorig:Head` 的**骨尖**比皮肤最高顶点高 **21 mm**（实测）——它是**正经关节**（523 个顶点带权重），
+#: 骨尖只是画到颅顶标记处；隐藏它会让"头"这根骨在预览里消失。⇒ 登记为已知例外并**每次实测报出**。
+DOOR_PUSH_BONE_OUTLIER_EXCEPTIONS = ("mixamorig:Head",)
+
+
+def _skin_weight_counts(skin_ob):
+    """`{骨名: 权重>0.01 的顶点数}`——判"这根骨有没有蒙皮"的唯一依据。"""
+    out = {}
+    for v in skin_ob.data.vertices:
+        for g in v.groups:
+            if g.weight > 0.01:
+                n = skin_ob.vertex_groups[g.group].name
+                out[n] = out.get(n, 0) + 1
+    return out
+
+
+def door_push_marker_bones(arm, skin="Beta_Surface"):
+    """**骨尖标记**（管线 §2.1.4 注 1 的定义，逐条实测）：**无子骨的叶骨** 且 **零蒙皮权重**。
+
+    实测清单（母版）：`HeadTop_End`（骨尖在头顶上方 **+243 mm**）· `LeftToe_End` / `RightToe_End`
+    （脚尖前方 **+96 mm**）· 10 根手指 `…4`（指尖前方 **+22 ~ +32 mm**）——**共 13 根**。
+    ⚠️ 它们**不能删**（导出契约要恰好 65 根变形骨）⇒ 只能在预览里**藏**。
     """
-    dropped = []
-    for coll_name in ("REF_Chair", "REF_Board"):
-        coll = bpy.data.collections.get(coll_name)
-        if coll is None:
+    wc = _skin_weight_counts(bpy.data.objects[skin])
+    ctrl = {c.name for c in arm.data.collections if c.name != DOOR_PUSH_VISIBLE_BONE_COLLECTION}
+    out = []
+    for b in arm.data.bones:
+        if b.children:
             continue
-        for ob in list(coll.objects):
-            dropped.append(ob.name)
-            bpy.data.objects.remove(ob, do_unlink=True)
-        bpy.data.collections.remove(coll)
-    hidden_mesh = []
+        if {c.name for c in b.collections} & ctrl:
+            continue                      # 控制骨（CTRL_*）里也有零权重叶骨，但它们**是控制层**、不是标记
+        if wc.get(b.name, 0) == 0:
+            out.append(b.name)
+    return out
+
+
+def visible_bone_outliers(arm, skin="Beta_Surface"):
+    """判据：**可见的骨**的 head / tail 都必须落在**皮肤的包围盒**内，并报出到表面的最近距离。
+
+    ⚠️ 为什么需要它（owner 2026-09-16 **第三次**指出「多余骨骼飘在人体模型外面」）：本仓的验证
+    回路里**没有任何通道能看见骨架**——回显卡量几何、静帧走**渲染器**，而 Blender 的渲染
+    **根本不画骨架**。⇒ 这件事在我这一侧**从来没有读数**，于是"每次都犯"。本函数把它变成读数。
+
+    ⚠️ 判据的**已知边界**（如实登记）：包围盒只抓"整体伸出去"的那类；**盒内的空隙**（腋下、胯间）
+    抓不到。第一版试过射线奇偶与法向侧判定，**在 X Bot 这套非闭合网格上都不成立**
+    （实测：髋骨点被两种方法都判成"体外"）⇒ 改用包围盒。
+    """
+    skin_ob = bpy.data.objects[skin]
+    verts = [skin_ob.matrix_world @ v.co for v in skin_ob.data.vertices]
+    lo = Vector((min(v.x for v in verts), min(v.y for v in verts), min(v.z for v in verts)))
+    hi = Vector((max(v.x for v in verts), max(v.y for v in verts), max(v.z for v in verts)))
+    vis_colls = {c.name for c in arm.data.collections if c.is_visible}
+    outside, visible_n, rows = [], 0, []
+    for b in arm.data.bones:
+        colls = {c.name for c in b.collections}
+        if b.hide or (colls and not (colls & vis_colls)):
+            continue
+        visible_n += 1
+        h = arm.matrix_world @ b.head_local
+        t = arm.matrix_world @ b.tail_local
+        hh = all(lo[i] <= h[i] <= hi[i] for i in range(3))
+        tt = all(lo[i] <= t[i] <= hi[i] for i in range(3))
+        over = [max(lo[i] - p[i], p[i] - hi[i], 0.0) for p in (h, t) for i in range(3)]
+        rows.append({"骨": b.name, "head_在盒内": hh, "tail_在盒内": tt,
+                     "伸出量_mm": round(max(over) * 1000.0, 2)})
+        # "贴面"与"伸出去"的分界**沿用同一个既有常量** `CONTACT_TOL_MM`（2.8 mm）——它在本仓的语义
+        # 就是"多近算贴住表面"（口径 §8.2）。实测：正经关节的骨尖最多越界 **2.13 mm**（指尖/趾尖处），
+        # 而骨尖标记越界 **15.7 ~ 241.9 mm** ⇒ 两者之间有一个**数量级**的天然间隙，不需要新阈值。
+        if (not (hh and tt)) and rows[-1]["伸出量_mm"] > CONTACT_TOL_MM:
+            rows[-1]["已知例外"] = b.name in DOOR_PUSH_BONE_OUTLIER_EXCEPTIONS
+            outside.append(rows[-1])
+    outside.sort(key=lambda r: -r["伸出量_mm"])
+    bad = [r for r in outside if not r["已知例外"]]
+    return {"可见骨数": visible_n, "可见骨集合": sorted(vis_colls),
+            "皮肤包围盒_m": [[round(v, 4) for v in lo], [round(v, 4) for v in hi]],
+            "判据": f"可见骨的 head/tail 都在皮肤包围盒内，越界量 > 贴面档 {CONTACT_TOL_MM} mm 才算"
+                    f"伸出（已知例外逐次重测）",
+            "伸到体外的骨": outside, "非例外的越界骨": bad,
+            "已知例外": [r for r in outside if r["已知例外"]],
+            "结论": "OK" if not bad else f"{len(bad)} 根可见骨伸到皮肤包围盒外面"}
+
+
+def door_push_preview_cleanup(arm, skin="Beta_Surface"):
+    """预览场景收敛：**只显示一套骨**（`MIXAMORIG`）+ 藏掉 **13 根骨尖标记**（不删，导出契约要 65 根）。
+
+    owner 2026-09-16 第 **三** 次指出：「Armature 里有**多余骨骼**……十分显眼地**飘在人体模型外面**」。
+    根因三条（**前两条本仓早已登记，我上一轮没读**）：
+    ① **母版生成器把 `CTRL` 与 `MIXAMORIG` 两个骨集合都设成可见**（`V9_display`）⇒ 13 根控制骨与它
+       驱动的 65 根变形骨**逐根重合地画在一起**——看着就是"多出一整套骨骼"。
+       处置口径写在 #164 证据里：**预览收敛成只显示 `MIXAMORIG` 一套**。
+    ② **13 根骨尖标记**（零权重叶骨）骨尖**伸到皮肤外面**：头顶 **+243 mm** · 脚尖 **+96 mm** ·
+       指尖 **+22~32 mm**（`door_push_marker_bones` 逐条实测）。只能藏，不能删。
+    ③ **我的回路缺口**（真正的错）：**没有任何通道能看见骨架** ⇒ 加了 `visible_bone_outliers` 判据。
+
+    ⚠️ **不藏 `Beta_Joints`**：#164 证据明写"它是**人体网格**（10514 顶点）不是骨骼显示件——
+    **隐藏它会把腰部蒙皮一起去掉**（实测踩到一次）"。本件第 2 轮**踩了这个坑**，此处回改。
+    """
+    info = {"骨集合": {}, "隐藏的骨集合": [], "藏起来的标记骨": [], "未藏的网格": []}
+    for c in arm.data.collections:
+        info["骨集合"][c.name] = {"is_visible": (c.name == DOOR_PUSH_VISIBLE_BONE_COLLECTION),
+                                  "原本": c.is_visible}
+        c.is_visible = (c.name == DOOR_PUSH_VISIBLE_BONE_COLLECTION)
+    info["隐藏的骨集合"] = sorted(c.name for c in arm.data.collections if not c.is_visible)
+    mc = arm.data.collections.get("HIDDEN_MARKERS") or arm.data.collections.new("HIDDEN_MARKERS")
+    mc.is_visible = False
+    for name in door_push_marker_bones(arm, skin):
+        b = arm.data.bones.get(name)
+        if b is None:
+            continue
+        b.hide = True
+        for c in list(b.collections):
+            c.unassign(b)
+        mc.assign(b)
+        info["藏起来的标记骨"].append(name)
     for ob in bpy.data.objects:
         if ob.type == "MESH" and ob.name.startswith("Beta_Joints"):
-            ob.hide_viewport = True
-            ob.hide_render = True
-            hidden_mesh.append(ob.name)
-    hidden_bones = []
-    for b in arm.data.bones:
-        if b.name.startswith("CTRL_") and not b.hide:
-            b.hide = True
-            hidden_bones.append(b.name)
-    return {"删掉的残留代理": dropped, "隐藏的网格": hidden_mesh, "隐藏的控制骨": len(hidden_bones)}
+            ob.hide_viewport = False          # ⚠️ 回改：它是**人体网格**，藏了会掉腰部蒙皮
+            ob.hide_render = False
+            info["未藏的网格"].append(ob.name)
+    return info
 
 
 def main_door_push() -> int:
@@ -3371,9 +3464,21 @@ def main_door_push() -> int:
     report["action_frames"] = [DOOR_PUSH_FRAME_NEUTRAL, DOOR_PUSH_FRAME_END]
     report["keyed_channels"] = sorted(captured[DOOR_PUSH_FRAME_END])
     report["preview_cleanup"] = door_push_preview_cleanup(arm)
-    print(f"预览清理：删掉残留代理 {report['preview_cleanup']['删掉的残留代理']} · "
-          f"隐藏网格 {report['preview_cleanup']['隐藏的网格']} · "
-          f"隐藏控制骨 {report['preview_cleanup']['隐藏的控制骨']} 根")
+    print(f"预览收敛：只显示骨集合 {DOOR_PUSH_VISIBLE_BONE_COLLECTION}"
+          f"（隐藏 {report['preview_cleanup']['隐藏的骨集合']}）· "
+          f"藏起标记骨 {report['preview_cleanup']['藏起来的标记骨']} · "
+          f"`Beta_Joints` **不藏**（它是人体网格，藏了会掉腰部蒙皮）")
+    # 判据：可见的骨必须都在皮肤内部（把"骨头飘在模型外面"变成读数）
+    report["visible_bones"] = visible_bone_outliers(arm)
+    if report["visible_bones"]["非例外的越界骨"]:
+        report["problems"].append(
+            "可见骨伸出皮肤包围盒：" + "; ".join(f"{x['骨']}(伸出 {x['伸出量_mm']:.1f} mm)"
+                                                for x in report["visible_bones"]["非例外的越界骨"][:8]))
+        print(f"⚠️ 可见骨伸出皮肤包围盒 {len(report['visible_bones']['非例外的越界骨'])} 根"
+              f"（另有已知例外 {[(x['骨'], x['伸出量_mm']) for x in report['visible_bones']['已知例外']]}）")
+    else:
+        print(f"判据「可见骨落在皮肤包围盒内」：{report['visible_bones']['可见骨数']} 根可见骨"
+              f"**全部在盒内** ✅（盒 = {report['visible_bones']['皮肤包围盒_m']}）")
     print(f"\n已打键：动作 {action_name} · 帧 {DOOR_PUSH_FRAME_NEUTRAL}–{DOOR_PUSH_FRAME_END} · "
           f"通道 {len(captured[DOOR_PUSH_FRAME_END])} 个（含腿脚："
           f"{[n for n in report['keyed_channels'] if 'UpLeg' in n or n.endswith('Leg') or 'Foot' in n]}）")
