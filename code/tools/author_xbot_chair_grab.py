@@ -809,7 +809,8 @@ DOOR_OPEN_END_DEG = 28.0
 # ---------------------------------------------------------------- ① 板与棱线
 
 
-def board_end_frame(near_edge_point, far_edge_point, into_board_dir):
+def board_end_frame(near_edge_point, far_edge_point, into_board_dir,
+                    u_span_m=(0.0, 0.21), z_span_m=(0.4449, 0.7949)):
     """**被掐的那一端**的局部坐标：两条竖棱 + 三张命名面（两个宿主共用同一段几何语言）。
 
     | 名 | 是什么 | 椅背（侧握） | 门板（门边） |
@@ -830,6 +831,7 @@ def board_end_frame(near_edge_point, far_edge_point, into_board_dir):
     if z.z < 0.0:
         z = -z
     return {"near": near, "far": far, "n": n, "u": u, "z": z,
+            "u_span_m": u_span_m, "z_span_m": z_span_m,
             "thickness_mm": round((far - near).length * 1000.0, 3),
             "面-近侧面": (near, -n),          # (面上一点, **朝外**法向)
             "面-远侧面": (far, n),
@@ -844,7 +846,9 @@ def chair_end_frame(side, lay):
     hw = lay["half_width"]
     return board_end_frame(Vector((sgn * hw, lay["back_near_y"], 0.0)),
                            Vector((sgn * hw, lay["back_far_y"], 0.0)),
-                           Vector((-sgn, 0.0, 0.0)))
+                           Vector((-sgn, 0.0, 0.0)),
+                           u_span_m=(0.0, 2.0 * hw),
+                           z_span_m=(lay["rail_bottom_z"], lay["rail_top_z"]))
 
 
 def door_layout(open_deg=DOOR_OPEN_START_DEG, width=DOOR_WIDTH, thickness=BACK_THICKNESS,
@@ -874,7 +878,8 @@ def door_layout(open_deg=DOOR_OPEN_START_DEG, width=DOOR_WIDTH, thickness=BACK_T
 
 def door_end_frame(lay):
     """门板**自由边**那一端 → 通用的"板端"坐标（与椅背同一段语言）。"""
-    return board_end_frame(lay["near_edge"], lay["far_edge"], -lay["u"])
+    return board_end_frame(lay["near_edge"], lay["far_edge"], -lay["u"],
+                           u_span_m=(0.0, lay["width"]), z_span_m=(0.0, lay["height"]))
 
 
 def point_to_line_mm(p, line):
@@ -1010,6 +1015,36 @@ def points_face_gap_mm(points, face):
             "max_mm": round(max(vals), 2)}
 
 
+def box_gap_mm(p, frame):
+    """点 ↔ **板体**（有限盒）的**带符号**距离（mm）：正 = 盒外最近距离 · 负 = 陷进盒内的深度。
+
+    ⚠️ **为什么不能用"点到远侧棱(线)的距离"当四指的判据**（本片第一版就是这么写的，被 owner 一眼看穿）：
+    棱是**一维**的——蒙皮离棱 0.5 mm，同时**陷进板体 20 mm** 完全可以成立（实测：四指 19.2 ~ 19.98 mm 穿模而
+    "↔远侧棱 0.28 ~ 1.01 mm"全绿）。⇒ 判据的参照必须是**体**（有限面片/盒），不是无限平面、更不是一条线。
+    这是"判据的度量对象要与措辞同层"（§4.2 硬规矩 3）在**本卡自己身上**的第二次应用。
+    """
+    v = Vector(p) - frame["near"]
+    a = v.dot(frame["n"]) * 1000.0
+    b = v.dot(frame["u"]) * 1000.0
+    c = v.dot(frame["z"]) * 1000.0
+    t = frame["thickness_mm"]
+    u0, u1 = frame["u_span_m"][0] * 1000.0, frame["u_span_m"][1] * 1000.0
+    z0, z1 = frame["z_span_m"][0] * 1000.0, frame["z_span_m"][1] * 1000.0
+    if 0.0 <= a <= t and u0 <= b <= u1 and z0 <= c <= z1:
+        return -min(a, t - a, b - u0, u1 - b, c - z0, z1 - c)
+    da = max(-a, a - t, 0.0)
+    db = max(u0 - b, b - u1, 0.0)
+    dc = max(z0 - c, c - z1, 0.0)
+    return math.sqrt(da * da + db * db + dc * dc)
+
+
+def points_box_gap_mm(points, frame):
+    """一组世界点 ↔ 板体的**最近带符号间隙**（mm）——四指的接触对读数用它。"""
+    if not points:
+        return None
+    return round(min(box_gap_mm(p, frame) for p in points), 2)
+
+
 def points_min_distance_mm(pa, pb):
     """两组世界点的最小距离（mm）——**捏间隙**（薄侧改族的读数）用它。"""
     if not pa or not pb:
@@ -1126,8 +1161,49 @@ def detect_curl_axis_group(arm, side, group):
 # ---------------------------------------------------------------- ④ 掐棱握式（卡 1 的唯一姿势解算器）
 
 
+def fit_finger_curls(arm, side, frame, curl_axis, lo=0.6, hi=1.5, steps=19):
+    """**逐指求蜷曲量**，让每根手指的蒙皮都贴到板上（板体带符号间隙的绝对值最小）。
+
+    ⚠️ 为什么必须**逐指**（而不是一个共用系数）：四根手指长度不同，同一个蜷曲量下它们到板的
+    最近间隙差 **14 mm**（实测 curl 1.0：[+7.8, +10.8, +3.2, −3.1]——同一姿势里有的悬空 11 mm、
+    有的已经陷进板 3 mm）⇒ **一个系数不可能让四根都贴住**。真手也是逐指调的。
+    卡 1 的 F10 本来写的就是"**逐指** 4 节屈曲角"（口径 §13.3）⇒ 本函数只是把那一格**解出来**。
+
+    返回 `{finger: 蜷曲量}`（顺便把姿势也设好）。
+    """
+    out = {}
+    for finger in FOUR_FINGERS:
+        best = None
+        for i in range(steps):
+            amount = lo + (hi - lo) * i / (steps - 1)
+            _apply_one_finger_curl(arm, side, finger, curl_axis, amount)
+            update(1)
+            gap = points_box_gap_mm(finger_skin_world(arm, side, finger), frame)
+            score = (abs(gap), -amount)
+            if best is None or score < best[0]:
+                best = (score, amount, gap)
+        _apply_one_finger_curl(arm, side, finger, curl_axis, best[1])
+        out[finger] = {"蜷曲量": round(best[1], 3), "板体间隙_mm": round(best[2], 2)}
+    update(2)
+    return out
+
+
+def _apply_one_finger_curl(arm, side, finger, curl_axis, amount):
+    """单根手指按卡内的 4 节基准角 × 蜷曲量蜷曲（轴与符号由 F3 的逐组实测给定）。"""
+    axis_index = 0 if curl_axis["axis"] == "X" else (1 if curl_axis["axis"] == "Y" else 2)
+    for k in (1, 2, 3, 4):
+        name = f"{BONE_PREFIX}{side}Hand{finger}{k}"
+        if name not in arm.pose.bones:
+            continue
+        e = [0.0, 0.0, 0.0]
+        e[axis_index] = math.radians(FINGER_CURL_DEG[finger][k - 1] * curl_axis["sign"] * amount)
+        pb = arm.pose.bones[name]
+        pb.rotation_mode = "XYZ"
+        pb.rotation_euler = Euler(e, "XYZ")
+
+
 def grip_board_edge(arm, side, frame, grip_z, curl_amount, curl_axis,
-                    thumb_inset_m=0.045, thumb_drop_m=0.030, label=""):
+                    thumb_inset_m=0.045, thumb_drop_m=0.030, label="", fit_curls=True):
     """**掐棱握式**：虎口压在**近侧竖棱**上 · 拇指绕到近侧面 · 四指绕**远侧竖棱**落到远侧面。
 
     ① **朝向**（解析，不搜索）：骨局部 `Y → n`（四指从近侧绕向远侧）· 骨局部 `Z → −u`（掌面压端面）
@@ -1164,12 +1240,16 @@ def grip_board_edge(arm, side, frame, grip_z, curl_amount, curl_axis,
     _set_world_axes(arm, ctrl_hand, hand_name, n, x_hint)
     off2 = web_point(arm, side) - world_point(arm, hand_name)
     wrist_target = edge_pt - off2
-    arm_final = solve_arm(arm, side, wrist_target, post)
+    arm_final, elbow_pick = solve_arm_with_elbow_scan(arm, side, wrist_target, post)
     _set_world_axes(arm, ctrl_hand, hand_name, n, x_hint)
     # ③ 四指蜷曲（F10 的输入值；拇指留到第 ④ 步单独解）
-    _apply_group_curl(arm, side, "四指",
-                      0 if curl_axis["axis"] == "X" else (1 if curl_axis["axis"] == "Y" else 2),
-                      curl_axis["sign"], curl_amount)
+    if fit_curls:
+        curl_solve = fit_finger_curls(arm, side, frame, curl_axis)
+    else:
+        _apply_group_curl(arm, side, "四指",
+                          0 if curl_axis["axis"] == "X" else (1 if curl_axis["axis"] == "Y" else 2),
+                          curl_axis["sign"], curl_amount)
+        curl_solve = None
     update(2)
     # ④ 拇指：目标 = 近侧面上一点（骨骼尖落在面上、蒙皮厚度靠第 ⑤ 步的读数校正）
     face_pt = frame["面-近侧面"][0]
@@ -1198,6 +1278,7 @@ def grip_board_edge(arm, side, frame, grip_z, curl_amount, curl_axis,
         "grip_z_m": round(grip_z, 4),
         "curl_amount": curl_amount,
         "curl_axis": dict(curl_axis),
+        "curl_solve": curl_solve,
         "edge_point_m": [round(c, 4) for c in edge_pt],
         "web_point_m": [round(c, 4) for c in web_p],
         "web_to_edge_mm": round(point_to_line_mm(web_p, frame["棱-近侧"]), 2),
@@ -1205,6 +1286,7 @@ def grip_board_edge(arm, side, frame, grip_z, curl_amount, curl_axis,
         "web_along_u_mm": round(web_vs.dot(u) * 1000.0, 2),
         "wrist_target_m": [round(c, 4) for c in wrist_target],
         "arm": arm_final,
+        "elbow_pick": elbow_pick,
         "thumb": thumb,
         "palm_to_end_face_mm": palm_gap,
         "thumb_gap_mm": gap1,
@@ -1220,6 +1302,42 @@ def grip_board_edge(arm, side, frame, grip_z, curl_amount, curl_axis,
 
 #: 四指的分区名（成组项必须**并列**打印，口径 §七 硬规矩 2）
 FOUR_FINGERS = ("Index", "Middle", "Ring", "Pinky")
+
+#: 肘部三条判据（**沿用 #163 的既有来源**，不是本次新拍）：向后 ≥ 60 · |侧向| ≤ 40 · 向下 ≥ 20（mm）
+ELBOW_BACK_MIN, ELBOW_SIDE_MAX, ELBOW_DOWN_MIN = 60.0, 40.0, 20.0
+
+
+def elbow_penalty_mm(off):
+    """肘偏移的**罚分**（mm）：偏离三条判据多少。0 = 三条都满足。"""
+    return (max(0.0, ELBOW_BACK_MIN - off["back"]) + max(0.0, abs(off["side"]) - ELBOW_SIDE_MAX)
+            + max(0.0, ELBOW_DOWN_MIN - off["down"]))
+
+
+def solve_arm_with_elbow_scan(arm, side, wrist_target, post, step_deg=30.0):
+    """**扫描肘平面**再解臂：不让肘外张（#163 的三条肘判据 + 罚分最小）。
+
+    ⚠️ 为什么必须扫：`solve_two_bone` 的 `bend_dir` 只给"肘往哪边弯"的**提示**，而在卡 1 的侧握里
+    用同一个 `bent posterior` 提示会解出**肘向体外张 92.6 mm**（判据上限 40）——owner 目视一眼看出
+    "肘部动作不对"，而当时我的回显卡**根本没量肘**（只量了三条接触对）。⇒ 判据漏一项，目视就得补一轮。
+    """
+    axis = (wrist_target - world_point(arm, f"{BONE_PREFIX}{side}Arm")).normalized()
+    base = Vector(post)
+    perp = (base - axis * base.dot(axis))
+    if perp.length < 1e-8:
+        perp = Vector((0.0, 1.0, 0.0)) - axis * axis.y
+    perp.normalize()
+    side_ax = axis.cross(perp).normalized()
+    best = None
+    for i in range(int(360.0 / step_deg)):
+        a = math.radians(i * step_deg)
+        d = (perp * math.cos(a) + side_ax * math.sin(a)).normalized()
+        info = solve_arm(arm, side, wrist_target, d)
+        off = elbow_offset(arm, side)
+        score = (elbow_penalty_mm(off), abs(off["side"]), round(info.get("tip_err_mm", 0.0), 3))
+        if best is None or score < best[0]:
+            best = (score, d, info, off)
+    info = solve_arm(arm, side, wrist_target, best[1])
+    return info, {"罚分": round(best[0][0], 1), "肘偏移": best[3], "扫描步长_deg": step_deg}
 
 
 def grip_board_edge_readings(arm, side, frame):
@@ -1256,13 +1374,14 @@ def grip_board_edge_readings(arm, side, frame):
                                       frame["面-近侧面"])["gap_mm"],
     }, {
         "手部分区": "食/中/无名/小四指",
-        "物体分区": "远侧竖棱",
-        "判据形态": "点↔线",
+        "物体分区": "远侧面",
+        "判据形态": "点↔面（**有限面片/体**，不是无限平面）",
         "容差档": "接触 tol_contact = 2.8 mm",
         "并列项": "四指逐根（口径 §七 硬规矩 2）",
-        "读数_mm": [round(min(point_to_line_mm(p, frame["棱-远侧"])
-                              for p in finger_skin_world(arm, side, f)), 2) for f in FOUR_FINGERS],
+        "读数_mm": [points_box_gap_mm(finger_skin_world(arm, side, f), frame)
+                    for f in FOUR_FINGERS],
         "逐项名": list(FOUR_FINGERS),
+        "符号约定": "正 = 悬在板外 · |·| ≤ 容差 = 贴住 · 负 = **陷进板体**",
     }]
     return rows
 
@@ -1752,7 +1871,7 @@ CARD1_PELVIS_OFFSET = (0.0, 0.100, -0.050)
 #: `--scan` 校准扫描的三个变量（只在校准期用；选定值写进上面前三个常量）
 CARD1_SCAN_BENDS = (CARD1_BEND,)
 CARD1_SCAN_DROPS = (0.075,)
-CARD1_SCAN_CURLS = (1.2, 1.4)
+CARD1_SCAN_CURLS = (0.5, 0.6, 0.7, 0.8, 0.9, 1.0)
 
 
 def pair_status(row, tol=CONTACT_TOL_MM):
@@ -1870,7 +1989,11 @@ def card1_json(report, args):
                             "厚侧四指**够不到**远侧棱）",
                 "薄侧界（四指越过远侧棱）": {
                     "判据": "约束残差首次 > 0（= 逐项超出 tol_contact）",
-                    "读数_mm": thin_bound},
+                    "读数_mm": thin_bound,
+                    "说明": ("" if thin_bound is not None else
+                             f"**未在扫描区间内出现**：{scan[0]['thickness_mm']:.0f} mm 处残差仍为 0"
+                             f"（逐指蜷曲会自适应，薄板反而好掐）⇒ 该侧越界尺寸 < {scan[0]['thickness_mm']:.0f} mm，"
+                             f"越界落点按「缺口」登记")},
                 "厚侧界（四指够不到远侧棱）": {
                     "判据": "同上",
                     "读数_mm": thick_bound},
@@ -1887,9 +2010,17 @@ def card1_json(report, args):
                 "理由": "圆柱族专用（绕轴旋转对称 ⇒ 方位角不是输入）；卡 1 的对象是**板棱**，棱的方向是输入",
             },
             "F10_手型（甲₁）": {
-                "逐指_4节屈曲角_deg": {k: [round(a * report["baseline"]["Left"]["grip"]["curl_amount"], 2)
-                                            for a in v] for k, v in FINGER_CURL_DEG.items()},
-                "蜷曲量系数": report["baseline"]["Left"]["grip"]["curl_amount"],
+                "逐指_4节屈曲角_deg": {
+                    f: [round(a * (base["grip"].get("curl_solve") or {}).get(f, {}).get("蜷曲量",
+                             base["grip"]["curl_amount"]), 2) for a in FINGER_CURL_DEG[f]]
+                    for f in FINGER_CURL_DEG},
+                "逐指蜷曲量（**本片解出**，见 §13.3「逐指 4 节屈曲角」）": {
+                    f: v["蜷曲量"] for f, v in (base["grip"].get("curl_solve") or {}).items()},
+                "逐指校验（板体带符号间隙 mm，正 = 悬空 / 负 = 陷入）": {
+                    f: v["板体间隙_mm"] for f, v in (base["grip"].get("curl_solve") or {}).items()},
+                "⚠️ 为什么必须逐指": "四根手指长度不同：同一个蜷曲量下它们到板的最近间隙差 **14 mm**"
+                                    "（实测 curl 1.0：[+7.8, +10.8, +3.2, −3.1]）⇒ 一个系数不可能让四根都贴住",
+                "蜷曲量系数（未逐指解时的基准）": report["baseline"]["Left"]["grip"]["curl_amount"],
                 "掌三轴（骨局部 → 世界）": report["baseline"]["Left"]["grip"]["hand_axes"],
                 "拇指单独解（4 节可动骨）": report["baseline"]["Left"]["grip"]["thumb"],
                 "分工": "朝向前三轴作**主条件**（解析解），落点读数（F11）用来**验**（owner 2026-09-15 接受）",
@@ -1908,7 +2039,9 @@ def card1_json(report, args):
                             "掌面蒙皮离端面 10.5 mm ⇒ 是「贴着棱」而不是「压着面」"},
                 "腕": {"目标_m": base["grip"]["wrist_target_m"],
                        "肘角_deg": base["grip"]["elbow_deg"],
-                       "肘偏移_mm": base["grip"]["elbow_offset_mm"]},
+                       "肘偏移_mm": base["grip"]["elbow_offset_mm"],
+                       "肘平面扫描": base["grip"].get("elbow_pick"),
+                       "肘判据（沿用 #163）": "向后 ≥ 60 · |侧向| ≤ 40 · 向下 ≥ 20（mm）"},
             },
             "F12_消费登记": [
                 {"动作": "BendGripChairBack（#163 侧握版，卡 1 基准）", "出处": "issue #163 · 口径 §13.6"},
@@ -2013,9 +2146,9 @@ def main_card1() -> int:
     # ---- B. 校准扫描（--scan）：抓握高度 × 蜷曲量——只打印表，不写机器源 ----
     if args.scan:
         print("=" * 100)
-        print("卡 1 校准扫描（板厚 40 mm · 左手）：弯腰角 × 抓握高度 × 蜷曲量")
+        print("卡 1 校准扫描（板厚 40 mm · 左手）：弯腰角 × 抓握高度 × 蜷曲量（四指读数 = 板体带符号间隙）")
         print(f"{'bend(°)':>8}{'drop(mm)':>8}{'curl':>6}{'残差':>8}{'虎口↔棱':>9}{'拇指↔近侧面':>12}"
-              f"{'逐指↔远侧面(mm)':>34}{'肘角':>8}{'臂':>6}{'腕残差':>8}")
+              f"{'逐指↔板体(mm)':>34}{'肘角':>8}{'肘后':>7}{'肘侧':>7}{'肘下':>7}")
         for bend in CARD1_SCAN_BENDS:
             for drop in CARD1_SCAN_DROPS:
                 for curl in CARD1_SCAN_CURLS:
@@ -2028,7 +2161,8 @@ def main_card1() -> int:
                     print(f"{bend:>9.0f}{drop * 1000:>7.0f}{curl:>6.1f}{case['residual_mm']:>8.2f}"
                           f"{g['web_to_edge_mm']:>9.2f}{str(g['thumb_gap_mm']):>12}"
                           f"{str([round(x, 1) for x in gaps]):>34}{g['elbow_deg']:>8.1f}"
-                          f"{('夹直' if g['arm'].get('clamped_straight') else '可解'):>6}{g['arm']['tip_err_mm']:>8.1f}")
+                          f"{g['elbow_offset_mm']['back']:>7.0f}{g['elbow_offset_mm']['side']:>7.0f}"
+                          f"{g['elbow_offset_mm']['down']:>7.0f}")
         print("=" * 100)
         return 0
 
