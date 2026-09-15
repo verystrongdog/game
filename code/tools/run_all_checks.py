@@ -49,6 +49,9 @@ VALIDATOR_REGISTRY = {
     "validate_hansen_intake.py":    {"status": "active", "json": False},
     # #164：手部基准卡片（名录 ↔ 机器源 ↔ 证据回显卡 三处不许漂移）
     "validate_grip_cards.py":      {"status": "active", "json": True},
+    # #165：接触相位识别件（注册表术语定义 ↔ M2 取点口径 ↔ soleMargin 容差 ↔ 证据逐帧表 四处不许漂移）
+    #   ⚠️ 它**不需要 bpy**：无参数时走离线机械判据 R1–R5；Blender 侧读产物是另一条路（`--blend`）。
+    "xbot_contact_phase.py":       {"status": "active", "json": False},
 }
 
 STATE_FILE = ROOT / ".checks-state.json"   # 运行状态（2026-09-12：原 .scratch/.last_check_state.json，随 .scratch 移出版本控制而迁出）

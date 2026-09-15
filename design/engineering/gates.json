@@ -30,8 +30,8 @@
       "ci_job": "docs-integrity",
       "command": "python3 code/tools/run_all_checks.py",
       "available": true,
-      "covers": "15 个校验器的编排（与 CI 循环逐项对齐）",
-      "criterion": "15/15 退出码 0",
+      "covers": "16 个校验器的编排（与 CI 循环逐项对齐）",
+      "criterion": "16/16 退出码 0",
       "note": "有副作用：会写 .checks-state.json（被 gitignore）。CI 里跑的是等价的显式循环，不用本编排器。"
     },
     {
