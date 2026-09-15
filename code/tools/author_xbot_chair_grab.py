@@ -429,17 +429,29 @@ def palm_face_vertices(arm, side):
         if not cand:
             continue
         zmax = max(p.z for p in cand)
-        out += [p for p in cand if p.z >= zmax - PALM_SLAB_M]
+        # ⚠️ 单位：缓存的偏移在**骨架局部单位**（本母版 1 单位 = 1 cm，`arm_scale=0.01`），
+        #    而 PALM_SLAB_M 写的是**米** ⇒ 必须换算，否则片层实际只有 0.06 mm 厚、"掌面最低点"退化成**单个顶点**
+        #    （2026-09-14 实测：slab_n = 1）。
+        slab_local = PALM_SLAB_M / max(arm.matrix_world.to_scale().x, 1e-9)
+        out += [p for p in cand if p.z >= zmax - slab_local]
     _PALM_CACHE[side] = out
     return out
 
 
 def palm_lowest_z(arm, side):
-    """按**当前姿势**算掌面那一层顶点的**最低世界 z**（判据形态"甲"的读数对象）。"""
+    """按**当前姿势**算掌面那一层顶点的**最低世界 z**（判据形态"甲"的读数对象）。
+
+    ⚠️ **2026-09-14 修**：这里原来多乘了一次 `bone.matrix_local.inverted()`——
+    而 `palm_face_vertices` 缓存的 `p` **已经是骨局部坐标**（`bl_inv @ (arm_inv @ (mesh_world @ co))`），
+    再反解一次等于把"骨在骨架里的位置"当成了顶点偏移 ⇒ 读数恒定偏 **≈1.4 m**（正是那个
+    −1402~−1410 mm），而且**对朝向不敏感**（因为偏量由骨的静止位置主导）。
+    判据：探针里用 `pb.matrix @ p` 算出的世界坐标与 evaluated depsgraph 的实测顶点**逐位相同（差 0.0 mm）**
+    ⇒ 正确写法就是 `pb.matrix @ p`。
+    """
     name = f"{BONE_PREFIX}{side}Hand"
-    rel = arm.pose.bones[name].matrix @ arm.data.bones[name].matrix_local.inverted()
+    pb = arm.pose.bones[name]
     mw = arm.matrix_world
-    return min((mw @ (rel @ p)).z for p in palm_face_vertices(arm, side))
+    return min((mw @ (pb.matrix @ p)).z for p in palm_face_vertices(arm, side))
 
 
 def capture_channels(arm, names):
@@ -607,7 +619,7 @@ def solve_leg(arm, side, ankle_target, knee_dir):
                           f"{BONE_PREFIX}{side}Foot", ankle_target, knee_dir, label=f"leg_{side}")
 
 
-def set_hand_grip_orientation(arm, side):
+def set_hand_grip_orientation(arm, side, lay_rail_top):
     """**按住上沿的手型**——owner 2026-09-14 选「A：抓住上沿」+「椅背沿 z 正方向最远的一端」。
 
     三个轴向条件 = 三个自由度 ⇒ **是解方程，不是搜索**（这正是上一轮的病根：把朝向需求
@@ -636,8 +648,53 @@ def set_hand_grip_orientation(arm, side):
     pb.scale = (1.0, 1.0, 1.0)
     pb.location = (0.0, 0.0, 0.0)
     update(2)
-    return {"euler_deg": [math.degrees(a) for a in pb.rotation_euler],
-            "mode": "axis-solve（解朝向，非搜索）"}
+    start = [math.degrees(a) for a in pb.rotation_euler]
+
+    # ---- 以"解出的朝向"为起点，做**三硬约束**搜索（owner 最终口径 D8 的三条：
+    #      掌面向下压上沿 · 拇指在 +Y 侧 · 四指在 −Y 侧）----
+    # ⚠️ 早先那版搜索在这个位置"三约束换手"，很可能是因为**当时掌面读数是坏的**
+    #    （−1.4 m 且对朝向不敏感）⇒ 它在一个没有信号的约束上白费自由度。现在读数已修，信号真实。
+    tip_bone = f"{BONE_PREFIX}{side}HandMiddle4"
+    thumb_bone = f"{BONE_PREFIX}{side}HandThumb3"
+    name = f"CTRL_{side}Hand"
+
+    def probe(hx, hy, hz):
+        pbx = arm.pose.bones[name]
+        pbx.rotation_mode = "XYZ"
+        pbx.rotation_euler = Euler((math.radians(hx), math.radians(hy), math.radians(hz)), "XYZ")
+        update(2)
+        tip_w = world_point(arm, tip_bone, "tail")
+        gap = (palm_lowest_z(arm, side) - lay_rail_top) * 1000.0
+        thumb_y = (world_point(arm, thumb_bone, "tail").y - BACK_NEAR_Y) * 1000.0
+        viol = (3000.0 * max(0.0, tip_w.y - BACK_FAR_Y)          # 四指必须在 −Y 侧
+                + 3000.0 * max(0.0, -thumb_y)                      # 拇指必须在 +Y 侧
+                + 3000.0 * max(0.0, gap - CONTACT_TOL_MM)          # 掌面不得悬空
+                + 3000.0 * max(0.0, -gap - CONTACT_TOL_MM))        # 也不得陷入
+        return viol + abs(gap) * 0.5, gap, thumb_y, tip_w.y * 1000.0
+
+    best = None
+    for hx in range(int(start[0]) - 40, int(start[0]) + 41, 20):
+        for hy in range(int(start[1]) - 40, int(start[1]) + 41, 20):
+            for hz in range(int(start[2]) - 40, int(start[2]) + 41, 20):
+                r = probe(hx, hy, hz)
+                if best is None or r[0] < best[0]:
+                    best = (r[0], hx, hy, hz, r[1], r[2], r[3])
+    for step, span in ((8, 20), (3, 8)):
+        for hx in range(best[1] - span, best[1] + span + 1, step):
+            for hy in range(best[2] - span, best[2] + span + 1, step):
+                for hz in range(best[3] - span, best[3] + span + 1, step):
+                    r = probe(hx, hy, hz)
+                    if r[0] < best[0]:
+                        best = (r[0], hx, hy, hz, r[1], r[2], r[3])
+    probe(best[1], best[2], best[3])
+    return {"euler_deg": [best[1], best[2], best[3]],
+            "mode": "axis-solve 起点 + 三硬约束搜索",
+            "start_deg": [round(v, 1) for v in start],
+            "feasible": bool(best[0] < 3000.0),
+            "palm_gap_mm": round(best[4], 2),
+            "thumb_y_mm_vs_near_face": round(best[5], 1),
+            "tip_y_mm": round(best[6], 1),
+            "score": round(best[0], 1)}
 
 
 def mesh_bbox(name):
@@ -725,7 +782,7 @@ def main() -> int:
             update(2)
             for side in ("Left", "Right"):
                 sgn = 1.0 if side == "Left" else -1.0
-                hand_orient[(frame, side)] = set_hand_grip_orientation(arm, side)
+                hand_orient[(frame, side)] = set_hand_grip_orientation(arm, side, lay["rail_top_z"])
             update(2)
         # ⚠️ 头颈**必须一起捕获**：它们没有控制骨（口径 §三 D6）；solve 出来的补偿角若不入 captured，
         #    复演与导出时就会丢——那样"目视水平"只活在解算的那一瞬间。
