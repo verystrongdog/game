@@ -623,82 +623,99 @@ def solve_leg(arm, side, ankle_target, knee_dir):
                           f"{BONE_PREFIX}{side}Foot", ankle_target, knee_dir, label=f"leg_{side}")
 
 
-def set_hand_grip_orientation(arm, side, lay_rail_top):
-    """**按住上沿的手型**——owner 2026-09-14 选「A：抓住上沿」+「椅背沿 z 正方向最远的一端」。
+def web_point(arm, side):
+    """**虎口**在世界里的位置 = 拇指根(`HandThumb1`)↔食指根(`HandIndex1`)的中点，再沿掌面法向偏移 ε。
 
-    三个轴向条件 = 三个自由度 ⇒ **是解方程，不是搜索**（这正是上一轮的病根：把朝向需求
-    写成了"指尖到某个点"的位置目标，于是搜索找到了"位置对、朝向错"的解，还判它 7 绿）。
+    为什么需要它：此前判据只有掌面最低点 / 拇指尖 / 四指指尖 ⇒ **没有任何一条要求"虎口落在上沿上"**，
+    于是虎口自然飘着（owner 一眼看出）。ε 与掌面同一套换算（[#160](../../../design/engineering/evidence/action-description-epsilon-2026-09-14.md) 实测 32.68 mm）。
+    """
+    t = world_point(arm, f"{BONE_PREFIX}{side}Hand{DIGIT_TIP['Thumb']}")   # Thumb1 head 的位置
+    i = world_point(arm, f"{BONE_PREFIX}{side}HandIndex1")
+    mid = (t + i) * 0.5
+    pb = arm.pose.bones[f"{BONE_PREFIX}{side}Hand"]
+    normal = (pb.matrix.to_3x3() @ Vector((0.0, 0.0, 1.0))).normalized()
+    return mid + normal * EPSILON_PALM_M
 
-    | 条件 | 依据 |
-    |---|---|
-    | 骨局部 **X → 世界 +X** | 上沿的轴向就是 X ⇒ **五指绕上沿（X 轴）收拢**；这一条就是 owner 说的"抓住 x 轴" |
-    | 骨局部 **Y → 世界 −Y** | 指尖朝**远侧**（跨过靠背厚度），随后屈曲即绕到板另一面 |
-    | 骨局部 **Z → 世界 −Z**（自动） | 右手系：Z = X × Y ⇒ (0,1,0)×(0,−1,0) 方向 = −Z ⇒ **掌向下**，与"手掌向下放在椅背上方"一致 |
 
-    写朝向走 `_set_world_axes`（按**变形骨**父链解 basis 再写到控制骨上——口径/管线记过的那处共轭坑）。
+def _strict_hand_axes(arm, side):
+    """**严格对齐**：掌面法向(局部 +Z) → 世界 −Z · 展开轴(局部 X) → 世界 +X（= 上沿轴向）⇒ 局部 Y → 世界 −Y。
+
+    ⚠️ 这一条必须是**硬约束**：上一轮它在搜索里被牺牲掉，四指于是成了 52 mm 的扇形摊开——
+    owner 的原话是"两只手更像握住一个**弯曲的**椅背，而不是**笔直的**"。偏差正是那 ~30°。
     """
     _set_world_axes(arm, f"CTRL_{side}Hand", f"{BONE_PREFIX}{side}Hand",
                     Vector((0.0, -1.0, 0.0)), Vector((1.0, 0.0, 0.0)))
-    pb = arm.pose.bones[f"CTRL_{side}Hand"]
-    # ⚠️ `_set_world_axes` 写的是 `matrix_basis`，而它由 `rest_chain.inverted() @ target` 得到——
-    #    本骨架对象 scale=0.01，这个乘积可能带上**非单位缩放**；缩放一旦进 basis，手会被整体拉飞
-    #    （实测：掌面读数 −1409.7 mm，手跑到地板下方 0.6 m ⇒ 量级自证当场否掉）。
-    #    这里只保留**旋转**（朝向需求只需要旋转），缩放与位移一律归位。
-    # ⚠️ 只保留**旋转**：`Matrix` 没有 `.normalized()`（我第一次写成 `mb.to_3x3().normalized()`，
-    #    `hasattr` 判假 → 走了 else 分支 ⇒ **空操作**，读数一字未变，白跑一轮）。
-    #    正确做法 = 取四元数再回矩阵（旋转部分）。
-    mb = pb.matrix_basis.copy()
-    pb.matrix_basis = mb.to_quaternion().to_matrix().to_4x4()
-    pb.scale = (1.0, 1.0, 1.0)
-    pb.location = (0.0, 0.0, 0.0)
-    update(2)
-    start = [math.degrees(a) for a in pb.rotation_euler]
 
-    # ---- 以"解出的朝向"为起点，做**三硬约束**搜索（owner 最终口径 D8 的三条：
-    #      掌面向下压上沿 · 拇指在 +Y 侧 · 四指在 −Y 侧）----
-    # ⚠️ 早先那版搜索在这个位置"三约束换手"，很可能是因为**当时掌面读数是坏的**
-    #    （−1.4 m 且对朝向不敏感）⇒ 它在一个没有信号的约束上白费自由度。现在读数已修，信号真实。
-    tip_bone = f"{BONE_PREFIX}{side}HandMiddle4"
-    thumb_bone = f"{BONE_PREFIX}{side}Hand{DIGIT_TIP['Thumb']}"
-    name = f"CTRL_{side}Hand"
 
-    def probe(hx, hy, hz):
-        pbx = arm.pose.bones[name]
-        pbx.rotation_mode = "XYZ"
-        pbx.rotation_euler = Euler((math.radians(hx), math.radians(hy), math.radians(hz)), "XYZ")
+def solve_thumb_to_near_face(arm, side, target, base_curl):
+    """**单独解拇指自身**的旋转，让拇指尖落到近侧面（+Y 侧）。
+
+    为什么要把拇指拆出来解：手掌严格对齐后，拇指的解剖位置落在"沿上沿(±X)"方向，
+    它的 y 会落进靠背厚度区间**之内**（既非近侧也非远侧）。上一轮为了满足"拇指近侧"，
+    求解器只能把**整只手偏转 30°**——那就是扇形的来源。拇指自己有 4 节可动骨，
+    让它**自己去贴近侧面**，手就不必偏。
+    """
+    name = f"{BONE_PREFIX}{side}HandThumb1"
+    pb = arm.pose.bones[name]
+    tip_bone = f"{BONE_PREFIX}{side}Hand{DIGIT_TIP['Thumb']}"
+
+    def probe(tx, ty, tz):
+        pb.rotation_mode = "XYZ"
+        pb.rotation_euler = Euler((math.radians(tx), math.radians(ty), math.radians(tz)), "XYZ")
+        for finger in ("Thumb",):
+            for k in (2, 3, 4):
+                b2 = arm.pose.bones.get(f"{BONE_PREFIX}{side}HandThumb{k}")
+                if b2 is none_guard:
+                    continue
         update(2)
-        tip_w = world_point(arm, tip_bone, "tail")
-        gap = (palm_lowest_z(arm, side) - lay_rail_top) * 1000.0
-        thumb_y = (world_point(arm, thumb_bone, "tail").y - BACK_NEAR_Y) * 1000.0
-        viol = (3000.0 * max(0.0, tip_w.y - BACK_FAR_Y)          # 四指必须在 −Y 侧
-                + 3000.0 * max(0.0, -thumb_y)                      # 拇指必须在 +Y 侧
-                + 3000.0 * max(0.0, gap - CONTACT_TOL_MM)          # 掌面不得悬空
-                + 3000.0 * max(0.0, -gap - CONTACT_TOL_MM))        # 也不得陷入
-        return viol + abs(gap) * 0.5, gap, thumb_y, tip_w.y * 1000.0
+        return (world_point(arm, tip_bone, "tail") - target).length * 1000.0
 
+    none_guard = None
+    base = list(base_curl)
     best = None
-    for hx in range(int(start[0]) - 40, int(start[0]) + 41, 20):
-        for hy in range(int(start[1]) - 40, int(start[1]) + 41, 20):
-            for hz in range(int(start[2]) - 40, int(start[2]) + 41, 20):
-                r = probe(hx, hy, hz)
-                if best is None or r[0] < best[0]:
-                    best = (r[0], hx, hy, hz, r[1], r[2], r[3])
-    for step, span in ((8, 20), (3, 8)):
-        for hx in range(best[1] - span, best[1] + span + 1, step):
-            for hy in range(best[2] - span, best[2] + span + 1, step):
-                for hz in range(best[3] - span, best[3] + span + 1, step):
-                    r = probe(hx, hy, hz)
-                    if r[0] < best[0]:
-                        best = (r[0], hx, hy, hz, r[1], r[2], r[3])
+    for tx in range(base[0] - 60, base[0] + 61, 20):
+        for ty in range(base[1] - 60, base[1] + 61, 30):
+            for tz in (-40, 0, 40):
+                d = probe(tx, ty, tz)
+                if best is None or d < best[0]:
+                    best = (d, tx, ty, tz)
+    for step in (8, 3):
+        for tx in range(best[1] - 16, best[1] + 17, step):
+            for ty in range(best[2] - 16, best[2] + 17, step):
+                for tz in range(best[3] - 16, best[3] + 17, step):
+                    d = probe(tx, ty, tz)
+                    if d < best[0]:
+                        best = (d, tx, ty, tz)
     probe(best[1], best[2], best[3])
-    return {"euler_deg": [best[1], best[2], best[3]],
-            "mode": "axis-solve 起点 + 三硬约束搜索",
-            "start_deg": [round(v, 1) for v in start],
-            "feasible": bool(best[0] < 3000.0),
-            "palm_gap_mm": round(best[4], 2),
-            "thumb_y_mm_vs_near_face": round(best[5], 1),
-            "tip_y_mm": round(best[6], 1),
-            "score": round(best[0], 1)}
+    return {"euler_deg": [best[1], best[2], best[3]], "tip_residual_mm": round(best[0], 1)}
+
+
+def hand_grip(arm, side, lay, wrist_default, tip_target):
+    """手部解算（三步，全是**约束**而不是加权评分）：
+
+    ① **严格对齐**手的三轴（掌向下 · 展开轴∥上沿）——四指因此同深、看起来"笔直"；
+    ② **腕位置解析解**：让**虎口**落到上沿线上（先按默认腕目标摆一次、量虎口、把差值补到腕目标上，再解一次）；
+    ③ **拇指单独解**：让拇指尖贴到近侧面（+Y 侧）。
+    """
+    sgn = 1.0 if side == "Left" else -1.0
+    _strict_hand_axes(arm, side)
+    web = web_point(arm, side)
+    edge = Vector((web.x, lay["back_cy"], lay["rail_top_z"]))      # 上沿线上正对虎口的那一点
+    delta = edge - web
+    wrist = Vector(wrist_default) + delta
+    info = solve_arm(arm, side, wrist, _posterior(arm))
+    _strict_hand_axes(arm, side)
+    web2 = web_point(arm, side)
+    return {"wrist_target_m": [round(v, 4) for v in wrist],
+            "web_to_edge_mm": round((web2 - edge).length * 1000.0, 1),
+            "web_gap_z_mm": round((web2.z - lay["rail_top_z"]) * 1000.0, 1),
+            "arm": info,
+            "hand_euler_deg": [math.degrees(a) for a in arm.pose.bones[f"CTRL_{side}Hand"].rotation_euler]}
+
+
+def _posterior(arm):
+    _, _, p = body_frame(arm)
+    return p
 
 
 def mesh_bbox(name):
@@ -750,7 +767,7 @@ def main() -> int:
     ctrl_bones = [f"{CTRL_PREFIX}{n}" for n in
                   ("Hips", "LeftUpLeg", "LeftLeg", "LeftFoot", "RightUpLeg", "RightLeg", "RightFoot",
                    "LeftArm", "LeftForeArm", "LeftHand", "RightArm", "RightForeArm", "RightHand")]
-    captured, hand_orient = {}, {}
+    captured, hand_orient, thumb_orient = {}, {}, {}
     for frame, bend, pelvis, hands_on_rail, curl_amount in SCHEDULE:
         clear_pose(arm)
         drop_temp(arm, also_objects=True)
@@ -780,13 +797,13 @@ def main() -> int:
         if hands_on_rail:
             for side in ("Left", "Right"):
                 sgn = 1.0 if side == "Left" else -1.0
-                report.setdefault("arm_solve", {})[f"{frame}_{side}"] = solve_arm(
-                    arm, side, lay["wrist"](sgn), posterior)
+                grip = hand_grip(arm, side, lay, lay["wrist"](sgn), lay["tip"](sgn))
+                report.setdefault("grip_solve", {})[f"{frame}_{side}"] = grip
                 apply_finger_curl(arm, side, curl[side], curl_amount)
-            update(2)
-            for side in ("Left", "Right"):
-                sgn = 1.0 if side == "Left" else -1.0
-                hand_orient[(frame, side)] = set_hand_grip_orientation(arm, side, lay["rail_top_z"])
+                # 拇指单独解：贴到近侧面（上沿下方 30 mm、往板内 20 mm）
+                thumb_target = Vector((sgn * 0.17 + sgn * 0.02, BACK_NEAR_Y + 0.02, lay["rail_top_z"] - 0.03))
+                thumb_orient[(frame, side)] = solve_thumb_to_near_face(
+                    arm, side, thumb_target, FINGER_CURL_DEG["Thumb"])
             update(2)
         # ⚠️ 头颈**必须一起捕获**：它们没有控制骨（口径 §三 D6）；solve 出来的补偿角若不入 captured，
         #    复演与导出时就会丢——那样"目视水平"只活在解算的那一瞬间。
@@ -804,11 +821,16 @@ def main() -> int:
         if hands_on_rail:
             for side in ("Left", "Right"):
                 spec = hand_orient.get((frame, side))
+                apply_finger_curl(arm, side, curl[side], curl_amount)
                 if spec:
                     pb = arm.pose.bones[f"CTRL_{side}Hand"]
                     pb.rotation_mode = "XYZ"
-                    pb.rotation_euler = Euler([math.radians(a) for a in spec["euler_deg"]], "XYZ")
-                apply_finger_curl(arm, side, curl[side], curl_amount)
+                    pb.rotation_euler = Euler([math.radians(a) for a in spec["hand_euler_deg"]], "XYZ")
+                tsp = thumb_orient.get((frame, side))
+                if tsp:
+                    tb = arm.pose.bones[f"{BONE_PREFIX}{side}HandThumb1"]
+                    tb.rotation_mode = "XYZ"
+                    tb.rotation_euler = Euler([math.radians(a) for a in tsp["euler_deg"]], "XYZ")
         update()
         back = mesh_bbox("REF_Back")
         row = {"frame": frame, "bend_deg": bend}
@@ -851,6 +873,12 @@ def main() -> int:
                              "side": "远侧(−Y)" if dt.y <= BACK_FAR_Y else "近侧(+Y)"}
             row[f"digits_{side}"] = digits
         row["palm"], row["thumb"] = palm, thumb
+        row["web"] = {}
+        for side in ("Left", "Right"):
+            w = web_point(arm, side)
+            row["web"][side] = {"pos_m": [round(v, 4) for v in w],
+                                "above_edge_mm": round((w.z - lay["rail_top_z"]) * 1000.0, 1),
+                                "in_slab": bool(-0.49 <= w.y <= -0.45)}
         verify.append(row)
     report["verify"] = verify
     report["back_bbox"] = {k: [round(x, 4) for x in v] for k, v in mesh_bbox("REF_Back").items()}
@@ -893,6 +921,13 @@ def main() -> int:
             if dy > BACK_FAR_Y:
                 report["problems"].append(
                     f"{side} {d} 指尖 y={dy:.4f} 未到远侧面 −0.49（四指应**逐根**贴住 −Y 侧）")
+        w = last["web"][side]
+        if abs(w["above_edge_mm"]) > CONTACT_TOL_MM:
+            report["problems"].append(
+                f"{side} 虎口未卡在上沿：离上沿 {w['above_edge_mm']} mm（|·| > 容差 {CONTACT_TOL_MM} mm）")
+        if not w["in_slab"]:
+            report["problems"].append(
+                f"{side} 虎口的 y={w['pos_m'][1]} 不在靠背厚度区间 [−0.49, −0.45] 内（没卡在板边上）")
         if last["thumb"][side]["y_mm_vs_near_face"] < 0.0:
             report["problems"].append(
                 f"{side} 拇指尖在靠背**远**侧（相对近侧面 {last['thumb'][side]['y_mm_vs_near_face']} mm < 0 ⇒ 没贴在背面，口径 D8）")
@@ -928,11 +963,16 @@ def main() -> int:
         if hands_on_rail:
             for side in ("Left", "Right"):
                 spec = hand_orient.get((frame, side))
+                apply_finger_curl(arm, side, curl[side], curl_amount)
                 if spec:
                     pb = arm.pose.bones[f"CTRL_{side}Hand"]
                     pb.rotation_mode = "XYZ"
-                    pb.rotation_euler = Euler([math.radians(a) for a in spec["euler_deg"]], "XYZ")
-                apply_finger_curl(arm, side, curl[side], curl_amount)
+                    pb.rotation_euler = Euler([math.radians(a) for a in spec["hand_euler_deg"]], "XYZ")
+                tsp = thumb_orient.get((frame, side))
+                if tsp:
+                    tb = arm.pose.bones[f"{BONE_PREFIX}{side}HandThumb1"]
+                    tb.rotation_mode = "XYZ"
+                    tb.rotation_euler = Euler([math.radians(a) for a in tsp["euler_deg"]], "XYZ")
         update()
         for name in keyed:
             pb = arm.pose.bones[name]
@@ -945,6 +985,12 @@ def main() -> int:
                     name = f"{BONE_PREFIX}{side}Hand{finger}{k}"
                     if name in arm.pose.bones:
                         arm.pose.bones[name].keyframe_insert("rotation_euler", frame=frame)
+            tsp = thumb_orient.get((frame, side))
+            if tsp:
+                tb = arm.pose.bones[f"{BONE_PREFIX}{side}HandThumb1"]
+                tb.rotation_mode = "XYZ"
+                tb.rotation_euler = Euler([math.radians(a) for a in tsp["euler_deg"]], "XYZ")
+                tb.keyframe_insert("rotation_euler", frame=frame)
     bpy.context.scene.frame_start = SCHEDULE[0][0]
     bpy.context.scene.frame_end = SCHEDULE[-1][0]
     if args.host == "live":
@@ -986,6 +1032,11 @@ def main() -> int:
          "参考系": "道具局部", "判据量": "中指尖 y (m) vs −0.49",
          "产物侧读数": last["tip_Left_m"][1],
          "状态": "✅" if last["tip_Left_m"][1] <= BACK_FAR_Y else "❌"},
+        {"owner 的话": "虎口卡住上沿（owner 第四轮）", "解成": "虎口 = 拇指根↔食指根中点 + ε·掌面法向",
+         "参考系": "世界/道具", "判据量": "虎口↔上沿 (mm) ≤ 2.8 且 y 在板厚内",
+         "产物侧读数": {"离上沿": last["web"]["Left"]["above_edge_mm"], "在板厚内": last["web"]["Left"]["in_slab"]},
+         "状态": "✅" if (abs(last["web"]["Left"]["above_edge_mm"]) <= CONTACT_TOL_MM
+                        and last["web"]["Left"]["in_slab"]) else "❌"},
         {"owner 的话": "（未提及）肘别往外顶", "解成": "肘相对肩-腕弦的分量",
          "参考系": "角色体侧", "判据量": "后 ≥ 60 mm 且 |侧| ≤ 40 mm",
          "产物侧读数": last["elbow_Left_offset_mm"],
