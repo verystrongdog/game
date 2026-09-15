@@ -62,6 +62,9 @@ PROVISIONAL_TOL_MM = 20.0
 #: **掌面判据形态 = owner 2026-09-14 选定的"甲"**：按**掌面最低点**离顶面 ≤ ε（**允许倾斜**，
 #: "掌根压住、指尖翘着"也算贴合）。量的对象是**真实蒙皮顶点**（掌面那一层），不是"沿法向的一个点"。
 PALM_SLAB_M = 0.006
+#: **接触验收容差**（owner 2026-09-14 定）：来源同 `soleMargin = 0.0028 m` 那一族（平贴面接触余量）。
+#: ⚠️ 与 ε **不是**同一个数：ε 管"骨→表面"的换算，本值管"多近算贴合"（口径 §8.2）。
+CONTACT_TOL_MM = 2.8
 #: 靠背近侧 / 远侧面（y 更大 = 更靠角色）——口径 §6.3 的命名面
 BACK_NEAR_Y = -0.45
 BACK_FAR_Y = -0.49
@@ -214,10 +217,10 @@ def chair_layout(chair_distance):
         "rail_top_z": SEAT_TOP + BACK_HEIGHT,
         "half_width": SEAT_SIZE / 2,
         # 抓握任务点：腕在顶杆上方略偏近侧；中指尖绕到**远侧面的下方**
-        # ⚠️ 腕目标的高出量**仍是手拍的 45 mm**（撤回版原值）——本轮试过改成"由实测 ε 推出"，
-        #    实测**更差**（掌面间隙 41.8 → 46.9 mm）：掌面间隙由**腕朝向**主导，不是腕高度。
-        #    ⇒ 这是未闭合项，见 evidence §七（改进方向 = 先定掌面法向、再解余下自由度）。
-        "wrist": lambda sx: Vector((sx * 0.17, back_cy + 0.005, SEAT_TOP + BACK_HEIGHT + 0.045)),
+        # 腕目标高出顶面 **ε**：掌面向下时，掌面点 = 骨原点 − ε·Z ⇒ 腕应恰在顶面上方 ε 处。
+        # ⚠️ 上一轮把它从手拍的 45 mm 改成 ε 时"更差"（46.9 mm）——因为那时**朝向是错的**（掌面没朝下），
+        #    高度再对也贴不上。现在朝向由 set_hand_grip_orientation **解出来**，这一步才成立。
+        "wrist": lambda sx: Vector((sx * 0.17, back_cy + 0.005, SEAT_TOP + BACK_HEIGHT + EPSILON_PALM_M)),
         "tip": lambda sx: Vector((sx * 0.17, back_cy - BACK_THICKNESS / 2 - 0.015,
                                   SEAT_TOP + BACK_HEIGHT - 0.025)),
     }
@@ -406,6 +409,11 @@ def palm_face_vertices(arm, side):
     out = []
     for ob in bpy.data.objects:
         if ob.type != "MESH":
+            continue
+        # ⚠️ **只取可见皮肤层 `Beta_Surface`**：`Beta_Joints` 是骨骼可视化的网格，其"手部"顶点不在皮肤上，
+        #    取两网格的 min 会被它污染（实测：掌面读数恒为 −1409.7 mm = 比顶面低 1.4 m，且**对朝向不敏感**
+        #    ⇒ 说明那批顶点根本不在手上）。#160 的 ε 也是在 `Beta_Surface` 上实测的，口径一致。
+        if ob.name != "Beta_Surface":
             continue
         vg = ob.vertex_groups.get(name)
         if vg is None:
@@ -599,60 +607,37 @@ def solve_leg(arm, side, ankle_target, knee_dir):
                           f"{BONE_PREFIX}{side}Foot", ankle_target, knee_dir, label=f"leg_{side}")
 
 
-def solve_hand_orientation(arm, side, tip_target, rail_top_z):
-    """解腕部三轴朝向，让**三条判据同时成立**（口径 §十 V-b 的那三项）：
+def set_hand_grip_orientation(arm, side):
+    """**按住上沿的手型**——owner 2026-09-14 选「A：抓住上沿」+「椅背沿 z 正方向最远的一端」。
 
-    ① 中指尖绕到**远侧下方**（四指在椅背正面）
-    ② **掌面贴合**顶面（掌面点 = 骨原点 + ε·掌面法向，ε 见 #160 实测）
-    ③ **拇指尖在近侧**（y ≥ 近侧面 −0.45；口径 D8）
+    三个轴向条件 = 三个自由度 ⇒ **是解方程，不是搜索**（这正是上一轮的病根：把朝向需求
+    写成了"指尖到某个点"的位置目标，于是搜索找到了"位置对、朝向错"的解，还判它 7 绿）。
 
-    ⚠️ 撤回版只解 ①，于是掌面与拇指**无人过问**——那正是 owner 说"手没放在椅背上"的地方。
-    这里把三项写进同一个评分（①用距离、②③用越界惩罚），腕部三轴有足够自由度同时满足。
+    | 条件 | 依据 |
+    |---|---|
+    | 骨局部 **X → 世界 +X** | 上沿的轴向就是 X ⇒ **五指绕上沿（X 轴）收拢**；这一条就是 owner 说的"抓住 x 轴" |
+    | 骨局部 **Y → 世界 −Y** | 指尖朝**远侧**（跨过靠背厚度），随后屈曲即绕到板另一面 |
+    | 骨局部 **Z → 世界 −Z**（自动） | 右手系：Z = X × Y ⇒ (0,1,0)×(0,−1,0) 方向 = −Z ⇒ **掌向下**，与"手掌向下放在椅背上方"一致 |
+
+    写朝向走 `_set_world_axes`（按**变形骨**父链解 basis 再写到控制骨上——口径/管线记过的那处共轭坑）。
     """
-    tip_bone = f"{BONE_PREFIX}{side}HandMiddle4"
-    thumb_bone = f"{BONE_PREFIX}{side}HandThumb3"
-    name = f"CTRL_{side}Hand"
-
-    def probe(hx, hy, hz):
-        pb = arm.pose.bones[name]
-        pb.rotation_mode = "XYZ"
-        pb.rotation_euler = Euler((math.radians(hx), math.radians(hy), math.radians(hz)), "XYZ")
-        update(2)
-        tip_w = world_point(arm, tip_bone, "tail")
-        tip_res = (tip_w - tip_target).length * 1000.0
-        gap = (palm_lowest_z(arm, side) - rail_top_z) * 1000.0
-        thumb_y = (world_point(arm, thumb_bone, "tail").y - BACK_NEAR_Y) * 1000.0
-        # ⚠️ 形式很重要：**"在哪一侧"是硬约束**（违反才罚），指尖到理想点才是被最小化的目标。
-        #    之前三项距离等权相加 ⇒ 搜索在三者之间换手（实测：掌面绿了拇指红 → 拇指绿了指尖红）。
-        viol = (3000.0 * max(0.0, tip_w.y - BACK_FAR_Y)          # 四指必须越过远侧面
-                + 3000.0 * max(0.0, -thumb_y)                     # 拇指必须在近侧
-                + 3000.0 * max(0.0, gap - EPSILON_PALM_M * 1000.0)   # 掌面最低点不得超过 ε
-                + 3000.0 * max(0.0, -gap - PROVISIONAL_TOL_MM))       # 也不得陷进去
-        return viol + tip_res, tip_res, gap, thumb_y, tip_w.y * 1000.0
-
-    # 粗网格 → 两段细化（best 的七个分量 = score,hx,hy,hz,tip_res,gap,thumb_y,tip_y）
-    best = None
-    for hx in range(-90, 91, 30):
-        for hy in range(-90, 91, 30):
-            for hz in (-60, 0, 60):
-                r = probe(hx, hy, hz)
-                if best is None or r[0] < best[0]:
-                    best = (r[0], hx, hy, hz, r[1], r[2], r[3], r[4])
-    for step, span in ((10, 30), (5, 15), (2, 6)):
-        for hx in range(best[1] - span, best[1] + span + 1, step):
-            for hy in range(best[2] - span, best[2] + span + 1, step):
-                for hz in range(best[3] - span * 2, best[3] + span * 2 + 1, step * 2):
-                    r = probe(hx, hy, hz)
-                    if r[0] < best[0]:
-                        best = (r[0], hx, hy, hz, r[1], r[2], r[3], r[4])
-    probe(best[1], best[2], best[3])
-    return {"euler_deg": [best[1], best[2], best[3]],
-            "tip_residual_mm": round(best[4], 1),
-            "palm_gap_mm": round(best[5], 1),
-            "thumb_y_mm_vs_near_face": round(best[6], 1),
-            "tip_y_mm": round(best[7], 1),
-            "score": round(best[0], 1),
-            "feasible": bool(best[0] < 3000.0)}
+    _set_world_axes(arm, f"CTRL_{side}Hand", f"{BONE_PREFIX}{side}Hand",
+                    Vector((0.0, -1.0, 0.0)), Vector((1.0, 0.0, 0.0)))
+    pb = arm.pose.bones[f"CTRL_{side}Hand"]
+    # ⚠️ `_set_world_axes` 写的是 `matrix_basis`，而它由 `rest_chain.inverted() @ target` 得到——
+    #    本骨架对象 scale=0.01，这个乘积可能带上**非单位缩放**；缩放一旦进 basis，手会被整体拉飞
+    #    （实测：掌面读数 −1409.7 mm，手跑到地板下方 0.6 m ⇒ 量级自证当场否掉）。
+    #    这里只保留**旋转**（朝向需求只需要旋转），缩放与位移一律归位。
+    # ⚠️ 只保留**旋转**：`Matrix` 没有 `.normalized()`（我第一次写成 `mb.to_3x3().normalized()`，
+    #    `hasattr` 判假 → 走了 else 分支 ⇒ **空操作**，读数一字未变，白跑一轮）。
+    #    正确做法 = 取四元数再回矩阵（旋转部分）。
+    mb = pb.matrix_basis.copy()
+    pb.matrix_basis = mb.to_quaternion().to_matrix().to_4x4()
+    pb.scale = (1.0, 1.0, 1.0)
+    pb.location = (0.0, 0.0, 0.0)
+    update(2)
+    return {"euler_deg": [math.degrees(a) for a in pb.rotation_euler],
+            "mode": "axis-solve（解朝向，非搜索）"}
 
 
 def mesh_bbox(name):
@@ -740,7 +725,7 @@ def main() -> int:
             update(2)
             for side in ("Left", "Right"):
                 sgn = 1.0 if side == "Left" else -1.0
-                hand_orient[(frame, side)] = solve_hand_orientation(arm, side, lay["tip"](sgn), lay["rail_top_z"])
+                hand_orient[(frame, side)] = set_hand_grip_orientation(arm, side)
             update(2)
         # ⚠️ 头颈**必须一起捕获**：它们没有控制骨（口径 §三 D6）；solve 出来的补偿角若不入 captured，
         #    复演与导出时就会丢——那样"目视水平"只活在解算的那一瞬间。
@@ -830,9 +815,9 @@ def main() -> int:
         # 陷进去（< −PROVISIONAL_TOL_MM）另判穿模。
         if gap < -PROVISIONAL_TOL_MM:
             report["problems"].append(f"{side} 掌面最低点陷进靠背顶面 {gap} mm（穿模）")
-        elif gap > EPSILON_PALM_M * 1000.0:
+        elif gap > CONTACT_TOL_MM:
             report["problems"].append(
-                f"{side} 掌面最低点离顶面 {gap} mm > ε {EPSILON_PALM_M*1000:.2f} mm（没贴合；判据形态甲）")
+                f"{side} 掌面最低点离顶面 {gap} mm > 容差 {CONTACT_TOL_MM} mm（没贴合；owner 定的接触容差）")
         if last["thumb"][side]["y_mm_vs_near_face"] < 0.0:
             report["problems"].append(
                 f"{side} 拇指尖在靠背**远**侧（相对近侧面 {last['thumb'][side]['y_mm_vs_near_face']} mm < 0 ⇒ 没贴在背面，口径 D8）")
@@ -915,9 +900,9 @@ def main() -> int:
          "参考系": "世界/重力", "判据量": "头骨上轴偏离竖直 (deg)",
          "产物侧读数": last["gaze_up_deg"], "状态": "✅" if abs(last["gaze_up_deg"]) <= 2.0 else "❌"},
         {"owner 的话": "双手手掌贴合椅背上方", "解成": "掌面点 = 手骨原点 + 32.68 mm × 掌面法向（局部 +Z）",
-         "参考系": "道具局部", "判据量": "掌面最低点↔顶面 (mm)；负 = 陷入",
+         "参考系": "道具局部", "判据量": "掌面最低点↔顶面 (mm) ≤ 2.8；负 = 陷入",
          "产物侧读数": last["palm"]["Left"]["to_rail_top_mm"],
-         "状态": "✅" if -PROVISIONAL_TOL_MM <= last["palm"]["Left"]["to_rail_top_mm"] <= EPSILON_PALM_M * 1000.0 else "❌"},
+         "状态": "✅" if -PROVISIONAL_TOL_MM <= last["palm"]["Left"]["to_rail_top_mm"] <= CONTACT_TOL_MM else "❌"},
         {"owner 的话": "大拇指贴住椅背的背面（近侧 y ≥ −0.45）", "解成": "拇指尖 y 相对近侧面",
          "参考系": "道具局部", "判据量": "拇指尖 − 近侧面 (mm)",
          "产物侧读数": last["thumb"]["Left"]["y_mm_vs_near_face"],
