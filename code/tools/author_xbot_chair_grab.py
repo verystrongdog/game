@@ -85,8 +85,12 @@ SCHEDULE = [
 ]
 
 FINGERS = ("Index", "Middle", "Ring", "Pinky", "Thumb")
-FINGER_CURL_DEG = {"Index": (60, 55, 40), "Middle": (60, 55, 40), "Ring": (60, 55, 40),
-                   "Pinky": (60, 55, 40), "Thumb": (30, 25, 20)}
+FINGER_CURL_DEG = {"Index": (60, 55, 40, 35), "Middle": (60, 55, 40, 35), "Ring": (60, 55, 40, 35),
+                   "Pinky": (60, 55, 40, 35), "Thumb": (30, 25, 20, 15)}
+#: 每根手指的**最末节**（= 真正的指尖）——判据一律量它，成组并列打印（口径 §七 硬规矩 2）
+DIGIT_TIP = {"Index": "Index4", "Middle": "Middle4", "Ring": "Ring4", "Pinky": "Pinky4",
+             "Thumb": "Thumb4"}
+DIGITS = ("Index", "Middle", "Ring", "Pinky", "Thumb")
 
 
 def parse_args(argv):
@@ -252,7 +256,7 @@ def _palm_plane(arm, side):
 
 def _set_one_finger(arm, side, finger, axis_index, amount):
     """按 `FINGER_CURL_DEG` 给一根手指的三个指节设同一轴的旋转；`amount` 为符号/幅度系数。"""
-    for k in (1, 2, 3):
+    for k in (1, 2, 3, 4):
         name = f"{BONE_PREFIX}{side}Hand{finger}{k}"
         if name not in arm.pose.bones:
             continue
@@ -274,14 +278,14 @@ def detect_curl_axis(arm, side):
     """
     ax = "X"                      # 屈曲轴：#161 §2.1.4 + 撤回版自测一致落在 X
     tip = f"{BONE_PREFIX}{side}HandMiddle4"
-    thumb = f"{BONE_PREFIX}{side}HandThumb3"
+    thumb = f"{BONE_PREFIX}{side}Hand{DIGIT_TIP['Thumb']}"
 
     def gap_mm():
         return (world_point(arm, tip, "tail") - world_point(arm, thumb, "tail")).length * 1000.0
 
     def curl(sign):
         for finger in FINGERS:
-            for k in (1, 2, 3):
+            for k in (1, 2, 3, 4):
                 name = f"{BONE_PREFIX}{side}Hand{finger}{k}"
                 if name not in arm.pose.bones:
                     continue
@@ -317,7 +321,7 @@ def apply_finger_curl(arm, side, curl_axis, amount):
     axis_index = 0 if curl_axis["axis"] == "X" else 2
     n = 0
     for finger in FINGERS:
-        for k in (1, 2, 3):
+        for k in (1, 2, 3, 4):
             name = f"{BONE_PREFIX}{side}Hand{finger}{k}"
             if name not in arm.pose.bones:
                 continue
@@ -655,7 +659,7 @@ def set_hand_grip_orientation(arm, side, lay_rail_top):
     # ⚠️ 早先那版搜索在这个位置"三约束换手"，很可能是因为**当时掌面读数是坏的**
     #    （−1.4 m 且对朝向不敏感）⇒ 它在一个没有信号的约束上白费自由度。现在读数已修，信号真实。
     tip_bone = f"{BONE_PREFIX}{side}HandMiddle4"
-    thumb_bone = f"{BONE_PREFIX}{side}HandThumb3"
+    thumb_bone = f"{BONE_PREFIX}{side}Hand{DIGIT_TIP['Thumb']}"
     name = f"CTRL_{side}Hand"
 
     def probe(hx, hy, hz):
@@ -834,9 +838,18 @@ def main() -> int:
             palm[side] = {"lowest_z_m": round(lo, 4),
                           "to_rail_top_mm": round((lo - lay["rail_top_z"]) * 1000.0, 1),
                           "n_face_vertices": len(palm_face_vertices(arm, side))}
-            tt = world_point(arm, f"{BONE_PREFIX}{side}HandThumb3", "tail")
+            tt = world_point(arm, f"{BONE_PREFIX}{side}Hand{DIGIT_TIP['Thumb']}", "tail")
             thumb[side] = {"tip_m": [round(v, 4) for v in tt],
                            "y_mm_vs_near_face": round((tt.y - BACK_NEAR_Y) * 1000.0, 1)}
+            # ⚠️ **成组并列**（口径 §七 硬规矩 2）：四指 + 拇指**逐根**都要有读数——
+            #    只量中指尖是不够的（owner 2026-09-14 一眼指出"只做了一件事"）。
+            digits = {}
+            for d in DIGITS:
+                dt = world_point(arm, f"{BONE_PREFIX}{side}Hand{DIGIT_TIP[d]}", "tail")
+                digits[d] = {"tip_y": round(dt.y, 4), "tip_z": round(dt.z, 4),
+                             "vs_far_face_mm": round((dt.y - BACK_FAR_Y) * 1000.0, 1),
+                             "side": "远侧(−Y)" if dt.y <= BACK_FAR_Y else "近侧(+Y)"}
+            row[f"digits_{side}"] = digits
         row["palm"], row["thumb"] = palm, thumb
         verify.append(row)
     report["verify"] = verify
@@ -875,6 +888,11 @@ def main() -> int:
         elif gap > CONTACT_TOL_MM:
             report["problems"].append(
                 f"{side} 掌面最低点离顶面 {gap} mm > 容差 {CONTACT_TOL_MM} mm（没贴合；owner 定的接触容差）")
+        for d in ("Index", "Middle", "Ring", "Pinky"):
+            dy = last[f"digits_{side}"][d]["tip_y"]
+            if dy > BACK_FAR_Y:
+                report["problems"].append(
+                    f"{side} {d} 指尖 y={dy:.4f} 未到远侧面 −0.49（四指应**逐根**贴住 −Y 侧）")
         if last["thumb"][side]["y_mm_vs_near_face"] < 0.0:
             report["problems"].append(
                 f"{side} 拇指尖在靠背**远**侧（相对近侧面 {last['thumb'][side]['y_mm_vs_near_face']} mm < 0 ⇒ 没贴在背面，口径 D8）")
@@ -923,7 +941,7 @@ def main() -> int:
         arm.pose.bones["CTRL_Hips"].keyframe_insert("location", frame=frame)
         for side in ("Left", "Right"):
             for finger in FINGERS:
-                for k in (1, 2, 3):
+                for k in (1, 2, 3, 4):
                     name = f"{BONE_PREFIX}{side}Hand{finger}{k}"
                     if name in arm.pose.bones:
                         arm.pose.bones[name].keyframe_insert("rotation_euler", frame=frame)
@@ -993,6 +1011,13 @@ def main() -> int:
     print("自由度表（owner 圈定 / agent 解）")
     for row in FREEDOM_TABLE:
         print(f"  {row['量']:<16}{row['归属']:<14}{row['值']:<32}{row['依据'][:44]}")
+    print("逐指读数（口径 §七 硬规矩 2：成组的项必须并列打印）")
+    print(f"  {'手':<6}{'指':<8}{'指尖 y':>10}{'指尖 z':>10}{'距远侧面(mm)':>14}  所在侧")
+    for _s in ("Left", "Right"):
+        _d = verify[-1][f"digits_{_s}"]
+        for dd in DIGITS:
+            v = _d[dd]
+            print(f"  {_s:<6}{dd:<8}{v['tip_y']:>10.4f}{v['tip_z']:>10.4f}{v['vs_far_face_mm']:>14.1f}  {v['side']}")
     print("回显卡（口径 §四：每一项都要有产物侧读数）")
     for row in card:
         print(f"  {row['owner 的话'][:26]:<28}| {row['判据量'][:30]:<32}| {str(row['产物侧读数'])[:34]:<36}| {row['状态']}")
