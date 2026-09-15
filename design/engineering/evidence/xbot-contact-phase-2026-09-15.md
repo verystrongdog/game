@@ -410,18 +410,30 @@ python3 code/tools/run_all_checks.py                                       # 退
 | 8 | 宿主 `--action` 默认值缺陷（§6.1 末） | 本件预期差分明写"不改宿主"；已登记 |
 | 9 | **`重心` 的判据部分**（Hips 投影 ↔ 支撑多边形）与 `脚滑` M5 的取帧范围 | 本件只交"件"（相位区间）；那两条是**消费方**，见 §九 |
 | 10 | **R4 的覆盖边界** | 它判"证据表 ↔ 算法"一致，**判不了**"那条动作的相位本身对不对"；也**不重跑 Blender**（CI 上无 Blender） |
+| 11 | 触发器 ② 的**第三个要求方 `悬空` 不在注册表** | issue 原文写"`接触相位` 已被 `重心` / `脚滑` / `悬空` 三条要求"，本次核实：**在册的是 2 条**（`重心` · `脚滑`），`悬空` 落在候选清单的「暂不动」档（`data/term_registry_candidates.md`）⇒ 这条触发器的第三个引用计数落在**散文**上。本件照原文写，但如实登记；**不据此改任何结论**（件本身与触发器是否成立无关——三条要求方只是"为什么现在建"的理由） |
 
 ## 八、回滚演练与"未改"核对
 
-**回滚**：本件的入库变化 = 一个新文件 + 四份登记/文档（§九 的问题差分）。演练方式与结论：
+**回滚演练（实做，不是预测）**：在**临时 worktree** 上做，主工作树全程未被触碰。
 
 ```bash
-git stash -u                    # 或：git checkout -- <四份文档> && rm code/tools/xbot_contact_phase.py
-python3 code/tools/run_all_checks.py     # 回到 15/15（新件已不在编排器里）
-python3 code/tools/validate_cross_refs.py # 0 死链（证据文件与索引行同时消失）
+git worktree add --detach .scratch/wt-165 770ab32      # 本件的提交
+cd .scratch/wt-165 && git revert --no-commit HEAD
+git diff --stat 76fefe0                                # ⇒ 空（逐文件回到 base）
+python3 code/tools/run_all_checks.py                   # ⇒ 15 validators: 15 passed, 0 failed, exit 0
+grep -c xbot_contact_phase code/tools/run_all_checks.py .github/workflows/ci.yml   # ⇒ 0 / 0
+cd .. && git worktree remove --force .scratch/wt-165   # 主工作树未被触碰
 ```
 
-⇒ **可回滚**：本件不写任何数据契约（无 `data/` 改动、无 manifest 变化），回滚后上一状态（15 个校验器 + #164 的入库面）逐项恢复。⚠️ 与 [#164](https://github.com/verystrongdog/game/issues/164) 同一形态的例外：**证据文件与切片行一旦被别的文档引用，回滚会留下引用它的行**——本次先 `grep` 过：除本件自身与本证据，没有第三处引用 `xbot_contact_phase`（§九 已核）。
+| 判据 | issue「回滚」节的预测 | **实测** |
+|---|---|---|
+| 文件面 | 删新建模块 | ✅ **`git diff 76fefe0` 为空**（新件 + 证据 + 四份登记逐文件回到 base） |
+| 门禁 | `run_all_checks` 回到 **15/15** | ✅ **15/15 退出码 0**（件已不在编排器里；CI 循环与 `gates.json` 的登记行同时消失） |
+| 切片表 | "还原切片表**新增行**" | ⚠️ **该行不消失**——它是 **base `76fefe0`（口径 §13.6 落库那一提交）加的行**，本件只改它的格子 ⇒ 回滚让它回到 `NONE` 且无 #165 注记（实测行首：`| **接触相位识别（脚支撑区间）**（✏️ 2026-09-15 新增） | **\`ACCEPTED\`** | **\`NONE\`** | \`ISOLATED\` |`）。**issue 这一句预测不准确**，如实登记 |
+| 术语表 | 三条定义"不受影响（只引用本件，不复制其实现）" | ✅ `重心` / `脚滑` / `接触相位` 三条 **`active` 且文本逐字未变**（回滚面里没有 `data/`）；⚠️ 顺带实测：`悬空` **不在注册表**（§七 第 11 条） |
+| 主工作树 | — | ✅ `git worktree remove` 后 `git status --short` 为空 |
+
+⇒ **可回滚，且回滚不需要任何数据迁移**（本件不写 `data/`、不写 manifest、无运行时消费方）。⚠️ 与本件自身引用面有关的一条：除件自身与本证据，**没有第三处引用 `xbot_contact_phase`**（§九 已核）——所以删掉这两处即无悬挂引用。
 
 **"未改"逐字节核对**（验收标准第 7 条）：
 
