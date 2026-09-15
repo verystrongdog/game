@@ -652,53 +652,46 @@ def _strict_hand_axes(arm, side):
 
 
 def solve_thumb_to_near_face(arm, side, target, base_curl):
-    """**只动拇指**：解 Thumb1 + Thumb2 的旋转，让拇指尖落到 +Y 侧那一面（近侧面）。
+    """**单独解拇指自身**的旋转，让拇指尖落到近侧面（+Y 侧）。
 
-    owner 2026-09-14 第六轮：「大拇指的位置不对，应该贴住椅背 **y 轴正方向的一面**，**其它的动作不用变**」。
-    ⇒ 只解拇指，不碰腕/手/四指。
-
-    ⚠️ 上一版只搜 Thumb1 三轴、范围 ±60°：**拇指压根转不到 +Y 侧**（实测尖端停在 y=−0.48，五指同侧）。
-    现在搜 Thumb1（±120° 粗搜 + 细化）并在其基础上再调 Thumb2。
+    为什么要把拇指拆出来解：手掌严格对齐后，拇指的解剖位置落在"沿上沿(±X)"方向，
+    它的 y 会落进靠背厚度区间**之内**（既非近侧也非远侧）。上一轮为了满足"拇指近侧"，
+    求解器只能把**整只手偏转 30°**——那就是扇形的来源。拇指自己有 4 节可动骨，
+    让它**自己去贴近侧面**，手就不必偏。
     """
-    b1 = arm.pose.bones[f"{BONE_PREFIX}{side}HandThumb1"]
-    b2 = arm.pose.bones.get(f"{BONE_PREFIX}{side}HandThumb2")
-    b3 = arm.pose.bones.get(f"{BONE_PREFIX}{side}HandThumb3")
+    name = f"{BONE_PREFIX}{side}HandThumb1"
+    pb = arm.pose.bones[name]
     tip_bone = f"{BONE_PREFIX}{side}Hand{DIGIT_TIP['Thumb']}"
 
-    def put(pb, vals):
-        if pb is None:
-            return
+    def probe(tx, ty, tz):
         pb.rotation_mode = "XYZ"
-        pb.rotation_euler = Euler([math.radians(a) for a in vals], "XYZ")
-
-    def probe(t1, t2, t3=(0, 0, 0)):
-        put(b1, t1); put(b2, t2); put(b3, t3)
+        pb.rotation_euler = Euler((math.radians(tx), math.radians(ty), math.radians(tz)), "XYZ")
+        for finger in ("Thumb",):
+            for k in (2, 3, 4):
+                b2 = arm.pose.bones.get(f"{BONE_PREFIX}{side}HandThumb{k}")
+                if b2 is none_guard:
+                    continue
         update(2)
         return (world_point(arm, tip_bone, "tail") - target).length * 1000.0
 
+    none_guard = None
+    base = list(base_curl)
     best = None
-    for a in range(-120, 121, 60):
-        for b in range(-120, 121, 60):
-            for c in range(-120, 121, 60):
-                d = probe((a, b, c), (0, 0, 0), (0, 0, 0))
+    for tx in range(base[0] - 60, base[0] + 61, 20):
+        for ty in range(base[1] - 60, base[1] + 61, 30):
+            for tz in (-40, 0, 40):
+                d = probe(tx, ty, tz)
                 if best is None or d < best[0]:
-                    best = (d, (a, b, c), (0, 0, 0), (0, 0, 0))
-    for step, span in ((20, 40), (8, 16), (3, 6)):
-        for which in (1, 2, 3):
-            d0, t1b, t2b, t3b = best
-            base_ = {1: t1b, 2: t2b, 3: t3b}[which]
-            for a in range(base_[0] - span, base_[0] + span + 1, step):
-                for b in range(base_[1] - span, base_[1] + span + 1, step):
-                    for c in range(base_[2] - span, base_[2] + span + 1, step):
-                        cand = (a, b, c)
-                        args = {1: (cand, t2b, t3b), 2: (t1b, cand, t3b), 3: (t1b, t2b, cand)}[which]
-                        d = probe(*args)
-                        if d < best[0]:
-                            best = (d,) + args
+                    best = (d, tx, ty, tz)
+    for step in (8, 3):
+        for tx in range(best[1] - 16, best[1] + 17, step):
+            for ty in range(best[2] - 16, best[2] + 17, step):
+                for tz in range(best[3] - 16, best[3] + 17, step):
+                    d = probe(tx, ty, tz)
+                    if d < best[0]:
+                        best = (d, tx, ty, tz)
     probe(best[1], best[2], best[3])
-    return {"euler_deg": list(best[1]), "euler2_deg": list(best[2]), "euler3_deg": list(best[3]),
-            "tip_residual_mm": round(best[0], 1),
-            "tip_y": round(world_point(arm, tip_bone, "tail").y, 4)}
+    return {"euler_deg": [best[1], best[2], best[3]], "tip_residual_mm": round(best[0], 1)}
 
 
 def hand_grip(arm, side, lay, wrist_default, tip_target):
@@ -821,7 +814,7 @@ def main() -> int:
                 report.setdefault("grip_solve", {})[f"{frame}_{side}"] = grip
                 apply_finger_curl(arm, side, curl[side], curl_amount)
                 # 拇指单独解：贴到近侧面（上沿下方 30 mm、往板内 20 mm）
-                thumb_target = Vector((sgn * 0.17 + sgn * 0.01, BACK_NEAR_Y + 0.015, lay["rail_top_z"] - 0.025))
+                thumb_target = Vector((sgn * 0.17 + sgn * 0.02, BACK_NEAR_Y + 0.02, lay["rail_top_z"] - 0.03))
                 thumb_orient[(frame, side)] = solve_thumb_to_near_face(
                     arm, side, thumb_target, FINGER_CURL_DEG["Thumb"])
             update(2)
@@ -848,13 +841,9 @@ def main() -> int:
                     pb.rotation_euler = Euler([math.radians(a) for a in spec["hand_euler_deg"]], "XYZ")
                 tsp = thumb_orient.get((frame, side))
                 if tsp:
-                    for nm, key in ((f"{BONE_PREFIX}{side}HandThumb1", "euler_deg"),
-                                    (f"{BONE_PREFIX}{side}HandThumb2", "euler2_deg"),
-                                    (f"{BONE_PREFIX}{side}HandThumb3", "euler3_deg")):
-                        tb = arm.pose.bones.get(nm)
-                        if tb is not None:
-                            tb.rotation_mode = "XYZ"
-                            tb.rotation_euler = Euler([math.radians(a) for a in tsp[key]], "XYZ")
+                    tb = arm.pose.bones[f"{BONE_PREFIX}{side}HandThumb1"]
+                    tb.rotation_mode = "XYZ"
+                    tb.rotation_euler = Euler([math.radians(a) for a in tsp["euler_deg"]], "XYZ")
         update()
         back = mesh_bbox("REF_Back")
         row = {"frame": frame, "bend_deg": bend}
@@ -994,13 +983,9 @@ def main() -> int:
                     pb.rotation_euler = Euler([math.radians(a) for a in spec["hand_euler_deg"]], "XYZ")
                 tsp = thumb_orient.get((frame, side))
                 if tsp:
-                    for nm, key in ((f"{BONE_PREFIX}{side}HandThumb1", "euler_deg"),
-                                    (f"{BONE_PREFIX}{side}HandThumb2", "euler2_deg"),
-                                    (f"{BONE_PREFIX}{side}HandThumb3", "euler3_deg")):
-                        tb = arm.pose.bones.get(nm)
-                        if tb is not None:
-                            tb.rotation_mode = "XYZ"
-                            tb.rotation_euler = Euler([math.radians(a) for a in tsp[key]], "XYZ")
+                    tb = arm.pose.bones[f"{BONE_PREFIX}{side}HandThumb1"]
+                    tb.rotation_mode = "XYZ"
+                    tb.rotation_euler = Euler([math.radians(a) for a in tsp["euler_deg"]], "XYZ")
         update()
         for name in keyed:
             pb = arm.pose.bones[name]
@@ -1015,14 +1000,10 @@ def main() -> int:
                         arm.pose.bones[name].keyframe_insert("rotation_euler", frame=frame)
             tsp = thumb_orient.get((frame, side))
             if tsp:
-                for nm, key in ((f"{BONE_PREFIX}{side}HandThumb1", "euler_deg"),
-                                (f"{BONE_PREFIX}{side}HandThumb2", "euler2_deg"),
-                                (f"{BONE_PREFIX}{side}HandThumb3", "euler3_deg")):
-                    tb = arm.pose.bones.get(nm)
-                    if tb is not None:
-                        tb.rotation_mode = "XYZ"
-                        tb.rotation_euler = Euler([math.radians(a) for a in tsp[key]], "XYZ")
-                        tb.keyframe_insert("rotation_euler", frame=frame)
+                tb = arm.pose.bones[f"{BONE_PREFIX}{side}HandThumb1"]
+                tb.rotation_mode = "XYZ"
+                tb.rotation_euler = Euler([math.radians(a) for a in tsp["euler_deg"]], "XYZ")
+                tb.keyframe_insert("rotation_euler", frame=frame)
     bpy.context.scene.frame_start = SCHEDULE[0][0]
     bpy.context.scene.frame_end = SCHEDULE[-1][0]
     if args.host == "live":
