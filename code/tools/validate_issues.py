@@ -24,7 +24,7 @@
       段引用 `§N` 文件必须在（FAIL），段号找不到只出 warning
   I9  正文不得出现 `文件.ext:行号` 或「第 N 行」式定位（warning）
   I10 正文不得引用 `design/archive/trash/`（FAIL）；不得使用 term_registry.json 中
-      `status: deprecated` 且有替代说明的术语（warning）
+      `status: deprecated` 且**机器可判**（`enforcement` ≠ `只登记`）的术语（warning）
   I11 全仓同时 `state:in-progress` 的 issue ≤ 1（仅 --from-github）
   I12 验收标准 2–8 条；能力增量 ≤ 3 行数据；门禁 ≥ 1 条
 
@@ -425,7 +425,17 @@ def load_gates():
 
 
 def load_deprecated_terms():
-    """term_registry.json 中 status=deprecated 且有替代说明的术语。"""
+    """term_registry.json 中 status=deprecated、有替代说明、且**机器可判**的术语。
+
+    2026-09-15（#159）：加读 `enforcement` 字段——逐术语执法策略由注册表给出，I10 与
+    `validate_trash_isolation.py` 的注册表驱动分支**共用同一字段**，不各写一份清单。
+    三档在本模块的投影：
+      · `扫描` / `关闭` → I10 判（warning）——`关闭` 只是"活跃设计文档现存残留未清"这一
+        历史事实，与 issue 正文无关，所以讨论面照样提示；
+      · `只登记` → 不判——该串在文本里另有合法用法（`β` 是易感慢变量、`CPM` 是 Critical
+        Path Method…），逐串匹配分不出新旧义，判了就是假阳性；
+      · 缺字段 / 取值非法 → 按缺省 `扫描` 处理（fail-closed）。
+    """
     if not TERM_REGISTRY.exists():
         raise InputUnavailable(f"{TERM_REGISTRY.relative_to(ROOT)} 不存在——I10 无法判定")
     doc = json.loads(TERM_REGISTRY.read_text(encoding="utf-8"))
@@ -433,12 +443,25 @@ def load_deprecated_terms():
     for name, v in (doc.get("terms") or {}).items():
         if not isinstance(v, dict) or v.get("status") != "deprecated":
             continue
+        enforcement = v.get("enforcement")
+        if enforcement == "只登记":
+            continue        # §I10：机器分不出新旧义的串不判（三档口径见上）
         replacement = (v.get("replaced_by") or v.get("superseded_by")
                        or v.get("deprecation_reason") or v.get("deviation_reason"))
         if not replacement:
             continue        # §I10：只查有 replacement/替代说明的条目
         terms.append((name, str(replacement)))
     return terms
+
+
+def mask_reference_spans(line: str) -> str:
+    """把**引用式跨度**（行内代码 / 「」『』引号）替换为等长占位——`提及` 不是 `使用`。
+
+    2026-09-15（#159）：本 issue 自己的正文只是**列举**术语（讨论术语治理），I10 却对它
+    报出 4 条 WARN——因为它没有"引用 / 列举"这种上下文豁免。行内代码与引号是 markdown 里
+    唯一机械可辨的"我在说这个词、不是在用它"的形态，故据此豁免。
+    """
+    return re.sub(r"`[^`]*`|「[^」]*」|『[^』]*』", lambda m: "\x00" * len(m.group(0)), line)
 
 
 def load_slice_design_states():
@@ -1020,7 +1043,12 @@ def rule_i9(subjects, ctx):
 
 
 def rule_i10(subjects, ctx):
-    """I10 不得引用垃圾桶路径（`design/archive/trash/` / `.trash/`，FAIL）；不得使用已废弃术语（警告）。"""
+    """I10 不得引用垃圾桶路径（`design/archive/trash/` / `.trash/`，FAIL）；不得使用已废弃术语（警告）。
+
+    术语那半条 2026-09-15（#159）加了两件事：① 只判注册表里**机器可判**的条目（读
+    `enforcement`，见 `load_deprecated_terms()`）；② **引用式豁免**——行内代码 / 引号包住的
+    出现算提及不算使用（`mask_reference_spans`）。垃圾桶路径那条**不动**。
+    """
     out = []
     for s in subjects:
         for i, line, _ in strip_code_fences(s.body):
@@ -1033,7 +1061,7 @@ def rule_i10(subjects, ctx):
             if rx is None:
                 continue
             for i, line, _ in strip_code_fences(s.body):
-                if rx.search(line):
+                if rx.search(mask_reference_spans(line)):
                     out.append(Finding(WARN, f"{s.tag}:{i} 使用已废弃术语「{term}」"
                                              f"（替代：{replacement[:80]}）"))
                     break       # 同一术语每个 issue 只报一次
@@ -1208,7 +1236,7 @@ RULES = [
     Rule("I7", "blocked-by 未全关闭时不得 in-progress", rule_i7),
     Rule("I8", "引用的仓库路径存在；段引用 §N 存在", rule_i8),
     Rule("I9", "禁止 `文件:行号` / 「第 N 行」式脆弱引用（警告）", rule_i9),
-    Rule("I10", "禁止引用 design/archive/trash/；禁止已废弃术语", rule_i10),
+    Rule("I10", "禁止引用 design/archive/trash/；禁止已废弃术语（引用式豁免 / 逐术语档位）", rule_i10),
     Rule("I11", "全仓同时 in-progress 的 issue ≤ 1", rule_i11),
     Rule("I12", "验收标准 2–8 条；能力增量 ≤ 3 行；门禁 ≥ 1 条", rule_i12),
     Rule("I13", "并行就绪的 issue 预期差分文件集合不得相交（警告）", rule_i13),

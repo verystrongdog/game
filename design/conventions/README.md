@@ -117,7 +117,15 @@ data/       结构化数据契约           ← 参数真值源
 **修订流程**（三条短规则，2026-09-14 增）：
 
 1. **改定义**：`definition` / `old_model` / `deviation_reason` 的实质修改属触发更新第 2 条 ⇒ 改字段的同时刷 `updated`、遍历复查 `numerical_locations`，并**全项目 grep 该术语**后跑 [§八 工具链](#八工具链) 的三个校验器（`numerical_locations` 只覆盖"数字出现在哪"，**不覆盖术语被文字引用的地方**）。
-2. **废弃**：**保留条目、不删**（删了就没有"这个词曾被用过"的记录）；`status` 改 `deprecated`，并把**替代物写进 `definition`**（先例：「7驱动」写"NPC AI 改用脑区链路模型"）；**并且**让机械门禁覆盖它——`validate_trash_isolation.py` 的废弃术语表是**硬编码的、不读 `status`**，故当前须手工加正则。**只标 `status` 不加门禁 = 记了一笔没人查的账。**
+2. **废弃**：**保留条目、不删**（删了就没有"这个词曾被用过"的记录）；`status` 改 `deprecated`，并把**替代物写进 `definition`**（先例：「7驱动」写"NPC AI 改用脑区链路模型"）；**并且**补 `enforcement` 字段——**逐术语执法策略**（🔧 2026-09-15 [#159](https://github.com/verystrongdog/game/issues/159) 起由校验器**自动覆盖**，不再靠手工加正则）：
+
+   | `enforcement` | 判定行为 | 该选它的判据 |
+   |---|---|---|
+   | `扫描` | 活跃文档里出现即判残留（`⚠️ 已废弃` 行 / 整节、以及引用式写法除外） | 该串**除旧模型外无合法用法** |
+   | `只登记` | 不判；命中数只计数、不列明细 | 该串在活跃文本里**另有合法用法**（记号 / 缩写 / 日常词）⇒ 逐串匹配分不出新旧义，判了就是假阳性机器 |
+   | `关闭` | 不判；**但现存量每次运行都打印**（欠账在明处） | 本可扫，但活跃文档**现存残留未清** ⇒ 先记账，清理后改回 `扫描` |
+
+   **缺字段或取值非法 ⇒ 按 `扫描` 处理**（fail-closed）："只标 `status` 不加门禁"这一形态不得靠不写字段成立。判定实现 = [`validate_trash_isolation.py`](../../code/tools/validate_trash_isolation.py) **检查 4**（设计文档面，判定面 = `design/` + `reference/` 活跃文档）；issue 正文面 = [`validate_issues.py`](../../code/tools/validate_issues.py) **I10**（读同一字段；`只登记` 档在那边也不判——机器分不出新旧义的串，在讨论面同样不可判）。三档实测分布与各档现存量见 `data/term_registry.json` 的 `_maintenance` 与每次运行的门禁输出。**只标 `status` 不加门禁 = 记了一笔没人查的账**——现在这笔账每跑一次门禁就打印一次。
 3. **不够格 / 待裁决**：登记进 [`data/term_registry_candidates.md`](../../data/term_registry_candidates.md)；达标后由 **owner 裁决**、结论落 `design/` 正典，再移入主表。
 
 ## 六、归档与隔离

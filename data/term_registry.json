@@ -1,13 +1,15 @@
 {
   "_description": "术语注册表 — 术语定义 / 旧模型 / 偏离原因集中管理，避免在撰写设计内容时被术语的现实世界默认含义劫持（例：项目内的「态度」不是社会心理学的 attitude）。status 字段区分活跃与已废弃术语，是本表唯一权威状态。",
-  "_maintenance": "入库触发: (a) 新核心术语且项目内有自定义含义 (b) definition/old_model/deviation_reason 被实质修改 (c) 两个术语边界被重新划分。numerical_locations 在入库时填充、定义变更时遍历复查。覆盖范围: 设计文档表格列头与参数名中 ≤4 ASCII 字符短标识符。 修订流程（改定义 / 废弃 / 候补三条短规则）见 design/conventions/README.md §五。",
+  "_maintenance": "入库触发: (a) 新核心术语且项目内有自定义含义 (b) definition/old_model/deviation_reason 被实质修改 (c) 两个术语边界被重新划分。numerical_locations 在入库时填充、定义变更时遍历复查。覆盖范围: 设计文档表格列头与参数名中 ≤4 ASCII 字符短标识符。 修订流程（改定义 / 废弃 / 候补三条短规则）见 design/conventions/README.md §五。 `enforcement` 字段 = 逐术语执法策略（`扫描` / `只登记` / `关闭`；**缺省即 `扫描`**，新增 deprecated 条目不得靠不写字段绕过门禁）：三档定义与判定面见 design/conventions/README.md §五 第 2 条，判定实现见 code/tools/validate_trash_isolation.py（#159，2026-09-15）。",
   "_created": "2026-08-03",
-  "_updated": "2026-09-14",
+  "_updated": "2026-09-15",
   "_batch": "grilling-113-disease-eligibility-2026-09-03",
   "_pending_candidates": "见 data/term_registry_candidates.md — 候补候选清单：P3级/单文档/待裁决术语登记处。Grilling #111 登记：降级协议（否决态）/单一事实源（推迟态）/语义层兜底（推迟）/#70 路线图模块化重构（推迟）。Grilling #26-27: CSTC/EDR/CTC/三体神经模型/function_profile/cstc_loop/cstc_role/signal_type/gameplay_domain/STN/脑干广播/皮层-皮层连接/功能剖面/基底节门控 (14条已入库).",
   "terms": {
     "态度": {
       "definition": "⚠️ 已废弃（2026-07-26）。认知 + 情绪 + 行为 = 态度，是三种成分的组合结算结果，不是独立实体。",
+      "enforcement": "关闭",
+      "enforcement_note": "活跃文档现存残留（3D 可视化旧规范的态度轴/空间、任务目标系统、灵感收件箱）**且**该词另有日常用语用法（世界观与叙事的散文）⇒ 清理后多半不是改 `扫描` 而是改 `只登记`；先清残留再复判",
       "source": "[项目规约](../design/conventions/README.md) §二（原 CLAUDE.md §核心术语表，该文件已删除）",
       "old_model": "一个人的评价倾向（社会心理学中的 attitude）",
       "deviation_reason": "项目中态度是结算结果而非独立实体——从卡牌类型降级为认知/情绪/行为的涌现产物",
@@ -32,6 +34,8 @@
     },
     "7驱动": {
       "definition": "⚠️ 已废弃（2026-07-26）。反射/惩罚/奖励/道德/文化/价值/照护。NPC AI 改用脑区链路模型。data/ 中 drives.json 仍使用——标记为参考数据。",
+      "enforcement": "关闭",
+      "enforcement_note": "现存残留：reference/灵感收件箱.md 的旧卡池规模（灵感收件箱是设想登记处，不是正典，但按「不为历史文件补豁免清单」的口径不单独豁免）。清理后改回 `扫描`",
       "status": "deprecated",
       "numerical_locations": [
         "data/drives.json",
@@ -45,6 +49,8 @@
     },
     "5模块": {
       "definition": "⚠️ 已废弃。知觉与注意/记忆/知识表征/表象与语言/推理与决策。data/cognition_cards.json 仍使用——标记为参考数据。",
+      "enforcement": "关闭",
+      "enforcement_note": "现存残留：reference/灵感收件箱.md 的旧卡池规模（同 7驱动）。清理后改回 `扫描`",
       "status": "deprecated",
       "numerical_locations": [
         "data/cognition_cards.json"
@@ -57,6 +63,8 @@
     },
     "CPM": {
       "definition": "⚠️ 已废弃。Cognitive-Psychological Mechanism，4 步评估流程。",
+      "enforcement": "只登记",
+      "enforcement_note": "CPM 另指 Critical Path Method（需求分解文献综述），非废弃的 Cognitive-Psychological Mechanism",
       "status": "deprecated",
       "numerical_locations": [
         "data/cognition_cards.json",
@@ -86,6 +94,8 @@
     },
     "意志力": {
       "definition": "⚠️ 已废弃（2026-09-12）。原为消耗性精神能量，用于硬解锁灰色行为型技能。",
+      "enforcement": "关闭",
+      "enforcement_note": "活跃文档现存残留：角色与面具（物质使用障碍仍把意志力当资源）、角色发展轴、关键突破（不可用意志力购买）。清理后改回 `扫描`",
       "source": "[项目规约](../design/conventions/README.md) §二（原 CLAUDE.md §核心术语表，该文件已删除）",
       "old_model": "Baumeister ego depletion 模型（2016 多中心复制失败——Hagger et al., 23实验室/2141被试, 效应量≈0）",
       "deviation_reason": "脑功能层级模型 §十三 定案：意志力(WP)已废弃，替换为认知负荷模型。硬解锁由认知负荷与聚焦容量承担",
@@ -365,6 +375,7 @@
     },
     "认知槽": {
       "definition": "⚠️ 已废弃（2026-08-08）。旧模型：执行控制并行处理槽位。已被 M1/Broca 双通道模型 + 聚焦容量替代。原公式: 3+floor(SAN/30)，敌方认知槽负载惩罚=occupied/max×0.5。",
+      "enforcement": "扫描",
       "source": "design/rules/核心机制.md §4.3/§十（⚠️ 已删除）",
       "old_model": "—（无现实对应。最接近'工作记忆容量'Cowan~4 items）",
       "deviation_reason": "已废弃。战斗内零资源管理（Grilling #20 D4/D7/D26），动作约束由 M1/Broca 双通道提供，容量约束由聚焦容量提供。",
@@ -691,6 +702,8 @@
     },
     "预烘焙": {
       "definition": "⚠️ 已废弃（2026-08-09）。旧 NPC 行为离线计算管线：P(link_i)∝exp(β×m_i×rel_i)，对27情境×3+SAN分段烘焙成行为概率分布表。基于已废弃的旧 pairwise 364 链路模型（link_NNN IDs, rel 字段）。由 Affordance Competition 实时 salience 替代：NPC 行动选择从与玩家共享的 WC 动力学 + CSTC 门控 + 脑干 tone 调制中实时计算，无需离线烘焙。见 NPC AI 行为模型.md §三（2026-08-09 重写）。",
+      "enforcement": "关闭",
+      "enforcement_note": "活跃文档现存残留：项目规约 §一「设计分界」行仍写 NPC AI = 脑区链路预烘焙查表（与 Affordance Competition 定案冲突）、预烘焙管线脚本设计.md 自身标题行、灵感收件箱。清理后改回 `扫描`",
       "source": "design/rules/skill-tree/NPC AI 行为模型.md §三（⚠️ 已废弃标注段）; design/pipeline/预烘焙管线脚本设计.md（⚠️ 架构已过时）",
       "old_model": "图形学'baking'——光照/纹理预计算渲染（lightmap baking, texture baking）",
       "deviation_reason": "烘焙对象是NPC行为概率表——不是光照/纹理。但此概念本身已于2026-08-09废弃——NPC行动选择改为实时affordance competition。",
@@ -706,6 +719,8 @@
     },
     "β": {
       "definition": "⚠️ 已废弃（2026-08-09）。旧预烘焙 Softmax 采样温度——β=clamp(β_base(SAN)+Σβ_tag_mod, 0.1, 5.0)。β_base: 高SAN 3.0/正常1.5/低SAN 0.5/SAN=0→0。由 Affordance Competition 模型中的 T（采样温度）替代——T = T_base + T_SAN(SAN%)（NPC AI 行为模型.md §3.4, 2026-08-09）。",
+      "enforcement": "只登记",
+      "enforcement_note": "同一记号的活跃合法用法遍布活跃文档：个体易感慢变量 β(t)（创伤记忆转化接口 / NPC人生生成器）、β 受体阻断剂（消耗品系统 / 精神类药物数据源）、文献里的漂移率 β。逐串扫描 = 假阳性机器；旧义（Softmax 逆温度）只出现在已标注过时的文档里",
       "source": "design/rules/skill-tree/NPC AI 行为模型.md §3.4（新 T 温度）; §十四（⚠️ 已废弃参数表）",
       "old_model": "ML/统计力学中固定的softmax温度常数——超参数，默认1.0，训练时不变",
       "deviation_reason": "旧 β 受 SAN+标签双重驱动——不是常数。新模型彻底替换了采样架构：salience来源从m×rel×focus变为WC a(t)+gate+tone_bias，温度从β变为T。",
@@ -811,6 +826,7 @@
     },
     "七层功能层级": {
       "definition": "⚠️ 已废弃（2026-08-07 Grilling #25）——旧七层功能层级（L0-L6）。已被六层功能层级（L0-L5）替代。L6 层级删除，功能并入 L5。旧义：89脑区按解剖功能分7层: L0脑干核团→L6跨模态整合。",
+      "enforcement": "扫描",
       "source": "design/rules/核心机制.md §1.1（⚠️ 已更新为六层）; design/rules/skill-tree/脑功能层级模型.md §二/§九（L6标记已废弃）",
       "old_model": "神经科学皮层层级——Mesulam六层（感觉→单模态→异模态→旁边缘→边缘），不含脑干独立层",
       "deviation_reason": "旧7层含L6跨模态整合层，已随Grilling #25删除。现为L0-L5六层。L5吸收旧L6终极链路功能",
@@ -836,6 +852,7 @@
     },
     "89脑区": {
       "definition": "⚠️ 已废弃（2026-08-07 Grilling #25）——旧体系使用89个功能脑区。已被50解剖实体替代（40 FreeSurfer DK/aseg + 10 Hansen 2024脑干核团，对应69 functional_id）。旧数量分布：L0=16/L1=21/L2=8/L3=7/L4=14/L5=23/L6=5（含已删除的L6）。",
+      "enforcement": "扫描",
       "source": "design/rules/skill-tree/脑功能层级模型.md §二（⚠️ 已更新为50解剖实体）",
       "old_model": "标准脑图谱分区数——FreeSurfer DK 68/AAL 116/Destrieux 148——AI极易引用标准图谱数字代替89",
       "deviation_reason": "89功能脑区→50解剖实体。不再有'89'这个数字。50通过DK解剖图谱锚定，不是自定义分区",
@@ -1002,6 +1019,8 @@
     },
     "AP": {
       "definition": "⚠️ 已废弃（2026-07-28）。项目不使用 Action Points 系统。基础行动表中'动作'列指消耗 1 个 M1 或 Broca 通道动作。",
+      "enforcement": "关闭",
+      "enforcement_note": "活跃文档现存残留：角色与面具（大量 AP ±N）、脑功能层级模型、战斗界面布局、基础行动设计。驳回式表述（「不设 AP」）已由行内豁免覆盖。清理后改回 `扫描`",
       "source": "design/rules/回合战斗流程.md §一（不设AP决策）; design/rules/核心机制.md §2.5（基底节门控替代AP）",
       "old_model": "RPG Action Points——每回合可分配的行动点数池（消耗AP执行动作，不同动作消耗不同AP量）",
       "deviation_reason": "项目明确否决AP系统——行动约束来自基底节CSTC环路门控（M1/Broca各自每回合独立放行1个动作），不是点数池。2026-08-05 grilling #21发现基础行动设计.md表头使用'AP'缩写触发了RPG旧模型",
@@ -1108,6 +1127,8 @@
     },
     "L0-L6": {
       "definition": "⚠️ 已废弃（2026-08-07 Grilling #25）——旧七层功能层级标识符（L0-L6），L6层级已删除。现用L0-L5（六层功能层级标识符）。旧义：L0脑干核团（生存反射）→L6跨模态整合（自我叙事），延迟L0~10-30ms→L6~300ms+。",
+      "enforcement": "关闭",
+      "enforcement_note": "现存残留：design/rules/skill-tree/README.md 的旧文档映射表（三分支 → L0-L6）。清理后改回 `扫描`",
       "source": "design/rules/核心机制.md §1.1（⚠️ 已更新为L0-L5）; design/rules/skill-tree/脑功能层级模型.md §二",
       "old_model": "L1/L2/L3 CPU缓存层级（计算机体系结构——访问速度分级）",
       "deviation_reason": "旧7层→现6层。L6删除（2026-08-07），功能并入L5。与空间层L0/L1/L2共用前缀但语义完全不同——AI极易混淆",
@@ -1176,6 +1197,7 @@
     },
     "g_0": {
       "definition": "月光场本征耦合常数 = 0.9（无量纲）。由零号病人初始场激发时锁定。月相调制: g_0(lunar) = 0.9 × lunar, lunar ∈ {0.75, 0.88, 1.00}。g_0 承载月相周期（~29.5d），独立于 C(ρ_O) 承载的昼夜周期。",
+      "enforcement": "扫描",
       "source": "reference/deprecated/moonlight-field/月光场-标量场模型.md §7.1-7.2; grilling #19 + #22",
       "old_model": "—（项目独创参数——量子场论中耦合常数概念借用，但项目 g_0 是标量场 φ(x) 的本征耦合强度）",
       "deviation_reason": "—",
@@ -1194,6 +1216,8 @@
     },
     "η": {
       "definition": "语义维度激活权重（= 坍缩强度）。η = g_0 × c(SAN) × κ。η < η_crit≈0.3 → 经典现实; η ≥ η_crit → 月光现实（语义维度参与环境监控）。典型范围 [0.01, 0.9]。",
+      "enforcement": "只登记",
+      "enforcement_note": "η 在活跃时空/事件设计里就是月光场强度（空间与关卡设计 / 游戏循环 / 敌人与事件 在用），与废弃的形式化参数 η = g_0 × c(SAN) × κ 同形不同用法",
       "source": "reference/deprecated/moonlight-field/月光场-标量场模型.md §7.1; grilling #22, 2026-08-05",
       "old_model": "希腊字母 η 在物理学中常表效率/粘度——无关。在项目中是全新定义的语义维度激活权重",
       "deviation_reason": "项目独创——不是物理学 η（效率/粘度），是月光场中语义内容对环境监控基的参与权重",
@@ -1214,6 +1238,7 @@
     },
     "c(SAN)": {
       "definition": "归一化相干性基线 = C(SAN) / C_max。所有实体类型共享同一条分段线性曲线。锚点: c_min=0.03(SAN≥90), c_60=0.08, c_30=0.50, c_0=1.00(SAN=0)。c = η / (g_0 × κ)，在 κ=1 基线下从实体类型表反推。",
+      "enforcement": "扫描",
       "source": "reference/deprecated/moonlight-field/月光场-标量场模型.md §7.1.1; grilling #22, 2026-08-05",
       "old_model": "—（项目独创——物理学中 c 常表光速，此处无关联）",
       "deviation_reason": "—",
@@ -1229,6 +1254,8 @@
     },
     "κ": {
       "definition": "认知结构效率。C_effective = C × κ。κ 修正相干性的场耦合效率——C 度量非对角元总信息量，κ 修正其中有几成可被环境分辨。实体类型查表: 默认=1.0, 范围[0.6, 4.5]。",
+      "enforcement": "只登记",
+      "enforcement_note": "希腊字母 κ 在活跃公式里另作系数/阈值记号（记忆内容层 P_trigger）；与废弃的月光场 κ 不同义",
       "source": "reference/deprecated/moonlight-field/月光场-标量场模型.md §7.1/§7.3; grilling #22, 2026-08-05",
       "old_model": "希腊字母 κ 在物理学中常表压缩率/介电常数/曲率——无关。⚠️ 与项目内曾出现的 κ_structure（已演化为此定义）同源但语义已收窄",
       "deviation_reason": "项目独创——不是物理学 κ，是从 Baumgratz 相干性框架中衍生的场耦合效率修正因子",
@@ -1245,6 +1272,7 @@
     },
     "η_crit": {
       "definition": "相变阈值 ≈ 0.3。η < η_crit → 经典现实（环境监控基 = {|x⟩}）; η ≥ η_crit → 月光现实（语义维度参与环境监控）。= 思维造物产生阈值。",
+      "enforcement": "扫描",
       "source": "reference/deprecated/moonlight-field/月光场-标量场模型.md §7.1.2; grilling #19 + #22",
       "old_model": "—（项目独创阈值——与物理学临界温度/相变点概念类似但领域完全不同）",
       "deviation_reason": "—",
@@ -1263,6 +1291,7 @@
     },
     "ρ_off": {
       "definition": "坍缩方向——ρ_O − Δ(ρ_O) 的主导非对角元对 |i⟩⟨j| 所编码的宏观构型等价类。计算: V = T + D（性格标签偏移 + 疾病语义权重）, axis = argmax(|V_i|)。三路输出: 情境偏移/NPC rel权重/叙事标签。",
+      "enforcement": "扫描",
       "source": "reference/deprecated/moonlight-field/月光场-标量场模型.md §7.1.3; grilling #22, 2026-08-05",
       "old_model": "—（项目独创——量子力学中 ρ_off 表非对角密度矩阵部分，项目沿用此数学含义但赋予游戏语义方向）",
       "deviation_reason": "—",
@@ -1278,6 +1307,7 @@
     },
     "lunar": {
       "definition": "月相调制因子 ∈ {0.75, 0.88, 1.00}（新月/弦月/满月）。g_0 = 0.9 × lunar。承载 ~29.5d 集体生物节律拍频（M4），独立于 C(ρ_O) 承载的昼夜周期（M3）。替代旧框架的'月光强度 1.0-2.0×'。",
+      "enforcement": "扫描",
       "source": "reference/deprecated/moonlight-field/月光场-标量场模型.md §7.1/§7.2; grilling #22, 2026-08-05",
       "old_model": "旧项目框架: '月光强度倍率 1.0-2.0×'——线性倍率，天体轨道模型。已被 g_0 × lunar 替代",
       "deviation_reason": "从'月光强度线性倍率'迁移到'场耦合常数的月相调制'——lunar 是 g_0 的调制因子而非独立强度值",
@@ -1648,6 +1678,8 @@
     },
     "w_perception": {
       "definition": "⚠️ 已废弃（2026-09-03 Grilling #35）。察觉分缩放权重槽位——原公式 perception_score = mean(a of L3 sensory nodes) × w_perception。2026-08-13（Grilling #33 step7）速度三行指针化：察觉分 = 回合战斗流程 §3.2/§3.3 公式（4 察觉节点 mean + 逐节点回落），合成权重 w₁/w₂/w₃=1/3（CalibrationConfig.SpeedW1/2/3）在合成层不在成分内部——w_perception 槽位不再存在。",
+      "enforcement": "关闭",
+      "enforcement_note": "现存残留：design/rules/skill-tree/运行时状态模型.md 2026-08-13「原表速度三行已指针化」的裁决记录行——行内豁免记号未覆盖「原表 / 冲突」这类变更记述。清理后改回 `扫描`",
       "source": "运行时状态模型.md §8.1; 回合战斗流程.md §三",
       "old_model": "—（项目独创——新三层动力学输出映射的自由参数）",
       "deviation_reason": "—",
@@ -1663,6 +1695,8 @@
     },
     "w_execution": {
       "definition": "⚠️ 已废弃（2026-09-03 Grilling #35）。执行分缩放权重槽位——原公式 execution_score = a(Precentral) × w_execution。2026-08-13（Grilling #33 step7）速度三行指针化：执行分 = 回合战斗流程 §3.3 公式（mean(a(Precentral), a_SD1_somatic) + M1 占用惩罚），合成权重 w₁/w₂/w₃=1/3 在合成层——w_execution 槽位不再存在。",
+      "enforcement": "关闭",
+      "enforcement_note": "同 w_perception：同一条裁决记录行",
       "source": "运行时状态模型.md §8.1; 回合战斗流程.md §三",
       "old_model": "—（项目独创——新三层动力学输出映射的自由参数）",
       "deviation_reason": "—",
@@ -1749,6 +1783,7 @@
     },
     "因果图晶格": {
       "definition": "⚠️ 已废弃（2026-08-21）。非正典术语——曾误用于 term_registry CGL 条目（2026-08-11 #37 闭合时写入），把空间离散结构（因果集/图/复形）与动力学普适类（CGL = Complex Ginzburg-Landau）混为一谈。正典中不存在此术语：空间结构表述为'离散图/复形'（时空结构数学框架.md §三），因果集理论为五框架之一（§二），CGL 为复金兹堡-朗道普适类（§六 D3）。",
+      "enforcement": "扫描",
       "source": "data/term_registry.json CGL 条目历史版本（2026-08-11）",
       "old_model": "—（项目内错误造词，无外部旧模型）",
       "deviation_reason": "术语混淆产物——因果集理论（空间结构）× CGL（动力学类）的错误合写。已由 CGL 条目 🔧 修正（2026-08-21）取代",
@@ -2207,6 +2242,7 @@
     },
     "苦痛记忆": {
       "definition": "⚠️ 已废弃（2026-08-19，#87 术语更正）。原为'病因-疾病'中间载体命名，用户更正为'创伤记忆'。定义全部并入创伤记忆条目。",
+      "enforcement": "扫描",
       "source": "../设计归档/grilling/grilling-87-npc-life-generation/grilling-87.md",
       "old_model": "日常语义：痛苦的记忆",
       "deviation_reason": "用户（2026-08-19）：创伤记忆是通用前体（所有非器质性精神疾病共性），苦痛记忆命名废弃。",
