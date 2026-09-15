@@ -116,8 +116,10 @@ DIGITS = ("Index", "Middle", "Ring", "Pinky", "Thumb")
 def parse_args(argv):
     argv = argv[argv.index("--") + 1:] if "--" in argv else []
     ap = argparse.ArgumentParser(prog="author_xbot_chair_grab.py")
-    ap.add_argument("--task", choices=("chair", "card1", "door", "restate"), default="chair",
+    ap.add_argument("--task", choices=("chair", "card1", "door", "restate", "doorpush"),
+                    default="chair",
                     help="宿主：#163 抓椅背（chair，默认）· 卡 1 掐棱测量（card1）· 门边动作（door）"
+                         "· 门边「推到底」能播段（doorpush，#166）"
                          "· 重述对拍（restate，纯算术，不需要 Blender）")
     ap.add_argument("--template", default=str(Path(__file__).resolve().parents[2] /
                                              ".scratch/blender_assets/xbot/XBot_AnimationTemplate.blend"))
@@ -141,6 +143,18 @@ def parse_args(argv):
     ap.add_argument("--report-in", default=None,
                     help="从既有报告**重排**机器源（不重跑测量；报告是机器源的唯一来源）")
     ap.add_argument("--still", default=None, help="静帧落点（.png）")
+    # ---- #166：门边「推到底」宿主的量 ----
+    ap.add_argument("--clearance", type=float, default=None,
+                    help="身体到门板中面的净距（m）；缺省用 DOOR_PUSH_CLEARANCE_M")
+    ap.add_argument("--crouch", type=float, default=None, help="站姿膝屈下沉量（m）")
+    ap.add_argument("--scan-arc", action="store_true",
+                    help="只跑「保持扣住可达的最大角」扫描（改族判定），不产动作")
+    ap.add_argument("--scan-max", type=float, default=76.0, help="扫描上界（开角°）")
+    ap.add_argument("--scan-step", type=float, default=2.0, help="扫描步长（°）")
+    ap.add_argument("--scan-stance", action="store_true",
+                    help="只跑「身体摆放（净距 b）」的解空间扫描——口径 §4.2 硬规矩 5 的 ≥2 解并列")
+    ap.add_argument("--first-foot", choices=("Right", "Left"), default="Left",
+                    help="迈步：哪只脚先迈（口径 §13.6 自由度表第 2 行；两种都解，回显卡并列）")
     return ap.parse_args(argv)
 
 
@@ -2506,6 +2520,879 @@ def main_door() -> int:
 
 
 # ══════════════════════════════════════════════════════════════════════════════
+# 宿主 5：门边「推到底」（`--task doorpush`）——[#166](https://github.com/verystrongdog/game/issues/166) 的交付
+#          （口径 §13.6 的**能播类第一件**）
+#
+#   完成定义（owner 2026-09-15 裁，口径 §13.6）：**Blender 侧能连着播**（静帧 + 时序 +
+#   接地/不穿模，owner 看着不出戏）**+** 导出侧机械门禁 E0–E6 全绿；**不接 Unity 侧 lab**。
+#
+#   ⚠️ 与宿主 3（`--task door`）**分家**：本条**不改**宿主 3 一行（#164 的读数留在它的证据里）。
+#      本宿主修掉宿主 3 上实测到的两处病（逐条读数与根因见证据 §六）：
+#      ① **转身写在 `CTRL_Hips` 的 `z` 上**——实测那是**侧倾**（`y` 才绕世界 +Z）：
+#         `z=+40°` 时实测脊柱 = (−0.641, 0.058, 0.765)、双脚被甩到 (0.677, 0.024, 0.364)
+#         ⇒ 宿主 3 实际做的是"身体横着倒 37°"，这正是 owner 目视那句
+#         「**整体开门的样子不太对、像是有病一样**」的来源；
+#      ② **腿脚控制骨没进打键表** ⇒ 骨盆一动脚就跟着飘（#165 实测门边动作双侧**全程无支撑**、
+#         离地 +160 ~ +313 mm）。本宿主把 `CTRL_*UpLeg / Leg / Foot` 与脚掌朝向一起打键。
+# ══════════════════════════════════════════════════════════════════════════════
+
+DOOR_PUSH_ACTION = "PushDoorEdgeFull"
+
+#: X Bot 的**胶囊半径**（`通过开度` 的推导输入；口径 §13.6 与注册表 `通过开度` 同引此值）。
+#: 来源：`code/unity/Assets/Scripts/ActionLabDriver.cs` `SizeControllerToModel()` 的
+#: `_cc.radius = Clamp(h × 0.19, 0.25, 0.4)`；**记录值 0.3117** 见
+#: `code/unity/Assets/Editor/ActionLabBuilder.cs` 与 `code/unity/Assets/Scripts/ChairSeat.cs`
+#: 的注释（"胶囊半径 0.3117"）——两处都是**已记录实测值**，不是本次新拍。
+X_BOT_CAPSULE_RADIUS_M = 0.3117
+
+#: 「推到底」时身体**到门板中面的净距**（m）。取值由两条硬约束夹出来（不是手拍）：
+#: ① 必须够大：净距扣掉板厚一半后要 > 胶囊半径 **0.3117**——人站在门的外侧、不能穿门；
+#: ② 不能太大：越大手臂越够不到——实测本值 0.35 / 0.38 / 0.42 时**肩→腕在整段弧上分别恒定
+#:   0.448 / 0.472 / 0.504 m**（臂长 0.5617）⇒ 取 **0.38**：净距留 48 mm 余量、手臂留 90 mm 余量。
+DOOR_PUSH_CLEARANCE_M = 0.38
+
+#: 站姿的**膝屈下沉量**（m）。为什么需要它：静止姿势的双腿几乎伸直（实测大腿 0.4437 +
+#: 小腿 0.4453 = **0.8890 m** vs 髋-踝竖直 **0.8883 m** ⇒ 水平可及仅 ≈ **0.7 mm**）——
+#: 不沉髋，迈步时腿**当场被夹直**、踝到不了目标（#165 那条"脚离地 160~313 mm"的一半成因）。
+#: 实测下沉 0.06 m 时：踝相对骨盆偏 0.20 m 仍残差 **0**（证据 §三 的预算表）。
+DOOR_PUSH_CROUCH_M = 0.06
+
+#: 摆动腿的**抬脚高度**（m）：只要求"足底最低点明确离地"（判据 = M2 > `soleMargin`）。
+#: 取值 0.05 m = 一步的正常抬脚量级；逐帧实测最小值见证据 §五。
+DOOR_PUSH_STEP_LIFT_M = 0.05
+
+#: 身体摆放（净距）的**解空间候选**——口径 §4.2 硬规矩 5「agent 解的行必须并列 ≥2 个可行解」。
+#: 下界由胶囊半径 0.3117（净距扣掉板厚一半后必须更大）、上界由臂长 0.5617 夹出来。
+DOOR_PUSH_STANCE_CANDIDATES = (0.33, 0.35, 0.38, 0.42, 0.46)
+
+#: 穿模判据（动作库规格 §四·戊·5 **判据 4**）的骨集：躯干/上臂/大腿**零穿透** ·
+#: 手与前臂**允许接触**（骨心进构件内部 ≤ 2 cm）· 非接触部位最小间隙 ≥ 1 cm。
+#: ⚠️ 判据量的是**骨段**；owner 看的是**蒙皮** ⇒ 层差登记为已知偏差（口径 §十 的能播类三项表）。
+DOOR_PUSH_CLEARANCE_CLASSES = (
+    ("躯干/上臂/大腿", 0.0, ("Hips", "Spine", "Spine1", "Spine2", "LeftArm", "RightArm",
+                             "LeftUpLeg", "RightUpLeg")),
+    #: ⚠️ 五指 20 根一并进"允许接触"档——它们是**真正绕在门边上的那部分**，
+    #:    漏掉它们的话这条判据就在最关键的地方留了个洞（判据 4 明写"手与前臂"含指）。
+    ("手/前臂/五指（允许接触）", -20.0,
+     ("LeftForeArm", "LeftHand", "RightForeArm", "RightHand")
+     + tuple(f"LeftHand{f}{k}" for f in ("Thumb", "Index", "Middle", "Ring", "Pinky")
+             for k in (1, 2, 3, 4))),
+    ("非接触部位", 10.0, ("LeftShoulder", "RightShoulder", "LeftLeg", "RightLeg", "LeftFoot",
+                          "RightFoot", "LeftToeBase", "RightToeBase", "Neck", "Head")),
+)
+
+#: 时序（帧号；30 fps）。判据面（口径 §十 的「时序」）只有一条：
+#: **脚本声明的到位帧 == 从产物算出的判据量极值帧**。表里的帧号是**声明**，不是结论。
+DOOR_PUSH_FRAME_NEUTRAL = 1      # 中立姿势（导出侧硬约定：首帧必须中立，否则 E5 报 Rest Pose 漂移）
+DOOR_PUSH_FRAME_GRIP = 13        # 扣住
+DOOR_PUSH_FRAME_PUSH = 19        # 开始推（门角从这一帧起离开半掩角）
+DOOR_PUSH_FRAME_ARRIVAL = 49     # 到位（门到 `通过开度`）
+DOOR_PUSH_FRAME_END = 61         # 保持到这一帧
+#: 迈步窗口 `(起帧, 止帧, 哪只脚)`——摆动脚在该窗口内从上一落点抬到下一落点。
+#: 三段合计覆盖自由边扫过的弧长（≈ 门宽 × Δ开角 = 0.82 × 29.486° = **0.422 m**）。
+#: ⚠️ 「先迈哪只脚」= 自由度表第 2 行（`agent 解`）⇒ 两种顺序**都解过、读数并列在证据 §五**；
+#: 本表采用**左脚先迈**——理由是它的**穿模余量**好得多（非接触部位最小间隙 **43.33 mm** vs
+#: 右脚先迈的 **15.43 mm**，阈值 10 mm），其余判据两者逐值相同。owner 想换只回一句。
+DOOR_PUSH_STEPS = ((21, 27, "Left"), (31, 37, "Right"), (41, 47, "Left"))
+
+#: 接地判据容差：**沿用** [对照实验 §2.1](../../design/presentation/动画处理能力对照实验.md) 的
+#: `soleMargin`（出身 = `code/unity/Assets/Scripts/FootGroundingIK.cs` 注释的 bind pose 实测）。
+#: 数值从**已入库的件** `xbot_contact_phase.py` 取（同一个量不抄第二份）；取不到才退回字面值。
+try:
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from xbot_contact_phase import SOLE_MARGIN_MM as DOOR_PUSH_SOLE_MARGIN_MM
+except Exception:                                              # pragma: no cover
+    DOOR_PUSH_SOLE_MARGIN_MM = 2.8                             # 来源同上（FootGroundingIK.cs）
+
+
+def door_pass_open_deg(width=DOOR_WIDTH, radius=X_BOT_CAPSULE_RADIUS_M):
+    """`通过开度` = 门开到**角色胶囊能通过**所需的最小开度（口径 §13.6 的终态量）。
+
+    推导（**几何关系，不是选定角度**）：门绕铰链转 θ 后，门板所在直线与远侧门框之间的
+    **净通道宽度** = `width · sin θ`（门板从铰链出发沿 `u(θ)` 伸出，远侧门框到该直线的垂距；
+    θ = 90° 时退化为整幅门宽）。要求净通道 ≥ 胶囊直径 `2r` ⇒ `sin θ ≥ 2r / width`。
+    """
+    return math.degrees(math.asin(min(1.0, 2.0 * radius / width)))
+
+
+def _rot_z(v, deg):
+    """世界 XY 向量绕世界 +Z 转 `deg`（脚朝向 / 站距用；不额外引入 `mathutils.Matrix`）。
+
+    ⚠️ 入参可能是 **2 维**（站距）⇒ 一律按 3 维返回（实测踩到：`Vector.z` 在 2 维向量上不可用）。
+    """
+    c, s = math.cos(math.radians(deg)), math.sin(math.radians(deg))
+    return Vector((v[0] * c - v[1] * s, v[0] * s + v[1] * c, v[2] if len(v) > 2 else 0.0))
+
+
+def _nlerp(a, b, t):
+    """两向量之间的归一化线性插值（起手段的朝向过渡用；夹角 < 180° 时足够）。"""
+    v = Vector(a) * (1.0 - t) + Vector(b) * t
+    return v.normalized() if v.length > 1e-9 else Vector(a).normalized()
+
+
+def door_layout_actor_side(open_deg, actor_xy=(0.0, 0.0)):
+    """`door_layout` 的**判侧版**：近/远侧按**给定角色位置**判，不按原点判。
+
+    ⚠️ 为什么必须换（实测）：原函数用"外法向是否指向**原点**"判近侧，而门边**扫过原点**
+    （θ ≈ 52.6° 时自由边恰在原点上；实测 49.478° 时离原点仅 **36 mm**）⇒ 判据在那里退化。
+    """
+    lay = door_layout(open_deg)
+    mid = lay["mid_edge"]
+    ref = Vector((actor_xy[0], actor_xy[1], 0.0))
+    if (ref - mid).dot(lay["n"]) > 0.0:      # n 必须**背离**角色（近侧面外法向 −n 指向角色）
+        lay["n"] = -lay["n"]
+        lay["near_edge"] = mid - lay["n"] * (lay["thickness"] / 2.0)
+        lay["far_edge"] = mid + lay["n"] * (lay["thickness"] / 2.0)
+    return lay
+
+
+def door_push_stance(open_deg, clearance_m=DOOR_PUSH_CLEARANCE_M, actor_xy=(0.0, 0.0)):
+    """「推到底」的身体摆放：**站在自由边正侧、离门板中面 `clearance_m`**（其余全由几何算出）。
+
+    ⚠️ 为什么不是"转身角 + 前倾量"两个手拍常量：自由边随开角绕铰链**扫弧**（半径 = 门宽）
+    ⇒ 要**保持扣住**，身体必须跟着弧走。`clearance_m` 一取定，**转身角 = 握点方位角**
+    （身体朝向握点）、**骨盆位置 = 铰链 + 门宽·u(θ) + clearance·(−n(θ))**——全部由几何给出，
+    没有第二个自由常量。实测：肩→腕距离在**整段弧上恒定**（证据 §三）。
+    """
+    lay = door_layout_actor_side(open_deg, actor_xy)
+    m = -lay["n"]
+    body = lay["hinge"] + lay["u"] * lay["width"] + m * clearance_m
+    grip = lay["near_edge"]
+    face = Vector((grip.x - body.x, grip.y - body.y, 0.0))
+    return lay, {"body_xy": (round(body.x, 6), round(body.y, 6)),
+                 "yaw_deg": math.degrees(math.atan2(face.x, -face.y)),
+                 "clearance_m": clearance_m,
+                 "pelvis_to_grip_m": round(face.length, 4),
+                 "grip_xy": (round(grip.x, 6), round(grip.y, 6))}
+
+
+def set_pelvis_world(arm, m3, xy, z, iters=4):
+    """把 `CTRL_Hips` 的**骨点世界位置**送到 `(xy, z)`——**实测回代**，不假设写入口径。
+
+    ⚠️ 两条实测（证据 §六.2）：① `set_world_offset` 写进去的是**真世界位移**（与 yaw 无关，已核）；
+    ② 但"目标位置"与"位移"差一个**静止髋位**，直接当位移写会整体偏约 16 mm ⇒ 按实测误差回代。
+    """
+    pb = arm.pose.bones["CTRL_Hips"]
+    pb.location = (0.0, 0.0, 0.0)
+    update()
+    base = world_point(arm, f"{BONE_PREFIX}Hips").copy()
+    delta = Vector((xy[0] - base.x, xy[1] - base.y, z - base.z))
+    err = Vector((0.0, 0.0, 0.0))
+    for _ in range(iters):
+        set_world_offset(arm, m3, "CTRL_Hips", delta)
+        update()
+        cur = world_point(arm, f"{BONE_PREFIX}Hips")
+        err = Vector((xy[0] - cur.x, xy[1] - cur.y, z - cur.z))
+        delta = delta + err
+    return round(err.length * 1000.0, 3)
+
+
+def solve_gaze_scan(arm, lo=-45.0, hi=45.0, step=1.0, fine=0.25, scale=1.0):
+    """扫描 `Neck` / `Head` 的局部 X，取**头骨上轴最接近竖直**的那一档（口径 §十 V-b「目视水平」）。
+
+    ⚠️ 为什么不复用 `solve_gaze`（牛顿法）：**实测它在转身 ≥ 45° 时发散**——#166 读数：
+    yaw 40° → after **0.477°**；yaw 45° → after **45.431°**（8 次迭代仍不收敛）；yaw 50° →
+    **49.564°**。而本动作的转身角要走到 **49.5°**。本函数只做**确定性扫描**，不依赖导数。
+    `scale` 供**起手段**用：抬头到水平这件事随起手一起长出来（首帧必须严格中立，
+    见 `DOOR_PUSH_FRAME_NEUTRAL` 的导出侧硬约定）。
+    """
+    def set_pair(x):
+        for name in (f"{BONE_PREFIX}Head", f"{BONE_PREFIX}Neck"):
+            pb = arm.pose.bones[name]
+            pb.rotation_mode = "XYZ"
+            pb.rotation_euler = Euler((math.radians(x), 0.0, 0.0), "XYZ")
+        update()
+
+    set_pair(0.0)
+    before = head_up_deg(arm)
+    best = None
+    x = lo
+    while x <= hi + 1e-9:
+        set_pair(x)
+        v = head_up_deg(arm)
+        if best is None or v < best[0]:
+            best = (v, x)
+        x += step
+    x = best[1] - step
+    while x <= best[1] + step + 1e-9:
+        set_pair(x)
+        v = head_up_deg(arm)
+        if v < best[0]:
+            best = (v, x)
+        x += fine
+    set_pair(best[1] * scale)
+    return {"neck_head_x_deg": round(best[1] * scale, 3), "解出的_x_deg": round(best[1], 3),
+            "scale": scale, "before_deg": round(before, 3),
+            "after_deg": round(head_up_deg(arm), 3), "粗扫": f"{lo}..{hi}° / {step}°"}
+
+
+def set_foot_world_orientation(arm, side, yaw_deg):
+    """脚掌：**保持水平**（沿用静止朝向）但方向随身体转 `yaw_deg`。
+
+    ⚠️ 库里既有写法（`_set_world_axes(..., _rest_dir, _rest_hinge)`）把脚**钉在世界朝向**上
+    ⇒ 身体转 49.5° 时踝被扭同样的角度（宿主 3 就是这个形态）。绕世界 Z 转静止朝向**不改变脚掌
+    的水平性**（判据 M2 只看竖直高度），只把脚尖摆到身体正前方。
+    """
+    _set_world_axes(arm, f"CTRL_{side}Foot", f"{BONE_PREFIX}{side}Foot",
+                    _rot_z(_rest_dir(arm, f"{BONE_PREFIX}{side}Foot"), yaw_deg),
+                    _rot_z(_rest_hinge(arm, f"{BONE_PREFIX}{side}Foot"), yaw_deg))
+
+
+def door_push_reach(arm, side, frame_geo, grip_wrist_target, rest_wrist, curl_axis,
+                    curl_ref, thumb_ref, t, post):
+    """**起手段**（`t` = 0 静止 → 1 抓住）：腕从静止位线性送到抓握目标，手指按 `t` 合拢。
+
+    ⚠️ 手型**不另发明**：合拢的终值就是帧 13 那次抓握解出来的 F10 逐指蜷曲与拇指角
+    （口径 §13.6 自由度表第 9 行：抓握高度与手型**引用卡 1**，不是自由量）。
+    """
+    n, u = frame_geo["n"], frame_geo["u"]
+    x_hint = n.cross(u)
+    rest_dir = Vector((1.0, 0.0, 0.0)) if side == "Left" else Vector((-1.0, 0.0, 0.0))
+    target = Vector(rest_wrist).lerp(Vector(grip_wrist_target), t)
+    _set_world_axes(arm, f"CTRL_{side}Hand", f"{BONE_PREFIX}{side}Hand",
+                    _nlerp(rest_dir, n, t), x_hint)
+    solve_arm_with_elbow_scan(arm, side, target, post)
+    _set_world_axes(arm, f"CTRL_{side}Hand", f"{BONE_PREFIX}{side}Hand",
+                    _nlerp(rest_dir, n, t), x_hint)
+    for finger in FINGERS:
+        val = float(curl_ref.get(finger, 0.0))
+        _apply_one_finger_curl(arm, side, finger, curl_axis, val * t)
+    if thumb_ref:
+        pb = arm.pose.bones[f"{BONE_PREFIX}{side}HandThumb1"]
+        pb.rotation_mode = "XYZ"
+        pb.rotation_euler = Euler([math.radians(a * t) for a in thumb_ref], "XYZ")
+    update(2)
+
+
+def main_door_push() -> int:
+    """门边「推到底」宿主：逐帧解算 → **逐帧打键** → 从**产物**里读三类判据。"""
+    from datetime import datetime
+    args = parse_args(list(sys.argv))
+    tmpl = Path(args.template)
+    if not tmpl.is_file():
+        print(f"[ERROR] 母版不存在：{tmpl}")
+        return 2
+    if args.host == "headless":
+        bpy.ops.wm.open_mainfile(filepath=str(tmpl))
+    elif not bpy.data.filepath:
+        print("[ERROR] --host live 要求母版已经在当前会话里打开")
+        return 2
+    bpy.context.scene.render.fps = args.fps
+    arm, m3 = make_context()
+    drop_temp(arm)
+    clear_pose(arm)
+
+    # ⚠️ 宿主 3 的动作名缺陷（#165 登记、宿主 3 本件不改）：`--action` 的默认值是椅子动作名。
+    #    本宿主**不带 `--action` 时用自己的名字**，只在不一致时提示（不静默）。
+    action_name = args.action if args.action != "BendGripChairBack" else DOOR_PUSH_ACTION
+    if action_name != args.action:
+        print(f"[WARN] --action 未显式给出（默认 {args.action}）⇒ 本宿主按 {action_name} 命名动作")
+
+    clearance = args.clearance if args.clearance is not None else DOOR_PUSH_CLEARANCE_M
+    crouch = args.crouch if args.crouch is not None else DOOR_PUSH_CROUCH_M
+    pass_deg = door_pass_open_deg()
+    report = {"script": Path(__file__).name, "task": "doorpush", "action": action_name,
+              "blender": bpy.app.version_string, "template": str(tmpl), "host": args.host,
+              "measured_at": datetime.now().isoformat(timespec="seconds"),
+              "clearance_m": clearance, "crouch_m": crouch, "problems": []}
+    print(f"门板：宽 {DOOR_WIDTH} m · 厚 {BACK_THICKNESS * 1000:.0f} mm · 铰链 {DOOR_HINGE} · "
+          f"半掩 {DOOR_OPEN_START_DEG}° · 动作名 {action_name}")
+    print(f"胶囊半径 {X_BOT_CAPSULE_RADIUS_M} m ⇒ 直径 {2 * X_BOT_CAPSULE_RADIUS_M:.4f} m · "
+          f"门宽 {DOOR_WIDTH} m ⇒ sinθ ≥ {2 * X_BOT_CAPSULE_RADIUS_M / DOOR_WIDTH:.6f} ⇒ "
+          f"通过开度 = {pass_deg:.3f}°（从半掩再推 {pass_deg - DOOR_OPEN_START_DEG:.3f}°）")
+    report["pass_open"] = {
+        "定义": "口径 §13.6 的终态量；术语注册表 `通过开度`",
+        "推导": "净通道宽度 = 门宽 × sinθ（远侧门框到门板所在直线的垂距）≥ 胶囊直径 2r",
+        "胶囊半径_m": X_BOT_CAPSULE_RADIUS_M, "胶囊直径_m": round(2 * X_BOT_CAPSULE_RADIUS_M, 4),
+        "门宽_m": DOOR_WIDTH, "sinθ_下界": round(2 * X_BOT_CAPSULE_RADIUS_M / DOOR_WIDTH, 6),
+        "通过开度_deg": round(pass_deg, 3), "从半掩再推_deg": round(pass_deg - DOOR_OPEN_START_DEG, 3),
+        "来源": "胶囊半径来源见 X_BOT_CAPSULE_RADIUS_M 的注释（两处 Unity 侧实测记录）"}
+
+    # ---- ① F3 复核（= 口径 §6.2 世界轴映射的**第二个动作复核**，即 U4 的复核点）----
+    clear_pose(arm)
+    f3 = {s: hand_axes_reading(arm, s) for s in CARD1_SIDES}
+    curl = {s: detect_curl_axis_group(arm, s, "四指") for s in CARD1_SIDES}
+    curl_axis = {s: {"axis": curl[s]["axis"], "sign": curl[s]["sign"]} for s in CARD1_SIDES}
+    report["f3_rest"] = f3
+    report["f3_curl"] = curl
+    head_up = (world_point(arm, f"{BONE_PREFIX}HeadTop_End", "tail")
+               - world_point(arm, f"{BONE_PREFIX}Head")).normalized()
+    toe_dir = (world_point(arm, f"{BONE_PREFIX}LeftToeBase", "tail")
+               - world_point(arm, f"{BONE_PREFIX}LeftToeBase")).normalized()
+    report["u4_world_axes"] = {
+        "上方=+Z（头骨上轴与 +Z 夹角°）": round(math.degrees(head_up.angle(Vector((0, 0, 1)))), 3),
+        "前方=−Y（左趾指向与 −Y 夹角°）": round(math.degrees(toe_dir.angle(Vector((0, -1, 0)))), 3),
+        "左手侧=+X（左腕 x_m）": round(world_point(arm, f"{BONE_PREFIX}LeftHand").x, 4),
+        "右手侧=−X（右腕 x_m）": round(world_point(arm, f"{BONE_PREFIX}RightHand").x, 4)}
+    print(f"F3 复核（与卡 1 同源）：+Y↔腕→中指尖 {f3['Left']['Y_vs_wrist_to_tip_deg']}°（左）· "
+          f"蜷曲轴 {curl_axis['Left']['axis']}{curl_axis['Left']['sign']:+d}（左）/ "
+          f"{curl_axis['Right']['axis']}{curl_axis['Right']['sign']:+d}（右）")
+    print(f"U4 复核（§6.2 世界轴映射）：{report['u4_world_axes']}")
+
+    foot_rest = {s: world_point(arm, f"{BONE_PREFIX}{s}Foot").copy() for s in CARD1_SIDES}
+    hips_rest = world_point(arm, f"{BONE_PREFIX}Hips").copy()
+    ankle_z = foot_rest["Left"].z
+    stance = {s: Vector((foot_rest[s].x - hips_rest.x, foot_rest[s].y - hips_rest.y))
+              for s in CARD1_SIDES}
+    side = "Left"
+    grip_z = args.grip_z if args.grip_z is not None else 1.15
+    curl_amount = args.curl if args.curl is not None else CARD1_CURL_BASELINE
+    print(f"静止读数：髋 {tuple(round(v, 4) for v in hips_rest)} · 踝 z {ankle_z:.4f} m · "
+          f"站距（左）{tuple(round(v, 4) for v in stance['Left'])}")
+
+    # ---- ② 摆放规则与**保持扣住可达的最大角**扫描（改族判定；口径 §13.5）----
+    if args.scan_arc:
+        print("\n弧上扫描（判据：手臂不夹直 + 三条接触对全在容差内）")
+        print(f"  {'θ°':>7}{'净距':>7}{'转身°':>7}{'肩→腕':>8}{'夹直':>6}{'虎口':>7}{'拇指':>7}"
+              f"{'四指最坏':>9}{'残差':>7}{'肘°':>7}")
+        rows, best_ok = [], None
+        deg = DOOR_OPEN_START_DEG
+        #: 判侧参考点：**沿扫描链递推**（第一档用原点，之后用上一档算出的身体位置）。
+        #: ⚠️ 为什么不能用原点判到底（实测）：自由边在 **θ ≈ 52.6°** 时**扫过原点**
+        #:   （49.486° 时离原点仅 36 mm）⇒ 越过它之后"哪一侧是角色侧"按原点判会**整条翻转**，
+        #:   身体位置会从 (−0.294, 0.240) 跳到 (0.289, −0.20)（跳跃 0.72 m）——那是**规则退化**，
+        #:   不是物理极限。递推参考点让"同一侧"沿链保持一致。
+        ref_xy = (0.0, 0.0)
+        while deg <= args.scan_max + 1e-9:
+            lay, st = door_push_stance(deg, clearance, actor_xy=ref_xy)
+            ref_xy = st["body_xy"]
+            frame_geo = door_end_frame(lay)
+            clear_pose(arm)
+            drop_temp(arm, also_objects=False)
+            set_euler(arm, "CTRL_Hips", y=st["yaw_deg"])
+            set_pelvis_world(arm, m3, st["body_xy"], hips_rest.z - crouch)
+            _, _, posterior = body_frame(arm)
+            for s in CARD1_SIDES:
+                solve_leg(arm, s, foot_rest[s], -posterior)
+                set_foot_world_orientation(arm, s, st["yaw_deg"])
+            update()
+            gi = grip_board_edge(arm, side, frame_geo, grip_z, curl_amount, curl_axis[side],
+                                 label=f"scan{deg}")
+            pairs = grip_board_edge_readings(arm, side, frame_geo)
+            worst4 = max(abs(x) for x in pairs[2]["读数_mm"])
+            ok = ((not gi["arm"].get("clamped_straight"))
+                  and worst4 <= CONTACT_TOL_MM
+                  and gi["web_to_edge_mm"] <= CONTACT_TOL_MM
+                  and (gi["thumb_gap_mm"] is None or abs(gi["thumb_gap_mm"]) <= CONTACT_TOL_MM))
+            rows.append({"deg": round(deg, 3), "ok": bool(ok), "reach_m": gi["arm"]["reach_m"],
+                         "clamped": bool(gi["arm"].get("clamped_straight")),
+                         "web_mm": gi["web_to_edge_mm"], "thumb_mm": gi["thumb_gap_mm"],
+                         "四指最坏_mm": worst4, "残差_mm": pair_residual_mm(pairs),
+                         "肘_deg": gi["elbow_deg"]})
+            if ok:
+                best_ok = round(deg, 3)
+            print(f"  {deg:7.2f}{clearance:7.2f}{st['yaw_deg']:7.1f}{gi['arm']['reach_m']:8.3f}"
+                  f"{('是' if gi['arm'].get('clamped_straight') else '否'):>6}"
+                  f"{gi['web_to_edge_mm']:7.2f}{str(gi['thumb_gap_mm']):>7}{worst4:9.2f}"
+                  f"{pair_residual_mm(pairs):7.2f}{gi['elbow_deg']:7.1f}")
+            deg += args.scan_step
+        trig = (best_ok is None) or (best_ok < pass_deg)
+        report["scan_arc"] = {"clearance_m": clearance, "行": rows,
+                              "保持扣住可达的最大角_deg": best_ok, "通过开度_deg": round(pass_deg, 3),
+                              "改族触发": bool(trig),
+                              "容差_mm": CONTACT_TOL_MM}
+        print(f"⇒ 保持扣住可达的最大角（扫描区间 {DOOR_OPEN_START_DEG}–{args.scan_max}° 内）="
+              f"{best_ok}° · 通过开度 = {pass_deg:.3f}° ⇒ 改族{'触发' if trig else '未触发'}")
+        if args.report:
+            Path(args.report).write_text(json.dumps(report, ensure_ascii=False, indent=1),
+                                         encoding="utf-8")
+            print(f"报告: {args.report}")
+        return 0 if not trig else 1
+
+    # ---- ②′ 身体摆放（净距）的解空间：口径 §4.2 硬规矩 5「agent 解的行并列 ≥2 解」----
+    if args.scan_stance:
+        print("\n身体摆放（净距 b）的解空间（口径 §4.2 硬规矩 5：agent 解的行必须并列 ≥2 个可行解）")
+        print(f"  {'θ°':>7}{'净距b':>7}{'离近侧面':>9}{'胶囊余量':>9}{'肩→腕':>8}{'夹直':>6}"
+              f"{'虎口':>7}{'残差':>7}{'肘°':>7}")
+        space = []
+        for deg in (DOOR_OPEN_START_DEG, pass_deg):
+            ref = (hips_rest.x, hips_rest.y)
+            for b in DOOR_PUSH_STANCE_CANDIDATES:
+                lay, st = door_push_stance(deg, b, actor_xy=ref)
+                ref = st["body_xy"]
+                frame_geo = door_end_frame(lay)
+                clear_pose(arm)
+                drop_temp(arm, also_objects=False)
+                set_euler(arm, "CTRL_Hips", y=st["yaw_deg"])
+                set_pelvis_world(arm, m3, st["body_xy"], hips_rest.z - crouch)
+                _, _, posterior = body_frame(arm)
+                for s_ in CARD1_SIDES:
+                    solve_leg(arm, s_, foot_rest[s_], -posterior)
+                    set_foot_world_orientation(arm, s_, st["yaw_deg"])
+                update()
+                gi = grip_board_edge(arm, side, frame_geo, grip_z, curl_amount, curl_axis[side],
+                                     label=f"stance{b}")
+                pairs = grip_board_edge_readings(arm, side, frame_geo)
+                face_margin = b - BACK_THICKNESS / 2.0 - X_BOT_CAPSULE_RADIUS_M
+                space.append({"deg": round(deg, 3), "clearance_m": b,
+                              "离近侧面_m": round(b - BACK_THICKNESS / 2.0, 4),
+                              "胶囊余量_m": round(face_margin, 4),
+                              "reach_m": gi["arm"]["reach_m"],
+                              "clamped": bool(gi["arm"].get("clamped_straight")),
+                              "web_mm": gi["web_to_edge_mm"], "残差_mm": pair_residual_mm(pairs),
+                              "肘_deg": gi["elbow_deg"]})
+                print(f"  {deg:7.3f}{b:7.2f}{b - BACK_THICKNESS / 2.0:9.3f}{face_margin:9.3f}"
+                      f"{gi['arm']['reach_m']:8.3f}{('是' if gi['arm'].get('clamped_straight') else '否'):>6}"
+                      f"{gi['web_to_edge_mm']:7.2f}{pair_residual_mm(pairs):7.2f}{gi['elbow_deg']:7.1f}")
+        report["stance_solution_space"] = {"候选净距_m": list(DOOR_PUSH_STANCE_CANDIDATES),
+                                           "行": space,
+                                           "采用": clearance,
+                                           "臂长_m": 0.5617,
+                                           "胶囊半径_m": X_BOT_CAPSULE_RADIUS_M}
+        if args.report:
+            Path(args.report).write_text(json.dumps(report, ensure_ascii=False, indent=1),
+                                         encoding="utf-8")
+            print(f"报告: {args.report}")
+        return 0
+    # ---- ③ 帧表（门角 / 身体摆放 / 迈步，全部由几何算出）----
+    def stance_fixed(deg, clearance_m):
+        """摆放的**不动点**版：判侧参考点 = 上一轮算出的身体位置。
+
+        ⚠️ 为什么不能一直用原点判侧（实测）：自由边在 **θ ≈ 52.6°** 时扫过原点（49.486° 时
+        离原点仅 36 mm）⇒ 越过它之后"哪一侧是角色侧"按原点判会整条翻转（身体位置跳 0.72 m）。
+        不动点 = "身体在哪一侧，就以它自己为参考"，与直观一致且不循环。
+        """
+        ref = (hips_rest.x, hips_rest.y)
+        st = None
+        for _ in range(3):
+            _lay, st = door_push_stance(deg, clearance_m, actor_xy=ref)
+            ref = st["body_xy"]
+        return st
+
+    def push_angle(frame):
+        if frame <= DOOR_PUSH_FRAME_PUSH:
+            return DOOR_OPEN_START_DEG
+        if frame >= DOOR_PUSH_FRAME_ARRIVAL:
+            return pass_deg
+        u = (frame - DOOR_PUSH_FRAME_PUSH) / float(DOOR_PUSH_FRAME_ARRIVAL - DOOR_PUSH_FRAME_PUSH)
+        return DOOR_OPEN_START_DEG + (pass_deg - DOOR_OPEN_START_DEG) * u
+
+    def body_at(frame):
+        if frame >= DOOR_PUSH_FRAME_GRIP:
+            return stance_fixed(push_angle(frame), clearance)
+        t = (frame - DOOR_PUSH_FRAME_NEUTRAL) / float(DOOR_PUSH_FRAME_GRIP - DOOR_PUSH_FRAME_NEUTRAL)
+        _lay, end = door_push_stance(DOOR_OPEN_START_DEG, clearance)
+        bx = hips_rest.x + (end["body_xy"][0] - hips_rest.x) * t
+        by = hips_rest.y + (end["body_xy"][1] - hips_rest.y) * t
+        return {"body_xy": (bx, by), "yaw_deg": end["yaw_deg"] * t, "clearance_m": clearance,
+                "pelvis_to_grip_m": end["pelvis_to_grip_m"], "grip_xy": end["grip_xy"]}
+
+    def crouch_at(frame):
+        if frame >= DOOR_PUSH_FRAME_PUSH:
+            return crouch
+        t = (frame - DOOR_PUSH_FRAME_NEUTRAL) / float(DOOR_PUSH_FRAME_PUSH - DOOR_PUSH_FRAME_NEUTRAL)
+        return crouch * t
+
+    def reach_t(frame):
+        if frame >= DOOR_PUSH_FRAME_GRIP:
+            return 1.0
+        return (frame - DOOR_PUSH_FRAME_NEUTRAL) / float(DOOR_PUSH_FRAME_GRIP - DOOR_PUSH_FRAME_NEUTRAL)
+
+    #: 迈步表按 `--first-foot` 生成（口径 §13.6 自由度表第 2 行 = agent 解 ⇒ 两种都要能跑、
+    #: 读数并列回显卡，见证据 §五）。窗口与帧号不随"先迈哪只脚"改：改的只是**哪只脚**。
+    _first = args.first_foot
+    _other = "Right" if _first == "Left" else "Left"
+    steps = ((21, 27, _first), (31, 37, _other), (41, 47, _first))
+    swing = {}
+    for a, b, s in steps:
+        swing.setdefault(s, []).append((a, b))
+    planted = {s: Vector((foot_rest[s].x, foot_rest[s].y, ankle_z)) for s in CARD1_SIDES}
+    swing_from, step_log = {}, []
+
+    def ankle_target(frame):
+        """逐脚的踝目标：不摆动 = 上一落点；摆动 = 从上一落点抬到下一落点（下一落点由**身体位置**给出）。"""
+        out = {}
+        for s in CARD1_SIDES:
+            w = next((w for w in swing.get(s, []) if w[0] <= frame <= w[1]), None)
+            if w is None:
+                out[s] = planted[s].copy()
+                continue
+            a, b = w
+            if frame == a:
+                swing_from[s] = planted[s].copy()
+            end = body_at(b)
+            tgt = Vector((end["body_xy"][0], end["body_xy"][1], 0.0)) + _rot_z(stance[s],
+                                                                               end["yaw_deg"])
+            u = (frame - a) / float(b - a)
+            xy = swing_from[s].lerp(Vector((tgt.x, tgt.y, ankle_z)), u)
+            out[s] = Vector((xy.x, xy.y, ankle_z + DOOR_PUSH_STEP_LIFT_M * math.sin(math.pi * u)))
+            if frame == b:
+                planted[s] = Vector((tgt.x, tgt.y, ankle_z))
+                step_log.append({"脚": s, "窗口": [a, b],
+                                 "从_xy": [round(v, 4) for v in swing_from[s]],
+                                 "到_xy": [round(v, 4) for v in planted[s]],
+                                 "步长_m": round((Vector((tgt.x, tgt.y, 0.0))
+                                                  - Vector((swing_from[s].x, swing_from[s].y, 0.0))).length, 4)})
+        return out
+
+    def grip_names():
+        """打键通道表：**双侧**手臂与腿脚控制骨 + 骨盆 + 颈/头 + 解算侧手骨。
+
+        ⚠️ 为什么必须**双侧腿脚**（宿主 3 就是在这里漏的）：只打一侧时，另一侧的腿在产物里
+        恒为**静止姿势**——骨盆一动，那条腿就整条跟着骨盆走（实测：脚陷到地面 **−60 mm**，
+        而 M2 的"含陷入"判据**照样读成"接触"**⇒ 接地判据被绕过）。#165 那条
+        "门边动作双侧全程无支撑、离地 +160~+313 mm" 是同一个病的另一面。
+        """
+        names = ["CTRL_Hips"]
+        for s in CARD1_SIDES:
+            names += [f"CTRL_{s}{p}" for p in ("Arm", "ForeArm", "Hand", "UpLeg", "Leg", "Foot")]
+        names += [f"{BONE_PREFIX}Neck", f"{BONE_PREFIX}Head"]
+        for finger in FINGERS:
+            for k in (1, 2, 3, 4):
+                n = f"{BONE_PREFIX}{side}Hand{finger}{k}"
+                if n in arm.pose.bones:
+                    names.append(n)
+        return names
+
+    # ---- ④ 起手参照解：帧 13 的抓握（拿到 F10 的逐指蜷曲 + 拇指角；起手段只按 t 缩放它们）----
+    clear_pose(arm)
+    drop_temp(arm, also_objects=False)
+    lay13 = build_door_proxy(DOOR_OPEN_START_DEG)
+    frame_geo13 = door_end_frame(lay13)
+    st13 = body_at(DOOR_PUSH_FRAME_GRIP)
+    set_euler(arm, "CTRL_Hips", y=st13["yaw_deg"])
+    set_pelvis_world(arm, m3, st13["body_xy"], hips_rest.z - crouch)
+    _, _, posterior = body_frame(arm)
+    for s in CARD1_SIDES:
+        solve_leg(arm, s, planted[s], -posterior)
+        set_foot_world_orientation(arm, s, st13["yaw_deg"])
+    update()
+    gaze_ref = solve_gaze_scan(arm)
+    ref_grip = grip_board_edge(arm, side, frame_geo13, grip_z, curl_amount, curl_axis[side],
+                               label="ref13")
+    curl_ref = {f: v["蜷曲量"] for f, v in (ref_grip["curl_solve"] or {}).items()}
+    thumb_ref = list(ref_grip["thumb"]["euler_deg"])
+    clear_pose(arm)
+    rest_wrist = world_point(arm, f"{BONE_PREFIX}{side}Hand").copy()
+    report["frame13_reference"] = {"gaze": gaze_ref, "curl_ref": curl_ref,
+                                   "thumb_ref_deg": thumb_ref,
+                                   "web_to_edge_mm": ref_grip["web_to_edge_mm"],
+                                   "elbow_deg": ref_grip["elbow_deg"]}
+
+    # ---- ⑤ 逐帧解算（每帧解、每帧打键 ⇒ 产物里的中间帧也是解出来的）----
+    captured, per_frame = {}, []
+    print(f"\n逐帧解算（帧 {DOOR_PUSH_FRAME_NEUTRAL}–{DOOR_PUSH_FRAME_END}，每帧打键）")
+    for frame in range(DOOR_PUSH_FRAME_NEUTRAL, DOOR_PUSH_FRAME_END + 1):
+        clear_pose(arm)
+        drop_temp(arm, also_objects=False)
+        st = body_at(frame)
+        deg = push_angle(frame)
+        lay = door_layout_actor_side(deg, st["body_xy"])
+        frame_geo = door_end_frame(lay)
+        ankles = ankle_target(frame)
+        if frame == DOOR_PUSH_FRAME_NEUTRAL:
+            # ⚠️ **首帧必须严格中立**（导出侧硬约定，`export_xbot_action.py` 的 E5）：FBX 导出会把
+            #    "导出那一刻的姿势"写进骨节点的默认变换、回导端把它当 Rest/Bind Pose ⇒ 首帧带姿势
+            #    就等于**污染骨架身份**（#156 实测过一次，E5 报出 86 m 量级偏差）。
+            #    ⇒ 首帧一个解都不打：只记中立通道。
+            row = {"frame": frame, "door_open_deg": round(deg, 4),
+                   "body_xy": [round(hips_rest.x, 4), round(hips_rest.y, 4)], "yaw_deg": 0.0,
+                   "crouch_m": 0.0, "pelvis_fix_mm": 0.0, "hooked": False, "reach_t": 0.0,
+                   "neutral": True,
+                   "ankles": {s: [round(v, 4) for v in ankles[s]] for s in CARD1_SIDES},
+                   "leg_tip_err_mm": {s: 0.0 for s in CARD1_SIDES},
+                   "leg_clamped": {s: False for s in CARD1_SIDES},
+                   "gaze_after_deg": round(head_up_deg(arm), 3), "gaze_x_deg": 0.0,
+                   "grip": None, "pairs": [], "residual_mm": None}
+            captured[frame] = capture_channels(arm, grip_names())
+            per_frame.append(row)
+            print(f"  帧 {frame:>3} 门 {deg:6.3f}° **中立姿势**（零通道；导出侧 Rest Pose 一口清）")
+            continue
+        set_euler(arm, "CTRL_Hips", y=st["yaw_deg"])
+        pelvis_err = set_pelvis_world(arm, m3, st["body_xy"], hips_rest.z - crouch_at(frame))
+        _, _, posterior = body_frame(arm)
+        legs = {}
+        for s in CARD1_SIDES:
+            legs[s] = solve_leg(arm, s, ankles[s], -posterior)
+            set_foot_world_orientation(arm, s, st["yaw_deg"])
+        update()
+        t = reach_t(frame)
+        gaze = solve_gaze_scan(arm, scale=t if frame < DOOR_PUSH_FRAME_GRIP else 1.0)
+        row = {"frame": frame, "door_open_deg": round(deg, 4),
+               "body_xy": [round(v, 4) for v in st["body_xy"]], "yaw_deg": round(st["yaw_deg"], 2),
+               "crouch_m": round(crouch_at(frame), 4), "pelvis_fix_mm": pelvis_err,
+               "hooked": t >= 1.0, "reach_t": round(t, 3),
+               "ankles": {s: [round(v, 4) for v in ankles[s]] for s in CARD1_SIDES},
+               "leg_tip_err_mm": {s: legs[s]["tip_err_mm"] for s in CARD1_SIDES},
+               "leg_clamped": {s: bool(legs[s].get("clamped_straight")) for s in CARD1_SIDES},
+               "gaze_after_deg": gaze["after_deg"], "gaze_x_deg": gaze["neck_head_x_deg"]}
+        if t >= 1.0:
+            grip = grip_board_edge(arm, side, frame_geo, grip_z, curl_amount, curl_axis[side],
+                                   label=f"f{frame}")
+            pairs = grip_board_edge_readings(arm, side, frame_geo)
+            for r in pairs:
+                r["状态"] = pair_status(r)
+            row["grip"] = {"web_to_edge_mm": grip["web_to_edge_mm"],
+                           "thumb_gap_mm": grip["thumb_gap_mm"],
+                           "palm_to_end_face_mm": grip["palm_to_end_face_mm"],
+                           "reach_m": grip["arm"]["reach_m"],
+                           "wrist_tip_err_mm": grip["arm"]["tip_err_mm"],
+                           "clamped": bool(grip["arm"].get("clamped_straight")),
+                           "elbow_deg": grip["elbow_deg"], "elbow_offset_mm": grip["elbow_offset_mm"],
+                           "elbow_penalty": grip["elbow_pick"]["罚分"],
+                           "四指_mm": pairs[2]["读数_mm"]}
+            row["pairs"] = [{"手部分区": r["手部分区"], "物体分区": r["物体分区"],
+                             "判据形态": r["判据形态"], "读数_mm": r["读数_mm"], "状态": r["状态"]}
+                            for r in pairs]
+            row["residual_mm"] = pair_residual_mm(pairs)
+        else:
+            door_push_reach(arm, side, frame_geo, ref_grip["wrist_target_m"], rest_wrist,
+                            curl_axis[side], curl_ref, thumb_ref, t, posterior)
+            row["grip"] = None
+            row["pairs"] = []
+            row["residual_mm"] = None
+        captured[frame] = capture_channels(arm, grip_names())
+        per_frame.append(row)
+        off = {s: round((Vector(row["ankles"][s])
+                         - Vector((st["body_xy"][0], st["body_xy"][1], ankle_z))).length, 3)
+               for s in CARD1_SIDES}
+        print(f"  帧 {frame:>3} 门 {deg:6.3f}° 骨盆 ({st['body_xy'][0]:+.3f},{st['body_xy'][1]:+.3f}) "
+              f"转身 {st['yaw_deg']:5.1f}° 踝偏 {off} 腿残差 {row['leg_tip_err_mm']} "
+              f"目视 {gaze['after_deg']:5.2f}°"
+              + (f" | 虎口 {row['grip']['web_to_edge_mm']:5.2f} 拇指 {row['grip']['thumb_gap_mm']}"
+                 f" 残差 {row['residual_mm']:5.2f} 肘 {row['grip']['elbow_deg']:5.1f}°"
+                 if row["grip"] else " | 起手（腕趋近 + 手指合拢）"))
+    report["frames"] = per_frame
+    report["steps"] = step_log
+    report["first_foot"] = _first
+    report["step_plan"] = [{"窗口": [a, b], "脚": f} for a, b, f in steps]
+
+    # ---- ⑥ 打键（**逐帧**；控制骨 + 手骨 + **腿脚**全打——宿主 3 漏掉的正是腿脚）----
+    arm.animation_data_clear()
+    ad = arm.animation_data_create()
+    for stale in [a for a in bpy.data.actions
+                  if a.name == action_name or a.name.startswith(action_name + ".")]:
+        bpy.data.actions.remove(stale)
+    action = bpy.data.actions.new(action_name)
+    action.use_fake_user = True
+    try:
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
+        import blender_action_compat as bac
+        bac.assign_action(ad, action)
+    except Exception as exc:
+        print(f"[WARN] 取道层不可用（{exc}），退回直接指派")
+        ad.action = action
+    panel = bpy.data.objects.get("REF_DoorPanel")
+    for frame in range(DOOR_PUSH_FRAME_NEUTRAL, DOOR_PUSH_FRAME_END + 1):
+        bpy.context.scene.frame_set(frame)
+        clear_pose(arm)
+        drop_temp(arm, also_objects=False)
+        apply_channels(arm, captured[frame])
+        if panel is not None:
+            p_lay = door_layout(push_angle(frame))
+            panel.location = p_lay["panel_center"]
+            panel.rotation_euler = Euler((0.0, 0.0, math.radians(p_lay["open_deg"])), "XYZ")
+            panel.keyframe_insert("location", frame=frame)
+            panel.keyframe_insert("rotation_euler", frame=frame)
+        update()
+        for name in list(captured[frame]):
+            pb = arm.pose.bones[name]
+            pb.rotation_mode = "XYZ"
+            pb.keyframe_insert("rotation_euler", frame=frame)
+            if name == "CTRL_Hips":
+                pb.keyframe_insert("location", frame=frame)
+    bpy.context.scene.frame_start = DOOR_PUSH_FRAME_NEUTRAL
+    bpy.context.scene.frame_end = DOOR_PUSH_FRAME_END
+    report["action_frames"] = [DOOR_PUSH_FRAME_NEUTRAL, DOOR_PUSH_FRAME_END]
+    report["keyed_channels"] = sorted(captured[DOOR_PUSH_FRAME_END])
+    print(f"\n已打键：动作 {action_name} · 帧 {DOOR_PUSH_FRAME_NEUTRAL}–{DOOR_PUSH_FRAME_END} · "
+          f"通道 {len(captured[DOOR_PUSH_FRAME_END])} 个（含腿脚："
+          f"{[n for n in report['keyed_channels'] if 'UpLeg' in n or n.endswith('Leg') or 'Foot' in n]}）")
+
+    # ---- ⑦ 产物侧读数：F4a（持续）· 时序（V-f）· 接地（M2）----
+    def product_frame(frame):
+        bpy.context.scene.frame_set(frame)
+        update()
+        d = bpy.context.evaluated_depsgraph_get()
+        return arm.evaluated_get(d)
+
+    timing_curve, f4a, ground, clash = [], [], [], []
+    for frame in range(DOOR_PUSH_FRAME_NEUTRAL, DOOR_PUSH_FRAME_END + 1):
+        ev = product_frame(frame)
+        deg = push_angle(frame)
+        st = body_at(frame)
+        lay = door_layout_actor_side(deg, st["body_xy"])
+        frame_geo = door_end_frame(lay)
+        hand = world_point(ev, f"{BONE_PREFIX}{side}Hand")
+        hinge = lay["hinge"]
+        timing_curve.append({"frame": frame, "door_open_deg": round(deg, 4),
+                             "hand_azimuth_deg": round(math.degrees(
+                                 math.atan2(hand.y - hinge.y, hand.x - hinge.x)), 4)})
+        feet, foot_pts = {}, {}
+        for s in CARD1_SIDES:
+            bone = world_point(ev, f"{BONE_PREFIX}{s}Foot")
+            toe = world_point(ev, f"{BONE_PREFIX}{s}ToeBase")
+            low = min(bone.z, toe.z) * 1000.0
+            feet[s] = {"foot_z_mm": round(bone.z * 1000.0, 2), "toe_z_mm": round(toe.z * 1000.0, 2),
+                       "lowest_mm": round(low, 2), "contact": bool(low <= DOOR_PUSH_SOLE_MARGIN_MM)}
+            foot_pts[s] = [(bone.x, bone.y), (toe.x, toe.y)]
+        support = sorted(s for s in CARD1_SIDES if feet[s]["contact"])
+        # 重心（口径 §13.6 自由度表第 7 行）：**只报读数、无阈值**——`支撑多边形` 的判据部分
+        # 仍未建（#167 登记），本件**不建它**：只报"Hips 水平投影"与"到最近支撑接触点的水平距离"。
+        hips_p = world_point(ev, f"{BONE_PREFIX}Hips")
+        pts = [q for s in support for q in foot_pts[s]]
+        nearest = (round(min(math.hypot(hips_p.x - q[0], hips_p.y - q[1]) for q in pts) * 1000.0, 1)
+                   if pts else None)
+        ground.append({"frame": frame, "angle_deg": round(deg, 4), "feet": feet, "support": support,
+                       "重心_xy_m": [round(hips_p.x, 4), round(hips_p.y, 4)],
+                       "离最近支撑接触点_mm": nearest})
+        # 穿模（动作库规格 §四·戊·5 判据 4）：骨段 ↔ 门板盒；逐段取 head/mid/tail 三点采样
+        clash_row = {"frame": frame, "classes": {}}
+        for cname, cthr, cbones in DOOR_PUSH_CLEARANCE_CLASSES:
+            worst, where = None, None
+            for bn in cbones:
+                full = f"{BONE_PREFIX}{bn}"
+                if full not in ev.pose.bones:
+                    continue
+                h = world_point(ev, full)
+                t = world_point(ev, full, "tail")
+                for tag, pt in (("head", h), ("mid", (h + t) * 0.5), ("tail", t)):
+                    g = box_gap_mm(pt, frame_geo)
+                    if worst is None or g < worst:
+                        worst, where = g, f"{bn}.{tag}"
+            clash_row["classes"][cname] = {"阈值_mm": cthr,
+                                           "最坏_mm": (round(worst, 2) if worst is not None else None),
+                                           "最坏处": where}
+        clash.append(clash_row)
+        if frame >= DOOR_PUSH_FRAME_GRIP:
+            pairs = grip_board_edge_readings(ev, side, frame_geo)
+            for r in pairs:
+                r["状态"] = pair_status(r)
+            f4a.append({"frame": frame, "angle_deg": round(deg, 4), "pairs": pairs,
+                        "residual_mm": pair_residual_mm(pairs)})
+
+    declared = DOOR_PUSH_FRAME_ARRIVAL
+    vals = [r["hand_azimuth_deg"] for r in timing_curve]
+    win = [i for i, r in enumerate(timing_curve) if r["frame"] >= DOOR_PUSH_FRAME_GRIP]
+    best_i = max(win, key=lambda i: vals[i])          # `max` 取**最先出现**的最大值（平台期 ⇒ 到位帧）
+    extreme = timing_curve[best_i]["frame"]
+    report["timing"] = {
+        "声明到位帧": declared,
+        "判据量": "手骨（mixamorig:LeftHand）绕铰链轴的水平方位角——门在转、手不动时该曲线是平的，"
+                  "极值帧会立刻偏离声明帧",
+        "取样": "全段逐帧（口径 §十 的 41 点均匀采样 + 整帧细化的极限情形：逐帧全取）",
+        "曲线": timing_curve, "极值帧": extreme, "极值_deg": round(vals[best_i], 4),
+        "一致": bool(extreme == declared)}
+    worst_f4a = round(max((abs(x) for r in f4a for row in r["pairs"]
+                           for x in (row["读数_mm"] if isinstance(row["读数_mm"], list)
+                                     else [row["读数_mm"]]) if x is not None), default=0.0), 3)
+    report["f4a_persistent"] = {"窗口": [DOOR_PUSH_FRAME_GRIP, DOOR_PUSH_FRAME_END], "行": f4a,
+                                "最坏_mm": worst_f4a, "容差_mm": CONTACT_TOL_MM}
+    report["grounding"] = {"容差_mm": DOOR_PUSH_SOLE_MARGIN_MM, "行": ground,
+                           "无支撑帧": [r["frame"] for r in ground if not r["support"]],
+                           "换脚帧": [ground[i]["frame"] for i in range(1, len(ground))
+                                   if ground[i]["support"] != ground[i - 1]["support"]]}
+    clash_bad, clash_worst = [], {}
+    for r in clash:
+        for cname, c in r["classes"].items():
+            if c["最坏_mm"] is None:
+                continue
+            if cname not in clash_worst or c["最坏_mm"] < clash_worst[cname]["最坏_mm"]:
+                clash_worst[cname] = {"最坏_mm": c["最坏_mm"], "帧": r["frame"],
+                                      "最坏处": c["最坏处"], "阈值_mm": c["阈值_mm"]}
+            if c["最坏_mm"] < c["阈值_mm"]:
+                clash_bad.append({"frame": r["frame"], "类": cname, "最坏_mm": c["最坏_mm"],
+                                  "阈值_mm": c["阈值_mm"], "最坏处": c["最坏处"]})
+    report["clash"] = {"判据": "动作库规格 §四·戊·5 判据 4（骨段 ↔ 门板盒）",
+                       "类": [{"类": c, "阈值_mm": t} for c, t, _ in DOOR_PUSH_CLEARANCE_CLASSES],
+                       "逐帧": clash, "各类最坏": clash_worst,
+                       "违规帧": clash_bad[:12], "违规处数": len(clash_bad)}
+    if clash_bad:
+        report["problems"].append(f"穿模（判据 4）：{len(clash_bad)} 处越界——"
+                                  f"{clash_bad[:4]}")
+    bad_legs = [r["frame"] for r in per_frame if max(r["leg_tip_err_mm"].values()) > 1.0]
+    report["leg_tracking"] = {"残差>1mm 的帧": bad_legs,
+                              "最坏_mm": max((max(r["leg_tip_err_mm"].values())
+                                              for r in per_frame), default=0.0)}
+    swing_low = []
+    for a, b, s in steps:
+        inner = [r for r in ground if a < r["frame"] < b]
+        swing_low.append({"窗口": [a, b], "脚": s, "窗口内帧数": len(inner),
+                          "窗口内该脚最低点_mm": min(r["feet"][s]["lowest_mm"] for r in inner),
+                          "窗口内该脚最高点_mm": max(r["feet"][s]["lowest_mm"] for r in inner)})
+    report["swing_clearance"] = swing_low
+    #: 支撑脚的**陷入**读数：M2 的判据是单边的（`≤ soleMargin`，**含陷入**）⇒ 只按它判，
+    #: "脚陷进地面 60 mm"也会读成"接触"。本件把同一个 `soleMargin` 对称地再用一次
+    #: （`|最低点| ≤ soleMargin`），新增的只是**同一常量的对称用法**，不是一个新阈值。
+    sunk = [{"frame": r["frame"], "脚": s, "最低点_mm": r["feet"][s]["lowest_mm"]}
+            for r in ground for s in r["support"] if r["feet"][s]["lowest_mm"] < -DOOR_PUSH_SOLE_MARGIN_MM]
+    report["support_penetration"] = {"判据": "|支撑脚最低点| ≤ soleMargin（同一常量的对称用法）",
+                                     "容差_mm": DOOR_PUSH_SOLE_MARGIN_MM, "行的数": len(sunk),
+                                     "最坏_mm": min((r["最低点_mm"] for r in sunk), default=0.0),
+                                     "前几帧": sunk[:6]}
+    if worst_f4a > CONTACT_TOL_MM:
+        report["problems"].append(f"F4a 持续型接触对最坏 {worst_f4a} mm > 容差 {CONTACT_TOL_MM} mm"
+                                  "（整段相位内须逐帧成立，松一帧即红）")
+    if extreme != declared:
+        report["problems"].append(f"时序：声明到位帧 {declared} ≠ 产物极值帧 {extreme}")
+    if report["grounding"]["无支撑帧"]:
+        report["problems"].append(f"接地：{len(report['grounding']['无支撑帧'])} 帧**双脚同时离地**"
+                                  f"（{report['grounding']['无支撑帧'][:6]}…）")
+    if bad_legs:
+        report["problems"].append(f"腿 IK 未跟踪（残差 > 1 mm）的帧：{bad_legs[:8]}"
+                                  "——踝没到目标 ⇒ 该帧脚不在标称落点")
+    if sunk:
+        report["problems"].append(f"接地：支撑脚**陷入地面** {len(sunk)} 处（最深 "
+                                  f"{report['support_penetration']['最坏_mm']} mm，容差 "
+                                  f"{DOOR_PUSH_SOLE_MARGIN_MM} mm）⇒ 该腿没进打键表或腿 IK 没解")
+    for w in swing_low:
+        if w["窗口内该脚最低点_mm"] <= DOOR_PUSH_SOLE_MARGIN_MM:
+            report["problems"].append(f"摆动脚没离地：窗口 {w['窗口']}（{w['脚']}）内最低 "
+                                      f"{w['窗口内该脚最低点_mm']} mm ≤ soleMargin "
+                                      f"{DOOR_PUSH_SOLE_MARGIN_MM} mm")
+    report["ok"] = not report["problems"]
+
+    print(f"\n时序：声明到位帧 {declared} · 产物极值帧 {extreme}（{report['timing']['极值_deg']}°）"
+          f" ⇒ {'一致 ✅' if extreme == declared else '不一致 ❌'}")
+    print(f"F4a 持续型接触对（帧 {DOOR_PUSH_FRAME_GRIP}–{DOOR_PUSH_FRAME_END}）：最坏 {worst_f4a} mm "
+          f"vs 容差 {CONTACT_TOL_MM} mm ⇒ {'全绿 ✅' if worst_f4a <= CONTACT_TOL_MM else '红 ❌'}")
+    print(f"接地（M2，容差 {DOOR_PUSH_SOLE_MARGIN_MM} mm）：无支撑帧 "
+          f"{report['grounding']['无支撑帧'] or '无'} · 换脚帧 {report['grounding']['换脚帧']}")
+    print(f"腿 IK 跟踪：最坏 {report['leg_tracking']['最坏_mm']} mm · 超 1 mm 的帧 "
+          f"{bad_legs or '无'}")
+    print(f"迈步：{[(w['脚'], w['步长_m']) for w in step_log]}")
+    print("接触相位（逐帧支撑集合，只打印变化点）")
+    prev = None
+    for r in ground:
+        cur = "+".join(r["support"]) or "无"
+        if cur != prev:
+            print(f"  帧 {r['frame']:>3} 起：{cur}")
+            prev = cur
+    print("穿模（判据 4 · 骨段 ↔ 门板盒）："
+          + " · ".join(f"{k} 最坏 {v['最坏_mm']:.2f} mm @帧 {v['帧']} {v['最坏处']}"
+                       f"（阈值 {v['阈值_mm']}）" for k, v in clash_worst.items())
+          + f" ⇒ 违规 {len(clash_bad)} 处")
+    print(f"支撑脚陷入：{report['support_penetration']['行的数']} 处（最深 "
+          f"{report['support_penetration']['最坏_mm']} mm / 容差 {DOOR_PUSH_SOLE_MARGIN_MM} mm）")
+    print(f"摆动脚离地（窗口内最低）：{[(w['窗口'], w['窗口内该脚最低点_mm']) for w in swing_low]} mm")
+    print("回显卡（口径 §四：每一项都要有产物侧读数；整段最坏见上）")
+    for r in (f4a[-1]["pairs"] if f4a else []):
+        print(f"  {r['手部分区']:<14}↔ {r['物体分区']:<10}{r['判据形态']:<10}"
+              f"{str(r['读数_mm']):>26} mm  帧 {f4a[-1]['frame']}")
+    for row in report["u4_world_axes"].items():
+        print(f"  U4 {row[0]:<28}{row[1]}")
+    if args.report:
+        Path(args.report).write_text(json.dumps(report, ensure_ascii=False, indent=1),
+                                     encoding="utf-8")
+        print(f"报告: {args.report}")
+    if args.still:
+        bpy.context.scene.frame_set(declared)
+        update()
+        st = body_at(declared)
+        mid = Vector((st["body_xy"][0], st["body_xy"][1], 1.05))
+        render_still(args.still, mid + Vector((1.45, 1.55, 0.75)), mid)
+        print(f"静帧: {args.still}")
+    if args.host == "live":
+        bpy.context.scene.frame_set(declared)
+        print(f"预览：已停在到位帧 {declared}（时间轴 {DOOR_PUSH_FRAME_NEUTRAL}–{DOOR_PUSH_FRAME_END}）")
+    elif not args.no_save:
+        bpy.ops.wm.save_as_mainfile(filepath=str(tmpl), compress=False)
+        print(f"已写回：{tmpl}")
+    print(f"结论: {'OK' if report['ok'] else 'FAIL —— ' + '; '.join(report['problems'])}")
+    return 0 if report["ok"] else 1
+
+
+# ══════════════════════════════════════════════════════════════════════════════
 # 宿主 4：重述对拍（`--task restate`）——口径 §13.8 判据 1
 #
 #   「#163 既有读数 vs 用**卡片语言**复现 ⇒ 差异 0」——**纯算术**，不跑 Blender、不请 owner 目视。
@@ -2596,7 +3483,7 @@ def main() -> int:
             if idx + 1 < len(tail):
                 task = tail[idx + 1]
     return {"chair": main_chair, "card1": main_card1, "door": main_door,
-            "restate": main_restate}[task]()
+            "doorpush": main_door_push, "restate": main_restate}[task]()
 
 
 if __name__ == "__main__":
