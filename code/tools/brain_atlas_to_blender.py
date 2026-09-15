@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2026 verystrongdog
+# SPDX-License-Identifier: GPL-3.0-or-later
 """
 脑图谱数据管线 — 技能树 57 脑区 → MNI坐标 → Blender 节点放置
 ================================================================

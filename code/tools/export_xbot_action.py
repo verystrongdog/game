@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# SPDX-FileCopyrightText: 2026 verystrongdog
+# SPDX-License-Identifier: GPL-3.0-or-later
 """export_xbot_action.py —— 把母版上的一条控制骨动作烘焙成 animation-only Unity FBX。
 
 来源：design/presentation/Blender动作制作管线.md §四（导出预设）/§五（回导判据）

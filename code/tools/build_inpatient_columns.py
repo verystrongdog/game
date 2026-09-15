@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 verystrongdog
+# SPDX-License-Identifier: GPL-3.0-or-later
 """
 一层住院部承重柱 — 基于 Desmos 柱网交点自动生成
 

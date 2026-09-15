@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# SPDX-FileCopyrightText: 2026 verystrongdog
+# SPDX-License-Identifier: GPL-3.0-or-later
 """author_xbot_chair_grab.py —— 在母版上产出动作 `BendGripChairBack`（弯腰、双手抓住椅背）。
 
 来源：design/presentation/动作描述口径.md（§二 三问骨架 · §三 D7 自由度表 · §八 容差 ε · §十 验收判据 V-a…V-e）

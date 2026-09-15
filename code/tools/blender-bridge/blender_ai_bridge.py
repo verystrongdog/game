@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# SPDX-FileCopyrightText: 2026 verystrongdog
+# SPDX-License-Identifier: GPL-3.0-or-later
 """blender_ai_bridge.py —— 把**当前这个 Blender 会话**变成可远程驱动的活体桥。
 
 来源：design/presentation/Blender动作制作管线.md §7.5（用法）/ §7.6（安全与边界）

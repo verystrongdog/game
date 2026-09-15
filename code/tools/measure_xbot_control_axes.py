@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# SPDX-FileCopyrightText: 2026 verystrongdog
+# SPDX-License-Identifier: GPL-3.0-or-later
 """measure_xbot_control_axes.py —— 实测母版里每根控制骨的**局部轴向语义**。
 
 来源：design/presentation/Blender动作制作管线.md §2.1.1（表）/ §7.4（口径）

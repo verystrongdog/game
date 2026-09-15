@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2026 verystrongdog
+# SPDX-License-Identifier: GPL-3.0-or-later
 """脑壳烘焙 — all_obj 的受控 OBJ → 一份可进 Unity 的减面 mesh
 
 把 `data/brain_regions.json` 里带 `obj_file` 的解剖载体（按文件去重，多个

@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# SPDX-FileCopyrightText: 2026 verystrongdog
+# SPDX-License-Identifier: GPL-3.0-or-later
 """build_xbot_animation_template.py —— 从仓库 X Bot.fbx 生成 Blender 人体动作母版。
 
 来源：design/presentation/Blender动作制作管线.md §二（母版契约）/§三（自检判据）

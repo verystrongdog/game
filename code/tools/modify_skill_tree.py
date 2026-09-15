@@ -1,4 +1,6 @@
 #!/usr/bin/env blender --python
+# SPDX-FileCopyrightText: 2026 verystrongdog
+# SPDX-License-Identifier: GPL-3.0-or-later
 """
 修改 brain_skill_tree.blend:
 1. 断层扫描验证: 检查每个技能点是否落在对应脑区 mesh 内

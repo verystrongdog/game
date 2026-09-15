@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# SPDX-FileCopyrightText: 2026 verystrongdog
+# SPDX-License-Identifier: GPL-3.0-or-later
 """measure_xbot_surface_offset.py —— 实测手部「骨 → 蒙皮表面」偏移（口径 §八 的接触档 ε）。
 
 来源：design/presentation/动作描述口径.md §八（容差 ε 口径 = "骨 → 蒙皮表面"实测偏移）

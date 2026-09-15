@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2026 verystrongdog
+# SPDX-License-Identifier: GPL-3.0-or-later
 """
 玻璃大脑技能树 — Blender 自动化构建脚本（v1 世代，2026-07-11）
 

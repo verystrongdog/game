@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 verystrongdog
+# SPDX-License-Identifier: GPL-3.0-or-later
 """
 玻璃大脑技能树 — Windows Blender 构建脚本
 ==========================================
