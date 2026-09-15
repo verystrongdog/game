@@ -57,8 +57,11 @@ FREEDOM_TABLE = [
 #: 来源：design/presentation/动作描述口径.md §8.1（#160 实测 `Beta_Surface` 32.6833 / 32.6854 mm）
 EPSILON_PALM_M = 0.0326833
 #: 转折期阈值（**沿用既有来源**，非新拍）：`Blender动作制作管线.md` §三 V6/V7/V8 的 20 mm 量级。
-#: ⚠️ 口径 §八 的"朝向档 / 到位档"ε **尚未实测**（U2′），故这里如实标注为**过渡阈值**。
+#: 仅用于"掌面陷进椅子"那一侧的穿模判定；"贴合"一侧改用 ε。
 PROVISIONAL_TOL_MM = 20.0
+#: **掌面判据形态 = owner 2026-09-14 选定的"甲"**：按**掌面最低点**离顶面 ≤ ε（**允许倾斜**，
+#: "掌根压住、指尖翘着"也算贴合）。量的对象是**真实蒙皮顶点**（掌面那一层），不是"沿法向的一个点"。
+PALM_SLAB_M = 0.006
 #: 靠背近侧 / 远侧面（y 更大 = 更靠角色）——口径 §6.3 的命名面
 BACK_NEAR_Y = -0.45
 BACK_FAR_Y = -0.49
@@ -376,10 +379,59 @@ def solve_gaze(arm, tol_deg=0.5, max_iter=8):
 
 
 def palm_surface_point(arm, side):
-    """掌面点（世界坐标）= 手骨原点 + ε × 骨局部 +Z（#160：掌面 = 骨局部 +Z）。"""
+    """掌面点（世界坐标）= 手骨原点 + ε × 骨局部 +Z（#160：掌面 = 骨局部 +Z）。
+
+    ⚠️ 这是"掌面中心点"的**粗模型**（只在掌面与目标面平行时才是接触点）。
+    owner 2026-09-14 选定判据形态"甲"之后，判据改用 `palm_lowest_z()`——**真实蒙皮顶点**的最低点。
+    """
     pb = arm.pose.bones[f"{BONE_PREFIX}{side}Hand"]
     normal = (pb.matrix.to_3x3() @ Vector((0.0, 0.0, 1.0))).normalized()
     return world_point(arm, f"{BONE_PREFIX}{side}Hand") + normal * EPSILON_PALM_M
+
+
+_PALM_CACHE = {}
+
+
+def palm_face_vertices(arm, side):
+    """**掌面那一层**的真实蒙皮顶点（静止时就近取好，之后按刚性变换跟随手骨）。
+
+    取法：网格里**主导组 = 手骨**的顶点中，沿骨局部 +Z 的偏移落在最外层 6 mm 内的那些
+    （+Z 就是 #160 实测的掌面法向）。手部顶点权重为 1.0（#160 证据 §五）⇒ 刚性变换精确。
+    """
+    if side in _PALM_CACHE:
+        return _PALM_CACHE[side]
+    name = f"{BONE_PREFIX}{side}Hand"
+    bl_inv = arm.data.bones[name].matrix_local.inverted()
+    arm_inv = arm.matrix_world.inverted()
+    out = []
+    for ob in bpy.data.objects:
+        if ob.type != "MESH":
+            continue
+        vg = ob.vertex_groups.get(name)
+        if vg is None:
+            continue
+        cand = []
+        for v in ob.data.vertices:
+            best_g, best_w = None, -1.0
+            for r in v.groups:
+                if r.weight > best_w:
+                    best_g, best_w = r.group, r.weight
+            if best_g == vg.index:
+                cand.append(bl_inv @ (arm_inv @ (ob.matrix_world @ v.co)))
+        if not cand:
+            continue
+        zmax = max(p.z for p in cand)
+        out += [p for p in cand if p.z >= zmax - PALM_SLAB_M]
+    _PALM_CACHE[side] = out
+    return out
+
+
+def palm_lowest_z(arm, side):
+    """按**当前姿势**算掌面那一层顶点的**最低世界 z**（判据形态"甲"的读数对象）。"""
+    name = f"{BONE_PREFIX}{side}Hand"
+    rel = arm.pose.bones[name].matrix @ arm.data.bones[name].matrix_local.inverted()
+    mw = arm.matrix_world
+    return min((mw @ (rel @ p)).z for p in palm_face_vertices(arm, side))
 
 
 def capture_channels(arm, names):
@@ -566,30 +618,41 @@ def solve_hand_orientation(arm, side, tip_target, rail_top_z):
         pb.rotation_mode = "XYZ"
         pb.rotation_euler = Euler((math.radians(hx), math.radians(hy), math.radians(hz)), "XYZ")
         update(2)
-        tip_res = (world_point(arm, tip_bone, "tail") - tip_target).length * 1000.0
-        palm_gap = abs(palm_surface_point(arm, side).z - rail_top_z) * 1000.0
+        tip_w = world_point(arm, tip_bone, "tail")
+        tip_res = (tip_w - tip_target).length * 1000.0
+        gap = (palm_lowest_z(arm, side) - rail_top_z) * 1000.0
         thumb_y = (world_point(arm, thumb_bone, "tail").y - BACK_NEAR_Y) * 1000.0
-        score = tip_res + palm_gap + max(0.0, -thumb_y) * 1.0
-        return score, tip_res, palm_gap, thumb_y
+        # ⚠️ 形式很重要：**"在哪一侧"是硬约束**（违反才罚），指尖到理想点才是被最小化的目标。
+        #    之前三项距离等权相加 ⇒ 搜索在三者之间换手（实测：掌面绿了拇指红 → 拇指绿了指尖红）。
+        viol = (3000.0 * max(0.0, tip_w.y - BACK_FAR_Y)          # 四指必须越过远侧面
+                + 3000.0 * max(0.0, -thumb_y)                     # 拇指必须在近侧
+                + 3000.0 * max(0.0, gap - EPSILON_PALM_M * 1000.0)   # 掌面最低点不得超过 ε
+                + 3000.0 * max(0.0, -gap - PROVISIONAL_TOL_MM))       # 也不得陷进去
+        return viol + tip_res, tip_res, gap, thumb_y, tip_w.y * 1000.0
 
+    # 粗网格 → 两段细化（best 的七个分量 = score,hx,hy,hz,tip_res,gap,thumb_y,tip_y）
     best = None
     for hx in range(-90, 91, 30):
         for hy in range(-90, 91, 30):
             for hz in (-60, 0, 60):
                 r = probe(hx, hy, hz)
                 if best is None or r[0] < best[0]:
-                    best = (r[0], hx, hy, hz, r[1], r[2], r[3])
-    for hx in range(best[1] - 30, best[1] + 31, 10):
-        for hy in range(best[2] - 30, best[2] + 31, 10):
-            for hz in range(best[3] - 40, best[3] + 41, 20):
-                r = probe(hx, hy, hz)
-                if r[0] < best[0]:
-                    best = (r[0], hx, hy, hz, r[1], r[2], r[3])
+                    best = (r[0], hx, hy, hz, r[1], r[2], r[3], r[4])
+    for step, span in ((10, 30), (5, 15), (2, 6)):
+        for hx in range(best[1] - span, best[1] + span + 1, step):
+            for hy in range(best[2] - span, best[2] + span + 1, step):
+                for hz in range(best[3] - span * 2, best[3] + span * 2 + 1, step * 2):
+                    r = probe(hx, hy, hz)
+                    if r[0] < best[0]:
+                        best = (r[0], hx, hy, hz, r[1], r[2], r[3], r[4])
     probe(best[1], best[2], best[3])
     return {"euler_deg": [best[1], best[2], best[3]],
             "tip_residual_mm": round(best[4], 1),
             "palm_gap_mm": round(best[5], 1),
-            "thumb_y_mm_vs_near_face": round(best[6], 1)}
+            "thumb_y_mm_vs_near_face": round(best[6], 1),
+            "tip_y_mm": round(best[7], 1),
+            "score": round(best[0], 1),
+            "feasible": bool(best[0] < 3000.0)}
 
 
 def mesh_bbox(name):
@@ -725,9 +788,10 @@ def main() -> int:
         row["gaze_up_deg"] = round(head_up_deg(arm), 3)
         palm, thumb = {}, {}
         for side in ("Left", "Right"):
-            ps = palm_surface_point(arm, side)
-            palm[side] = {"surface_m": [round(v, 4) for v in ps],
-                          "to_rail_top_mm": round((ps.z - lay["rail_top_z"]) * 1000.0, 1)}
+            lo = palm_lowest_z(arm, side)
+            palm[side] = {"lowest_z_m": round(lo, 4),
+                          "to_rail_top_mm": round((lo - lay["rail_top_z"]) * 1000.0, 1),
+                          "n_face_vertices": len(palm_face_vertices(arm, side))}
             tt = world_point(arm, f"{BONE_PREFIX}{side}HandThumb3", "tail")
             thumb[side] = {"tip_m": [round(v, 4) for v in tt],
                            "y_mm_vs_near_face": round((tt.y - BACK_NEAR_Y) * 1000.0, 1)}
@@ -762,11 +826,13 @@ def main() -> int:
             f"目视水平：到位帧头骨上轴偏离竖直 {last['gaze_up_deg']}° > 2°（头跟着骨盆低下去了）")
     for side in ("Left", "Right"):
         gap = last["palm"][side]["to_rail_top_mm"]
+        # 判据形态"甲"（owner 2026-09-14）：允许倾斜 —— 只要**掌面最低点**在 ε 之内就算贴合；
+        # 陷进去（< −PROVISIONAL_TOL_MM）另判穿模。
         if gap < -PROVISIONAL_TOL_MM:
-            report["problems"].append(f"{side} 掌面陷进靠背顶面 {gap} mm（穿模）")
-        elif gap > PROVISIONAL_TOL_MM:
+            report["problems"].append(f"{side} 掌面最低点陷进靠背顶面 {gap} mm（穿模）")
+        elif gap > EPSILON_PALM_M * 1000.0:
             report["problems"].append(
-                f"{side} 掌面离顶面 {gap} mm > {PROVISIONAL_TOL_MM} mm（没贴合；过渡阈值见常量注释）")
+                f"{side} 掌面最低点离顶面 {gap} mm > ε {EPSILON_PALM_M*1000:.2f} mm（没贴合；判据形态甲）")
         if last["thumb"][side]["y_mm_vs_near_face"] < 0.0:
             report["problems"].append(
                 f"{side} 拇指尖在靠背**远**侧（相对近侧面 {last['thumb'][side]['y_mm_vs_near_face']} mm < 0 ⇒ 没贴在背面，口径 D8）")
@@ -787,9 +853,9 @@ def main() -> int:
          "参考系": "世界/重力", "判据量": "头骨上轴偏离竖直 (deg)",
          "产物侧读数": last["gaze_up_deg"], "状态": "✅" if abs(last["gaze_up_deg"]) <= 2.0 else "❌"},
         {"owner 的话": "双手手掌贴合椅背上方", "解成": "掌面点 = 手骨原点 + 32.68 mm × 掌面法向（局部 +Z）",
-         "参考系": "道具局部", "判据量": "掌面↔顶面 (mm)；负 = 陷入",
+         "参考系": "道具局部", "判据量": "掌面最低点↔顶面 (mm)；负 = 陷入",
          "产物侧读数": last["palm"]["Left"]["to_rail_top_mm"],
-         "状态": "✅" if abs(last["palm"]["Left"]["to_rail_top_mm"]) <= PROVISIONAL_TOL_MM else "❌"},
+         "状态": "✅" if -PROVISIONAL_TOL_MM <= last["palm"]["Left"]["to_rail_top_mm"] <= EPSILON_PALM_M * 1000.0 else "❌"},
         {"owner 的话": "大拇指贴住椅背的背面（近侧 y ≥ −0.45）", "解成": "拇指尖 y 相对近侧面",
          "参考系": "道具局部", "判据量": "拇指尖 − 近侧面 (mm)",
          "产物侧读数": last["thumb"]["Left"]["y_mm_vs_near_face"],
