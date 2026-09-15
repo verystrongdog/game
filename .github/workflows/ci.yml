@@ -39,7 +39,7 @@ jobs:
         run: pip install -r code/tools/requirements.txt
       - name: 干净检出可解析性检查
         run: python3 code/tools/check_clean_checkout.py
-      - name: 跑 14 个校验器
+      - name: 跑 15 个校验器
         run: |
           set -o pipefail
           fail=0
@@ -48,7 +48,8 @@ jobs:
                    validate_eligibility validate_situation_fids \
                    validate_tripartite_annotations validate_data_manifest \
                    validate_runtime_fixtures validate_unity_assets \
-                   validate_ceiling_generator validate_hansen_intake; do
+                   validate_ceiling_generator validate_hansen_intake \
+                   validate_grip_cards; do
             printf '%-38s' "$v"
             if python3 "code/tools/$v.py" > "/tmp/$v.log" 2>&1; then
               echo "✅"

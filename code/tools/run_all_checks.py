@@ -47,6 +47,8 @@ VALIDATOR_REGISTRY = {
     "validate_unity_assets.py":   {"status": "active", "json": False},
     "validate_ceiling_generator.py": {"status": "active", "json": False},
     "validate_hansen_intake.py":    {"status": "active", "json": False},
+    # #164：手部基准卡片（名录 ↔ 机器源 ↔ 证据回显卡 三处不许漂移）
+    "validate_grip_cards.py":      {"status": "active", "json": True},
 }
 
 STATE_FILE = ROOT / ".checks-state.json"   # 运行状态（2026-09-12：原 .scratch/.last_check_state.json，随 .scratch 移出版本控制而迁出）

@@ -13,15 +13,15 @@
     "`--check` 校验文件集与属性合法性，**不重新推导属性**（refs 计数会随任意新增 .md 漂移）；属性更新是人工动作 `--refresh`"
   ],
   "_stats": {
-    "total": 101,
+    "total": 102,
     "runtime": 8,
-    "generator_input": 1,
+    "generator_input": 2,
     "shipping_true": 8,
     "deprecated": 17,
     "archived": 0,
     "by_lifecycle_role": {
       "active/evidence": 54,
-      "active/generator-input": 1,
+      "active/generator-input": 2,
       "active/reference": 21,
       "active/runtime": 8,
       "deprecated/reference": 17
@@ -36,13 +36,14 @@
       "shipping": false,
       "owner": "工具组（生成链消费方：code/tools 或 code/unity Editor 侧）",
       "consumed_by": [
-        "code/tools/build_data_manifest.py"
+        "code/tools/build_data_manifest.py",
+        "code/tools/test_validate_issues.py"
       ],
       "generators": [],
       "runtime_consumers": [],
       "provenance": "本仓作者维护",
       "refs": {
-        "active_docs": 2,
+        "active_docs": 8,
         "deprecated_docs": 0
       }
     },
@@ -95,6 +96,7 @@
       "consumed_by": [
         "code/src/YouAreNotTheFish.Console/Program.cs",
         "code/src/YouAreNotTheFish.Core.Tests/Data/RuntimeFixtureTests.cs",
+        "code/tools/bake_brain_shell.py",
         "code/tools/brain_atlas_to_blender.py",
         "code/tools/build_brain_skill_tree.py",
         "code/tools/build_brain_skill_tree_windows.py",
@@ -109,7 +111,9 @@
         "code/tools/rebuild_brain_regions.py",
         "code/tools/refine_coords_from_objs.py",
         "code/tools/validate_runtime_fixtures.py",
-        "code/tools/validate_spatial.py"
+        "code/tools/validate_spatial.py",
+        "code/unity/Assets/Editor/BrainViewLabBuilder.cs",
+        "code/unity/Assets/Tests/PlayMode/BrainViewSmokeTests.cs"
       ],
       "generators": [
         "code/tools/rebuild_brain_regions.py"
@@ -122,8 +126,8 @@
       ],
       "provenance": "本仓作者维护",
       "refs": {
-        "active_docs": 24,
-        "deprecated_docs": 22
+        "active_docs": 27,
+        "deprecated_docs": 20
       }
     },
     "data/cognition_cards.json": {
@@ -229,7 +233,7 @@
       "runtime_consumers": [],
       "provenance": "本仓作者维护",
       "refs": {
-        "active_docs": 1,
+        "active_docs": 2,
         "deprecated_docs": 4
       }
     },
@@ -472,13 +476,15 @@
       "owner": "设计组（design/ 引用方）",
       "consumed_by": [
         "code/tools/build_contexts_tripartite.py",
-        "code/tools/build_data_manifest.py"
+        "code/tools/build_data_manifest.py",
+        "code/unity/Assets/Scripts/BrainLinkRenderer.cs",
+        "code/unity/Assets/Tests/PlayMode/BrainViewSmokeTests.cs"
       ],
       "generators": [],
       "runtime_consumers": [],
       "provenance": "external（见 data/connectivity/sources.md 或子目录 README）",
       "refs": {
-        "active_docs": 2,
+        "active_docs": 4,
         "deprecated_docs": 5
       }
     },
@@ -508,7 +514,8 @@
       "shipping": false,
       "owner": "设计组（design/ 引用方）",
       "consumed_by": [
-        "code/tools/build_contexts_tripartite.py"
+        "code/tools/build_contexts_tripartite.py",
+        "code/unity/Assets/Scripts/BrainLinkRenderer.cs"
       ],
       "generators": [
         "code/tools/build_contexts_tripartite.py"
@@ -516,26 +523,29 @@
       "runtime_consumers": [],
       "provenance": "本仓作者维护",
       "refs": {
-        "active_docs": 1,
+        "active_docs": 2,
         "deprecated_docs": 6
       }
     },
     "data/connectivity/link_modulation_ceiling.json": {
       "logical_id": "link_modulation_ceiling",
-      "origin": "authored",
+      "origin": "generated",
       "lifecycle": "deprecated",
       "role": "reference",
       "shipping": false,
       "owner": "设计组（design/ 引用方）",
       "consumed_by": [
         "code/tools/build_data_manifest.py",
+        "code/tools/gen_modulation_ceiling.py",
+        "code/tools/validate_ceiling_generator.py"
+      ],
+      "generators": [
         "code/tools/gen_modulation_ceiling.py"
       ],
-      "generators": [],
       "runtime_consumers": [],
       "provenance": "本仓作者维护",
       "refs": {
-        "active_docs": 1,
+        "active_docs": 2,
         "deprecated_docs": 1
       }
     },
@@ -548,7 +558,8 @@
       "owner": "设计组（design/ 引用方）",
       "consumed_by": [
         "code/tools/build_data_manifest.py",
-        "code/tools/gen_modulation_ceiling_v2.py"
+        "code/tools/gen_modulation_ceiling_v2.py",
+        "code/tools/validate_ceiling_generator.py"
       ],
       "generators": [],
       "runtime_consumers": [],
@@ -769,7 +780,9 @@
         "code/tools/build_runtime_data_fixtures.py",
         "code/tools/build_tripartite_model.py",
         "code/tools/validate_disease.py",
-        "code/tools/validate_runtime_fixtures.py"
+        "code/tools/validate_runtime_fixtures.py",
+        "code/unity/Assets/Scripts/BrainLinkRenderer.cs",
+        "code/unity/Assets/Tests/PlayMode/BrainViewSmokeTests.cs"
       ],
       "generators": [
         "code/tools/build_function_labels.py",
@@ -783,7 +796,7 @@
       ],
       "provenance": "本仓作者维护",
       "refs": {
-        "active_docs": 51,
+        "active_docs": 52,
         "deprecated_docs": 15
       }
     },
@@ -897,6 +910,28 @@
         "deprecated_docs": 0
       }
     },
+    "data/hand_grip_cards.json": {
+      "logical_id": "hand_grip_cards",
+      "origin": "generated",
+      "lifecycle": "active",
+      "role": "generator-input",
+      "shipping": false,
+      "owner": "工具组（生成链消费方：code/tools 或 code/unity Editor 侧）",
+      "consumed_by": [
+        "code/tools/author_xbot_chair_grab.py",
+        "code/tools/build_data_manifest.py",
+        "code/tools/validate_grip_cards.py"
+      ],
+      "generators": [
+        "code/tools/author_xbot_chair_grab.py"
+      ],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 5,
+        "deprecated_docs": 0
+      }
+    },
     "data/hospital_ref/manifest.json": {
       "logical_id": "manifest",
       "origin": "external",
@@ -911,7 +946,7 @@
       "runtime_consumers": [],
       "provenance": "external（见 data/connectivity/sources.md 或子目录 README）",
       "refs": {
-        "active_docs": 5,
+        "active_docs": 15,
         "deprecated_docs": 2
       },
       "note": "医院建模参考的 provenance 记录（来源 PDF 路径为 Windows 绝对路径，跨机不可复现）。"
@@ -1819,13 +1854,14 @@
       "consumed_by": [
         "code/tools/build_brain_skill_tree.py",
         "code/tools/build_brain_skill_tree_windows.py",
-        "code/tools/build_data_manifest.py"
+        "code/tools/build_data_manifest.py",
+        "code/tools/map_skills_to_regions.py"
       ],
       "generators": [],
       "runtime_consumers": [],
       "provenance": "本仓作者维护",
       "refs": {
-        "active_docs": 2,
+        "active_docs": 3,
         "deprecated_docs": 0
       }
     },
@@ -1839,13 +1875,14 @@
       "consumed_by": [
         "code/tools/build_data_manifest.py",
         "code/tools/list_deprecated_terms.py",
-        "code/tools/validate_issues.py"
+        "code/tools/validate_issues.py",
+        "code/tools/validate_trash_isolation.py"
       ],
       "generators": [],
       "runtime_consumers": [],
       "provenance": "本仓作者维护",
       "refs": {
-        "active_docs": 15,
+        "active_docs": 20,
         "deprecated_docs": 27
       },
       "note": "设计期参考，非运行时数据。status 字段是术语唯一权威状态。"

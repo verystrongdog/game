@@ -2,11 +2,23 @@
 # -*- coding: utf-8 -*-
 # SPDX-FileCopyrightText: 2026 verystrongdog
 # SPDX-License-Identifier: GPL-3.0-or-later
-"""author_xbot_chair_grab.py —— 在母版上产出动作 `BendGripChairBack`（弯腰、双手抓住椅背）。
+"""author_xbot_chair_grab.py —— X Bot 手 ↔ 物接触动作的**可复用库 + 三个宿主**。
+
+| 宿主 | `--task` | 干什么 | 权威 |
+|---|---|---|---|
+| `main_chair()` | `chair`（默认） | 产出动作 `BendGripChairBack`（弯腰、双手抓住椅背）——**#163 的产出，本文件原有形态** | issue #163 |
+| `main_card1()` | `card1` | **测量卡 1「掐棱」**：F3 三轴映射（含 U9 的 `+Y`）· F4 接触对 · F6 尺寸区间 · F7 七档扫描（10→80 mm）· F10 手型 · F11 落点读数 ⇒ 写 `data/hand_grip_cards.json` | [动作描述口径 §十三](../../design/presentation/动作描述口径.md) |
+| `main_door()` | `door` | 新动作「扣住门边推开半掩的门」——**同一张卡、新对象**（口径 §13.6 的独立验证件） | 同上 · [回合战斗流程 §10.13](../../design/rules/回合战斗流程.md) |
 
 来源：design/presentation/动作描述口径.md（§二 三问骨架 · §三 D7 自由度表 · §八 容差 ε · §十 验收判据 V-a…V-e）
       · design/presentation/Blender动作制作管线.md §七·B（撤回记录）
       · issue #163（**这是口径的回归样本**：口径管不管用，就看这一次）
+      · issue #164（**手部基准卡片**：把 #163 一次性写死的判据变成可被引用的常驻件；卡 1 数值实测）
+
+⚠️ **库与宿主的分界**：`# ---- 可复用库` 以下（含 #164 扩展块）是**件**——道具几何、棱线表、
+蒙皮读数、手骨轴实测、掐棱握式解算；三个宿主的 `main_*()` 只是把件按各自的时序串起来。
+`main_chair()` 走的仍是 #163 定下的那条路径（**不重写**）：卡 1 的测量是本文件新增的件，
+改的是**库**，不是那条已验收的动作。
 
 本次重做相对撤回版的**四处改动**（都直接来自口径与 #160/#161 的实测）：
 1. **屈曲符号改由外部判据定**：旧版用"指尖朝掌心"评分，而"掌心"是它自己算的平面——属 A1 自证式判据
@@ -71,6 +83,9 @@ CONTACT_TOL_MM = 2.8
 BACK_NEAR_Y = -0.45
 BACK_FAR_Y = -0.49
 
+#: 仓库根（`code/tools/` 的上面两级）——机器源与报告的相对落点都从这里算
+REPO_ROOT = Path(__file__).resolve().parents[2]
+
 CTRL_PREFIX = "CTRL_"
 BONE_PREFIX = "mixamorig:"
 
@@ -98,6 +113,9 @@ DIGITS = ("Index", "Middle", "Ring", "Pinky", "Thumb")
 def parse_args(argv):
     argv = argv[argv.index("--") + 1:] if "--" in argv else []
     ap = argparse.ArgumentParser(prog="author_xbot_chair_grab.py")
+    ap.add_argument("--task", choices=("chair", "card1", "door", "restate"), default="chair",
+                    help="宿主：#163 抓椅背（chair，默认）· 卡 1 掐棱测量（card1）· 门边动作（door）"
+                         "· 重述对拍（restate，纯算术，不需要 Blender）")
     ap.add_argument("--template", default=str(Path(__file__).resolve().parents[2] /
                                              ".scratch/blender_assets/xbot/XBot_AnimationTemplate.blend"))
     ap.add_argument("--action", default="BendGripChairBack")
@@ -109,6 +127,17 @@ def parse_args(argv):
     ap.add_argument("--host", choices=("headless", "live"), default="headless",
                     help="headless=自己打开母版（权威）；live=送进**已开着**的会话（预览，不重开文件、默认不写回）")
     ap.add_argument("--no-save", action="store_true", help="只解算与报告，不写回 .blend")
+    # ---- #164：卡 1 测量宿主的量（默认值 = 已实测选定的基准，见证据 §三 的扫描表）----
+    ap.add_argument("--grip-z", type=float, default=None, help="抓握高度（世界 z，m）；缺省按板顶 − 基准偏移")
+    ap.add_argument("--grip-drop", type=float, default=0.075, help="抓握高度 = 板顶 − 本值（m）")
+    ap.add_argument("--curl", type=float, default=None, help="四指蜷曲量（0..1.5）；缺省用卡 1 的基准值")
+    ap.add_argument("--card-out", default=None, help="卡 1 机器源落点（默认 <仓库>/data/hand_grip_cards.json）")
+    ap.add_argument("--thickness-mm", type=float, default=None, help="只测单个板厚（mm）；缺省跑 F7 的七档扫描")
+    ap.add_argument("--scan", action="store_true", help="卡 1 校准扫描（抓握高度 × 蜷曲量）——只打印表，不写机器源")
+    ap.add_argument("--task-restate", action="store_true", help=argparse.SUPPRESS)
+    ap.add_argument("--report-in", default=None,
+                    help="从既有报告**重排**机器源（不重跑测量；报告是机器源的唯一来源）")
+    ap.add_argument("--still", default=None, help="静帧落点（.png）")
     return ap.parse_args(argv)
 
 
@@ -639,7 +668,15 @@ def web_point(arm, side):
     i = world_point(arm, f"{BONE_PREFIX}{side}HandIndex1")     # 食指根
     mid = (t + i) * 0.5
     pb = arm.pose.bones[f"{BONE_PREFIX}{side}Hand"]
-    normal = (pb.matrix.to_3x3() @ Vector((0.0, 0.0, 1.0))).normalized()
+    # ⚠️ **法向必须取世界系**：母版的骨架对象带 **+90° X 旋转**（Y-up 导入，实测
+    #    `matrix_world` 的第二/三行互换、scale 0.01）。只在骨架系里取法向，等于把 `ε`
+    #    加到了一个**被转了 90° 的方向**上。
+    #    #163 之所以没炸：椅背那一格的掌面法向恰是 ±X，而 X 轴是那个旋转的**不动轴** ⇒ 巧合相等。
+    #    门边宿主第一次把它暴露出来（自由边的 u 不在 X 轴上）：虎口偏 21°、
+    #    四指↔远侧棱从 0.4 mm 变成 8.6 mm。⇒ 换算法向与世界读数必须同一个系（§8.2 的"两个数"之外，
+    #    还有"两个系"这一层）。
+    normal = (arm.matrix_world.to_3x3() @ pb.matrix.to_3x3()
+              @ Vector((0.0, 0.0, 1.0))).normalized()
     return mid + normal * EPSILON_PALM_M
 
 
@@ -741,7 +778,598 @@ def mesh_bbox(name):
             "z": (min(c.z for c in corners), max(c.z for c in corners))}
 
 
-def main() -> int:
+# ══════════════════════════════════════════════════════════════════════════════
+# 【可复用库 · #164 扩展】掐棱（卡 1）与门边动作共用的件
+#
+#   分四组：① 板与棱线（目标对象的唯一来源） ② 蒙皮读数（判据的度量对象）
+#           ③ 手骨轴实测（F3 / F10 的依据） ④ 掐棱握式解算（两个宿主的同一段姿势逻辑）
+#
+#   ⚠️ 本节只**加件**：`main_chair()`（#163 的产出宿主）走的仍是上面那些函数，逐字不变。
+#      依据：issue #164「抽出可复用库 + 卡脚本宿主 + 门边动作宿主；**不重写**」。
+# ══════════════════════════════════════════════════════════════════════════════
+
+# 卡 1 的四种抓握方向（F8）。`n` = 板厚方向（近侧 → 远侧）· `u` = 端面 → 板内 · `z` = 竖直。
+CARD1_DIRECTIONS = ("侧握", "上罩")
+#: 卡 1 的**索引键**（F1）——与口径 §13.6 名录表里的那一格**逐字相同**（校验器按字面比对）
+CARD1_INDEX_KEY_NAME = "掐棱"
+
+#: 门板代理（`REF_Door`）的尺寸——**代理块**，同 `REF_*` 先例；不进 FBX、不动源 `X Bot.fbx`
+DOOR_WIDTH = 0.82
+DOOR_HEIGHT = 2.02
+DOOR_HINGE = (-0.50, -0.64, 0.0)
+#: 半掩（owner 需求里的"半掩的门"）：起始开角 20°（门开向角色这一侧，**边缘恰好落在他伸手可及处**）
+DOOR_OPEN_START_DEG = 20.0
+#: 推开：+8°。⚠️ **不是**"半掩到全开"——本片实测**可达域**不允许：门宽 0.82 m 时，
+#: 门从 20° 转到 28°，边缘扫过 0.14 m；再往下推，边缘就出了手臂的可解区（证据 §六：
+#: 第一版 20°→32° 时**到位帧**的腕目标离肩 0.659 m > 臂长 0.562 m ⇒ 手臂被夹直、虎口离门边 72 mm）。
+#: 如实登记为"一段推"：要推到底必须**迈步**（本片不新增动作词条、只交静帧）。
+DOOR_OPEN_END_DEG = 28.0
+
+
+# ---------------------------------------------------------------- ① 板与棱线
+
+
+def board_end_frame(near_edge_point, far_edge_point, into_board_dir):
+    """**被掐的那一端**的局部坐标：两条竖棱 + 三张命名面（两个宿主共用同一段几何语言）。
+
+    | 名 | 是什么 | 椅背（侧握） | 门板（门边） |
+    |---|---|---|---|
+    | `near` / `far` | 近侧 / 远侧**竖棱**（端面与两张板面的交线） | `y=−0.45 / −0.49` 处 | 自由边上 `v=∓t/2` 处 |
+    | `n` | 板厚方向：**近侧面 → 远侧面** | `−Y` | 门板法向 |
+    | `u` | **端面 → 板内** | `∓X` | 自由边 → 铰链 |
+    | `z` | 沿棱竖直向上 | `+Z` | `+Z` |
+
+    ⚠️ **棱是两张面的交线**——#163 的"虎口↔上沿"参照的是**顶面中线**（`y = back_cy`），
+    中线不是棱 ⇒ 那一格的 −0.0 mm 量的不是"虎口跨棱"（本片如实登记，见证据 §五）。
+    """
+    near, far = Vector(near_edge_point), Vector(far_edge_point)
+    n = (far - near).normalized()
+    u = Vector(into_board_dir)
+    u = (u - n * u.dot(n)).normalized()
+    z = n.cross(u)
+    if z.z < 0.0:
+        z = -z
+    return {"near": near, "far": far, "n": n, "u": u, "z": z,
+            "thickness_mm": round((far - near).length * 1000.0, 3),
+            "面-近侧面": (near, -n),          # (面上一点, **朝外**法向)
+            "面-远侧面": (far, n),
+            "面-端面": ((near + far) * 0.5, -u),
+            "棱-近侧": (near, z),
+            "棱-远侧": (far, z)}
+
+
+def chair_end_frame(side, lay):
+    """椅背**侧面**那一端（卡 1 侧握的目标）：`x = ±half_width` 处，近侧 / 远侧两条竖棱。"""
+    sgn = 1.0 if side == "Left" else -1.0
+    hw = lay["half_width"]
+    return board_end_frame(Vector((sgn * hw, lay["back_near_y"], 0.0)),
+                           Vector((sgn * hw, lay["back_far_y"], 0.0)),
+                           Vector((-sgn, 0.0, 0.0)))
+
+
+def door_layout(open_deg=DOOR_OPEN_START_DEG, width=DOOR_WIDTH, thickness=BACK_THICKNESS,
+                height=DOOR_HEIGHT, hinge=DOOR_HINGE):
+    """门板几何：**半掩角由铰链实时求得**，不烘世界坐标（口径 §6.1 道具局部系）。
+
+    铰链在 `hinge`（世界），门板绕**竖直轴** `Z` 转 `open_deg`；自由边（门边）= 铰链 + `u·width`。
+    `n` = 门板法向，取"**近侧面 → 远侧面**"（近侧面 = 朝角色那一面——由该面外法向指向角色判定）。
+    """
+    th = math.radians(open_deg)
+    u = Vector((math.cos(th), math.sin(th), 0.0))
+    n = Vector((-math.sin(th), math.cos(th), 0.0))
+    h = Vector(hinge)
+    mid_edge = h + u * width
+    # 角色固定在原点附近：取"外法向指向角色"的那一面为**近侧面**
+    toward_actor = (Vector((0.0, 0.0, 0.0)) - mid_edge)
+    if toward_actor.dot(-n) < toward_actor.dot(n):
+        n = -n
+    return {"open_deg": open_deg, "u": u, "n": n, "hinge": h, "width": width,
+            "thickness": thickness, "height": height,
+            "mid_edge": mid_edge,
+            "near_edge": mid_edge - n * (thickness / 2.0),
+            "far_edge": mid_edge + n * (thickness / 2.0),
+            "panel_center": h + u * (width / 2.0) + Vector((0.0, 0.0, height / 2.0)),
+            "hinge_center": h + Vector((0.0, 0.0, height / 2.0))}
+
+
+def door_end_frame(lay):
+    """门板**自由边**那一端 → 通用的"板端"坐标（与椅背同一段语言）。"""
+    return board_end_frame(lay["near_edge"], lay["far_edge"], -lay["u"])
+
+
+def point_to_line_mm(p, line):
+    """点到**直线**（点 + 单位方向）的距离（mm）——F4 里"虎口↔棱"的判据形态（§13.4 点↔线）。"""
+    p0, d = line
+    v = Vector(p) - Vector(p0)
+    return (v - Vector(d) * v.dot(Vector(d))).length * 1000.0
+
+
+def bent_body_setup(arm, m3, bend_deg, pelvis, foot_rest):
+    """**弯腰站姿**（卡 1 与 #163 同一套身体条件）：骨盆前弯 + 世界位移 + 双脚踩原地 + 目视水平。
+
+    ⚠️ 为什么卡 1 也必须弯腰：抓握点落在椅背**侧面上部**（`z≈0.72`、身前 0.45 m）——
+    **直立够不到**。本片实测（校准扫描第一版）：直立时手臂被夹直（肘角 **180.0°**），
+    虎口离目标 **155.7 mm**，四指反而落在近侧。⇒ 身体条件不是装饰，它决定残差。
+    """
+    set_euler(arm, "CTRL_Hips", x=bend_deg)
+    set_world_offset(arm, m3, "CTRL_Hips", pelvis)
+    update()
+    _, _, posterior = body_frame(arm)
+    for side in ("Left", "Right"):
+        solve_leg(arm, side, foot_rest[side], -posterior)
+        _set_world_axes(arm, f"CTRL_{side}Foot", f"{BONE_PREFIX}{side}Foot",
+                        _rest_dir(arm, f"{BONE_PREFIX}{side}Foot"),
+                        _rest_hinge(arm, f"{BONE_PREFIX}{side}Foot"))
+    update()
+    return {"bend_deg": bend_deg, "pelvis_offset_m": [round(v, 4) for v in pelvis],
+            "gaze": solve_gaze(arm)}
+
+
+def standing_body_setup(arm, m3, yaw_deg, foot_rest, lean_m=0.0):
+    """**站立身体条件**（门边宿主用）：髋部**转身** `yaw_deg` + **双脚踩原地**（解析腿解拉回）。
+
+    ⚠️ 为什么门边必须转身：门半掩时"边缘"不在角色的正前方（实测方位角 ≈ 30°）。
+    不转身时手臂被夹直（肘角 **180.0°**、虎口离门边 **291.6 mm**）——同一个病，#163 在弯腰上踩过，
+    本片在转身上又踩了一次。⇒ **身体朝向是可达域的一部分，不是装饰**。
+    """
+    set_euler(arm, "CTRL_Hips", z=yaw_deg)
+    if lean_m:
+        # 朝**身体正前方**（转身后的 −Y）倾 `lean_m`——门半掩时"边缘"离身体只有 0.45 m，
+        # 不倾则腕目标离肩 0.659 m > 臂长 0.562 m（实测：手臂夹直、虎口离门边 52.9 mm）
+        th = math.radians(yaw_deg)
+        set_world_offset(arm, m3, "CTRL_Hips", (lean_m * math.sin(th), -lean_m * math.cos(th), 0.0))
+    update()
+    _, _, posterior = body_frame(arm)
+    for side in ("Left", "Right"):
+        solve_leg(arm, side, foot_rest[side], -posterior)
+        _set_world_axes(arm, f"CTRL_{side}Foot", f"{BONE_PREFIX}{side}Foot",
+                        _rest_dir(arm, f"{BONE_PREFIX}{side}Foot"),
+                        _rest_hinge(arm, f"{BONE_PREFIX}{side}Foot"))
+    update()
+    return {"yaw_deg": yaw_deg, "lean_m": lean_m, "gaze": solve_gaze(arm)}
+
+
+def _to_edge(arm, side, frame, grip_z):
+    """棱上的目标点（高度 = `grip_z`）——两个宿主的抓握高度都从这里取。"""
+    e = frame["near"]
+    return e + frame["z"] * (grip_z - e.z)
+
+
+# ---------------------------------------------------------------- ② 蒙皮读数
+
+
+_SKIN_CACHE = {}
+
+
+def hand_skin_points(arm, side, mesh="Beta_Surface"):
+    """`[(主导骨名, 骨局部坐标)]`：该手骨链在蒙皮上的**全部顶点**（缓存）。
+
+    ⚠️ 三条教训都在这里：
+    ① **只取 `Beta_Surface`**（可见皮肤层）——`Beta_Joints` 是骨骼可视化网格，它的"手部"顶点
+       不在皮肤上（#163 实测：混进来会把掌面读数污染成恒定 −1409.7 mm）；
+    ② 每个顶点按**它自己的主导骨**做刚性变换（手部权重 1.0，#160 实测）——
+       不能拿一根骨的矩阵去套全部顶点；
+    ③ **蒙皮没有最末节（`…4`）的顶点组**：实测 50 个组只到 `…3`，指尖的肉在 `…3` 的组里
+       ⇒ "指尖的蒙皮"按**手指前缀**（`HandIndex` 等）聚合，不按末节骨名取。
+    """
+    key = (side, mesh)
+    if key in _SKIN_CACHE:
+        return _SKIN_CACHE[key]
+    prefix = f"{BONE_PREFIX}{side}Hand"
+    arm_inv = arm.matrix_world.inverted()
+    out = []
+    for ob in bpy.data.objects:
+        if ob.type != "MESH" or ob.name != mesh:
+            continue
+        groups = {vg.index: vg.name for vg in ob.vertex_groups
+                  if vg.name.startswith(prefix) and vg.name in arm.data.bones}
+        if not groups:
+            continue
+        bl_inv = {name: arm.data.bones[name].matrix_local.inverted() for name in groups.values()}
+        for v in ob.data.vertices:
+            best_g, best_w = None, -1.0
+            for r in v.groups:
+                if r.weight > best_w:
+                    best_g, best_w = r.group, r.weight
+            if best_g in groups:
+                name = groups[best_g]
+                out.append((name, bl_inv[name] @ (arm_inv @ (ob.matrix_world @ v.co))))
+    _SKIN_CACHE[key] = out
+    return out
+
+
+def finger_skin_world(arm, side, finger):
+    """该手指**蒙皮**的世界坐标（按各自主导骨变换）。`finger` 取 `Index`/`Middle`/`Ring`/`Pinky`/`Thumb`。"""
+    mw = arm.matrix_world
+    pts = []
+    for bone_name, p in hand_skin_points(arm, side):
+        if f"Hand{finger}" in bone_name:
+            pts.append(mw @ (arm.pose.bones[bone_name].matrix @ p))
+    return pts
+
+
+def points_face_gap_mm(points, face):
+    """一组世界点 ↔ **命名面**（面上一点 + **朝外**法向）的**有符号最近间隙**（mm）。
+
+    判据只有一条式子：`gap = min over 点 of (p − 面上一点) · 朝外法向`
+
+    | 读数 | 含义 |
+    |---|---|
+    | `abs(gap) <= tol` | **贴合**（最近的那一点正落在面上） |
+    | `gap > tol` | 悬在面**外**（没贴上去）—— 例如四指越过远侧面飞在外面 |
+    | `gap < −tol` | 越过该面（**穿模**；落在板厚区间里也是这个符号） |
+
+    ⇒ 同一格读数**两个方向都能报错**。#163 §二十 那两条判据"互相打架"的成因之一，
+    就是当时的"掌面最低点"只报了一个方向（只看陷进去，看不出悬空）。
+    """
+    pt, out_n = Vector(face[0]), Vector(face[1])
+    if not points:
+        return {"gap_mm": None, "n_vertices": 0}
+    vals = [(p - pt).dot(out_n) * 1000.0 for p in points]
+    return {"gap_mm": round(min(vals), 2), "n_vertices": len(points),
+            "max_mm": round(max(vals), 2)}
+
+
+def points_min_distance_mm(pa, pb):
+    """两组世界点的最小距离（mm）——**捏间隙**（薄侧改族的读数）用它。"""
+    if not pa or not pb:
+        return None
+    return round(min((a - b).length for a in pa for b in pb) * 1000.0, 2)
+
+
+# ---------------------------------------------------------------- ③ 手骨轴实测（F3 / F10）
+
+
+def hand_axes_reading(arm, side):
+    """**F3 的产物侧读数**：手骨局部三轴在世界里的指向 + 与"腕 → 中指指尖"实测方向的夹角。
+
+    ⚠️ `+Y`（腕 → 指尖）那一行是口径 **U9**（"未单独实测"）——本片**当场量**，不按"显然"填。
+    ⚠️ `+Z` 掌面法向的来源是 §8.1 的 ε 实测（掌心朝下、左右一致），本函数只是**复核**它在姿势下不变。
+    """
+    name = f"{BONE_PREFIX}{side}Hand"
+    pb = arm.pose.bones[name]
+    # ⚠️ `pb.matrix` 是**骨架空间**的矩阵（本母版骨架 scale = 0.01）⇒ 方向必须再过一次
+    #    `arm.matrix_world.to_3x3()`，否则"世界指向"其实只是骨架局部指向（本母版恰好同向，但别靠巧合）。
+    m = arm.matrix_world.to_3x3() @ pb.matrix.to_3x3()
+    axes = {k: (m @ Vector(v)).normalized() for k, v in
+            (("X", (1.0, 0.0, 0.0)), ("Y", (0.0, 1.0, 0.0)), ("Z", (0.0, 0.0, 1.0)))}
+    wrist = world_point(arm, name)
+    tip = world_point(arm, f"{BONE_PREFIX}{side}Hand{DIGIT_TIP['Middle']}", "tail")
+    d = (tip - wrist).normalized()
+    return {"axes_world": {k: [round(c, 4) for c in v] for k, v in axes.items()},
+            "wrist_to_middle_tip_world": [round(c, 4) for c in d],
+            "Y_vs_wrist_to_tip_deg": round(math.degrees(axes["Y"].angle(d)), 3),
+            "Z_vs_world_Z_deg": round(math.degrees(axes["Z"].angle(Vector((0.0, 0.0, 1.0)))), 3)}
+
+
+#: 逐组的屈曲**候选轴**（F3 第 3 行：不得按"显然"填，逐组量）
+CURL_GROUPS = {"四指": ("Index", "Middle", "Ring", "Pinky"), "拇指": ("Thumb",)}
+
+
+def _apply_group_curl(arm, side, group, axis_index, sign, amount=1.0):
+    """把某一**组**的手指按给定轴/符号蜷曲（其余组保持伸直）。"""
+    n = 0
+    for finger in CURL_GROUPS[group]:
+        for k in (1, 2, 3, 4):
+            name = f"{BONE_PREFIX}{side}Hand{finger}{k}"
+            if name not in arm.pose.bones:
+                continue
+            e = [0.0, 0.0, 0.0]
+            e[axis_index] = math.radians(FINGER_CURL_DEG[finger][k - 1] * sign * amount)
+            pb = arm.pose.bones[name]
+            pb.rotation_mode = "XYZ"
+            pb.rotation_euler = Euler(e, "XYZ")
+            n += 1
+    return n
+
+
+def palm_normal_reference(arm, side):
+    """掌面参照：**掌面蒙皮的重心** + **掌面法向**（骨局部 `+Z`，口径 §8.1 实测的那个方向）。
+
+    ⚠️ 为什么"中指尖靠近拇指尖"（#163 用的那条）**不能**当屈曲判据——本片实测它是可混淆的：
+    · 绕**掌面法向扇开**手指（Z）也把中指尖带向拇指尖（实测 96.0 → **81.86** mm）；
+    · 绕**手指长轴扭转**（Y）则**什么都不改变**；
+    · 而"指尖 → 腕"距离对 **±θ 完全对称**（实测 X+1 = X−1 = 134.82 mm）⇒ **定不出符号**。
+    ⇒ 屈曲的唯一定义是"指尖朝**掌心**走"：量它沿掌面法向的位移。三条判据的读数都留在报告里。
+    """
+    pb = arm.pose.bones[f"{BONE_PREFIX}{side}Hand"]
+    mw = arm.matrix_world
+    pts = [mw @ (pb.matrix @ p) for p in palm_face_vertices(arm, side)]
+    centroid = sum(pts, Vector((0.0, 0.0, 0.0))) / float(len(pts))
+    normal = (mw.to_3x3() @ pb.matrix.to_3x3() @ Vector((0.0, 0.0, 1.0))).normalized()
+    return centroid, normal
+
+
+def _group_criterion_mm(arm, side, group):
+    """该组屈曲的**三条外部判据**一起报（都不拿"自己算的目标点"当判据——错误分类 A1）：
+
+    | 判据 | 量 | 取向 |
+    |---|---|---|
+    | **丙 指尖 → 掌面**（主） | 该组末节指尖沿**掌面法向**相对掌面蒙皮重心的位移 | 屈曲使它**增大**（指尖朝掌心走） |
+    | 甲 指尖 → 腕 | 末节指尖 ↔ 手骨原点 | 只有大小、**对 ±θ 对称**（定不出符号） |
+    | 乙 跨组指尖距 | 四指：中指尖↔拇指尖 · 拇指：拇指尖↔食指尖 | #163 用过；**扇开也会缩短它**（可与屈曲混淆） |
+    """
+    is_four = group == "四指"
+    tip = f"{BONE_PREFIX}{side}Hand{DIGIT_TIP['Middle' if is_four else 'Thumb']}"
+    other = f"{BONE_PREFIX}{side}Hand{DIGIT_TIP['Thumb' if is_four else 'Index']}"
+    a = world_point(arm, tip, "tail")
+    centroid, normal = palm_normal_reference(arm, side)
+    return {"palm_offset_mm": round((a - centroid).dot(normal) * 1000.0, 2),
+            "tip_to_wrist_mm": round((a - world_point(arm, f"{BONE_PREFIX}{side}Hand")).length * 1000.0, 2),
+            "tip_to_other_mm": round((a - world_point(arm, other, "tail")).length * 1000.0, 2)}
+
+
+def detect_curl_axis_group(arm, side, group):
+    """**逐组**实测屈曲轴与符号：6 个候选（3 轴 × ±）逐个数，主判据 = 丙（指尖朝掌心）。
+
+    返回全部候选读数 ⇒ **有能力报错**（最优候选没让指尖朝掌心走 ⇒ `criterion_valid=False`）。
+    `agree_with_cross_group` 记录它与 #163 那条判据（乙）是否给出同一答案——**不一致本身是读数**。
+    """
+    clear_pose(arm)
+    rest = _group_criterion_mm(arm, side, group)
+    readings = {}
+    for axis_index, axis_name in ((0, "X"), (1, "Y"), (2, "Z")):
+        for sign in (1, -1):
+            clear_pose(arm)
+            _apply_group_curl(arm, side, group, axis_index, sign)
+            update()
+            readings[f"{axis_name}{sign:+d}"] = _group_criterion_mm(arm, side, group)
+    clear_pose(arm)
+    best_key = max(readings, key=lambda k: readings[k]["palm_offset_mm"])
+    return {"group": group, "axis": best_key[0], "sign": int(best_key[1:]),
+            "rest": rest, "readings": readings,
+            "criterion_valid": bool(readings[best_key]["palm_offset_mm"] > rest["palm_offset_mm"]),
+            "agree_with_cross_group": bool(
+                readings[best_key]["tip_to_other_mm"] == min(r["tip_to_other_mm"] for r in readings.values()))}
+
+
+# ---------------------------------------------------------------- ④ 掐棱握式（卡 1 的唯一姿势解算器）
+
+
+def grip_board_edge(arm, side, frame, grip_z, curl_amount, curl_axis,
+                    thumb_inset_m=0.045, thumb_drop_m=0.030, label=""):
+    """**掐棱握式**：虎口压在**近侧竖棱**上 · 拇指绕到近侧面 · 四指绕**远侧竖棱**落到远侧面。
+
+    ① **朝向**（解析，不搜索）：骨局部 `Y → n`（四指从近侧绕向远侧）· 骨局部 `Z → −u`（掌面压端面）
+       ⇒ 骨局部 `X`（蜷曲轴）`= Y × Z → −z` —— **蜷曲轴沿棱**，四指绕远侧竖棱收拢。
+    ② **虎口落到棱上**：`腕 = 棱上一点 − R·(虎口相对腕的偏移)`，**一次算出**而非两遍定点
+       （#163 §十八/§十九：两遍定点会把腕推过板；顺序必须是"先解臂、后定朝向"）。
+    ③ **四指蜷曲**：用卡 1 的 F10 值（`curl_amount` × `FINGER_CURL_DEG`）——指尖落不落得上远侧面
+       **由残差说出来**，不在解算里偷偷补。
+    ④ **拇指单独解**到近侧面（拇指自己 4 节可动骨；不让整只手偏转——#163 §十七 的扇形就是这么来的）。
+
+    返回读数（全部**产物侧**）：虎口↔棱（点↔线）· 指尖↔远侧面（逐根，点↔面）· 拇指↔近侧面 · 腕位 · 肘。
+    """
+    sgn = 1.0 if side == "Left" else -1.0
+    n, u, z = frame["n"], frame["u"], frame["z"]
+    post = _posterior(arm)
+    edge_pt = _to_edge(arm, side, frame, grip_z)
+    hand_name = f"{BONE_PREFIX}{side}Hand"
+    ctrl_hand = f"CTRL_{side}Hand"
+
+    # ⚠️ 手朝向的第三轴**由几何解出，不按手别硬编码**：要"掌面压端面"就是要求
+    #    `掌面法向(骨局部 Z) = +u`，而 `_set_world_axes` 算出的是 `z_local = x_hint × y_dir`
+    #    ⇒ 解 `x × n = u` 得 **`x_hint = n × u`**（因为 `(n×u) × n = u`）。
+    #    实测代价（两次都踩在同一处）：
+    #    ① 两侧同号 ⇒ 右手整只手翻个儿（虎口离棱 155 mm、残差 22.27 mm）；
+    #    ② 按手别取反能过椅背，却在**门边宿主上翻了**——门自由边那一端的 (u, n) 手性与椅背 +X 端相反
+    #       （`u×n = −Z`）⇒ 四指↔远侧棱 从 0.4 mm 变成 8.6 mm。⇒ 用几何量，别用"左/右"这个代理变量。
+    x_hint = n.cross(u)
+    # ① 朝向（此时父链未定，写下去只为给"虎口偏移"一个初值）
+    _set_world_axes(arm, ctrl_hand, hand_name, n, x_hint)
+    # ② 解臂（先解臂、后定朝向——#163 §十九 的顺序修正）→ 定朝向 → 重算偏移 → 再解一次
+    off = web_point(arm, side) - world_point(arm, hand_name)
+    wrist_target = edge_pt - off
+    arm_first = solve_arm(arm, side, wrist_target, post)
+    _set_world_axes(arm, ctrl_hand, hand_name, n, x_hint)
+    off2 = web_point(arm, side) - world_point(arm, hand_name)
+    wrist_target = edge_pt - off2
+    arm_final = solve_arm(arm, side, wrist_target, post)
+    _set_world_axes(arm, ctrl_hand, hand_name, n, x_hint)
+    # ③ 四指蜷曲（F10 的输入值；拇指留到第 ④ 步单独解）
+    _apply_group_curl(arm, side, "四指",
+                      0 if curl_axis["axis"] == "X" else (1 if curl_axis["axis"] == "Y" else 2),
+                      curl_axis["sign"], curl_amount)
+    update(2)
+    # ④ 拇指：目标 = 近侧面上一点（骨骼尖落在面上、蒙皮厚度靠第 ⑤ 步的读数校正）
+    face_pt = frame["面-近侧面"][0]
+    thumb_target = face_pt + u * thumb_inset_m + z * (grip_z - face_pt.z)
+    thumb = solve_thumb_to_target(arm, side, thumb_target)
+    update(2)
+    gap0 = points_face_gap_mm(finger_skin_world(arm, side, "Thumb"), frame["面-近侧面"])["gap_mm"]
+    if gap0 is not None and abs(gap0) > CONTACT_TOL_MM:
+        # 一步 Newton（⚠️ 方向实测踩过一次）：近侧面的**朝外**法向是 `−n`，而 `gap` 正是沿它量的
+        # ⇒ 要让 gap 归零，目标点必须沿 `−n` 移动 |gap|。写反的代价：目标点永远落在面上，
+        #    间隙恒为 −14.42 mm（拇指蒙皮陷进板 14 mm），且**与抓握高度无关**——那个"恒定"就是判据。
+        thumb_target = thumb_target + n * (gap0 / 1000.0)
+        thumb = solve_thumb_to_target(arm, side, thumb_target)
+        update(2)
+    gap1 = points_face_gap_mm(finger_skin_world(arm, side, "Thumb"), frame["面-近侧面"])["gap_mm"]
+
+    web_p = web_point(arm, side)
+    web_vs = web_p - edge_pt
+    palm_gap = points_face_gap_mm(
+        [arm.matrix_world @ (arm.pose.bones[hand_name].matrix @ q) for q in palm_face_vertices(arm, side)],
+        frame["面-端面"])["gap_mm"]
+    return {
+        "label": label,
+        "frame_axes": {"n": [round(c, 4) for c in n], "u": [round(c, 4) for c in u],
+                       "z": [round(c, 4) for c in z], "thickness_mm": frame["thickness_mm"]},
+        "grip_z_m": round(grip_z, 4),
+        "curl_amount": curl_amount,
+        "curl_axis": dict(curl_axis),
+        "edge_point_m": [round(c, 4) for c in edge_pt],
+        "web_point_m": [round(c, 4) for c in web_p],
+        "web_to_edge_mm": round(point_to_line_mm(web_p, frame["棱-近侧"]), 2),
+        "web_along_n_mm": round(web_vs.dot(n) * 1000.0, 2),
+        "web_along_u_mm": round(web_vs.dot(u) * 1000.0, 2),
+        "wrist_target_m": [round(c, 4) for c in wrist_target],
+        "arm": arm_final,
+        "thumb": thumb,
+        "palm_to_end_face_mm": palm_gap,
+        "thumb_gap_mm": gap1,
+        "thumb_gap_before_correction_mm": gap0,
+        "elbow_deg": round(math.degrees(
+            (world_point(arm, f"{BONE_PREFIX}{side}Arm") - world_point(arm, f"{BONE_PREFIX}{side}ForeArm"))
+            .angle(world_point(arm, hand_name) - world_point(arm, f"{BONE_PREFIX}{side}ForeArm"))), 1),
+        "elbow_offset_mm": elbow_offset(arm, side),
+        "hand_euler_deg": [round(math.degrees(a), 2)
+                           for a in arm.pose.bones[ctrl_hand].rotation_euler],
+    }
+
+
+#: 四指的分区名（成组项必须**并列**打印，口径 §七 硬规矩 2）
+FOUR_FINGERS = ("Index", "Middle", "Ring", "Pinky")
+
+
+def grip_board_edge_readings(arm, side, frame):
+    """**卡 1「掐棱」的接触对读数**（每对一行；与回显卡**同一来源**——回显卡由本函数的结果生成）。
+
+    三条对（口径 §13.2：一对 = 手部分区 × 物体分区 × 判据形态 × 容差档 × 并列项）：
+
+    | # | 手部分区 | 物体分区 | 形态 | 为什么是这个对象 |
+    |---|---|---|---|---|
+    | 1 | 虎口 | **近侧竖棱** | 点↔线 | 虎口跨的就是这条棱；`web_point` 含 ε 换算（§8.1） |
+    | 2 | 拇指 | 近侧面 | 点↔面 | 拇指绕到 +Y 近侧（口径 §三 D8） |
+    | 3 | **四指逐根** | **远侧竖棱** | 点↔线 | 四指绕远侧棱收拢；⚠️ 量的**不是**远侧面——见下 |
+
+    ⚠️ **为什么不量"逐指尖 ↔ 远侧面"**（名录原写的形态）：本片实测它**不可满足**——
+    板厚 40 mm 时，虎口压在近侧棱上 ⇒ 掌指关节必然落在 `n≈37.5 mm`（虎口→掌指关节在掌内是
+    刚体常量 37 mm），四指于是整段越过远侧面飞在外面，蒙皮到远侧面是 **−3.5 ~ +80 mm**，
+    加蜷曲只会更远。**四指真正吃住的是"远侧棱"这条线**（同一姿势下实测 **0.3 ~ 1.0 mm**）
+    ⇒ 判据形态取 **点↔线**。这是"判据的度量对象要与措辞同层"（§4.2 硬规矩 3）在卡上的第一次应用。
+    """
+    rows = [{
+        "手部分区": "虎口",
+        "物体分区": "近侧竖棱",
+        "判据形态": "点↔线",
+        "容差档": "接触 tol_contact = 2.8 mm",
+        "并列项": "—",
+        "读数_mm": round(point_to_line_mm(web_point(arm, side), frame["棱-近侧"]), 2),
+    }, {
+        "手部分区": "拇指",
+        "物体分区": "近侧面",
+        "判据形态": "点↔面",
+        "容差档": "接触 tol_contact = 2.8 mm",
+        "并列项": "—",
+        "读数_mm": points_face_gap_mm(finger_skin_world(arm, side, "Thumb"),
+                                      frame["面-近侧面"])["gap_mm"],
+    }, {
+        "手部分区": "食/中/无名/小四指",
+        "物体分区": "远侧竖棱",
+        "判据形态": "点↔线",
+        "容差档": "接触 tol_contact = 2.8 mm",
+        "并列项": "四指逐根（口径 §七 硬规矩 2）",
+        "读数_mm": [round(min(point_to_line_mm(p, frame["棱-远侧"])
+                              for p in finger_skin_world(arm, side, f)), 2) for f in FOUR_FINGERS],
+        "逐项名": list(FOUR_FINGERS),
+    }]
+    return rows
+
+
+def solve_thumb_to_target(arm, side, target):
+    """拇指自身 4 节的**目标点解算**（由 `solve_thumb_to_near_face` 泛化：目标点由调用方给）。
+
+    ⚠️ 保留 `solve_thumb_to_near_face` 原函数不动（#163 的路径逐字不变）；本函数是卡 1 / 门边用的。
+    """
+    name = f"{BONE_PREFIX}{side}HandThumb1"
+    pb = arm.pose.bones[name]
+    tip_bone = f"{BONE_PREFIX}{side}Hand{DIGIT_TIP['Thumb']}"
+
+    def probe(tx, ty, tz):
+        pb.rotation_mode = "XYZ"
+        pb.rotation_euler = Euler((math.radians(tx), math.radians(ty), math.radians(tz)), "XYZ")
+        update(2)
+        return (world_point(arm, tip_bone, "tail") - target).length * 1000.0
+
+    base = list(FINGER_CURL_DEG["Thumb"])
+    best = None
+    for tx in range(base[0] - 80, base[0] + 81, 20):
+        for ty in range(base[1] - 60, base[1] + 61, 20):
+            for tz in (-40, 0, 40):
+                d = probe(tx, ty, tz)
+                if best is None or d < best[0]:
+                    best = (d, tx, ty, tz)
+    for step in (8, 3):
+        for tx in range(best[1] - 16, best[1] + 17, step):
+            for ty in range(best[2] - 16, best[2] + 17, step):
+                for tz in range(best[3] - 16, best[3] + 17, step):
+                    d = probe(tx, ty, tz)
+                    if d < best[0]:
+                        best = (d, tx, ty, tz)
+    probe(best[1], best[2], best[3])
+    return {"euler_deg": [best[1], best[2], best[3]], "tip_residual_mm": round(best[0], 1)}
+
+
+# ---------------------------------------------------------------- 代理网格（板 / 门）
+
+
+def _proxy_cube(coll, name, center, size, color, rot_z_deg=0.0):
+    bpy.ops.mesh.primitive_cube_add(size=1.0, location=center)
+    ob = bpy.context.active_object
+    ob.name = name
+    ob.scale = size
+    if rot_z_deg:
+        ob.rotation_euler = Euler((0.0, 0.0, math.radians(rot_z_deg)), "XYZ")
+    for c in list(ob.users_collection):
+        c.objects.unlink(ob)
+    coll.objects.link(ob)
+    mat = bpy.data.materials.new(name + "_mat")
+    mat.diffuse_color = (*color, 1.0)
+    ob.data.materials.append(mat)
+    return ob
+
+
+def build_door_proxy(open_deg=DOOR_OPEN_START_DEG):
+    """门代理（`REF_Door` 集合）：**只做参考与量测，不进 FBX**（同 `REF_Chair` 先例）。
+
+    几何的唯一来源是 `door_layout()`——代理与判据目标从**同一个**函数取
+    （#163 那次"手离椅背 440 mm 而残差 0.0 mm"就是两处各算一份造成的）。
+    """
+    old = bpy.data.collections.get("REF_Door")
+    if old:
+        for ob in list(old.objects):
+            bpy.data.objects.remove(ob, do_unlink=True)
+        bpy.data.collections.remove(old)
+    coll = bpy.data.collections.new("REF_Door")
+    bpy.context.scene.collection.children.link(coll)
+    lay = door_layout(open_deg)
+    _proxy_cube(coll, "REF_DoorPanel", lay["panel_center"],
+                (lay["width"], lay["thickness"], lay["height"]), (0.42, 0.30, 0.18), lay["open_deg"])
+    _proxy_cube(coll, "REF_DoorJamb", lay["hinge_center"] + Vector((0.0, 0.0, 0.0)),
+                (0.06, 0.10, lay["height"]), (0.50, 0.50, 0.50))
+    return lay
+
+
+def build_board_proxy(thickness_m, size=SEAT_SIZE, height=BACK_HEIGHT, distance=0.70):
+    """**板代理**（`REF_Board`）：卡 1 的 F6/F7 扫描要换板厚 ⇒ 板必须能独立于椅子重建。"""
+    old = bpy.data.collections.get("REF_Board")
+    if old:
+        for ob in list(old.objects):
+            bpy.data.objects.remove(ob, do_unlink=True)
+        bpy.data.collections.remove(old)
+    coll = bpy.data.collections.new("REF_Board")
+    bpy.context.scene.collection.children.link(coll)
+    lay = board_layout(distance, thickness_m, size, height)
+    _proxy_cube(coll, "REF_BoardPanel",
+                (0.0, lay["back_cy"], SEAT_TOP + height / 2.0),
+                (size, thickness_m, height), (0.45, 0.29, 0.16))
+    return lay
+
+
+def board_layout(distance, thickness=BACK_THICKNESS, size=SEAT_SIZE, height=BACK_HEIGHT):
+    """**板**的几何（椅背 / 门板同族）：把 `chair_layout` 里的板厚参数化 ⇒ F6/F7 扫描才有对象。
+
+    板占 `x ∈ ±size/2` · `y ∈ [far_y, near_y]` · `z ∈ [SEAT_TOP, SEAT_TOP + height]`。
+    与 `chair_layout` **同一套公式**（同一个来源，不另算一份）。
+    """
+    back_cy = -distance + (size / 2 + thickness / 2)
+    return {"back_cy": back_cy, "half_width": size / 2, "thickness": thickness,
+            "back_near_y": back_cy + thickness / 2, "back_far_y": back_cy - thickness / 2,
+            "rail_bottom_z": SEAT_TOP, "rail_top_z": SEAT_TOP + height}
+
+
+def main_chair() -> int:
     args = parse_args(list(sys.argv))
     tmpl = Path(args.template)
     report_path = Path(args.report) if args.report else tmpl.parent / "chair_grab_report.json"
@@ -1097,6 +1725,739 @@ def main() -> int:
         bpy.ops.wm.save_as_mainfile(filepath=str(tmpl), compress=False)
         print(f"已写回母版：{tmpl}")
     return 0 if report["ok"] else 1
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# 宿主 2：卡 1「掐棱」测量（`--task card1`）——#164 的主交付
+#
+#   产物：`data/hand_grip_cards.json`（卡 1 的 F3/F4/F6/F7/F8/F10/F11 逐字段数值）
+#   权威：design/presentation/动作描述口径.md §十三（字段语义与判据形态枚举）
+#   ⚠️ 本宿主**不产出动作**：卡 1 是**引用件**，不是 clip（口径 §13.1 甲/乙/丙 的取舍）
+# ══════════════════════════════════════════════════════════════════════════════
+
+CARD1_SIDES = ("Left", "Right")
+#: F7 的尺寸扫描（口径 §13.5「7 档 / 10 → 80 mm」：区间与步长照写，档数取 8 —— 区间相同时
+#: 10 mm 步长给 8 档；多一档是机器的活，不额外花 owner 的时间，证据里如实登记）
+CARD1_F7_SCAN_MM = (10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0)
+#: 卡 1 的基准板厚 = 椅背实测板厚（40 mm，`动作库规格.md §四·丁` 的权威常量）
+CARD1_BASELINE_THICKNESS_MM = round(BACK_THICKNESS * 1000.0, 1)
+#: F10 的四指蜷曲量（基准；由 `--scan` 的校准表选定，见证据 §三）
+CARD1_CURL_BASELINE = 1.4
+#: 卡 1 的身体条件：**弯腰角**（agent 解：可达性反解——55° 时手臂被夹直、80° 时肘反折）
+CARD1_BEND = 75.0
+#: 抓握高度 = 板顶 − 本值（由 `--scan` 选定：板顶正下方那个位置会把手臂拉直）
+CARD1_GRIP_DROP = 0.075
+#: 身体条件（与 #163 的同一条路径一致：弯腰 + 骨盆后移 0.10 m、下沉 0.05 m）
+CARD1_PELVIS_OFFSET = (0.0, 0.100, -0.050)
+#: `--scan` 校准扫描的三个变量（只在校准期用；选定值写进上面前三个常量）
+CARD1_SCAN_BENDS = (CARD1_BEND,)
+CARD1_SCAN_DROPS = (0.075,)
+CARD1_SCAN_CURLS = (1.2, 1.4)
+
+
+def pair_status(row, tol=CONTACT_TOL_MM):
+    """接触对状态：**逐项**判（成组项全部在容差内才算 ✅）——§七 硬规矩 2 的机械化。"""
+    v = row.get("读数_mm")
+    if v is None:
+        return "❓"
+    vals = v if isinstance(v, (list, tuple)) else [v]
+    return "✅" if all(x is not None and abs(x) <= tol for x in vals) else "❌"
+
+
+def pair_residual_mm(rows):
+    """**约束残差** = 逐接触对"超出容差的那部分"的最大值（mm）；0 = 全部落在容差内。
+
+    口径 §13.5 的改族阈值 = 残差**首次超容差**的那个尺寸 ⇒ 残差必须能报错、且**单调可比**。
+    """
+    worst = 0.0
+    for r in rows:
+        v = r.get("读数_mm")
+        if v is None:
+            continue
+        vals = v if isinstance(v, (list, tuple)) else [v]
+        for x in vals:
+            if x is None:
+                continue
+            worst = max(worst, abs(x) - CONTACT_TOL_MM)
+    return round(worst, 2)
+
+
+def card1_case(arm, args, thickness_mm, grip_z, curl_amount, curl_axis, side):
+    """一个扫描格的完整测量：重建板代理 → 解掐棱握式 → 读接触对（判据一律对着**产物几何**）。"""
+    lay = build_board_proxy(thickness_mm / 1000.0, distance=args.chair)
+    frame = chair_end_frame(side, lay)
+    grip = grip_board_edge(arm, side, frame, grip_z, curl_amount, curl_axis,
+                           label=f"{thickness_mm:.0f}mm-{side}")
+    rows = grip_board_edge_readings(arm, side, frame)
+    pinch = points_min_distance_mm(finger_skin_world(arm, side, "Thumb"),
+                                   finger_skin_world(arm, side, "Index"))
+    return {"thickness_mm": thickness_mm, "lay": lay, "grip": grip, "pairs": rows,
+            "residual_mm": pair_residual_mm(rows), "pinch_gap_mm": pinch,
+            "frame_axes": grip["frame_axes"]}
+
+
+def card1_json(report, args):
+    """把测量报告折成**机器源**（`data/hand_grip_cards.json`）——字段名逐字取口径 §13.3。"""
+    base = report["baseline"]["Left"]
+    scan = report["f7_scan"]
+    ref = report.get("f6_refined_mm") or {}
+    # ⚠️ 边界一律取**细化并验证过**的那两个读数（第一版这里从 scan 列表里"取第一个越界档"，
+    #    于是厚侧界报成 10.0 mm——那是**薄侧**的越界档。扫描表不是单调的，别拿它当边界。）
+    thick_usable = ref["厚侧"][1] if ref.get("厚侧") else None
+    thick_bound = ref["厚侧"][0] if ref.get("厚侧") else None
+    thin_usable = ref["薄侧"][1] if ref.get("薄侧") else None
+    thin_bound = ref["薄侧"][0] if ref.get("薄侧") else None
+    return {
+        "_meta": {
+            "schema_version": "1.0",
+            "design_authority": "design/presentation/动作描述口径.md §十三",
+            "role": "generator-input",
+            "measured_by": "code/tools/author_xbot_chair_grab.py --task card1",
+            "blender": report["blender"],
+            "template": report["template"],
+            "measured_at": report["measured_at"],
+            "units": "长度 m；间隙/残差 mm；角度 deg",
+            "contact_tol_mm": CONTACT_TOL_MM,
+            "epsilon_palm_mm": round(EPSILON_PALM_M * 1000.0, 4),
+            "note": "本文件是卡 1 的**逐字段数值**权威；字段语义与判据形态枚举的权威是口径 §十三。",
+        },
+        "cards": [{
+            "F1_索引键": report["index_key"],
+            "F2_别名位": {
+                "消费端语汇": ["正握/反握（武器语汇，owner 2026-09-15 已否）"],
+                "符号变体": "侧握 ↔ 上罩 = 棱的方向与接近方向换行（F8），非某一行取反",
+            },
+            "F3_三轴映射": {
+                "来源": "本仓实测（`--task card1` 的 f3 段）",
+                "行": [
+                    {"手骨轴": "+Z 掌面法向", "世界指向（静止）": report["f3"]["rest"]["Left"]["axes_world"]["Z"],
+                     "判据": "掌面 = 骨局部 +Z（口径 §8.1，ε = 32.68 mm）",
+                     "读数": f'静止时与世界 +Z 夹角 {report["f3"]["rest"]["Left"]["Z_vs_world_Z_deg"]}°（180° = 掌面朝下）'},
+                    {"手骨轴": "+Y 腕 → 指尖", "世界指向（静止）": report["f3"]["rest"]["Left"]["axes_world"]["Y"],
+                     "判据": "与实测「腕 → 中指指尖」方向同向（口径 U9，本片当场量）",
+                     "读数": f'夹角 {report["f3"]["rest"]["Left"]["Y_vs_wrist_to_tip_deg"]}°（左）/ '
+                             f'{report["f3"]["rest"]["Right"]["Y_vs_wrist_to_tip_deg"]}°（右）'},
+                    {"手骨轴": "X 手指屈曲轴", "世界指向（静止）": report["f3"]["rest"]["Left"]["axes_world"]["X"],
+                     "判据": "外部判据：屈曲把中指尖带向拇指尖（四指）/ 把拇指尖带向食指尖（拇指）",
+                     "读数": {g: {"左": report["f3"]["curl"]["Left"][g]["axis"] + f'{report["f3"]["curl"]["Left"][g]["sign"]:+d}',
+                                  "右": report["f3"]["curl"]["Right"][g]["axis"] + f'{report["f3"]["curl"]["Right"][g]["sign"]:+d}',
+                                  "判据读数_mm": {"静息": report["f3"]["curl"]["Left"][g]["rest"],
+                                                  "屈曲": report["f3"]["curl"]["Left"][g]["readings"][
+                                                      report["f3"]["curl"]["Left"][g]["axis"] +
+                                                      f'{report["f3"]["curl"]["Left"][g]["sign"]:+d}'],
+                                                  "全部候选": report["f3"]["curl"]["Left"][g]["readings"]},
+                                  "成立": report["f3"]["curl"]["Left"][g]["criterion_valid"]}
+                              for g in CURL_GROUPS}},
+                ],
+            },
+            "F4_分区分工与接触对清单": [
+                {"手部分区": r["手部分区"], "物体分区": r["物体分区"], "判据形态": r["判据形态"],
+                 "容差档": r["容差档"], "并列项": r.get("并列项", "—"),
+                 "基准读数_mm": r["读数_mm"], "状态": r["状态"]}
+                for r in report["baseline"]["Left"]["pairs"]
+            ],
+            "F5_判据形态与容差档": {
+                "形态": ["点↔线（虎口↔近侧竖棱 · 四指↔远侧竖棱）", "点↔面（拇指↔近侧面）"],
+                "容差": {"换算 ε": f'{round(EPSILON_PALM_M * 1000.0, 4)} mm（掌面，逐骨，口径 §8.1）',
+                         "验收 tol_contact": f"{CONTACT_TOL_MM} mm（口径 §8.2）"},
+                "为什么两个数不许混": "口径 §8.2：把两者合成一个数 ⇒ 掌面悬空 30.8 mm 被判成贴合",
+            },
+            "F6_尺寸适用区间": {
+                "量": "板厚",
+                "区间_mm": [thin_usable if thin_usable is not None else scan[0]["thickness_mm"],
+                            thick_usable if thick_usable is not None else scan[-1]["thickness_mm"]],
+                "区间判据": "全部接触对的 |读数| ≤ tol_contact = 2.8 mm（两端都越界：薄侧四指**越过**远侧棱、"
+                            "厚侧四指**够不到**远侧棱）",
+                "薄侧界（四指越过远侧棱）": {
+                    "判据": "约束残差首次 > 0（= 逐项超出 tol_contact）",
+                    "读数_mm": thin_bound},
+                "厚侧界（四指够不到远侧棱）": {
+                    "判据": "同上",
+                    "读数_mm": thick_bound},
+                "⚠️ 未出现的退化（如实登记）": "「棱太薄 ⇒ 掐不住、退化为捏/对指」的判据（拇指蒙皮↔食指蒙皮 ≤ 0）"
+                                              "在 10–80 mm 全程**未触发**（恒定 21.87 mm）——薄侧真正的越界形态是"
+                                              "**四指越过远侧棱**（+19.5 mm @10 mm），不是捏不上",
+                "扫描": [{"板厚_mm": r["thickness_mm"], "残差_mm": r["residual_mm"],
+                          "捏间隙_mm": r["pinch_gap_mm"]} for r in scan],
+            },
+            "F7_改族阈值与越界落点": report["f7"],
+            "F8_接近方向与无解组合": report["f8"],
+            "F9_方位角可行区间": {
+                "适用": False,
+                "理由": "圆柱族专用（绕轴旋转对称 ⇒ 方位角不是输入）；卡 1 的对象是**板棱**，棱的方向是输入",
+            },
+            "F10_手型（甲₁）": {
+                "逐指_4节屈曲角_deg": {k: [round(a * report["baseline"]["Left"]["grip"]["curl_amount"], 2)
+                                            for a in v] for k, v in FINGER_CURL_DEG.items()},
+                "蜷曲量系数": report["baseline"]["Left"]["grip"]["curl_amount"],
+                "掌三轴（骨局部 → 世界）": report["baseline"]["Left"]["grip"]["hand_axes"],
+                "拇指单独解（4 节可动骨）": report["baseline"]["Left"]["grip"]["thumb"],
+                "分工": "朝向前三轴作**主条件**（解析解），落点读数（F11）用来**验**（owner 2026-09-15 接受）",
+            },
+            "F11_落点读数（甲₂）": {
+                "虎口": {"世界坐标_m": base["grip"]["web_point_m"],
+                         "↔近侧竖棱_mm": base["grip"]["web_to_edge_mm"],
+                         "沿板厚方向_mm": base["grip"]["web_along_n_mm"],
+                         "沿端面方向_mm": base["grip"]["web_along_u_mm"]},
+                "拇指": {"↔近侧面_mm": base["grip"]["thumb_gap_mm"]},
+                "四指逐根_↔远侧竖棱_mm": dict(zip(base["pairs"][2]["逐项名"],
+                                                base["pairs"][2]["读数_mm"])),
+                "掌面↔端面_mm": {
+                    "读数": base["grip"]["palm_to_end_face_mm"],
+                    "性质": "**非接触对**（口径 §13.6：侧握下掌面不构成接触对）——本片实测证实："
+                            "掌面蒙皮离端面 10.5 mm ⇒ 是「贴着棱」而不是「压着面」"},
+                "腕": {"目标_m": base["grip"]["wrist_target_m"],
+                       "肘角_deg": base["grip"]["elbow_deg"],
+                       "肘偏移_mm": base["grip"]["elbow_offset_mm"]},
+            },
+            "F12_消费登记": [
+                {"动作": "BendGripChairBack（#163 侧握版，卡 1 基准）", "出处": "issue #163 · 口径 §13.6"},
+                {"动作": "扣住门边推开半掩的门（#164 新动作，独立验证）",
+                 "出处": "回合战斗流程.md §10.13「关门/开门」"},
+            ],
+        }],
+    }
+
+
+def render_still(path, cam_loc, look_at, res=(1100, 800)):
+    """**静帧**（headless 可复现）：临时相机 + 太阳光 + Workbench 引擎 ⇒ 只写 PNG，不改母版。
+
+    ⚠️ 用渲染而不是 GUI 截图：GUI 截图**不逐位可复现**（重绘时序/悬停高亮，见危险点表 §七）。
+    """
+    scene = bpy.context.scene
+    cam = bpy.data.objects.get("REF_StillCam")
+    if cam is None:
+        cdata = bpy.data.cameras.new("REF_StillCam")
+        cam = bpy.data.objects.new("REF_StillCam", cdata)
+        scene.collection.objects.link(cam)
+    cam.location = Vector(cam_loc)
+    cam.rotation_euler = (Vector(look_at) - Vector(cam_loc)).to_track_quat("-Z", "Y").to_euler()
+    cam.data.lens = 50.0
+    scene.camera = cam
+    if bpy.data.objects.get("REF_StillSun") is None:
+        ldata = bpy.data.lights.new("REF_StillSun", type="SUN")
+        sun = bpy.data.objects.new("REF_StillSun", ldata)
+        scene.collection.objects.link(sun)
+        sun.rotation_euler = Euler((math.radians(55.0), 0.0, math.radians(35.0)), "XYZ")
+        ldata.energy = 3.0
+    scene.render.engine = "BLENDER_WORKBENCH"
+    scene.render.resolution_x, scene.render.resolution_y = res
+    scene.render.resolution_percentage = 100
+    scene.render.image_settings.file_format = "PNG"
+    scene.render.filepath = str(path)
+    bpy.ops.render.render(write_still=True)
+    return str(path)
+
+
+def main_card1() -> int:
+    from datetime import datetime
+    args = parse_args(list(sys.argv))
+    if args.report_in:
+        # 报告 → 机器源（唯一来源）：重排不改任何读数，只改字段组织
+        rep = json.loads(Path(args.report_in).read_text(encoding="utf-8"))
+        out = Path(args.card_out) if args.card_out else REPO_ROOT / "data/hand_grip_cards.json"
+        out.write_text(json.dumps(card1_json(rep, args), ensure_ascii=False, indent=1), encoding="utf-8")
+        print(f"机器源（由报告重排）：{out}")
+        return 0
+    tmpl = Path(args.template)
+    if not tmpl.is_file():
+        print(f"[ERROR] 母版不存在：{tmpl}")
+        return 2
+    if args.host == "headless":
+        bpy.ops.wm.open_mainfile(filepath=str(tmpl))
+    elif not bpy.data.filepath:
+        print("[ERROR] --host live 要求母版已经在当前会话里打开")
+        return 2
+    bpy.context.scene.render.fps = args.fps
+    arm, m3 = make_context()
+    drop_temp(arm)
+    clear_pose(arm)
+
+    lay0 = board_layout(args.chair)
+    grip_z = args.grip_z if args.grip_z is not None else (lay0["rail_top_z"] - args.grip_drop)
+    curl_amount = args.curl if args.curl is not None else CARD1_CURL_BASELINE
+    report = {"script": Path(__file__).name, "task": "card1", "blender": bpy.app.version_string,
+              "template": str(tmpl), "host": args.host, "index_key": CARD1_INDEX_KEY_NAME,
+              "measured_at": datetime.now().isoformat(timespec="seconds"),
+              "chair_distance_m": args.chair, "grip_z_m": round(grip_z, 4),
+              "grip_drop_m": args.grip_drop, "curl_amount": curl_amount,
+              "board_top_z": round(lay0["rail_top_z"], 4), "problems": []}
+
+    # ---- A. F3：三轴映射（静止 T-pose 实测；U9 的 `+Y` 当场量）----
+    clear_pose(arm)
+    report["f3"] = {
+        "rest": {s: hand_axes_reading(arm, s) for s in CARD1_SIDES},
+        "curl": {s: {g: detect_curl_axis_group(arm, s, g) for g in CURL_GROUPS} for s in CARD1_SIDES},
+    }
+    curl_axis = {s: {"axis": report["f3"]["curl"][s]["四指"]["axis"],
+                     "sign": report["f3"]["curl"][s]["四指"]["sign"]} for s in CARD1_SIDES}
+    report["curl_axis_used"] = curl_axis
+    for s in CARD1_SIDES:
+        r = report["f3"]["rest"][s]
+        print(f"F3 三轴 {s:5s}: 局部+X→{r['axes_world']['X']}  +Y→{r['axes_world']['Y']}  "
+              f"+Z→{r['axes_world']['Z']} · Y↔腕→指尖 {r['Y_vs_wrist_to_tip_deg']}° · "
+              f"Z↔世界+Z {r['Z_vs_world_Z_deg']}°")
+        for g in CURL_GROUPS:
+            c = report["f3"]["curl"][s][g]
+            best = c["axis"] + f"{c['sign']:+d}"
+            print(f"      屈曲轴自测 {s:5s}/{g}: 最优 {best} · 丙(指尖→掌面) "
+                  f"{c['rest']['palm_offset_mm']} → {c['readings'][best]['palm_offset_mm']} mm · "
+                  f"乙(跨组指尖距) {c['rest']['tip_to_other_mm']} → {c['readings'][best]['tip_to_other_mm']} mm"
+                  f"（丙判据{'成立' if c['criterion_valid'] else '**失效**'}·丙乙"
+                  f"{'一致' if c['agree_with_cross_group'] else '**不一致**'}）")
+
+    # ---- 身体条件：脚踝静止位（双脚踩原地）----
+    clear_pose(arm)
+    foot_rest = {s: world_point(arm, f"{BONE_PREFIX}{s}Foot").copy() for s in CARD1_SIDES}
+
+    # ---- B. 校准扫描（--scan）：抓握高度 × 蜷曲量——只打印表，不写机器源 ----
+    if args.scan:
+        print("=" * 100)
+        print("卡 1 校准扫描（板厚 40 mm · 左手）：弯腰角 × 抓握高度 × 蜷曲量")
+        print(f"{'bend(°)':>8}{'drop(mm)':>8}{'curl':>6}{'残差':>8}{'虎口↔棱':>9}{'拇指↔近侧面':>12}"
+              f"{'逐指↔远侧面(mm)':>34}{'肘角':>8}{'臂':>6}{'腕残差':>8}")
+        for bend in CARD1_SCAN_BENDS:
+            for drop in CARD1_SCAN_DROPS:
+                for curl in CARD1_SCAN_CURLS:
+                    clear_pose(arm)
+                    bent_body_setup(arm, m3, bend, CARD1_PELVIS_OFFSET, foot_rest)
+                    case = card1_case(arm, args, CARD1_BASELINE_THICKNESS_MM,
+                                      lay0["rail_top_z"] - drop, curl, curl_axis["Left"], "Left")
+                    g = case["grip"]
+                    gaps = case["pairs"][2]["读数_mm"]
+                    print(f"{bend:>9.0f}{drop * 1000:>7.0f}{curl:>6.1f}{case['residual_mm']:>8.2f}"
+                          f"{g['web_to_edge_mm']:>9.2f}{str(g['thumb_gap_mm']):>12}"
+                          f"{str([round(x, 1) for x in gaps]):>34}{g['elbow_deg']:>8.1f}"
+                          f"{('夹直' if g['arm'].get('clamped_straight') else '可解'):>6}{g['arm']['tip_err_mm']:>8.1f}")
+        print("=" * 100)
+        return 0
+
+    # ---- C. 基准格（板厚 40 mm）——F4/F5/F10/F11 从这一格取 ----
+    report["body_setup"] = bent_body_setup(arm, m3, CARD1_BEND, CARD1_PELVIS_OFFSET, foot_rest)
+    print(f"身体条件：弯腰 {CARD1_BEND}° · 骨盆位移 {CARD1_PELVIS_OFFSET} · "
+          f"目视水平 {report['body_setup']['gaze']['after_deg']}°")
+    report["baseline"] = {}
+    for side in CARD1_SIDES:
+        clear_pose(arm)
+        bent_body_setup(arm, m3, CARD1_BEND, CARD1_PELVIS_OFFSET, foot_rest)
+        case = card1_case(arm, args, CARD1_BASELINE_THICKNESS_MM, grip_z, curl_amount, curl_axis[side], side)
+        for r in case["pairs"]:
+            r["状态"] = pair_status(r)
+        case["grip"]["hand_axes"] = {
+            "骨局部X（蜷曲轴）": [round(c, 4) for c in
+                                 (arm.matrix_world.to_3x3() @ arm.pose.bones[f"{BONE_PREFIX}{side}Hand"]
+                                  .matrix.to_3x3() @ Vector((1.0, 0.0, 0.0))).normalized()],
+            "骨局部Y（腕→指尖）": [round(c, 4) for c in
+                                   (arm.matrix_world.to_3x3() @ arm.pose.bones[f"{BONE_PREFIX}{side}Hand"]
+                                    .matrix.to_3x3() @ Vector((0.0, 1.0, 0.0))).normalized()],
+            "骨局部Z（掌面法向）": [round(c, 4) for c in
+                                    (arm.matrix_world.to_3x3() @ arm.pose.bones[f"{BONE_PREFIX}{side}Hand"]
+                                     .matrix.to_3x3() @ Vector((0.0, 0.0, 1.0))).normalized()],
+        }
+        report["baseline"][side] = case
+        if case["residual_mm"] > 0.0:
+            report["problems"].append(
+                f"基准格（{side}，板厚 {CARD1_BASELINE_THICKNESS_MM} mm）残差 {case['residual_mm']} mm > 0")
+        print(f"基准格 {side:5s}: 虎口↔棱 {case['grip']['web_to_edge_mm']} mm · "
+              f"拇指↔近侧面 {case['grip']['thumb_gap_mm']} mm · 残差 {case['residual_mm']} mm · "
+              f"肘角 {case['grip']['elbow_deg']}° · 捏间隙 {case['pinch_gap_mm']} mm")
+
+    # ---- D. F6/F7：尺寸扫描（10 → 80 mm）----
+    if args.thickness_mm is not None:
+        scan_list = (args.thickness_mm,)
+    else:
+        scan_list = CARD1_F7_SCAN_MM
+    scan = []
+    print("F7 尺寸扫描（左手 · 同一 F10 手型）：")
+    print(f"{'板厚(mm)':>9}{'残差':>8}{'虎口↔棱':>9}{'拇指↔近侧面':>12}"
+          f"{'逐指↔远侧面(mm)':>40}{'捏间隙':>9}{'肘角':>8}")
+    for t_mm in scan_list:
+        clear_pose(arm)
+        bent_body_setup(arm, m3, CARD1_BEND, CARD1_PELVIS_OFFSET, foot_rest)
+        case = card1_case(arm, args, t_mm, grip_z, curl_amount, curl_axis["Left"], "Left")
+        g = case["grip"]
+        gaps = case["pairs"][2]["读数_mm"]
+        print(f"{t_mm:>9.0f}{case['residual_mm']:>8.2f}{g['web_to_edge_mm']:>9.2f}"
+              f"{str(g['thumb_gap_mm']):>12}{str([round(x, 1) for x in gaps]):>40}"
+              f"{str(case['pinch_gap_mm']):>9}{g['elbow_deg']:>8.1f}")
+        scan.append(case)
+    report["f7_scan"] = scan
+
+    def _residual_at(t_mm):
+        clear_pose(arm)
+        bent_body_setup(arm, m3, CARD1_BEND, CARD1_PELVIS_OFFSET, foot_rest)
+        c = card1_case(arm, args, t_mm, grip_z, curl_amount, curl_axis["Left"], "Left")
+        return c["residual_mm"]
+
+    def refine(ok_t, bad_t, steps=3):
+        """二分细化窗口边界（**机器的活**，口径 §13.5：用扫描换目视）。
+
+        ⚠️ 必须以**已验过的** ok / bad 两端为输入：残差在薄侧**不是单调的**（四根指头长度不同 ⇒
+        各自的"搭上远侧棱"厚度不同）。第一版实现拿"最小越界档"当 bad 端并**没验 ok 端**，
+        于是报出"最后一个可用 10.0 mm"——而 10 mm 那档残差是 16.66 mm。**未验证的端点不算读数。**
+        """
+        for _ in range(steps):
+            mid = (ok_t + bad_t) / 2.0
+            if _residual_at(mid) > 0.0:
+                bad_t = mid
+            else:
+                ok_t = mid
+        return round(bad_t, 1), round(ok_t, 1)
+
+    base_t = CARD1_BASELINE_THICKNESS_MM
+    thick_above = next((r["thickness_mm"] for r in scan if r["residual_mm"] > 0.0 and r["thickness_mm"] > base_t), None)
+    thin_below = next((r["thickness_mm"] for r in reversed(scan)
+                       if r["residual_mm"] > 0.0 and r["thickness_mm"] < base_t), None)
+    thick_ref = refine(base_t, thick_above) if (thick_above and args.thickness_mm is None) else None
+    thin_ref = refine(base_t, thin_below) if (thin_below and args.thickness_mm is None) else None
+    if thick_ref:
+        print(f"厚侧边界细化：首次越界 {thick_ref[0]} mm（最后一个可用 {thick_ref[1]} mm）")
+    if thin_ref:
+        print(f"薄侧边界细化（向下）：首次越界 {thin_ref[0]} mm（最后一个可用 {thin_ref[1]} mm）")
+    report["f6_refined_mm"] = {"厚侧": thick_ref, "薄侧": thin_ref}
+    thick_bound = thick_ref[0] if thick_ref else None
+    thin_bound = thin_ref[0] if thin_ref else None
+
+    # ---- E. F7 改族边 + F8 方向对照 ----
+    report["f7"] = {
+        "阈值定义": "约束集首次不可满足的那个尺寸（口径 §13.5：读出来的，不是设定的）",
+        "阈值_mm": {"厚侧": thick_bound, "薄侧": thin_bound},
+        "扫描区间_mm": [scan[0]["thickness_mm"], scan[-1]["thickness_mm"]],
+        "越界落点": {
+            "厚侧": {"落点": "卡 4（指尖触点）", "状态": "已登记（卡 4 在名录里，尚未建）",
+                     "依据": "口径 §13.5 ① 归到另一张卡"},
+            "薄侧": {"落点": "缺口（该族未建，不建空卡）", "状态": "已登记",
+                     "依据": "口径 §13.5 ③；先例 §6.3『不建空表』"},
+        },
+        "改族边": [{"from": "卡1", "to": "卡4", "条件": f"板厚 > {thick_bound} mm" if thick_bound else "板厚 > 扫描上界"}],
+    }
+    report["f8"] = {
+        "侧握（基准）": {
+            "棱": "椅背侧面的**近侧竖棱**（`x=±half_width`, `y=back_near_y`）",
+            "读数_mm": {s: report["baseline"][s]["grip"]["web_to_edge_mm"] for s in CARD1_SIDES},
+        },
+        "上罩（对照）": {
+            "来源": "#163 已接受版本（`6a20c09`）的既有读数，**不是**本宿主重测",
+            "虎口↔上沿（原判据，参照**顶面中线**）": "−0.0 mm（#163 证据 §二十）",
+            "虎口↔**真棱**（本片改参照后重算）": {
+                "上沿近侧棱（`y=−0.45, z=0.7949`）": "20.0 mm",
+                "上沿远侧棱（`y=−0.49, z=0.7949`）": "20.0 mm",
+                "说明": "由 #163 记录的虎口坐标 `(±0.17, −0.47, 0.7949)` 与板几何**解析换算**，"
+                        "原判据参照的中线 `y=back_cy=−0.47` **不是棱**（两面交线才是）",
+            },
+            "掌面↔顶面_mm": "−22.2（陷入）", "拇指↔近侧面_mm": "−30.0", "四指↔远侧面_mm": "−0.462 ~ −0.468（未过）",
+            "结论": "上罩在卡 1 的判据下**两条红**：虎口没落在真棱上、四指没落到远侧面",
+            ("⚠️ 本片发现：那条「掌面陷入 22.2 mm」的根因是 ε 换算的掌面法向取自**骨架系**"
+             "（母版骨架带 +90° X 旋转 ⇒ 与世界系差 90°；#163 的上罩掌面法向恰是 −Z，不在不动轴上）。"
+             "改成世界系后重跑同一姿势：掌面最低点 −22.2 → **+10.5 mm（悬空，不再穿模）**、"
+             "肘侧向 31.5 → 49.8 mm（从绿变红）⇒ 上罩那一版的已知偏差里，第 1 条是**工具的错，不是姿势的错**。"
+             "本卡登记的对照读数仍取 **#163 记录值**（历史如实），修正后的重跑值见证据"):
+             "见证据 §七",
+        },
+        "两方向的区别": "棱的方向（竖/横）+ 接近方向（侧面/上方）；F3 的三轴映射在两者间**整体重排**",
+    }
+
+    # ---- F. 回显卡（口径 §四；行数 = 接触对行数——由**同一列表**生成，结构上不可能不一致）----
+    card_rows = []
+    for r in report["baseline"]["Left"]["pairs"]:
+        card_rows.append({"手部分区": r["手部分区"], "物体分区": r["物体分区"], "判据形态": r["判据形态"],
+                          "判据量": f'{r["手部分区"]} ↔ {r["物体分区"]}（{r["判据形态"]}）',
+                          "产物侧读数_mm": r["读数_mm"], "容差档": r["容差档"], "状态": r["状态"]})
+    report["feedback_card"] = card_rows
+    print("回显卡（口径 §四：每一项都有产物侧读数；行数 = 卡 1 的接触对行数）")
+    for row in card_rows:
+        print(f"  {row['判据量'][:34]:<36}| {str(row['产物侧读数_mm']):>10} | {row['容差档']:<26}| {row['状态']}")
+
+    report["ok"] = not report["problems"]
+    if args.report:
+        Path(args.report).write_text(json.dumps(report, ensure_ascii=False, indent=1), encoding="utf-8")
+        print(f"报告: {args.report}")
+
+    # ---- G. 机器源 ----
+    if args.thickness_mm is None:
+        card_out = Path(args.card_out) if args.card_out else REPO_ROOT / "data/hand_grip_cards.json"
+        card_out.parent.mkdir(parents=True, exist_ok=True)
+        # 机器源落点：data/hand_grip_cards.json（`role: generator-input`；被 validate_grip_cards.py 核）
+        card_out.write_text(json.dumps(card1_json(report, args), ensure_ascii=False, indent=1),
+                            encoding="utf-8")
+        print(f"机器源: {card_out}")
+
+    # ---- H. 静帧（可选）----
+    if args.still:
+        edge = report["baseline"]["Left"]["frame_axes"]
+        mid = Vector(report["baseline"]["Left"]["grip"]["web_point_m"])
+        render_still(args.still, mid + Vector((0.62, 0.72, 0.42)), mid)
+        print(f"静帧: {args.still}")
+    print(f"结论: {'OK' if report['ok'] else 'FAIL —— ' + '; '.join(report['problems'])}")
+    return 0 if report["ok"] else 1
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# 宿主 3：门边动作「扣住门边推开半掩的门」（`--task door`）——#164 的独立验证件
+#
+#   口径 §13.6：**同一张卡、新的对象**（棱从椅背换到门边，映射整体重排）
+#   ⚠️ 本宿主只交付**静帧**（口径 §13.8 边界：不做动画/关键帧入库、不接 Unity lab、不新增词条）
+# ══════════════════════════════════════════════════════════════════════════════
+
+DOOR_ACTION = "PushDoorEdge"
+#: (帧, 门开角°, 手是否扣住门边)——半掩 30° → 推开 80°
+DOOR_SCHEDULE = ((1, DOOR_OPEN_START_DEG, False), (13, DOOR_OPEN_START_DEG, True),
+                 (25, DOOR_OPEN_END_DEG, True))
+
+
+def main_door() -> int:
+    from datetime import datetime
+    args = parse_args(list(sys.argv))
+    tmpl = Path(args.template)
+    if not tmpl.is_file():
+        print(f"[ERROR] 母版不存在：{tmpl}")
+        return 2
+    if args.host == "headless":
+        bpy.ops.wm.open_mainfile(filepath=str(tmpl))
+    elif not bpy.data.filepath:
+        print("[ERROR] --host live 要求母版已经在当前会话里打开")
+        return 2
+    bpy.context.scene.render.fps = args.fps
+    arm, m3 = make_context()
+    drop_temp(arm)
+    clear_pose(arm)
+    report = {"script": Path(__file__).name, "task": "door", "blender": bpy.app.version_string,
+              "template": str(tmpl), "host": args.host, "action": DOOR_ACTION,
+              "measured_at": datetime.now().isoformat(timespec="seconds"),
+              "schedule": [{"frame": f, "door_open_deg": a, "hooked": h} for f, a, h in DOOR_SCHEDULE],
+              "problems": []}
+
+    # 手骨轴的实测与卡 1 同源（不得在两处各测一份）
+    clear_pose(arm)
+    f3 = {s: hand_axes_reading(arm, s) for s in CARD1_SIDES}
+    curl = {s: detect_curl_axis_group(arm, s, "四指") for s in CARD1_SIDES}
+    report["f3_rest"] = f3
+    report["f3_curl"] = curl
+    curl_axis = {s: {"axis": curl[s]["axis"], "sign": curl[s]["sign"]} for s in CARD1_SIDES}
+    print(f"F3 复核（门边宿主与卡 1 同源）：+Y↔腕→指尖 {f3['Left']['Y_vs_wrist_to_tip_deg']}°（左）")
+
+    side = "Left"                       # 副手（右手）在推门这一拍是自由的 ⇒ 本片只解一只手
+    grip_z = args.grip_z if args.grip_z is not None else 1.15   # 站立时略低于肩（肩高≈1.28 m）
+    curl_amount = args.curl if args.curl is not None else CARD1_CURL_BASELINE
+    clear_pose(arm)
+    foot_rest = {s: world_point(arm, f"{BONE_PREFIX}{s}Foot").copy() for s in CARD1_SIDES}
+    report["freedom_table"] = [
+        {"量": "门开角（半掩 → 推开）", "归属": "owner 圈定（需求原话「扣住门边推开半掩的门」）",
+         "值": f"{DOOR_OPEN_START_DEG}° → {DOOR_OPEN_END_DEG}°", "依据": "回合战斗流程 §10.13 关门/开门"},
+        {"量": "抓握高度", "归属": "agent 解", "值": f"{grip_z:.2f} m",
+         "依据": "站立时肩高（≈1.28 m）− 0.13 m：抓握点离肩越近，腕目标越不逼近臂长"},
+        {"量": "身体朝向（转身角）", "归属": "agent 解（可达性反解）", "值": "每帧 = 门边方位角",
+         "依据": "不转身则手臂夹直（实测肘 180°、虎口离门边 291.6 mm）"},
+        {"量": "身体前倾", "归属": "agent 解（可达性反解）", "值": "0.12 m",
+         "依据": "不倾则到位帧腕目标离肩 0.659 m > 臂长 0.562 m（实测：手臂夹直）"},
+        {"量": "四指蜷曲量", "归属": "卡 1 的 F10（同一张卡，不另发明）", "值": str(curl_amount),
+         "依据": "口径 §13.6：新动作**复用**卡片，不新发明判据"},
+    ]
+    captured, verify = {}, []
+    for frame, open_deg, hooked in DOOR_SCHEDULE:
+        clear_pose(arm)
+        drop_temp(arm, also_objects=False)
+        dlay = build_door_proxy(open_deg)
+        frame_geo = door_end_frame(dlay)
+        me = dlay["mid_edge"]
+        yaw = math.degrees(math.atan2(me.x, -me.y))
+        report.setdefault("body_yaw", {})[frame] = round(yaw, 2)
+        body = standing_body_setup(arm, m3, yaw, foot_rest, lean_m=0.12)
+        if frame == DOOR_SCHEDULE[0][0]:
+            print(f"身体：转身 {yaw:.1f}° · 前倾 0.12 m · 目视水平 {body['gaze']['after_deg']}°")
+        if hooked:
+            # 抓握高度**保持常量**（不随门角漂移：那会引入一个无来源的常数）
+            grip = grip_board_edge(arm, side, frame_geo, grip_z,
+                                   curl_amount, curl_axis[side], label=f"door{frame}")
+            pairs = grip_board_edge_readings(arm, side, frame_geo)
+            for r in pairs:
+                r["状态"] = pair_status(r)
+            verify.append({"frame": frame, "door_open_deg": open_deg, "grip": grip, "pairs": pairs,
+                           "residual_mm": pair_residual_mm(pairs)})
+            print(f"帧 {frame:>3} 门 {open_deg:>5.1f}°: 虎口↔门边 {grip['web_to_edge_mm']:>6.2f} mm · "
+                  f"拇指↔近侧面 {str(grip['thumb_gap_mm']):>7} mm · 残差 {pair_residual_mm(pairs):>5.2f} mm · "
+                  f"肘角 {grip['elbow_deg']}°")
+        else:
+            verify.append({"frame": frame, "door_open_deg": open_deg, "grip": None, "pairs": [],
+                           "residual_mm": None})
+        captured[frame] = capture_channels(arm, [f"CTRL_{side}Arm", f"CTRL_{side}ForeArm",
+                                                 f"CTRL_{side}Hand", f"CTRL_Hips",
+                                                 f"{BONE_PREFIX}Neck", f"{BONE_PREFIX}Head"])
+        for finger in FINGERS:
+            for k in (1, 2, 3, 4):
+                name = f"{BONE_PREFIX}{side}Hand{finger}{k}"
+                if name in arm.pose.bones:
+                    pb = arm.pose.bones[name]
+                    pb.rotation_mode = "XYZ"
+                    captured[frame][name] = {"euler_deg": [math.degrees(a) for a in pb.rotation_euler],
+                                             "location": [0.0, 0.0, 0.0]}
+    report["verify"] = verify
+    hooked_frames = [v for v in verify if v["grip"]]
+    if hooked_frames:
+        last = hooked_frames[-1]
+        worst = max((abs(x) for r in last["pairs"]
+                     for x in (r["读数_mm"] if isinstance(r["读数_mm"], list) else [r["读数_mm"]])
+                     if x is not None), default=0.0)
+        report["arrival"] = {"frame": hooked_frames[0]["frame"], "worst_pair_mm": worst}
+        for r in hooked_frames[0]["pairs"]:
+            if r["状态"] == "❌":
+                report["problems"].append(
+                    f"到位帧 {hooked_frames[0]['frame']}：{r['手部分区']}↔{r['物体分区']} "
+                    f"读数 {r['读数_mm']} mm 超容差")
+    report["feedback_card"] = [
+        {"手部分区": r["手部分区"], "物体分区": r["物体分区"], "判据形态": r["判据形态"],
+         "产物侧读数_mm": r["读数_mm"], "状态": r["状态"]}
+        for r in (hooked_frames[0]["pairs"] if hooked_frames else [])]
+    print("回显卡（门边 · 到位帧）")
+    for row in report["feedback_card"]:
+        print(f"  {row['手部分区']:<12}↔ {row['物体分区']:<10}{row['判据形态']:<8}"
+              f"{str(row['产物侧读数_mm']):>9} mm  {row['状态']}")
+    report["ok"] = not report["problems"]
+
+    # ---- 打键（写动作；门代理的转角一起打——它只是预览件，不进 FBX）----
+    arm.animation_data_clear()
+    ad = arm.animation_data_create()
+    for stale in [a for a in bpy.data.actions
+                  if a.name == args.action or a.name.startswith(args.action + ".")]:
+        bpy.data.actions.remove(stale)
+    action = bpy.data.actions.new(args.action)
+    action.use_fake_user = True
+    try:
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
+        import blender_action_compat as bac
+        bac.assign_action(ad, action)
+    except Exception as exc:
+        print(f"[WARN] 取道层不可用（{exc}），退回直接指派")
+        ad.action = action
+    for frame, open_deg, hooked in DOOR_SCHEDULE:
+        bpy.context.scene.frame_set(frame)
+        clear_pose(arm)
+        drop_temp(arm, also_objects=False)
+        apply_channels(arm, captured[frame])
+        panel = bpy.data.objects.get("REF_DoorPanel")
+        if panel is not None:
+            panel.rotation_euler = Euler((0.0, 0.0, math.radians(open_deg)), "XYZ")
+            panel.keyframe_insert("rotation_euler", frame=frame)
+        update()
+        for name in list(captured[frame]):
+            pb = arm.pose.bones[name]
+            pb.rotation_mode = "XYZ"
+            pb.keyframe_insert("rotation_euler", frame=frame)
+    bpy.context.scene.frame_start = DOOR_SCHEDULE[0][0]
+    bpy.context.scene.frame_end = DOOR_SCHEDULE[-1][0]
+    report["action_frames"] = [DOOR_SCHEDULE[0][0], DOOR_SCHEDULE[-1][0]]
+
+    if args.report:
+        Path(args.report).write_text(json.dumps(report, ensure_ascii=False, indent=1), encoding="utf-8")
+        print(f"报告: {args.report}")
+    if args.still and hooked_frames:
+        # 静帧停在**到位帧**（"扣住门边"那一拍）——预览必须停在有内容的那一帧（#163 的教训）
+        bpy.context.scene.frame_set(hooked_frames[0]["frame"])
+        mid = Vector(hooked_frames[0]["grip"]["web_point_m"])
+        render_still(args.still, mid + Vector((0.85, 0.95, 0.45)), mid)
+        print(f"静帧: {args.still}")
+    if args.host == "live":
+        arrival = hooked_frames[0]["frame"] if hooked_frames else DOOR_SCHEDULE[0][0]
+        bpy.context.scene.frame_set(arrival)
+        print(f"预览：已停在到位帧 {arrival}（时间轴 {DOOR_SCHEDULE[0][0]}–{DOOR_SCHEDULE[-1][0]}）")
+    print(f"结论: {'OK' if report['ok'] else 'FAIL —— ' + '; '.join(report['problems'])}")
+    return 0 if report["ok"] else 1
+
+
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# 宿主 4：重述对拍（`--task restate`）——口径 §13.8 判据 1
+#
+#   「#163 既有读数 vs 用**卡片语言**复现 ⇒ 差异 0」——**纯算术**，不跑 Blender、不请 owner 目视。
+#   ⚠️ 它**不是独立验证**（口径 §13.8 已写明）：卡 1 的字段正是从 #163 读数提炼的 ⇒ **训练集测训练集**。
+#      独立验证 = 门边动作那条（`--task door`）。
+#
+#   两处**参照系改写**（不是数值改动，逐条登记）：
+#   ① 「虎口↔上沿」原判据参照的是**顶面中线**（`y = back_cy`）——中线不是棱（棱是两面的交线）
+#      ⇒ 卡片语言改按**真棱**（上沿近侧 / 远侧）参照，同一点得出 20.0 mm（见 §五 的登记）；
+#   ② ε 换算的掌面法向原取自**骨架系**（母版骨架带 +90° X 旋转）⇒ 世界系与它差 90°
+#      （#163 那条"掌面陷入 22.2 mm"的已知偏差由此而来；改对之后重跑给出 10.5 mm 悬空）。
+# ══════════════════════════════════════════════════════════════════════════════
+
+#: #163 已接受版本的**既有读数**（逐值带来源；不得凭记忆填）
+ISSUE163_RECORDED = {
+    "来源": "design/engineering/evidence/action-description-regression-2026-09-14.md §二十/§二十三",
+    "报告": ".scratch/chair_live_report.json（到位帧 41）",
+    "虎口_世界坐标_m": [0.17, -0.47, 0.7949],
+    "虎口↔顶面中线_mm": -0.0,
+    "掌面最低点↔顶面_mm": -22.2,
+    "拇指尖_m": [0.2308, -0.48, 0.7187],
+    "拇指尖↔近侧面_mm": -30.0,
+    "逐指尖_m": {"Index": -0.4662, "Middle": -0.4684, "Ring": -0.4639, "Pinky": -0.4622},
+}
+#: 上罩那一版的板几何（`chair_layout(0.70)` 与 #163 一致：靠背中心面 y=−0.47、厚 40 mm、顶面 z=0.7949）
+ISSUE163_BOARD = {"back_cy": -0.47, "back_near_y": -0.45, "back_far_y": -0.49, "rail_top_z": 0.7949}
+
+
+def main_restate() -> int:
+    """把 #163 的既有读数**逐值**搬进卡片的字段语言，并断言差异 0（口径 §13.8 判据 1）。"""
+    rec = ISSUE163_RECORDED
+    board = ISSUE163_BOARD
+    web = Vector(rec["虎口_世界坐标_m"])
+    tol = 1e-9
+    rows, diffs = [], []
+
+    def check(field, recorded, restated, note=""):
+        d = None if (recorded is None or restated is None) else abs(recorded - restated)
+        ok = (d is not None and d <= tol)
+        rows.append({"字段": field, "既有读数": recorded, "卡片语言复现": restated,
+                     "差异": d, "状态": "✅" if ok else "❌", "备注": note})
+        if not ok:
+            diffs.append(field)
+
+    # F11 虎口：坐标逐个搬；参照线由**中线**改为**真棱**（登记，不计入差异）
+    check("F11 虎口.x", web.x, web.x)
+    check("F11 虎口.y", web.y, web.y)
+    check("F11 虎口.z", web.z, web.z)
+    check("F11 虎口↔顶面中线（原判据）", rec["虎口↔顶面中线_mm"], rec["虎口↔顶面中线_mm"],
+          "非棱参照；真棱参照见下两行")
+    near_edge = Vector((web.x, board["back_near_y"], board["rail_top_z"]))
+    far_edge = Vector((web.x, board["back_far_y"], board["rail_top_z"]))
+    rows.append({"字段": "F11 虎口↔真棱（上沿近侧）", "既有读数": None,
+                 "卡片语言复现": round(point_to_line_mm(web, (near_edge, Vector((1.0, 0.0, 0.0)))), 1),
+                 "差异": None, "状态": "登记", "备注": "**参照系改写**：同一点、改按棱量"})
+    rows.append({"字段": "F11 虎口↔真棱（上沿远侧）", "既有读数": None,
+                 "卡片语言复现": round(point_to_line_mm(web, (far_edge, Vector((1.0, 0.0, 0.0)))), 1),
+                 "差异": None, "状态": "登记", "备注": "同上"})
+    check("F11 拇指↔近侧面", rec["拇指尖↔近侧面_mm"], rec["拇指尖↔近侧面_mm"])
+    check("F11 掌面最低点↔顶面", rec["掌面最低点↔顶面_mm"], rec["掌面最低点↔顶面_mm"],
+          "负 = 陷入；⚠️ 根因见下（ε 法向的系）")
+    for finger, y in rec["逐指尖_m"].items():
+        check(f"F11 {finger}指尖 y", y, y)
+        rows.append({"字段": f"F11 {finger}指尖↔远侧面", "既有读数": round((y - board["back_far_y"]) * 1000.0, 1),
+                     "卡片语言复现": round((y - board["back_far_y"]) * 1000.0, 1),
+                     "差异": 0.0, "状态": "✅", "备注": "点↔面（远侧面在 −Y 侧，正 = 还差这么多）"})
+
+    print("重述对拍（口径 §13.8 判据 1；#163 既有读数 → 卡片语言）")
+    print(f"  {'字段':<34}{'既有读数':>12}{'复现':>12}{'差异':>10}  状态")
+    for r in rows:
+        print(f"  {r['字段']:<34}{str(r['既有读数']):>12}{str(r['卡片语言复现']):>12}"
+              f"{str(r['差异']):>10}  {r['状态']}")
+    print(f"逐值差异：{len(diffs)} 处不一致" + ("" if not diffs else f" —— {diffs}"))
+    print("⚠️ 本条**不是独立验证**（卡 1 的字段就是从这些读数提炼的）⇒ 独立验证 = `--task door`。")
+    print("登记的两处参照系改写：① 虎口参照由顶面中线改为**真棱**；"
+          "② ε 的掌面法向由骨架系改为**世界系**（母版骨架带 +90° X 旋转）")
+    return 0 if not diffs else 1
+
+
+def main() -> int:
+    """任务分发：`--task` 选宿主（默认 `chair` = #163 的产出宿主，行为与改动前一致）。"""
+    argv = list(sys.argv)
+    task = "chair"
+    if "--" in argv:
+        tail = argv[argv.index("--") + 1:]
+        if "--task" in tail:
+            idx = tail.index("--task")
+            if idx + 1 < len(tail):
+                task = tail[idx + 1]
+    return {"chair": main_chair, "card1": main_card1, "door": main_door,
+            "restate": main_restate}[task]()
 
 
 if __name__ == "__main__":

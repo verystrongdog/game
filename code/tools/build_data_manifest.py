@@ -277,6 +277,11 @@ GENERATOR_INPUT = {
     # Unity 动作集机器源：Editor 侧 builder（code/unity/Assets/Editor/）在**生成期**
     # 读它产出 controller 与 C# 静态表；运行时 Unity 不读 data/（ARCHITECTURE.md §二）。
     'data/action_set.json',
+    # 手部基准卡片的机器源（#164）：Blender 侧创作/校验脚本在**生成期**读它
+    # （`code/tools/author_xbot_chair_grab.py` 写、`code/tools/validate_grip_cards.py` 核），
+    # 运行时任何一方都不读。设计权威 = design/presentation/动作描述口径.md §十三
+    # ⇒ `data/ → code/tools/` 这条依赖边（ARCHITECTURE.md §二 的「待落地」）由此转正。
+    'data/hand_grip_cards.json',
 }
 
 OWNER = {
