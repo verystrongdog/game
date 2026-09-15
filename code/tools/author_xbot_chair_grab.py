@@ -85,8 +85,8 @@ SCHEDULE = [
 ]
 
 FINGERS = ("Index", "Middle", "Ring", "Pinky", "Thumb")
-FINGER_CURL_DEG = {"Index": (60, 55, 40, 35), "Middle": (60, 55, 40, 35), "Ring": (60, 55, 40, 35),
-                   "Pinky": (60, 55, 40, 35), "Thumb": (30, 25, 20, 15)}
+FINGER_CURL_DEG = {"Index": (45, 40, 30, 25), "Middle": (45, 40, 30, 25), "Ring": (45, 40, 30, 25),
+                   "Pinky": (45, 40, 30, 25), "Thumb": (25, 20, 15, 12)}
 #: 每根手指的**最末节**（= 真正的指尖）——判据一律量它，成组并列打印（口径 §七 硬规矩 2）
 DIGIT_TIP = {"Index": "Index4", "Middle": "Middle4", "Ring": "Ring4", "Pinky": "Pinky4",
              "Thumb": "Thumb4"}
@@ -698,15 +698,22 @@ def hand_grip(arm, side, lay, wrist_default, tip_target):
     ③ **拇指单独解**：让拇指尖贴到近侧面（+Y 侧）。
     """
     sgn = 1.0 if side == "Left" else -1.0
+    # ① **先严格对齐**：此时手在世界的朝向已定，与腕位置无关
     _strict_hand_axes(arm, side)
-    web = web_point(arm, side)
-    edge = Vector((web.x, lay["back_cy"], lay["rail_top_z"]))      # 上沿线上正对虎口的那一点
-    delta = edge - web
-    wrist = Vector(wrist_default) + delta
-    info = solve_arm(arm, side, wrist, _posterior(arm))
+    # ② 在**已对齐**的手上量"虎口相对腕"的偏移（刚体常量），再**一次算出**腕目标
+    #    ⚠️ 上一版是"两遍定点"：先按默认腕目标摆一次量虎口、再补差值 ⇒ 量的时候手**还没对齐**，
+    #    补出来的差值把整只手推过了远侧面（y 过头 16 mm、掌面反而离顶面 29.6 mm）。
+    #    owner 2026-09-14 的话就是"手掌可以再稍微下沉一点"。
+    wrist_head = world_point(arm, f"{BONE_PREFIX}{side}Hand")
+    off = web_point(arm, side) - wrist_head                      # 虎口相对腕的偏移（对齐后 = 常量）
+    edge = Vector((wrist_head.x, lay["back_cy"], lay["rail_top_z"]))   # 虎口该落在的上沿那一点
+    wrist_target = edge - off
+    # ③ 解手臂到这个**一次算出**的腕目标；解臂会改变腕的旋转 ⇒ 再对齐一次
+    info = solve_arm(arm, side, wrist_target, _posterior(arm))
     _strict_hand_axes(arm, side)
     web2 = web_point(arm, side)
-    return {"wrist_target_m": [round(v, 4) for v in wrist],
+    return {"wrist_target_m": [round(v, 4) for v in wrist_target],
+            "web_offset_m": [round(v, 4) for v in off],
             "web_to_edge_mm": round((web2 - edge).length * 1000.0, 1),
             "web_gap_z_mm": round((web2.z - lay["rail_top_z"]) * 1000.0, 1),
             "arm": info,
