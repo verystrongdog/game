@@ -887,7 +887,16 @@ def main() -> int:
                         arm.pose.bones[name].keyframe_insert("rotation_euler", frame=frame)
     bpy.context.scene.frame_start = SCHEDULE[0][0]
     bpy.context.scene.frame_end = SCHEDULE[-1][0]
-    bpy.context.scene.frame_set(SCHEDULE[0][0])
+    if args.host == "live":
+        # ⚠️ 预览必须**停在到位帧**，不能停在首帧：首帧是站立中立姿势，owner 打开窗口看到的是"一个人站着"，
+        #    会直接得出"看不见动作"（2026-09-14 实测踩到）。headless/存档路径仍回首帧（导出的首帧不变量）。
+        arrival = [f for f, _b, _p, on, _c in SCHEDULE if on][-1]
+        bpy.context.scene.frame_set(arrival)
+        print(f"预览：已停在到位帧 {arrival}（时间轴 {SCHEDULE[0][0]}–{SCHEDULE[-1][0]}，按空格可播）")
+        print("提示：母版里 CTRL/MIXAMORIG 两个骨骼集合默认可见 ⇒ 78 根骨的八面体会挡在人身前；"
+              "看姿势时建议在 Outliner 里把这两个集合的眼睛关掉（纯显示层，不影响动作）。")
+    else:
+        bpy.context.scene.frame_set(SCHEDULE[0][0])
     report["action"] = args.action
     report["action_frames"] = [SCHEDULE[0][0], SCHEDULE[-1][0]]
     report["action_fcurves"] = len(action.fcurves) if hasattr(action, "fcurves") else None
