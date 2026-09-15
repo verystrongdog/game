@@ -54,6 +54,7 @@ data/        结构化数据契约      设计参数的机器可读形态
 | `data/` → `code/src/` | ✅ | 引擎读数据文件，不硬编码参数 |
 | `data/` → `code/unity/` | ✅ **仅生成期** | ✏️ 2026-09-12 新增。Unity **Editor 侧生成器**可读 `data/` 作为生成输入（`role: generator-input`，首个实例 `data/action_set.json`）；**运行时不得读 `data/`**——运行时消费的是生成器写出的 C# 静态表。生成器是「呈现管线」的一部分，不是逻辑正典 |
 | `code/src/` → `code/unity/` | ✅（**当前未接线**） | 计划为 DLL 桥接；现状见 §四 |
+| `data/` → `code/tools/` | ⏳ **仅生成期（待落地）** | ✏️ 2026-09-15 新增声明。Blender 侧创作/校验脚本（`code/tools/`）可读 `data/` 作为生成输入（同为 `role: generator-input`）；**首个计划实例** `data/hand_grip_cards.json`（[动作描述口径 §十三](../design/presentation/%E5%8A%A8%E4%BD%9C%E6%8F%8F%E8%BF%B0%E5%8F%A3%E5%BE%84.md) 手部基准卡片的机器源，**尚未产出**——不建空表）。落地时须在 `code/tools/build_data_manifest.py` 的 `GENERATOR_INPUT` 声明式登记并刷新 `data/manifest.json` |
 | `code/` → `design/` | ✅ 仅注释引用 | 代码可引设计文档作为**来源注记**，但不得把设计文本当运行时输入 |
 | `design/` → `code/` | ❌ | 设计文档不依赖实现细节 |
 | `code/unity/` → 逻辑正典 | ❌ | Unity 不得重新实现规则（见 §四） |
