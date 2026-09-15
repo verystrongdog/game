@@ -642,21 +642,13 @@ def web_point(arm, side):
 
 
 def _strict_hand_axes(arm, side):
-    """**抓椅背两侧**的手部朝向（owner 2026-09-14 第七轮选「丙」）——解析解，不搜索。
+    """**严格对齐**：掌面法向(局部 +Z) → 世界 −Z · 展开轴(局部 X) → 世界 +X（= 上沿轴向）⇒ 局部 Y → 世界 −Y。
 
-    owner 的原话是"双手分别握住椅背**两侧**"。几何上这样最顺：
-      掌心贴**侧面**（`x = ±0.21` 那个 40 mm 窄面）· 四指朝**前面**（−Y，绕前转角）· 拇指朝**后面**（+Y）。
-    ⇒ **"拇指在 +Y 侧"在这个握法是天然的**（不再需要手部偏转，也就没有"像握住弯曲椅背"的扇形）。
-
-    | 条件 | 左（握 `x=+0.21`） | 右（握 `x=−0.21`） | 含义 |
-    |---|---|---|---|
-    | 骨局部 Y → 世界 −Y | 同 | 同 | 四指朝前面（绕前转角） |
-    | 骨局部 X → 世界 ∓Z | `(0,0,−1)` | `(0,0,+1)` | **蜷曲轴竖直**（绕侧棱收拢） |
-    | 骨局部 Z → 世界 ∓X | `(−1,0,0)` | `(+1,0,0)` | **掌面法向朝内**（压住侧面） |
+    ⚠️ 这一条必须是**硬约束**：上一轮它在搜索里被牺牲掉，四指于是成了 52 mm 的扇形摊开——
+    owner 的原话是"两只手更像握住一个**弯曲的**椅背，而不是**笔直的**"。偏差正是那 ~30°。
     """
-    sgn = 1.0 if side == "Left" else -1.0
     _set_world_axes(arm, f"CTRL_{side}Hand", f"{BONE_PREFIX}{side}Hand",
-                    Vector((0.0, -1.0, 0.0)), Vector((0.0, 0.0, -sgn)))
+                    Vector((0.0, -1.0, 0.0)), Vector((1.0, 0.0, 0.0)))
 
 
 def solve_thumb_to_near_face(arm, side, target, base_curl):
@@ -718,28 +710,27 @@ def hand_grip(arm, side, lay, wrist_default, tip_target):
     """
     sgn = 1.0 if side == "Left" else -1.0
     post = _posterior(arm)
-    # 腕目标（解析）：掌心朝内、掌面距侧面 ε ⇒ 腕在侧面外侧 ε 处；高度取靠背上部（顶面下 30 mm）
-    side_x = sgn * 0.21
-    grip_z = lay["rail_top_z"] - 0.03
-    wrist_target = Vector((side_x + sgn * EPSILON_PALM_M, lay["back_cy"], grip_z))
+    # ① 先把腕送到**默认目标**（已实测可达：撤回版在此残差 0.0 mm）
+    info1 = solve_arm(arm, side, wrist_default, post)
+    # ② **顺序修正点**：父链此刻已定，再定手的世界朝向——原来这一步放在 solve_arm **之前**，
+    #    写 basis 用的是父骨**残留**矩阵 ⇒ 手朝向在解臂前后不一致、虎口偏移被算成错的常量（§十九 根因）
     _strict_hand_axes(arm, side)
-    info = solve_arm(arm, side, wrist_target, post)
+    # ③ 在该顺序下量"虎口相对腕"的偏移（刚体常量）
+    wrist_head = world_point(arm, f"{BONE_PREFIX}{side}Hand")
+    off = web_point(arm, side) - wrist_head
+    edge = Vector((wrist_head.x, lay["back_cy"], lay["rail_top_z"]))   # 虎口该落在的上沿那一点
+    wrist_target = edge - off
+    # ④ 送到"一次算出"的目标；解臂会改腕的旋转 ⇒ 再定一次朝向
+    info2 = solve_arm(arm, side, wrist_target, post)
     _strict_hand_axes(arm, side)
-    return {"wrist_target_m": [round(v, 4) for v in wrist_target],
-            "accepted": _post_side_gap_mm(arm, side),
-            "arm": info,
+    web2 = web_point(arm, side)
+    return {"wrist_default_m": [round(v, 4) for v in wrist_default],
+            "wrist_target_m": [round(v, 4) for v in wrist_target],
+            "web_offset_m": [round(v, 4) for v in off],
+            "web_to_edge_mm": round((web2 - edge).length * 1000.0, 1),
+            "arm_default": info1,
+            "arm": info2,
             "hand_euler_deg": [math.degrees(a) for a in arm.pose.bones[f"CTRL_{side}Hand"].rotation_euler]}
-
-
-def _post_side_gap_mm(arm, side):
-    """掌面 ↔ 侧面（`x = ±0.21`）的距离（mm）：正 = 悬空，负 = 陷入。"""
-    sgn = 1.0 if side == "Left" else -1.0
-    name = f"{BONE_PREFIX}{side}Hand"
-    rel = arm.pose.bones[name].matrix
-    mw = arm.matrix_world
-    xs = [(mw @ (rel @ p)).x for p in palm_face_vertices(arm, side)]
-    near = min(xs) if sgn > 0 else max(xs)          # 朝内最近的那一点
-    return round((near - sgn * 0.21) * sgn * 1000.0, 1)
 
 
 def _posterior(arm):
@@ -830,8 +821,7 @@ def main() -> int:
                 report.setdefault("grip_solve", {})[f"{frame}_{side}"] = grip
                 apply_finger_curl(arm, side, curl[side], curl_amount)
                 # 拇指单独解：贴到近侧面（上沿下方 30 mm、往板内 20 mm）
-                # 拇指目标：贴**后面**（+Y 侧）靠近侧棱处
-                thumb_target = Vector((sgn * 0.195, BACK_NEAR_Y + 0.012, lay["rail_top_z"] - 0.055))
+                thumb_target = Vector((sgn * 0.17 + sgn * 0.01, BACK_NEAR_Y + 0.015, lay["rail_top_z"] - 0.025))
                 thumb_orient[(frame, side)] = solve_thumb_to_near_face(
                     arm, side, thumb_target, FINGER_CURL_DEG["Thumb"])
             update(2)
@@ -893,7 +883,6 @@ def main() -> int:
             lo = palm_lowest_z(arm, side)
             palm[side] = {"lowest_z_m": round(lo, 4),
                           "to_rail_top_mm": round((lo - lay["rail_top_z"]) * 1000.0, 1),
-                          "side_gap_mm": _post_side_gap_mm(arm, side),
                           "n_face_vertices": len(palm_face_vertices(arm, side))}
             tt = world_point(arm, f"{BONE_PREFIX}{side}Hand{DIGIT_TIP['Thumb']}", "tail")
             thumb[side] = {"tip_m": [round(v, 4) for v in tt],
@@ -943,14 +932,14 @@ def main() -> int:
         report["problems"].append(
             f"目视水平：到位帧头骨上轴偏离竖直 {last['gaze_up_deg']}° > 2°（头跟着骨盆低下去了）")
     for side in ("Left", "Right"):
-        gap = last["palm"][side].get("side_gap_mm", 0.0)
+        gap = last["palm"][side]["to_rail_top_mm"]
         # 判据形态"甲"（owner 2026-09-14）：允许倾斜 —— 只要**掌面最低点**在 ε 之内就算贴合；
         # 陷进去（< −PROVISIONAL_TOL_MM）另判穿模。
         if gap < -PROVISIONAL_TOL_MM:
-            report["problems"].append(f"{side} 掌面陷入靠背**侧面** {gap} mm（穿模）")
+            report["problems"].append(f"{side} 掌面最低点陷进靠背顶面 {gap} mm（穿模）")
         elif gap > CONTACT_TOL_MM:
             report["problems"].append(
-                f"{side} 掌面离靠背**侧面** {gap} mm > 容差 {CONTACT_TOL_MM} mm（没贴合）")
+                f"{side} 掌面最低点离顶面 {gap} mm > 容差 {CONTACT_TOL_MM} mm（没贴合；owner 定的接触容差）")
         for d in ("Index", "Middle", "Ring", "Pinky"):
             dy = last[f"digits_{side}"][d]["tip_y"]
             if dy > BACK_FAR_Y:
@@ -1063,10 +1052,10 @@ def main() -> int:
             report["gaze_solve"][last["frame"]]["head_x_deg"], report["gaze_solve"][last["frame"]]["neck_x_deg"]),
          "参考系": "世界/重力", "判据量": "头骨上轴偏离竖直 (deg)",
          "产物侧读数": last["gaze_up_deg"], "状态": "✅" if abs(last["gaze_up_deg"]) <= 2.0 else "❌"},
-        {"owner 的话": "双手手掌贴合椅背侧面（丙：抓两侧）", "解成": "掌面点 = 手骨原点 + 32.68 mm × 掌面法向（局部 +Z）",
-         "参考系": "道具局部", "判据量": "掌面↔靠背侧面 (mm) ≤ 2.8；负 = 陷入",
-         "产物侧读数": last["palm"]["Left"]["side_gap_mm"],
-         "状态": "✅" if -PROVISIONAL_TOL_MM <= last["palm"]["Left"]["side_gap_mm"] <= CONTACT_TOL_MM else "❌"},
+        {"owner 的话": "双手手掌贴合椅背上方", "解成": "掌面点 = 手骨原点 + 32.68 mm × 掌面法向（局部 +Z）",
+         "参考系": "道具局部", "判据量": "掌面最低点↔顶面 (mm) ≤ 2.8；负 = 陷入",
+         "产物侧读数": last["palm"]["Left"]["to_rail_top_mm"],
+         "状态": "✅" if -PROVISIONAL_TOL_MM <= last["palm"]["Left"]["to_rail_top_mm"] <= CONTACT_TOL_MM else "❌"},
         {"owner 的话": "大拇指贴住椅背的背面（近侧 y ≥ −0.45）", "解成": "拇指尖 y 相对近侧面",
          "参考系": "道具局部", "判据量": "拇指尖 − 近侧面 (mm)",
          "产物侧读数": last["thumb"]["Left"]["y_mm_vs_near_face"],
@@ -1075,7 +1064,7 @@ def main() -> int:
          "参考系": "道具局部", "判据量": "中指尖 y (m) vs −0.49",
          "产物侧读数": last["tip_Left_m"][1],
          "状态": "✅" if last["tip_Left_m"][1] <= BACK_FAR_Y else "❌"},
-        {"owner 的话": "（上一握法的）虎口卡上沿", "解成": "虎口 = 拇指根↔食指根中点 + ε·掌面法向",
+        {"owner 的话": "虎口卡住上沿（owner 第四轮）", "解成": "虎口 = 拇指根↔食指根中点 + ε·掌面法向",
          "参考系": "世界/道具", "判据量": "虎口↔上沿 (mm) ≤ 2.8 且 y 在板厚内",
          "产物侧读数": {"离上沿": last["web"]["Left"]["above_edge_mm"], "在板厚内": last["web"]["Left"]["in_slab"]},
          "状态": "✅" if (abs(last["web"]["Left"]["above_edge_mm"]) <= CONTACT_TOL_MM
