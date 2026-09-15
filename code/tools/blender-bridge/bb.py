@@ -84,6 +84,12 @@ def main():
                  f"     Blender 还开着吗？端口/网卡变过吗？重跑 bb-launch.sh。")
     reply = json.loads(buf.decode("utf-8"))
     if args.raw:
+        # ⚠️ `--raw` 也要把**错误**打出来：否则失败时"什么也不显示"，与"成功但无输出"无法区分
+        #    （2026-09-14 实测踩到：一次 `--raw` 调用静默返回，误以为桥死了）
+        if reply.get("error"):
+            print(f"[bb] error: {reply['error']}", file=sys.stderr)
+        if reply.get("trace"):
+            print(reply["trace"], file=sys.stderr)
         if reply.get("stdout"):
             print(reply["stdout"])
         if reply.get("result") is not None:

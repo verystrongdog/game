@@ -839,6 +839,59 @@ def main() -> int:
     if max(r[f"foot_{s}_drift_mm"] for r in verify for s in ("Left", "Right")) > 15.0:
         report["problems"].append("关键帧上脚漂移 > 15 mm")
 
+    # ---- 写动作（⚠️ 这一步以前**根本不存在**：撤回版改写解析解时把打键丢了，
+    #      于是"跑了 4 轮、判据全在、却没有任何动作"——owner 目视时看不到东西。2026-09-14 实测。）
+    arm.animation_data_clear()
+    ad = arm.animation_data_create()
+    # ⚠️ `actions.new()` 遇到同名会**静默**建 `名字.001`，旧动作仍留着 ⇒ 导出按名取到**旧动作**
+    #    （管线上实测：改完动作导出结果一模一样，E5 偏差逐位不变）。重跑前先清同名/同前缀。
+    for stale in [a for a in bpy.data.actions
+                  if a.name == args.action or a.name.startswith(args.action + ".")]:
+        bpy.data.actions.remove(stale)
+    action = bpy.data.actions.new(args.action)
+    if action.name != args.action:
+        raise RuntimeError(f"动作名被占用：期望 {args.action!r}，实际 {action.name!r}")
+    action.use_fake_user = True
+    try:
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
+        import blender_action_compat as bac
+        bac.assign_action(ad, action)
+    except Exception as exc:
+        print(f"[WARN] 取道层不可用（{exc}），退回直接指派")
+        ad.action = action
+
+    keyed = ctrl_bones + [f"{BONE_PREFIX}Neck", f"{BONE_PREFIX}Head"]   # 头颈的补偿必须一起打键
+    for frame, bend, pelvis, hands_on_rail, curl_amount in SCHEDULE:
+        bpy.context.scene.frame_set(frame)
+        clear_pose(arm)
+        apply_channels(arm, captured[frame])
+        if hands_on_rail:
+            for side in ("Left", "Right"):
+                spec = hand_orient.get((frame, side))
+                if spec:
+                    pb = arm.pose.bones[f"CTRL_{side}Hand"]
+                    pb.rotation_mode = "XYZ"
+                    pb.rotation_euler = Euler([math.radians(a) for a in spec["euler_deg"]], "XYZ")
+                apply_finger_curl(arm, side, curl[side], curl_amount)
+        update()
+        for name in keyed:
+            pb = arm.pose.bones[name]
+            pb.rotation_mode = "XYZ"
+            pb.keyframe_insert("rotation_euler", frame=frame)
+        arm.pose.bones["CTRL_Hips"].keyframe_insert("location", frame=frame)
+        for side in ("Left", "Right"):
+            for finger in FINGERS:
+                for k in (1, 2, 3):
+                    name = f"{BONE_PREFIX}{side}Hand{finger}{k}"
+                    if name in arm.pose.bones:
+                        arm.pose.bones[name].keyframe_insert("rotation_euler", frame=frame)
+    bpy.context.scene.frame_start = SCHEDULE[0][0]
+    bpy.context.scene.frame_end = SCHEDULE[-1][0]
+    bpy.context.scene.frame_set(SCHEDULE[0][0])
+    report["action"] = args.action
+    report["action_frames"] = [SCHEDULE[0][0], SCHEDULE[-1][0]]
+    report["action_fcurves"] = len(action.fcurves) if hasattr(action, "fcurves") else None
+
     # ---- 回显卡（口径 §四 V-a：每一项都要有**产物侧**读数）----
     foot_worst = max(r[f"foot_{s}_drift_mm"] for r in verify for s in ("Left", "Right"))
     card = [
