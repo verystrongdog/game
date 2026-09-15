@@ -629,8 +629,12 @@ def web_point(arm, side):
     为什么需要它：此前判据只有掌面最低点 / 拇指尖 / 四指指尖 ⇒ **没有任何一条要求"虎口落在上沿上"**，
     于是虎口自然飘着（owner 一眼看出）。ε 与掌面同一套换算（[#160](../../../design/engineering/evidence/action-description-epsilon-2026-09-14.md) 实测 32.68 mm）。
     """
-    t = world_point(arm, f"{BONE_PREFIX}{side}Hand{DIGIT_TIP['Thumb']}")   # Thumb1 head 的位置
-    i = world_point(arm, f"{BONE_PREFIX}{side}HandIndex1")
+    # ⚠️ 这里必须用**拇指根**（Thumb1 的 head）与**食指根**（Index1 的 head）——虎口是"根与根之间"那一点。
+    #    2026-09-14 实测踩到：误用了 `DIGIT_TIP['Thumb']`（= Thumb4 拇指**尖**），拇指又蜷着 ⇒
+    #    虎口被算在腕**前方 130 mm** ⇒ 腕目标被反向推后 130 mm（就是那个恒定的"腕↔靠背 130.0 mm"），
+    #    整只手退到远侧面之外、四指全部落在近侧。
+    t = world_point(arm, f"{BONE_PREFIX}{side}HandThumb1")     # 拇指根
+    i = world_point(arm, f"{BONE_PREFIX}{side}HandIndex1")     # 食指根
     mid = (t + i) * 0.5
     pb = arm.pose.bones[f"{BONE_PREFIX}{side}Hand"]
     normal = (pb.matrix.to_3x3() @ Vector((0.0, 0.0, 1.0))).normalized()
@@ -698,25 +702,27 @@ def hand_grip(arm, side, lay, wrist_default, tip_target):
     ③ **拇指单独解**：让拇指尖贴到近侧面（+Y 侧）。
     """
     sgn = 1.0 if side == "Left" else -1.0
-    # ① **先严格对齐**：此时手在世界的朝向已定，与腕位置无关
+    post = _posterior(arm)
+    # ① 先把腕送到**默认目标**（已实测可达：撤回版在此残差 0.0 mm）
+    info1 = solve_arm(arm, side, wrist_default, post)
+    # ② **顺序修正点**：父链此刻已定，再定手的世界朝向——原来这一步放在 solve_arm **之前**，
+    #    写 basis 用的是父骨**残留**矩阵 ⇒ 手朝向在解臂前后不一致、虎口偏移被算成错的常量（§十九 根因）
     _strict_hand_axes(arm, side)
-    # ② 在**已对齐**的手上量"虎口相对腕"的偏移（刚体常量），再**一次算出**腕目标
-    #    ⚠️ 上一版是"两遍定点"：先按默认腕目标摆一次量虎口、再补差值 ⇒ 量的时候手**还没对齐**，
-    #    补出来的差值把整只手推过了远侧面（y 过头 16 mm、掌面反而离顶面 29.6 mm）。
-    #    owner 2026-09-14 的话就是"手掌可以再稍微下沉一点"。
+    # ③ 在该顺序下量"虎口相对腕"的偏移（刚体常量）
     wrist_head = world_point(arm, f"{BONE_PREFIX}{side}Hand")
-    off = web_point(arm, side) - wrist_head                      # 虎口相对腕的偏移（对齐后 = 常量）
+    off = web_point(arm, side) - wrist_head
     edge = Vector((wrist_head.x, lay["back_cy"], lay["rail_top_z"]))   # 虎口该落在的上沿那一点
     wrist_target = edge - off
-    # ③ 解手臂到这个**一次算出**的腕目标；解臂会改变腕的旋转 ⇒ 再对齐一次
-    info = solve_arm(arm, side, wrist_target, _posterior(arm))
+    # ④ 送到"一次算出"的目标；解臂会改腕的旋转 ⇒ 再定一次朝向
+    info2 = solve_arm(arm, side, wrist_target, post)
     _strict_hand_axes(arm, side)
     web2 = web_point(arm, side)
-    return {"wrist_target_m": [round(v, 4) for v in wrist_target],
+    return {"wrist_default_m": [round(v, 4) for v in wrist_default],
+            "wrist_target_m": [round(v, 4) for v in wrist_target],
             "web_offset_m": [round(v, 4) for v in off],
             "web_to_edge_mm": round((web2 - edge).length * 1000.0, 1),
-            "web_gap_z_mm": round((web2.z - lay["rail_top_z"]) * 1000.0, 1),
-            "arm": info,
+            "arm_default": info1,
+            "arm": info2,
             "hand_euler_deg": [math.degrees(a) for a in arm.pose.bones[f"CTRL_{side}Hand"].rotation_euler]}
 
 
