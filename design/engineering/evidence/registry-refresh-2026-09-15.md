@@ -95,21 +95,22 @@ PASS  R1  注册表 `接触相位` 定义逐字一致 —— 注册表 `接触�
 ## 七、回滚演练（实做）
 
 ```bash
-git worktree add --detach .scratch/wt-167 <本件提交>
+git worktree add --detach .scratch/wt-167 dc492ee     # 本件的提交
 cd .scratch/wt-167 && git revert --no-commit HEAD
-git diff --stat fffc589                       # ⇒ 空（逐文件回到 #165 收尾态）
-python3 code/tools/xbot_contact_phase.py      # ⇒ R1–R5 5/5（**注册表与件 docstring 一起回退 ⇒ 逐字一致重新成立**）
-python3 code/tools/run_all_checks.py          # ⇒ 16/16 退出码 0
-cd .. && git worktree remove --force .scratch/wt-167
+git diff --stat fffc589                       # ⇒ 空（12 处逐文件回到 #165 收尾态）
+python3 code/tools/xbot_contact_phase.py      # ⇒ R1–R5: 5/5 passed（注册表与件 docstring 一起回退 ⇒ 逐字一致重新成立）
+python3 code/tools/run_all_checks.py          # ⇒ 16 validators: 16 passed, 0 failed, exit 0
+cd .. && git worktree remove --force .scratch/wt-167  # 主工作树未被触碰
 ```
 
-| 判据 | 预测 | 实测 |
+| 判据 | 预测 | **实测** |
 |---|---|---|
-| 文本面 | 12 处回到 base | （见 §八 实做读数） |
-| R1 | **仍绿**（两边原子回退） | （同上） |
-| 门禁 | 16/16 | （同上） |
+| 文本面 | 12 处回到 base | ✅ **`git diff --stat fffc589` 为空** |
+| R1 | **仍绿**（两边原子回退） | ✅ **R1–R5 5/5 passed** —— 逐字一致性在回退后重新成立，**没有"回滚留半个状态"** |
+| 门禁 | 16/16 | ✅ **16 validators: 16 passed, 0 failed, 0 errors（退出码 0）** |
+| 主工作树 | — | ✅ `git worktree remove` 后 `git status --short` 为空 |
 
-⇒ **可回滚，且回滚不产生任何数据迁移**（本件不写 `data/` 之外的结构化契约、不动 manifest、无运行时消费方）。
+⇒ **可回滚，且回滚不产生任何数据迁移**（本件不写 `data/` 之外的结构化契约、不动 manifest、无运行时消费方）。⚠️ 一条如实说明：**回滚会把"件已建"这件事从注册表里抹掉**（回到"未建"）——那不是 bug，是 revert 的定义；但它意味着**注册表文本与仓库里真实存在的件在回滚后会再度不一致**，与 #165 那次的形态相同（一次 `git revert` 只能回退文本，回退不掉"件在 `code/tools/` 里"这个事实）。真要把件也撤掉，得连 #165 一起 revert。
 
 ## 八、问题差分
 
