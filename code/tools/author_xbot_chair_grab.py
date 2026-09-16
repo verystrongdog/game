@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # SPDX-FileCopyrightText: 2026 verystrongdog
 # SPDX-License-Identifier: GPL-3.0-or-later
-"""author_xbot_chair_grab.py —— X Bot 手 ↔ 目标接触动作的**可复用库 + 七个宿主**。
+"""author_xbot_chair_grab.py —— X Bot 手 ↔ 目标接触动作的**可复用库 + 八个宿主**。
 
 | 宿主 | `--task` | 干什么 | 权威 |
 |---|---|---|---|
@@ -12,6 +12,7 @@
 | `main_door_push()` | `doorpush` | 门边「推到底」**能播段**（61 帧逐帧解算 + 逐帧打键 + F4a/时序/接地/穿模） | 口径 §13.6 · issue #166 |
 | `main_panic()` | `panic` | **恐慌姿态（抱头 / 捂耳）**——**第四系「目标部位局部系」的第一次实做**：掌面 ↔ 自身头部的**具名面**（ε 来自口径 §15.6.1 / #168 实测） | 口径 §15.7 ① 件 · issue #169 |
 | `main_crouch()` | `crouch` | **下蹲 / 被推退**——`C′ 平衡与支撑`：**凸包件**（`code/tools/xbot_balance.py`）的载体（下蹲 → 被推 ⇒ 重心出域 → 后撤步 ⇒ 重新入域） | 口径 §15.7 ② 件 · issue #170 |
+| `main_kneel()` | `kneel` | **跪地 / 顶肘**——**`A′ 部位 ↔ 物面`首件**：右膝**前面** ↔ **地面**（世界系）· 左肘**肘尖面** ↔ **门板近侧面**（道具系，§6.3.1 登记面）；ε 来自 `--set kneeelbow` 实测 | 口径 §15.7 ③ 件 · issue #171 |
 | `main_restate()` | `restate` | 把 #164 的读数搬进卡片语言并断言差异 0（纯算术） | 口径 §13.8 判据 1 |
 
 来源：design/presentation/动作描述口径.md（§二 三问骨架 · §三 D7 自由度表 · §八 容差 ε · §十 验收判据 V-a…V-e
@@ -124,12 +125,13 @@ def parse_args(argv):
     argv = argv[argv.index("--") + 1:] if "--" in argv else []
     ap = argparse.ArgumentParser(prog="author_xbot_chair_grab.py")
     ap.add_argument("--task", choices=("chair", "card1", "door", "restate", "doorpush", "panic",
-                                       "crouch"),
+                                       "crouch", "kneel"),
                     default="chair",
                     help="宿主：#163 抓椅背（chair，默认）· 卡 1 掐棱测量（card1）· 门边动作（door）"
                          "· 门边「推到底」能播段（doorpush，#166）"
                          "· 恐慌姿态 抱头/捂耳（panic，#169——第四系「目标部位局部系」首件）"
                          "· 下蹲/被推退（crouch，#170——凸包件「重心 ↔ 支撑多边形」的载体）"
+                         "· 跪地/顶肘（kneel，#171——**A′ 部位 ↔ 物面**首件：膝↔地面 · 肘↔门板近侧面）"
                          "· 重述对拍（restate，纯算术，不需要 Blender）")
     ap.add_argument("--template", default=str(Path(__file__).resolve().parents[2] /
                                              ".scratch/blender_assets/xbot/XBot_AnimationTemplate.blend"))
@@ -192,6 +194,14 @@ def parse_args(argv):
     ap.add_argument("--ear-drop-mm", type=float, default=PANIC_FINAL_DROP_MM,
                     help="捂耳时掌面沿头骨长轴**再向下**这么多 mm（owner 第 1 轮指名「手应该再向下一点」；"
                          "默认 0 = 掌面重心落在该面的 ε 锚点上——这个默认值本身已经比改前低 ≈80 mm）")
+    # ---- #171：跪地 / 顶肘宿主的量 ----
+    ap.add_argument("--door-open", type=float, default=KNEEL_DOOR_OPEN_DEG,
+                    help="门的开角（°）；默认 20 = 口径 §6.3.1 登记的「半掩」")
+    ap.add_argument("--arm-angle", type=float, default=KNEEL_ARM_ANGLE_DEG,
+                    help="顶上板面时**上臂相对水平的下倾角** φ（°）——它同时定下站位"
+                         "（肩到板面 = 上臂长·cosφ + ε）")
+    ap.add_argument("--knee-side", choices=("Right", "Left"), default=KNEEL_KNEE_SIDE,
+                    help="哪条腿跪下（另一只脚前踩）；两解都解，读数并列（口径 §4.2 硬规矩 5）")
     return ap.parse_args(argv)
 
 
@@ -5629,6 +5639,1172 @@ def main_crouch() -> int:
 
 
 # ══════════════════════════════════════════════════════════════════════════════
+# 宿主 8：跪地 / 顶肘（`--task kneel`）——[#171] 的交付 · 口径 §15.7 ③ 件（**A′ 部位 ↔ 物面**）
+#
+#   关系类型 **A′ 部位 ↔ 物面**：两个目标分属**两个不同的系**（口径 §6.1）——
+#     · **跪地**：右膝**前面** ↔ **地面**（世界 / 重力系 —— M2 接地判据用的就是它）
+#     · **顶肘**：左肘**肘尖（鹰嘴 · 后侧）面** ↔ **门板近侧面**（道具局部系 —— §6.3.1 已登记的命名面）
+#   ⇒ 本件是「**一张卡之外的身体部位接触**」的第一个样本，而且它挑的两个目标**都不需要新建命名面登记**
+#     （地面 = 世界系 · 门板 = 已登记的道具面）⇒ 它干净地回答一件事：
+#     「**一次部位面登记 + ε** 是不是就够」。
+#
+#   ε **逐值取自本条实测**（`measure_xbot_surface_offset.py --set kneeelbow`，证据 §四）：
+#     · 膝前面 = `*Leg` 局部 `+Z` · **71.0281 mm**（`Beta_Surface`；静止朝世界 −Y = **前**）
+#     · 肘尖面 = 左 `+X` / 右 `−X` · **53.9201 / 53.9203 mm**（`Beta_Surface`；静止朝世界 +Y = **后**）
+#
+#   ⚠️ **换算系**（[#164] 那笔账）：两个面的法向都经 `arm.matrix_world` 换算。本条实测的代价读数
+#     （证据 §四.4）：`Leg` 的 **`+Z` 差 71.0281 mm**、`ForeArm` 的 **`±X` 差 53.9201 mm**，
+#     而它们的 `±X` / `±Y` 恰在 +90° X 旋转的**不动轴**上（差 0.0000 mm —— #163 那次"巧合相等"的同一格）。
+#     ⇒ 与 #169 的耳侧相反：**本件两个真判据面都抓得住算错系**。
+# ══════════════════════════════════════════════════════════════════════════════
+
+KNEEL_ACTION = "KneelElbowBrace"
+
+#: 部位面登记（结构沿用宿主 6 的 `HEAD_PART_FACES`；口径 §15.6 **逐件登记 · 不建空表**）
+#: ⚠️ `面内轴` 与本条判据无关：本件的两个**目标面**（地面 / 门板近侧面）来自外部几何，
+#:    部位面只提供**探针点集**（真实蒙皮面片）与 ε 自检（同 #169 的 `ε_实测复核`）。
+KNEEL_PART_FACES = {
+    # 两侧膝的 `+Z` 读数**逐值相同**（71.0281 · 平坦支撑 3 · 世界指向 −Y）⇒ 两行都登记：
+    # `--scan-posture` 的「跪哪条腿」一档要换到左膝（口径 §15.6 逐件登记 = 用到的就登记）
+    "knee_front_right": {"骨": f"{BONE_PREFIX}RightLeg", "轴": "+Z", "ε_mm": 71.0281,
+                         "标签": "右膝前面（跪地判据面）"},
+    "knee_front_left": {"骨": f"{BONE_PREFIX}LeftLeg", "轴": "+Z", "ε_mm": 71.0281,
+                        "标签": "左膝前面（跪地判据面 · 换腿那一档）"},
+    #: ⚠️ 本条实测的**登记事实**（证据 §四/§六）：`ForeArm` 的 `+X` 最外片层落在**前臂背侧**
+    #: （骨长轴 `y ≈ 20–107 mm` 那一段），**不是**鹰嘴那一点——肘尖（鹰嘴）那圈的皮肤主导骨是 **`Arm`**
+    #: （前臂的 `−Y` 外沿只有 −5.97 mm，即前臂侧皮肤只越过肘关节 6 mm）。
+    #: ⇒ 判据面如实登记为「**前臂背侧面（肘尖一侧）**」：顶肘时压住板面的本来就是"肘 + 前臂背侧"这一片。
+    "elbow_tip": {"骨": f"{BONE_PREFIX}LeftForeArm", "轴": "+X", "ε_mm": 53.9201,
+                  "标签": "左前臂背侧面（肘尖一侧 · 顶肘判据面）"},
+}
+#: 面片片层（m）——沿用宿主 6 的 `PANIC_SLAB_M`（同一用途、同一量级）
+KNEEL_SLAB_M = 0.008
+#: 接触验收容差 = 口径 §8.2 的 `tol_contact`（**不是** ε；两个数不许混）
+KNEEL_TOL_MM = CONTACT_TOL_MM
+
+#: 帧表（30 fps）。⚠️ 两个"到位帧"是**声明值**，判据要求它们 == 产物侧「首次进入容差帧」（V-f 形态）
+KNEEL_FRAME_NEUTRAL = 1      # 首帧严格中立（导出侧 E5 硬约定，同宿主 5/6/7）
+KNEEL_FRAME_KNEE = 21        # **膝到位**（右膝前面首次落进容差）
+KNEEL_FRAME_ELBOW = 33       # **肘到位**（左肘尖面首次落进容差）
+KNEEL_FRAME_END = 61         # 保持到这一帧
+
+#: 跪哪条腿 / 哪只脚在前踩
+KNEEL_KNEE_SIDE = "Right"
+KNEEL_SUPPORT_SIDE = "Left"
+
+#: 门（几何唯一来源 = `door_layout()`；§6.3.1 登记的两套命名面之一）
+KNEEL_DOOR_OPEN_DEG = DOOR_OPEN_START_DEG     # 半掩 20°
+#: 骨盆所在的板面 `u`（距铰链，m）——顶肘落点在角色的**左**侧，故骨盆要比落点更靠铰链一侧
+KNEEL_PANEL_U_M = 0.28
+#: 判据面锚点在板上的位置（**声明值**，面内偏移只报读数）
+KNEEL_CONTACT_U_M = 0.46
+KNEEL_CONTACT_Z_M = 0.82
+#: 上臂相对水平的下倾角（°）——决定"肘比肩低多少"；水平距离 = 上臂长·cos(φ)
+KNEEL_ARM_ANGLE_DEG = 26.0
+KNEEL_STANDOFF_GUESS_M = 0.42    # 站位初值（标定会把它解到"肩到门板中面 = 上臂长·cosφ + ε"）
+KNEEL_HIPS_Z_GUESS_M = 0.45      # 跪姿骨盆高度初值（标定会把它解到"膝恰好触地"）
+#: 两条腿的目标三角全部**由骨长反解**（不是手拍距离）：
+#: `a` = 大腿长（`*UpLeg`→`*Leg`）· `b` = 小腿长（`*Leg`→`*Foot`）——实测值见证据。
+#: ⚠️ **第 1 版是手拍的**（踝在膝后 0.40 m + 让 IK 自己决定膝落哪）⇒ 实测把膝解到**地面以下 59.18 mm**
+#: （`RightUpLeg.tail`），而探针面的接触判据**照样报 0.00 mm** —— "判据绿而姿势错"现场复现。
+KNEEL_THIGH_TILT_DEG = 6.0       # 跪地腿：大腿相对竖直**后倾** 6°（自然人跪，也给 IK 一点余地）
+KNEEL_KNEE_ANKLE_Z_GUESS_M = 0.085  # 跪地脚：踝高**初值**——由标定解到"足背蒙皮触地"（不是手拍）
+KNEEL_SUPPORT_ANKLE_SIDE_M = 0.10  # 前踩脚：横向偏移（朝身体左侧 = n）
+KNEEL_SUPPORT_ANKLE_Z_M = 0.075    # 前踩脚：踝高（脚掌平放）
+KNEEL_SUPPORT_KNEE_UP = 0.16        # 前踩腿：膝意图 = 髋 + (前 + 上·本值)·大腿长（大腿近水平、膝略高于髋）
+KNEEL_SWING_CLEARANCE_M = 0.09      # 过渡期摆腿的**踝部离地余量**（同族先例：`DOOR_PUSH_STEP_LIFT_M = 0.05`）
+KNEEL_SWING_MIN_SKIN_Z = 0.010      # 过渡期**足部蒙皮**的最低高度下限（m）——低于它就把踝抬上去重解
+KNEEL_KNEE_JOINT_Z_GUESS_M = 0.071  # 膝（骨点）高度初值 ≈ 膝面 ε（`+Z` 朝下时就是它）；标定会解到"面触地"
+KNEEL_STEP_LIFT_M = 0.10         # 下跪过程中两只脚各自抬起的峰值（避免"拖地"）
+KNEEL_TORSO_LEAN_DEG = 7.0       # 躯干前倾（脊柱三段各 1/3；管线 §2.1.4：局部 X = 前倾）
+KNEEL_PRESS_LEAN_DEG = 4.0       # 顶住之后**继续压**这么多度——让"持续"窗口不平凡（姿势在动、判据仍绿）
+KNEEL_FOREARM_TILT = 0.22        # 前臂"朝上 + 朝角色侧"的比例
+KNEEL_FIST_CURL = 1.0            # 顶肘那只手 = 握拳
+
+
+# ---------------------------------------------------------------- 部位面（膝 / 肘）
+
+_PART_SKIN_CACHE = {}
+
+
+def part_bone_skin_local(arm, bone, mesh="Beta_Surface"):
+    """该骨在指定蒙皮层上**主导顶点**的骨局部坐标（缓存）。
+
+    判据与 `measure_xbot_surface_offset.dominant_set()` **同一套**（argmax 权重 == 该骨）——
+    否则"判据面"与"ε 面"会是两个面（#163 的椅子几何两处各算一份就是这类错）。
+    ⚠️ 只取 `Beta_Surface`：**判据层 = 蒙皮层**（口径 §10.1，#170 owner 裁定）。
+    """
+    key = (bone, mesh)
+    if key in _PART_SKIN_CACHE:
+        return _PART_SKIN_CACHE[key]
+    bl_inv = arm.data.bones[bone].matrix_local.inverted()
+    arm_inv = arm.matrix_world.inverted()
+    out = []
+    for ob in bpy.data.objects:
+        if ob.type != "MESH" or ob.name != mesh:
+            continue
+        vg = ob.vertex_groups.get(bone)
+        if vg is None:
+            continue
+        for v in ob.data.vertices:
+            best_g, best_w = None, -1.0
+            for r in v.groups:
+                if r.weight > best_w:
+                    best_g, best_w = r.group, r.weight
+            if best_g == vg.index:
+                out.append(bl_inv @ (arm_inv @ (ob.matrix_world @ v.co)))
+    _PART_SKIN_CACHE[key] = out
+    return out
+
+
+def kneel_part_frame(arm, key, mesh="Beta_Surface"):
+    """部位面（口径 §15.6.1 逐件登记的那一行）：由该部位**当前** transform 实时求得。
+
+    返回：`法向`（世界）· `面片`（真实蒙皮世界点集 = 判据的**探针**）· `ε_实测复核`（= 面片沿轴最外投影，
+    与登记的 ε 两条独立来源互证 ⇒ "ε 能不能被消费"是读数而不是承诺，先例 #169 §4）。
+    """
+    spec = KNEEL_PART_FACES[key]
+    pb = arm.pose.bones[spec["骨"]]
+    m3 = arm.matrix_world.to_3x3()
+    r3 = pb.matrix.to_3x3()
+    axis_local = _axis_local(spec["轴"])
+    n_world = (m3 @ (r3 @ axis_local)).normalized()
+    pts = part_bone_skin_local(arm, spec["骨"], mesh)
+    scale = arm.matrix_world.to_scale().x
+    slab_local = KNEEL_SLAB_M / max(scale, 1e-9)
+    ext = max(p.dot(axis_local) for p in pts)
+    patch = [p for p in pts if p.dot(axis_local) >= ext - slab_local]
+    patch_world = [arm.matrix_world @ (pb.matrix @ p) for p in patch]
+    ext_mm = round(ext * scale * 1000.0, 4)
+    return {"键": key, "标签": spec["标签"], "骨": spec["骨"], "局部轴": spec["轴"],
+            "ε_mm": spec["ε_mm"], "ε_实测复核_mm": ext_mm,
+            "ε_一致": bool(abs(ext_mm - spec["ε_mm"]) <= 0.01),
+            "法向": n_world, "骨原点": arm.matrix_world @ pb.head,
+            "面片": patch_world, "面片数": len(patch_world),
+            "取样顶点数": len(pts)}
+
+
+# ---------------------------------------------------------------- 目标面（地面 / 门板近侧面）
+
+
+def kneel_door_geometry(open_deg=KNEEL_DOOR_OPEN_DEG, u_panel=KNEEL_PANEL_U_M):
+    """门板几何 + **近侧面**判据面（口径 §6.3.1 的命名面；几何唯一来源 = `door_layout()`）。
+
+    | 名 | 是什么 |
+    |---|---|
+    | `m` | 近侧面**朝外**法向（指向角色）——判据的符号基准 |
+    | `面板点(u, z)` | 板面（中面）上的通用取点；近侧面 = 中面沿 `m` 再退半个板厚 |
+    | `面` | 判据面的 frame：锚点 + 法向 + **有限面片**（板宽 × 板高；#164 的教训：不是无限平面） |
+    """
+    lay = door_layout(open_deg)
+    m = -lay["n"]
+    up = Vector((0.0, 0.0, 1.0))
+
+    def panel_point(u_m, z_m):
+        return lay["hinge"] + lay["u"] * u_m + m * (lay["thickness"] / 2.0) + up * z_m
+
+    face = {"标签": "门板近侧面", "锚点": panel_point(KNEEL_CONTACT_U_M, KNEEL_CONTACT_Z_M),
+            "法向": m, "u": lay["u"], "v": up,
+            "u_span_m": (-KNEEL_CONTACT_U_M, lay["width"] - KNEEL_CONTACT_U_M),
+            "z_span_m": (-KNEEL_CONTACT_Z_M, lay["height"] - KNEEL_CONTACT_Z_M),
+            "面片": [panel_point(uu, zz) for uu in (0.0, lay["width"])
+                     for zz in (0.0, lay["height"])],
+            "面片说明": f"板宽 {lay['width']} m × 板高 {lay['height']} m（有限面片）"}
+    return lay, m, panel_point, face
+
+
+def kneel_ground_face(anchor_xy):
+    """**地面**判据面：世界 `z = 0` 平面，朝外法向 `+Z`（朝角色）。
+
+    ⚠️ 不设"有限面片"：地面是**半空间**（判据与 M2 接地同一处理）——#164 的"有限面片"教训针对的是
+    **小板面**（指尖飞在板外也会读成"过了面"），而地面的外沿不构成同一种歧义。
+    """
+    return {"标签": "地面", "锚点": Vector((anchor_xy[0], anchor_xy[1], 0.0)),
+            "法向": Vector((0.0, 0.0, 1.0)), "u": None, "v": None,
+            "面片": None, "面片说明": "半空间（无面片边界；与 M2 接地同一处理）"}
+
+
+def kneel_contact_readings(probe, face, label, tol_mm=KNEEL_TOL_MM):
+    """**弧面 ↔ 面**（口径 §13.4 的形态之一）：探针面片的**最低点** ↔ 目标面。
+
+    判红量 = `沿法向间隙_mm`（`> 0` 悬空 · `< 0` 陷入 · `|·| ≤ tol` 贴合）；
+    另报"面↔面顶点最近距离"（只报读数，有网格分辨力下限，先例 #169）与"是否落在面片内"。
+    """
+    gap = points_face_gap_mm(probe["面片"], (face["锚点"], face["法向"]))
+    vals = [((p - face["锚点"]).dot(face["法向"]) * 1000.0, p) for p in probe["面片"]]
+    low_mm, low = min(vals, key=lambda t: t[0])
+    out = {"判据量": f"{label} ↔ {face['标签']}",
+           "判据形态": "弧面↔面（探针面片最低点 ↔ 目标面）",
+           "沿法向间隙_mm": low_mm,
+           "面↔面顶点最近距离_mm": (points_min_distance_mm(probe["面片"], face["面片"])
+                                    if face.get("面片") else None),
+           "面↔面_分辨力_mm": "顶点间距量级（只报读数、不判红）",
+           "探针点数": len(probe["面片"]), "探针": probe["标签"],
+           "贴合": bool(abs(low_mm) <= tol_mm), "容差_mm": tol_mm}
+    if face.get("u") is not None:
+        du = (low - face["锚点"]).dot(face["u"]) * 1000.0
+        dv = (low - face["锚点"]).dot(face["v"]) * 1000.0
+        u0, u1 = [x * 1000.0 for x in face["u_span_m"]]
+        z0, z1 = [x * 1000.0 for x in face["z_span_m"]]
+        out.update({"面内偏移_mm": [round(du, 1), round(dv, 1)],
+                    "面内窗口_mm": [[round(u0, 1), round(u1, 1)], [round(z0, 1), round(z1, 1)]],
+                    "落在面片内": bool(u0 <= du <= u1 and z0 <= dv <= z1)})
+    else:
+        out.update({"面内偏移_mm": None, "面内窗口_mm": None, "落在面片内": None})
+    return out
+
+
+# ---------------------------------------------------------------- 姿势解算（跪 + 顶肘）
+
+def kneel_facing(lay):
+    """角色的朝向：**面朝 −u**（沿门板、朝铰链）⇒ 门板落在他的**左侧**。
+
+    ⚠️ 为什么不能面朝门板（本件设计期推演 + 实测）：单膝跪地里前踩脚在身前 ≈0.34 m、前膝还要更靠前
+    （大腿近水平），而门板近侧面离身体只有 ≈0.3 m ⇒ **前腿会穿进门板**。沿板面朝向时前腿沿板面走、
+    到板面的横向距离不变 ⇒ 无冲突。代价：顶肘是**侧向**的（`鸡翅`式），这正是"顶住门"的自然姿势。
+    """
+    fwd = -lay["u"]
+    up = Vector((0.0, 0.0, 1.0))
+    left = up.cross(fwd).normalized()
+    yaw = math.degrees(math.atan2(fwd.x, -fwd.y))
+    return fwd, left, yaw
+
+
+def _contact_phase():
+    """惰性取 #165 的件（足底/足部蒙皮取点）——本宿主的接地读数不重写第二份。"""
+    if "cp" not in globals():
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
+        globals()["cp"] = __import__("xbot_contact_phase")
+    return globals()["cp"]
+
+
+def knee_face_key(ctx):
+    """跪地侧的膝面键（两侧读数逐值相同，登记两行；标签随侧走）。"""
+    return "knee_front_right" if ctx["knee_side"] == "Right" else "knee_front_left"
+
+
+def kneel_bone_lengths(arm):
+    """两骨链的**实测骨长**（米）——两条腿与左臂的目标三角全部从这里算，不用手拍距离。"""
+    B = BONE_PREFIX
+    side = "Right"
+    return {"thigh": (world_point(arm, f"{B}{side}Leg") - world_point(arm, f"{B}{side}UpLeg")).length,
+            "shin": (world_point(arm, f"{B}{side}Foot") - world_point(arm, f"{B}{side}Leg")).length,
+            "upper_arm": (world_point(arm, f"{B}LeftForeArm") - world_point(arm, f"{B}LeftArm")).length}
+
+
+def kneel_knee_leg(arm, ctx, hip_xy, kz, lens):
+    """**跪地腿**的目标三角：`→ (踝目标, 膝意图, 髋目标)`（三者互为刚体，骨长逐值用上）。
+
+    | 点 | 取法 | 为什么 |
+    |---|---|---|
+    | 膝 | `(hip_xy, kz)` | `kz` 由标定解出（"膝面触地"的物理含义），**不是手拍高度** |
+    | 髋 | 膝 + (上·cos6° + 背·sin6°)·大腿长 | 大腿竖直略后倾；`|髋−膝| = a` **正好** |
+    | 踝 | 膝 + 背·`√(b²−(kz−z_踝)²)` + 上·`(z_踝−kz)` | 让 `|膝−踝| = b` **正好** ⇒ 膝意图才落在 IK 的解圆上 |
+    """
+    up = Vector((0.0, 0.0, 1.0))
+    back = ctx["back"]
+    tilt = math.radians(KNEEL_THIGH_TILT_DEG)
+    knee = Vector((hip_xy[0], hip_xy[1], kz))
+    hip = knee + (up * math.cos(tilt) + back * math.sin(tilt)) * lens["thigh"]
+    dz = ctx["knee_ankle_z_m"] - kz
+    back_m = math.sqrt(max(lens["shin"] ** 2 - dz * dz, 1e-6))
+    ankle = knee + back * back_m + up * dz
+    return ankle, knee, hip
+
+
+def kneel_support_leg(arm, ctx, lens):
+    """**前踩腿**的目标三角：`→ (踝目标, 膝意图, 髋)`。
+
+    | 点 | 取法 | 为什么 |
+    |---|---|---|
+    | 膝 | 髋 + (前 + 上·`KNEEL_SUPPORT_KNEE_UP`)·大腿长 | 跪姿下髋高 ≈ 小腿长（0.45 m）⇒ **大腿必须近水平** |
+    | 踝 | 膝 + (下 − 前·t)·小腿长，`t` 由"踝落到静止踝高"解出 | 小腿近竖直、脚掌平放；`t` 是**解出来的** |
+
+    ⚠️ 第 1 版把膝意图放在"髋前下方 45°"（`fwd − up` 各 0.707）⇒ 髋高只有 0.45 m 时，小腿只剩
+    "近水平前伸"这一种解：实测**前踩腿小腿平铺在地面上、踝在膝前 0.44 m**，判据当场报出
+    **膝的前面朝外 −0.954**（腿反着伸）。⇒ 膝的高度是**由髋高与骨长决定**的，不是自由量。
+    """
+    B = BONE_PREFIX
+    up = Vector((0.0, 0.0, 1.0))
+    fwd = ctx["fwd"]
+    hip = world_point(arm, f"{B}{ctx['support_side']}UpLeg").copy()
+    knee = hip + (fwd + up * KNEEL_SUPPORT_KNEE_UP).normalized() * lens["thigh"]
+    za = ctx["rest"]["踝"][ctx["support_side"]].z        # 平放脚的踝高 = 静止踝高（母版实测）
+    drop = knee.z - za
+    t = math.sqrt(max((lens["shin"] / drop) ** 2 - 1.0, 0.0)) if drop > 1e-6 else 0.0
+    d2 = (up * (-1.0) - fwd * t).normalized()            # 小腿近竖直、略向后
+    ankle = knee + d2 * lens["shin"]
+    return ankle, knee, hip
+
+
+def kneel_place_hip(arm, m3, side, target, iters=6):
+    """把**髋关节**（`*UpLeg` 骨点）送到指定世界位置——按实测误差回代（同 `set_pelvis_world` 的写法）。
+
+    为什么不直接设骨盆位置：骨盆骨点与髋关节差一个横向 + 纵向偏移，且转身角会把它转走 ⇒ 实测回代。
+    """
+    pb = arm.pose.bones["CTRL_Hips"]
+    pb.location = (0.0, 0.0, 0.0)
+    update()
+    delta = Vector(target) - world_point(arm, f"{BONE_PREFIX}{side}UpLeg")
+    for _ in range(iters):
+        set_world_offset(arm, m3, "CTRL_Hips", delta)
+        update()
+        delta = delta + (Vector(target) - world_point(arm, f"{BONE_PREFIX}{side}UpLeg"))
+    return round((Vector(target) - world_point(arm, f"{BONE_PREFIX}{side}UpLeg")).length * 1000.0, 4)
+
+
+def kneel_bend_dir(hip, ankle, knee):
+    """把"想要的膝位置"化成 `bend_dir`：该点相对**髋-踝弦**的垂直分量（单位向量）。"""
+    chord = Vector(ankle) - Vector(hip)
+    c = chord.length
+    if c < 1e-9:
+        return Vector((0.0, 0.0, 1.0))
+    axis = chord / c
+    v = Vector(knee) - Vector(hip)
+    v = v - axis * v.dot(axis)
+    return v.normalized() if v.length > 1e-9 else Vector((0.0, 0.0, 1.0))
+
+
+def kneel_solve_leg(arm, ctx, side, ankle_target, bend_dir):
+    """两骨解析解（**屈曲方向**为输入）+ **滚转符号对齐静止局部 X**。
+
+    ⚠️ 滚转符号是本件实测踩出来的真 bug：`solve_two_bone()` 拿 `hinge = (mid−root)×(tip−mid)` 当局部 X 的
+    提示，而母版腿骨的静止局部 X 是**世界 −X**（管线 §2.1.2）⇒ 这个 cross 的符号让小腿**绕自身轴翻 180°**：
+    实测跪姿下**小腿前面（局部 `+Z`）朝上**、判据面读到的是腿背面，标定于是把膝骨点压到**地面以下 70.7 mm**
+    才把"最低点"顶到 0 —— **判据全绿而腿是反着跪的**（证据 §六）。
+    ⇒ 本函数把 hinge 的符号按"指向角色**右侧**"钉死（两侧腿同轴，管线 §2.1.2）。
+    """
+    B = BONE_PREFIX
+    hip = world_point(arm, f"{B}{side}UpLeg")
+    ank = Vector(ankle_target)
+    a = (world_point(arm, f"{B}{side}Leg") - hip).length
+    b = (world_point(arm, f"{B}{side}Foot") - world_point(arm, f"{B}{side}Leg")).length
+    chord = ank - hip
+    c = chord.length
+    axis = chord / c
+    x = (a * a - b * b + c * c) / (2.0 * c)
+    h = math.sqrt(max(a * a - x * x, 0.0))
+    n = Vector(bend_dir) - axis * Vector(bend_dir).dot(axis)
+    if n.length < 1e-9:
+        n = Vector((0.0, 1.0, 0.0)) - axis * axis.y
+    n.normalize()
+    mid = hip + axis * x + n * h
+    hinge = (mid - hip).cross(ank - mid)
+    if hinge.length < 1e-8:
+        hinge = ctx["right"].copy()
+    hinge.normalize()
+    if hinge.dot(ctx["right"]) < 0.0:
+        hinge = -hinge
+    _set_world_axes(arm, f"CTRL_{side}UpLeg", f"{B}{side}UpLeg", mid - hip, hinge)
+    _set_world_axes(arm, f"CTRL_{side}Leg", f"{B}{side}Leg", ank - mid, hinge)
+    update()
+    return {"label": f"leg_{side}", "mid_m": [round(v, 4) for v in mid],
+            "mid_err_mm": round((world_point(arm, f"{B}{side}Leg") - mid).length * 1000.0, 1),
+            "tip_err_mm": round((world_point(arm, f"{B}{side}Foot") - ank).length * 1000.0, 1),
+            "clamped_straight": bool(c >= a + b - 1e-6)}
+
+
+def kneel_arm_hang(arm, m3, side, curl_axes, t=1.0, relax=CROUCH_RELAX_CURL, post=None):
+    """**单侧**垂放（`crouch_arms_down()` 的单侧版）。
+
+    ⚠️ 为什么不直接调 `crouch_arms_down()`：本件两条臂走**两条不同的路**（另一条先垂放后顶肘），
+    而那件一次解两条臂。两条实测口径（世界偏移不碰矩阵 · 锚点是肩不是髋）逐字照抄
+    （`crouch_arms_down` 的 docstring 记着 #170 第 1 轮"僵尸式前伸"的两次代价）。
+    """
+    sign = 1.0 if side == "Left" else -1.0
+    shoulder = world_point(arm, f"{BONE_PREFIX}{side}Arm")
+    sx, sy, sz = CROUCH_HAND_DROP_M
+    target = shoulder + Vector((sx * sign, sy, sz))
+    rest_wrist = world_point(arm, f"{BONE_PREFIX}{side}Hand").copy()
+    wrist = rest_wrist.lerp(target, t)
+    elbow = Vector((CROUCH_ELBOW_DIR[0] * sign, CROUCH_ELBOW_DIR[1], CROUCH_ELBOW_DIR[2]))
+    arm_info, elbow_scan = solve_arm_with_elbow_scan(
+        arm, side, wrist, post if post is not None else Vector((0.0, 1.0, 0.0)))
+    down = Vector((0.0, 0.0, -1.0))
+    _set_world_axes(arm, f"CTRL_{side}Hand", f"{BONE_PREFIX}{side}Hand",
+                    _nlerp(Vector((sign, 0.0, 0.0)), down, t), Vector((0.0, 1.0, 0.0)))
+    for finger in FINGERS:
+        _apply_one_finger_curl(arm, side, finger, curl_axes[side][finger], relax * t)
+    update(2)
+    return {"腕目标_m": [round(v, 4) for v in target], "臂长_m": arm_info.get("limb_len_m"),
+            "夹直": bool(arm_info.get("clamped_straight")), "肘扫描罚分": elbow_scan["罚分"]}
+
+
+def kneel_arm_brace(arm, m3, ctx, t_down, s, curl_axes):
+    """**左臂三态**：T-pose（`t_down`=0）→ 垂放（=1）→ **肘尖顶上板面**（`s`=1）。
+
+    顶上那一态是**解析构造**的（不是搜索）：`E = S − m·(h−ε) − ẑ·drop`，其中 `drop = √(a² − (h−ε)²)`
+    ⇒ ① `|E − S| = a`（正好是上臂长）② 肘尖面（`+X` 方向 = `−m`）落在板面**上**（`ε` 的换算在构造里用掉）。
+
+    ⚠️ **`+X` 的方向就是"肘尖朝哪"**：本条实测左前臂的 `+X` 静止朝世界 `+Y`（后）= 鹰嘴那一侧
+    ⇒ 顶上时把 `+X` 对到 `−m`（朝板面），压着板面的才是"肘尖那一侧"的面（不是前臂的掌侧）。
+
+    ⚠️ **前臂的"朝上"必须垂直于板面法向**：否则 `_set_world_axes` 会把 `x_hint = −m` 正交化掉一截，
+    判据面法向被拧走（实测 12.41°、最低点间隙 +11.74 mm 而构造出的 ε 锚点只在 1.26 mm）。
+    侧向取 `back`（沿板面）——`left` 恰好就是 `−m`，拿它做倾斜等于没改。
+    """
+    side = "Left"
+    down = Vector((0.0, 0.0, -1.0))
+    S = world_point(arm, f"{BONE_PREFIX}{side}Arm")
+    d_rest = (world_point(arm, f"{BONE_PREFIX}{side}ForeArm") - S).normalized()
+    f_rest = (world_point(arm, f"{BONE_PREFIX}{side}Hand")
+              - world_point(arm, f"{BONE_PREFIX}{side}ForeArm")).normalized()
+    # **逐帧**重算顶上那一态（不是用标定那一刻的常量）：躯干一动，肩就动；肩一动，肘目标跟着挪
+    # ⇒ 顶住之后继续压前倾时，肘**始终**落在板面上（"持续"窗口因此不平凡：姿势在动、判据仍绿）。
+    a = ctx["lens"]["upper_arm"]
+    eps = KNEEL_PART_FACES["elbow_tip"]["ε_mm"] / 1000.0
+    up = Vector((0.0, 0.0, 1.0))
+    h = (S - ctx["face"]["锚点"]).dot(ctx["m"])
+    drop = math.sqrt(max(a * a - (h - eps) ** 2, 0.0))
+    E = S - ctx["m"] * (h - eps) - up * drop
+    d1 = (E - S).normalized() if s > 0.0 else (ctx.get("elbow_dir_stage1") or down)
+    f1 = ctx.get("forearm_dir_stage1") or down
+    d = _nlerp(_nlerp(d_rest, down, t_down), d1, s)
+    f = _nlerp(_nlerp(f_rest, down, t_down), f1, s)
+    hinge = d.cross(f)
+    if hinge.length < 1e-6:
+        hinge = Vector((0.0, 1.0, 0.0))
+    hinge.normalize()
+    _set_world_axes(arm, f"CTRL_{side}Arm", f"{BONE_PREFIX}{side}Arm", d, hinge)
+    x0 = Vector((0.0, 1.0, 0.0))            # 静止 +X = 世界 +Y（后）——本条实测
+    x_hint = _nlerp(x0, -ctx["m"], s)
+    _set_world_axes(arm, f"CTRL_{side}ForeArm", f"{BONE_PREFIX}{side}ForeArm", f, x_hint)
+    for finger in FINGERS:
+        _apply_one_finger_curl(arm, side, finger, curl_axes[side][finger], KNEEL_FIST_CURL * s)
+    update(2)
+    return {"上臂方向": [round(c, 4) for c in d], "前臂方向": [round(c, 4) for c in f],
+            "肘位置_m": [round(c, 4) for c in world_point(arm, f"{BONE_PREFIX}{side}ForeArm")],
+            "肩位置_m": [round(c, 4) for c in S]}
+
+
+def kneel_apply(arm, m3, ctx, t_leg, t_down, s_elbow, standoff, kz, curl_axes, lift=0.0,
+                lean_extra=0.0):
+    """按**任务空间参数**摆一帧，并当场量两个接触判据。
+
+    | 参数 | 含义 |
+    |---|---|
+    | `t_leg` | 下跪进度 0→1：**目标三角**从静止姿势线性插到接触姿势（`t_leg=1` = 标定出的接触姿势） |
+    | `t_down` | T-pose → 垂放的手臂过渡（首帧必须严格中立 ⇒ 由调用方直接捕获，不进本函数） |
+    | `s_elbow` | 顶肘进度 0→1 |
+    | `lift` | 额外的过渡期抬脚量（本宿主内部还会按**离地余量**自动补足，见 `lift_for()`） |
+    """
+    clear_pose(arm)
+    drop_temp(arm, also_objects=False)
+    lens = ctx["lens"]
+    up = Vector((0.0, 0.0, 1.0))
+    hip_xy = (ctx["panel_point"](ctx["u_panel"], 0.0) + ctx["m"] * standoff)
+    hip_xy = (hip_xy.x, hip_xy.y)
+    ankle_k, knee_k, hip_k = kneel_knee_leg(arm, ctx, hip_xy, kz, lens)
+
+    def mix(a, b):
+        return Vector(a) * (1.0 - t_leg) + Vector(b) * t_leg
+
+    yaw_now = ctx["yaw"] * t_leg          # 转身也必须过渡：第 2 帧就拧 70° ⇒ 脚当场扎进地面（本件实测）
+    set_euler(arm, "CTRL_Hips", y=yaw_now)
+    update()
+    # ① 骨盆：把**跪地那条腿的髋关节**送到目标位（膝的位置是设计量，骨盆是被解出来的）
+    hip_target = mix(ctx["rest"]["髋"][ctx["knee_side"]], hip_k)
+    hip_err = kneel_place_hip(arm, m3, ctx["knee_side"], hip_target)
+    # ② 躯干前倾 + 目视水平
+    lean = door_push_torso_lean(arm, ctx["lean_deg"] * t_down + lean_extra)
+    solve_gaze_scan(arm, scale=1.0)
+    update()
+    # ③ 两条腿：**踝按位置插值**（脚要踩在地上，不能跟着髋一起沉下去）+ **屈曲方向按方向插值**。
+    #    ⚠️ 两个反例都实测过：① 膝/踝都按位置插值 ⇒ 与骨长不自洽、IK 给垃圾解（趾骨沉到 −187 mm）；
+    #    ② 整个三角按方向插值 ⇒ 腿刚性跟着髋下沉，脚陷进地面（−22.79 mm 起）。
+    # 摆腿抬脚量：**够用就抬**——`max(固定摆动曲线, 把踝抬到"静止踝高 + 余量"所需的量)`，两端都归零。
+    swing = KNEEL_STEP_LIFT_M * math.sin(math.pi * t_leg)
+
+    def lift_for(ankle_target, side):
+        need = (ctx["rest"]["踝"][side].z + KNEEL_SWING_CLEARANCE_M * math.sin(math.pi * t_leg)
+                - ankle_target.z)
+        return max(swing, max(0.0, need))
+
+    def leg_targets(side, ankle_f, knee_f, hip_f):
+        ankle_r, knee_r, hip_r = (ctx["rest"]["踝"][side], ctx["rest"]["膝"][side],
+                                  ctx["rest"]["髋"][side])
+        ankle_t = mix(ankle_r, ankle_f)
+        bend = _nlerp(kneel_bend_dir(hip_r, ankle_r, knee_r), kneel_bend_dir(hip_f, ankle_f, knee_f), t_leg)
+        return ankle_t, bend
+
+    ak0, bend_k = leg_targets(ctx["knee_side"], ankle_k, knee_k, hip_k)
+    # ⚠️ 前踩腿的最终三角按"当前髋"算：标定帧（`t_leg=1`）现算并缓存；过渡帧用缓存
+    if t_leg >= 1.0 or "support_final" not in ctx:
+        a_s, k_s, h_s = kneel_support_leg(arm, ctx, lens)
+        if t_leg >= 1.0:
+            ctx["support_final"] = (a_s.copy(), k_s.copy(), h_s.copy())
+    else:
+        a_s, k_s, h_s = ctx["support_final"]
+    asup0, bend_s = leg_targets(ctx["support_side"], a_s, k_s, h_s)
+    ak = ak0 + up * lift_for(ak0, ctx["knee_side"])
+    asup = asup0 + up * lift_for(asup0, ctx["support_side"])
+    leg_res = {ctx["knee_side"]: kneel_solve_leg(arm, ctx, ctx["knee_side"], ak, bend_k)}
+    leg_res[ctx["support_side"]] = kneel_solve_leg(arm, ctx, ctx["support_side"], asup, bend_s)
+    # ③′ 双脚朝向（随 `t_leg` 过渡；⚠️ 改小腿朝向会带走脚的世界朝向 ⇒ 必须能被重复调用）
+    def set_feet():
+        for side in ("Left", "Right"):
+            ry = _rest_dir(arm, f"{BONE_PREFIX}{side}Foot")
+            rx = _rest_hinge(arm, f"{BONE_PREFIX}{side}Foot")
+            if side == ctx["support_side"]:
+                _set_world_axes(arm, f"CTRL_{side}Foot", f"{BONE_PREFIX}{side}Foot",
+                                _nlerp(ry, _rot_z(ry, yaw_now), t_leg),
+                                _nlerp(rx, _rot_z(rx, yaw_now), t_leg))
+                continue
+            # 跪地脚：**两段转向**——先"勾脚尖"（趾朝前上）再折到"脚背贴地"。
+            # ⚠️ 一段直达会让脚趾**扫过朝下那一档**（实测足趾骨沉到地面以下 150 mm）
+            ty = (ctx["back"] * 0.95 + Vector((0.0, 0.0, -0.31))).normalized()
+            tx = ctx["right"].copy()
+            mid = (ctx["fwd"] * 0.5 + Vector((0.0, 0.0, 1.0)) * 0.87).normalized()
+            if t_leg < 0.5:
+                ty_now, tx_now = _nlerp(ry, mid, t_leg * 2.0), _nlerp(rx, ctx["right"], t_leg * 2.0)
+            else:
+                ty_now = _nlerp(mid, ty, (t_leg - 0.5) * 2.0)
+                tx_now = _nlerp(ctx["right"], tx, (t_leg - 0.5) * 2.0)
+            _set_world_axes(arm, f"CTRL_{side}Foot", f"{BONE_PREFIX}{side}Foot", ty_now, tx_now)
+        update()
+
+    set_feet()
+    # 摆腿**离地自检**（只在过渡期）：脚在"平放 → 脚背贴地"的转向过程中会扫过朝下那一档，
+    # 光抬踝不够（实测足趾骨沉到 −150.16 mm）⇒ 按**足部蒙皮实测最低点**把踝抬上去重解（回代）。
+    if t_leg < 1.0:
+        cp2 = _contact_phase()
+        for side in (ctx["knee_side"], ctx["support_side"]):
+            ctx.setdefault("foot_skin_idx", {})[side] = cp2._skin_index(arm, side)
+        for _ in range(3):
+            fixed = False
+            for side in (ctx["knee_side"], ctx["support_side"]):
+                low = cp2._skin_lowest(arm, ctx["foot_skin_idx"][side])
+                if low is None or low >= KNEEL_SWING_MIN_SKIN_Z:
+                    continue
+                need = up * (KNEEL_SWING_MIN_SKIN_Z - low)
+                if side == ctx["knee_side"]:
+                    ak = ak + need
+                else:
+                    asup = asup + need
+                fixed = True
+            if not fixed:
+                break
+            leg_res[ctx["knee_side"]] = kneel_solve_leg(arm, ctx, ctx["knee_side"], ak, bend_k)
+            leg_res[ctx["support_side"]] = kneel_solve_leg(
+                arm, ctx, ctx["support_side"], asup, bend_s)
+            set_feet()          # ⚠️ 重解腿之后必须重设脚（否则脚的世界朝向又跑回小腿那边）
+        dbg = {s_: (None if cp2._skin_lowest(arm, ctx["foot_skin_idx"][s_]) is None
+                    else round(cp2._skin_lowest(arm, ctx["foot_skin_idx"][s_]) * 1000.0, 2))
+               for s_ in (ctx["knee_side"], ctx["support_side"])}
+        print(f"    [离地自检] t_leg={t_leg:.2f} 足部蒙皮最低 {dbg} mm · "
+              f"踝目标 z {round(ak.z * 1000, 1)} / {round(asup.z * 1000, 1)} mm")
+    # ④ 双臂
+    post = _posterior(arm)
+    hands = {f"{ctx['support_side']}臂（垂放）": kneel_arm_hang(
+        arm, m3, ctx["support_side"], curl_axes, t=min(1.0, t_down), post=post)}
+    hands["左臂（顶肘）"] = kneel_arm_brace(arm, m3, ctx, t_down, s_elbow, curl_axes)
+    update()
+    # ⑤ 当场量两个接触判据（判据面 = 部位面的**真实蒙皮面片**）
+    kkey = knee_face_key(ctx)
+    knee_probe = kneel_part_frame(arm, kkey)
+    elbow_probe = kneel_part_frame(arm, "elbow_tip")
+    knee_face = kneel_ground_face((world_point(arm, f"{BONE_PREFIX}Hips").x,
+                                   world_point(arm, f"{BONE_PREFIX}Hips").y))
+    # **朝向自检**（判据面法向 vs 目标面法向）：量的是"肘尖到底朝没朝板面"
+    fa = arm.pose.bones[f"{BONE_PREFIX}LeftForeArm"]
+    x_world = (arm.matrix_world.to_3x3() @ (fa.matrix.to_3x3() @ Vector((1.0, 0.0, 0.0)))).normalized()
+    aim = {"肘尖面法向_世界": [round(c, 4) for c in x_world],
+           "与目标面法向(−m)夹角_deg": round(math.degrees(x_world.angle(-ctx["m"])), 2),
+           "肘位置_m": [round(c, 4) for c in world_point(arm, f"{BONE_PREFIX}LeftForeArm")],
+           "膝位置_m": [round(c, 4) for c in world_point(arm, f"{BONE_PREFIX}{ctx['knee_side']}Leg")],
+           "膝前面法向_世界": [round(c, 4) for c in knee_probe["法向"]],
+           "膝前面法向_与地面法向夹角_deg": round(
+               math.degrees(knee_probe["法向"].angle(Vector((0.0, 0.0, 1.0)))), 2),
+           "膝δ髋_mm": round((world_point(arm, f"{BONE_PREFIX}{ctx['knee_side']}Leg")
+                              - world_point(arm, f"{BONE_PREFIX}{ctx['knee_side']}UpLeg")).length * 1000.0, 2)}
+    return {"髋残差_mm": hip_err, "前倾": lean,
+            "腿残差_mm": {k: leg_res[k]["tip_err_mm"] for k in leg_res},
+            "膝残差_mm": {k: leg_res[k]["mid_err_mm"] for k in leg_res},
+            "抬脚_mm": {ctx["knee_side"]: round((ak - ak0).z * 1000.0, 1),
+                        ctx["support_side"]: round((asup - asup0).z * 1000.0, 1)},
+            "踝目标_m": {ctx["knee_side"]: [round(c, 4) for c in ak],
+                         ctx["support_side"]: [round(c, 4) for c in asup]},
+            "膝_探针": knee_probe, "肘_探针": elbow_probe,
+            "膝_读数": kneel_contact_readings(knee_probe, knee_face, KNEEL_PART_FACES[kkey]["标签"]),
+            "肘_读数": kneel_contact_readings(elbow_probe, ctx["face"],
+                                            KNEEL_PART_FACES["elbow_tip"]["标签"]),
+            "朝向自检": aim, "臂": hands}
+
+
+def kneel_calibrate(arm, m3, ctx, curl_axes, iters=8):
+    """解出**接触姿势**的两个量——这是本件的"回代"，不是手拍常量：
+
+    | 量 | 判据 | 为什么这样写 |
+    |---|---|---|
+    | `kz`（膝骨点高度） | 右膝前面 ↔ 地面的**沿法向间隙 = 0** | "跪下去"的物理含义就是膝触地；高度不是装饰 |
+    | `standoff`（站位：髋目标到板面） | 肩到门板中面的水平距离 `h = 上臂长·cosφ + ε` | 让上臂**恰好够到**板面（肘顶上去时臂长正好用完） |
+    | `knee_ankle_z`（跪地脚踝高） | 跪地那只脚的**足背蒙皮最低点 = 0** | 踝高不是手拍量：手拍 0.085 m 时足背扎到 −50.3 mm |
+
+    三者近乎解耦（`kz` 只动膝 · `standoff` 只动沿 `m` 的位移 · 踝高只动足）⇒ 交替回代，实测 3 轮内收敛。
+    """
+    lens = ctx["lens"]
+    cp = _contact_phase()
+    a = lens["upper_arm"]
+    eps = KNEEL_PART_FACES["elbow_tip"]["ε_mm"] / 1000.0
+    phi = ctx.get("arm_angle_deg", KNEEL_ARM_ANGLE_DEG)
+    target_h = a * math.cos(math.radians(phi)) + eps
+    standoff, kz = KNEEL_STANDOFF_GUESS_M, KNEEL_KNEE_JOINT_Z_GUESS_M
+    ctx.setdefault("knee_ankle_z_m", KNEEL_KNEE_ANKLE_Z_GUESS_M)
+    foot_idx = {s: cp._skin_index(arm, s) for s in ("Left", "Right")}
+    log = []
+    for it in range(iters):
+        out = kneel_apply(arm, m3, ctx, 1.0, 1.0, 0.0, standoff, kz, curl_axes)
+        gap = out["膝_读数"]["沿法向间隙_mm"]
+        S = world_point(arm, f"{BONE_PREFIX}LeftArm")
+        h = (S - ctx["face"]["锚点"]).dot(ctx["m"])
+        foot_low = cp._skin_lowest(arm, foot_idx[ctx["knee_side"]])
+        log.append({"轮": it + 1, "standoff_m": round(standoff, 5), "膝骨点_z_m": round(kz, 5),
+                    "膝间隙_mm": round(gap, 3), "肩到板面_m": round(h, 5),
+                    "跪地踝高_m": round(ctx["knee_ankle_z_m"], 5),
+                    "跪地足背最低_mm": None if foot_low is None else round(foot_low * 1000.0, 2)})
+        kz -= gap / 1000.0
+        standoff -= (h - target_h)
+        if foot_low is not None:
+            ctx["knee_ankle_z_m"] -= foot_low          # 踝高回代：让足背蒙皮正好落到地面
+        if (abs(gap) < 0.02 and abs(h - target_h) < 5e-4 and foot_low is not None
+                and abs(foot_low) < 0.0002 and it >= 1):
+            break
+    ctx["standoff_m"], ctx["knee_joint_z_m"] = round(standoff, 5), round(kz, 5)
+    # 两条腿"最终"的髋→膝 / 膝→踝 方向（过渡期按方向插值用；位置插值会破坏骨长约束）
+    hip_xy = (ctx["panel_point"](ctx["u_panel"], 0.0) + ctx["m"] * standoff)
+    ankle_k, knee_k, hip_k = kneel_knee_leg(arm, ctx, (hip_xy.x, hip_xy.y), kz, lens)
+    a_sup, k_sup, hip_sup = kneel_support_leg(arm, ctx, lens)
+    ctx["support_final"] = (a_sup.copy(), k_sup.copy(), hip_sup.copy())
+    ctx["elbow_dir_stage1"] = Vector((0.0, 0.0, -1.0))
+    # ⚠️ 前臂的"朝上"方向必须**垂直于板面法向**：否则 `_set_world_axes` 会把 `x_hint = −m`
+    #    正交化掉一截 ⇒ 判据面法向被拧走 12.41°（本件实测：肘尖面法向与 −m 夹角 12.41°、
+    #    最低点间隙 +11.74 mm 而构造出来的 ε 锚点只在 1.26 mm）。
+    #    ⚠️ 侧向必须取 `back`（沿板面）——`left` 恰好就是 **−m**（角色左侧正对板面），拿它做倾斜
+    #    等于没改（第一版就是这么写的，实测夹角仍 12.41°）。
+    ctx["forearm_dir_stage1"] = (Vector((0.0, 0.0, 1.0)) + ctx["back"] * KNEEL_FOREARM_TILT).normalized()
+    return {"回合": log, "上臂长_m": round(a, 5), "大腿长_m": round(lens["thigh"], 5),
+            "跪地踝高_m": round(ctx["knee_ankle_z_m"], 5),
+            "小腿长_m": round(lens["shin"], 5), "目标_肩到板面_m": round(target_h, 5),
+            "上臂下倾角_deg": phi, "standoff_m": ctx["standoff_m"],
+            "膝骨点_z_m": ctx["knee_joint_z_m"],
+            "肘比肩低_mm": round(math.sqrt(max(a * a - (target_h - eps) ** 2, 0.0)) * 1000.0, 1)}
+
+
+def main_kneel() -> int:
+    """跪地 / 顶肘宿主：逐帧解算 → 逐帧打键 → 从**产物**里读两个**接触对**（两个系各一条）。"""
+    from datetime import datetime
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    import xbot_contact_phase as cp          # 足底蒙皮取点沿用 #165 的件（不重写第二份）
+    args = parse_args(list(sys.argv))
+    tmpl = Path(args.template)
+    if not tmpl.is_file():
+        print(f"[ERROR] 母版不存在：{tmpl}")
+        return 2
+    if args.host == "headless":
+        bpy.ops.wm.open_mainfile(filepath=str(tmpl))
+    elif not bpy.data.filepath:
+        print("[ERROR] --host live 要求母版已经在当前会话里打开")
+        return 2
+    bpy.context.scene.render.fps = args.fps
+    arm, m3 = make_context()
+    drop_temp(arm)
+    clear_pose(arm)
+
+    action_name = args.action if args.action != "BendGripChairBack" else KNEEL_ACTION
+    if action_name != args.action:
+        print(f"[WARN] --action 未显式给出（默认 {args.action}）⇒ 本宿主按 {action_name} 命名动作")
+
+    lay, m, panel_point, face = kneel_door_geometry(args.door_open, KNEEL_PANEL_U_M)
+    fwd, left, yaw = kneel_facing(lay)
+    ctx = {"lay": lay, "m": m, "panel_point": panel_point, "face": face,
+           "u_panel": KNEEL_PANEL_U_M, "lean_deg": KNEEL_TORSO_LEAN_DEG,
+           "back": lay["u"], "fwd": fwd, "left": left, "right": -left, "yaw": yaw,
+           "knee_side": args.knee_side,
+           "support_side": "Left" if args.knee_side == "Right" else "Right",
+           "arm_angle_deg": args.arm_angle,
+           "lens": kneel_bone_lengths(arm),
+           "rest": {"踝": {}, "膝": {}, "髋": {}}}
+    report = {"script": Path(__file__).name, "task": "kneel", "action": action_name,
+              "blender": bpy.app.version_string, "template": str(tmpl), "host": args.host,
+              "measured_at": datetime.now().isoformat(timespec="seconds"),
+              "door_open_deg": args.door_open, "knee_side": args.knee_side, "problems": []}
+    print(f"跪地 / 顶肘（口径 §15.7 ③ 件 · **A′ 部位 ↔ 物面** · #171）· 动作名 {action_name}")
+    print(f"帧表：中立 {KNEEL_FRAME_NEUTRAL} · **膝到位 {KNEEL_FRAME_KNEE}** · "
+          f"**肘到位 {KNEEL_FRAME_ELBOW}** · 末帧 {KNEEL_FRAME_END}（{args.fps} fps）")
+    print("两个目标分属两系（口径 §6.1）：右膝前面 ↔ **地面**（世界系）· "
+          "左肘尖面 ↔ **门板近侧面**（道具系，§6.3.1 登记的命名面）")
+    print(f"门：半掩 {args.door_open}° · 板宽 {lay['width']} m · 厚 {lay['thickness'] * 1000:.0f} mm · "
+          f"铰链 ({lay['hinge'].x:+.2f}, {lay['hinge'].y:+.2f}) · 近侧面朝外法向 m = "
+          f"({m.x:+.4f}, {m.y:+.4f}, {m.z:+.4f})")
+    print(f"角色朝向：**面朝 −u**（沿板面，朝铰链）⇒ 板面在他的**左侧**；转身 {yaw:+.1f}°")
+
+    # 部位面登记的行 + ε 自检（先在中立姿势量：登记值与真实面片互证）
+    clear_pose(arm)
+    update()
+    used = ["knee_front_right", "knee_front_left", "elbow_tip"]
+    report["part_faces_used"] = {k: {kk: v[kk] for kk in ("标签", "骨", "局部轴", "ε_mm",
+                                                          "ε_实测复核_mm", "ε_一致",
+                                                          "面片数", "取样顶点数")}
+                                 for k, v in ((k, kneel_part_frame(arm, k)) for k in used)}
+    for k, row in report["part_faces_used"].items():
+        print(f"  部位面 {k:<11}{row['骨']:<24}{row['局部轴']:>3}  ε = {row['ε_mm']:>9.4f} mm"
+              f"（真实面片复核 {row['ε_实测复核_mm']} mm · {'一致 ✅' if row['ε_一致'] else '不一致 ❌'}）"
+              f" · 面片 {row['面片数']} 点 / 取样 {row['取样顶点数']}")
+        if not row["ε_一致"]:
+            report["problems"].append(f"部位面 {k} 的 ε 与真实面片不符（登记 {row['ε_mm']} / 实测复核 "
+                                      f"{row['ε_实测复核_mm']}）")
+
+    hips_rest = world_point(arm, f"{BONE_PREFIX}Hips").copy()
+    ankle_rest = {s: world_point(arm, f"{BONE_PREFIX}{s}Foot").copy() for s in ("Left", "Right")}
+    # 静止时的"目标三角"（`t_leg=0` 那一端）：踝 / 膝 / 髋三个骨点，逐帧线性插到接触姿势
+    for s_ in ("Left", "Right"):
+        ctx["rest"]["踝"][s_] = ankle_rest[s_].copy()
+        ctx["rest"]["膝"][s_] = world_point(arm, f"{BONE_PREFIX}{s_}Leg").copy()
+        ctx["rest"]["髋"][s_] = world_point(arm, f"{BONE_PREFIX}{s_}UpLeg").copy()
+    curl = {s: detect_curl_axis_group(arm, s, "四指") for s in ("Left", "Right")}
+    curl_thumb = {s: detect_curl_axis_group(arm, s, "拇指") for s in ("Left", "Right")}
+    curl_axes = {s: {f: (curl_thumb[s] if f == "Thumb" else curl[s]) for f in FINGERS}
+                 for s in ("Left", "Right")}
+    report["rest"] = {"静止髋_m": [round(v, 6) for v in hips_rest],
+                      "静止踝_m": {s: [round(v, 6) for v in ankle_rest[s]] for s in ankle_rest},
+                      "骨长_m": {k: round(v, 6) for k, v in ctx["lens"].items()},
+                      "f3_curl": {"四指": curl, "拇指": curl_thumb},
+                      "静止目标三角_m": {k: {s: [round(c, 6) for c in v] for s, v in d.items()}
+                                          for k, d in ctx["rest"].items()}}
+    report["targets"] = {
+        "门板近侧面": {"锚点_m": [round(c, 4) for c in face["锚点"]],
+                       "朝外法向": [round(c, 4) for c in face["法向"]],
+                       "面片": [[round(c, 4) for c in p] for p in face["面片"]],
+                       "面内窗口_mm": [[round(x * 1000, 1) for x in face["u_span_m"]],
+                                       [round(x * 1000, 1) for x in face["z_span_m"]]],
+                       "面片说明": face["面片说明"]},
+        "地面": {"朝外法向": [0.0, 0.0, 1.0],
+                 "面片说明": kneel_ground_face((0, 0))["面片说明"]}}
+
+    report["freedom_table"] = [
+        {"行": "跪哪条腿 / 前踩哪只脚", "值": f"{args.knee_side} 膝下 · {ctx['support_side']} 脚前踩",
+         "状态": "agent 解（本件选定）", "来源": "`--scan-posture` 并列 2 解（口径 §4.2 硬规矩 5）"},
+        {"行": "上臂下倾角 φ（决定肘比肩低多少）", "值": args.arm_angle, "单位": "°",
+         "状态": "agent 解（本件选定）", "来源": "`--scan-posture` 并列 3 档；它同时定下站位"},
+        {"行": "站位（肩到板面水平距离）", "值": "**解出来的**（= 上臂长·cosφ + ε）", "单位": "m",
+         "状态": "agent 解（标定）", "来源": "`kneel_calibrate()`：让上臂恰好够到板面"},
+        {"行": "跪姿膝骨点高度", "值": "**解出来的**（膝前面触地 ⇒ 间隙 0）", "单位": "m",
+         "状态": "agent 解（标定）", "来源": "`kneel_calibrate()`：跪下去的物理含义就是膝触地"},
+        {"行": "两条腿的目标三角", "值": "**由实测骨长反解**（大腿/小腿长 + 地面高度）", "单位": "m",
+         "状态": "agent 解", "来源": "`kneel_knee_leg()` / `kneel_support_leg()`；"
+                                     "⚠️ 第 1 版是手拍距离 ⇒ 膝被解到地面以下 59.18 mm（证据 §六）"},
+        {"行": "躯干前倾", "值": [KNEEL_TORSO_LEAN_DEG, f"+{KNEEL_PRESS_LEAN_DEG}°（顶住之后继续压）"],
+         "单位": "°", "状态": "agent 解",
+         "来源": "管线 §2.1.4（脊柱局部 X = 前倾）；后 4° 让「持续」窗口不平凡"},
+        {"行": "**F4a 判据时域**（必填）", "值": "两条接触对**都是 `持续`**（整段窗口逐帧，松一帧即红）",
+         "状态": "owner（涉观感）/ agent", "来源": "口径 §13.3 F4a · §13.4.1"},
+        {"行": "判据层", "值": "**蒙皮层**（`Beta_Surface`）", "状态": "已裁",
+         "来源": "口径 §10.1（owner 2026-09-16 裁定）"},
+    ]
+
+    # ---- ① 标定（接触姿势的两个量：膝骨点高度 + 站位）----
+    cal = kneel_calibrate(arm, m3, ctx, curl_axes)
+    report["calibration"] = cal
+    print("\n标定（回代，不是手拍常量）")
+    for row in cal["回合"]:
+        print(f"  轮 {row['轮']}：站位 {row['standoff_m']:.4f} m · 膝骨点 z {row['膝骨点_z_m']:.4f} m · "
+              f"膝间隙 {row['膝间隙_mm']:+.2f} mm · 肩到板面 {row['肩到板面_m']:.4f} m"
+              f"（目标 {cal['目标_肩到板面_m']:.4f}）· 跪地踝高 {row['跪地踝高_m']:.4f} m · "
+              f"足背最低 {row['跪地足背最低_mm']} mm")
+    print(f"  ⇒ 接触姿势：站位 {cal['standoff_m']} m · 膝骨点 z {cal['膝骨点_z_m']} m · "
+          f"跪地踝高 {cal['跪地踝高_m']} m · "
+          f"骨长 大腿 {cal['大腿长_m']} / 小腿 {cal['小腿长_m']} / 上臂 {cal['上臂长_m']} m · "
+          f"肘比肩低 {cal['肘比肩低_mm']} mm")
+
+    # ---- ② `--scan-posture`：解空间（口径 §4.2 硬规矩 5 —— agent 解的行必须并列 ≥2 解）----
+    if args.scan_posture:
+        print("\n解空间（口径 §4.2 硬规矩 5）：跪哪条腿 × 上臂下倾角 φ")
+        print(f"  {'膝下':>6}{'φ°':>6}{'站位_m':>9}{'膝骨点z':>9}{'膝间隙_mm':>11}{'肘间隙_mm':>11}"
+              f"{'面内偏移_mm':>18}{'膝残差_mm':>11}{'落在面内':>9}")
+        rows = []
+        for knee_side in ("Right", "Left"):
+            for phi in (18.0, 26.0, 34.0):
+                clear_pose(arm)
+                drop_temp(arm, also_objects=False)
+                c2 = dict(ctx)
+                c2["knee_side"] = knee_side
+                c2["support_side"] = "Left" if knee_side == "Right" else "Right"
+                c2["arm_angle_deg"] = phi
+                cal2 = kneel_calibrate(arm, m3, c2, curl_axes)
+                out = kneel_apply(arm, m3, c2, 1.0, 1.0, 1.0, cal2["standoff_m"],
+                                  cal2["膝骨点_z_m"], curl_axes)
+                e = out["肘_读数"]
+                row = {"膝下": knee_side, "φ": phi, "站位_m": cal2["standoff_m"],
+                       "膝骨点_z_m": cal2["膝骨点_z_m"], "膝间隙_mm": out["膝_读数"]["沿法向间隙_mm"],
+                       "肘间隙_mm": e["沿法向间隙_mm"], "面内偏移_mm": e.get("面内偏移_mm"),
+                       "落在面片内": e.get("落在面片内"),
+                       "腿残差_mm": round(max(abs(v) for v in out["腿残差_mm"].values()), 2),
+                       "膝残差_mm": round(max(abs(v) for v in out["膝残差_mm"].values()), 2),
+                       "肘_朝面夹角_deg": out["朝向自检"]["与目标面法向(−m)夹角_deg"]}
+                rows.append(row)
+                print(f"  {knee_side:>6}{phi:6.1f}{row['站位_m']:9.4f}{row['膝骨点_z_m']:9.4f}"
+                      f"{row['膝间隙_mm']:11.2f}{row['肘间隙_mm']:11.2f}"
+                      f"{str(row['面内偏移_mm']):>18}{row['膝残差_mm']:11.2f}"
+                      f"{str(row['落在面片内']):>9}")
+        report["scan_posture"] = {"行": rows,
+                                  "来源": "本件选定；两条判据的读数在同一解算路径下量（不回中立）",
+                                  "如实登记": "φ 越大 ⇒ 肘比肩低得越多、站位越远；跪哪条腿决定前踩脚"}
+        if args.report:
+            Path(args.report).write_text(json.dumps(report, ensure_ascii=False, indent=1),
+                                         encoding="utf-8")
+            print(f"报告: {args.report}")
+        return 0
+
+    # ---- ③ 门代理（预览用；几何与判据目标同出 `door_layout()`）----
+    build_door_proxy(args.door_open)
+    panel_frame = door_end_frame(lay)
+
+    # ---- ④ 逐帧解算 ----
+    captured, per_frame = {}, []
+    print(f"\n逐帧解算（帧 {KNEEL_FRAME_NEUTRAL}–{KNEEL_FRAME_END}，每帧解、每帧打键）")
+    for frame in range(KNEEL_FRAME_NEUTRAL, KNEEL_FRAME_END + 1):
+        if frame == KNEEL_FRAME_NEUTRAL:
+            clear_pose(arm)
+            drop_temp(arm, also_objects=False)
+            captured[frame] = capture_channels(arm, panic_channel_names(arm))
+            per_frame.append({"frame": frame, "中立": True})
+            print(f"  帧 {frame:>3} **中立姿势**（零通道；导出侧 Rest Pose 一口清）")
+            continue
+        # 下跪进度（到 KNEEL_FRAME_KNEE）· 顶肘进度（KNEE→ELBOW）· 顶住后继续压
+        t_knee = min(1.0, (frame - KNEEL_FRAME_NEUTRAL) / float(KNEEL_FRAME_KNEE - KNEEL_FRAME_NEUTRAL))
+        s_elbow = min(1.0, max(0.0, (frame - KNEEL_FRAME_KNEE)
+                               / float(KNEEL_FRAME_ELBOW - KNEEL_FRAME_KNEE)))
+        if frame <= KNEEL_FRAME_ELBOW:
+            lean_now = KNEEL_TORSO_LEAN_DEG * t_knee
+        else:
+            press = min(1.0, (frame - KNEEL_FRAME_ELBOW)
+                        / float(KNEEL_FRAME_END - KNEEL_FRAME_ELBOW - 4))
+            lean_now = KNEEL_TORSO_LEAN_DEG + KNEEL_PRESS_LEAN_DEG * press
+        ctx["lean_deg"] = KNEEL_TORSO_LEAN_DEG
+        extra = max(0.0, lean_now - KNEEL_TORSO_LEAN_DEG * t_knee)
+        out = kneel_apply(arm, m3, ctx, t_knee, t_knee, s_elbow, cal["standoff_m"],
+                          cal["膝骨点_z_m"], curl_axes, lean_extra=extra)
+        captured[frame] = capture_channels(arm, panic_channel_names(arm))
+        row = {"frame": frame, "t_knee": round(t_knee, 4), "s_elbow": round(s_elbow, 4),
+               "抬脚_mm": {k: round(v * 1000.0, 1) for k, v in out["抬脚_mm"].items()},
+               "前倾_deg": round(lean_now, 2),
+               "髋残差_mm": out["髋残差_mm"],
+               "腿残差_mm": {k: round(v, 2) for k, v in out["腿残差_mm"].items()},
+               "膝残差_mm": {k: round(v, 2) for k, v in out["膝残差_mm"].items()},
+               "膝间隙_mm": out["膝_读数"]["沿法向间隙_mm"],
+               "肘间隙_mm": out["肘_读数"]["沿法向间隙_mm"],
+               "肘_面内偏移_mm": out["肘_读数"].get("面内偏移_mm"),
+               "肘_落在面片内": out["肘_读数"].get("落在面片内"),
+               "朝向自检": out["朝向自检"]}
+        per_frame.append(row)
+        if frame in (KNEEL_FRAME_KNEE, KNEEL_FRAME_ELBOW, KNEEL_FRAME_END) or frame % 10 == 0:
+            print(f"  帧 {frame:>3} 跪 {t_knee:.2f} · 顶肘 {s_elbow:.2f} · "
+                  f"髋残差 {out['髋残差_mm']:.2f} mm · 膝残差 "
+                  f"{max(abs(v) for v in out['膝残差_mm'].values()):.2f} mm · "
+                  f"膝间隙 {row['膝间隙_mm']:+.2f} mm · 肘间隙 {row['肘间隙_mm']:+.2f} mm · "
+                  f"肘朝面 {row['朝向自检']['与目标面法向(−m)夹角_deg']:.1f}°")
+    report["frame_params"] = per_frame
+
+    # ---- ⑤ 预览清理 + 打键（逐帧）----
+    residue = sorted(o.name for o in bpy.data.objects
+                     if o.name.startswith("REF_")
+                     and not any(m.type == "ARMATURE" for m in o.modifiers))
+    for name in [n for n in residue if not n.startswith("REF_Door")]:
+        bpy.data.objects.remove(bpy.data.objects[name], do_unlink=True)
+    report["preview_residue_removed"] = residue
+
+    names = panic_channel_names(arm)
+    arm.animation_data_clear()
+    ad = arm.animation_data_create()
+    for stale in [a for a in bpy.data.actions
+                  if a.name == action_name or a.name.startswith(action_name + ".")]:
+        bpy.data.actions.remove(stale)
+    action = bpy.data.actions.new(action_name)
+    action.use_fake_user = True
+    try:
+        import blender_action_compat as bac
+        bac.assign_action(ad, action)
+    except Exception as exc:
+        print(f"[WARN] 取道层不可用（{exc}），退回直接指派")
+        ad.action = action
+    for frame in range(KNEEL_FRAME_NEUTRAL, KNEEL_FRAME_END + 1):
+        bpy.context.scene.frame_set(frame)
+        clear_pose(arm)
+        drop_temp(arm, also_objects=False)
+        apply_channels(arm, captured[frame])
+        for name in list(captured[frame]):
+            pb = arm.pose.bones[name]
+            pb.rotation_mode = "XYZ"
+            pb.keyframe_insert("rotation_euler", frame=frame)
+            if name == "CTRL_Hips":
+                pb.keyframe_insert("location", frame=frame)
+    bpy.context.scene.frame_start = KNEEL_FRAME_NEUTRAL
+    bpy.context.scene.frame_end = KNEEL_FRAME_END
+    report["frames"] = {"起": KNEEL_FRAME_NEUTRAL, "膝到位": KNEEL_FRAME_KNEE,
+                        "肘到位": KNEEL_FRAME_ELBOW, "末": KNEEL_FRAME_END}
+    report["keyed_channels"] = names
+    report["preview_cleanup"] = door_push_preview_cleanup(arm)
+    report["visible_bones"] = visible_bone_outliers(arm)
+    print(f"\n已打键：动作 {action_name} · 帧 {KNEEL_FRAME_NEUTRAL}–{KNEEL_FRAME_END} · "
+          f"通道 {len(names)} 个（含腿脚 {sum(1 for n in names if 'Leg' in n or 'Foot' in n)} 个）")
+    if report["visible_bones"]["非例外的越界骨"]:
+        report["problems"].append(
+            "可见骨伸出皮肤包围盒：" + "; ".join(
+                f"{x['骨']}({x['伸出量_mm']:.1f} mm)" for x in report["visible_bones"]["非例外的越界骨"][:8]))
+
+    # ---- ⑥ 产物侧读数：从**打键后的产物**上逐帧重量（不是解算时的中间量）----
+    def product_frame(frame):
+        bpy.context.scene.frame_set(frame)
+        update()
+        d = bpy.context.evaluated_depsgraph_get()
+        return arm.evaluated_get(d)
+
+    prod, clash = [], []
+    for frame in range(KNEEL_FRAME_NEUTRAL, KNEEL_FRAME_END + 1):
+        ev = product_frame(frame)
+        knee_p = kneel_part_frame(ev, knee_face_key(ctx))
+        elbow_p = kneel_part_frame(ev, "elbow_tip")
+        hips_w = world_point(ev, f"{BONE_PREFIX}Hips")
+        knee_r = kneel_contact_readings(knee_p, kneel_ground_face((hips_w.x, hips_w.y)),
+                                        KNEEL_PART_FACES[knee_face_key(ctx)]["标签"])
+        elbow_r = kneel_contact_readings(elbow_p, ctx["face"],
+                                         KNEEL_PART_FACES["elbow_tip"]["标签"])
+        # 地面屏障（判据 4 的第一个数"骨段零穿透"的形态）：全体变形骨端点 + 两个探针面片 + 足底蒙皮
+        ground_pts = []
+        for b in ("Hips", "Spine", "Spine1", "Spine2", "Neck", "Head", "LeftUpLeg", "LeftLeg",
+                  "LeftFoot", "LeftToeBase", "RightUpLeg", "RightLeg", "RightFoot", "RightToeBase"):
+            if f"{BONE_PREFIX}{b}" not in ev.pose.bones:
+                continue
+            # ⚠️ 只取**骨心**（head）：`*ToeBase.tail` = 标记骨 `*Toe_End` 的骨心，**伸在皮肤外
+            #    93.50 mm**（口径 §15.4）⇒ 拿它当"地面屏障"会假红（本件实测 −87.94 mm 全是它）。
+            ground_pts.append((world_point(ev, f"{BONE_PREFIX}{b}").z, f"{b}.head"))
+        ground_pts += [(p.z, "膝_面片") for p in knee_p["面片"]]
+        ground_pts += [(p.z, "肘_面片") for p in elbow_p["面片"]]
+        for s_ in ("Left", "Right"):
+            z = cp._skin_lowest(ev, cp._skin_index(ev, s_))
+            if z is not None:
+                ground_pts.append((z, f"{s_}足底蒙皮"))
+        low, low_where = min(ground_pts, key=lambda t: t[0])
+        # 板体穿透（同一形态）：肘尖面片的点到**板体**（有限盒）的最近带符号间隙
+        panel_gap = min(box_gap_mm(p, panel_frame) for p in elbow_p["面片"])
+        prod.append({"frame": frame, "膝": knee_r, "肘": elbow_r,
+                     "地面_最低_mm": round(low * 1000.0, 2), "地面_最低处": low_where,
+                     "板体_最小间隙_mm": round(panel_gap, 2),
+                     "髋_z_m": round(hips_w.z, 5)})
+        clash.append({"frame": frame,
+                      "地面_违规": bool(low * 1000.0 < -CONTACT_TOL_MM),
+                      "板体_违规": bool(panel_gap < 0.0)})
+    report["product"] = prod
+    knee_curve = [(r["frame"], r["膝"]["沿法向间隙_mm"]) for r in prod]
+    elbow_curve = [(r["frame"], r["肘"]["沿法向间隙_mm"]) for r in prod]
+
+    # ---- ⑦ 判据：两条**持续**接触对 + 首次进入容差帧（时序的零阈值形态）----
+    def first_in(curve, tol=KNEEL_TOL_MM):
+        for f, v in curve:
+            if abs(v) <= tol:
+                return f
+        return None
+
+    def window_stats(curve, f0):
+        win = [(f, v) for f, v in curve if f >= f0]
+        worst = max(win, key=lambda t: abs(t[1]))
+        return {"窗口": [f0, curve[-1][0]], "逐帧最坏_mm": worst[1], "最坏帧": worst[0],
+                "超差帧": [f for f, v in win if abs(v) > KNEEL_TOL_MM]}
+
+    knee_first, elbow_first = first_in(knee_curve), first_in(elbow_curve)
+    report["contact_criteria"] = {
+        "膝 ↔ 地面": {"判据形态": "弧面↔面（右膝前面探针面片最低点 ↔ 地面 z=0）",
+                      "判据时域（F4a）": "持续（整段窗口逐帧，松一帧即红）",
+                      "容差_mm": KNEEL_TOL_MM, "判据层": "蒙皮层 Beta_Surface",
+                      "声明到位帧": KNEEL_FRAME_KNEE, "产物_首次进入容差帧": knee_first,
+                      **window_stats(knee_curve, KNEEL_FRAME_KNEE),
+                      "接近段红帧": [f for f, v in knee_curve
+                                     if f < KNEEL_FRAME_KNEE and abs(v) > KNEEL_TOL_MM]},
+        "肘 ↔ 门板近侧面": {"判据形态": "弧面↔面（左肘尖面探针面片最低点 ↔ 有限板面）",
+                            "判据时域（F4a）": "持续（整段窗口逐帧，松一帧即红）",
+                            "容差_mm": KNEEL_TOL_MM, "判据层": "蒙皮层 Beta_Surface",
+                            "声明到位帧": KNEEL_FRAME_ELBOW, "产物_首次进入容差帧": elbow_first,
+                            **window_stats(elbow_curve, KNEEL_FRAME_ELBOW),
+                            "接近段红帧": [f for f, v in elbow_curve
+                                           if f < KNEEL_FRAME_ELBOW and abs(v) > KNEEL_TOL_MM]},
+    }
+    print("\n判据（口径 §4.2 硬规矩 2：判据必须**能报红**）+ F4a 时域")
+    for label, c in report["contact_criteria"].items():
+        print(f"  {label:<16}{c['判据形态']}")
+        print(f"    持续窗口 {c['窗口']} · 逐帧最坏 {c['逐帧最坏_mm']:+.2f} mm（帧 {c['最坏帧']}）· "
+              f"超差帧 {len(c['超差帧'])} · 接近段红帧 {len(c['接近段红帧'])}"
+              f" · 首次进入容差帧 {c['产物_首次进入容差帧']}（声明 {c['声明到位帧']}）")
+        if c["超差帧"]:
+            report["problems"].append(f"{label}：持续窗口内超差帧 {c['超差帧'][:8]}")
+        if c["产物_首次进入容差帧"] != c["声明到位帧"]:
+            report["problems"].append(
+                f"{label}：时序不一致——声明到位帧 {c['声明到位帧']} ≠ 产物侧首次进入容差帧 "
+                f"{c['产物_首次进入容差帧']}")
+        if not c["接近段红帧"]:
+            report["problems"].append(f"{label}：接近段**没有红帧** ⇒ 判据退化（非退化性未证）")
+    # ⚠️ 只判**持续窗口内**的面外（接近段人离板几百 mm，"面内投影"无意义；§13.4 管的是"判贴合时"）
+    elbow_out = [r["frame"] for r in prod
+                 if r["frame"] >= KNEEL_FRAME_ELBOW and r["肘"].get("落在面片内") is False]
+    elbow_out_all = [r["frame"] for r in prod if r["肘"].get("落在面片内") is False]
+    report["contact_criteria"]["肘 ↔ 门板近侧面"]["面外帧"] = elbow_out
+    if elbow_out:
+        report["problems"].append(f"肘 ↔ 门板近侧面：接触点落在板面**之外**的帧 {elbow_out[:8]}"
+                                  f"（§13.4：#164 的教训——面外不许判贴合；窗口外面外帧（不判）："
+                                  f"{elbow_out_all[:6]}）")
+
+    # ---- ⑧ 非退化对照（中立姿势）----
+    clear_pose(arm)
+    drop_temp(arm, also_objects=False)
+    update()
+    hw = world_point(arm, f"{BONE_PREFIX}Hips")
+    neutral = {"膝 膝前面 ↔ 地面": kneel_contact_readings(
+                   kneel_part_frame(arm, knee_face_key(ctx)), kneel_ground_face((hw.x, hw.y)),
+                   KNEEL_PART_FACES[knee_face_key(ctx)]["标签"])["沿法向间隙_mm"],
+               "肘 前臂背侧面 ↔ 门板近侧面": kneel_contact_readings(
+                   kneel_part_frame(arm, "elbow_tip"), ctx["face"],
+                   KNEEL_PART_FACES["elbow_tip"]["标签"])["沿法向间隙_mm"]}
+    report["neutral_control"] = neutral
+    print(f"  非退化对照（中立姿势）：{neutral}")
+
+    # ---- ⑨ 穿模（判据 4 的形态）----
+    report["clash"] = {"行": clash,
+                       "地面最坏_mm": round(min(r["地面_最低_mm"] for r in prod), 2),
+                       "地面最坏处": min(prod, key=lambda r: r["地面_最低_mm"])["地面_最低处"],
+                       "板体最小间隙_mm": round(min(r["板体_最小间隙_mm"] for r in prod), 2),
+                       "违规帧": [r["frame"] for r in clash if r["地面_违规"] or r["板体_违规"]],
+                       "来源": "动作库规格 §四·戊·5 判据 4（骨段零穿透）；碰撞体 = 地面（半空间）"
+                               "与门板（有限盒）",
+                       "地面阈值_mm": f"−`CONTACT_TOL_MM` = −{CONTACT_TOL_MM} mm"
+                                    "（⚠️ 母版**中立姿势本身**就读到足底 −0.32 mm ⇒ 零阈值会在导出侧 E5"
+                                    "要求的首帧上误报；容差沿用 §8.2 的同族数）"}
+    print(f"  穿模：地面最坏 {report['clash']['地面最坏_mm']} mm"
+          f"（{report['clash']['地面最坏处']}）· 板体最小间隙 "
+          f"{report['clash']['板体最小间隙_mm']} mm ⇒ 违规帧 {len(report['clash']['违规帧'])}")
+    if report["clash"]["违规帧"]:
+        report["problems"].append(f"穿模：违规帧 {report['clash']['违规帧'][:8]}")
+
+    # ---- ⑩ 零阈值姿态断言（双腿不反关节）----
+    # **零阈值、且非自证**：拿**蒙皮实测的面法向**（小腿局部 `+Z` = 膝前面）去比对"膝相对弦往哪鼓"
+    # ⇒ 判的是"**膝的前面朝外**"（腿没有反着跪）。⚠️ 本条正是第 1 版那个真 bug 的判据形态：
+    # 滚转符号错时小腿前面朝上（法向朝上）而膝相对弦向下鼓 ⇒ 当场报红。
+    pose_rows = []
+    for frame in (KNEEL_FRAME_KNEE, KNEEL_FRAME_ELBOW, KNEEL_FRAME_END):
+        ev = product_frame(frame)
+        row = {"frame": frame}
+        for side in ("Left", "Right"):
+            pb = ev.pose.bones[f"{BONE_PREFIX}{side}Leg"]
+            front = (arm.matrix_world.to_3x3() @ (pb.matrix.to_3x3() @ Vector((0, 0, 1)))).normalized()
+            hip = world_point(ev, f"{BONE_PREFIX}{side}UpLeg")
+            knee = world_point(ev, f"{BONE_PREFIX}{side}Leg")
+            ank = world_point(ev, f"{BONE_PREFIX}{side}Foot")
+            chord = ank - hip
+            axis = chord.normalized() if chord.length > 1e-9 else Vector((0, 0, -1))
+            bulge = (knee - (hip + ank) * 0.5)
+            bulge = bulge - axis * bulge.dot(axis)
+            bulge = bulge.normalized() if bulge.length > 1e-9 else Vector((0, 0, -1))
+            row[f"{side}_膝_前朝外_mm"] = round(front.dot(bulge) * 1000.0, 1)   # 无量纲投影 ×1000
+            row[f"{side}_膝鼓出_mm"] = round(bulge.dot(ctx["fwd"]) * 1000.0, 1)  # 只报读数
+        pose_rows.append(row)
+    bad_knee = [r["frame"] for r in pose_rows
+                if r["Left_膝_前朝外_mm"] <= 0.0 or r["Right_膝_前朝外_mm"] <= 0.0]
+    report["pose_judgements"] = {
+        "膝的前面**朝外**（小腿局部 `+Z` · 蒙皮实测法向 vs 弦几何 · 零阈值）": {"违规帧": bad_knee},
+        "逐帧读数": pose_rows}
+    for r in pose_rows:
+        print(f"  姿态读数 帧 {r['frame']}：左膝 前朝外 {r['Left_膝_前朝外_mm']:+.1f} / 鼓出 "
+              f"{r['Left_膝鼓出_mm']:+.1f} mm · 右膝 前朝外 {r['Right_膝_前朝外_mm']:+.1f} / 鼓出 "
+              f"{r['Right_膝鼓出_mm']:+.1f} mm")
+    if bad_knee:
+        report["problems"].append(f"膝的前面没有朝外（腿反着跪）帧：{bad_knee[:6]}")
+
+    # ---- ⑪ 回显卡 ----
+    kc = report["contact_criteria"]["膝 ↔ 地面"]
+    ec = report["contact_criteria"]["肘 ↔ 门板近侧面"]
+    card = [
+        {"判据量": "右膝前面 ↔ **地面**（世界/重力系）", "判据形态": kc["判据形态"],
+         "产物侧读数": f"持续窗口 {kc['窗口']} · 逐帧最坏 {kc['逐帧最坏_mm']:+.2f} mm"
+                       f"（帧 {kc['最坏帧']}）· 首次进入容差帧 {kc['产物_首次进入容差帧']}",
+         "容差档": f"`tol_contact` {KNEEL_TOL_MM} mm（ε 换算 "
+                   f"{KNEEL_PART_FACES['knee_front_right']['ε_mm']} mm 是另一个数）",
+         "状态": "✅" if not kc["超差帧"] else "❌"},
+        {"判据量": "左肘尖面 ↔ **门板近侧面**（道具局部系）", "判据形态": ec["判据形态"],
+         "产物侧读数": f"持续窗口 {ec['窗口']} · 逐帧最坏 {ec['逐帧最坏_mm']:+.2f} mm"
+                       f"（帧 {ec['最坏帧']}）· 首次进入容差帧 {ec['产物_首次进入容差帧']}",
+         "容差档": f"`tol_contact` {KNEEL_TOL_MM} mm（ε 换算 "
+                   f"{KNEEL_PART_FACES['elbow_tip']['ε_mm']} mm 是另一个数）",
+         "状态": "✅" if not ec["超差帧"] else "❌"},
+        {"判据量": "判据**能报红**（接近段必须有超差帧 + 中立姿势对照）",
+         "判据形态": "存在性（非退化对照）",
+         "产物侧读数": f"膝 接近段红帧 {len(kc['接近段红帧'])} · "
+                       f"肘 接近段红帧 {len(ec['接近段红帧'])} · 中立姿势 "
+                       f"{neutral['膝 膝前面 ↔ 地面']:+.1f} / "
+                       f"{neutral['肘 前臂背侧面 ↔ 门板近侧面']:+.1f} mm",
+         "容差档": "—",
+         "状态": "✅" if kc["接近段红帧"] and ec["接近段红帧"] else "❌"},
+        {"判据量": "时序：声明到位帧 == 产物侧**首次进入容差帧**（零阈值）",
+         "判据形态": "帧号相等（无阈值）",
+         "产物侧读数": f"膝 声明 {KNEEL_FRAME_KNEE} / 产物 {kc['产物_首次进入容差帧']} · "
+                       f"肘 声明 {KNEEL_FRAME_ELBOW} / 产物 {ec['产物_首次进入容差帧']}",
+         "容差档": "—",
+         "状态": "✅" if (kc["产物_首次进入容差帧"] == KNEEL_FRAME_KNEE
+                        and ec["产物_首次进入容差帧"] == KNEEL_FRAME_ELBOW) else "❌"},
+        {"判据量": "接触点落在**有限板面**之内（§13.4：面外不许判贴合）",
+         "判据形态": "面内窗口（布尔）",
+         "产物侧读数": f"面外帧 {len(elbow_out)} · 末帧面内偏移 "
+                       f"{prod[-1]['肘'].get('面内偏移_mm')} mm · 面内窗口 "
+                       f"{prod[-1]['肘'].get('面内窗口_mm')}",
+         "容差档": "板宽 × 板高（有限面片）", "状态": "✅" if not elbow_out else "❌"},
+        {"判据量": "穿模：地面（半空间）与门板（有限盒）", "判据形态": "点↔面 / 点↔体（判据 4 的形态）",
+         "产物侧读数": f"地面最坏 {report['clash']['地面最坏_mm']} mm"
+                       f"（{report['clash']['地面最坏处']}）· 板体最小间隙 "
+                       f"{report['clash']['板体最小间隙_mm']} mm · "
+                       f"违规帧 {len(report['clash']['违规帧'])}",
+         "容差档": "零穿透（判据 4 的第一个数）",
+         "状态": "✅" if not report["clash"]["违规帧"] else "❌"},
+        {"判据量": "膝的前面朝外（腿没反着跪，零阈值）", "判据形态": "法向投影的符号（蒙皮实测面 vs 弦几何）",
+         "产物侧读数": str(pose_rows), "容差档": "0.0 mm（**零阈值**）",
+         "状态": "✅" if not bad_knee else "❌"},
+        {"判据量": "可见骨不伸出皮肤包围盒（口径 §15.4 / §15.8）", "判据形态": "包围盒包含（布尔）",
+         "产物侧读数": f"可见骨 {report['visible_bones']['可见骨数']} · "
+                       f"非例外越界 {len(report['visible_bones']['非例外的越界骨'])}",
+         "容差档": "分界 = `CONTACT_TOL_MM` = 2.8 mm",
+         "状态": "✅" if not report["visible_bones"]["非例外的越界骨"] else "❌"},
+    ]
+    report["feedback_card"] = card
+    report["ok"] = not report["problems"]
+    print("\n" + "=" * 100)
+    print(f"回显卡（口径 §四：每一项都要有产物侧读数）· 动作 {action_name}")
+    for row in card:
+        print(f"  {row['判据量'][:36]:<38}{row['判据形态'][:22]:<24}"
+              f"{str(row['产物侧读数'])[:78]:<80}{row['状态']}")
+    print("=" * 100)
+
+    if args.report:
+        Path(args.report).write_text(json.dumps(report, ensure_ascii=False, indent=1),
+                                     encoding="utf-8")
+        print(f"报告: {args.report}")
+    if args.still:
+        for frame, suffix in ((KNEEL_FRAME_KNEE - 4, "approach"), (KNEEL_FRAME_KNEE, "knee"),
+                              (KNEEL_FRAME_ELBOW, "elbow"), (KNEEL_FRAME_END, "hold")):
+            bpy.context.scene.frame_set(frame)
+            update()
+            target = ctx["face"]["锚点"] + Vector((0.0, 0.0, -0.30))
+            cam = target + m * 2.4 + Vector((0.0, 0.0, 1.25)) + lay["u"] * 1.6
+            path = str(args.still).replace(".png", f"_{suffix}.png")
+            render_still(path, cam, target)
+            print(f"静帧：{path}")
+    if args.host == "live":
+        bpy.context.scene.frame_set(KNEEL_FRAME_END)
+        update()
+        print(f"[live] 停在末帧 {KNEEL_FRAME_END}（预览；未写回文件）")
+    elif not args.no_save:
+        bpy.ops.wm.save_as_mainfile(filepath=str(tmpl))
+        print(f"已写回母版副本：{tmpl}")
+    print(f"结论: {'OK' if report['ok'] else 'FAIL'} —— problems {report['problems']}")
+    return 0 if report["ok"] else 1
+
+
+# ══════════════════════════════════════════════════════════════════════════════
 # 宿主 4：重述对拍（`--task restate`）——口径 §13.8 判据 1
 #
 #   「#163 既有读数 vs 用**卡片语言**复现 ⇒ 差异 0」——**纯算术**，不跑 Blender、不请 owner 目视。
@@ -5720,7 +6896,7 @@ def main() -> int:
                 task = tail[idx + 1]
     return {"chair": main_chair, "card1": main_card1, "door": main_door,
             "doorpush": main_door_push, "panic": main_panic, "crouch": main_crouch,
-            "restate": main_restate}[task]()
+            "kneel": main_kneel, "restate": main_restate}[task]()
 
 
 if __name__ == "__main__":
