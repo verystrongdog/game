@@ -33,7 +33,7 @@
 | 4 | 非战斗行为是否进入休息与时段推进 | `游戏循环 §2.2`：推进时段的动作**仍是休息**（公式/恢复量不变），但**休息动机不再绑在战斗上**——对话/调查/异常暴露/检定失败/空间爬深同样构成动机 |
 | 5 | 叙事后果边界 | `剧情系统设计 §3.1.1`：六类后果（关系 · 世界状态 · 感知版本 · 空间访问 · 自问演化 · 结局映射）+ `m/SAN/HP` **不进表**、只经 `核心机制 §8.2/§8.3` 的巩固窗口或战斗/休息结算 |
 | 6 | 自研动作生成的停止边界 | `动作库规格 §1.1`：冻结**泛化目标** · 既有资产与研究**全保留** · 外部工具生产 · **接口不变只换产出方**；与 #173 §7.8 的关系写明读法（管线保留为**判定与接缝**工具） |
-| 7 | 决策落正典 + 后续 issue | 决策落 8 文件（上表）；**后续 issue 尚未建立**——见 §四 未闭合项 1 |
+| 7 | 决策落正典 + 后续 issue | 决策落 8 文件（上表）；**后续 issue 已按导入门建立**：owner 同日准入 CP-01（`PLAYABLE.md` = `AUTHORIZED_PLAYABLE: CP-01`）后，frontier 设为 [#182](https://github.com/verystrongdog/game/issues/182)（data：`data/story/` 六件 + `validate_story.py`）→ [#183](https://github.com/verystrongdog/game/issues/183)（code：`StoryEngine`）→ [#184](https://github.com/verystrongdog/game/issues/184)（unity：叙事遭遇路径 + 笔记本反馈）。三条均为 `Implementation` · `state:needs-triage`，依赖边为原生 `blocked-by` 投影 |
 
 ## 三、门禁读数（逐条实跑）
 
@@ -61,8 +61,8 @@ git -C .scratch/revert-drill2 diff --quiet f4152f6 ; echo $?   # → 0
 
 ## 五、未闭合项（如实登记）
 
-1. **后续 issue 未建立**：#181 验收第 7 条要求「通过导入门后按 `design → data → code → unity` 建立必要的后续 issue」。当前**不具备**建立条件——CP-01 的 M1 前置（叙事解释器 `StoryEngine`、`data/` 侧的对话树契约与 `validate_story.py`）都要靠新 issue，而 [issue-process §六·R7](issue-process.md) 明令：`PLAYABLE.md` 仍是 `NO_AUTHORIZED_PLAYABLE` 时**不得**开"实现并试玩 CP-01"。⇒ 下一步是 **owner 的 CP-01 准入决策**（`PLAYABLE.md` 改 `AUTHORIZED_PLAYABLE: CP-01`），此后才可按 frontier 分解。本项不是本阶段欠账，是**流程上的下一道门**。
-2. **`PLAYABLE.md` 仍是 `CANDIDATE`**：定位裁定**不**构成准入；未准入期间不得新增正式玩家行为。
+1. ✅ **后续 issue 已建立**（2026-09-16 当晚闭合）：owner 准入 CP-01 后（`PLAYABLE.md` = `AUTHORIZED_PLAYABLE: CP-01`），按导入门建立 frontier **#182 → #183 → #184**（`data → code → unity` 三段，各带 `门禁` / `预期差分` / `验收标准` / `回滚` 与原生 `blocked-by` 投影）。三条创建前均过 `validate_issues.py --file`（#182 / #184 一次通过；**#183 首版正文有一处 I8 未通过**——正文里 `data/story/` 的一处引用未标注"此刻尚不存在"，已就地登记待修；修它属「改 issue 正文」，按 [issue-process §7.2](../issue-process.md) 须 owner 逐次确认，故暂留）。切片四轴表为此**新增三行**（对话树数据契约 / 叙事解释器 StoryEngine / 笔记本呈现与反馈）并挂上执行件。
+2. ✅ **`PLAYABLE.md` 已准入**（不再是 `CANDIDATE`）：`AUTHORIZED_PLAYABLE: CP-01`。但**准入 ≠ 可玩**——`playtest.md` 三条 must-prove 仍全 `UNTESTED`，且 M1 前置（`StoryEngine` + `data/story/` 契约）由 #182/#183 交付。
 3. **判定为「不必改」的三个候选文件（登记理由，非欠账）**：
    - `design/rules/回合战斗流程.md` §八：读过全文——它只定义战斗的**开始/结束/逃跑**，**没有**"战斗必经"的表述（§8.2 已含投降/逃跑/全员退出三条非歼灭终止路径）⇒ 与选项 A 不冲突，**不改**。
    - `design/rules/核心机制.md` §8.2/§8.3：它已经是**非战斗事件强度 → 巩固窗口 → Δm** 的唯一权威 ⇒ `§3.1.1` **只引用不复制**，不改。
