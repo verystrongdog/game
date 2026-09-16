@@ -2,21 +2,27 @@
 # -*- coding: utf-8 -*-
 # SPDX-FileCopyrightText: 2026 verystrongdog
 # SPDX-License-Identifier: GPL-3.0-or-later
-"""author_xbot_chair_grab.py —— X Bot 手 ↔ 物接触动作的**可复用库 + 三个宿主**。
+"""author_xbot_chair_grab.py —— X Bot 手 ↔ 目标接触动作的**可复用库 + 六个宿主**。
 
 | 宿主 | `--task` | 干什么 | 权威 |
 |---|---|---|---|
 | `main_chair()` | `chair`（默认） | 产出动作 `BendGripChairBack`（弯腰、双手抓住椅背）——**#163 的产出，本文件原有形态** | issue #163 |
 | `main_card1()` | `card1` | **测量卡 1「掐棱」**：F3 三轴映射（含 U9 的 `+Y`）· F4 接触对 · F6 尺寸区间 · F7 七档扫描（10→80 mm）· F10 手型 · F11 落点读数 ⇒ 写 `data/hand_grip_cards.json` | [动作描述口径 §十三](../../design/presentation/动作描述口径.md) |
 | `main_door()` | `door` | 新动作「扣住门边推开半掩的门」——**同一张卡、新对象**（口径 §13.6 的独立验证件） | 同上 · [回合战斗流程 §10.13](../../design/rules/回合战斗流程.md) |
+| `main_door_push()` | `doorpush` | 门边「推到底」**能播段**（61 帧逐帧解算 + 逐帧打键 + F4a/时序/接地/穿模） | 口径 §13.6 · issue #166 |
+| `main_panic()` | `panic` | **恐慌姿态（抱头 / 捂耳）**——**第四系「目标部位局部系」的第一次实做**：掌面 ↔ 自身头部的**具名面**（ε 来自口径 §15.6.1 / #168 实测） | 口径 §15.7 ① 件 · issue #169 |
+| `main_restate()` | `restate` | 把 #164 的读数搬进卡片语言并断言差异 0（纯算术） | 口径 §13.8 判据 1 |
 
-来源：design/presentation/动作描述口径.md（§二 三问骨架 · §三 D7 自由度表 · §八 容差 ε · §十 验收判据 V-a…V-e）
+来源：design/presentation/动作描述口径.md（§二 三问骨架 · §三 D7 自由度表 · §八 容差 ε · §十 验收判据 V-a…V-e
+      · §13.4 判据形态与 F4a 时域 · §15.6.1 部位面登记 · §15.7 ① 件）
       · design/presentation/Blender动作制作管线.md §七·B（撤回记录）
       · issue #163（**这是口径的回归样本**：口径管不管用，就看这一次）
       · issue #164（**手部基准卡片**：把 #163 一次性写死的判据变成可被引用的常驻件；卡 1 数值实测）
+      · issue #168（**部位侧 ε 实测**：本条 `panic` 的部位面 ε 逐值来自它）
+      · issue #169（**恐慌姿态**：手 ↔ **自身部位**，此前被消费的只有前两系 + 道具系）
 
 ⚠️ **库与宿主的分界**：`# ---- 可复用库` 以下（含 #164 扩展块）是**件**——道具几何、棱线表、
-蒙皮读数、手骨轴实测、掐棱握式解算；三个宿主的 `main_*()` 只是把件按各自的时序串起来。
+蒙皮读数、手骨轴实测、掐棱握式解算；六个宿主的 `main_*()` 只是把件按各自的时序串起来。
 `main_chair()` 走的仍是 #163 定下的那条路径（**不重写**）：卡 1 的测量是本文件新增的件，
 改的是**库**，不是那条已验收的动作。
 
@@ -116,10 +122,11 @@ DIGITS = ("Index", "Middle", "Ring", "Pinky", "Thumb")
 def parse_args(argv):
     argv = argv[argv.index("--") + 1:] if "--" in argv else []
     ap = argparse.ArgumentParser(prog="author_xbot_chair_grab.py")
-    ap.add_argument("--task", choices=("chair", "card1", "door", "restate", "doorpush"),
+    ap.add_argument("--task", choices=("chair", "card1", "door", "restate", "doorpush", "panic"),
                     default="chair",
                     help="宿主：#163 抓椅背（chair，默认）· 卡 1 掐棱测量（card1）· 门边动作（door）"
                          "· 门边「推到底」能播段（doorpush，#166）"
+                         "· 恐慌姿态 抱头/捂耳（panic，#169——第四系「目标部位局部系」首件）"
                          "· 重述对拍（restate，纯算术，不需要 Blender）")
     ap.add_argument("--template", default=str(Path(__file__).resolve().parents[2] /
                                              ".scratch/blender_assets/xbot/XBot_AnimationTemplate.blend"))
@@ -155,6 +162,12 @@ def parse_args(argv):
                     help="只跑「身体摆放（净距 b）」的解空间扫描——口径 §4.2 硬规矩 5 的 ≥2 解并列")
     ap.add_argument("--first-foot", choices=("Right", "Left"), default="Left",
                     help="迈步：哪只脚先迈（口径 §13.6 自由度表第 2 行；两种都解，回显卡并列）")
+    # ---- #169：恐慌姿态（抱头 / 捂耳）宿主的量 ----
+    ap.add_argument("--pose", choices=("ears", "head"), default="ears",
+                    help="哪一解进 clip：ears = 捂耳（掌面 ↔ 耳侧面 ×2，口径 §15.6.1 的平support 最大面）"
+                         "· head = 抱头（掌面 ↔ 后脑面 ×2）；**两解都解**，另一解只报读数（§4.2 硬规矩 5）")
+    ap.add_argument("--scan-body", action="store_true",
+                    help="只跑身体条件（下蹲量 × 肘方向）的解空间扫描——口径 §4.2 硬规矩 5 的 ≥2 解并列")
     return ap.parse_args(argv)
 
 
@@ -2884,7 +2897,7 @@ def door_push_marker_bones(arm, skin="Beta_Surface"):
     return out
 
 
-def visible_bone_outliers(arm, skin="Beta_Surface"):
+def visible_bone_outliers(arm, skin="Beta_Surface", meshes=None):
     """判据：**可见的骨**的 head / tail 都必须落在**皮肤的包围盒**内，并报出到表面的最近距离。
 
     ⚠️ 为什么需要它（owner 2026-09-16 **第三次**指出「多余骨骼飘在人体模型外面」）：本仓的验证
@@ -2895,8 +2908,11 @@ def visible_bone_outliers(arm, skin="Beta_Surface"):
     抓不到。第一版试过射线奇偶与法向侧判定，**在 X Bot 这套非闭合网格上都不成立**
     （实测：髋骨点被两种方法都判成"体外"）⇒ 改用包围盒。
     """
-    skin_ob = bpy.data.objects[skin]
-    verts = [skin_ob.matrix_world @ v.co for v in skin_ob.data.vertices]
+    # ⚠️ `meshes` 供**多实例 lab** 用（口径 §15.8）：实例复制后网格叫 `Beta_Surface.001`，
+    #    按名字取会取到**原实例**的皮肤 ⇒ 骨架在 ±5 m 而盒子在原位，判据会读出 51 根"伸出 5000 mm"
+    #    的假红（本件实测踩到）。传对象进来就没有这个歧义。
+    skin_obs = list(meshes) if meshes is not None else [bpy.data.objects[skin]]
+    verts = [ob.matrix_world @ v.co for ob in skin_obs for v in ob.data.vertices]
     lo = Vector((min(v.x for v in verts), min(v.y for v in verts), min(v.z for v in verts)))
     hi = Vector((max(v.x for v in verts), max(v.y for v in verts), max(v.z for v in verts)))
     vis_colls = {c.name for c in arm.data.collections if c.is_visible}
@@ -3683,6 +3699,985 @@ def main_door_push() -> int:
 
 
 # ══════════════════════════════════════════════════════════════════════════════
+# 宿主 6：恐慌姿态（抱头 / 捂耳）（`--task panic`）——[#169] 的交付 · 口径 §15.7 ① 件
+#
+#   关系类型 **B′ 自身姿势关系**（目标不是道具，而是**自己的身体**）⇒ 这是
+#   **第四系「目标部位局部系」的第一次实做**（口径 §6.1 · §15.5）：
+#   部位面**由该部位当前 transform 实时求得**、不烘世界坐标；判据的面**逐值取自** §15.6.1
+#   的部位面登记，ε 由 [#168] 实测（证据 design/engineering/evidence/body-part-epsilon-2026-09-16.md §4.2）。
+#
+#   两条解**并列**（口径 §4.2 硬规矩 5——agent 解的行不许只给一个解）：
+#     · `ears` 捂耳：掌面 ↔ **耳侧面**（`Head` 局部 `+X`/`−X`，ε = 88.0429 mm，**平坦支撑 31 = 全头最平**）
+#     · `head` 抱头：掌面 ↔ **后脑面**（`Head` 局部 `−Z`，ε = 99.7200 mm）
+#   默认把 `ears` 打进 clip；**另一解照样解到底并进回显卡**（两解都不是手拍的）。
+#
+#   ⚠️ **换算系**（[#164] 的代价）：掌面法向与部位面法向**都必须经 `arm.matrix_world` 换算**。
+#      实测读数：本条的面里**耳侧恰在 +90° X 旋转的不动轴上**（错法差 0.0000 mm）而**后脑面差 99.72 mm**
+#      ⇒ "错法不会红在耳侧那一格"（#168 证据 §4.4）。故抱头那一解才是这套换算的**真判据**。
+# ══════════════════════════════════════════════════════════════════════════════
+
+PANIC_ACTION_EARS = "PanicCoverEars"
+PANIC_ACTION_HEAD = "PanicHoldHead"
+
+#: 帧表（30 fps，`--fps` 可改）：中立 → 起手 → **到位** → 保持（恐慌是**持续态**）
+PANIC_FRAME_NEUTRAL = 1     # 首帧严格中立（导出侧 E5 硬约定，同宿主 5）
+PANIC_FRAME_HIT = 13        # 声明到位帧 —— **V-f 要求它 == 产物侧判据量的极值帧**
+PANIC_FRAME_END = 46        # 保持到这一帧（保持期 33 帧 ≈ 1.1 s）
+
+#: 掌面最低点相对**部位面**（沿朝外法向）的目标间隙（mm）——**判据量的目标值**。
+#: 来源：容差沿用 §8.2 的 `tol_contact = 2.8 mm`（**不新立阈值**）；两个具体值 = 本件选定，
+#: 「到位帧最紧、保持期回收一点」⇒ 极值帧**唯一**且保持期**不越容差**（登记为自由度表的一行）。
+PANIC_GAP_HIT_MM = 0.8
+PANIC_GAP_HOLD_MM = 2.0
+#: 验收容差 = §8.2 的 `tol_contact`（两个数不许混：ε 是**换算**、这个是**验收**）
+PANIC_TOL_MM = CONTACT_TOL_MM
+#: 面片片层厚度（m）：沿该面局部轴取最外这一层顶点 ⇒ **有限面片**（#164：参照不能是无限平面）
+PANIC_SLAB_M = 0.008
+#: 身体条件（本件选定，登记为自由度表行；`--scan-body` 并列 ≥2 解）
+PANIC_CROUCH_M = 0.030
+PANIC_TORSO_LEAN_DEG = 8.0
+PANIC_HEAD_DOWN_DEG = 6.0
+#: 肘方向（本件选定）：向外 0.35 · 向后 0.10 · 向下 0.93（捂耳时肘下垂外张）
+PANIC_ELBOW_DIR = (0.35, 0.10, -0.93)
+#: 逐指蜷曲扫描区间（#164 实测：四指共用一个系数必然有的悬空、有的陷入 ⇒ **必须逐指解**）
+PANIC_CURL_LO, PANIC_CURL_HI, PANIC_CURL_STEPS = 0.0, 2.0, 21
+#: 拇指单独一档下限（允许**伸展**）：掌面贴耳时拇指会被掌的落点顶到头前面 ⇒ 需要能外展
+PANIC_CURL_LO_THUMB = -0.8
+#: 逐指拟合的**目标**（mm）：指尖离头部蒙皮面这么远（正 = 在头外）。来源：本件选定（落在 §8.2
+#: `tol_contact = 2.8` 之内、且给顶点分辨率留余量）；
+#: ⚠️ 拟合目标必须是**带符号**量——用无符号"最近距离"会把**陷进头里**也当成"贴住"（本件实测踩到：
+#: 拇指尖陷入 −14.72 mm 而"最近距离"只有 0.4 mm）。
+PANIC_FINGER_GAP_MM = 2.0
+#: 头部蒙皮点集的抽样步长（逐指拟合的参照；523 点全量 × 5 指 × 11 档太慢）
+PANIC_HEAD_SKIN_STEP = 3
+#: 抱头那一解：两只手在**同一个面**上错开（`u` = 头骨局部 X），避免两手重叠
+PANIC_HEAD_INPLANE_OFFSET_M = 0.045
+#: `--scan-body` 的两个维度（口径 §4.2 硬规矩 5：≥2 解并列）
+PANIC_BODY_CANDIDATES = (0.0, 0.030, 0.060)
+PANIC_ELBOW_ELEV_CANDIDATES = (-15.0, 0.0, 15.0)
+
+#: 部位面登记的正本 = 口径 **§15.6.1**（ε 逐值来自 [#168] 实测，**不得凭记忆填**）
+#: 局部轴语义来源 = 管线 §2.1.4 的实测轴表（`Neck`/`Head`：局部 X = 点头/抬头 ⇒ **左右轴**；
+#: 局部 Z = 歪头 ⇒ **前后轴**；局部 Y = 转头 ⇒ **沿骨长轴**）；
+#: 正负号 = 实测 `axis_in_world` 与口径 §6.2（世界 `+X` = 左手侧 · 世界 `−Y` = 前）比对后裁定。
+HEAD_PART_FACES = {
+    "side_left": {"骨": f"{BONE_PREFIX}Head", "轴": "+X", "ε_mm": 88.0429, "标签": "左耳侧面",
+                  "面内轴": ("Y", "Z")},
+    "side_right": {"骨": f"{BONE_PREFIX}Head", "轴": "-X", "ε_mm": 88.0429, "标签": "右耳侧面",
+                   "面内轴": ("Y", "Z")},
+    "back": {"骨": f"{BONE_PREFIX}Head", "轴": "-Z", "ε_mm": 99.7200, "标签": "后脑面",
+             "面内轴": ("X", "Y")},
+    "top": {"骨": f"{BONE_PREFIX}Head", "轴": "+Y", "ε_mm": 207.4887, "标签": "头顶面",
+            "面内轴": ("X", "Z")},
+    "front": {"骨": f"{BONE_PREFIX}Head", "轴": "+Z", "ε_mm": 148.0259, "标签": "额面",
+              "面内轴": ("X", "Y")},
+}
+#: 两解各自打哪两个面（`--pose` 只选**哪一解进 clip**，两解都解）
+PANIC_SOLUTIONS = {
+    "ears": {"动作名": PANIC_ACTION_EARS, "标签": "捂耳",
+             "面": {"Left": "side_left", "Right": "side_right"},
+             "错开_m": 0.0},
+    "head": {"动作名": PANIC_ACTION_HEAD, "标签": "抱头",
+             "面": {"Left": "back", "Right": "back"},
+             "错开_m": PANIC_HEAD_INPLANE_OFFSET_M},
+}
+
+
+def _axis_local(spec):
+    """`"+X"` → 该骨局部系里的单位向量。"""
+    v = Vector((0.0, 0.0, 0.0))
+    v[{"X": 0, "Y": 1, "Z": 2}[spec[1]]] = 1.0 if spec[0] == "+" else -1.0
+    return v
+
+
+_HEAD_SKIN_CACHE = {}
+
+
+def head_skin_local(arm):
+    """`Head` 骨在**可见层**上的蒙皮顶点（**骨局部坐标**；头刚性 1.0 ⇒ 随姿势精确跟随）。
+
+    只取 `Beta_Surface`：口径 §15.6.1 实测**头只存在这一层**（`Beta_Joints` 的顶点 y 上界
+    = 159.6 cm = 颈骨尾 ⇒ **那一层没有头**）。取法同 `palm_face_vertices`：主导组 = `Head`。
+    """
+    if "Head" in _HEAD_SKIN_CACHE:
+        return _HEAD_SKIN_CACHE["Head"]
+    name = f"{BONE_PREFIX}Head"
+    bl_inv = arm.data.bones[name].matrix_local.inverted()
+    arm_inv = arm.matrix_world.inverted()
+    out = []
+    for ob in bpy.data.objects:
+        if ob.type != "MESH" or ob.name != "Beta_Surface":
+            continue
+        vg = ob.vertex_groups.get(name)
+        if vg is None:
+            continue
+        for v in ob.data.vertices:
+            best_g, best_w = None, -1.0
+            for r in v.groups:
+                if r.weight > best_w:
+                    best_g, best_w = r.group, r.weight
+            if best_g == vg.index:
+                out.append(bl_inv @ (arm_inv @ (ob.matrix_world @ v.co)))
+    _HEAD_SKIN_CACHE["Head"] = out
+    return out
+
+
+def head_face_patch_local(arm, key):
+    """该具名面的**真实蒙皮面片**（骨局部坐标）：沿该面局部轴最外 `PANIC_SLAB_M` 那一层顶点。"""
+    axis = _axis_local(HEAD_PART_FACES[key]["轴"])
+    pts = head_skin_local(arm)
+    ext = max(p.dot(axis) for p in pts)
+    slab_local = PANIC_SLAB_M / max(arm.matrix_world.to_scale().x, 1e-9)
+    return [p for p in pts if p.dot(axis) >= ext - slab_local]
+
+
+def head_part_frame(arm, key):
+    """**第四系：目标部位局部系**——由该部位**当前** transform 实时求得（不烘世界坐标）。
+
+    返回：`锚点`（= 骨原点 + ε·朝外法向，ε 来自 §15.6.1）· `法向` · 面内两轴 `u`/`v` 与**跨度**
+    （⇒ 参照是**有限面片**而不是无限平面，#164 的实测教训）· `面片`（真实蒙皮世界点集）。
+
+    ⚠️ 法向**必须经 `arm.matrix_world` 换算**：[#164] 的代价 = 母版骨架对象带 **+90° X 旋转**，
+       漏掉它等于把面转到错方向（#168 证据 §4.4：耳侧面差 **0.0000** mm＝不动轴巧合，后脑面差 **99.72** mm）。
+    """
+    spec = HEAD_PART_FACES[key]
+    pb = arm.pose.bones[spec["骨"]]
+    m3 = arm.matrix_world.to_3x3()
+    r3 = pb.matrix.to_3x3()
+    n_world = (m3 @ (r3 @ _axis_local(spec["轴"]))).normalized()
+    origin = arm.matrix_world @ pb.head
+    scale = arm.matrix_world.to_scale().x
+    u_ax, v_ax = (_axis_local("+" + a) for a in spec["面内轴"])
+    u_w = (m3 @ (r3 @ u_ax)).normalized()
+    v_w = (m3 @ (r3 @ v_ax)).normalized()
+    patch = head_face_patch_local(arm, key)
+    us = [p.dot(u_ax) * scale for p in patch]
+    vs = [p.dot(v_ax) * scale for p in patch]
+    patch_world = [arm.matrix_world @ (pb.matrix @ p) for p in patch]
+    # 锚点（第四系的"面上一点"）= **沿该轴最外的那个真实蒙皮顶点**。
+    # ⚠️ 为什么不是"骨原点 + ε·法向"（本件实测踩到）：那个点在**面内**的位置等于**骨原点**的位置，
+    #    而后脑这类面的最外点高出骨原点 **48–118 mm** ⇒ 锚点会落在面片**下方 80 mm** 处，
+    #    "最低点是否落在面片内"的判读整个错位。取真实极值顶点则：① ε **逐值不变**（它就是那个
+    #    顶点的沿轴投影）② 面内位置是**面的真位置**。
+    ext_p = max(patch, key=lambda q: q.dot(_axis_local(spec["轴"])))
+    anchor = arm.matrix_world @ (pb.matrix @ ext_p)
+    # 面片重心（世界）——**面内对齐的目标**（数据给的中心，不是拍的）
+    centroid = sum(patch_world, Vector((0.0, 0.0, 0.0))) / float(len(patch_world))
+    # 自检：面片上沿法向最远的顶点距骨原点应当**逐值等于** §15.6.1 登记的 ε
+    # （两条独立来源互证 ⇒ "登记的数能不能被消费"变成读数，而不是承诺）
+    ext_mm = round(max(p.dot(_axis_local(spec["轴"])) for p in patch) * scale * 1000.0, 4)
+    return {"键": key, "标签": spec["标签"], "骨": spec["骨"], "局部轴": spec["轴"],
+            "ε_mm": spec["ε_mm"], "ε_实测复核_mm": ext_mm,
+            "ε_一致": bool(abs(ext_mm - spec["ε_mm"]) <= 0.01),
+            "骨原点": origin, "锚点": anchor, "法向": n_world,
+            "锚点沿法向距骨原点_mm": round((anchor - origin).dot(n_world) * 1000.0, 4),
+            "u": u_w, "v": v_w, "u_span_m": (min(us), max(us)), "v_span_m": (min(vs), max(vs)),
+            "面片": patch_world, "面片数": len(patch_world), "面片重心": centroid,
+            "重心面内_mm": [round((centroid - anchor).dot(u_w) * 1000.0, 2),
+                            round((centroid - anchor).dot(v_w) * 1000.0, 2)]}
+
+
+_HEAD_NORMAL_CACHE = {}
+
+
+def head_skin_local_normals(arm):
+    """`[(骨局部坐标, 骨局部朝外法向)]`——头蒙皮顶点 + **顶点法向**（判"在不在头里"用）。
+
+    ⚠️ 为什么不用 AABB 盒当头部代理（本件实测）：头的 AABB 在骨局部系里是
+    `x∈±88 / y∈[−67.6, 207.5] / z∈[−99.7, 148.0] mm`——**脖子整段落在盒里**，
+    于是"手在耳侧"会被读成"骨段陷入头 −38.94 mm"（35 帧假红）。⇒ 参照取**真实皮肤面**。
+    """
+    if "Head" in _HEAD_NORMAL_CACHE:
+        return _HEAD_NORMAL_CACHE["Head"]
+    name = f"{BONE_PREFIX}Head"
+    bl_inv = arm.data.bones[name].matrix_local.inverted()
+    arm_inv = arm.matrix_world.inverted()
+    out = []
+    for ob in bpy.data.objects:
+        if ob.type != "MESH" or ob.name != "Beta_Surface":
+            continue
+        vg = ob.vertex_groups.get(name)
+        if vg is None:
+            continue
+        for v in ob.data.vertices:
+            best_g, best_w = None, -1.0
+            for r in v.groups:
+                if r.weight > best_w:
+                    best_g, best_w = r.group, r.weight
+            if best_g != vg.index:
+                continue
+            pl = bl_inv @ (arm_inv @ (ob.matrix_world @ v.co))
+            nl = (bl_inv.to_3x3() @ (arm_inv.to_3x3() @ (ob.matrix_world.to_3x3() @ v.normal))).normalized()
+            out.append((pl, nl))
+    _HEAD_NORMAL_CACHE["Head"] = out
+    return out
+
+
+def head_signed_mm(arm, p_world, pts_normals=None):
+    """点相对**头部蒙皮面**的带符号距离（mm）：`> 0` 在头外 · `< 0` **陷入头里**。
+
+    取法：最近的那个头蒙皮顶点，把 `p − 该顶点` 投影到**该顶点的朝外法向**上。
+    ⚠️ 分辨力：顶点间距量级（本母版头 523 顶点，间距 ≈ 10–20 mm）⇒ **判据取符号（零穿透）**，
+       深度读数只作量级（口径 §8.2「容差必须远小于你想抓的那个错」的同一条道理）。
+    """
+    pb = arm.pose.bones[f"{BONE_PREFIX}Head"]
+    mw = arm.matrix_world
+    r3 = pb.matrix.to_3x3()
+    src = pts_normals if pts_normals is not None else head_skin_local_normals(arm)
+    best = None
+    for pl, nl in src:
+        q = mw @ (pb.matrix @ pl)
+        d = (p_world - q).length
+        if best is None or d < best[0]:
+            n = (mw.to_3x3() @ (r3 @ nl)).normalized()
+            best = (d, (p_world - q).dot(n) * 1000.0)
+    return best[1]
+
+
+def head_proxy_box(arm):
+    """头部代理盒（**骨局部系的 AABB**，随姿势刚体跟随）——穿模判据 `box_gap_mm` 的参照。
+
+    ⚠️ 为什么用**体**而不是面（#164 的实测教训原文）：棱/面是降维的参照——"蒙皮离面 0.5 mm、
+    同时陷进体 20 mm"完全可以成立。盒对体内点返回**负的陷入深度** ⇒ 一个读数两个方向都能报错。
+    """
+    pts = head_skin_local(arm)
+    scale = arm.matrix_world.to_scale().x
+    lo = Vector((min(p.x for p in pts), min(p.y for p in pts), min(p.z for p in pts)))
+    hi = Vector((max(p.x for p in pts), max(p.y for p in pts), max(p.z for p in pts)))
+    pb = arm.pose.bones[f"{BONE_PREFIX}Head"]
+    m3 = arm.matrix_world.to_3x3()
+    r3 = pb.matrix.to_3x3()
+    return {"near": arm.matrix_world @ (pb.matrix @ lo),
+            "n": (m3 @ (r3 @ Vector((1.0, 0.0, 0.0)))).normalized(),
+            "u": (m3 @ (r3 @ Vector((0.0, 1.0, 0.0)))).normalized(),
+            "z": (m3 @ (r3 @ Vector((0.0, 0.0, 1.0)))).normalized(),
+            "thickness_mm": (hi.x - lo.x) * scale * 1000.0,
+            "u_span_m": (0.0, (hi.y - lo.y) * scale),
+            "z_span_m": (0.0, (hi.z - lo.z) * scale)}
+
+
+def panic_elbow_dir(arm, side, elevation_deg=0.0):
+    """肘方向：**向外 + 略后 + 向下**（捂耳/抱头时肘外张下垂）。`elevation_deg` 供解空间并列。
+
+    来源：**本件选定**（不是实测）⇒ 登记为自由度表行，并在 `--scan-body` 里并列 ≥2 解（§4.2 硬规矩 5）。
+    """
+    sgn = 1.0 if side == "Left" else -1.0
+    lat, back, down = PANIC_ELBOW_DIR
+    v = Vector((sgn * lat, back, down))
+    th = math.radians(elevation_deg)
+    c, s = math.cos(th), math.sin(th)
+    return Vector((v.x * c - v.z * s, v.y, v.x * s + v.z * c)).normalized()
+
+
+def panic_palm_gap_mm(arm, side, frame):
+    """**掌面最低点相对部位面锚点的带符号法向间隙**（mm）——判据形态「弧面↔面」的那个量。
+
+    `> 0` 悬空 · `< 0` 陷入 · `|·| ≤ tol_contact` **贴合**（口径 §13.4 甲，U8 已闭合）。
+    """
+    pb = arm.pose.bones[f"{BONE_PREFIX}{side}Hand"]
+    mw = arm.matrix_world
+    palm = [mw @ (pb.matrix @ p) for p in palm_face_vertices(arm, side)]
+    vals = [(p - frame["锚点"]).dot(frame["法向"]) * 1000.0 for p in palm]
+    i = min(range(len(vals)), key=lambda k: vals[k])
+    return vals[i], palm[i], palm
+
+
+def panic_contact_readings(arm, side, frame):
+    """**掌面 ↔ 具名面**的读数（判据形态 = 口径 §13.4 的「**弧面↔面**」，U8 已闭合）。
+
+    | 读数 | 式子 | 判读 |
+    |---|---|---|
+    | `掌面最低点` | 掌面点集里沿目标面法向**最低**的那一点（= 该弧面指向目标面一侧的最低点） | — |
+    | `沿法向间隙_mm` | `(掌面最低点 − 锚点)·朝外法向` | `< −tol` 陷入 · `> tol` 悬空 · `|·| ≤ tol` **贴合** |
+    | `面↔面顶点最近距离_mm` | 掌面点集 ↔ **面片点集** 的最小**顶点**距离 | ⚠️ **只报读数、不判红**：两点集的最小顶点距离有**网格分辨力下限**（≈ 顶点间距）⇒ 当判据就是"用地磅称一封信"（§七 登记） |
+    | `落在面片内` | 最低点在面内两轴上的投影是否落在面片跨度内 | False ⇒ **不许判贴合**（手指飞在面外） |
+    | `掌面法向夹角_deg` | 掌面法向 ↔ 面法向（掌面朝内 ⇒ 接近 180°） | **只报读数**（朝向档 ε 未测，§8.3） |
+    """
+    pb = arm.pose.bones[f"{BONE_PREFIX}{side}Hand"]
+    mw = arm.matrix_world
+    gap, low, palm = panic_palm_gap_mm(arm, side, frame)
+    n = frame["法向"]
+    du = (low - frame["锚点"]).dot(frame["u"])
+    dv = (low - frame["锚点"]).dot(frame["v"])
+    in_patch = (frame["u_span_m"][0] <= du <= frame["u_span_m"][1]
+                and frame["v_span_m"][0] <= dv <= frame["v_span_m"][1])
+    n_palm = (mw.to_3x3() @ pb.matrix.to_3x3() @ Vector((0.0, 0.0, 1.0))).normalized()
+    return {"判据量": f"{side}掌面 ↔ {frame['标签']}",
+            "判据形态": "弧面↔面（掌面最低点 ↔ 有限面片）",
+            "锚点_mm": [round(c * 1000.0, 1) for c in frame["锚点"]],
+            "掌面最低点_mm": [round(c * 1000.0, 1) for c in low],
+            "面内偏移_mm": [round(du * 1000.0, 2), round(dv * 1000.0, 2)],
+            "面内跨度_mm": [[round(frame["u_span_m"][0] * 1000.0, 1), round(frame["u_span_m"][1] * 1000.0, 1)],
+                            [round(frame["v_span_m"][0] * 1000.0, 1), round(frame["v_span_m"][1] * 1000.0, 1)]],
+            "沿法向间隙_mm": round(gap, 2),
+            "面↔面顶点最近距离_mm": points_min_distance_mm(palm, frame["面片"]),
+            "面↔面_分辨力_mm": "顶点间距量级（本件 2.7 mm 下限，**只报读数、不判红**——见 §七 的登记）",
+            "掌面法向夹角_deg": round(math.degrees(n_palm.angle(n)), 2),
+            "落在面片内": bool(in_patch), "面片数": frame["面片数"], "掌面点数": len(palm)}
+
+
+def panic_finger_readings(arm, side, head_pts):
+    """**逐指**读数（口径 §七 硬规矩 2：成组项必须并列打印；F10/F11 的验收面）。
+
+    判据量 = 该指蒙皮点集 ↔ 头部蒙皮点集的**最近距离**（0 = 贴住；越小越贴）。
+    ⚠️ **必须逐指**：#164 实测"四指共用一个蜷曲系数"会让同一姿势里有的悬空 11 mm、有的陷入 3 mm。
+    """
+    out = {}
+    for finger in FINGERS:
+        pts = finger_skin_world(arm, side, finger)
+        out[finger] = {"指尖间隙_mm": points_min_distance_mm(pts, head_pts), "点数": len(pts)}
+    return out
+
+
+def panic_compare_curls(arm, side, curls, curl_axes, head_pts, head_normals):
+    """**两种手型解并列**（口径 §4.2 硬规矩 5）：**逐指解** vs **四指共用一个系数**。
+
+    后者就是 [#164] 实测过的那个错法（口径 §13.8 前史）：同一姿势里**有的指尖悬空、有的陷入**。
+    本件把那条教训**复现成读数**（不是引用结论）：两解的逐指间隙并排列出、谁更差由数字说。
+    """
+    out = {}
+    for mode in ("逐指", "四指共用"):
+        detail = None
+        if mode == "逐指":
+            for f in FINGERS:
+                _apply_one_finger_curl(arm, side, f, curl_axes[f], curls[f]["蜷曲量"])
+        else:
+            best = None
+            for k in range(PANIC_CURL_STEPS):
+                amt = PANIC_CURL_LO + (PANIC_CURL_HI - PANIC_CURL_LO) * k / (PANIC_CURL_STEPS - 1)
+                for f in FOUR_FINGERS:
+                    _apply_one_finger_curl(arm, side, f, curl_axes[f], amt)
+                _apply_one_finger_curl(arm, side, "Thumb", curl_axes["Thumb"],
+                                       curls["Thumb"]["蜷曲量"])
+                update(1)
+                gaps = {f: panic_finger_signed_mm(arm, side, f, head_normals) for f in FINGERS}
+                worst = max(abs(g - PANIC_FINGER_GAP_MM) for g in gaps.values() if g is not None)
+                if best is None or worst < best[0]:
+                    best = (worst, amt)
+            for f in FOUR_FINGERS:
+                _apply_one_finger_curl(arm, side, f, curl_axes[f], best[1])
+            detail = {"四指共用系数": round(best[1], 3), "拇指": curls["Thumb"]["蜷曲量"]}
+        update(1)
+        gaps = {f: panic_finger_signed_mm(arm, side, f, head_normals) for f in FINGERS}
+        out[mode] = {"蜷曲量": ({f: curls[f]["蜷曲量"] for f in FINGERS} if mode == "逐指" else detail),
+                     "逐指带符号间隙_mm": {f: round(g, 2) for f, g in gaps.items() if g is not None},
+                     "最坏_偏离目标_mm": round(max(abs(g - PANIC_FINGER_GAP_MM)
+                                                for g in gaps.values() if g is not None), 2)}
+    for f in FINGERS:      # 恢复**逐指解**（判据面用逐指那一档）
+        _apply_one_finger_curl(arm, side, f, curl_axes[f], curls[f]["蜷曲量"])
+    update(2)
+    return out
+
+
+def hand_skin_world_all(arm, side, step=4):
+    """该手**全部蒙皮点**的世界坐标（抽样 `step`）——**零穿透判据的度量对象是蒙皮，不是骨**。
+
+    ⚠️ 为什么不能拿"骨段点"判穿透（本件实测）：骨的采样点在**肉里**（手指骨离皮肤约 10 mm）
+    ⇒ 皮肤刚贴上时骨点已经"陷入 −4.21 mm"（假红）。同族教训见口径 §15.3 子分区「脚」的
+    **41 mm 层差**（骨点口径 vs 看得见的足底）。
+    """
+    mw = arm.matrix_world
+    out = []
+    for bone_name, p in hand_skin_points(arm, side)[::step]:
+        out.append(mw @ (arm.pose.bones[bone_name].matrix @ p))
+    return out
+
+
+def panic_finger_signed_mm(arm, side, finger, head_normals, step=3):
+    """该指**最深的那个蒙皮点**相对头部蒙皮面的带符号距离（mm，`< 0` = 陷入头里）。"""
+    pts = finger_skin_world(arm, side, finger)
+    if not pts:
+        return None
+    return min(head_signed_mm(arm, p, head_normals) for p in pts[::step])
+
+
+def panic_hand_to_face(arm, side, frame, curl_axes, clearance_mm=PANIC_GAP_HIT_MM,
+                       in_plane_m=0.0, curls=None, curl_scale=1.0, elbow_elev_deg=0.0,
+                       fit_fingers=True):
+    """把手摆到「**掌面贴住具名面**」：朝向解析 + 腕位**一次算出** + **逐指**蜷曲。
+
+    三步（顺序是先例[#163] §十九 的结论，不是选择）：① **先解臂**（父链先定）② **再写手的世界朝向**
+    （`_set_world_axes` 写的是 basis，父链没定就是错的）③ 量"掌面重心相对腕"的刚体偏移后**一次算出**腕目标。
+
+    朝向 = 三个自由度（口径 §13.2「解方程而非搜索」）：骨局部 `Z`（**掌面法向**，§8.1 实测）
+    = **−面法向**（掌面朝**头**）· 骨局部 `Y`（腕 → 指尖）= 头骨长轴方向（手指朝头顶覆上去）·
+    `X = Y × Z` 由 `_set_world_axes` 自动成立。
+    """
+    n_face = frame["法向"]
+    n_palm = -n_face
+    up = head_part_frame(arm, "top")["法向"]          # 头骨长轴方向（实时量，不烘）
+    f_dir = (up - n_palm * up.dot(n_palm)).normalized()
+    hand = f"{BONE_PREFIX}{side}Hand"
+    elbow = panic_elbow_dir(arm, side, elbow_elev_deg)
+    anchor = frame["锚点"] + frame["u"] * in_plane_m
+    # ① 先解臂到**接近点**（父链先定）
+    info1 = solve_arm(arm, side, anchor + n_face * 0.12 - up * 0.05, elbow)
+    # ② 在该朝向下量"掌面重心相对腕"的刚体偏移
+    _set_world_axes(arm, f"CTRL_{side}Hand", hand, f_dir, f_dir.cross(n_palm))
+    centroid, _ = palm_normal_reference(arm, side)
+    off = centroid - world_point(arm, hand)
+    # ③ **一次算出**腕目标：掌面重心落在「锚点 + 朝外 clearance」
+    wrist_target = anchor + n_face * (clearance_mm / 1000.0) - off
+    # ③′ **面内对齐修正**（一遍）：把"掌面重心"在面内的位置对到**面片重心**上。
+    #     ⚠️ 为什么必须做（本件实测）：掌面是一块**近平面**（6 mm 片层的点集），
+    #     "沿法向最低点"在近平面上**近乎简并** ⇒ 最低点会落在掌的边缘（实测落在耳侧面片之外，
+    #     `落在面片内 = False`，而 §13.4/#164 的规矩是**面外不许判贴合**）。
+    #     对齐之后，最低点才落在面片里（读数见报告 `落在面片内`）。
+    #     这是**修正**而不是 #163 §十八 那种"两遍定点"（那次的错在于用错朝向下的偏移反复推腕）。
+    wrist_target = wrist_target - frame["u"] * (centroid - anchor).dot(frame["u"]) \
+        - frame["v"] * (centroid - anchor).dot(frame["v"]) \
+        + frame["u"] * frame["重心面内_mm"][0] / 1000.0 + frame["v"] * frame["重心面内_mm"][1] / 1000.0
+    info2 = solve_arm(arm, side, wrist_target, elbow)
+    _set_world_axes(arm, f"CTRL_{side}Hand", hand, f_dir, f_dir.cross(n_palm))
+    update()
+    # ③″ **法向修正**（一遍，实测回代）：判据量的是**掌面最低点**，而 ③ 把**重心**放到了目标间隙上；
+    #     两者差一个实测常量（本件实测 ≈ −2.8 mm：掌面是弧面，最低点比重心更靠里）。
+    #     判据要的是**最低点** ⇒ 按"最低点的实测间隙"回代一次（同 #166 `set_pelvis_world` 的实测回代法）。
+    #     ⚠️ 这不是 #163 §十八 那种"两遍定点"：那次的错在于**用错朝向下的偏移**反复推腕；
+    #        这里朝向已经定了，回代的是**同一个刚性量**的一次性差值。
+    gap_now, _, _ = panic_palm_gap_mm(arm, side, frame)
+    wrist_target = wrist_target + n_face * ((clearance_mm - gap_now) / 1000.0)
+    info2 = solve_arm(arm, side, wrist_target, elbow)
+    _set_world_axes(arm, f"CTRL_{side}Hand", hand, f_dir, f_dir.cross(n_palm))
+    update()
+    # ④ **逐指**蜷曲：以"该指蒙皮 ↔ 头部蒙皮"最近距离最小为目标（贴住 = 0）
+    if curls is None and fit_fingers:
+        head_pts = [arm.matrix_world @ (arm.pose.bones[f"{BONE_PREFIX}Head"].matrix @ p)
+                    for p in head_skin_local(arm)[::PANIC_HEAD_SKIN_STEP]]
+        normals = head_skin_local_normals(arm)[::2]
+        curls = {}
+        for finger in FINGERS:
+            lo = PANIC_CURL_LO_THUMB if finger == "Thumb" else PANIC_CURL_LO
+            best = None
+            for k in range(PANIC_CURL_STEPS):
+                amount = lo + (PANIC_CURL_HI - lo) * k / (PANIC_CURL_STEPS - 1)
+                _apply_one_finger_curl(arm, side, finger, curl_axes[finger], amount)
+                update(1)
+                gap = panic_finger_signed_mm(arm, side, finger, normals)
+                score = (abs(gap - PANIC_FINGER_GAP_MM), amount)
+                if best is None or score < best[0]:
+                    best = (score, amount, gap)
+            curls[finger] = {"蜷曲量": round(best[1], 3),
+                             "带符号间隙_mm": round(best[2], 2),
+                             "顶点最近距离_mm": points_min_distance_mm(
+                                 finger_skin_world(arm, side, finger), head_pts)}
+        for finger in FINGERS:
+            _apply_one_finger_curl(arm, side, finger, curl_axes[finger], curls[finger]["蜷曲量"])
+        update(2)
+    elif curls is not None:
+        for finger in FINGERS:
+            _apply_one_finger_curl(arm, side, finger, curl_axes[finger],
+                                   curls[finger]["蜷曲量"] * curl_scale)
+        update(2)
+    return {"wrist_target_m": [round(v, 4) for v in wrist_target],
+            "wrist_default": info1, "arm": info2, "elbow_dir": [round(v, 3) for v in elbow],
+            "curls": curls, "clearance_mm": clearance_mm}
+
+
+def panic_body_setup(arm, m3, foot_rest, crouch_m=PANIC_CROUCH_M, lean_deg=PANIC_TORSO_LEAN_DEG,
+                     head_down_deg=PANIC_HEAD_DOWN_DEG):
+    """恐慌姿态的身体条件：**微蹲 + 躯干前倾 + 缩头**（每一项的轴语义都有实测来源）。
+
+    | 项 | 写法 | 轴语义 / 方法来源 |
+    |---|---|---|
+    | 微蹲 | `set_pelvis_world(双脚中点, 静止髋 z − crouch_m)` + 双腿解析解拉回 | 宿主 5 同法（实测回代，不假设写入口径） |
+    | 躯干前倾 | `door_push_torso_lean(lean_deg)`（三段脊柱各 1/3） | 管线 §2.1.4：脊柱局部 X = **前倾** |
+    | 缩头 | `Neck` / `Head` 局部 X +`head_down_deg` | 同上：颈 / 头局部 X = **点头/抬头** |
+
+    ⚠️ **本件不调 `solve_gaze` / `solve_gaze_scan`**：它们写的是同一个 `Neck`/`Head` 局部 X，
+       恐慌姿态要的正是"**不**目视水平"（缩头）⇒ 两条解冲突，本件显式取缩头并写进自由度表。
+    """
+    mid = Vector(((foot_rest["Left"].x + foot_rest["Right"].x) / 2.0,
+                  (foot_rest["Left"].y + foot_rest["Right"].y) / 2.0))
+    hips_z = world_point(arm, f"{BONE_PREFIX}Hips").z - crouch_m
+    err = set_pelvis_world(arm, m3, (mid.x, mid.y), hips_z)
+    door_push_torso_lean(arm, lean_deg)
+    for name in (f"{BONE_PREFIX}Neck", f"{BONE_PREFIX}Head"):
+        pb = arm.pose.bones[name]
+        pb.rotation_mode = "XYZ"
+        pb.rotation_euler = Euler((math.radians(head_down_deg), 0.0, 0.0), "XYZ")
+    update()
+    _, _, posterior = body_frame(arm)
+    for s in CARD1_SIDES:
+        solve_leg(arm, s, foot_rest[s], -posterior)
+        set_foot_world_orientation(arm, s, 0.0)
+    update()
+    return {"crouch_m": crouch_m, "pelvis_err_mm": err, "lean_deg": lean_deg,
+            "head_down_deg": head_down_deg}
+
+
+def panic_channel_names(arm):
+    """打键通道表：**控制骨 + 脊柱/颈头 + 手指骨**。
+
+    ⚠️ 宿主 3 的教训（#165 登记）：它**腿脚一条键都没打** ⇒ 相位判据判不了。
+    本件逐项列全并**打印**，让"漏打哪一类"变成可读的读数。
+    """
+    names = ["CTRL_Hips"] + [f"CTRL_{s}{suf}" for s in CARD1_SIDES
+                             for suf in ("Arm", "ForeArm", "Hand", "UpLeg", "Leg", "Foot")]
+    names += [f"{BONE_PREFIX}{b}" for b in ("Spine", "Spine1", "Spine2", "Neck", "Head")]
+    names += [f"{BONE_PREFIX}{s}Hand{f}{k}"
+              for s in CARD1_SIDES for f in FINGERS for k in (1, 2, 3, 4)]
+    return [n for n in names if n in arm.pose.bones]
+
+
+def main_panic() -> int:
+    """恐慌姿态宿主：逐帧解算 → 逐帧打键 → 从**产物**里读第四系的判据。"""
+    from datetime import datetime
+    args = parse_args(list(sys.argv))
+    tmpl = Path(args.template)
+    if not tmpl.is_file():
+        print(f"[ERROR] 母版不存在：{tmpl}")
+        return 2
+    if args.host == "headless":
+        bpy.ops.wm.open_mainfile(filepath=str(tmpl))
+    elif not bpy.data.filepath:
+        print("[ERROR] --host live 要求母版已经在当前会话里打开")
+        return 2
+    bpy.context.scene.render.fps = args.fps
+    arm, m3 = make_context()
+    drop_temp(arm)
+    clear_pose(arm)
+
+    action_name = args.action if args.action != "BendGripChairBack" else PANIC_SOLUTIONS[args.pose]["动作名"]
+    if action_name != args.action:
+        print(f"[WARN] --action 未显式给出（默认 {args.action}）⇒ 本宿主按 {action_name} 命名动作")
+
+    report = {"script": Path(__file__).name, "task": "panic", "action": action_name,
+              "blender": bpy.app.version_string, "template": str(tmpl), "host": args.host,
+              "measured_at": datetime.now().isoformat(timespec="seconds"),
+              "pose": args.pose, "problems": []}
+    print(f"恐慌姿态（口径 §15.7 ① 件 · 第四系「目标部位局部系」首件）· 动作名 {action_name}")
+    print(f"帧表：中立 {PANIC_FRAME_NEUTRAL} · **到位 {PANIC_FRAME_HIT}** · 保持到 {PANIC_FRAME_END}"
+          f"（{args.fps} fps；恐慌 = **持续态**，口径 §15.7 的「词条位」块）")
+
+    # ---- ① 部位面登记的自检：登记的 ε 与**真实面片**是否逐值一致（#168 的读数能不能被消费）----
+    frames_rest = {}
+    for key in ("side_left", "side_right", "back", "top"):
+        fr = head_part_frame(arm, key)
+        frames_rest[key] = fr
+        print(f"  部位面 [{fr['标签']}] 骨局部 {fr['局部轴']} · §15.6.1 登记 ε = {fr['ε_mm']} mm · "
+              f"真实面片复核 = {fr['ε_实测复核_mm']} mm ⇒ {'一致 ✅' if fr['ε_一致'] else '不一致 ❌'}")
+    report["part_faces_used"] = {
+        k: {"标签": v["标签"], "骨": v["骨"], "局部轴": v["局部轴"],
+            "ε_mm §15.6.1": v["ε_mm"], "ε_真实面片复核_mm": v["ε_实测复核_mm"],
+            "ε_一致": v["ε_一致"], "面片数": v["面片数"]}
+        for k, v in frames_rest.items()}
+    if not all(v["ε_一致"] for v in frames_rest.values()):
+        report["problems"].append("部位面登记的 ε 与真实面片复核不一致（登记表与母版脱节）")
+
+    # ---- ② 静止读数与身体条件 ----
+    foot_rest = {s: world_point(arm, f"{BONE_PREFIX}{s}Foot").copy() for s in CARD1_SIDES}
+    hips_rest = world_point(arm, f"{BONE_PREFIX}Hips").copy()
+    curl = {s: detect_curl_axis_group(arm, s, "四指") for s in CARD1_SIDES}
+    curl_thumb = {s: detect_curl_axis_group(arm, s, "拇指") for s in CARD1_SIDES}
+    curl_axes = {s: {f: (curl_thumb[s] if f == "Thumb" else curl[s]) for f in FINGERS}
+                 for s in CARD1_SIDES}
+    report["f3_curl"] = {"四指": curl, "拇指": curl_thumb}
+    print(f"F3 屈曲轴自测：四指 左 {curl['Left']['axis']}{curl['Left']['sign']:+d} / "
+          f"右 {curl['Right']['axis']}{curl['Right']['sign']:+d} · "
+          f"拇指 左 {curl_thumb['Left']['axis']}{curl_thumb['Left']['sign']:+d} / "
+          f"右 {curl_thumb['Right']['axis']}{curl_thumb['Right']['sign']:+d}")
+    report["freedom_table"] = [
+        {"行": "身体：下蹲量", "值": PANIC_CROUCH_M, "单位": "m", "状态": "agent 解（本件选定）",
+         "来源": "本件选定 + `--scan-body` 并列 ≥2 解（口径 §4.2 硬规矩 5）"},
+        {"行": "身体：躯干前倾", "值": PANIC_TORSO_LEAN_DEG, "单位": "°", "状态": "agent 解",
+         "来源": "管线 §2.1.4（脊柱局部 X = 前倾）"},
+        {"行": "身体：缩头", "值": PANIC_HEAD_DOWN_DEG, "单位": "°", "状态": "agent 解",
+         "来源": "管线 §2.1.4（颈/头局部 X = 点头）；**本件不调 gaze**（见 panic_body_setup 的 ⚠️）"},
+        {"行": "肘方向", "值": list(PANIC_ELBOW_DIR), "单位": "单位向量", "状态": "agent 解",
+         "来源": "本件选定 + `--scan-body` 的抬肘档并列"},
+        {"行": "掌面 ↔ 部位面 目标间隙（到位）", "值": PANIC_GAP_HIT_MM, "单位": "mm", "状态": "agent 解",
+         "来源": "容差沿用 §8.2 `tol_contact = 2.8`；具体值本件选定（保证极值帧唯一）"},
+        {"行": "掌面 ↔ 部位面 目标间隙（保持）", "值": PANIC_GAP_HOLD_MM, "单位": "mm", "状态": "agent 解",
+         "来源": "同上；保持期回收 1.0 mm 以让极值帧落在到位帧"},
+        {"行": "**F4a 判据时域**（必填）", "值": "接触对 = `持续`（窗口 = 到位帧…末帧，松一帧即红）· "
+                                          "接地 = `持续`（整段）· 时序 = `一次性`（到位帧）",
+         "单位": "—", "状态": "owner（涉观感）/ agent","来源": "口径 §13.3 F4a · §13.4.1"},
+        {"行": "手型（F10）", "值": "逐指 4 节屈曲角（**逐指解**，不共用系数）", "单位": "—",
+         "状态": "agent 解", "来源": "#164 实测（共用系数 ⇒ 有的悬空 11 mm / 有的陷入 3 mm）"},
+    ]
+
+    # ---- ③ 两解并列（口径 §4.2 硬规矩 5）+ 非退化对照 ----
+    solved = {}
+    for name, spec in PANIC_SOLUTIONS.items():
+        clear_pose(arm)
+        body = panic_body_setup(arm, m3, foot_rest)
+        per_side = {}
+        for s in CARD1_SIDES:
+            key = spec["面"][s]
+            frame = head_part_frame(arm, key)
+            in_plane = spec["错开_m"] * (1.0 if s == "Left" else -1.0)
+            res = panic_hand_to_face(arm, s, frame, curl_axes[s], PANIC_GAP_HIT_MM, in_plane)
+            per_side[s] = {"面": key, "frame": frame, "solve": res}
+        # ⚠️ 读数必须**当场量**（不能先 `clear_pose` 再量：那就量成了中立姿势的读数——
+        #    本件实测踩到过：两解并列打出的 622 mm 正是中立对照的值，而解本身是好的）
+        readings = {s: panic_contact_readings(arm, s, per_side[s]["frame"]) for s in CARD1_SIDES}
+        # ⚠️ 两解都在**同一个身体条件**下解（进入本循环时已 `clear_pose` + 重摆），故读数可比
+        head_pts = [arm.matrix_world @ (arm.pose.bones[f"{BONE_PREFIX}Head"].matrix @ p)
+                    for p in head_skin_local(arm)[::PANIC_HEAD_SKIN_STEP]]
+        head_nrm = head_skin_local_normals(arm)[::2]
+        curls_cmp = {s: panic_compare_curls(arm, s, per_side[s]["solve"]["curls"],
+                                            curl_axes[s], head_pts, head_nrm) for s in CARD1_SIDES}
+        solved[name] = {"body": body, "per_side": per_side, "readings": readings,
+                        "curls_cmp": curls_cmp}
+        report[f"solution_{name}"] = {
+            "标签": spec["标签"], "动作名": spec["动作名"],
+            "身体条件": body,
+            "面": {s: per_side[s]["面"] for s in CARD1_SIDES},
+            "读数": readings,
+            "逐指": {s: curls_cmp[s]["逐指"]["逐指带符号间隙_mm"] for s in CARD1_SIDES},
+            "手型两解": curls_cmp,
+            "腕目标_m": {s: per_side[s]["solve"]["wrist_target_m"] for s in CARD1_SIDES},
+            "肘方向": {s: per_side[s]["solve"]["elbow_dir"] for s in CARD1_SIDES},
+            "可达性": {s: {"reach_m": per_side[s]["solve"]["arm"].get("reach_m"),
+                           "夹直": bool(per_side[s]["solve"]["arm"].get("clamped_straight"))}
+                       for s in CARD1_SIDES},
+        }
+
+    # ---- ③′ 非退化对照：同一套判据在**中立姿势**下的读数（必须远出容差 ⇒ 判据「能失败」）----
+    clear_pose(arm)
+    control = {s: panic_contact_readings(arm, s, frames_rest[PANIC_SOLUTIONS[args.pose]["面"][s]])
+               for s in CARD1_SIDES}
+    report["neutral_control"] = control
+    print("\n非退化对照（口径 §十 V-b：判据必须**能失败**）——同一套判据下，**中立姿势**的读数")
+    for s in CARD1_SIDES:
+        row = control[s]
+        print(f"  {row['判据量']:<28} 沿法向间隙 {row['沿法向间隙_mm']:>9.2f} mm · "
+              f"面↔面顶点 {row['面↔面顶点最近距离_mm']:>9.2f} mm ⇒ "
+              f"{'**远出容差（判据能报红）✅**' if abs(row['沿法向间隙_mm']) > PANIC_TOL_MM else '❌ 判据退化'}")
+        if abs(row["沿法向间隙_mm"]) <= PANIC_TOL_MM:
+            report["problems"].append(f"非退化对照退化：{row['判据量']} 在中立姿势下已在容差内")
+
+    # ---- ④ `--scan-body`：身体条件的解空间（口径 §4.2 硬规矩 5 的 ≥2 解并列）----
+    if args.scan_body:
+        spec = PANIC_SOLUTIONS["ears"]
+        print("\n身体条件解空间（口径 §4.2 硬规矩 5：agent 解的行必须并列 ≥2 个可行解）")
+        print(f"  {'下蹲_m':>8}{'抬肘°':>7}{'肩→腕_m':>9}{'臂长_m':>8}{'余量_mm':>9}{'夹直':>6}"
+              f"{'掌面↔耳侧':>11}{'面↔面点':>9}{'面内':>6}{'肘侧向_mm':>11}")
+        rows = []
+        for crouch in PANIC_BODY_CANDIDATES:
+            for elev in PANIC_ELBOW_ELEV_CANDIDATES:
+                clear_pose(arm)
+                panic_body_setup(arm, m3, foot_rest, crouch)
+                per, arm_info = {}, {}
+                for s in CARD1_SIDES:
+                    key = spec["面"][s]
+                    fr = head_part_frame(arm, key)
+                    res = panic_hand_to_face(arm, s, fr, curl_axes[s], PANIC_GAP_HIT_MM, 0.0,
+                                             elbow_elev_deg=elev, fit_fingers=False)
+                    per[s] = panic_contact_readings(arm, s, fr)
+                    arm_info[s] = res["arm"]
+                el = elbow_offset(arm, "Left")
+                row = {"下蹲_m": crouch, "抬肘_deg": elev,
+                       "肩→腕_m": arm_info["Left"]["reach_m"], "臂长_m": arm_info["Left"]["limb_len_m"],
+                       "余量_mm": round((arm_info["Left"]["limb_len_m"] - arm_info["Left"]["reach_m"]) * 1000.0, 1),
+                       "夹直": bool(arm_info["Left"].get("clamped_straight")),
+                       "掌面间隙_mm": {s: per[s]["沿法向间隙_mm"] for s in CARD1_SIDES},
+                       "面↔面顶点_mm": {s: per[s]["面↔面顶点最近距离_mm"] for s in CARD1_SIDES},
+                       "面内": {s: per[s]["落在面片内"] for s in CARD1_SIDES},
+                       "肘侧向_mm": el["side"], "肘后向_mm": el["back"]}
+                rows.append(row)
+                print(f"  {crouch:8.3f}{elev:7.1f}{row['肩→腕_m']:9.4f}{row['臂长_m']:8.4f}"
+                      f"{row['余量_mm']:9.1f}{'是' if row['夹直'] else '否':>6}"
+                      f"{row['掌面间隙_mm']['Left']:11.2f}{row['面↔面顶点_mm']['Left']:9.2f}"
+                      f"{str(row['面内']['Left']):>6}{el['side']:11.1f}")
+        inv = len({(r["掌面间隙_mm"]["Left"], r["面内"]["Left"]) for r in rows}) == 1
+        print(f"  ⇒ 接触读数在**所有**身体条件下**逐值相同**（{'是' if inv else '否'}）："
+              f"因为目标面**跟着身体走**（第四系的锚点由该部位当前 transform 实时求得）"
+              f"⇒ **身体条件的取舍是观感（owner）**，判据面给不出区分；肘方向的取舍有读数"
+              f"（肘侧向/后向随档变化）。")
+        report["scan_body"] = {"行": rows, "读数与身体条件无关": bool(inv),
+                               "来源": "本件选定；容差 §8.2 tol_contact = 2.8 mm",
+                               "如实登记": "接触读数随身体条件逐值不变（目标面跟身体走）⇒ "
+                                           "该行的取舍归**观感**（owner）；肘方向档有读数（肘侧向/后向）"}
+        if args.report:
+            Path(args.report).write_text(json.dumps(report, ensure_ascii=False, indent=1),
+                                         encoding="utf-8")
+            print(f"报告: {args.report}")
+        return 0
+
+    # ---- ⑤ 帧表（纯函数一次算完）：腕目标 / 手掌朝向按 t 过渡，**到位帧最小** ----
+    spec = PANIC_SOLUTIONS[args.pose]
+    hit = solved[args.pose]
+    clear_pose(arm)
+    panic_body_setup(arm, m3, foot_rest)
+    rest_wrist = {s: world_point(arm, f"{BONE_PREFIX}{s}Hand").copy() for s in CARD1_SIDES}
+    rest_palm_n = {s: (arm.matrix_world.to_3x3() @ arm.pose.bones[f"{BONE_PREFIX}{s}Hand"].matrix.to_3x3()
+                       @ Vector((0.0, 0.0, 1.0))).normalized() for s in CARD1_SIDES}
+    rest_finger = {s: (arm.matrix_world.to_3x3()
+                       @ arm.pose.bones[f"{BONE_PREFIX}{s}Hand"].matrix.to_3x3()
+                       @ Vector((0.0, 1.0, 0.0))).normalized() for s in CARD1_SIDES}
+    hit_wrist = {s: Vector(hit["per_side"][s]["solve"]["wrist_target_m"]) for s in CARD1_SIDES}
+    up_now = head_part_frame(arm, "top")["法向"]
+    final_palm_n = {s: -hit["per_side"][s]["frame"]["法向"] for s in CARD1_SIDES}
+    final_finger = {s: (up_now - final_palm_n[s] * up_now.dot(final_palm_n[s])).normalized()
+                    for s in CARD1_SIDES}
+    # 保持期回收：腕目标沿面法向再退 `PANIC_GAP_HOLD_MM − PANIC_GAP_HIT_MM`
+    hold_wrist = {s: hit_wrist[s] + hit["per_side"][s]["frame"]["法向"]
+                  * ((PANIC_GAP_HOLD_MM - PANIC_GAP_HIT_MM) / 1000.0) for s in CARD1_SIDES}
+
+    def approach_t(frame):
+        """起手进度（0 = 静止，1 = 到位）——线性，纯函数（可复算）。"""
+        return min(1.0, max(0.0, (frame - PANIC_FRAME_NEUTRAL) / float(PANIC_FRAME_HIT - PANIC_FRAME_NEUTRAL)))
+
+    def wrist_at(frame, s):
+        if frame <= PANIC_FRAME_HIT:
+            t = approach_t(frame)
+            return rest_wrist[s] * (1.0 - t) + hit_wrist[s] * t
+        u = (frame - PANIC_FRAME_HIT) / float(max(1, PANIC_FRAME_END - PANIC_FRAME_HIT))
+        return hit_wrist[s] * (1.0 - u) + hold_wrist[s] * u
+
+    captured, per_frame = {}, []
+    print(f"\n逐帧解算（帧 {PANIC_FRAME_NEUTRAL}–{PANIC_FRAME_END}，每帧解、每帧打键）")
+    for frame in range(PANIC_FRAME_NEUTRAL, PANIC_FRAME_END + 1):
+        clear_pose(arm)
+        drop_temp(arm, also_objects=False)
+        if frame == PANIC_FRAME_NEUTRAL:
+            # ⚠️ 首帧必须严格中立（导出侧 E5 硬约定：导出时的姿势会被写进骨节点默认变换）
+            captured[frame] = capture_channels(arm, panic_channel_names(arm))
+            per_frame.append({"frame": frame, "neutral": True, "t": 0.0})
+            print(f"  帧 {frame:>3} **中立姿势**（零通道；导出侧 Rest Pose 一口清）")
+            continue
+        panic_body_setup(arm, m3, foot_rest)
+        t = approach_t(frame)
+        row = {"frame": frame, "t": round(t, 4), "hands": {}}
+        for s in CARD1_SIDES:
+            # 朝向与腕目标都按 t 过渡（起手不是"瞬移"）
+            n_palm = _nlerp(rest_palm_n[s], final_palm_n[s], t)
+            f_dir = _nlerp(rest_finger[s], final_finger[s], t)
+            solve_arm(arm, s, wrist_at(frame, s), panic_elbow_dir(arm, s))
+            _set_world_axes(arm, f"CTRL_{s}Hand", f"{BONE_PREFIX}{s}Hand", f_dir, f_dir.cross(n_palm))
+            for finger in FINGERS:
+                _apply_one_finger_curl(arm, s, finger, curl_axes[s][finger],
+                                       hit["per_side"][s]["solve"]["curls"][finger]["蜷曲量"] * t)
+            update()
+            fr = head_part_frame(arm, spec["面"][s])
+            row["hands"][s] = panic_contact_readings(arm, s, fr)
+        captured[frame] = capture_channels(arm, panic_channel_names(arm))
+        per_frame.append(row)
+        if frame in (PANIC_FRAME_NEUTRAL + 1, PANIC_FRAME_HIT, PANIC_FRAME_HIT + 1, PANIC_FRAME_END):
+            print(f"  帧 {frame:>3} t={t:5.2f} 掌面↔面 "
+                  + " · ".join(f"{s} {row['hands'][s]['沿法向间隙_mm']:6.2f} mm" for s in CARD1_SIDES))
+
+    # ---- ⑥ 打键（逐帧；控制骨 + 脊柱/颈头 + 手指全打）----
+    names = panic_channel_names(arm)
+    arm.animation_data_clear()
+    ad = arm.animation_data_create()
+    for stale in [a for a in bpy.data.actions
+                  if a.name == action_name or a.name.startswith(action_name + ".")]:
+        bpy.data.actions.remove(stale)
+    action = bpy.data.actions.new(action_name)
+    action.use_fake_user = True
+    try:
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
+        import blender_action_compat as bac
+        bac.assign_action(ad, action)
+    except Exception as exc:
+        print(f"[WARN] 取道层不可用（{exc}），退回直接指派")
+        ad.action = action
+    for frame in range(PANIC_FRAME_NEUTRAL, PANIC_FRAME_END + 1):
+        bpy.context.scene.frame_set(frame)
+        clear_pose(arm)
+        drop_temp(arm, also_objects=False)
+        apply_channels(arm, captured[frame])
+        for name in list(captured[frame]):
+            pb = arm.pose.bones[name]
+            pb.rotation_mode = "XYZ"
+            pb.keyframe_insert("rotation_euler", frame=frame)
+            if name == "CTRL_Hips":
+                pb.keyframe_insert("location", frame=frame)
+    bpy.context.scene.frame_start = PANIC_FRAME_NEUTRAL
+    bpy.context.scene.frame_end = PANIC_FRAME_END
+    report["frames"] = {"起": PANIC_FRAME_NEUTRAL, "到位": PANIC_FRAME_HIT, "末": PANIC_FRAME_END}
+    report["keyed_channels"] = names
+    report["preview_cleanup"] = door_push_preview_cleanup(arm)
+    report["visible_bones"] = visible_bone_outliers(arm)
+    print(f"\n已打键：动作 {action_name} · 帧 {PANIC_FRAME_NEUTRAL}–{PANIC_FRAME_END} · "
+          f"通道 {len(names)} 个（含手指 {sum(1 for n in names if 'Hand' in n and n[-1].isdigit())} 个 · "
+          f"含腿脚 {sum(1 for n in names if 'Leg' in n or 'Foot' in n)} 个）")
+    print(f"预览收敛：只显示骨集合 {DOOR_PUSH_VISIBLE_BONE_COLLECTION}"
+          f"（隐藏 {report['preview_cleanup']['隐藏的骨集合']}）· "
+          f"藏起标记骨 {report['preview_cleanup']['藏起来的标记骨']} · `Beta_Joints` **不藏**")
+    if report["visible_bones"]["非例外的越界骨"]:
+        report["problems"].append(
+            "可见骨伸出皮肤包围盒：" + "; ".join(
+                f"{x['骨']}({x['伸出量_mm']:.1f} mm)" for x in report["visible_bones"]["非例外的越界骨"][:8]))
+        print(f"⚠️ 可见骨越界 {len(report['visible_bones']['非例外的越界骨'])} 根")
+    else:
+        print(f"判据「可见骨落在皮肤包围盒内」：{report['visible_bones']['可见骨数']} 根可见骨"
+              f"**全部在盒内** ✅（期望 52 = 65 变形骨 − 13 标记骨）")
+
+    # ---- ⑦ 产物侧读数：F4a（持续）· 时序（V-f）· 接地（M2）· 穿模（骨段 ↔ 头部代理盒）----
+    def product_frame(frame):
+        bpy.context.scene.frame_set(frame)
+        update()
+        d = bpy.context.evaluated_depsgraph_get()
+        return arm.evaluated_get(d)
+
+    f4a, timing, ground, clash = [], [], [], []
+    for frame in range(PANIC_FRAME_NEUTRAL, PANIC_FRAME_END + 1):
+        ev = product_frame(frame)
+        row = {"frame": frame, "读": {}}
+        for s in CARD1_SIDES:
+            fr = head_part_frame(ev, spec["面"][s])
+            row["读"][s] = panic_contact_readings(ev, s, fr)
+        f4a.append(row)
+        timing.append({"frame": frame,
+                       "max_面↔面_mm": max(row["读"][s]["面↔面顶点最近距离_mm"] for s in CARD1_SIDES),
+                       "max_掌面间隙_mm": max(abs(row["读"][s]["沿法向间隙_mm"]) for s in CARD1_SIDES)})
+        feet, contact = {}, {}
+        for s in CARD1_SIDES:
+            bone = world_point(ev, f"{BONE_PREFIX}{s}Foot")
+            toe = world_point(ev, f"{BONE_PREFIX}{s}ToeBase")
+            low = min(bone.z, toe.z) * 1000.0
+            feet[s] = {"最低_mm": round(low, 2), "接触": bool(low <= DOOR_PUSH_SOLE_MARGIN_MM)}
+            contact[s] = low
+        ground.append({"frame": frame, "feet": feet,
+                       "支撑": sorted(s for s in CARD1_SIDES if feet[s]["接触"])})
+        normals = head_skin_local_normals(ev)[::3]
+        worst_skin, where_skin, worst_bone = None, None, None
+        for s in CARD1_SIDES:
+            for p in hand_skin_world_all(ev, s):
+                g = head_signed_mm(ev, p, normals)
+                if worst_skin is None or g < worst_skin:
+                    worst_skin, where_skin = g, f"{s}手蒙皮"
+            for suf in ("ForeArm", "Hand"):
+                pb = ev.pose.bones[f"{BONE_PREFIX}{s}{suf}"]
+                for attr in ("head", "tail"):
+                    g = head_signed_mm(ev, ev.matrix_world @ getattr(pb, attr), normals)
+                    worst_bone = g if worst_bone is None else min(worst_bone, g)
+        clash.append({"frame": frame,
+                      "最坏_蒙皮_mm": round(worst_skin, 2) if worst_skin is not None else None,
+                      "位置": where_skin,
+                      "最坏_骨段_mm_仅读数": round(worst_bone, 2) if worst_bone is not None else None,
+                      "穿透": bool(worst_skin is not None and worst_skin < -PANIC_TOL_MM)})
+
+    # 判据汇总
+    win = [r for r in f4a if PANIC_FRAME_HIT <= r["frame"] <= PANIC_FRAME_END]
+    worst_f4a = max(abs(r["读"][s]["沿法向间隙_mm"]) for r in win for s in CARD1_SIDES)
+    worst_face = max(r["读"][s]["面↔面顶点最近距离_mm"] for r in win for s in CARD1_SIDES)
+    out_of_patch = [r["frame"] for r in win for s in CARD1_SIDES if not r["读"][s]["落在面片内"]]
+    report["f4a_persistent"] = {"窗口": [PANIC_FRAME_HIT, PANIC_FRAME_END], "行": f4a,
+                                "最坏_沿法向_mm": round(worst_f4a, 2),
+                                "最坏_面↔面顶点_mm": round(worst_face, 2),
+                                "面外帧": out_of_patch, "容差_mm": PANIC_TOL_MM,
+                                "判据量": "掌面最低点 ↔ 部位面锚点（沿朝外法向）· 且最低点须**落在面片内**",
+                                "面↔面顶点距离的用途": "**只报读数**：两点集的最小顶点距离有**网格分辨力下限**"
+                                                       "（顶点间距量级，本件 2.7 mm）⇒ 不能当贴合判据（§七 登记）"}
+    argmin = min(timing, key=lambda r: r["max_掌面间隙_mm"])["frame"]
+    report["timing"] = {"声明到位帧": PANIC_FRAME_HIT, "产物极值帧": argmin,
+                        "判据量": "两手「掌面最低点 ↔ 部位面」沿法向间隙的绝对值取大（曲线的最低点）",
+                        "曲线": timing, "一致": bool(argmin == PANIC_FRAME_HIT)}
+    report["grounding"] = {"容差_mm": DOOR_PUSH_SOLE_MARGIN_MM, "行": ground,
+                           "无支撑帧": [r["frame"] for r in ground if not r["支撑"]]}
+    report["clash"] = {"阈值_mm": -PANIC_TOL_MM,
+                       "参照": "**手/指蒙皮** ↔ 头部**蒙皮面**（顶点法向 · 带符号）",
+                       "阈值来源": "§8.2 `tol_contact = 2.8` 的**对称用法**（同宿主 5 的 `support_penetration`）",
+                       "分辨力": "顶点间距量级（10–20 mm）⇒ 深度只作量级·判据取符号",
+                       "为什么不用骨段点": "骨点在**肉里**（离皮肤 ≈10 mm）⇒ 皮肤刚贴住就会读成陷入 −4.21 mm（本件实测的假红）；同族：§15.3 脚的 41 mm 层差",
+                       "行": clash, "违规帧": [r["frame"] for r in clash if r["穿透"]]}
+    if worst_f4a > PANIC_TOL_MM:
+        report["problems"].append(
+            f"F4a 持续型接触对最坏 沿法向 {worst_f4a:.2f} mm > 容差 {PANIC_TOL_MM} mm")
+    if out_of_patch:
+        report["problems"].append(f"掌面最低点落在面片之外的帧：{out_of_patch[:6]}（#164：面外不许判贴合）")
+    if argmin != PANIC_FRAME_HIT:
+        report["problems"].append(f"时序：声明到位帧 {PANIC_FRAME_HIT} ≠ 产物极值帧 {argmin}")
+    if report["grounding"]["无支撑帧"]:
+        report["problems"].append(f"接地：无支撑帧 {report['grounding']['无支撑帧'][:6]}")
+    if report["clash"]["违规帧"]:
+        report["problems"].append(f"穿模：骨段陷入头部代理盒的帧 {report['clash']['违规帧'][:6]}")
+    for s in CARD1_SIDES:
+        if hit["per_side"][s]["solve"]["arm"].get("clamped_straight"):
+            report["problems"].append(f"{s} 臂夹直（腕目标超出可达域）——姿势不可用")
+    report["ok"] = not report["problems"]
+
+    # ---- ⑧ 回显卡（口径 §4：每一项都要有产物侧读数）----
+    card = []
+    for s in CARD1_SIDES:
+        r = f4a[-1]["读"][s]
+        card.append({"判据量": r["判据量"], "判据形态": r["判据形态"],
+                     "产物侧读数": f"沿法向 {r['沿法向间隙_mm']:.2f} mm · 面↔面顶点 {r['面↔面顶点最近距离_mm']:.2f} mm"
+                                   f" · 夹角 {r['掌面法向夹角_deg']:.1f}° · 面内 {r['落在面片内']}",
+                     "容差档": f"接触 {PANIC_TOL_MM} mm（§8.2）",
+                     "状态": "✅" if abs(r["沿法向间隙_mm"]) <= PANIC_TOL_MM else "❌"})
+    for s in CARD1_SIDES:
+        fin = hit["curls_cmp"][s]["逐指"]["逐指带符号间隙_mm"]
+        shared = hit["curls_cmp"][s]["四指共用"]["逐指带符号间隙_mm"]
+        card.append({"判据量": f"{s}五指 ↔ 头部蒙皮（**逐指解**，带符号）",
+                     "判据形态": "点集↔面（沿顶点法向）",
+                     "产物侧读数": " · ".join(f"{f} {fin[f]:+.1f}" for f in FINGERS) + " mm",
+                     "容差档": f"不判贴合（球面↔平面的固有间隙由读数说）· 陷入 ≤ {PANIC_TOL_MM} mm"
+                               f"（§8.2 的对称用法）",
+                     "状态": "✅" if all(v >= -PANIC_TOL_MM for v in fin.values()) else "❌ 陷入超容差"})
+        card.append({"判据量": f"{s}五指 ↔ 头部蒙皮（**四指共用一个系数**，对照解）",
+                     "判据形态": "点集↔面（沿顶点法向）",
+                     "产物侧读数": " · ".join(f"{f} {shared[f]:+.1f}" for f in FINGERS) + " mm",
+                     "容差档": "同上（#164 实测的那个错法）",
+                     "状态": "对照（只报读数）"})
+    card.append({"判据量": "足底 ↔ 地面（M2，**持续**）", "判据形态": "点↔面",
+                 "产物侧读数": f"无支撑帧 {len(report['grounding']['无支撑帧'])} 个 / "
+                               f"{PANIC_FRAME_END - PANIC_FRAME_NEUTRAL + 1} 帧 · "
+                               f"最坏陷入 {max(abs(r['feet'][s]['最低_mm']) for r in ground for s in CARD1_SIDES):.2f} mm",
+                 "容差档": f"soleMargin {DOOR_PUSH_SOLE_MARGIN_MM} mm（沿用）",
+                 "状态": "✅" if not report["grounding"]["无支撑帧"] else "❌"})
+    card.append({"判据量": "手/指**蒙皮** ↔ 头部蒙皮面（**不陷入**）", "判据形态": "点集↔面（带符号，沿顶点法向）",
+                 "产物侧读数": f"最坏**蒙皮** {min(r['最坏_蒙皮_mm'] for r in clash):.2f} mm @ "
+                               f"{min(clash, key=lambda r: r['最坏_蒙皮_mm'])['位置']}"
+                               f"（骨段点仅读数 {min(r['最坏_骨段_mm_仅读数'] for r in clash):.2f} mm）",
+                 "容差档": "0.0 mm（动作库规格 §四·戊·5 判据 4，**取符号**）",
+                 "状态": "✅" if not report["clash"]["违规帧"] else "❌"})
+    card.append({"判据量": "声明的到位帧 == 产物极值帧（V-f 时序）", "判据形态": "帧号相等（无阈值）",
+                 "产物侧读数": f"声明 {PANIC_FRAME_HIT} · 产物 {argmin}",
+                 "容差档": "—", "状态": "✅" if argmin == PANIC_FRAME_HIT else "❌"})
+    for s in CARD1_SIDES:
+        c = control[s]
+        card.append({"判据量": f"**非退化对照**：{c['判据量']}（中立姿势）", "判据形态": c["判据形态"],
+                     "产物侧读数": f"沿法向 {c['沿法向间隙_mm']:.2f} mm · 面↔面顶点 {c['面↔面顶点最近距离_mm']:.2f} mm",
+                     "容差档": f"接触 {PANIC_TOL_MM} mm",
+                     "状态": "✅（能报红）" if abs(c["沿法向间隙_mm"]) > PANIC_TOL_MM else "❌ 退化"})
+    report["feedback_card"] = card
+
+    print("\n" + "=" * 100)
+    print(f"回显卡（口径 §四：每一项都要有产物侧读数）· 解 = {spec['标签']}（{hit['标签'] if '标签' in hit else args.pose}）")
+    print(f"  {'判据量':<38}{'判据形态':<24}{'产物侧读数':<52}{'状态'}")
+    for row in card:
+        print(f"  {row['判据量'][:36]:<38}{row['判据形态'][:22]:<24}{str(row['产物侧读数'])[:78]:<80}{row['状态']}")
+    print(f"\n两解并列（口径 §4.2 硬规矩 5）：")
+    for name, sp in PANIC_SOLUTIONS.items():
+        rr = report[f"solution_{name}"]["读数"]
+        print(f"  {sp['标签']}（{sp['动作名']}）· " + " · ".join(
+            f"{s} {rr[s]['沿法向间隙_mm']:6.2f} mm / 面↔面顶点 {rr[s]['面↔面顶点最近距离_mm']:6.2f} mm"
+            for s in CARD1_SIDES))
+    print(f"F4a 持续型接触对（帧 {PANIC_FRAME_HIT}–{PANIC_FRAME_END}）：最坏 沿法向 {worst_f4a:.2f} mm vs "
+          f"容差 {PANIC_TOL_MM} mm ⇒ {'全绿 ✅' if worst_f4a <= PANIC_TOL_MM else '红 ❌'}"
+          f"（面↔面**顶点**距离最坏 {worst_face:.2f} mm —— 只报读数，分辨力下限见报告）")
+    print(f"接地（持续）：无支撑帧 {len(report['grounding']['无支撑帧'])} · "
+          f"穿模（零穿透）：违规帧 {len(report['clash']['违规帧'])} · "
+          f"时序：声明 {PANIC_FRAME_HIT} / 产物 {argmin}")
+    print("=" * 100)
+
+    if args.report:
+        Path(args.report).write_text(json.dumps(report, ensure_ascii=False, indent=1),
+                                     encoding="utf-8")
+        print(f"报告: {args.report}")
+    if args.still:
+        bpy.context.scene.frame_set(PANIC_FRAME_HIT)
+        update()
+        pt = world_point(arm, f"{BONE_PREFIX}Head")
+        render_still(args.still, pt + Vector((1.35, 1.15, 0.55)), pt)
+    if args.host == "live":
+        bpy.context.scene.frame_set(PANIC_FRAME_HIT)
+        update()
+        print(f"[live] 停在到位帧 {PANIC_FRAME_HIT}（预览；未写回文件）")
+    elif not args.no_save:
+        bpy.ops.wm.save_as_mainfile(filepath=str(tmpl))
+        print(f"已写回母版副本：{tmpl}")
+    print(f"结论: {'OK' if report['ok'] else 'FAIL'} —— problems {report['problems']}")
+    return 0 if report["ok"] else 1
+
+
+# ══════════════════════════════════════════════════════════════════════════════
 # 宿主 4：重述对拍（`--task restate`）——口径 §13.8 判据 1
 #
 #   「#163 既有读数 vs 用**卡片语言**复现 ⇒ 差异 0」——**纯算术**，不跑 Blender、不请 owner 目视。
@@ -3773,7 +4768,7 @@ def main() -> int:
             if idx + 1 < len(tail):
                 task = tail[idx + 1]
     return {"chair": main_chair, "card1": main_card1, "door": main_door,
-            "doorpush": main_door_push, "restate": main_restate}[task]()
+            "doorpush": main_door_push, "panic": main_panic, "restate": main_restate}[task]()
 
 
 if __name__ == "__main__":
