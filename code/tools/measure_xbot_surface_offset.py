@@ -100,6 +100,26 @@ HEADNECK_POSES = (
     ("spine_lean", {f"{BONE_PREFIX}Spine2": (12.0, 0.0, 0.0)}),
 )
 
+#: 膝 / 肘集的骨集合（口径 §15.3 的第 4–5 行「膝 L/R」与第 10–11 行「肘 L/R」）
+#: 膝 = `mixamorig:*Leg`（小腿骨，骨原点在**膝关节**）· 肘 = `mixamorig:*ForeArm`（前臂骨，骨原点在**肘关节**）
+KNEEELBOW_BONES = (f"{BONE_PREFIX}LeftLeg", f"{BONE_PREFIX}RightLeg",
+                   f"{BONE_PREFIX}LeftForeArm", f"{BONE_PREFIX}RightForeArm")
+#: 膝 / 肘集的确定性姿势：**必须真的动到目标骨及其父链**（#168 的颈头集只动颈/脊柱 ⇒
+#: 那 5 个姿势对膝/肘是"骨头没动"，稳定性读数会平凡全绿）。轴的语义取自管线 §2.1.1：
+#: `CTRL_*Leg` 局部 X = 小腿前后摆（膝屈伸）· `CTRL_*UpLeg` 局部 X = 髋前摆 ·
+#: `CTRL_*ForeArm` 局部 Z = 前臂前后摆（肘屈伸，**左右镜像**：左 +/右 −，§2.1.2）·
+#: `CTRL_*ForeArm` 局部 Y = **前臂旋**（会绕前臂轴转局部系 ⇒ 肘尖面的 ε 是否随之稳定，
+#: 是本集**专门要问**的一件事：鹰嘴在解剖上不随旋前旋后走）
+KNEEELBOW_POSES = (
+    ("rest", {}),
+    ("knee_fold", {"CTRL_LeftLeg": (-80.0, 0.0, 0.0), "CTRL_RightLeg": (-80.0, 0.0, 0.0)}),
+    ("knee_extend", {"CTRL_LeftLeg": (30.0, 0.0, 0.0), "CTRL_RightLeg": (30.0, 0.0, 0.0)}),
+    ("hip_swing", {"CTRL_LeftUpLeg": (40.0, 0.0, 0.0), "CTRL_RightUpLeg": (-20.0, 0.0, 0.0)}),
+    ("elbow_bend", {"CTRL_LeftForeArm": (0.0, 0.0, 70.0), "CTRL_RightForeArm": (0.0, 0.0, -70.0)}),
+    ("elbow_pronate", {"CTRL_LeftForeArm": (0.0, 60.0, 0.0), "CTRL_RightForeArm": (0.0, 60.0, 0.0)}),
+    ("arm_drop", {"CTRL_LeftArm": (60.0, 0.0, 0.0), "CTRL_RightArm": (60.0, 0.0, 0.0)}),
+)
+
 #: 部位集：骨集合 + 姿势表 + 打印明细的"根骨" + 掌面探针是否适用
 #: ⚠️ 默认 `hand` ⇒ 不传 `--set` 时读数/报告与 #160 那两次运行**逐值相同**
 PART_SETS = {
@@ -107,6 +127,17 @@ PART_SETS = {
              "palm_probe": True, "extra_label": "手指骨"},
     "headneck": {"bones": HEADNECK_BONES, "poses": HEADNECK_POSES, "print_roots": HEADNECK_BONES,
                  "palm_probe": False, "extra_label": "非根骨"},
+    "kneeelbow": {"bones": KNEEELBOW_BONES, "poses": KNEEELBOW_POSES,
+                  "print_roots": KNEEELBOW_BONES, "palm_probe": False, "extra_label": "非根骨"},
+}
+
+#: **量级自证上限的逐骨覆盖**（m）——默认 0.30 m 是"骨半径量级"的判据（见 `PLAUSIBLE_MAX_M`），
+#: 但**沿骨长轴**那一格量的是"骨原点到链末表面"，腿骨的链末（踝）比头/颈远得多：
+#: 实测 `Leg` 的 `+Y`（膝 → 踝）外沿 = **0.4490708 m**（#171 实测，`--set kneeelbow` 报告
+#: `per_mesh.Beta_Surface.bones.*Leg.profile.+Y.outer_m`）⇒ 按链长给这一格自己的上限。
+#: ⚠️ 覆盖是**逐骨逐方向**的：只有量出"链末"的那几格放宽，半径量级的格仍走 0.30 m。
+PLAUSIBLE_MAX_BY_BONE_DIRECTION = {
+    (f"{BONE_PREFIX}LeftLeg", "+Y"): 0.50, (f"{BONE_PREFIX}RightLeg", "+Y"): 0.50,
 }
 
 #: 具名面的**局部轴分组**——语义来源：管线 §2.1.4 实测轴表（`Neck`/`Head`：局部 X = 点头/抬头
@@ -122,6 +153,31 @@ NAMED_WORLD_AXES = {
     "side_left": ((1.0, 0.0, 0.0), "左侧面（耳侧）"),
     "front": ((0.0, -1.0, 0.0), "前面（额）"),
     "along_bone": ((0.0, 0.0, 1.0), "沿骨长轴（头顶方向）"),
+}
+
+#: **逐骨逐面的显式登记**（口径 §15.6「不建空表」：只用到的面才登记）。
+#: 与上面的「轴分组」是两条路：轴分组按**实测世界指向自动裁定左右/前后**（用于头/颈，
+#: 因为那里的 `+X`/`−X` 就是左右轴）；本表用于**轴语义与头颈不同**的骨——膝/肘的
+#: `±X`/`±Z` 谁是"左右"、谁是"前后"由管线 §2.1.1 的实测轴表定，**自动裁定会给出错的名字**
+#: （肘的 `±X` 是世界前后轴，自动裁定会把它叫"左右侧面"）。
+#: 结构：{骨名: {面 key: (局部轴, 标签, 参照世界轴, 参照轴名)}}
+#: ⚠️ 局部轴的选择**有实测依据**（本次 `--set kneeelbow` 的 `axis_in_world` 读数）：
+#: · `*Leg`：`+Z` → 世界 (0, −0.9977, −0.0684) = **前** ⇒ 膝前面（跪地时朝下）· 膝的 `±X` 是左右轴（管线 §2.1.2：腿左右**同轴**）
+#: · `*ForeArm`：`+X` → 左 (+0, +1, 0) / 右 (+0, −1, 0)，即**世界前后轴且左右镜像**（§2.1.2：臂 X 反号）
+#:   ⇒ 左肘尖面 = `+X`、右肘尖面 = `−X`（"肘尖" = 鹰嘴，在肘关节的**后侧**，静止朝世界 +Y）
+PART_FACE_SPECS = {
+    f"{BONE_PREFIX}RightLeg": {
+        "front": ("+Z", "右膝前面（跪地判据面）", (0.0, -1.0, 0.0), "前（口径 §6.2：世界 −Y）"),
+    },
+    f"{BONE_PREFIX}LeftLeg": {
+        "front": ("+Z", "左膝前面", (0.0, -1.0, 0.0), "前（口径 §6.2：世界 −Y）"),
+    },
+    f"{BONE_PREFIX}LeftForeArm": {
+        "tip_back": ("+X", "左肘尖（鹰嘴 · 后侧）面", (0.0, 1.0, 0.0), "后（口径 §6.2：世界 +Y）"),
+    },
+    f"{BONE_PREFIX}RightForeArm": {
+        "tip_back": ("-X", "右肘尖（鹰嘴 · 后侧）面", (0.0, 1.0, 0.0), "后（口径 §6.2：世界 +Y）"),
+    },
 }
 
 
@@ -357,16 +413,16 @@ def frame_check(arm, mesh_entry, bone_name):
 
 
 def named_faces(mesh_entry, bone_name, frame):
-    """把 6 方向剖面折成**具名面**（语义 = 管线 §2.1.4 轴表；正负号 = 实测世界指向 vs 口径 §6.2）。"""
-    groups = PART_FACE_AXIS_GROUPS.get(bone_name)
+    """把 6 方向剖面折成**具名面**（语义 = 管线 §2.1.4 轴表；正负号 = 实测世界指向 vs 口径 §6.2）。
+
+    两条路：① `PART_FACE_SPECS` 的**显式登记**（膝/肘这类"轴语义与头颈不同"的骨）；
+    ② `PART_FACE_AXIS_GROUPS` 的**自动裁定**（头/颈——那里的 ±X 就是左右轴）。
+    """
     row = mesh_entry["bones"].get(bone_name, {})
-    if not groups or not row.get("sampled"):
+    if not row.get("sampled"):
         return {}
     prof = row["profile"]
     per_direction = (frame or {}).get("per_direction", {})
-
-    def axis_world(tag):
-        return Vector(prof[tag]["axis_in_world"])
 
     def face(tag, key, world_axis, label):
         out = {
@@ -377,11 +433,23 @@ def named_faces(mesh_entry, bone_name, frame):
             "flat_support_vertices": prof[tag]["flat_support_vertices"],
             "axis_in_world": prof[tag]["axis_in_world"],
             "angle_to_named_world_axis_deg": round(
-                math.degrees(axis_world(tag).angle(Vector(world_axis))), 4),
+                math.degrees(Vector(prof[tag]["axis_in_world"]).angle(Vector(world_axis))), 4),
         }
         if tag in per_direction:
             out["frame_check"] = per_direction[tag]
         return key, out
+
+    specs = PART_FACE_SPECS.get(bone_name)
+    if specs:
+        return dict(face(tag, key, world_axis, label)
+                    for key, (tag, label, world_axis, _axis_name) in specs.items())
+
+    groups = PART_FACE_AXIS_GROUPS.get(bone_name)
+    if not groups:
+        return {}
+
+    def axis_world(tag):
+        return Vector(prof[tag]["axis_in_world"])
 
     faces = {}
     side_sorted = sorted(groups["side"], key=lambda t: -axis_world(t).dot(Vector((1.0, 0.0, 0.0))))
@@ -479,10 +547,11 @@ def main() -> int:
                 "sample_ids": [vi for vi, _ in pairs],
             }
             for tag, row in prof.items():
-                if row["outer_m"] > PLAUSIBLE_MAX_M:
+                limit = PLAUSIBLE_MAX_BY_BONE_DIRECTION.get((bone_name, tag), PLAUSIBLE_MAX_M)
+                if row["outer_m"] > limit:
                     report["problems"].append(
                         f"{mesh_obj.name}/{bone_name}{tag} 外沿 {row['outer_m']:.3f} m 超出量级自证上限"
-                        f" {PLAUSIBLE_MAX_M} m —— 单位或成员判据可疑")
+                        f" {limit} m —— 单位或成员判据可疑")
         report["per_mesh"][mesh_obj.name] = entry
 
     # ---------- 3. 稳定性：跨姿势跟踪"静止时选出的最外顶点集合" ----------
