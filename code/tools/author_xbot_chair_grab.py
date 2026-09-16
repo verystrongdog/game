@@ -6867,9 +6867,21 @@ LIFT_GRIP_DROP_M = CARD1_GRIP_DROP
 #: ⇒ `solve_two_bone()` 夹直、**双脚被抬起 15.97 mm**（接地判据与支撑域同时报红）。取`down=-0.12` 后
 #: 弦回到骨长以内（腿仍近直、膝不弯过头），故这里**只下沉、不后移**（后移的活由骨盆俯仰自己干）。
 LIFT_PELVIS_OFFSET = (0.0, 0.0, -0.120)
-#: 握式（owner 2026-09-16 第 1 轮指名）：`palm` = 掌面朝下、虎口落在椅背上沿，**虎口朝 −Z**
-LIFT_GRIP_MODES = ("palm", "side")
-LIFT_GRIP_MODE = "palm"
+#: 握式（owner 2026-09-16 逐轮指名，**以最新一轮为准**）：
+#: - **`backhand`（默认）** = 抓**椅背的左右竖直侧面端**（`x=±0.21`、40 mm 厚那张端面）+ **反手**：
+#:   **拇指朝下**（−Z）· **掌心朝内**（朝椅子中线）· 四指绕过**近侧竖棱**落到近侧面上；
+#:   骨局部三轴（未抡之前）：左手 `X → +Z` / `Y → +Y` / 右手 `X → −Z` / `Y → +Y`（**镜像**）
+#: - `palm` = 掌面朝下扣椅背上沿（第 1–2 轮试过，owner 否：是"上沿"不是"侧面"）
+#: - `side` = 卡 1 掐棱用在侧面端（正手：拇指向 ±Z 那一版，owner 否：拇指一上一下不对称）
+LIFT_GRIP_MODES = ("backhand", "palm", "side")
+LIFT_GRIP_MODE = "backhand"
+#: **抡弧**：椅子绕握点转多少度（绕世界 X 轴；负 = 椅腿往前甩出去、椅子横过来）。
+#: owner 2026-09-16 第 3 轮："把椅子抡起来维持在胸前" + "椅子跟着手走" ⇒ 旋转由**手的路径**定，
+#: 本值只是"抡到位"那一帧的终点角。
+LIFT_SWING_DEG = -92.0
+#: 抡到位时**握点**的目标世界位置（m）——反手抓侧面端时，握点 = 端面上的一点
+LIFT_SIDE_GRIP_Y_M = -0.235
+LIFT_SIDE_GRIP_Z_M = 1.16
 #: `palm` 握式：手在横杆上的横向位置（m，绝对值）——两侧对称；它同时定下"两手间距"（判据 1）
 LIFT_GRIP_X_M = 0.13
 #: 胸前持握：**握点**的目标世界位置（m）——⚠️ 语义随握式走：
@@ -6954,6 +6966,28 @@ def lift_smooth(t):
     """两端速度为 0 的平滑段（`smoothstep`）——本件所有进度量共用它。"""
     t = min(1.0, max(0.0, t))
     return t * t * (3.0 - 2.0 * t)
+
+
+def lift_transform_frame(frame, pivot, rot, offset):
+    """把**板端坐标**按"绕握点 `pivot` 转 `rot` 再平移 `offset`"整体变换。
+
+    抡弧用它：椅子的姿态不再由我拍，而是**由手的路径决定**（owner 2026-09-16 第 3 轮：
+    "椅子不是一个整体么，你把手和椅背的相对位置固定之后直接调手的位置就行了，椅子跟着动"）。
+    """
+    def pt(p):
+        return Vector(pivot) + (rot @ (Vector(p) - Vector(pivot))) + Vector(offset)
+
+    def dr(d):
+        return (rot.to_3x3() @ Vector(d)).normalized()
+
+    out = dict(frame)
+    for key in ("near", "far"):
+        out[key] = pt(frame[key])
+    for key in ("面-近侧面", "面-远侧面", "面-端面", "棱-近侧", "棱-远侧"):
+        out[key] = (pt(frame[key][0]), dr(frame[key][1]))
+    for key in ("n", "u", "z"):
+        out[key] = dr(frame[key])
+    return out
 
 
 def lift_translate_frame(frame, offset):
@@ -7076,6 +7110,19 @@ def lift_contact_ok(rows, tol=LIFT_TOL_MM):
 # ---------------------------------------------------------------- 姿势解算（弯腰 → 掐棱 → 抬起）
 
 
+def _root_pose(prm, grip):
+    """椅子根空物体的逐帧位姿：**绕 `pivot` 转 `R` 再平移 `offset`** ⇒ 位置项含 `−R·pivot`。
+
+    ⚠️ 漏掉旋转的代价（本件实测）：手按 frame 转了、空物体只平移 ⇒ 握持刚性读到 **1726 mm**。
+    """
+    pivot = Vector(grip.get("pivot", (0.0, 0.0, 0.0)))
+    rot = prm.get("rot")
+    loc = Vector(prm["offset"]) + (pivot - (rot @ pivot if rot is not None else pivot))
+    euler = (0.0, 0.0, 0.0) if rot is None else tuple(
+        math.degrees(a) for a in rot.to_euler("XYZ"))
+    return {"location": loc, "euler_deg": euler}
+
+
 def lift_frame_params(frame, bend_deg, offset_full, pelvis_m=LIFT_PELVIS_OFFSET):
     """一帧的任务空间参数（**唯一的进度来源**；产物侧不重算它）。"""
     # ⚠️ 分子 +1：`smoothstep(0) = 0` ⇒ 若从 0 起算，"起手帧"那一帧的姿势仍**逐位等于中立**，
@@ -7085,9 +7132,14 @@ def lift_frame_params(frame, bend_deg, offset_full, pelvis_m=LIFT_PELVIS_OFFSET)
     down = (frame - LIFT_FRAME_LIFT) / float(LIFT_FRAME_CHEST - LIFT_FRAME_LIFT)
     s_up, s_down = lift_smooth(up), lift_smooth(down)
     t_bend = s_up * (1.0 - s_down)
-    return {"t_bend": t_bend, "t_reach": s_up, "t_lift": s_down,
+    # **抡弧**：椅子绕**握点**转（`R` = 绕世界 X 轴）——owner 第 3 轮："椅子跟着手走" ⇒ 手转到哪、
+    # 椅子跟到哪；转轴取世界 X（横向）⇒ 椅腿往前甩出去、椅子横过来。
+    from mathutils import Matrix
+    theta = math.radians(LIFT_SWING_DEG) * s_down
+    return {"t_bend": t_bend, "t_reach": s_up, "t_lift": s_down, "swing_deg": math.degrees(theta),
             "bend_deg": bend_deg * t_bend,
             "pelvis": Vector(pelvis_m) * t_bend,
+            "rot": Matrix.Rotation(theta, 4, "X"),
             "offset": Vector(offset_full) * s_down}
 
 
@@ -7109,6 +7161,65 @@ def lift_body_setup(arm, m3, bend_deg, pelvis_m, foot_rest):
                         _rest_hinge(arm, f"{BONE_PREFIX}{side}Foot"))
     update()
     return {"gaze": solve_gaze(arm), "legs": legs}
+
+
+def lift_arm_solve_backhand(arm, side, frame, s, curl_axes, fitted, thumb_solved, wrist_rest,
+                            grip_h_m=0.0, grip_df=0.5, rot=None, post=None):
+    """**反手抓椅背侧面端**（owner 2026-09-16 第 3 轮指名）的可变进度版。
+
+    朝向（未抡之前，逐轴实测）：**掌心朝内**（= 端面的内法向 `+u`）· **拇指朝下**（−Z）·
+    四指绕过**近侧竖棱**落到近侧面上 ⇒ 左手骨局部 `X → +Z` · `Y → +Y`，右手 `X → −Z` · `Y → +Y`
+    （**镜像**：两只手都是"拇指朝下"，这正是 owner 第 1 轮看到的"虎口朝 z"的反面）。
+
+    ⚠️ 用 `_set_world_axes(hand, y_dir, x_hint)` 表达：局部 `Z`（掌面法向）`= X × Y` ⇒
+      左手 `(0,0,1)×(0,1,0) = (−1,0,0) = −X = 朝内` ✅ · 右手 `(0,0,−1)×(0,1,0) = (+1,0,0) = +X = 朝内` ✅
+    """
+    sgn = 1.0 if side == "Left" else -1.0
+    hand_name = f"{BONE_PREFIX}{side}Hand"
+    ctrl_hand = f"CTRL_{side}Hand"
+    y_grip = Vector((0.0, 1.0, 0.0))          # 腕 → 指尖：**朝角色**（绕近侧竖棱收进去）
+    x_grip = Vector((0.0, 0.0, sgn))          # 蜷曲轴：左手 +Z / 右手 −Z ⇒ 拇指朝下（镜像）
+    if rot is not None:
+        # ⚠️ 抡弧时**朝向也必须跟着转**：只转 frame（位置）而手保持静止朝向 ⇒ 手与椅子相对位姿破掉
+        #    （实测握持刚性 124 m、四指读数从 ±0.5 mm 漂到 −102 mm）
+        r3 = rot.to_3x3()
+        y_grip = (r3 @ y_grip).normalized()
+        x_grip = (r3 @ x_grip).normalized()
+    y_dir = _nlerp(_rest_dir(arm, hand_name).normalized(), y_grip, s)
+    x_dir = _nlerp(_rest_hinge(arm, hand_name).normalized(), x_grip, s)
+    _set_world_axes(arm, ctrl_hand, hand_name, y_dir, x_dir)
+    # 握点：**端面上的一点**——沿厚度取中（`n` 方向）、沿棱向上取 `grip_h_m`（`z` 方向）。
+    # ⚠️ 位置用**frame 自己的三个轴**表达 ⇒ 抡弧时它跟着 frame 一起转（椅子是刚体）。
+    grip_pt = (frame["near"] + frame["n"] * (frame["thickness_mm"] / 1000.0 * grip_df)
+               + frame["z"] * grip_h_m)
+    off = web_point(arm, side) - world_point(arm, hand_name)
+    wrist_target = Vector(wrist_rest).lerp(grip_pt - off, s)
+    arm_first = solve_arm(arm, side, wrist_target, post if post is not None else _posterior(arm))
+    _set_world_axes(arm, ctrl_hand, hand_name, y_dir, x_dir)
+    off2 = web_point(arm, side) - world_point(arm, hand_name)
+    wrist_target = Vector(wrist_rest).lerp(grip_pt - off2, s)
+    info = solve_arm(arm, side, wrist_target, post if post is not None else _posterior(arm))
+    _set_world_axes(arm, ctrl_hand, hand_name, y_dir, x_dir)
+    for finger in FOUR_FINGERS:
+        amount = float((fitted or {}).get(finger, {}).get("蜷曲量", 0.0)) * s
+        _apply_one_finger_curl(arm, side, finger, curl_axes[side][finger], amount)
+    lift_thumb_set(arm, side, curl_axes[side]["Thumb"], LIFT_THUMB_CURL * s, thumb_solved,
+                   min(1.0, max(0.0, (s - 0.8) / 0.2)))
+    update(2)
+    return {"s": round(s, 4), "wrist_target_m": [round(c, 4) for c in wrist_target],
+            "grip_point_m": [round(c, 4) for c in grip_pt],
+            "web_point_m": [round(c, 4) for c in web_point(arm, side)],
+            "web_to_end_face_mm": points_face_gap_mm([web_point(arm, side)],
+                                                     frame["面-端面"])["gap_mm"],
+            "web_to_edge_mm": points_face_gap_mm([web_point(arm, side)],
+                                                 frame["面-端面"])["gap_mm"],
+            "arm_default": arm_first, "arm": info,
+            "clamped_straight": bool(info.get("clamped_straight")),
+            "tip_err_mm": info.get("tip_err_mm"),
+            "elbow_deg": round(math.degrees(
+                (world_point(arm, f"{BONE_PREFIX}{side}Arm")
+                 - world_point(arm, f"{BONE_PREFIX}{side}ForeArm")).angle(
+                    world_point(arm, hand_name) - world_point(arm, f"{BONE_PREFIX}{side}ForeArm"))), 1)}
 
 
 def lift_thumb_set(arm, side, curl_axis, base_amount, solved_deg, w):
@@ -7302,6 +7413,195 @@ def lift_rail_from_points(pts):
             "棱-上沿远侧": (Vector((0.0, fy, top)), x_axis)}
 
 
+
+# ---------------------------------------------------------------- 握式三：反手抓侧面端（owner 第 3 轮指名）
+#
+#   逐字：「他妈的不对啊，我要的是**抓住椅子的侧面**，不是上沿，**要反手抓**，把椅子**抡起来**
+#   维持在胸前」+「椅子不是一个整体么，你把手和椅背的相对位置固定之后**直接调手的位置**就行了，
+#   椅子跟着动」⇒ ① 接触面 = 椅背侧面端（`x=±0.21` 那张 40 mm 端面）② 反手 = **拇指朝下 ·
+#   掌心朝内**（两手**镜像**，不再是一上一下）③ **抡一个上摆弧**：先提离地、再绕握点转
+#   `LIFT_SWING_DEG`，到位后横在胸前 ④ 椅子的位姿**由手的路径决定**（刚体挂点）。
+
+def lift_chair_frame_from_object(ob_ev, side):
+    """从**求值后的椅背零件**（对象矩阵 + 标准 cube 的 ±0.5 局部盒）重建板端坐标。
+
+    ⚠️ 为什么不能再用"世界坐标 min/max"那一版：**抡过的椅子是转的**，转 90° 之后"世界 y 的极值"
+       已经不对应板厚方向了。这里按**零件自己的三个轴**取（等价于"对着产物量"，但旋转无关）。
+    """
+    mw = ob_ev.matrix_world
+    r3 = mw.to_3x3()
+    sc = mw.to_scale()
+    nx = (r3 @ Vector((1.0, 0.0, 0.0))).normalized()
+    ny = (r3 @ Vector((0.0, 1.0, 0.0))).normalized()
+    nz = (r3 @ Vector((0.0, 0.0, 1.0))).normalized()
+    c = mw @ Vector((0.0, 0.0, 0.0))
+    sgn = 1.0 if side == "Left" else -1.0
+    # 近侧棱在**局部 +y**（装配时 `back_center` 的近侧面朝角色）；底边取局部 −z ⇒ z_span 从 0 起
+    base = c + nx * (sgn * 0.5 * sc.x) - nz * (0.5 * sc.z)
+    near = base + ny * (0.5 * sc.y)
+    far = base - ny * (0.5 * sc.y)
+    frame = board_end_frame(near, far, -nx * sgn,
+                            u_span_m=(0.0, sc.x), z_span_m=(0.0, sc.z))
+    # ⚠️ `board_end_frame()` 用 `z.z < 0` 判"朝上"——**椅子抡到 ~90° 时这条启发式会翻向**
+    #    （实测：帧 48 起四指的"点↔体"读数从 ±0.5 mm 跳到 268–328 mm，而"点↔面"读数不变）。
+    #    这里按**零件自己的局部 +z** 钉死（旋转无关；未旋转时与原来逐值相同）。
+    frame["z"] = nz
+    return frame
+
+
+def lift_contact_rows_backhand(arm_like, side, frame):
+    """**反手抓侧面端**这套握式的接触对（回显卡与判据的同一来源）。
+
+    | # | 手部分区 | 物体分区 | 形态 | 为什么 |
+    |---|---|---|---|---|
+    | 1 | **掌面** | **端面** | 点↔面 | 掌心朝内压的就是这张端面 |
+    | 2 | **四指逐根（末节）** | **近侧面** | 点↔面 | 反手时四指绕过**近侧竖棱**、落到近侧面上 |
+    | 3 | **拇指（末节）** | 端面 / 近侧面 | 点↔面 | 拇指朝下包住端面的下段（两者都报，主判据取"更贴合的那一面"见注释） |
+    """
+    hand_name = f"{BONE_PREFIX}{side}Hand"
+    palm_pts = [arm_like.matrix_world @ (arm_like.pose.bones[hand_name].matrix @ q)
+                for q in palm_face_vertices(arm_like, side)]
+    thumb_pts = lift_distal_skin_local(arm_like, side, "Thumb")
+    return [{
+        # 判据：虎口点（骨点 + ε·掌面法向）落在**端面**上——它对着**从产物网格重建的 frame**量，
+        # 因此抓得住"椅子与手错位"（本件实测过一次：抡弧漏转手的朝向 ⇒ 这条当场漂）
+        "手部分区": "虎口", "物体分区": "端面", "判据形态": "点↔面（ε 换算后的着力点）",
+        "容差档": f"接触 tol_contact = {LIFT_TOL_MM} mm", "并列项": "—",
+        "读数_mm": points_face_gap_mm([web_point(arm_like, side)], frame["面-端面"])["gap_mm"],
+    }, {
+        # 读数：同一姿势下**掌面层**离端面 +10.47 mm（ε 的位置依赖性，见证据 §六#6）⇒ 不当判据
+        "手部分区": "掌面（读数）", "物体分区": "端面", "判据形态": "点↔面（取最近点）",
+        "容差档": "只报读数（ε 的位置依赖性，证据 §六#6）", "并列项": "—", "只报读数": True,
+        "读数_mm": points_face_gap_mm(palm_pts, frame["面-端面"])["gap_mm"],
+    }, {
+        "手部分区": "食/中/无名/小四指（**末节**）", "物体分区": "**板体（有限盒）**",
+        "判据形态": "点↔体（有符号；同时报「距近侧面」的读数）",
+        "容差档": f"接触 tol_contact = {LIFT_TOL_MM} mm", "并列项": "四指逐根（口径 §七 硬规矩 2）",
+        "读数_mm": [points_box_gap_mm(lift_distal_skin_local(arm_like, side, f), frame)
+                    for f in FOUR_FINGERS],
+        "并列读数_面内_mm": [points_face_gap_mm(lift_distal_skin_local(arm_like, side, f),
+                                            frame["面-近侧面"])["gap_mm"] for f in FOUR_FINGERS],
+        "逐项名": list(FOUR_FINGERS),
+        "符号约定": "正 = 悬在近侧面之外（朝角色一侧）· |·| ≤ 容差 = 贴住 · 负 = 越过近侧面（进板）",
+    }, {
+        "手部分区": "**拇指（末节）**", "物体分区": "**板体（有限盒）**",
+        "判据形态": "点↔体（有符号；两面对照并列报）",
+        "容差档": f"接触 tol_contact = {LIFT_TOL_MM} mm", "并列项": "—",
+        "读数_mm": points_box_gap_mm(thumb_pts, frame),
+        "两面对照_mm": {"端面": points_face_gap_mm(thumb_pts, frame["面-端面"])["gap_mm"],
+                     "近侧面": points_face_gap_mm(thumb_pts, frame["面-近侧面"])["gap_mm"]},
+    }]
+
+
+def lift_fit_curls_backhand(arm, side, curl_axis, face, lo=0.6, hi=2.4, steps=41):
+    """反手握式的逐指蜷曲量：按**末节蒙皮 ↔ 该指落到的那张面**打分（与卡 1 的分工见证据 §4.4）。"""
+    out = {}
+    for finger in FOUR_FINGERS:
+        best = None
+        for i in range(steps):
+            amount = lo + (hi - lo) * i / (steps - 1)
+            _apply_one_finger_curl(arm, side, finger, curl_axis, amount)
+            update(1)
+            gaps = [points_face_gap_mm([q], face)["gap_mm"]
+                    for q in lift_distal_skin_local(arm, side, finger)]
+            gap = min(gaps, key=abs) if gaps else None
+            score = (abs(gap) if gap is not None else 1e9, -amount)
+            if best is None or score < best[0]:
+                best = (score, amount, gap)
+        _apply_one_finger_curl(arm, side, finger, curl_axis, best[1])
+        out[finger] = {"蜷曲量": round(best[1], 3), "末节间隙_mm": round(best[2], 2),
+                       "板体间隙_mm": round(best[2], 2)}
+    update(2)
+    return out
+
+
+def lift_calibrate_hand_backhand(arm, m3, lay, frames, grip_h, foot_rest, curl_axes, wrist_rest,
+                                 bend_deg, pelvis_m):
+    """反手握式的标定：① 握点在端面上的**深度分数**（一维扫描 × 每点重做四指精修）
+    ② 逐指蜷曲量（末节↔近侧面）③ 拇指（末节↔端面，粗解 + Newton + 局部模式搜索）。
+
+    ⚠️ `frames` 是**逐侧**的（`{side: frame}`）：两只手各自抓自己那一侧的端面——用同一侧的面去解
+       另一只手，会让那只手的拟合与拇指全按错面解（实测右手拇指残留 6.0 mm > 容差）。
+    """
+    out = {}
+    for side in CARD1_SIDES:
+        frame = frames[side]
+        clear_pose(arm)
+        drop_temp(arm, also_objects=False)
+        lift_body_setup(arm, m3, bend_deg, pelvis_m, foot_rest)
+        lift_arm_solve_backhand(arm, side, frame, 1.0, curl_axes, None, None, wrist_rest[side],
+                                grip_h_m=grip_h)
+        fitted = lift_fit_curls_backhand(arm, side, curl_axes[side]["Index"],
+                                         frame["面-近侧面"])
+        out[side] = {"fitted": fitted}
+        # ① 握点深度分数扫描（每个落点上重做四指精修；判据 = 四指末节↔近侧面的最大 |间隙| 最小）
+        best = None
+        for i in range(13):
+            df = 0.20 + 0.05 * i
+            clear_pose(arm)
+            drop_temp(arm, also_objects=False)
+            lift_body_setup(arm, m3, bend_deg, pelvis_m, foot_rest)
+            lift_arm_solve_backhand(arm, side, frame, 1.0, curl_axes, fitted, None,
+                                    wrist_rest[side], grip_h_m=grip_h, grip_df=df)
+            amts, gaps, boxes = {}, {}, {}
+            for f in FOUR_FINGERS:
+                a, g = lift_refine_curl_local(arm, side, f, curl_axes[side][f],
+                                              frame["面-近侧面"], fitted[f]["蜷曲量"])
+                amts[f], gaps[f] = a, g
+                pts = lift_distal_skin_local(arm, side, f)
+                boxes[f] = None if not pts else round(min(box_gap_mm(q, frame) for q in pts), 2)
+            # 评分同时看两条：**接触判据**（末节↔近侧面）与**判据 5 的措辞**（末节↔构件表面）
+            score = (round(max(max(abs(gaps[f]), max(boxes[f] or 0.0, 0.0)) for f in FOUR_FINGERS), 2),
+                     abs(df - 0.5))
+            if best is None or score < best[0]:
+                best = (score, round(df, 3), amts, gaps, boxes)
+        out[side]["grip_df"] = best[1]
+        out[side]["四指残差_mm"] = best[3]
+        out[side]["四指_到构件表面_mm"] = best[4]
+        out[side]["扫描"] = {"握点深度分数": [0.20, 0.80], "判据": "四指末节↔近侧面的最大 |间隙| 最小"}
+        out[side]["fitted"] = {f: {"蜷曲量": best[2][f], "末节间隙_mm": best[3][f],
+                                "板体间隙_mm": best[3][f]} for f in FOUR_FINGERS}
+        # ② 落点定下来后解拇指（目标 = 端面上握点下方 25 mm；Newton + 局部模式搜索精修）
+        clear_pose(arm)
+        drop_temp(arm, also_objects=False)
+        lift_body_setup(arm, m3, bend_deg, pelvis_m, foot_rest)
+        lift_arm_solve_backhand(arm, side, frame, 1.0, curl_axes, out[side]["fitted"], None,
+                                wrist_rest[side], grip_h_m=grip_h, grip_df=best[1])
+        face = frame["面-端面"]
+        target = (frame["near"] + frame["n"] * (frame["thickness_mm"] / 2000.0)
+                  + frame["z"] * (grip_h - 0.025))
+        thumb = solve_thumb_to_target(arm, side, target)
+        update(2)
+        gap0 = points_face_gap_mm(lift_distal_skin_local(arm, side, "Thumb"), face)["gap_mm"]
+        push = -face[1]
+        cur = Vector(target)
+        best_gap, best_target = gap0, Vector(target)
+        for _it in range(4):
+            if best_gap is None or abs(best_gap) <= LIFT_TOL_MM:
+                break
+            cur = cur + push * (best_gap / 1000.0)
+            thumb = solve_thumb_to_target(arm, side, cur)
+            update(2)
+            g = points_face_gap_mm(lift_distal_skin_local(arm, side, "Thumb"), face)["gap_mm"]
+            if g is None:
+                break
+            if best_gap is None or abs(g) < abs(best_gap):
+                best_gap, best_target = g, Vector(cur)
+            else:
+                break
+        if best_target != Vector(target):
+            thumb = solve_thumb_to_target(arm, side, best_target)
+            update(2)
+        gap1 = lift_refine_thumb_local(arm, side, face=face, box=frame)
+        solved = {f"{BONE_PREFIX}{side}HandThumb{k}":
+                  [round(math.degrees(a), 4) for a in arm.pose.bones[
+                      f"{BONE_PREFIX}{side}HandThumb{k}"].rotation_euler]
+                  for k in (1, 2, 3, 4) if f"{BONE_PREFIX}{side}HandThumb{k}" in arm.pose.bones}
+        out[side].update({"thumb_solved_deg": solved, "thumb_gap_before_mm": gap0,
+                          "thumb_gap_mm": gap1, "thumb_target_m": [round(c, 4) for c in best_target],
+                          "thumb": thumb})
+    return out
+
 def lift_fit_curls_palm(arm, side, curl_axis, face, lo=0.6, hi=2.2, steps=41):
     """掌面朝下握式的**逐指蜷曲量**：按**末节蒙皮 ↔ 远侧面**（点↔面，有符号）打分。
 
@@ -7330,7 +7630,7 @@ def lift_fit_curls_palm(arm, side, curl_axis, face, lo=0.6, hi=2.2, steps=41):
 
 
 
-def lift_refine_thumb_local(arm, side, face, tol=LIFT_TOL_MM, steps=(6.0, 2.0, 0.7)):
+def lift_refine_thumb_local(arm, side, face=None, tol=LIFT_TOL_MM, steps=(6.0, 2.0, 0.7), box=None):
     """在**当前**拇指姿势附近做**模式搜索**精修（`Thumb1` 的三个欧拉角），把末节间隙压进容差。
 
     ⚠️ 为什么需要它：`solve_thumb_to_target()` 是**网格粗搜索**（±3° 分辨率），实测左右手会各落在
@@ -7340,7 +7640,10 @@ def lift_refine_thumb_local(arm, side, face, tol=LIFT_TOL_MM, steps=(6.0, 2.0, 0
 
     def gap():
         update(1)
-        return points_face_gap_mm(lift_distal_skin_local(arm, side, "Thumb"), face)["gap_mm"]
+        pts = lift_distal_skin_local(arm, side, "Thumb")
+        if box is not None:
+            return None if not pts else round(min(box_gap_mm(q, box) for q in pts), 2)
+        return points_face_gap_mm(pts, face)["gap_mm"]
 
     cur = gap()
     for step in steps:
@@ -7621,7 +7924,7 @@ def lift_calibrate_hand_palm(arm, m3, lay, rail, grip_x, foot_rest, curl_axes, w
             thumb = solve_thumb_to_target(arm, side, best_target)
             update(2)
         # 局部模式搜索（粗搜索会左右手各落一个局部解 ⇒ 必须精修）
-        gap1 = lift_refine_thumb_local(arm, side, face)
+        gap1 = lift_refine_thumb_local(arm, side, face=face, box=frame)
         solved = {f"{BONE_PREFIX}{side}HandThumb{k}":
                   [round(math.degrees(a), 4) for a in arm.pose.bones[
                       f"{BONE_PREFIX}{side}HandThumb{k}"].rotation_euler]
@@ -7638,7 +7941,15 @@ def lift_apply(arm, m3, prm, lay, foot_rest, curl_axes, wrist_rest, cal, grip):
     out = {"gaze": body["gaze"], "legs": body["legs"]}
     if prm["t_reach"] > 0.0:
         for side in CARD1_SIDES:
-            if grip["mode"] == "palm":
+            if grip["mode"] == "backhand":
+                fr = lift_transform_frame(grip["frames"][side], grip["pivot"], prm["rot"],
+                                          prm["offset"])
+                out[side] = lift_arm_solve_backhand(
+                    arm, side, fr, prm["t_reach"], curl_axes, cal[side]["fitted"],
+                    cal[side]["thumb_solved_deg"], wrist_rest[side],
+                    grip_h_m=grip["grip_h"], grip_df=cal[side].get("grip_df", 0.5),
+                    rot=prm.get("rot"))
+            elif grip["mode"] == "palm":
                 rail = lift_translate_rail(grip["rail"], prm["offset"])
                 out[side] = lift_arm_solve_palm(
                     arm, side, rail, grip["x"], prm["t_reach"], curl_axes, cal[side]["fitted"],
@@ -7674,9 +7985,13 @@ def lift_product_frame(arm, frame, lay, root, cp, grip):
     frame_geo = {}
     if back is not None:
         for side in CARD1_SIDES:
-            frame_geo[side] = lift_chair_frame_from_points(side, back["pts"])
+            # ⚠️ 用**零件自己的三轴**重建（旋转无关）——抡过 90° 之后"世界 y 极值"已不是板厚方向
+            frame_geo[side] = lift_chair_frame_from_object(back["ob"], side)
     rail_geo = lift_rail_from_points(back["pts"]) if back is not None else None
-    if grip["mode"] == "palm" and rail_geo is not None:
+    if grip["mode"] == "backhand":
+        contacts = {side: lift_contact_rows_backhand(ev, side, frame_geo[side])
+                    for side in CARD1_SIDES}
+    elif grip["mode"] == "palm" and rail_geo is not None:
         contacts = {side: lift_contact_rows_palm(ev, side, rail_geo, frame_geo[side])
                     for side in CARD1_SIDES}
     else:
@@ -7690,7 +8005,14 @@ def lift_product_frame(arm, frame, lay, root, cp, grip):
     grip_pt = None
     if frame_geo and frame_geo.get("Left") is not None:
         fr = frame_geo["Left"]
-        if grip["mode"] == "palm" and rail_geo is not None:
+        if grip["mode"] == "backhand":
+            # 反手握式的"判据点" = **椅背外侧面的中心**（局部 +z 面中心，从产物对象矩阵取）
+            mw = back["ob"].matrix_world
+            r3 = mw.to_3x3()
+            sc = mw.to_scale()
+            top_pt = mw @ Vector((0.0, 0.0, 0.5))
+            grip_pt = top_pt
+        elif grip["mode"] == "palm" and rail_geo is not None:
             # 上沿握式的"判据点" = **顶面上、该手横向位置的那一点**（从产物网格重建）
             grip_pt = Vector((grip["x"], rail_geo["cy"], rail_geo["top_z"]))
         else:
@@ -7795,6 +8117,21 @@ def main_liftchest() -> int:
             "anchor_rest_m": [round(c, 4) for c in anchor_rest],
             "anchor_chest_m": [round(args.grip_x if args.grip == "palm" else 0.0, 4),
                                round(args.chest_grip_y, 4), round(args.chest_grip_z, 4)]}
+    if args.grip == "backhand":
+        # 反手握式：接触面 = 椅背**侧面端**；抡弧绕**椅子中线上的握点**转（`pivot` 与两侧握点同 y/z
+        # ⇒ 转完握点位置不变、只有椅子转，正是 owner 第 3 轮说的"椅子跟着手动"）。
+        grip_h = round(grip_z0 - SEAT_TOP, 6)
+        grip["frames"] = {s: lift_chair_frame_from_object(bpy.data.objects["REF_Back"], s)
+                          for s in CARD1_SIDES}
+        grip["pivot"] = Vector((0.0, lay["back_cy"], grip_z0))
+        grip["grip_h"] = grip_h
+        grip["target_grip_m"] = [0.0, LIFT_SIDE_GRIP_Y_M, LIFT_SIDE_GRIP_Z_M]
+        offset_full = Vector((0.0, LIFT_SIDE_GRIP_Y_M - lay["back_cy"],
+                              LIFT_SIDE_GRIP_Z_M - grip_z0))
+        dy, dz = offset_full.y, offset_full.z
+        anchor_rest = grip["pivot"]
+        grip["anchor_rest_m"] = [round(c, 4) for c in anchor_rest]
+        grip["anchor_chest_m"] = [0.0, LIFT_SIDE_GRIP_Y_M, LIFT_SIDE_GRIP_Z_M]
     report = {"script": Path(__file__).name, "task": "liftchest", "action": action_name,
               "blender": bpy.app.version_string, "template": str(tmpl), "host": args.host,
               "measured_at": datetime.now().isoformat(timespec="seconds"),
@@ -7820,7 +8157,15 @@ def main_liftchest() -> int:
     print(f"帧表：中立 {LIFT_FRAME_NEUTRAL} · **起手 {LIFT_FRAME_START}** · **扣住 {LIFT_FRAME_GRIP}** · "
           f"起吊 {LIFT_FRAME_LIFT} · **离地 {LIFT_FRAME_OFF_GROUND}** · **胸前到位 {LIFT_FRAME_CHEST}** · "
           f"保持至 {LIFT_FRAME_END}（{args.fps} fps）")
-    if args.grip == "palm":
+    if args.grip == "backhand":
+        print(f"握式：**反手抓椅背侧面端**（x = ±{lay['half_width']} m 那张 {BACK_THICKNESS * 1000:.0f} mm 端面）"
+              f"——**拇指朝下**（−Z）· **掌心朝内**（朝椅子中线）· 四指绕**近侧竖棱**落到近侧面"
+              f"（owner 2026-09-16 第 3 轮指名：「抓住椅子的侧面……要反手抓，把椅子抡起来维持在胸前」）")
+        print(f"抡弧：绕椅子中线上的握点转 **{LIFT_SWING_DEG:+.0f}°**（绕世界 X 轴）· "
+              f"握点从 (0, {lay['back_cy']:+.3f}, {grip_z0:.4f}) 移到 "
+              f"(0, {LIFT_SIDE_GRIP_Y_M:+.3f}, {LIFT_SIDE_GRIP_Z_M:.3f}) m ⇒ 椅子平移 "
+              f"(0, {dy:+.4f}, {dz:+.4f})")
+    elif args.grip == "palm":
         print(f"握式：**掌面朝下扣在椅背上沿（横杆）** —— 手在 x = ±{args.grip_x} m · "
               f"掌面最低点↔**顶面** · 拇指末节↔近侧面 · 四指末节逐根↔**远侧面**"
               f"（虎口↔顶面只报读数：ε 的位置依赖性，见证据 §六#6）"
@@ -7857,7 +8202,10 @@ def main_liftchest() -> int:
             report["problems"].append(f"{s} 四指屈曲符号的外部判据失效 ⇒ 符号不可信")
 
     # ---- ⓪ 手部标定（抓握帧）：逐指蜷曲量 + 拇指的解——两条都只由**握式**决定，标定一次全程复用 ----
-    if args.grip == "palm":
+    if args.grip == "backhand":
+        cal = lift_calibrate_hand_backhand(arm, m3, lay, grip["frames"], grip["grip_h"],
+                                           foot_rest, curl_axes, wrist_rest, args.bend, pelvis_m)
+    elif args.grip == "palm":
         cal = lift_calibrate_hand_palm(arm, m3, lay, grip["rail"], args.grip_x, foot_rest,
                                        curl_axes, wrist_rest, args.bend, pelvis_m)
     else:
@@ -7958,7 +8306,7 @@ def main_liftchest() -> int:
             drop_temp(arm, also_objects=False)
             update()
             captured[frame] = capture_channels(arm, names)
-            offsets[frame] = Vector((0.0, 0.0, 0.0))
+            offsets[frame] = {"location": Vector((0.0, 0.0, 0.0)), "euler_deg": (0.0, 0.0, 0.0)}
             per_frame.append({"frame": frame, "中立": True})
             if frame == LIFT_FRAME_NEUTRAL:
                 print(f"  帧 {frame:>3} **中立姿势**（零通道；导出侧 Rest Pose 一口清）")
@@ -7968,14 +8316,16 @@ def main_liftchest() -> int:
         drop_temp(arm, also_objects=False)
         out = lift_apply(arm, m3, prm, lay, foot_rest, curl_axes, wrist_rest, cal, grip)
         captured[frame] = capture_channels(arm, names)
-        offsets[frame] = prm["offset"]
+        offsets[frame] = _root_pose(prm, grip)
         row = {"frame": frame, "t_bend": round(prm["t_bend"], 4), "t_reach": round(prm["t_reach"], 4),
                "t_lift": round(prm["t_lift"], 4), "bend_deg": round(prm["bend_deg"], 2),
                "chair_offset_m": [round(c, 5) for c in prm["offset"]],
+               "swing_deg": round(prm["swing_deg"], 2),
                "gaze_up_deg": round(head_up_deg(arm), 3),
-               "hands": {s: {k: out[s][k] for k in ("web_to_edge_mm", "elbow_deg", "clamped_straight",
-                                                    "tip_err_mm", "s", "wrist_target_m",
-                                                    "web_point_m", "elbow_pick")}
+               "hands": {s: {k: out[s].get(k) for k in ("web_to_edge_mm", "elbow_deg",
+                                                        "clamped_straight", "tip_err_mm", "s",
+                                                        "wrist_target_m", "web_point_m",
+                                                        "elbow_pick")}
                          for s in CARD1_SIDES if s in out}}
         per_frame.append(row)
         if frame in (LIFT_FRAME_START, LIFT_FRAME_GRIP, LIFT_FRAME_LIFT, LIFT_FRAME_OFF_GROUND,
@@ -8021,14 +8371,22 @@ def main_liftchest() -> int:
             pb.keyframe_insert("rotation_euler", frame=frame)
             if name == "CTRL_Hips":
                 pb.keyframe_insert("location", frame=frame)
-        root.location = offsets[frame]
+        root.location = offsets[frame]["location"]
+        root.rotation_mode = "XYZ"
+        root.rotation_euler = Euler([math.radians(a) for a in offsets[frame]["euler_deg"]], "XYZ")
         root.keyframe_insert("location", frame=frame)
+        root.keyframe_insert("rotation_euler", frame=frame)
     bpy.context.scene.frame_start = LIFT_FRAME_NEUTRAL
     bpy.context.scene.frame_end = LIFT_FRAME_END
     report["keyed_channels"] = names
-    report["chair_root_keyed"] = {"物体": LIFT_CHAIR_ROOT, "通道": "location",
-                                  "位移端点_m": [[round(c, 5) for c in offsets[LIFT_FRAME_NEUTRAL]],
-                                                [round(c, 5) for c in offsets[LIFT_FRAME_END]]]}
+    report["chair_root_keyed"] = {
+        "物体": LIFT_CHAIR_ROOT, "通道": "location + rotation_euler",
+        "端点": {str(LIFT_FRAME_NEUTRAL): {"location_m": [round(c, 5) for c in
+                                                    offsets[LIFT_FRAME_NEUTRAL]["location"]],
+                                        "euler_deg": list(offsets[LIFT_FRAME_NEUTRAL]["euler_deg"])},
+               str(LIFT_FRAME_END): {"location_m": [round(c, 5) for c in
+                                                    offsets[LIFT_FRAME_END]["location"]],
+                                     "euler_deg": list(offsets[LIFT_FRAME_END]["euler_deg"])}}}
     report["preview_cleanup"] = door_push_preview_cleanup(arm)
     report["visible_bones"] = visible_bone_outliers(arm)
     print(f"\n已打键：动作 {action_name} · 帧 {LIFT_FRAME_NEUTRAL}–{LIFT_FRAME_END} · "
@@ -8206,11 +8564,16 @@ def main_liftchest() -> int:
             f"累计 {cum}（≤{LIFT_RIGID_TOTAL_MM}）")
     anchor_span = report["rigidity"]["两手间距_m"]["中位"]
     band = LIFT_HANDS_BAND_M
-    band_ok = band[0] * (1 - LIFT_HANDS_ANCHOR_TOL) <= anchor_span <= band[1] * (1 + LIFT_HANDS_ANCHOR_TOL)
+    swing_ok = (band[0] * (1 - LIFT_HANDS_ANCHOR_TOL) <= anchor_span
+                <= band[1] * (1 + LIFT_HANDS_ANCHOR_TOL))
+    carry_ok = abs(anchor_span - LIFT_HANDS_ANCHOR_M) <= LIFT_HANDS_ANCHOR_TOL * LIFT_HANDS_ANCHOR_M
+    band_ok = bool(swing_ok or carry_ok)
     carry_dev = (anchor_span - LIFT_HANDS_ANCHOR_M) / LIFT_HANDS_ANCHOR_M
     report["rigidity"]["判据1_两个参照"] = {
         "挥舞带_m": list(band), "带±25%": [round(band[0] * 0.75, 4), round(band[1] * 1.25, 4)],
-        "落在带内": bool(band_ok),
+        "落在带内": bool(band_ok), "挥舞带内": bool(swing_ok), "搬运锚带内": bool(carry_ok),
+        "判据": "**任一条参照的 ±25% 带内即算过**——哪一条适用由握式定：掌面朝下扣横杆 ⇒ 挥舞带；"
+                "反手抓侧面端 ⇒ 搬运锚（两种握式的读数各落一条带，两条偏差都并列报出，不混读）",
         "搬运锚_m": LIFT_HANDS_ANCHOR_M,
         "锚±25%": [round(LIFT_HANDS_ANCHOR_M * 0.75, 4), round(LIFT_HANDS_ANCHOR_M * 1.25, 4)],
         "对搬运锚的偏差": f"{carry_dev:+.1%}",
@@ -8219,8 +8582,9 @@ def main_liftchest() -> int:
                         "⇒ 硬判挥舞带、并列报搬运锚的偏差（冲突登记为未闭合）"}
     if not band_ok:
         report["problems"].append(
-            f"判据 1（两手间距）中位 {anchor_span} m 落在挥舞带 {band} ±"
-            f"{LIFT_HANDS_ANCHOR_TOL:.0%} 之外")
+            f"判据 1（两手间距）中位 {anchor_span} m 既不在挥舞带 {band} ±"
+            f"{LIFT_HANDS_ANCHOR_TOL:.0%} 内、也不在搬运锚 {LIFT_HANDS_ANCHOR_M} m ±"
+            f"{LIFT_HANDS_ANCHOR_TOL:.0%} 内")
     if report["rigidity"]["两手间距_m"]["波动"] > LIFT_HANDS_DRIFT_M:
         report["problems"].append(
             f"判据 1（两手间距）持握期间波动 {report['rigidity']['两手间距_m']['波动']} m > "
