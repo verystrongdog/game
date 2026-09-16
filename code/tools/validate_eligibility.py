@@ -88,6 +88,64 @@ THETA_F, THETA_N = 0.80, 0.40
 VERIFIED = set(NECESSARY) | {"PTSD", "DID"}  # 24 经历型全部
 
 
+class EligibilityInputError(ValueError):
+    """规范资格输入不满足契约。"""
+
+
+def _is_number(value):
+    return isinstance(value, (int, float)) and not isinstance(value, bool)
+
+
+def validate_canonical_input(patient: dict) -> None:
+    """验证 Adapter 与资格判定器之间的规范输入边界。
+
+    这里只验证通用容器与事件/记忆/声明的形状；疾病签名及阈值仍由下方
+    的既有判定表负责。这样原始 ``.gen.json`` 不会再被默认为空患者。
+    """
+    if not isinstance(patient, dict):
+        raise EligibilityInputError("资格输入必须是 JSON object")
+
+    required = ("events", "memories", "declarations")
+    missing = [key for key in required if key not in patient]
+    if missing:
+        raise EligibilityInputError(f"缺少规范顶层字段: {', '.join(missing)}")
+    if not isinstance(patient["events"], list):
+        raise EligibilityInputError("events 必须是 array")
+    if not isinstance(patient["memories"], list):
+        raise EligibilityInputError("memories 必须是 array")
+    if not isinstance(patient["declarations"], dict):
+        raise EligibilityInputError("declarations 必须是 object")
+
+    for index, event_type in enumerate(patient["events"]):
+        if not isinstance(event_type, str) or event_type not in EVENT_CANDIDATES:
+            raise EligibilityInputError(f"events[{index}] 是未知事件类型: {event_type!r}")
+
+    for index, memory in enumerate(patient["memories"]):
+        if not isinstance(memory, dict):
+            raise EligibilityInputError(f"memories[{index}] 必须是 object")
+        event_type = memory.get("event_type")
+        if not isinstance(event_type, str) or event_type not in EVENT_CANDIDATES:
+            raise EligibilityInputError(
+                f"memories[{index}].event_type 是未知事件类型: {event_type!r}"
+            )
+        for field in ("F", "N", "D_seg"):
+            if field not in memory or memory[field] is None:
+                continue
+            value = memory[field]
+            if not _is_number(value) or not 0 <= value <= 1:
+                raise EligibilityInputError(
+                    f"memories[{index}].{field} 必须是 [0,1] 数值或 null"
+                )
+
+    for atom, value in patient["declarations"].items():
+        if not isinstance(atom, str):
+            raise EligibilityInputError("declarations 的键必须是 string")
+        if value not in (0, 1, "MISSING") or isinstance(value, bool):
+            raise EligibilityInputError(
+                f"declarations.{atom} 必须是 0、1 或 \"MISSING\""
+            )
+
+
 # ============================================================
 # 判定器
 # ============================================================
@@ -95,9 +153,10 @@ VERIFIED = set(NECESSARY) | {"PTSD", "DID"}  # 24 经历型全部
 def eligibility_for(patient: dict) -> dict:
     """patient: {events: [event_type...], memories: [{event_type,F,N,D_seg}...],
                  declarations: {atom: 1|0|"MISSING"}}"""
-    events = set(patient.get("events", []))
-    memories = patient.get("memories", [])
-    decl = patient.get("declarations", {})
+    validate_canonical_input(patient)
+    events = set(patient["events"])
+    memories = patient["memories"]
+    decl = patient["declarations"]
     recalled = set()
     for e in events:
         recalled |= set(EVENT_CANDIDATES.get(e, []))
@@ -239,8 +298,13 @@ def main():
     if len(sys.argv) > 1 and sys.argv[1] == "--self-test":
         sys.exit(0 if run_self_test() else 1)
     if len(sys.argv) > 1:
-        patient = json.load(open(sys.argv[1], encoding="utf-8"))
-        res = eligibility_for(patient)
+        try:
+            with open(sys.argv[1], encoding="utf-8") as handle:
+                patient = json.load(handle)
+            res = eligibility_for(patient)
+        except (OSError, json.JSONDecodeError, EligibilityInputError) as exc:
+            print(f"ERROR: {exc}", file=sys.stderr)
+            sys.exit(1)
         elig = {d: (s, r) for d, (s, r) in res.items() if s == "ELIGIBLE"}
         print("ELIGIBLE:", elig if elig else "(无——全部 INELIGIBLE/UNDETERMINED)")
         print("UNDETERMINED:", [d for d, (s, _) in res.items() if s == "UNDETERMINED"])
