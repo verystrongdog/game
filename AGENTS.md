@@ -51,11 +51,14 @@ data/        结构化数据契约
 python3 code/tools/validate_cross_refs.py        # 跨文件引用：必须 0 死链 / 0 段引用警告
 python3 code/tools/validate_trash_isolation.py   # 归档隔离 + 废弃术语残留
 python3 code/tools/validate_params.py            # 跨文件参数一致性
-python3 code/tools/validate_issues.py --from-github  # issue 契约（字段/依赖/门禁/单线程）
+python3 code/tools/validate_issues.py --from-github  # issue 契约快照（字段/依赖/门禁/单线程）
+python3 code/tools/test_validate_issues.py       # issue 规则正反例 fixture（门禁 issues-fixtures）
 dotnet test code/src/YouAreNotTheFish.sln        # 引擎测试（改代码时）
 ```
 
-改设计文档或数据后跑前三条；改代码后跑第四条；**新建或修改 issue 后跑第四条**（issue 是准入载体，其字段与依赖边同样受机械校验）。**报 0 死链 + 测试全绿是底线**，不是"锦上添花"。
+**按名字对应，不按行号**（行号一插就错位）：改设计文档或数据后跑 `validate_cross_refs` · `validate_trash_isolation` · `validate_params`；**新建或修改 issue 后跑 `validate_issues --from-github` 与 `test_validate_issues` 两条**（前者是快照校验，后者是规则的正反例 fixture——两者是**不同的门禁**，只跑前者会让规则回归漏到 CI 才暴露，实例见 [#188](https://github.com/verystrongdog/game/issues/188)）；改代码后跑 `dotnet test`。**报 0 死链 + 测试全绿是底线**，不是"锦上添花"。
+
+**本节是默认必跑的子集，权威清单是 [`gates.json`](design/engineering/gates.json)**（机器可读：gate id / 命令 / CI job / 本机可用性 / 不可用时阻塞什么）。其余门禁按改动面挑选：`unity` 与 `unity-assets` 属 Unity 资产面（`unity` 需 Editor——本机经 WSL interop 可用、CI 侧报 `NOT_AVAILABLE`）、`engine` 需 .NET SDK 且耗时（CI 每次跑）、`npc-materials-fixtures` 与 `issues-fixtures` 是素材与 issue 的 fixture 套件。**清单与门禁表漂移没有机械护栏**，所以本节只列默认子集并指向 `gates.json`，不抄第二份列表。
 
 **改 `code/unity/Assets/**`、或经 CLI 驱动 Unity Editor 之前**，先查 [危险点表](design/engineering/危险点表.md)（按**位置**检索的排障索引：这个位置反复出什么事、判据是什么、怎么躲）。⚠️ 该表覆盖 Unity 侧的坑，而 **`code/` 与根目录文档不在上述校验器的扫描范围内**——它的死链要人盯。
 
@@ -76,5 +79,5 @@ dotnet test code/src/YouAreNotTheFish.sln        # 引擎测试（改代码时�
 **这些是历史，不是流程。** 新的设计讨论用你顺手的方式，只要求结论落进 `design/`。
 
 ---
-*创建: 2026-09-12 | 更新: 2026-09-12*
+*创建: 2026-09-12 | 更新: 2026-09-17（[#190](https://github.com/verystrongdog/game/issues/190)：§三 自检清单补入 `issues-fixtures` 门禁——它此前不在清单里，导致 agent 侧自查全绿而 CI 恒红，实例 [#188](https://github.com/verystrongdog/game/issues/188)；同一段落的「改代码后跑第四条」按行号指错了命令（第四条其实是 issue 快照），改为**按名字对应**并指向 `gates.json`。触发 = #188 的 CI 红灯）*
 *关联: [项目规约](design/conventions/README.md), [架构](ARCHITECTURE.md), [可玩状态](PLAYABLE.md), [工作流程](WORKFLOW.md), [协作指南](CONTRIBUTING.md)*
