@@ -18,7 +18,7 @@
 | 字段 | 值 |
 |---|---|
 | base SHA | `e562a74`（口径 §十五 落库那次提交） |
-| head SHA | 本回填提交（脚本参数化 + 证据 + 口径 §15.6/§十一 回填） |
+| head SHA | 本条**提交组**：`651fe7b`（工具参数化）· `71f0798`（证据 + 口径回填）· `7c9f5a8`（回滚演练实做记录）· `3e89fd5`（门禁读数）· 本行所在提交 |
 | 阶段 | [#168](https://github.com/verystrongdog/game/issues/168)（Experiment） |
 | 执行者 | DSH agent（本机 WSL → Windows 侧 Blender） |
 | 工具版本 | Blender **5.1.2**（`hash ec6e62d40fa9`，built 2026-05-19 01:37:34）· Windows 11 家庭中文版 |
@@ -41,7 +41,7 @@
 | 上表 `--set headneck`（run2） | **0** |
 | `--set hand`（**参数化后**，默认集） | **0** |
 | `--set hand`（**参数化前**的 `git show e562a74:` 版本，作改前基线） | **0** |
-| `python3 code/tools/validate_cross_refs.py` | **0**（2005 refs / 0 死链 / 0 段引用警告） |
+| `python3 code/tools/validate_cross_refs.py` | **0**（**0 死链 / 0 段引用警告**；本轮引用数 改前 **2005** → 改后 **2020**，增长全部来自新增的本证据/口径引用） |
 | `python3 code/tools/validate_trash_isolation.py` | **0** |
 | `python3 code/tools/validate_params.py` | **0**（0 failed / 7 warnings —— **与改前逐条相同**，全在未改动文件上） |
 | `python3 code/tools/validate_grip_cards.py` | **0**（8 checks / 8 passed / 0 failed —— 手部基准卡片未被本次改动波及） |
