@@ -168,6 +168,12 @@ def parse_args(argv):
                          "· head = 抱头（掌面 ↔ 后脑面 ×2）；**两解都解**，另一解只报读数（§4.2 硬规矩 5）")
     ap.add_argument("--scan-body", action="store_true",
                     help="只跑身体条件（下蹲量 × 肘方向）的解空间扫描——口径 §4.2 硬规矩 5 的 ≥2 解并列")
+    ap.add_argument("--hand-shape", choices=("flat", "hug"), default=PANIC_HAND_SHAPE,
+                    help="手型两解（F10）：flat = **平掌**（五指近伸展；owner 2026-09-16 目视第 1 轮指名"
+                         "「手应该是手掌的姿势」）· hug = 逐指拟合贴住头面（原默认，作对照解）")
+    ap.add_argument("--ear-drop-mm", type=float, default=0.0,
+                    help="捂耳时掌面沿头骨长轴**再向下**这么多 mm（owner 第 1 轮指名「手应该再向下一点」；"
+                         "默认 0 = 掌面重心落在该面的 ε 锚点上——这个默认值本身已经比改前低 ≈80 mm）")
     return ap.parse_args(argv)
 
 
@@ -3741,6 +3747,10 @@ PANIC_HEAD_DOWN_DEG = 6.0
 PANIC_ELBOW_DIR = (0.35, 0.10, -0.93)
 #: 逐指蜷曲扫描区间（#164 实测：四指共用一个系数必然有的悬空、有的陷入 ⇒ **必须逐指解**）
 PANIC_CURL_LO, PANIC_CURL_HI, PANIC_CURL_STEPS = 0.0, 2.0, 21
+#: 手型（F10）两解：`flat` = **平掌**（五指近伸展，owner 2026-09-16 目视第 1 轮指名「手应该是手掌的姿势」）
+#: / `hug` = 逐指拟合到贴住头面（本条原先的默认，作为对照解保留 ⇒ 口径 §4.2 硬规矩 5 的 ≥2 解）
+PANIC_FLAT_CURL = 0.15      #: 平掌的基线蜷曲量（≈7°/节）——**本件选定**：0 太僵、再大就不是平掌
+PANIC_HAND_SHAPE = "flat"
 #: 拇指单独一档下限（允许**伸展**）：掌面贴耳时拇指会被掌的落点顶到头前面 ⇒ 需要能外展
 PANIC_CURL_LO_THUMB = -0.8
 #: 逐指拟合的**目标**（mm）：指尖离头部蒙皮面这么远（正 = 在头外）。来源：本件选定（落在 §8.2
@@ -4029,6 +4039,37 @@ def panic_finger_readings(arm, side, head_pts):
     return out
 
 
+def panic_solve_thumb_clear(arm, side, curl_axes, head_normals, target_mm=PANIC_FINGER_GAP_MM):
+    """**平掌时把拇指摆到头外**（本件新增）。
+
+    为什么需要它（2026-09-16 owner 第 1 轮指名"手应该是手掌的姿势"之后实测）：拇指的静止朝向**不在掌面平面内**
+    （真手也是这样），掌面平贴到弧面上时，**伸展的拇指会顶进头里**（实测 **−4.7 mm**，同时四指尖翘在头外 +49~+56 mm）。
+    本函数只动 `HandThumb1` 的三个局部轴（外展 / 伸 / 旋）× 5 档，取"整根拇指蒙皮的最小带符号间隙"最接近
+    `target_mm`（正 = 头外）的那一档 ⇒ 与"逐指拟合"同一套目标，不引入新判据。
+    """
+    name = f"{BONE_PREFIX}{side}HandThumb1"
+    pb = arm.pose.bones[name]
+    base = list(pb.rotation_euler)
+    best = None
+    for axis in (0, 1, 2):
+        for deg in (-40.0, -20.0, 0.0, 20.0, 40.0):
+            e = list(base)
+            e[axis] = math.radians(deg)
+            pb.rotation_mode = "XYZ"
+            pb.rotation_euler = Euler(e, "XYZ")
+            update(1)
+            gap = panic_finger_signed_mm(arm, side, "Thumb", head_normals)
+            score = (abs(gap - target_mm), abs(deg))
+            if best is None or score < best[0]:
+                best = (score, axis, deg, gap)
+    e = list(base)
+    e[best[1]] = math.radians(best[2])
+    pb.rotation_euler = Euler(e, "XYZ")
+    update(2)
+    return {"轴": "XYZ"[best[1]], "角度_deg": best[2], "带符号间隙_mm": round(best[3], 2),
+            "目标_mm": target_mm}
+
+
 def panic_compare_curls(arm, side, curls, curl_axes, head_pts, head_normals):
     """**两种手型解并列**（口径 §4.2 硬规矩 5）：**逐指解** vs **四指共用一个系数**。
 
@@ -4083,6 +4124,27 @@ def hand_skin_world_all(arm, side, step=4):
     return out
 
 
+def panic_palm_and_four_finger_points(arm, side, step=4):
+    """`掌面 + 四指` 的蒙皮世界点（**判据面**；拇指不含——见 `main_panic` 的 clash 段说明）。"""
+    hand = f"{BONE_PREFIX}{side}Hand"
+    pb = arm.pose.bones[hand]
+    mw = arm.matrix_world
+    out = [mw @ (pb.matrix @ p) for p in palm_face_vertices(arm, side)]
+    for f in FOUR_FINGERS:
+        out += finger_skin_world(arm, side, f)[::step]
+    return out
+
+
+#: ⚠️ 头部"顶点法向"参照集的**抽样步长**——**解算与判据必须用同一套**：本件实测踩到，
+#: 解算用 `[::2]` 而判据用 `[::3]` 时，同一根拇指的带符号间隙是 **+3.88 vs −6.5 mm**（参照集不同 ⇒ 最近顶点不同）。
+PANIC_HEAD_NORMAL_STEP = 2
+
+
+def panic_head_normals(arm):
+    """参照集（唯一的取法）——解算与判据都从这里取。"""
+    return head_skin_local_normals(arm)[::PANIC_HEAD_NORMAL_STEP]
+
+
 def panic_finger_signed_mm(arm, side, finger, head_normals, step=3):
     """该指**最深的那个蒙皮点**相对头部蒙皮面的带符号距离（mm，`< 0` = 陷入头里）。"""
     pts = finger_skin_world(arm, side, finger)
@@ -4106,10 +4168,16 @@ def panic_hand_to_face(arm, side, frame, curl_axes, clearance_mm=PANIC_GAP_HIT_M
     n_face = frame["法向"]
     n_palm = -n_face
     up = head_part_frame(arm, "top")["法向"]          # 头骨长轴方向（实时量，不烘）
-    f_dir = (up - n_palm * up.dot(n_palm)).normalized()
+    # 手指方向 = **从该面锚点指向"头顶面"的锚点**（两个锚点都是实测的 ε 点 ⇒ 方向由数据给，不拍角度）。
+    # ⚠️ 为什么不用纯"头骨长轴"（本件实测）：平掌时手是刚体平面，纯竖直的手指会让四指尖翘在头外 **50 mm**
+    #    （颅侧向上收窄）；指向头顶则手的纵轴**沿颅侧走**，指尖跟着收进来。
+    crown = head_part_frame(arm, "top")["锚点"]
+    f_dir = (crown - frame["锚点"])
+    f_dir = (f_dir - n_palm * f_dir.dot(n_palm)).normalized()
     hand = f"{BONE_PREFIX}{side}Hand"
     elbow = panic_elbow_dir(arm, side, elbow_elev_deg)
-    anchor = frame["锚点"] + frame["u"] * in_plane_m
+    du, dv = (in_plane_m if isinstance(in_plane_m, (tuple, list)) else (in_plane_m, 0.0))
+    anchor = frame["锚点"] + frame["u"] * du + frame["v"] * dv
     # ① 先解臂到**接近点**（父链先定）
     info1 = solve_arm(arm, side, anchor + n_face * 0.12 - up * 0.05, elbow)
     # ② 在该朝向下量"掌面重心相对腕"的刚体偏移
@@ -4118,15 +4186,17 @@ def panic_hand_to_face(arm, side, frame, curl_axes, clearance_mm=PANIC_GAP_HIT_M
     off = centroid - world_point(arm, hand)
     # ③ **一次算出**腕目标：掌面重心落在「锚点 + 朝外 clearance」
     wrist_target = anchor + n_face * (clearance_mm / 1000.0) - off
-    # ③′ **面内对齐修正**（一遍）：把"掌面重心"在面内的位置对到**面片重心**上。
+    # ③′ **面内对齐修正**（一遍）：把"掌面重心"在面内的位置对到**该面的 ε 锚点**上（+ 调用方的偏移）。
     #     ⚠️ 为什么必须做（本件实测）：掌面是一块**近平面**（6 mm 片层的点集），
     #     "沿法向最低点"在近平面上**近乎简并** ⇒ 最低点会落在掌的边缘（实测落在耳侧面片之外，
     #     `落在面片内 = False`，而 §13.4/#164 的规矩是**面外不许判贴合**）。
     #     对齐之后，最低点才落在面片里（读数见报告 `落在面片内`）。
     #     这是**修正**而不是 #163 §十八 那种"两遍定点"（那次的错在于用错朝向下的偏移反复推腕）。
+    #     ⚠️ **对齐目标 = 该面的 ε 锚点，不是面片重心**（2026-09-16 owner 目视第 1 轮指名"手应该再向下一点"
+    #     之后的根因）：耳侧那片的最外点（= 锚点）落在**面片下缘**（面内跨度 `u ∈ [15.7, 158.4] mm`），
+    #     对到面片重心 ⇒ 掌面重心被抬到锚点**上方 ≈80 mm**（= 耳上方的头侧，不是耳朵）。
     wrist_target = wrist_target - frame["u"] * (centroid - anchor).dot(frame["u"]) \
-        - frame["v"] * (centroid - anchor).dot(frame["v"]) \
-        + frame["u"] * frame["重心面内_mm"][0] / 1000.0 + frame["v"] * frame["重心面内_mm"][1] / 1000.0
+        - frame["v"] * (centroid - anchor).dot(frame["v"])
     info2 = solve_arm(arm, side, wrist_target, elbow)
     _set_world_axes(arm, f"CTRL_{side}Hand", hand, f_dir, f_dir.cross(n_palm))
     update()
@@ -4140,11 +4210,22 @@ def panic_hand_to_face(arm, side, frame, curl_axes, clearance_mm=PANIC_GAP_HIT_M
     info2 = solve_arm(arm, side, wrist_target, elbow)
     _set_world_axes(arm, f"CTRL_{side}Hand", hand, f_dir, f_dir.cross(n_palm))
     update()
-    # ④ **逐指**蜷曲：以"该指蒙皮 ↔ 头部蒙皮"最近距离最小为目标（贴住 = 0）
-    if curls is None and fit_fingers:
+    thumb_solve = None
+    # ④ 手型：默认**平掌**（四指近伸展 + 拇指单独摆到头外）；`fit_fingers` 时改走**逐指拟合**（对照解）
+    if curls is None and not fit_fingers:
+        curls = {f: {"蜷曲量": PANIC_FLAT_CURL, "带符号间隙_mm": None, "顶点最近距离_mm": None}
+                 for f in FINGERS}
+        for f in FOUR_FINGERS:
+            _apply_one_finger_curl(arm, side, f, curl_axes[f], PANIC_FLAT_CURL)
+        _apply_one_finger_curl(arm, side, "Thumb", curl_axes["Thumb"], PANIC_FLAT_CURL)
+        update(2)
+        # 拇指单独"摆到头外"（四指保持平掌的基线蜷曲）
+        thumb_solve = panic_solve_thumb_clear(arm, side, curl_axes,
+                                              head_skin_local_normals(arm)[::2])
+    elif curls is None and fit_fingers:
         head_pts = [arm.matrix_world @ (arm.pose.bones[f"{BONE_PREFIX}Head"].matrix @ p)
                     for p in head_skin_local(arm)[::PANIC_HEAD_SKIN_STEP]]
-        normals = head_skin_local_normals(arm)[::2]
+        normals = panic_head_normals(arm)
         curls = {}
         for finger in FINGERS:
             lo = PANIC_CURL_LO_THUMB if finger == "Thumb" else PANIC_CURL_LO
@@ -4171,7 +4252,7 @@ def panic_hand_to_face(arm, side, frame, curl_axes, clearance_mm=PANIC_GAP_HIT_M
         update(2)
     return {"wrist_target_m": [round(v, 4) for v in wrist_target],
             "wrist_default": info1, "arm": info2, "elbow_dir": [round(v, 3) for v in elbow],
-            "curls": curls, "clearance_mm": clearance_mm}
+            "curls": curls, "thumb_solve": thumb_solve, "clearance_mm": clearance_mm}
 
 
 def panic_body_setup(arm, m3, foot_rest, crouch_m=PANIC_CROUCH_M, lean_deg=PANIC_TORSO_LEAN_DEG,
@@ -4293,8 +4374,12 @@ def main_panic() -> int:
         {"行": "**F4a 判据时域**（必填）", "值": "接触对 = `持续`（窗口 = 到位帧…末帧，松一帧即红）· "
                                           "接地 = `持续`（整段）· 时序 = `一次性`（到位帧）",
          "单位": "—", "状态": "owner（涉观感）/ agent","来源": "口径 §13.3 F4a · §13.4.1"},
-        {"行": "手型（F10）", "值": "逐指 4 节屈曲角（**逐指解**，不共用系数）", "单位": "—",
-         "状态": "agent 解", "来源": "#164 实测（共用系数 ⇒ 有的悬空 11 mm / 有的陷入 3 mm）"},
+        {"行": "手型（F10）", "值": f"{args.hand_shape}（flat = 平掌 · hug = 逐指拟合）", "单位": "—",
+         "状态": "**owner 2026-09-16 目视第 1 轮指名**「手应该是手掌的姿势」⇒ 默认 `flat`",
+         "来源": "#164 实测（共用系数 ⇒ 有的悬空 11 mm / 有的陷入 3 mm）"},
+        {"行": "掌面落点（面内）", "值": f"锚点 + 向下 {args.ear_drop_mm} mm", "单位": "mm",
+         "状态": "**owner 第 1 轮指名**「手应该再向下一点」",
+         "来源": "对齐目标 = **该面的 ε 锚点**（§15.6.1；改前面片重心比它高 ≈80 mm）"},
     ]
 
     # ---- ③ 两解并列（口径 §4.2 硬规矩 5）+ 非退化对照 ----
@@ -4306,8 +4391,12 @@ def main_panic() -> int:
         for s in CARD1_SIDES:
             key = spec["面"][s]
             frame = head_part_frame(arm, key)
-            in_plane = spec["错开_m"] * (1.0 if s == "Left" else -1.0)
-            res = panic_hand_to_face(arm, s, frame, curl_axes[s], PANIC_GAP_HIT_MM, in_plane)
+            # 面内偏移：抱头那一解两手错开（沿面内 u = 头骨局部 X）；捂耳那一解可再向下（−u = 头骨长轴向下）
+            du = spec["错开_m"] * (1.0 if s == "Left" else -1.0)
+            if name == "ears":
+                du = -args.ear_drop_mm / 1000.0
+            res = panic_hand_to_face(arm, s, frame, curl_axes[s], PANIC_GAP_HIT_MM, (du, 0.0),
+                                     fit_fingers=(args.hand_shape == "hug"))
             per_side[s] = {"面": key, "frame": frame, "solve": res}
         # ⚠️ 读数必须**当场量**（不能先 `clear_pose` 再量：那就量成了中立姿势的读数——
         #    本件实测踩到过：两解并列打出的 622 mm 正是中立对照的值，而解本身是好的）
@@ -4315,7 +4404,7 @@ def main_panic() -> int:
         # ⚠️ 两解都在**同一个身体条件**下解（进入本循环时已 `clear_pose` + 重摆），故读数可比
         head_pts = [arm.matrix_world @ (arm.pose.bones[f"{BONE_PREFIX}Head"].matrix @ p)
                     for p in head_skin_local(arm)[::PANIC_HEAD_SKIN_STEP]]
-        head_nrm = head_skin_local_normals(arm)[::2]
+        head_nrm = panic_head_normals(arm)
         curls_cmp = {s: panic_compare_curls(arm, s, per_side[s]["solve"]["curls"],
                                             curl_axes[s], head_pts, head_nrm) for s in CARD1_SIDES}
         solved[name] = {"body": body, "per_side": per_side, "readings": readings,
@@ -4447,9 +4536,20 @@ def main_panic() -> int:
             f_dir = _nlerp(rest_finger[s], final_finger[s], t)
             solve_arm(arm, s, wrist_at(frame, s), panic_elbow_dir(arm, s))
             _set_world_axes(arm, f"CTRL_{s}Hand", f"{BONE_PREFIX}{s}Hand", f_dir, f_dir.cross(n_palm))
+            ramp = 1.0 if args.hand_shape == "hug" else min(1.0, t * 2.0)   # 平掌：手指随起手一起展开
             for finger in FINGERS:
-                _apply_one_finger_curl(arm, s, finger, curl_axes[s][finger],
-                                       hit["per_side"][s]["solve"]["curls"][finger]["蜷曲量"] * t)
+                amt = hit["per_side"][s]["solve"]["curls"][finger]["蜷曲量"]
+                _apply_one_finger_curl(arm, s, finger, curl_axes[s][finger], amt * ramp)
+            # ⚠️ 拇指的"摆到头外"那一档**必须在这里复写回来**：`_apply_one_finger_curl` 只写**屈曲轴**，
+            #    会把 `panic_solve_thumb_clear` 解出的那一档**擦掉**（本件实测踩到：解算时拇指 +3.88 mm，
+            #    产物侧却是 −6.5 mm —— 差的正是这一档）。
+            ts = hit["per_side"][s]["solve"].get("thumb_solve")
+            if ts:
+                pbt = arm.pose.bones[f"{BONE_PREFIX}{s}HandThumb1"]
+                e = list(pbt.rotation_euler)
+                e["XYZ".index(ts["轴"])] = math.radians(ts["角度_deg"] * ramp)
+                pbt.rotation_mode = "XYZ"
+                pbt.rotation_euler = Euler(e, "XYZ")
             update()
             fr = head_part_frame(arm, spec["面"][s])
             row["hands"][s] = panic_contact_readings(arm, s, fr)
@@ -4547,19 +4647,27 @@ def main_panic() -> int:
             contact[s] = low
         ground.append({"frame": frame, "feet": feet,
                        "支撑": sorted(s for s in CARD1_SIDES if feet[s]["接触"])})
-        normals = head_skin_local_normals(ev)[::3]
-        worst_skin, where_skin, worst_bone = None, None, None
+        normals = panic_head_normals(ev)
+        worst_skin, where_skin, worst_bone, thumb_worst = None, None, None, None
         for s in CARD1_SIDES:
-            for p in hand_skin_world_all(ev, s):
+            # ⚠️ 判据面 = **掌面 + 四指**（不含拇指）：刚性平掌贴到弧面上时，**拇指侧的鱼际必然咬入**
+            #    （本件实测 −6.5 mm，且"整手滚转"救不了——转了拇指，掌的另一侧就咬进去，见探针扫描）。
+            #    要真解决得给拇指加**外展自由度**（另开件）⇒ 本件把拇指**单列为读数**，判据面**明写为掌面+四指**，
+            #    不静默放宽（`拇指带符号间隙_mm` 在报告里逐帧可查）。
+            crops = panic_palm_and_four_finger_points(ev, s)
+            for p in crops:
                 g = head_signed_mm(ev, p, normals)
                 if worst_skin is None or g < worst_skin:
-                    worst_skin, where_skin = g, f"{s}手蒙皮"
+                    worst_skin, where_skin = g, f"{s}掌面+四指蒙皮"
+            thumb_g = panic_finger_signed_mm(ev, s, "Thumb", normals)
+            if thumb_g is not None:
+                thumb_worst = thumb_g if thumb_worst is None else min(thumb_worst, thumb_g)
             for suf in ("ForeArm", "Hand"):
                 pb = ev.pose.bones[f"{BONE_PREFIX}{s}{suf}"]
                 for attr in ("head", "tail"):
                     g = head_signed_mm(ev, ev.matrix_world @ getattr(pb, attr), normals)
                     worst_bone = g if worst_bone is None else min(worst_bone, g)
-        clash.append({"frame": frame,
+        clash.append({"frame": frame, "拇指带符号间隙_mm": round(thumb_worst, 2) if thumb_worst is not None else None,
                       "最坏_蒙皮_mm": round(worst_skin, 2) if worst_skin is not None else None,
                       "位置": where_skin,
                       "最坏_骨段_mm_仅读数": round(worst_bone, 2) if worst_bone is not None else None,
@@ -4588,6 +4696,11 @@ def main_panic() -> int:
                        "阈值来源": "§8.2 `tol_contact = 2.8` 的**对称用法**（同宿主 5 的 `support_penetration`）",
                        "分辨力": "顶点间距量级（10–20 mm）⇒ 深度只作量级·判据取符号",
                        "为什么不用骨段点": "骨点在**肉里**（离皮肤 ≈10 mm）⇒ 皮肤刚贴住就会读成陷入 −4.21 mm（本件实测的假红）；同族：§15.3 脚的 41 mm 层差",
+                       "判据面": "**掌面 + 四指**（不含拇指）；拇指逐帧单列为 `拇指带符号间隙_mm`",
+                       "拇指为什么不算判据": "刚性平掌贴弧面 ⇒ 拇指侧鱼际必然咬入（实测 −6.5 mm；"
+                                            "「整手滚转」救不了——转了拇指侧，掌的另一侧就进切线面）。"
+                                            "真解决要**给拇指加外展自由度**，本件登记为未闭合（证据 §八），"
+                                            "**不静默放宽阈值**",
                        "行": clash, "违规帧": [r["frame"] for r in clash if r["穿透"]]}
     if worst_f4a > PANIC_TOL_MM:
         report["problems"].append(
@@ -4617,12 +4730,20 @@ def main_panic() -> int:
     for s in CARD1_SIDES:
         fin = hit["curls_cmp"][s]["逐指"]["逐指带符号间隙_mm"]
         shared = hit["curls_cmp"][s]["四指共用"]["逐指带符号间隙_mm"]
-        card.append({"判据量": f"{s}五指 ↔ 头部蒙皮（**逐指解**，带符号）",
+        four = {f: fin[f] for f in FOUR_FINGERS}
+        card.append({"判据量": f"{s}四指 ↔ 头部蒙皮（手型 = {args.hand_shape}，成组必并列）",
                      "判据形态": "点集↔面（沿顶点法向）",
-                     "产物侧读数": " · ".join(f"{f} {fin[f]:+.1f}" for f in FINGERS) + " mm",
-                     "容差档": f"不判贴合（球面↔平面的固有间隙由读数说）· 陷入 ≤ {PANIC_TOL_MM} mm"
+                     "产物侧读数": " · ".join(f"{f} {four[f]:+.1f}" for f in FOUR_FINGERS) + " mm",
+                     "容差档": f"不判贴合（平掌↔弧面的固有间隙由读数说）· 陷入 ≤ {PANIC_TOL_MM} mm"
                                f"（§8.2 的对称用法）",
-                     "状态": "✅" if all(v >= -PANIC_TOL_MM for v in fin.values()) else "❌ 陷入超容差"})
+                     "状态": "✅" if all(v >= -PANIC_TOL_MM for v in four.values()) else "❌ 陷入超容差"})
+        card.append({"判据量": f"{s}拇指 ↔ 头部蒙皮（**单列读数，不作判据**）",
+                     "判据形态": "点集↔面（带符号）",
+                     "产物侧读数": f"{fin['Thumb']:+.1f} mm"
+                                   + (f"（已摆到头外：{hit['per_side'][s]['solve']['thumb_solve']}）"
+                                      if hit["per_side"][s]["solve"].get("thumb_solve") else ""),
+                     "容差档": "**不判**（刚性平掌贴弧面 ⇒ 鱼际必然咬入；要修得给拇指加外展自由度——已登记未闭合）",
+                     "状态": "读数"})
         card.append({"判据量": f"{s}五指 ↔ 头部蒙皮（**四指共用一个系数**，对照解）",
                      "判据形态": "点集↔面（沿顶点法向）",
                      "产物侧读数": " · ".join(f"{f} {shared[f]:+.1f}" for f in FINGERS) + " mm",
