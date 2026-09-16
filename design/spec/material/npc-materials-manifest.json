@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "draft_root": "design/spec/material/drafts",
-  "expected_material_count": 16,
-  "expected_patient_count": 13,
+  "expected_material_count": 20,
+  "expected_patient_count": 17,
   "materials": [
     {
       "name": "顾维扬",
@@ -107,6 +107,38 @@
       "status": "validated",
       "patient_pool": true,
       "target_disease": "BN"
+    },
+    {
+      "name": "马会宁",
+      "json_path": "design/spec/material/drafts/马会宁.gen.json",
+      "narrative_path": "design/spec/material/drafts/马会宁-叙事视图.md",
+      "status": "validated",
+      "patient_pool": true,
+      "target_disease": "GAD"
+    },
+    {
+      "name": "郭月芹",
+      "json_path": "design/spec/material/drafts/郭月芹.gen.json",
+      "narrative_path": "design/spec/material/drafts/郭月芹-叙事视图.md",
+      "status": "validated",
+      "patient_pool": true,
+      "target_disease": "GAD"
+    },
+    {
+      "name": "罗惠琴",
+      "json_path": "design/spec/material/drafts/罗惠琴.gen.json",
+      "narrative_path": "design/spec/material/drafts/罗惠琴-叙事视图.md",
+      "status": "validated",
+      "patient_pool": true,
+      "target_disease": "PDD"
+    },
+    {
+      "name": "方海潮",
+      "json_path": "design/spec/material/drafts/方海潮.gen.json",
+      "narrative_path": "design/spec/material/drafts/方海潮-叙事视图.md",
+      "status": "validated",
+      "patient_pool": true,
+      "target_disease": "BED"
     },
     {
       "name": "刘建军",
