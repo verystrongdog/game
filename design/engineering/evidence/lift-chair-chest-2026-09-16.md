@@ -21,7 +21,7 @@
 | 字段 | 值 |
 |---|---|
 | base SHA | `c38aeb6`（#180 建 issue 后那次文档提交；开工时工作树干净、`validate_issues --from-github` **0 fail**） |
-| head SHA | 本条**提交组**：`89ddf03`（宿主 9）+ 本条证据与文档回填那次提交 |
+| head SHA | 本条**提交组**（5 条，按主题）：`89ddf03`（宿主 9）· `b58aed2`（证据 + 三处回填）· `ea4e058`（证据补回滚演练与可复现性）· `e2e85fa`（**第 1 轮返工**：握式二 `--grip palm`）· `06295ac`（返工的文档与证据） |
 | 阶段 | [#180](https://github.com/verystrongdog/game/issues/180)（`Experiment` · `state:in-progress`，2026-09-16 开工） |
 | 执行者 | DSH agent（本机 WSL → Windows 侧 Blender） |
 | 工具版本 | Blender **5.1.2**（`hash ec6e62d40fa9`，built 2026-05-19 01:37:34）· Windows 11 · `gh` 2.100.0 |
@@ -53,10 +53,11 @@
 
 | 命令 | 退出码 |
 |---|---|
-| 宿主 9 `--task liftchest --bend 65`（**权威运行**） | **0**（`problems: []`） |
+| 宿主 9 `--task liftchest --bend 65`（**权威运行** · 掌面朝下握式） | **0**（`problems: []`） |
 | 同上 `--chest-grip-z 1.10 --action LiftChairToChestLow` | **0**（`problems: []`） |
 | 同上 `--chest-grip-z 1.30 --action LiftChairToChestHigh` | **0**（`problems: []`） |
-| `--scan-lift`（9 行解空间） | **0** |
+| `--scan-lift`（9 行解空间，弯腰角 × 胸前握点高度） | **0**（9 行**逐行可行**） |
+| 同上 **`--grip side`**（第一轮的侧面端掐棱，对照解） | **0**（`problems: []`）——返工前的三解读数见 §4.2 尾注 |
 | 活体窗口启动（`--background` 自检跑一次 + GUI 起一次） | **0**（三实例可见骨 52 / 越界 0；椅子轨迹自检见 §四.7） |
 | `python3 code/tools/validate_cross_refs.py` | **0**（0 死链 / 0 段引用警告） |
 | `python3 code/tools/validate_trash_isolation.py` | **0** |
@@ -247,6 +248,9 @@ git revert --no-edit <docs>    # 证据 + 口径/规格/slice 回填
 ```bash
 git worktree add --detach .scratch/rollback-drill-180 HEAD
 cd .scratch/rollback-drill-180
+git revert --no-edit 06295ac   # 返工的文档与证据
+git revert --no-edit e2e85fa   # 第 1 轮返工：握式二 --grip palm
+git revert --no-edit ea4e058   # 证据补回滚演练与可复现性
 git revert --no-edit b58aed2   # 证据 + 三处回填
 git revert --no-edit 89ddf03   # 宿主 9（+ 可复用件 + CLI）
 git diff c38aeb6 HEAD | wc -l  # ⇒ 0
@@ -254,7 +258,7 @@ git diff c38aeb6 HEAD | wc -l  # ⇒ 0
 
 | 核对项 | 实测 |
 |---|---|
-| 回落点 | ✅ **`git diff c38aeb6 HEAD` = 0 行**（回滚态与 base **逐字节相同**；`--stat` 为空） |
+| 回落点 | ✅ **`git diff c38aeb6 HEAD` = 0 行**（回滚态与 base **逐字节相同**；`--stat` 为空）——**返工轮后再演一遍**仍是 0 行 |
 | `validate_cross_refs.py`（回滚态） | ✅ **2124 refs / 2123 passed / 0 dead / 0 section warnings**——与**同一支 worktree 直接检出 base `c38aeb6`** 的空跑对照**逐值相同**（2124 / 2123 / 0） |
 | `validate_trash_isolation.py`（回滚态） | ✅ 全部通过 |
 | `validate_params.py`（回滚态） | ✅ **56 checks / 49 passed / 0 failed / 7 warnings**（与改前逐值相同） |
