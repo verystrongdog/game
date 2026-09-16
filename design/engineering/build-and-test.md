@@ -22,7 +22,7 @@
 | NuGet 源 | nuget.org | [`NuGet.config`](../../NuGet.config) | 此前包路径被烘焙进 `obj/*.nuget.g.props` 指向开发机（`/home/dog/game/.nuget-pkgs`），**干净检出无法复现**——本文件修掉该问题 |
 | NuGet 依赖锁定 | 三份 `code/src/<工程>/packages.lock.json` + `RestoreLockedMode` | 三个 `.csproj` | 锁的是**包图**（含传递依赖），不是"源"。漂移即 `NU1004` 失败；做法与实测见 §1.2。**自 2026-09-13（#129）** |
 | Python | **3.10.12** | CI 的 `setup-python` | 校验器与 sim 脚本 |
-| 校验器依赖 | `PyYAML==6.0.3` · `numpy==2.2.6` | [`code/tools/requirements.txt`](../../code/tools/requirements.txt) | 17 个校验器里**只有两个**需要第三方库：`validate_disease.py`（YAML frontmatter）与 `validate_ceiling_generator.py`（numpy——它要真跑一次生成器，#134） |
+| 校验器依赖 | `PyYAML==6.0.3` · `numpy==2.2.6` | [`code/tools/requirements.txt`](../../code/tools/requirements.txt) | 18 个生产校验器里**只有两个**需要第三方库：`validate_disease.py`（YAML frontmatter）与 `validate_ceiling_generator.py`（numpy——它要真跑一次生成器，#134）；NPC fixture 套件仅用标准库 |
 | 数值实验依赖 | `numpy==2.2.6` · `scipy==1.15.3` · `numba==0.67.0` | [`code/sim/requirements.txt`](../../code/sim/requirements.txt) | 15 个 sim 脚本里只有 3 个需要 |
 | Unity Editor | **6000.5.2f1**（revision `eb73d3b415a1`） | [`code/unity/ProjectSettings/ProjectVersion.txt`](../../code/unity/ProjectSettings/ProjectVersion.txt) | 版本与 revision 自 #136 起随工程入库（此前该文件只有 `m_EditorVersion` 一行）；包版本另有 `code/unity/Packages/packages-lock.json` 可复现。Unity 侧的**未验证项**见 §五 |
 
@@ -125,7 +125,16 @@ python3 code/tools/validate_runtime_fixtures.py  # runtime 数据结构契约 + 
 python3 code/tools/validate_unity_assets.py      # Unity 资产身份：.meta 成对性 / GUID 唯一性 / guid 引用可解析 / FBX Rig（无 Editor 依赖）
 python3 code/tools/validate_ceiling_generator.py # 生成链解耦：只写 MD 不得改写数据契约（#134，需 numpy）
 python3 code/tools/validate_hansen_intake.py     # hansen2024 只读结构校验（#133，纯标准库）
+python3 code/tools/validate_grip_cards.py        # 手部基准卡片：名录 ↔ 机器源 ↔ 证据回显卡
+python3 code/tools/xbot_contact_phase.py         # 接触相位：术语 ↔ M2 取点 ↔ soleMargin ↔ 逐帧证据
+python3 code/tools/validate_npc_materials.py      # NPC manifest ↔ 16 组素材 ↔ 资格回放 ↔ 台账
 python3 code/tools/build_runtime_data_fixtures.py --check   # fixture 索引与磁盘一致
+```
+
+NPC 素材生产校验器另有一个独立 mutation fixture 套件；它不计入上述 18 个生产校验器：
+
+```bash
+python3 code/tools/test_validate_npc_materials.py  # 真实基线 + 缺失/漂移/假阳性反例（#174）
 ```
 
 **issue 契约**（新建或修改 issue 后跑；需要 `gh` 已认证或 `GH_TOKEN`）：
@@ -153,7 +162,7 @@ python3 code/tools/check_clean_checkout.py
 
 编排器：`python3 code/tools/run_all_checks.py`（⚠️ **有副作用**——写 `.checks-state.json`，CI 里不要用）
 
-> 2026-09-12 修：编排器此前把校验器目录写成 `ROOT / "tools"`（Phase 3 之后该目录已不存在），于是 `get_active_validators()` 返回空列表——**跑了 0 个校验器却退出码 0**，是静默全绿。现已改为 `code/tools/`，注册表与 CI 的 14 个循环逐项对齐，并加「找不到校验器即退出 2」的断言。判据：编排器读数必须与 §三 的 `docs-integrity` job 一致。
+> 2026-09-12 修：编排器此前把校验器目录写成 `ROOT / "tools"`（Phase 3 之后该目录已不存在），于是 `get_active_validators()` 返回空列表——**跑了 0 个校验器却退出码 0**，是静默全绿。现已改为 `code/tools/`，注册表与 CI 的 18 个生产校验器逐项对齐，并加「找不到校验器即退出 2」的断言；#174 的 NPC fixture 套件也由同一注册表编排，但在 CI 中保持独立步骤。判据：编排器读数必须与 §三 的 `docs-integrity` job 一致。
 
 ### 2.2 引擎（改代码后必跑）
 
@@ -241,7 +250,7 @@ MD 参考表的默认落点是被 gitignore 的 `artifacts/链路调制上限参
 
 | job | 覆盖 | 本机可复现 |
 |---|---|---|
-| `docs-integrity` | 17 个校验器（与 §2.1 同一循环）+ fixture 索引契约 | ✅ |
+| `docs-integrity` | 18 个生产校验器（与 §2.1 同一循环）+ 1 个 NPC fixture 套件 + fixture 索引契约 | ✅ |
 | `engine` | SDK 版本核对 → restore → Release build → Release test → **跨语言 fixture 判定比对** → trx artifact | ✅ |
 | `issues-snapshot` | 规则 fixture（`test_validate_issues.py`，不联网）+ 开放 issue 的契约校验（`validate_issues.py --from-github`，需 `issues: read`） | ✅ |
 | `unity` | **显式报告 `NOT_AVAILABLE`** | ❌ 需 Editor |
@@ -266,7 +275,7 @@ MD 参考表的默认落点是被 gitignore 的 `artifacts/链路调制上限参
 
 | 判据 | 要求 |
 |---|---|
-| 校验器 | 17/17 退出码 0 |
+| 生产校验器与 NPC fixture | 18/18 生产校验器退出码 0；`test_validate_npc_materials.py` 独立退出码 0 |
 | `validate_cross_refs` | **0 死链 / 0 段引用警告** |
 | 引擎测试 | **416 passed / 0 failed**（唯一权威；其余文档引用本节） |
 | 跨语言 fixture 判定 | `compare_fixture_verdicts.py` 逐条比对 Python 与 C# 的接受/拒绝，**差异为空**（53 条） |

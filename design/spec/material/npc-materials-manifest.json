@@ -1,0 +1,168 @@
+{
+  "schema_version": 1,
+  "draft_root": "design/spec/material/drafts",
+  "expected_material_count": 20,
+  "expected_patient_count": 17,
+  "materials": [
+    {
+      "name": "顾维扬",
+      "json_path": "design/spec/material/drafts/顾维扬.gen.json",
+      "narrative_path": "design/spec/material/drafts/顾维扬-叙事视图.md",
+      "status": "needs-migration",
+      "patient_pool": true,
+      "target_disease": "MDD"
+    },
+    {
+      "name": "孙嘉禾",
+      "json_path": "design/spec/material/drafts/孙嘉禾.gen.json",
+      "narrative_path": "design/spec/material/drafts/孙嘉禾-叙事视图.md",
+      "status": "needs-migration",
+      "patient_pool": true,
+      "target_disease": "BD-II"
+    },
+    {
+      "name": "陈国强",
+      "json_path": "design/spec/material/drafts/陈国强.gen.json",
+      "narrative_path": "design/spec/material/drafts/陈国强-叙事视图.md",
+      "status": "needs-migration",
+      "patient_pool": true,
+      "target_disease": "SUD"
+    },
+    {
+      "name": "林小满",
+      "json_path": "design/spec/material/drafts/林小满.gen.json",
+      "narrative_path": "design/spec/material/drafts/林小满-叙事视图.md",
+      "status": "needs-migration",
+      "patient_pool": true,
+      "target_disease": "MDD"
+    },
+    {
+      "name": "高远",
+      "json_path": "design/spec/material/drafts/高远.gen.json",
+      "narrative_path": "design/spec/material/drafts/高远-叙事视图.md",
+      "status": "needs-migration",
+      "patient_pool": true,
+      "target_disease": "BD-I"
+    },
+    {
+      "name": "王淑芬",
+      "json_path": "design/spec/material/drafts/王淑芬.gen.json",
+      "narrative_path": "design/spec/material/drafts/王淑芬-叙事视图.md",
+      "status": "needs-migration",
+      "patient_pool": true,
+      "target_disease": "环性"
+    },
+    {
+      "name": "周卫国",
+      "json_path": "design/spec/material/drafts/周卫国.gen.json",
+      "narrative_path": "design/spec/material/drafts/周卫国-叙事视图.md",
+      "status": "validated",
+      "patient_pool": true,
+      "target_disease": "PTSD"
+    },
+    {
+      "name": "杨秀兰",
+      "json_path": "design/spec/material/drafts/杨秀兰.gen.json",
+      "narrative_path": "design/spec/material/drafts/杨秀兰-叙事视图.md",
+      "status": "validated",
+      "patient_pool": true,
+      "target_disease": "躯体症状"
+    },
+    {
+      "name": "苏晴",
+      "json_path": "design/spec/material/drafts/苏晴.gen.json",
+      "narrative_path": "design/spec/material/drafts/苏晴-叙事视图.md",
+      "status": "validated",
+      "patient_pool": true,
+      "target_disease": "DID"
+    },
+    {
+      "name": "吴桐",
+      "json_path": "design/spec/material/drafts/吴桐.gen.json",
+      "narrative_path": "design/spec/material/drafts/吴桐-叙事视图.md",
+      "status": "validated",
+      "patient_pool": true,
+      "target_disease": "AN"
+    },
+    {
+      "name": "唐念安",
+      "json_path": "design/spec/material/drafts/唐念安.gen.json",
+      "narrative_path": "design/spec/material/drafts/唐念安-叙事视图.md",
+      "status": "validated",
+      "patient_pool": true,
+      "target_disease": "OCD"
+    },
+    {
+      "name": "许一鸣",
+      "json_path": "design/spec/material/drafts/许一鸣.gen.json",
+      "narrative_path": "design/spec/material/drafts/许一鸣-叙事视图.md",
+      "status": "validated",
+      "patient_pool": true,
+      "target_disease": "社交焦虑"
+    },
+    {
+      "name": "贺春兰",
+      "json_path": "design/spec/material/drafts/贺春兰.gen.json",
+      "narrative_path": "design/spec/material/drafts/贺春兰-叙事视图.md",
+      "status": "validated",
+      "patient_pool": true,
+      "target_disease": "BN"
+    },
+    {
+      "name": "马会宁",
+      "json_path": "design/spec/material/drafts/马会宁.gen.json",
+      "narrative_path": "design/spec/material/drafts/马会宁-叙事视图.md",
+      "status": "validated",
+      "patient_pool": true,
+      "target_disease": "GAD"
+    },
+    {
+      "name": "郭月芹",
+      "json_path": "design/spec/material/drafts/郭月芹.gen.json",
+      "narrative_path": "design/spec/material/drafts/郭月芹-叙事视图.md",
+      "status": "validated",
+      "patient_pool": true,
+      "target_disease": "GAD"
+    },
+    {
+      "name": "罗惠琴",
+      "json_path": "design/spec/material/drafts/罗惠琴.gen.json",
+      "narrative_path": "design/spec/material/drafts/罗惠琴-叙事视图.md",
+      "status": "validated",
+      "patient_pool": true,
+      "target_disease": "PDD"
+    },
+    {
+      "name": "方海潮",
+      "json_path": "design/spec/material/drafts/方海潮.gen.json",
+      "narrative_path": "design/spec/material/drafts/方海潮-叙事视图.md",
+      "status": "validated",
+      "patient_pool": true,
+      "target_disease": "BED"
+    },
+    {
+      "name": "刘建军",
+      "json_path": "design/spec/material/drafts/刘建军.gen.json",
+      "narrative_path": "design/spec/material/drafts/刘建军-叙事视图.md",
+      "status": "needs-review",
+      "patient_pool": false,
+      "target_disease": null
+    },
+    {
+      "name": "周桂芳",
+      "json_path": "design/spec/material/drafts/周桂芳.gen.json",
+      "narrative_path": "design/spec/material/drafts/周桂芳-叙事视图.md",
+      "status": "demonstration",
+      "patient_pool": false,
+      "target_disease": null
+    },
+    {
+      "name": "郑晓敏",
+      "json_path": "design/spec/material/drafts/郑晓敏.gen.json",
+      "narrative_path": "design/spec/material/drafts/郑晓敏-叙事视图.md",
+      "status": "non-patient",
+      "patient_pool": false,
+      "target_disease": null
+    }
+  ]
+}

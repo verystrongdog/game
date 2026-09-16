@@ -68,7 +68,7 @@
 | `python3 code/tools/validate_cross_refs.py` | **0**（0 死链 / 0 段引用警告） |
 | `python3 code/tools/validate_trash_isolation.py` | **0** |
 | `python3 code/tools/validate_params.py` | **0** |
-| `python3 code/tools/run_all_checks.py`（编排器） | **0**（**17 validators: 17 passed / 0 failed / 0 errors**） |
+| `python3 code/tools/run_all_checks.py`（编排器） | **0**（本件改动所在树：**17 validators: 17 passed / 0 failed / 0 errors**；⚠️ 推送前并入 `origin/main` 上 #174 的 NPC 校验器后，同一命令为 **18 production validators + 1 fixture suites: 19 passed / 0 failed**） |
 | `python3 code/tools/validate_issues.py --from-github` | **1**（2 条 FAIL **都在 #179**，与本次改动无关；见 §9.1；#171 自身全过） |
 | `dotnet test code/src/YouAreNotTheFish.sln` | **未跑** —— 本次**未改 `code/src/`**（先例：[#165]/[#168]/[#170] 同记法） |
 
