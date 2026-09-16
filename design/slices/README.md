@@ -4,7 +4,7 @@
 
 ## 目录
 
-- [CP-01 — 住院楼 1F](CP-01-ward-1f/slice.md) — `CANDIDATE`（未经 owner 准入）
+- [CP-01 — 住院楼 1F](CP-01-ward-1f/slice.md) — **`AUTHORIZED_PLAYABLE: CP-01`**（owner 2026-09-16 准入；同日落定 [#181](https://github.com/verystrongdog/game/issues/181) 选项 A「叙事驱动的心理 CRPG」⇒ 合同按叙事优先重写；试玩证据见 `playtest.md`，现全 `UNTESTED`）
 
 ## 约定
 
@@ -18,5 +18,5 @@
 - 四轴状态定义见 [WORKFLOW.md §二](../../WORKFLOW.md)
 
 ---
-*创建: 2026-09-12 | 更新: 2026-09-12*
+*创建: 2026-09-12 | 更新: 2026-09-16（CP-01 由 `CANDIDATE` 改为 owner 已准入 · #181）*
 *关联: [PLAYABLE.md](../../PLAYABLE.md), [WORKFLOW.md](../../WORKFLOW.md)*
