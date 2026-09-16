@@ -18,8 +18,8 @@
 
 | 字段 | 值 |
 |---|---|
-| base SHA | 本条提交组之前的那次提交（`git log` 里 #168 收口之后的 HEAD） |
-| head SHA | 本条**提交组**：`--task panic` 宿主 + `lab_multi_instance.py` + 证据 + 口径/slice 回填（见 §七） |
+| base SHA | `d632baa`（#168 收口后的 HEAD） |
+| head SHA | 本条**提交组**：`8dcc868`（宿主 6 + lab 装配器）· `6a8eea4`（证据 + 口径/切片回填）· 本行所在提交（回滚演练记录 + head SHA） |
 | 阶段 | [#169](https://github.com/verystrongdog/game/issues/169)（Experiment） |
 | 执行者 | DSH agent（本机 WSL → Windows 侧 Blender） |
 | 工具版本 | Blender **5.1.2**（`hash ec6e62d40fa9`）· Windows 11 家庭中文版 |
@@ -177,7 +177,7 @@
 | **连带修改**（逐条登记） | ① [阶段证据说明](README.md) 的「已有证据」表**加一行**；② `author_xbot_chair_grab.py` 的**模块 docstring**（"三个宿主"→ 六个宿主）与 `main()` docstring——**该表已过期两轮**（#166 加 doorpush 时就没跟上），本件顺手更正；③ `visible_bone_outliers()` 加 `meshes=` 可选参数（多实例 lab 必需，见 §4.6 坑 ①）——**旧调用点行为不变**（默认仍是按名字取） |
 | 计划外变化 | 无 |
 | 工作树 | 提交后干净（`git status --short` 空） |
-| **回滚演练** | 见 §九（临时 worktree + 逐条 `git revert` + 全门禁重跑） |
+| **回滚演练** | ✅ **已演练**：临时 worktree 里逐条 `git revert` 两条提交后 **`git diff d632baa HEAD` 为空**（回滚态与 base **逐字节相同**）、宿主表回到既有五个（`panic` 命中 0 处、lab 文件已删）、四条门禁读数逐值回到改前 ⇒ **回滚恢复上一状态成立**。实做记录见 §九 |
 | 预期不变项 | `data/action_set.json` **17 词条不增**（本件**不新增词条**）· `data/hand_grip_cards.json` 未触碰 · `code/unity/**` **未触碰**（不接 Unity 侧 lab）· `design/rules/回合战斗流程.md` §10.13 未触碰 · `PLAYABLE.md` 未触碰（仍 `NO_AUTHORIZED_PLAYABLE`）· 母版 `.blend` 与源 `X Bot.fbx` **字节未触碰**（全部写回都落在 `.scratch/panic/` 副本）· 既有四个宿主行为不变 |
 
 **测试报告定位**：`.scratch/panic/panic_report_{6,7}.json`（两遍读数）· `panic_scan_body.json` · `panic_report_head.json`（抱头对照解）· `lab_report_{single,three}.json` · `stills/`——过程物、被 `.gitignore` 排除、磁盘保留。
@@ -196,7 +196,27 @@
 
 ## 九、回滚演练实做记录
 
-（本节在提交后回填——形态与 [#166](https://github.com/verystrongdog/game/issues/166) §十三 / [#168](https://github.com/verystrongdog/game/issues/168) §十 的先例一致。）
+形态与 [#166](https://github.com/verystrongdog/game/issues/166) §十三 / [#168](https://github.com/verystrongdog/game/issues/168) §十 的先例一致：**临时 worktree + 逐条 `git revert` + 全门禁重跑**（不做 `reset --hard`）。
+
+```bash
+git worktree add --detach .scratch/rollback-drill-169 HEAD
+cd .scratch/rollback-drill-169
+git revert --no-edit 6a8eea4      # 证据 + 口径/切片回填
+git revert --no-edit 8dcc868      # 宿主 6 + lab 装配器
+```
+
+| 核对项 | 预测（issue 的「回滚」节） | **实测** |
+|---|---|---|
+| 回落点 | 宿主与 lab 可整体删除、口径与切片可回退；无数据迁移、无资产改动 | ✅ **`git diff d632baa HEAD` 为空**（回滚态与 base **逐字节相同**） |
+| **宿主表逐字核对** | 回到既有五个（`chair`/`card1`/`door`/`restate`/`doorpush`） | ✅ `choices=("chair", "card1", "door", "restate", "doorpush")` · 全文件 `panic` 命中 **0** 处 · `lab_multi_instance.py` **已删除** |
+| `validate_cross_refs.py` | 0 死链 | ✅ **2020 refs / 2019 passed / 0 dead / 0 section warnings**（= 改前那一组数） |
+| `validate_trash_isolation.py` | 全过 | ✅ 全部通过 |
+| `validate_params.py` | 0 失败 | ✅ 56 checks / 49 passed / 0 failed / 7 warnings |
+| `run_all_checks.py` | 16/16 | ✅ 16 validators / 16 passed / 0 failed |
+| 母版与数据 | 零改动 | ✅ 母版 `.blend` 与源 `X Bot.fbx` **字节未触碰**（所有写回都在 `.scratch/panic/` 副本）；`data/` 零改动 |
+| 工作树 | 干净 | ✅ `git status --short` 空；演练后 `git worktree remove --force`（`git worktree list` 只剩主树） |
+
+⇒ **回滚恢复上一状态成立**（以最强形式：**逐字节**）。
 
 ## 十、来源
 
