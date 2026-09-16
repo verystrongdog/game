@@ -2,7 +2,7 @@
   "_description": "术语注册表 — 术语定义 / 旧模型 / 偏离原因集中管理，避免在撰写设计内容时被术语的现实世界默认含义劫持（例：项目内的「态度」不是社会心理学的 attitude）。status 字段区分活跃与已废弃术语，是本表唯一权威状态。",
   "_maintenance": "入库触发: (a) 新核心术语且项目内有自定义含义 (b) definition/old_model/deviation_reason 被实质修改 (c) 两个术语边界被重新划分。numerical_locations 在入库时填充、定义变更时遍历复查。覆盖范围: 设计文档表格列头与参数名中 ≤4 ASCII 字符短标识符。 修订流程（改定义 / 废弃 / 候补三条短规则）见 design/conventions/README.md §五。 `enforcement` 字段 = 逐术语执法策略（`扫描` / `只登记` / `关闭`；**缺省即 `扫描`**，新增 deprecated 条目不得靠不写字段绕过门禁）：三档定义与判定面见 design/conventions/README.md §五 第 2 条，判定实现见 code/tools/validate_trash_isolation.py（#159，2026-09-15）。",
   "_created": "2026-08-03",
-  "_updated": "2026-09-15",
+  "_updated": "2026-09-16",
   "_batch": "grilling-113-disease-eligibility-2026-09-03",
   "_pending_candidates": "见 data/term_registry_candidates.md — 候补候选清单：P3级/单文档/待裁决术语登记处。Grilling #111 登记：降级协议（否决态）/单一事实源（推迟态）/语义层兜底（推迟）/#70 路线图模块化重构（推迟）。Grilling #26-27: CSTC/EDR/CTC/三体神经模型/function_profile/cstc_loop/cstc_role/signal_type/gameplay_domain/STN/脑干广播/皮层-皮层连接/功能剖面/基底节门控 (14条已入库).",
   "terms": {
@@ -4476,13 +4476,41 @@
       ],
       "added": "2026-09-15",
       "updated": "2026-09-15"
+    },
+    "呈现探针": {
+      "definition": "本仓对**不接运行时、不新增词条、只交读数与目视材料**的那一类动作件的定性。三条硬边界（已两次实做）：① **不新增动作词条**（受控 17 条）② **不接 Unity 侧 lab**（完成定义 = Blender 侧能连着播 + 导出侧机械门禁 E0–E6 全绿）③ `PLAYABLE.md` 保持 `NO_AUTHORIZED_PLAYABLE`（切片未准入 ⇒ 不得新增正式玩家行为）。产物常**不入库**（#166 的 `PushDoorEdgeFull.fbx` 672284 字节明写不入库）。",
+      "source": "design/presentation/动作描述口径.md §13.8 / §15.7；design/slices/CP-01-ward-1f/slice.md（#164 / #166 两行的定性）",
+      "old_model": "把「验证性动作」当成要上线的功能——于是它会被要求进词表、接 lab、进 `PLAYABLE`，而这三件都是**未准入门槛**，会把一件读数工作拖成一次准入流程",
+      "deviation_reason": "本仓的可玩准入是 `PLAYABLE.md` 的显式裁定，未准入前「不得新增正式玩家行为」是规约级约束。本词把**边界**（不接什么）与**产出**（读数 + 目视材料）一次说清，免得每件重新谈一次范围——实测两次（#164 卡 1 掐棱 · #166 门边「推到底」）都靠它把范围钉住",
+      "status": "active",
+      "numerical_locations": [
+        "design/presentation/动作描述口径.md §13.8",
+        "design/presentation/动作描述口径.md §15.7",
+        "design/slices/CP-01-ward-1f/slice.md"
+      ],
+      "added": "2026-09-16",
+      "updated": "2026-09-16"
+    },
+    "标记骨": {
+      "definition": "母版里 **13 根零蒙皮权重的叶骨**——`HeadTop_End` · `LeftToe_End`/`RightToe_End` · 手指 `…4` ×10（**推导**得到：无子骨 **且** 零顶点权重 **且** 不在控制骨集合）。它们是**骨尖标记、不是关节**：转它们**皮肤一动不动**（蒙皮位移 **0.00**）。",
+      "source": "design/presentation/Blender动作制作管线.md §2.1.4 注 1（🔧 2026-09-16 由动作描述口径 §15.4 反向补登记）",
+      "old_model": "把骨表里的每一根骨都当成「可摆的部位」——于是「头顶 / 脚尖」被读成 `HeadTop_End` / `Toe_End`，判据**必然平凡全绿**而画面不动",
+      "deviation_reason": "同一批骨在导出侧**不能删**（V2 与导出 E2/E3 要恰好 **65** 根变形骨），在观感侧又**必须藏**（#166 实测：`HeadTop_End` 骨尖高出皮肤 **+241.85 mm** · `Toe_End` ×2 **+93.50 mm** · 手指 `…4` ×10 **+15.70 ~ +31.66 mm**，正是 owner 三次指出的「骨头飘在模型外面」）⇒ 只能靠**命名与判据面**隔离：需求里不许指它们",
+      "status": "active",
+      "numerical_locations": [
+        "design/presentation/Blender动作制作管线.md §2.1.4 注 1",
+        "design/presentation/Blender动作制作管线.md §2.1.5",
+        "design/presentation/动作描述口径.md §15.4"
+      ],
+      "added": "2026-09-16",
+      "updated": "2026-09-16"
     }
   },
   "_metadata": {
-    "last_updated": "2026-09-15",
-    "last_batch": "2026-09-15 第七批：**事实句刷新 4 条**——`接触相位`（自己那句「本仓未建」）/ `重心` / `脚滑` / `支撑多边形`（三条引用者的「前置 = 接触相位识别（未建）」）——#165 落地后那句话不再成立，触发更新第 2 条；已刷 updated + 复查 numerical_locations（`接触相位` 补 3 处：§2.1 / 件 / 证据；另 3 条复查处数不变）+ 全项目 grep。**术语条数与计数不变**：total 331 / active 308 / deprecated 23",
-    "total_terms": 331,
-    "active_terms": 308,
+    "last_updated": "2026-09-16",
+    "last_batch": "2026-09-16 第八批：**新增 2 条**（`呈现探针` · `标记骨`）——两者都**已经在承载硬约束**却一直不在表内：前者是 #164/#166 两件共用的范围定性（不新增词条 / 不接 Unity lab / `PLAYABLE` 不动），后者是会让判据**平凡全绿**的陷阱（13 根零权重叶骨，需求里不许指它们）。口径 §十五 立（身体分区与四系）时一并入库；候补清单另 11 条未裁（见口径 §十一 U17）。**计数**：total 331 → **333** / active 308 → **310** / deprecated 23 不变",
+    "total_terms": 333,
+    "active_terms": 310,
     "deprecated_terms": 23
   }
 }
