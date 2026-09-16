@@ -248,9 +248,30 @@ python3 code/tools/xbot_balance.py --verify          # B1–B5 5/5
 | lab | 装配器 + 1 实例真跑 | **批槽位预设（两件同屏）+ 逐实例定格** |
 | slice 四轴表「平衡与支撑」行 | Implementation `NONE` | **`PARTIAL`** |
 
-### 十一.2 回滚演练
+### 十一.2 回滚演练（**实做**，不是承诺）
 
-见本文件末尾「回滚演练结论」表（提交组落库后补录）。
+环境：临时 worktree `.scratch/rollback170`（被忽略），**起点 = 提交组顶端** `6af05cd`。
+
+```bash
+git worktree add --detach .scratch/rollback170 6af05cd
+cd .scratch/rollback170
+git revert --no-edit 6af05cd    # docs：证据 + 口径 §15.7.2 + 切片回填 + 证据索引（删 1 文件）
+git revert --no-edit 3d17779    # fix：lab 批预设 + 逐实例定格（1 file changed, 6 insertions(+), 81 deletions(-)）
+git revert --no-edit b11940d    # feat：宿主 7（1 file changed, 2 insertions(+), 704 deletions(-)）
+git revert --no-edit 3d497ce    # feat：凸包件（delete mode code/tools/xbot_balance.py）
+```
+
+| 判据 | 结果 |
+|---|---|
+| 逐条 `revert` 是否真的动了（**不是空操作**） | ✅ 四条各自有实际 diff（见上，含 704 行删除与两个文件删除） |
+| 回滚态 vs base `771cf0d` | **0 个文件有差异**（`git diff 771cf0d --name-only` 为空 ⇒ 逐字节相同）；新增件 `code/tools/xbot_balance.py` 与证据文件**确实消失** |
+| 回滚态门禁重跑 | `validate_cross_refs` **2035 passed / 0 dead / 0 段引用警告**（引用数 2047 → 2036，即回到 base 计数）· `validate_trash_isolation` **全部通过** · `validate_params` **49 passed / 0 failed** · `run_all_checks` **16 validators / 16 passed**（17 → 16 ⇒ 新校验器随提交一起回退） |
+| 工作树 | 回滚态 `git status --porcelain` **空** |
+
+⚠️ **演练本身的一条教训（第一次做错了，如实记录）**：第一版把 worktree 起在 **base** 上再 revert 这四个提交，
+`git revert` 全部返回"nothing to commit, working tree clean"——因为**反向补丁要删的东西那时根本不在**，
+于是"与 base 逐字节相同"是**空操作**得来的（形式上是"零测试通过"，正是 [WORKFLOW.md §5.1](../../../WORKFLOW.md) 禁的那种绿）。
+⇒ **回滚演练的起点必须是提交组顶端**；判据里要同时核"revert 真的有 diff"。
 
 ## 十二、未闭合（诚实清单）
 
