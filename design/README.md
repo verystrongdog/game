@@ -188,6 +188,7 @@
 
 ### 呈现
 - [战斗界面布局](presentation/%E6%88%98%E6%96%97%E7%95%8C%E9%9D%A2%E5%B8%83%E5%B1%80.md) — 37项决策：整体布局/操作流/脑区面板/HUD/信息展示/过渡/键盘快捷键
+- [叙事界面布局](presentation/%E5%8F%99%E4%BA%8B%E7%95%8C%E9%9D%A2%E5%B8%83%E5%B1%80.md) — 左侧游戏世界 + 右侧叙事流/回应/笔记的布局与交互；含[浏览器交互原型](presentation/%E5%8F%99%E4%BA%8B%E7%95%8C%E9%9D%A2%E5%8E%9F%E5%9E%8B.html)
 - [3D可视化](presentation/visualization-3d) — 可视化规范/Blender管线/HTML原型（目录在规则/下）
 - [Unity 呈现沙盘工程](../code/unity/README.md) — 白盒回合沙盘/KiWalkerLab 真人动画演示（2026-09-06 grilling #122）
 - [Unity 沙盘动作集规格](presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md) — 动作受控词表/引用契约/来源矩阵/扩展协议（2026-09-07 grilling #123）

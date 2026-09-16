@@ -1,0 +1,779 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>子非鱼｜叙事界面原型</title>
+  <style>
+    /* 来源：design/presentation/叙事界面布局.md §二—§五。以下尺寸均为原型呈现常量，不是游戏规则参数。 */
+    :root {
+      color-scheme: dark;
+      --ink: #e8e2d2;
+      --muted: #9da49f;
+      --quiet: #69716d;
+      --moon: #c5ded6;
+      --moon-strong: #e3fff5;
+      --rust: #ba6c4b;
+      --rust-soft: #80513d;
+      --line: rgba(226, 237, 224, .13);
+      --paper: #111614;
+      --paper-2: #171c19;
+      --scene: #0d1516;
+      --panel-width: 39%;
+      font-family: "Noto Serif SC", "Songti SC", "Source Han Serif SC", Georgia, serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: #080b0b;
+      color: var(--ink);
+    }
+
+    button { font: inherit; }
+
+    .game-shell {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(390px, var(--panel-width));
+      width: 100vw;
+      height: 100dvh;
+      isolation: isolate;
+    }
+
+    .scene {
+      position: relative;
+      min-width: 0;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 68% 25%, rgba(165, 202, 192, .15), transparent 24%),
+        linear-gradient(148deg, #152325 0%, #091011 54%, #111614 100%);
+    }
+
+    .scene::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 8;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, rgba(0,0,0,.28), transparent 18%, transparent 72%, rgba(0,0,0,.34)),
+        radial-gradient(ellipse at center, transparent 42%, rgba(0,0,0,.62) 118%);
+      mix-blend-mode: multiply;
+    }
+
+    .scene::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 9;
+      opacity: .16;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+    }
+
+    .hallway {
+      position: absolute;
+      inset: 0;
+      perspective: 900px;
+      transition: filter 900ms ease;
+    }
+
+    .hallway.suspicious { filter: saturate(.7) contrast(1.12) hue-rotate(-8deg); }
+    .hallway.opened { filter: brightness(1.12) saturate(.92); }
+
+    .ceiling {
+      position: absolute;
+      inset: 0 0 52% 0;
+      clip-path: polygon(0 0, 100% 0, 72% 100%, 27% 100%);
+      background:
+        linear-gradient(90deg, transparent 49.8%, rgba(187, 204, 195, .11) 50%, transparent 50.2%),
+        repeating-linear-gradient(90deg, transparent 0 16%, rgba(188, 201, 193, .08) 16.2% 16.45%),
+        linear-gradient(#283537, #121b1c);
+    }
+
+    .floor {
+      position: absolute;
+      inset: 47% 0 0 0;
+      clip-path: polygon(27% 0, 72% 0, 100% 100%, 0 100%);
+      background:
+        linear-gradient(90deg, transparent 49.7%, rgba(206, 232, 220, .16) 50%, transparent 50.3%),
+        repeating-linear-gradient(98deg, transparent 0 13%, rgba(196, 220, 209, .07) 13.2% 13.45%),
+        linear-gradient(#182323, #0a0e0e 72%);
+    }
+
+    .left-wall, .right-wall {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, #172324, #273436 50%, #121a1b);
+    }
+
+    .left-wall {
+      left: 0;
+      width: 29%;
+      clip-path: polygon(0 0, 100% 48%, 100% 100%, 0 100%);
+    }
+
+    .right-wall {
+      right: 0;
+      width: 30%;
+      clip-path: polygon(0 48%, 100% 0, 100% 100%, 0 100%);
+      background: linear-gradient(90deg, #10191a, #253234);
+    }
+
+    .stripe {
+      position: absolute;
+      top: 56%;
+      left: 0;
+      width: 100%;
+      height: 5.5%;
+      background: #64736c;
+      border-top: 1px solid rgba(210, 228, 218, .25);
+      border-bottom: 1px solid rgba(0, 0, 0, .5);
+      opacity: .48;
+    }
+
+    .door {
+      position: absolute;
+      top: 23%;
+      width: 15%;
+      height: 44%;
+      background: linear-gradient(90deg, #111a1a, #2a3938 55%, #101717);
+      border: 1px solid rgba(193, 215, 205, .13);
+      box-shadow: inset 0 0 22px rgba(0,0,0,.65), 0 18px 30px rgba(0,0,0,.26);
+    }
+
+    .door.left { left: 7%; transform: skewY(17deg); }
+    .door.right { right: 7%; transform: skewY(-17deg); }
+    .door::after {
+      content: "";
+      position: absolute;
+      top: 48%;
+      right: 12%;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #9a8d69;
+      box-shadow: 0 0 8px rgba(225, 208, 145, .24);
+    }
+
+    .nurse-station {
+      position: absolute;
+      z-index: 3;
+      left: 35%;
+      top: 44%;
+      width: 30%;
+      height: 25%;
+      transform: perspective(600px) rotateX(2deg);
+      background: linear-gradient(#606d67 0 9%, #26322f 10% 72%, #111816 73%);
+      border: 1px solid rgba(204, 221, 210, .18);
+      box-shadow: 0 18px 38px rgba(0,0,0,.55);
+    }
+
+    .nurse-station::before {
+      content: "护士站  NURSE STATION";
+      position: absolute;
+      left: 10%;
+      top: 17%;
+      color: rgba(210, 224, 215, .48);
+      font: 500 clamp(7px, .75vw, 12px)/1 sans-serif;
+      letter-spacing: .15em;
+    }
+
+    .window {
+      position: absolute;
+      z-index: 2;
+      left: 38%;
+      top: 12%;
+      width: 24%;
+      height: 27%;
+      overflow: hidden;
+      background: linear-gradient(155deg, #b9d8d0 0%, #5d7d79 45%, #142425 100%);
+      border: 8px solid #182222;
+      box-shadow: 0 0 70px rgba(171, 220, 207, .18);
+    }
+
+    .window::before, .window::after {
+      content: "";
+      position: absolute;
+      background: rgba(15, 26, 27, .8);
+    }
+
+    .window::before { inset: 0 auto 0 49%; width: 6px; }
+    .window::after { inset: 48% 0 auto 0; height: 5px; }
+
+    .moon {
+      position: absolute;
+      z-index: 1;
+      top: 8%;
+      left: 52%;
+      width: 8vw;
+      max-width: 112px;
+      min-width: 62px;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: radial-gradient(circle at 38% 35%, #eefcf3, #b7d0ca 48%, #76918c 72%);
+      box-shadow: 0 0 35px rgba(201, 239, 228, .25), 0 0 100px rgba(170, 222, 209, .18);
+      opacity: .78;
+      transition: opacity 800ms ease, transform 800ms ease;
+    }
+
+    .moon.alert { opacity: 1; transform: scale(1.08); }
+
+    .moonbeam {
+      position: absolute;
+      z-index: 2;
+      top: 31%;
+      left: 51%;
+      width: 31%;
+      height: 67%;
+      opacity: .12;
+      transform: skewX(-16deg);
+      background: linear-gradient(115deg, rgba(205,243,231,.7), transparent 68%);
+      pointer-events: none;
+    }
+
+    .figure {
+      position: absolute;
+      z-index: 5;
+      left: 49%;
+      top: 31%;
+      width: 7%;
+      min-width: 44px;
+      height: 33%;
+      filter: drop-shadow(0 12px 12px rgba(0,0,0,.8));
+      transition: transform 700ms cubic-bezier(.2,.7,.2,1);
+    }
+
+    .figure.turned { transform: translateX(-9%) rotate(-2deg); }
+
+    .head {
+      position: absolute;
+      left: 31%;
+      top: 0;
+      width: 38%;
+      aspect-ratio: .82;
+      border-radius: 48% 48% 42% 42%;
+      background: #3a3c37;
+      box-shadow: inset -7px -4px 12px #171a18;
+    }
+
+    .body {
+      position: absolute;
+      left: 14%;
+      top: 19%;
+      width: 72%;
+      height: 52%;
+      clip-path: polygon(18% 0, 82% 0, 100% 100%, 0 100%);
+      background: linear-gradient(90deg, #d2d5ca, #737b72 70%, #414842);
+    }
+
+    .body::after {
+      content: "";
+      position: absolute;
+      left: 45%;
+      top: 0;
+      width: 8%;
+      height: 100%;
+      background: rgba(41, 59, 56, .45);
+    }
+
+    .legs {
+      position: absolute;
+      left: 26%;
+      top: 68%;
+      width: 48%;
+      height: 32%;
+      border-left: 10px solid #242d2b;
+      border-right: 10px solid #1c2422;
+    }
+
+    .scene-topbar {
+      position: absolute;
+      z-index: 12;
+      inset: 0 0 auto 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 24px 28px;
+      background: linear-gradient(rgba(3,7,7,.72), transparent);
+    }
+
+    .location-kicker, .time-readout, .eyebrow {
+      font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+      text-transform: uppercase;
+      letter-spacing: .16em;
+    }
+
+    .location-kicker { color: var(--moon); font-size: 11px; }
+    .location-title { margin-top: 7px; font-size: clamp(20px, 2vw, 31px); font-weight: 500; }
+    .time-readout { color: rgba(215, 231, 221, .68); font-size: 10px; text-align: right; line-height: 1.8; }
+
+    .scene-bottom {
+      position: absolute;
+      z-index: 12;
+      inset: auto 0 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 24px;
+      padding: 80px 28px 26px;
+      background: linear-gradient(transparent, rgba(4,7,7,.88));
+    }
+
+    .objective { max-width: 490px; }
+    .eyebrow { color: var(--rust); font-size: 10px; font-weight: 700; }
+    .objective p { margin: 8px 0 0; color: rgba(239,235,220,.86); font-size: 15px; line-height: 1.5; }
+
+    .player-vitals {
+      display: grid;
+      grid-template-columns: auto auto;
+      gap: 5px 12px;
+      min-width: 150px;
+      font: 11px/1.2 ui-monospace, monospace;
+      color: var(--muted);
+    }
+
+    .meter {
+      width: 86px;
+      height: 4px;
+      margin-top: 4px;
+      background: rgba(255,255,255,.1);
+      overflow: hidden;
+    }
+
+    .meter > i { display: block; height: 100%; background: var(--moon); }
+    .meter.hp > i { width: 84%; background: #9b7968; }
+    .meter.san > i { width: 72%; }
+
+    .narrative-panel {
+      position: relative;
+      z-index: 15;
+      min-width: 0;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr) auto;
+      border-left: 1px solid rgba(226, 237, 224, .15);
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.018), transparent 24%),
+        var(--paper);
+      box-shadow: -24px 0 60px rgba(0,0,0,.28);
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: stretch;
+      min-height: 78px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255,255,255,.012);
+    }
+
+    .speaker-mark {
+      display: grid;
+      place-items: center;
+      width: 78px;
+      border-right: 1px solid var(--line);
+      color: var(--moon);
+      font: 30px/1 Georgia, serif;
+      background:
+        radial-gradient(circle, rgba(169,211,199,.11), transparent 64%),
+        repeating-linear-gradient(135deg, transparent 0 6px, rgba(255,255,255,.014) 7px);
+    }
+
+    .speaker-heading { flex: 1; min-width: 0; padding: 15px 18px 13px; }
+    .speaker-heading h1 { margin: 2px 0 3px; font-size: 19px; font-weight: 500; }
+    .speaker-heading p { margin: 0; color: var(--quiet); font-size: 12px; }
+
+    .tabs { flex: 0 0 auto; display: flex; align-items: stretch; }
+    .tab {
+      appearance: none;
+      min-width: 54px;
+      padding: 0 14px;
+      border: 0;
+      border-left: 1px solid var(--line);
+      background: transparent;
+      color: var(--quiet);
+      cursor: pointer;
+      font-size: 12px;
+      writing-mode: vertical-rl;
+      letter-spacing: .25em;
+    }
+
+    .tab:hover, .tab.active { color: var(--ink); background: rgba(255,255,255,.03); }
+
+    .story-scroll {
+      min-height: 0;
+      overflow-y: auto;
+      scroll-behavior: smooth;
+      scrollbar-width: thin;
+      scrollbar-color: #48514c transparent;
+    }
+
+    .story, .notebook { padding: 28px clamp(24px, 3vw, 46px) 44px; }
+    .notebook[hidden], .story[hidden] { display: none; }
+
+    .beat { margin: 0 0 26px; animation: rise .45s ease both; }
+    .beat .label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      color: var(--rust);
+      font: 700 10px/1.2 ui-monospace, monospace;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .beat .label::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, var(--rust-soft), transparent); }
+    .beat p { margin: 0; color: #d9d9cf; font-size: clamp(15px, 1.25vw, 18px); line-height: 1.85; }
+    .beat.scene-text p { color: #c5c9c1; font-style: italic; }
+    .beat.player { padding-left: 16px; border-left: 2px solid rgba(197,222,214,.28); }
+    .beat.player p { color: #cbd4ce; }
+
+    .beat.perception {
+      position: relative;
+      padding: 16px 17px 17px;
+      border: 1px solid rgba(166, 202, 190, .13);
+      background: linear-gradient(120deg, rgba(124, 166, 153, .09), transparent 70%);
+    }
+
+    .beat.perception p { color: #d7eee7; }
+    .beat.system p { color: #c2c9bd; font-size: 14px; }
+
+    .choices {
+      position: relative;
+      padding: 15px 22px 21px;
+      border-top: 1px solid var(--line);
+      background: linear-gradient(rgba(17,22,20,.84), #0c100f 30%);
+    }
+
+    .choices-header {
+      display: flex;
+      justify-content: space-between;
+      margin: 0 4px 10px;
+      color: var(--quiet);
+      font: 9px/1.2 ui-monospace, monospace;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+
+    .choice {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 27px minmax(0, 1fr);
+      gap: 10px;
+      align-items: baseline;
+      padding: 10px 12px;
+      border: 0;
+      border-left: 2px solid transparent;
+      background: transparent;
+      color: #c7c6bb;
+      text-align: left;
+      cursor: pointer;
+      line-height: 1.45;
+      transition: color .16s, background .16s, transform .16s, border-color .16s;
+    }
+
+    .choice:hover, .choice:focus-visible {
+      outline: none;
+      color: #fffbed;
+      border-left-color: var(--rust);
+      background: linear-gradient(90deg, rgba(170,97,66,.13), transparent);
+      transform: translateX(4px);
+    }
+
+    .choice-index { color: var(--rust); font: 700 11px/1.4 ui-monospace, monospace; }
+    .choice-meta { display: block; margin-top: 3px; color: #747d78; font: 10px/1.3 ui-monospace, monospace; }
+
+    .note-section { margin-bottom: 34px; }
+    .note-section h2 { margin: 0 0 13px; color: var(--rust); font: 700 11px/1.2 ui-monospace, monospace; letter-spacing: .17em; }
+    .note-card { padding: 13px 15px; margin-bottom: 9px; border-left: 2px solid #59655f; background: rgba(255,255,255,.025); }
+    .note-card span { display: block; color: var(--quiet); margin-top: 4px; font-size: 12px; }
+
+    .prototype-badge {
+      position: absolute;
+      z-index: 20;
+      top: 17px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 6px 10px;
+      border: 1px solid rgba(255,255,255,.1);
+      background: rgba(5,8,8,.55);
+      color: rgba(233,238,228,.43);
+      font: 8px/1 ui-monospace, monospace;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      backdrop-filter: blur(7px);
+    }
+
+    .toast {
+      position: absolute;
+      z-index: 30;
+      left: 28px;
+      bottom: 125px;
+      max-width: 390px;
+      padding: 12px 14px;
+      border-left: 2px solid var(--moon);
+      background: rgba(9,14,13,.86);
+      color: #c9d4ce;
+      font-size: 13px;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity .25s, transform .25s;
+      backdrop-filter: blur(8px);
+    }
+
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 840px) {
+      html, body { overflow: auto; }
+      .game-shell { grid-template-columns: 1fr; grid-template-rows: 42dvh 58dvh; min-height: 100dvh; }
+      .narrative-panel { border-left: 0; border-top: 1px solid var(--line); }
+      .scene-topbar { padding: 15px 16px; }
+      .scene-bottom { padding: 50px 16px 13px; }
+      .player-vitals { display: none; }
+      .prototype-badge { left: auto; right: 13px; transform: none; top: 13px; }
+      .panel-header { min-height: 64px; }
+      .speaker-mark { width: 64px; }
+      .speaker-heading { padding-inline: 14px 8px; }
+      .speaker-heading p { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+      .tab { min-width: 44px; padding: 0 10px; }
+      .story, .notebook { padding: 22px 22px 36px; }
+      .beat { margin-bottom: 21px; }
+      .beat p { font-size: 15px; line-height: 1.7; }
+      .choices { padding: 11px 12px 14px; }
+      .choice { padding: 8px 8px; }
+      .toast { left: 14px; right: 14px; bottom: calc(58dvh + 12px); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="game-shell">
+    <section class="scene" aria-label="住院楼一层护士站场景">
+      <div class="hallway" id="hallway" aria-hidden="true">
+        <div class="ceiling"></div>
+        <div class="floor"></div>
+        <div class="left-wall"></div>
+        <div class="right-wall"></div>
+        <div class="stripe"></div>
+        <div class="door left"></div>
+        <div class="door right"></div>
+        <div class="window"></div>
+        <div class="moon" id="moon"></div>
+        <div class="moonbeam"></div>
+        <div class="nurse-station"></div>
+        <div class="figure" id="figure">
+          <div class="head"></div>
+          <div class="body"></div>
+          <div class="legs"></div>
+        </div>
+      </div>
+
+      <div class="prototype-badge">interactive presentation prototype</div>
+
+      <header class="scene-topbar">
+        <div>
+          <div class="location-kicker">住院楼 · 一层</div>
+          <div class="location-title">夜间护士站</div>
+        </div>
+        <div class="time-readout">第 01 日<br>夜晚 · 月光增强</div>
+      </header>
+
+      <footer class="scene-bottom">
+        <div class="objective">
+          <div class="eyebrow">当前承诺</div>
+          <p id="objectiveText">弄清楚护士站为什么提前锁上。</p>
+        </div>
+        <div class="player-vitals" aria-label="玩家状态">
+          <span>HP</span><span>42 / 50</span>
+          <div class="meter hp"><i></i></div><span></span>
+          <span>SAN</span><span>58 / 80</span>
+          <div class="meter san"><i></i></div><span></span>
+        </div>
+      </footer>
+
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    </section>
+
+    <aside class="narrative-panel" aria-label="叙事面板">
+      <header class="panel-header">
+        <div class="speaker-mark" aria-hidden="true">护</div>
+        <div class="speaker-heading">
+          <div class="eyebrow">值班护士</div>
+          <h1>赵岚</h1>
+          <p>她没有看你。她在看玻璃上的倒影。</p>
+        </div>
+        <nav class="tabs" aria-label="侧栏视图">
+          <button class="tab active" data-view="story" aria-pressed="true">对话</button>
+          <button class="tab" data-view="notebook" aria-pressed="false">笔记</button>
+        </nav>
+      </header>
+
+      <div class="story-scroll" id="storyScroll">
+        <div class="story" id="story">
+          <article class="beat scene-text">
+            <div class="label">场景</div>
+            <p>玻璃后的灯只亮了一半。赵护士背对着你，把一串钥匙压在登记册下面。月光从她肩头越过去，在地面铺出一条苍白的路。</p>
+          </article>
+
+          <article class="beat">
+            <div class="label">赵岚</div>
+            <p>“回病房去。今晚不发药，也不接待任何人。”</p>
+          </article>
+
+          <article class="beat perception">
+            <div class="label">显著性网络 · 被动</div>
+            <p>她说“任何人”时，食指压住了登记册的第三行。不是钥匙让她紧张。是那个名字。</p>
+          </article>
+        </div>
+
+        <div class="notebook" id="notebook" hidden>
+          <section class="note-section">
+            <h2>承诺</h2>
+            <div class="note-card">弄清楚护士站为什么提前锁上。<span>未完成 · 来自环境障碍</span></div>
+          </section>
+          <section class="note-section">
+            <h2>线索</h2>
+            <div class="note-card">赵护士把钥匙压在登记册下。<span>夜间护士站</span></div>
+            <div class="note-card" id="dynamicClue">登记册第三行似乎让她紧张。<span>感知所得 · 尚未核实</span></div>
+          </section>
+          <section class="note-section">
+            <h2>自问</h2>
+            <div class="note-card">如果所有人看见的都不一样，隐瞒还算是说谎吗？<span>正在深化</span></div>
+          </section>
+        </div>
+      </div>
+
+      <footer class="choices" id="choices">
+        <div class="choices-header"><span>选择回应</span><span>数字键 1—3</span></div>
+        <button class="choice" data-choice="observe">
+          <span class="choice-index">01</span>
+          <span>“登记册第三行是谁？”<small class="choice-meta">直接指出她正在回避的东西</small></span>
+        </button>
+        <button class="choice" data-choice="gentle">
+          <span class="choice-index">02</span>
+          <span>“我不是来拿药的。你看起来需要有人陪一会儿。”<small class="choice-meta">尝试降低她的戒备</small></span>
+        </button>
+        <button class="choice" data-choice="leave">
+          <span class="choice-index">03</span>
+          <span>暂时离开，去走廊另一端看看。<small class="choice-meta">保留这次对话，状态不会回滚</small></span>
+        </button>
+      </footer>
+    </aside>
+  </main>
+
+  <script>
+    // 来源：design/presentation/叙事界面布局.md §四—§五；剧情文字只用于呈现原型，不是正典内容。
+    const story = document.querySelector('#story');
+    const storyScroll = document.querySelector('#storyScroll');
+    const choices = document.querySelector('#choices');
+    const hallway = document.querySelector('#hallway');
+    const moon = document.querySelector('#moon');
+    const figure = document.querySelector('#figure');
+    const toast = document.querySelector('#toast');
+    const objectiveText = document.querySelector('#objectiveText');
+
+    const branches = {
+      observe: {
+        player: '“登记册第三行是谁？”',
+        response: '她终于转过身来。不是看你，而是确认你身后的走廊里有没有别人。\n\n“你看错了。今天的登记册没有第三行。”',
+        perception: '纸页在她手肘下轻轻鼓动。第三行的墨迹透过背面，像一根被压住的静脉。',
+        system: '线索更新：不存在的第三行。',
+        toast: '线索已更新 · 登记册第三行',
+        state: 'suspicious',
+        objective: '找到能够证明“第三行”存在的另一位见证者。'
+      },
+      gentle: {
+        player: '“我不是来拿药的。你看起来需要有人陪一会儿。”',
+        response: '她的手从登记册上移开了一点。\n\n“陪我？”她短促地笑了一声，“那你先告诉我——窗户里站着的，是你，还是我？”',
+        perception: '玻璃里确实有两个人。但倒影都没有做出你正在做的动作。',
+        system: '自问深化：倒影属于谁？',
+        toast: '自问正在深化 · 倒影属于谁',
+        state: 'opened',
+        objective: '判断窗户中的倒影是否正在模仿你们。'
+      },
+      leave: {
+        player: '你没有回答。你让脚步声替你结束这次会话。',
+        response: '“对，回去。”她重新背过身，“趁走廊还记得你的房间在哪。”',
+        perception: '你离开时，钥匙碰了一下桌面。她在提醒你：门仍然可以被打开。',
+        system: '会话已保留。你可以在取得新线索后回来。',
+        toast: '对话状态已保留 · 世界继续',
+        state: '',
+        objective: '调查走廊尽头那扇没有编号的门。'
+      }
+    };
+
+    function addBeat(type, label, text) {
+      const article = document.createElement('article');
+      article.className = `beat ${type}`;
+      const heading = document.createElement('div');
+      heading.className = 'label';
+      heading.textContent = label;
+      const paragraph = document.createElement('p');
+      paragraph.textContent = text;
+      article.append(heading, paragraph);
+      story.append(article);
+    }
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add('show');
+      window.setTimeout(() => toast.classList.remove('show'), 2400);
+    }
+
+    function choose(id) {
+      const branch = branches[id];
+      if (!branch || choices.dataset.resolved === 'true') return;
+      choices.dataset.resolved = 'true';
+      addBeat('player', '你', branch.player);
+      addBeat('', '赵岚', branch.response);
+      addBeat('perception', '感知回声', branch.perception);
+      addBeat('system', '笔记本', branch.system);
+      hallway.className = `hallway ${branch.state}`;
+      moon.classList.toggle('alert', id !== 'leave');
+      figure.classList.toggle('turned', id !== 'leave');
+      objectiveText.textContent = branch.objective;
+      showToast(branch.toast);
+      choices.innerHTML = '<div class="choices-header"><span>本段演示结束</span><span>切换至“笔记”查看记录</span></div>';
+      window.requestAnimationFrame(() => { storyScroll.scrollTop = storyScroll.scrollHeight; });
+    }
+
+    document.querySelectorAll('.choice').forEach(button => {
+      button.addEventListener('click', () => choose(button.dataset.choice));
+    });
+
+    document.addEventListener('keydown', event => {
+      if (event.key >= '1' && event.key <= '3') {
+        const button = document.querySelectorAll('.choice')[Number(event.key) - 1];
+        button?.click();
+      }
+    });
+
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        const view = tab.dataset.view;
+        document.querySelectorAll('.tab').forEach(item => {
+          const active = item === tab;
+          item.classList.toggle('active', active);
+          item.setAttribute('aria-pressed', String(active));
+        });
+        document.querySelector('#story').hidden = view !== 'story';
+        document.querySelector('#notebook').hidden = view !== 'notebook';
+        choices.style.visibility = view === 'story' ? 'visible' : 'hidden';
+        storyScroll.scrollTop = 0;
+      });
+    });
+  </script>
+</body>
+</html>
