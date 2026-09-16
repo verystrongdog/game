@@ -189,7 +189,7 @@
 | **连带修改**（逐条登记） | [阶段证据说明](README.md) 的「已有证据」表**加一行**（先例：#165/#166/#167 各一行） |
 | 计划外变化 | 无 |
 | 工作树 | 提交后干净（`git status --short` 空） |
-| **回滚演练** | **预测**：本条是纯脚本 + 文档 + 证据（无数据迁移、无资产改动）⇒ `git revert` 本条提交组后三个校验器仍绿、工作树干净。**实测记录见 §十**（先例：#166 / #167 都是"临时 worktree + 逐条 `git revert` + 全门禁重跑"） |
+| **回滚演练** | ✅ **已演练**（2026-09-16）：临时 worktree 里逐条 `git revert` 两条提交后，**`git diff e562a74 HEAD` 为空**（回滚态与 base **逐字节相同**），三个校验器读数逐值回到改前（2005 refs / 0 死链 · trash 全过 · params 0 failed / 7 warnings），工作树干净、临时树已清 ⇒ **回滚恢复上一状态成立**。实做记录见 §十 |
 | 预期不变项 | 手部两个数 **32.6833 / 32.6854 mm** 逐值不变（§4.6）· `data/hand_grip_cards.json` 未触碰 · `soleMargin = 2.8 mm` 与 `tol_contact = 2.8 mm` 未触碰（两个数没混）· 母版 `.blend` 与源 `X Bot.fbx` 字节未触碰（脚本只读打开、从不存盘）· 四个既有校验器结论不变（无新增/删除校验器） |
 
 **测试报告定位**：`.scratch/so168_headneck_run{1,2}.json`（本次读数）· `.scratch/so168_hand_run1.json`（参数化后手部集）· `.scratch/surface_offset_baseline_run1.json`（参数化前手部集基线）——过程物、被 `.gitignore` 排除、磁盘保留；复现命令见 §三。
@@ -222,7 +222,25 @@
 
 ## 十、回滚演练实做记录
 
-（本节在提交后回填——形态与 [#166](https://github.com/verystrongdog/game/issues/166) §十三 / [#167](https://github.com/verystrongdog/game/issues/167) 的先例一致：**临时 worktree + 逐条 `git revert` + 全门禁重跑**，不做 `reset --hard`。）
+形态与 [#166](https://github.com/verystrongdog/game/issues/166) §十三 / [#167](https://github.com/verystrongdog/game/issues/167) 的先例一致：**临时 worktree + 逐条 `git revert` + 全门禁重跑**（不做 `reset --hard`）。
+
+```bash
+git worktree add --detach .scratch/rollback-drill-168 HEAD
+cd .scratch/rollback-drill-168
+git revert --no-edit 71f0798      # 证据 + 口径回填
+git revert --no-edit 651fe7b      # 工具参数化
+```
+
+| 核对项 | 预测（issue 的「回滚」节） | **实测** |
+|---|---|---|
+| 回落点 | 纯脚本 + 文档 + 证据 ⇒ 回到 base 状态 | ✅ **`git diff e562a74 HEAD` 为空**（不只是"仍绿"：回滚态与 base **逐字节相同**） |
+| `validate_cross_refs.py` | 0 死链 | ✅ **2005 refs / 2004 passed / 0 dead / 0 section warnings**（= 改前那一组数，逐值相同） |
+| `validate_trash_isolation.py` | 全过 | ✅ 全部通过 |
+| `validate_params.py` | 0 失败 | ✅ **56 checks / 49 passed / 0 failed / 7 warnings**（与改前逐条相同） |
+| 工作树 | 干净 | ✅ `git status --short` 空；演练后 `git worktree remove --force` 清掉临时树（`git worktree list` 只剩主树） |
+| 数据迁移 / 资产 | 无 | ✅ 无（脚本只读打开母版、从不存盘；读数全在 `.scratch/`） |
+
+⇒ **回滚恢复上一状态成立**（以最强形式：逐字节）。
 
 ---
 
