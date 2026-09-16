@@ -64,15 +64,17 @@ EXPECTED_VISIBLE_BONES = 52
 #: 末项 = **定格帧**：每件停在自己的判据帧上（① 捂耳到位帧 13 · ② 失衡极值帧 34）。
 #: ⚠️ 为什么要有它：#169 那次静帧停在 `scene.frame_start`(=1)，而两条动作的首帧都被
 #:   导出侧 E5 硬约定要求为**中立姿势** ⇒ 那样拍出来的"三件同屏"其实是**三个站着不动的人**。
-BATCH_SLOTS = ((0.0, "PanicCoverEars", "① 恐慌姿态（#169）", 13),
-               (5.0, "CrouchPushedBack", "② 下蹲/被推退（#170）", 34),
-               (-5.0, None, "③ 跪地/顶肘（#171，未落地）", None))
+BATCH_SLOTS = ((0.0, "PanicCoverEars", "① 恐慌姿态（#169）", 13, False),
+               (5.0, "CrouchPushedBack", "② 下蹲/被推退（#170）", 34, False),
+               (-5.0, "KneelElbowBrace", "③ 跪地/顶肘（#171）", 61, True))
+#: 第 5 列 = 该实例**带道具代理**（本批只有 ③ 有：`REF_Door*`）。
+#: ⚠️ 道具**只平移一份**到它那一件的位置，不逐实例复制——逐实例复制会变成"三扇门"。
 
 
 def batch_instances(include_unlanded=True):
-    """本批三件的 `--instances` 串（③ 未落地时写 `-` = 中立姿势占位）。"""
+    """本批三件的 `--instances` 串（`<x>:<动作>:<定格帧>`）。"""
     out = []
-    for x, action, _label, frame in BATCH_SLOTS:
+    for x, action, _label, frame, _prop in BATCH_SLOTS:
         if action is None and not include_unlanded:
             continue
         item = f"{x:g}:{action or '-'}"
@@ -193,8 +195,8 @@ def main() -> int:
               "template": str(tmpl), "measured_at": datetime.now().isoformat(timespec="seconds"),
               "spacing_m": args.spacing, "instances": [], "problems": [],
               "batch": bool(args.batch),
-              "batch_slots": ([{"x_m": x, "动作": a, "标签": lb, "定格帧": fr}
-                               for x, a, lb, fr in BATCH_SLOTS] if args.batch else None)}
+              "batch_slots": ([{"x_m": x, "动作": a, "标签": lb, "定格帧": fr, "带道具": pr}
+                               for x, a, lb, fr, pr in BATCH_SLOTS] if args.batch else None)}
     rows = []
     frozen_store = []
     for idx, item in enumerate(spec):
@@ -276,6 +278,20 @@ def main() -> int:
             report["problems"].append(
                 f"实例 {idx} 有可见骨伸出皮肤包围盒："
                 + "; ".join(f"{x['骨']}({x['伸出量_mm']:.1f} mm)" for x in outliers["非例外的越界骨"][:6]))
+
+    # 道具代理：**只平移一份**到"带道具"那一件的位置（口径 §15.8 硬规矩 1/2：lab 是生成物、从不写回）
+    prop_slot = next((x for x, a, _l, _f, pr in BATCH_SLOTS if pr and a is not None), None)
+    props = [o for o in bpy.data.objects
+             if o.name.startswith("REF_") and o.type == "MESH"
+             and not any(m.type == "ARMATURE" for m in o.modifiers)]   # 只搬**网格**代理
+    if props and prop_slot is not None:
+        for ob in props:
+            ob.location = ob.location + Vector((prop_slot, 0.0, 0.0))
+        bpy.context.view_layer.update()
+    report["props"] = {"对象": [o.name for o in props], "平移到_x_m": prop_slot}
+    if props:
+        print(f"道具代理 {len(props)} 件（{', '.join(o.name for o in props)}）"
+              f"平移到 x={prop_slot:+.1f} m 那一件（只平移一份，不逐实例复制）")
 
     # 静态校核：**一次**（口径 §15.8：不做逐帧判据）+ 间距核对
     # ⚠️ 相邻对必须按**实测 x 升序**取（原实现按 `--instances` 的**参数顺序**取 ⇒ 参数写成
