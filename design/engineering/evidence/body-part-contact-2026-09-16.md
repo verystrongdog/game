@@ -68,7 +68,9 @@
 | `python3 code/tools/validate_cross_refs.py` | **0**（0 死链 / 0 段引用警告） |
 | `python3 code/tools/validate_trash_isolation.py` | **0** |
 | `python3 code/tools/validate_params.py` | **0** |
-| `python3 code/tools/run_all_checks.py` | 见 §七 |
+| `python3 code/tools/run_all_checks.py`（编排器） | **0**（**17 validators: 17 passed / 0 failed / 0 errors**） |
+| `python3 code/tools/validate_issues.py --from-github` | **1**（2 条 FAIL **都在 #179**，与本次改动无关；见 §9.1；#171 自身全过） |
+| `dotnet test code/src/YouAreNotTheFish.sln` | **未跑** —— 本次**未改 `code/src/`**（先例：[#165]/[#168]/[#170] 同记法） |
 
 ## 四、读数：膝 / 肘的部位面 ε（`--set kneeelbow`，单位 mm）
 
@@ -244,7 +246,31 @@
 
 ## 九、回滚演练实做记录
 
-见 §十（本文件末尾）——形态与先例一致：**临时 worktree + 逐条 `git revert` + 全门禁重跑**（不做 `reset --hard`）。
+形态与 [#166]/[#167]/[#168]/[#170] 的先例一致：**临时 worktree + 逐条 `git revert` + 全门禁重跑**（不做 `reset --hard`）。
+
+```bash
+git worktree add --detach .scratch/rollback-drill-171 HEAD
+cd .scratch/rollback-drill-171
+git revert --no-edit 8a318e0   # 工具扩展（膝/肘 ε）
+git revert --no-edit c411f44   # 宿主 8
+git revert --no-edit ce8fb2c   # lab 第 3 个实例
+git revert --no-edit 66d16a0   # 证据 + 口径 + 切片
+```
+
+| 核对项 | 预测（issue 的「回滚」节） | **实测** |
+|---|---|---|
+| 回落点 | 纯脚本 + 文档 + 证据 ⇒ 回到 base 状态 | ✅ **`git diff f5f5640 HEAD` = 0 行**（回滚态与 base **逐字节相同**） |
+| `validate_cross_refs.py` | 0 死链 | ✅ **2057 refs / 2055 passed / 1 dead** ——⚠️ **该死链与本次改动无关**：`balance-support-2026-09-16.md:286` 指向 `../../../.scratch/issue170/开工记账.md`（**被忽略的过程物**，worktree 里没有被签出）。**空跑对照**：同一支 worktree 直接检出 **base 提交** `f5f5640` ⇒ **同一组读数（2057 / 2055 / 1 dead）**；主树（有那批过程物）仍是 **0 死链** |
+| `validate_trash_isolation.py` | 全过 | ✅ 全部通过 |
+| `validate_params.py` | 0 失败 | ✅ **56 checks / 49 passed / 0 failed / 7 warnings**（与改前逐值相同） |
+| 工作树 | 干净 | ✅ 演练后 `git worktree remove --force` 清掉临时树（`git worktree list` 只剩主树） |
+| 数据迁移 / 资产 | 无 | ✅ 无（宿主只写 `.scratch/` 的副本；母版 `.blend` 与源 FBX 字节未触碰） |
+
+⇒ **回滚恢复上一状态成立**（以最强形式：逐字节）。
+
+### 9.1 另一条与本次改动**无关**的仓库级读数的登记
+
+`python3 code/tools/validate_issues.py --from-github` 报 **2 条 FAIL，都在 [#179]**（`requires: gate:npc-materials-fixtures` 不在 `gates.json` 中 ⇒ I5/I6）——**不是本次改动引入**（本件未改任何 issue 正文；只把 #171 的标签 `needs-triage` → `in-progress`）。#171 自身在 I5/I6/I7/I11 上**全过**（`consumed-by: 待建:…` 只出 WARN，正是 [issue 流程 §4.1.1 例外 3](../../engineering/issue-process.md) 的预期形态）；I13 的 6 条 WARN 全在别的 issue 上（#138/#150/#151/#152/#172/#173）。
 
 ## 十、来源
 
