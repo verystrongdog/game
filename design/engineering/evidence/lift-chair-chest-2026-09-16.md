@@ -22,7 +22,7 @@
 | 字段 | 值 |
 |---|---|
 | base SHA | `c38aeb6`（#180 建 issue 后那次文档提交；开工时工作树干净、`validate_issues --from-github` **0 fail**） |
-| head SHA | 本条**提交组**（5 条，按主题）：`89ddf03`（宿主 9）· `b58aed2`（证据 + 三处回填）· `ea4e058`（证据补回滚演练与可复现性）· `e2e85fa`（**第 1 轮返工**：握式二 `--grip palm`）· `06295ac`（返工的文档与证据） |
+| head SHA | 本条**提交组**（7 条，按主题）：`89ddf03`（宿主 9）· `b58aed2`（证据 + 三处回填）· `ea4e058`（回滚演练与可复现性）· `e2e85fa`（**第 1 轮返工**：握式二 `--grip palm`）· `06295ac`（返工文档）· `3a70c13`（**第 2 轮返工**：握式三 `--grip backhand` + 抡弧）· `67e6848`（返工文档与证据） |
 | 阶段 | [#180](https://github.com/verystrongdog/game/issues/180)（`Experiment` · `state:in-progress`，2026-09-16 开工） |
 | 执行者 | DSH agent（本机 WSL → Windows 侧 Blender） |
 | 工具版本 | Blender **5.1.2**（`hash ec6e62d40fa9`，built 2026-05-19 01:37:34）· Windows 11 · `gh` 2.100.0 |
@@ -271,7 +271,8 @@ git revert --no-edit <docs>    # 证据 + 口径/规格/slice 回填
 ```bash
 git worktree add --detach .scratch/rollback-drill-180 HEAD
 cd .scratch/rollback-drill-180
-git revert --no-edit 06295ac   # 返工的文档与证据
+git revert --no-edit 67e6848 3a70c13   # 第 2 轮返工（握式三 + 抡弧）+ 文档
+git revert --no-edit 06295ac
 git revert --no-edit e2e85fa   # 第 1 轮返工：握式二 --grip palm
 git revert --no-edit ea4e058   # 证据补回滚演练与可复现性
 git revert --no-edit b58aed2   # 证据 + 三处回填
