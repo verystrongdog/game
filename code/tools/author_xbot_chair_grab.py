@@ -168,10 +168,10 @@ def parse_args(argv):
                          "· head = 抱头（掌面 ↔ 后脑面 ×2）；**两解都解**，另一解只报读数（§4.2 硬规矩 5）")
     ap.add_argument("--scan-body", action="store_true",
                     help="只跑身体条件（下蹲量 × 肘方向）的解空间扫描——口径 §4.2 硬规矩 5 的 ≥2 解并列")
-    ap.add_argument("--hand-shape", choices=("flat", "hug"), default=PANIC_HAND_SHAPE,
+    ap.add_argument("--hand-shape", choices=("flat", "hug"), default=PANIC_FINAL_HAND_SHAPE,
                     help="手型两解（F10）：flat = **平掌**（五指近伸展；owner 2026-09-16 目视第 1 轮指名"
                          "「手应该是手掌的姿势」）· hug = 逐指拟合贴住头面（原默认，作对照解）")
-    ap.add_argument("--ear-drop-mm", type=float, default=0.0,
+    ap.add_argument("--ear-drop-mm", type=float, default=PANIC_FINAL_DROP_MM,
                     help="捂耳时掌面沿头骨长轴**再向下**这么多 mm（owner 第 1 轮指名「手应该再向下一点」；"
                          "默认 0 = 掌面重心落在该面的 ε 锚点上——这个默认值本身已经比改前低 ≈80 mm）")
     return ap.parse_args(argv)
@@ -3751,6 +3751,17 @@ PANIC_CURL_LO, PANIC_CURL_HI, PANIC_CURL_STEPS = 0.0, 2.0, 21
 #: / `hug` = 逐指拟合到贴住头面（本条原先的默认，作为对照解保留 ⇒ 口径 §4.2 硬规矩 5 的 ≥2 解）
 PANIC_FLAT_CURL = 0.15      #: 平掌的基线蜷曲量（≈7°/节）——**本件选定**：0 太僵、再大就不是平掌
 PANIC_HAND_SHAPE = "flat"
+#: 手型与落点的**定稿值**（owner 2026-09-16 目视第 2 轮：「**用 hug 但是要向下一点**」·
+#: 第 3 轮：「**最后一个是捂住耳朵**」= 向下 **90 mm** 那一档）。⇒ 定稿 = `hug` + 落点 −90 mm。
+PANIC_FINAL_HAND_SHAPE = "hug"
+PANIC_FINAL_DROP_MM = 90.0
+#: **面域（面内窗口）**沿该面 `u` 轴（耳侧 = 头骨长轴向上）的声明范围，mm，相对 ε 锚点。
+#: ⚠️ 为什么需要它（本件两轮实测逼出来的）：原来"最低点是否落在面片内"用的是**最外片层的顶点跨度**，
+#: 它只覆盖"头最宽的那一段带"（实测距头底 **155–205 mm**）⇒ ① `抱头` 解被判面外 ② owner 认定的
+#: **耳朵位置在这段带的下方 90 mm** ⇒ 判据把"正确的落点"判成面外。⇒ 改成**声明的面内窗口**：
+#: 下界 = owner 裁定值 −90 mm 再留 60 mm 余量 = −150；上界 = 实测平台顶 +50 mm 再留 10 = +60。
+#: **来源**：owner 目视裁定 + §4.9 的侧向剖面实测（不是拍的）。⚠️ 这条口径**留给 ②③ 复核**。
+PANIC_FACE_U_WINDOW_MM = (-150.0, 60.0)
 #: 拇指单独一档下限（允许**伸展**）：掌面贴耳时拇指会被掌的落点顶到头前面 ⇒ 需要能外展
 PANIC_CURL_LO_THUMB = -0.8
 #: 逐指拟合的**目标**（mm）：指尖离头部蒙皮面这么远（正 = 在头外）。来源：本件选定（落在 §8.2
@@ -3861,15 +3872,20 @@ def head_part_frame(arm, key):
     u_w = (m3 @ (r3 @ u_ax)).normalized()
     v_w = (m3 @ (r3 @ v_ax)).normalized()
     patch = head_face_patch_local(arm, key)
-    us = [p.dot(u_ax) * scale for p in patch]
-    vs = [p.dot(v_ax) * scale for p in patch]
+    # ⚠️ **面内坐标一律以"该面的 ε 锚点"为基准**（2026-09-16 第 2 轮修的真 bug）：原来这里给的是
+    #    **相对骨原点**的绝对坐标，而 `panic_contact_readings` 量的是**相对锚点**的偏移 ⇒ 两者被直接比较，
+    #    基准不同（锚点落在面片中部时差 ≈70 mm）⇒ "最低点是否落在面片内"这一格**判错**：
+    #    ① `抱头` 那一解被判"面外"（其中含这个 bug 的成分）② 落点往下调之后立刻"面外"（同一原因）。
+    #    统一到锚点后，两边的数才是同一个量（判据与措辞同层）。
+    ext_p = max(patch, key=lambda q: q.dot(_axis_local(spec["轴"])))
+    us = [(p.dot(u_ax) - ext_p.dot(u_ax)) * scale for p in patch]
+    vs = [(p.dot(v_ax) - ext_p.dot(v_ax)) * scale for p in patch]
     patch_world = [arm.matrix_world @ (pb.matrix @ p) for p in patch]
     # 锚点（第四系的"面上一点"）= **沿该轴最外的那个真实蒙皮顶点**。
     # ⚠️ 为什么不是"骨原点 + ε·法向"（本件实测踩到）：那个点在**面内**的位置等于**骨原点**的位置，
     #    而后脑这类面的最外点高出骨原点 **48–118 mm** ⇒ 锚点会落在面片**下方 80 mm** 处，
     #    "最低点是否落在面片内"的判读整个错位。取真实极值顶点则：① ε **逐值不变**（它就是那个
     #    顶点的沿轴投影）② 面内位置是**面的真位置**。
-    ext_p = max(patch, key=lambda q: q.dot(_axis_local(spec["轴"])))
     anchor = arm.matrix_world @ (pb.matrix @ ext_p)
     # 面片重心（世界）——**面内对齐的目标**（数据给的中心，不是拍的）
     centroid = sum(patch_world, Vector((0.0, 0.0, 0.0))) / float(len(patch_world))
@@ -4009,7 +4025,8 @@ def panic_contact_readings(arm, side, frame):
     n = frame["法向"]
     du = (low - frame["锚点"]).dot(frame["u"])
     dv = (low - frame["锚点"]).dot(frame["v"])
-    in_patch = (frame["u_span_m"][0] <= du <= frame["u_span_m"][1]
+    # 面内判读：用**声明的面内窗口**（口径 §15.6「名与坐标同出一个布局函数」）；顶点跨度只作读数
+    in_patch = (PANIC_FACE_U_WINDOW_MM[0] / 1000.0 <= du <= PANIC_FACE_U_WINDOW_MM[1] / 1000.0
                 and frame["v_span_m"][0] <= dv <= frame["v_span_m"][1])
     n_palm = (mw.to_3x3() @ pb.matrix.to_3x3() @ Vector((0.0, 0.0, 1.0))).normalized()
     return {"判据量": f"{side}掌面 ↔ {frame['标签']}",
@@ -4023,7 +4040,11 @@ def panic_contact_readings(arm, side, frame):
             "面↔面顶点最近距离_mm": points_min_distance_mm(palm, frame["面片"]),
             "面↔面_分辨力_mm": "顶点间距量级（本件 2.7 mm 下限，**只报读数、不判红**——见 §七 的登记）",
             "掌面法向夹角_deg": round(math.degrees(n_palm.angle(n)), 2),
-            "落在面片内": bool(in_patch), "面片数": frame["面片数"], "掌面点数": len(palm)}
+            "落在面片内": bool(in_patch),
+            "面内窗口_mm": [list(PANIC_FACE_U_WINDOW_MM),
+                            [round(frame["v_span_m"][0] * 1000.0, 1),
+                             round(frame["v_span_m"][1] * 1000.0, 1)]],
+            "面片数": frame["面片数"], "掌面点数": len(palm)}
 
 
 def panic_finger_readings(arm, side, head_pts):
