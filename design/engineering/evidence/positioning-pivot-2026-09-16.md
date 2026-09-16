@@ -7,7 +7,7 @@
 |---|---|
 | issue | [#181](https://github.com/verystrongdog/game/issues/181)（RFC · owner 决策 = **选项 A**） |
 | base SHA | `f4152f6`（`feat+docs: #180 第 3 轮按 owner 指名的四个量返工…`） |
-| head SHA | `a03b5ce`（本阶段 5 个提交） |
+| head SHA | `32770e4`（8 文件落地的最后一个改动提交；记录提交见 §四 的绑定说明） |
 | 工具版本 | Python 3.10.12 · git 2.34.1 · `gh` 2.100.0 |
 | 工作树 | 检查后干净（`git status --short` 无输出） |
 
@@ -50,12 +50,14 @@
 ## 四、回滚演练（实做）
 
 ```bash
-git worktree add --detach .scratch/revert-drill HEAD
-git -C .scratch/revert-drill revert -n --no-edit f4152f6..HEAD
-git -C .scratch/revert-drill diff --quiet f4152f6 ; echo $?   # → 0
+git worktree add --detach .scratch/revert-drill2 HEAD     # HEAD = 记录提交，含本证据文件与索引行
+git -C .scratch/revert-drill2 revert -n --no-edit f4152f6..HEAD
+git -C .scratch/revert-drill2 diff --quiet f4152f6 ; echo $?   # → 0
 ```
 
-**结论：可干净回滚**——5 个提交逆序 revert 后，工作树与 base `f4152f6` **逐字节相同**（`git diff` 退出码 0）。本阶段全部为设计面文本改动，无数据迁移、无删除、无玩家行为，故回滚不需要额外方案。演练后 `git worktree remove --force` + `prune`，主工作树未受影响。
+**结论：可干净回滚**——**范围内全部提交**（5 个正典改动 + 证据文件 + 索引行 + 引用口径修正）逆序 revert 后，工作树与 base `f4152f6` **逐字节相同**（`git diff` 退出码 0；10 个文件回到 base 内容）。本阶段全部为设计面文本改动，无数据迁移、无删除、无玩家行为，故回滚不需要额外方案。演练后 `git worktree remove --force` + `prune`，主工作树未受影响（`git status --short` 无输出）。
+
+> 绑定：本证据的**内容**对应 head `32770e4`（8 文件落地的最后一个改动提交）；其后的 `c75c866` 与本次记录提交**只改本文件与证据索引**，不改任何正典内容与结论。
 
 ## 五、未闭合项（如实登记）
 
