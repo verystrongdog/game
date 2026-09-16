@@ -1,8 +1,13 @@
 """
-#87 A′-Generator 最小可用实现（MVP）
-====================================
-目标：证明"从结构化输入自动得到一个合法、可追溯、能经过资格门的患者 artifact"。
+#87 A′-Generator 历史研究模拟器（五病种 MVP）
+================================================
+历史目标：证明"从结构化输入自动得到一个合法、可追溯、能经过资格门的患者 artifact"。
 第一版不实现文学叙事生成——产物是 gen.json + 机械版 trace + 资格门裁决。
+
+当前定位（#174）：本文件只是历史性五病种数值研究（MDD/SUD/BD-I/BD-II/环性），
+不是 NPC 素材生产入口，也不承担现有 16 组草稿的格式适配。当前生产链由
+design/spec/material/npc-materials-manifest.json + code/tools/validate_npc_materials.py 承担；
+草稿经 Adapter 转为规范资格输入后，再由 code/tools/validate_eligibility.py 回放。
 
 流水线（每步可追溯）：
     Matrix(社会演化矩阵) → SoilSampler → EventGenerator → MemoryBuilder
@@ -14,7 +19,7 @@
   3. R=100 固定 seed 分布测试，第一轮不优化——先记录系统实际产生什么
 
 数据来源（引用即读取铁律）：
-  - 社会演化矩阵: ../规格/素材/社会演化矩阵.md §八
+  - 社会演化矩阵: design/spec/material/社会演化矩阵.md §八
   - 事件→候选集: design/rules/skill-tree/创伤记忆转化接口.md §3.2.1
   - 资格门五原子: 转化接口 §3.2.2 + 决策树 #113
 """

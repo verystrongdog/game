@@ -147,7 +147,7 @@ Event Generator（按已定义叙事约束生成人生叙事线）
 
 #### 第②层操作化：六轴多样性诊断（2026-09-03 #89-D20/D21 落地，第一批指标锁）
 
-> 第②层"批次多样性"从抽象概念固化为可检查指标。**指标锁、数值不锁**（同 Q6 原则，待批次观测后标定）。六轴定义详见 `../规格/素材/叙事多样化维度定义.md`。
+> 第②层"批次多样性"从抽象概念固化为可检查指标。**指标锁、数值不锁**（同 Q6 原则，待批次观测后标定）。六轴定义详见 [叙事多样化维度定义](../spec/material/%E5%8F%99%E4%BA%8B%E5%A4%9A%E6%A0%B7%E5%8C%96%E7%BB%B4%E5%BA%A6%E5%AE%9A%E4%B9%89.md)。
 
 **六轴（批次级统计口径）**：
 
@@ -204,6 +204,31 @@ Q6 结果做约束/多样性/现实性校验，而不定义"正确人生"
 
 #111 = 通用模块化原则（静态契约/seam/装配期验证/fail-fast）→ 引擎与 #87 生成器各自落地；#87 不发明"生成器插件框架"。
 
+### 5.4 当前素材生产链（#174）
+
+当前库内 NPC 素材以 `design/spec/material/npc-materials-manifest.json` 作为**生产链状态权威**，每份 `.gen.json` 仍是人物事实源。manifest 只登记路径、目标病种、生产链状态和患者池资格，不复制人物经历。
+
+```text
+配额 slot + 六轴约束
+    ↓
+.gen.json + 叙事视图（同一草稿的两种视图）
+    ↓ 登记
+npc-materials-manifest.json
+    ↓ validate_npc_materials.py 内部 Adapter
+{events, memories, declarations}（资格门规范输入）
+    ↓ validate_eligibility.py
+目标病种资格回放
+    ↓
+患者生态索引 + 多样性记账表 + docs-integrity
+```
+
+边界规则：
+
+- Adapter 只读结构化事件、记忆与精确的 `资格声明（#87 规范化声明）` 块，不从自然语言推测声明。
+- `validated` 只表示目标病种已通过生产链回放，不等于文学稿已终审。
+- 原始 `.gen.json` 不直接交给资格门；完整仓库审计入口为 `python3 code/tools/validate_npc_materials.py`。
+- 生产审计同时校验草稿成对、manifest 状态、资格回放与两份人类可读台账；任一输入缺失均须明确失败。
+
 ## 六、与现有系统的关系
 
 | 系统 | 关系 |
@@ -243,5 +268,5 @@ Q6 结果做约束/多样性/现实性校验，而不定义"正确人生"
 | 来源标注 | input_source | ∈ {canonical, fallback} | §5.2 |
 
 ---
-*创建: 2026-09-01 | 更新: 2026-09-01*
+*创建: 2026-09-01 | 更新: 2026-09-16（#174 恢复 NPC 素材生产链）*
 *关联: [grilling-87](../archive/grilling/grilling-87-npc-life-generation/grilling-87.md), [剧情系统设计](%E5%89%A7%E6%83%85%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1.md), [创伤记忆转化接口](../rules/skill-tree/%E5%88%9B%E4%BC%A4%E8%AE%B0%E5%BF%86%E8%BD%AC%E5%8C%96%E6%8E%A5%E5%8F%A3.md), [记忆内容层](../rules/skill-tree/%E8%AE%B0%E5%BF%86%E5%86%85%E5%AE%B9%E5%B1%82.md), [社会演化矩阵](../spec/material/%E7%A4%BE%E4%BC%9A%E6%BC%94%E5%8C%96%E7%9F%A9%E9%98%B5.md)*
