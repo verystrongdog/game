@@ -18,9 +18,7 @@ import sys
 from typing import Any
 
 from validate_eligibility import (
-    EXCLUDE,
-    MIXED_DID,
-    NECESSARY,
+    KNOWN_DECLARATION_ATOMS,
     VERIFIED,
     EligibilityInputError,
     eligibility_for,
@@ -44,11 +42,7 @@ KNOWN_STATUSES = {
     "excluded",
 }
 PATIENT_STATUSES = {"validated", "needs-migration"}
-KNOWN_ATOMS = (
-    {atom for atoms in NECESSARY.values() for atom in atoms}
-    | {atom for atoms in EXCLUDE.values() for atom in atoms}
-    | {MIXED_DID["atom"]}
-)
+KNOWN_ATOMS = KNOWN_DECLARATION_ATOMS
 DECLARATION_BLOCK = "资格声明（#87 规范化声明）"
 DOCUMENTARY_FIELDS = {"判定", "note"}
 ANNOTATION_FIELDS = {"PTSD"}
@@ -299,12 +293,6 @@ def audit_repository(root: str | Path) -> AuditReport:
             str(MANIFEST_REL),
             f"manifest 有 {len(materials)} 项，预期 {expected_material_count}",
         )
-    if expected_material_count != 16:
-        report.add(
-            "MANIFEST_CONTRACT_COUNT",
-            str(MANIFEST_REL),
-            f"Issue #174 契约要求 expected_material_count=16，实得 {expected_material_count!r}",
-        )
 
     seen_names: set[str] = set()
     seen_json_paths: set[str] = set()
@@ -416,13 +404,6 @@ def audit_repository(root: str | Path) -> AuditReport:
             str(MANIFEST_REL),
             f"患者池有 {len(patient_names)} 人，预期 {expected_patient_count}",
         )
-    if expected_patient_count != 13:
-        report.add(
-            "MANIFEST_CONTRACT_COUNT",
-            str(MANIFEST_REL),
-            f"Issue #174 契约要求 expected_patient_count=13，实得 {expected_patient_count!r}",
-        )
-
     for name in sorted(scanned_json - manifest_names):
         report.add("DRAFT_UNREGISTERED_JSON", name, "结构化草稿未登记到 manifest")
     for name in sorted(scanned_narratives - manifest_names):

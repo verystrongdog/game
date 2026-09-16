@@ -86,6 +86,11 @@ PTSD_EVENTS = {"威胁/暴力", "性创伤"}
 THETA_F, THETA_N = 0.80, 0.40
 
 VERIFIED = set(NECESSARY) | {"PTSD", "DID"}  # 24 经历型全部
+KNOWN_DECLARATION_ATOMS = (
+    {atom for atoms in NECESSARY.values() for atom in atoms}
+    | {atom for atoms in EXCLUDE.values() for atom in atoms}
+    | {MIXED_DID["atom"]}
+)
 
 
 class EligibilityInputError(ValueError):
@@ -140,6 +145,8 @@ def validate_canonical_input(patient: dict) -> None:
     for atom, value in patient["declarations"].items():
         if not isinstance(atom, str):
             raise EligibilityInputError("declarations 的键必须是 string")
+        if atom not in KNOWN_DECLARATION_ATOMS:
+            raise EligibilityInputError(f"declarations 包含未知原子: {atom}")
         if value not in (0, 1, "MISSING") or isinstance(value, bool):
             raise EligibilityInputError(
                 f"declarations.{atom} 必须是 0、1 或 \"MISSING\""
