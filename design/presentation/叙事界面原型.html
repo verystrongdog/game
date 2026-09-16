@@ -1,0 +1,1618 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>子非鱼｜叙事界面原型</title>
+  <style>
+    /* 来源：design/presentation/叙事界面布局.md §二—§五。以下尺寸均为原型呈现常量，不是游戏规则参数。 */
+    :root {
+      color-scheme: dark;
+      --ink: #e8e2d2;
+      --muted: #9da49f;
+      --quiet: #69716d;
+      --moon: #c5ded6;
+      --moon-strong: #e3fff5;
+      --rust: #ba6c4b;
+      --rust-soft: #80513d;
+      --line: rgba(226, 237, 224, .13);
+      --paper: #111614;
+      --paper-2: #171c19;
+      --scene: #0d1516;
+      --panel-width: 39%;
+      font-family: "Noto Serif SC", "Songti SC", "Source Han Serif SC", Georgia, serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: #080b0b;
+      color: var(--ink);
+    }
+
+    button { font: inherit; }
+
+    .game-shell {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(390px, var(--panel-width));
+      /* 行高锁死在视口高（minmax(0,·) 而非 auto）：否则右侧叙事栏会按内容长高，
+         把「回应选项」挤出屏幕——违反叙事界面布局.md §二「历史增长不得把当前选项推出屏幕」 */
+      grid-template-rows: minmax(0, 1fr);
+      width: 100vw;
+      height: 100dvh;
+      isolation: isolate;
+    }
+
+    .scene {
+      position: relative;
+      min-width: 0;
+      min-height: 0;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 68% 25%, rgba(165, 202, 192, .15), transparent 24%),
+        linear-gradient(148deg, #152325 0%, #091011 54%, #111614 100%);
+    }
+
+    .scene::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 8;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, rgba(0,0,0,.28), transparent 18%, transparent 72%, rgba(0,0,0,.34)),
+        radial-gradient(ellipse at center, transparent 42%, rgba(0,0,0,.62) 118%);
+      mix-blend-mode: multiply;
+    }
+
+    .scene::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 9;
+      opacity: .16;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+    }
+
+    /* ── 探索层：可走动的住院楼 1F 走廊 ─────────────────────────────
+       来源：design/space/空间与关卡设计.md §3.2（走廊宽 2.5–3.5m）· §3.7（护士站）
+             · §6.4（住院楼 1F 全开放——玩家醒来的楼层全部可走）
+       PLAYABLE.md CP-01 must-prove 第 3 条：探索、接敌、解决与结束形成连续体验。
+       本节所有尺寸/速度均为原型呈现常量，不是游戏规则参数。 */
+    .stage { position: absolute; inset: 0; z-index: 1; }
+
+    .backwall {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      height: 46%;
+      background:
+        linear-gradient(90deg, rgba(0,0,0,.35), transparent 22%, transparent 78%, rgba(0,0,0,.4)),
+        linear-gradient(#1c2829 0 62%, #131d1e 62.4% 63%, #0e1617 100%);
+    }
+
+    .ground {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 46%;
+      bottom: 0;
+      background:
+        linear-gradient(90deg, transparent 49.83%, rgba(203, 231, 219, .13) 50%, transparent 50.17%),
+        repeating-linear-gradient(90deg, transparent 0 58px, rgba(196, 220, 209, .05) 58px 59px),
+        linear-gradient(#162021, #070b0c 88%);
+    }
+
+    .wall-side {
+      position: absolute;
+      top: 46%;
+      bottom: 0;
+      width: 30%;
+      pointer-events: none;
+    }
+
+    .wall-side.left {
+      left: 0;
+      background: linear-gradient(90deg, #101a1b 32%, transparent);
+      clip-path: polygon(0 0, 100% 100%, 0 100%);
+    }
+
+    .wall-side.right {
+      right: 0;
+      background: linear-gradient(270deg, #0e1819 32%, transparent);
+      clip-path: polygon(100% 0, 100% 100%, 0 100%);
+    }
+
+    .moonpool {
+      position: absolute;
+      top: 46%;
+      height: 48%;
+      transform: translateX(-50%);
+      pointer-events: none;
+      background: radial-gradient(ellipse at 50% 0, rgba(186, 232, 219, .17), transparent 68%);
+      opacity: .72;
+      transition: opacity 800ms ease;
+    }
+
+    /* 世界对象：一律以「足底/底边」锚定后再缩放 */
+    .obj {
+      position: absolute;
+      transform-origin: 50% 100%;
+      pointer-events: none;
+    }
+
+    .obj.door {
+      border: 1px solid rgba(193, 215, 205, .14);
+      background: linear-gradient(90deg, #0f1818, #2b3a39 58%, #0d1415);
+      box-shadow: inset 0 0 22px rgba(0,0,0,.7), 0 10px 18px rgba(0,0,0,.35);
+    }
+
+    .obj.door::after {
+      content: "";
+      position: absolute;
+      top: 46%;
+      right: 15%;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #9a8d69;
+    }
+
+    .obj.door.unnumbered { background: linear-gradient(90deg, #0b1213, #1d2726 58%, #090e0f); }
+
+    .obj.window-glass {
+      overflow: hidden;
+      border: 0;
+      background: linear-gradient(155deg, #b9d8d0 0%, #5d7d79 45%, #142425 100%);
+      box-shadow: 0 0 44px rgba(171, 220, 207, .2), inset 0 0 30px rgba(9, 22, 22, .5);
+    }
+
+    .obj.window-glass::before, .obj.window-glass::after {
+      content: "";
+      position: absolute;
+      background: rgba(15, 26, 27, .82);
+    }
+
+    .obj.window-glass::before { inset: 0 auto 0 49%; width: 5px; }
+    .obj.window-glass::after { inset: 48% 0 auto 0; height: 4px; }
+
+    .obj.counter {
+      background: linear-gradient(#5c6963 0 8%, #26322f 9% 74%, #101715 75%);
+      border-left: 1px solid rgba(204, 221, 210, .2);
+      border-right: 1px solid rgba(204, 221, 210, .2);
+      box-shadow: 0 14px 26px rgba(0,0,0,.5);
+      pointer-events: none;
+    }
+
+    .obj.prop {
+      border-radius: 2px;
+      background: linear-gradient(#cdc8b6, #6d6a5d);
+      box-shadow: 0 4px 8px rgba(0,0,0,.5);
+    }
+
+    .obj.prop.keys { background: linear-gradient(#c9a86a, #6c5a36); }
+
+    /* 可交互标记：靠近才亮 */
+    .marker {
+      position: absolute;
+      width: 9px;
+      height: 9px;
+      margin: -4px 0 0 -4px;
+      border: 1px solid rgba(197, 222, 214, .3);
+      transform: rotate(45deg);
+      background: rgba(197, 222, 214, .07);
+      transition: background .18s, border-color .18s, transform .18s;
+    }
+
+    .marker.near {
+      border-color: var(--moon);
+      background: rgba(227, 255, 245, .34);
+      transform: rotate(45deg) scale(1.35);
+    }
+
+    .marker.done { border-color: rgba(197, 222, 214, .12); background: transparent; }
+
+    .actor {
+      position: absolute;
+      transform-origin: 50% 100%;
+      filter: drop-shadow(0 8px 8px rgba(0,0,0,.75));
+    }
+
+    .actor .head {
+      position: absolute;
+      left: 31%;
+      top: 0;
+      width: 38%;
+      aspect-ratio: .82;
+      border-radius: 48% 48% 42% 42%;
+      background: #3a3c37;
+      box-shadow: inset -6px -3px 10px #171a18;
+    }
+
+    .actor .body {
+      position: absolute;
+      left: 14%;
+      top: 19%;
+      width: 72%;
+      height: 52%;
+      clip-path: polygon(18% 0, 82% 0, 100% 100%, 0 100%);
+      background: linear-gradient(90deg, #d6d9cd, #7b837a 70%, #454c46);
+    }
+
+    .actor .body::after {
+      content: "";
+      position: absolute;
+      left: 45%;
+      top: 0;
+      width: 8%;
+      height: 100%;
+      background: rgba(41, 59, 56, .45);
+    }
+
+    .actor .legs {
+      position: absolute;
+      left: 26%;
+      top: 68%;
+      width: 48%;
+      height: 32%;
+      border-left: 7px solid #242d2b;
+      border-right: 7px solid #1c2422;
+    }
+
+    /* 玩家：病号服（低饱和青灰），与护士的白制服区分 */
+    .actor.player .head { background: #35383a; }
+    .actor.player .body { background: linear-gradient(90deg, #8fa6a2, #4d5f5d 70%, #2e3a39); }
+    .actor.nurse .body::before {
+      content: "";
+      position: absolute;
+      left: 8%;
+      top: 6%;
+      width: 84%;
+      height: 10%;
+      background: rgba(186, 108, 75, .75);
+    }
+
+    .actor.walking .legs { animation: step .3s ease-in-out infinite alternate; }
+    @keyframes step { from { transform: translateY(0); } to { transform: translateY(-6%); } }
+
+    .prompt {
+      position: absolute;
+      transform: translate(-50%, -100%);
+      padding: 4px 8px;
+      border: 1px solid rgba(197, 222, 214, .3);
+      background: rgba(8, 13, 13, .86);
+      color: var(--ink);
+      font: 11px/1.3 ui-monospace, monospace;
+      white-space: nowrap;
+      opacity: 0;
+      transition: opacity .16s;
+      pointer-events: none;
+    }
+
+    .prompt.show { opacity: 1; }
+
+    .control-hint {
+      position: absolute;
+      z-index: 12;
+      left: 50%;
+      bottom: 14px;
+      transform: translateX(-50%);
+      padding: 5px 10px;
+      border: 1px solid rgba(255,255,255,.09);
+      background: rgba(5, 9, 9, .62);
+      color: rgba(233, 238, 228, .58);
+      font: 10px/1.3 ui-monospace, monospace;
+      letter-spacing: .06em;
+      white-space: nowrap;
+      backdrop-filter: blur(6px);
+    }
+
+    .scene.alert .moonpool { opacity: 1; }
+    .scene.suspicious .ground { filter: saturate(.72) contrast(1.1); }
+    .scene.opened .ground { filter: brightness(1.1); }
+
+    .scene-topbar {
+      position: absolute;
+      z-index: 12;
+      inset: 0 0 auto 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 18px 22px;
+      background: linear-gradient(rgba(3,7,7,.72), transparent);
+    }
+
+    .location-kicker, .time-readout, .eyebrow {
+      font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+      text-transform: uppercase;
+      letter-spacing: .16em;
+    }
+
+    .location-kicker { color: var(--moon); font-size: 11px; }
+    .location-title { margin-top: 4px; font-size: clamp(18px, 1.7vw, 25px); font-weight: 500; }
+    .time-readout { color: rgba(215, 231, 221, .68); font-size: 10px; text-align: right; line-height: 1.55; }
+
+    .scene-bottom {
+      position: absolute;
+      z-index: 12;
+      inset: auto 0 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 18px;
+      padding: 58px 22px 18px;
+      background: linear-gradient(transparent, rgba(4,7,7,.88));
+    }
+
+    .objective { max-width: 490px; }
+    .eyebrow { color: var(--rust); font-size: 10px; font-weight: 700; }
+    .objective p { margin: 5px 0 0; color: rgba(239,235,220,.86); font-size: 14px; line-height: 1.42; }
+
+    .player-vitals {
+      display: grid;
+      grid-template-columns: auto auto;
+      gap: 5px 12px;
+      min-width: 150px;
+      font: 11px/1.2 ui-monospace, monospace;
+      color: var(--muted);
+    }
+
+    .meter {
+      width: 86px;
+      height: 4px;
+      margin-top: 4px;
+      background: rgba(255,255,255,.1);
+      overflow: hidden;
+    }
+
+    .meter > i { display: block; height: 100%; background: var(--moon); }
+    .meter.hp > i { width: 84%; background: #9b7968; }
+    .meter.san > i { width: 72%; }
+
+    .narrative-panel {
+      position: relative;
+      z-index: 15;
+      min-width: 0;
+      min-height: 0;
+      overflow: hidden;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr) auto;
+      border-left: 1px solid rgba(226, 237, 224, .15);
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.018), transparent 24%),
+        var(--paper);
+      box-shadow: -24px 0 60px rgba(0,0,0,.28);
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: stretch;
+      min-height: 62px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255,255,255,.012);
+    }
+
+    .speaker-mark {
+      display: grid;
+      place-items: center;
+      width: 62px;
+      border-right: 1px solid var(--line);
+      color: var(--moon);
+      font: 25px/1 Georgia, serif;
+      background:
+        radial-gradient(circle, rgba(169,211,199,.11), transparent 64%),
+        repeating-linear-gradient(135deg, transparent 0 6px, rgba(255,255,255,.014) 7px);
+    }
+
+    .speaker-heading { flex: 1; min-width: 0; padding: 10px 15px 9px; }
+    .speaker-heading h1 { margin: 2px 0 3px; font-size: 17px; font-weight: 500; }
+    .speaker-heading p { margin: 0; color: var(--quiet); font-size: 11px; line-height: 1.4; }
+
+    .tabs { flex: 0 0 auto; display: flex; align-items: stretch; }
+    .tab {
+      appearance: none;
+      min-width: 54px;
+      padding: 0 14px;
+      border: 0;
+      border-left: 1px solid var(--line);
+      background: transparent;
+      color: var(--quiet);
+      cursor: pointer;
+      font-size: 12px;
+      writing-mode: vertical-rl;
+      letter-spacing: .25em;
+    }
+
+    .tab:hover, .tab.active { color: var(--ink); background: rgba(255,255,255,.03); }
+
+    .story-scroll {
+      min-height: 0;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scroll-behavior: smooth;
+      scrollbar-width: auto;
+      scrollbar-color: #6d7c75 rgba(255, 255, 255, .04);
+      cursor: grab;
+      touch-action: pan-y;
+    }
+
+    /* 拖拽回读时关掉平滑滚动，否则每帧都排队动画会拖不动 */
+    .story-scroll.dragging { cursor: grabbing; scroll-behavior: auto; }
+
+    .story-scroll::-webkit-scrollbar { width: 11px; }
+    .story-scroll::-webkit-scrollbar-track { background: rgba(255, 255, 255, .035); }
+    .story-scroll::-webkit-scrollbar-thumb {
+      background: #55635d;
+      border: 2px solid transparent;
+      border-radius: 6px;
+      background-clip: content-box;
+    }
+    .story-scroll::-webkit-scrollbar-thumb:hover { background: #7d8f87; background-clip: content-box; }
+
+    .story, .notebook { padding: 18px clamp(18px, 2.1vw, 32px) 26px; }
+    .notebook[hidden], .story[hidden] { display: none; }
+
+    .beat { margin: 0 0 16px; animation: rise .45s ease both; }
+    .beat .label {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 5px;
+      color: var(--rust);
+      font: 700 10px/1.2 ui-monospace, monospace;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .beat .label::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, var(--rust-soft), transparent); }
+    .beat p { margin: 0; color: #d9d9cf; font-size: clamp(14px, 1.05vw, 16px); line-height: 1.6; }
+    .beat.scene-text p { color: #c5c9c1; font-style: italic; }
+    .beat.player { padding-left: 16px; border-left: 2px solid rgba(197,222,214,.28); }
+    .beat.player p { color: #cbd4ce; }
+
+    .beat.perception {
+      position: relative;
+      padding: 11px 13px 12px;
+      border: 1px solid rgba(166, 202, 190, .13);
+      background: linear-gradient(120deg, rgba(124, 166, 153, .09), transparent 70%);
+    }
+
+    .beat.perception p { color: #d7eee7; }
+    .beat.system p { color: #c2c9bd; font-size: 13px; }
+
+    .choices {
+      position: relative;
+      padding: 11px 16px 13px;
+      border-top: 1px solid var(--line);
+      background: linear-gradient(rgba(17,22,20,.84), #0c100f 30%);
+    }
+
+    .choices-header {
+      display: flex;
+      justify-content: space-between;
+      margin: 0 4px 6px;
+      color: var(--quiet);
+      font: 9px/1.2 ui-monospace, monospace;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+
+    .choice {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 27px minmax(0, 1fr);
+      gap: 8px;
+      align-items: baseline;
+      padding: 7px 9px;
+      border: 0;
+      border-left: 2px solid transparent;
+      background: transparent;
+      color: #c7c6bb;
+      text-align: left;
+      cursor: pointer;
+      line-height: 1.34;
+      transition: color .16s, background .16s, transform .16s, border-color .16s;
+    }
+
+    .choice:hover, .choice:focus-visible {
+      outline: none;
+      color: #fffbed;
+      border-left-color: var(--rust);
+      background: linear-gradient(90deg, rgba(170,97,66,.13), transparent);
+      transform: translateX(4px);
+    }
+
+    .choice-index { color: var(--rust); font: 700 11px/1.4 ui-monospace, monospace; }
+    .choice-meta { display: block; margin-top: 2px; color: #858e88; font: 10px/1.25 ui-monospace, monospace; }
+
+    .note-section { margin-bottom: 21px; }
+    .note-section h2 { margin: 0 0 8px; color: var(--rust); font: 700 11px/1.2 ui-monospace, monospace; letter-spacing: .17em; }
+    .note-card { padding: 9px 11px; margin-bottom: 6px; border-left: 2px solid #59655f; background: rgba(255,255,255,.025); }
+    .note-card span { display: block; color: #8a938b; margin-top: 3px; font-size: 11px; line-height: 1.42; }
+
+    /* 内在反应——叙事界面布局.md §三：独立标签与边线，不伪装成客观事实。
+       与「感知文本」（实线框 + 青色）在形状上分开：这里是虚线左边线、无框、暖灰。 */
+    .beat.inner {
+      padding-left: 14px;
+      border-left: 1px dashed rgba(186, 108, 75, .55);
+    }
+
+    .beat.inner .label { color: #8d7a68; }
+    .beat.inner .label::after { background: linear-gradient(90deg, rgba(141, 122, 104, .45), transparent); }
+    .beat.inner p { color: #cbbfae; }
+
+    .replay {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid rgba(197, 222, 214, .28);
+      background: rgba(197, 222, 214, .05);
+      color: var(--ink);
+      font-size: 13px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color .16s, background .16s, transform .16s;
+    }
+
+    /* §四.2：焦点反馈含边线与位移，不只依赖颜色 */
+    .replay:hover, .replay:focus-visible {
+      outline: none;
+      border-color: var(--moon);
+      background: rgba(197, 222, 214, .11);
+      transform: translateY(-1px);
+    }
+
+    .prototype-badge {
+      position: absolute;
+      z-index: 20;
+      top: 17px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 6px 10px;
+      border: 1px solid rgba(255,255,255,.1);
+      background: rgba(5,8,8,.55);
+      color: rgba(233,238,228,.43);
+      font: 8px/1 ui-monospace, monospace;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      backdrop-filter: blur(7px);
+    }
+
+    .toast {
+      position: absolute;
+      z-index: 30;
+      left: 28px;
+      bottom: 125px;
+      max-width: 340px;
+      padding: 9px 12px;
+      border-left: 2px solid var(--moon);
+      background: rgba(9,14,13,.86);
+      color: #c9d4ce;
+      font-size: 12px;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity .25s, transform .25s;
+      backdrop-filter: blur(8px);
+    }
+
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 840px) {
+      html, body { overflow: auto; }
+      .game-shell { grid-template-columns: 1fr; grid-template-rows: minmax(0, 42dvh) minmax(0, 58dvh); min-height: 100dvh; }
+      .narrative-panel { border-left: 0; border-top: 1px solid var(--line); }
+      .scene-topbar { padding: 15px 16px; }
+      .scene-bottom { padding: 50px 16px 13px; }
+      .player-vitals { display: none; }
+      .prototype-badge { left: auto; right: 10px; transform: none; top: 52px; }
+      .panel-header { min-height: 64px; }
+      .speaker-mark { width: 64px; }
+      .speaker-heading { padding-inline: 14px 8px; }
+      .speaker-heading p { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+      .tab { min-width: 44px; padding: 0 10px; }
+      .story, .notebook { padding: 16px 16px 22px; }
+      .beat { margin-bottom: 14px; }
+      .beat p { font-size: 14px; line-height: 1.55; }
+      .choices { padding: 9px 10px 11px; }
+      .choice { padding: 8px 8px; }
+      .toast { left: 14px; right: 14px; bottom: calc(58dvh + 12px); }
+      /* 窄屏操作提示上移并允许折行：原文案在 390px 宽下会压住「当前承诺」 */
+      .control-hint {
+        left: 10px;
+        right: 10px;
+        bottom: 60px;
+        transform: none;
+        font-size: 9px;
+        white-space: normal;
+        text-align: center;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="game-shell">
+    <section class="scene" id="scene" aria-label="住院楼 1F 走廊与夜间护士站">
+      <div class="stage" id="stage">
+        <div class="backwall"></div>
+        <div class="ground" id="ground"></div>
+        <div class="wall-side left"></div>
+        <div class="wall-side right"></div>
+        <div class="moonpool" id="moonpool"></div>
+        <div class="objects" id="objects"></div>
+        <div class="actors" id="actors"></div>
+        <div class="markers" id="markers"></div>
+        <div class="prompt" id="prompt"></div>
+      </div>
+
+      <div class="prototype-badge">interactive presentation prototype</div>
+
+      <header class="scene-topbar">
+        <div>
+          <div class="location-kicker">住院楼 · 一层</div>
+          <div class="location-title">夜间走廊</div>
+        </div>
+        <div class="time-readout">第 01 日<br>夜晚 · 月光增强</div>
+      </header>
+
+      <footer class="scene-bottom">
+        <div class="objective">
+          <div class="eyebrow">当前承诺</div>
+          <p id="objectiveText">弄清楚护士站为什么提前锁上。</p>
+        </div>
+        <div class="player-vitals" aria-label="玩家状态">
+          <span>HP</span><span>42 / 50</span>
+          <div class="meter hp"><i></i></div><span></span>
+          <span>SAN</span><span>58 / 80</span>
+          <div class="meter san"><i></i></div><span></span>
+        </div>
+      </footer>
+
+      <div class="control-hint" id="controlHint">WASD / 方向键走动 · 点击地面移动 · 走近后按 E 交互</div>
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    </section>
+
+    <aside class="narrative-panel" aria-label="叙事面板">
+      <header class="panel-header">
+        <div class="speaker-mark" aria-hidden="true">护</div>
+        <div class="speaker-heading">
+          <div class="eyebrow">值班护士</div>
+          <h1>赵岚</h1>
+          <p>她没有看你。她在看玻璃上的倒影。</p>
+        </div>
+        <nav class="tabs" aria-label="侧栏视图">
+          <button class="tab active" data-view="story" aria-pressed="true">对话</button>
+          <button class="tab" data-view="notebook" aria-pressed="false">笔记</button>
+        </nav>
+      </header>
+
+      <div class="story-scroll" id="storyScroll" tabindex="0" role="log" aria-label="叙事流与笔记本">
+        <div class="story" id="story"></div>
+        <div class="notebook" id="notebook" hidden></div>
+      </div>
+
+      <footer class="choices" id="choices"></footer>
+    </aside>
+  </main>
+
+  <script>
+    // 来源：design/presentation/叙事界面布局.md §三—§五。
+    // 本文件的剧情文案按该文 §五「原型场景」仅为演示，不进入故事正典；数值为原型呈现常量，不是游戏规则参数。
+    // 叙事流的六种类型按 §三 实现：客观描述 / 说话者 / 感知文本 / 内在反应 / 系统回声 / 玩家回应。
+    const SECTIONS = ['承诺', '线索', '自问'];
+    const INITIAL_OBJECTIVE = '弄清楚护士站为什么提前锁上。';
+    const INITIAL_NOTES = {
+      承诺: [{ text: '弄清楚护士站为什么提前锁上。', tag: '未完成 · 来自环境障碍' }],
+      线索: [
+        { text: '赵护士把钥匙压在登记册下。', tag: '夜间护士站' },
+        { text: '登记册第三行似乎让她紧张。', tag: '感知所得 · 尚未核实' }
+      ],
+      自问: [{ text: '如果所有人看见的都不一样，隐瞒还算是说谎吗？', tag: '正在深化' }]
+    };
+
+    // 回应选项的 meta 一律写「已知前提」（§三：已知前提；未知后果不预告），不写预期效果。
+    const nodes = {
+      r1: {
+        beats: [
+          { t: 'scene-text', l: '场景', x: '玻璃后的灯只亮了一半。赵护士背对着你，把一串钥匙压在登记册下面。月光从她肩头越过去，在地面铺出一条苍白的路。' },
+          { t: '', l: '赵岚', x: '“回病房去。今晚不发药，也不接待任何人。”' },
+          { t: 'perception', l: '显著性网络 · 被动', x: '她说“任何人”时，食指压住了登记册的第三行。不是钥匙让她紧张。是那个名字。' },
+          { t: 'inner', l: '内在反应 · 竞争性解释', x: '〔现在走，你就是今晚第二个被她赶回去的人。〕／〔不走，你就是今晚第一个不肯走的人。〕' }
+        ],
+        choices: [
+          { text: '“登记册第三行是谁？”', meta: '前提：她的食指一直没离开那一行', next: 'r2_press' },
+          { text: '“我不是来拿药的。你看起来需要有人陪一会儿。”', meta: '前提：她背对着门，却没有锁上它', next: 'r2_care' },
+          { text: '什么都不说，站在原地看她的手。', meta: '前提：不打断，先看她先动哪一样东西', next: 'r2_watch' },
+          { text: '转身离开护士站。', meta: '前提：会话可以保留，之后还能回来', next: 'end_leave' }
+        ]
+      },
+
+      r2_press: {
+        beats: [
+          { t: 'player', l: '你', x: '“登记册第三行是谁？”' },
+          { t: '', l: '赵岚', x: '她终于转过身来。不是看你，而是确认你身后的走廊里有没有别人。“你看错了。今天的登记册没有第三行。”' },
+          { t: 'perception', l: '显著性网络 · 被动', x: '纸页在她手肘下轻轻鼓动。第三行的墨迹透过背面，像一根被压住的静脉。' },
+          { t: 'inner', l: '内在反应 · 竞争性解释', x: '〔她在否认一件她根本没看的东西。〕／〔她确认的不是走廊，是我身后有没有别人。〕' }
+        ],
+        choices: [
+          { text: '“那就翻开看一眼。没有第三行，你看一眼就能证明。”', meta: '前提：她始终没有把手从册子上移开', next: 'end_p_show' },
+          { text: '“我今晚也看见了不该在的东西。也许我们在替同一件事保密。”', meta: '前提：她刚才确认过走廊里没有别人', next: 'end_p_share' },
+          { text: '不再追问，退到门边。', meta: '前提：否认也可以先收下，门还开着', next: 'end_p_yield' }
+        ]
+      },
+
+      r2_care: {
+        beats: [
+          { t: 'player', l: '你', x: '“我不是来拿药的。你看起来需要有人陪一会儿。”' },
+          { t: '', l: '赵岚', x: '她的手从登记册上移开了一点。“陪我？”她短促地笑了一声，“那你先告诉我——窗户里站着的，是你，还是我？”' },
+          { t: 'perception', l: '显著性网络 · 被动', x: '玻璃里确实有两个人。但两个倒影都没有做出你正在做的动作。' },
+          { t: 'inner', l: '内在反应 · 竞争性解释', x: '〔她在问我，还是在问她自己？〕／〔她早就知道窗户里有两个，她只是想听我怎么答。〕' }
+        ],
+        choices: [
+          { text: '你走到窗边，站进她的倒影里。', meta: '前提：她一直看的是玻璃，不是你', next: 'end_c_window' },
+          { text: '“我不知道。但我可以站到你看得见的地方。”', meta: '前提：这也是一个你回答不了的问题', next: 'end_c_truth' },
+          { text: '不回答。走廊尽头的灯管响了一下。', meta: '前提：这个问题可以留在原处', next: 'end_c_yield' }
+        ]
+      },
+
+      r2_watch: {
+        beats: [
+          { t: 'player', l: '你', x: '你什么也没说。' },
+          { t: '', l: '赵岚', x: '“你站在那儿，我就没法装作没人在看。”她把登记册往自己这边抽了半寸，钥匙串在台面上刮出一声轻响。' },
+          { t: 'perception', l: '显著性网络 · 被动', x: '钥匙串上有一把没有编号的铜牌。她的袖口是干的，可那把钥匙是湿的。' },
+          { t: 'inner', l: '内在反应 · 竞争性解释', x: '〔湿的是钥匙，不是人——她刚才去过一个不该有水的地方。〕／〔她先把最要紧的东西挪向自己怀里。〕' }
+        ],
+        choices: [
+          { text: '“那把钥匙是哪扇门的？”', meta: '前提：她的手指在铜牌上停了一下', next: 'end_w_key' },
+          { text: '你伸手按住登记册，没有翻开。', meta: '前提：你够得着，而且没有翻开它', next: 'end_w_register' },
+          { text: '退开半步，把台面还给她。', meta: '前提：先看她先动哪一样', next: 'end_w_yield' }
+        ]
+      },
+
+      end_p_show: {
+        beats: [
+          { t: 'player', l: '你', x: '“那就翻开看一眼。没有第三行，你看一眼就能证明。”' },
+          { t: '', l: '赵岚', x: '她把登记册推到灯下，翻开。“你看，第三行是空的。”说完就去合册子——比翻开时快得多。' },
+          { t: 'perception', l: '显著性网络 · 被动', x: '那一行空得比别处更白。纸被擦过，擦得很轻，像有人怕留下自己的指纹。' },
+          { t: 'inner', l: '内在反应 · 竞争性解释', x: '〔空的一行也是证据。她刚刚亲手替我证明了这一点。〕' },
+          { t: 'system', l: '笔记本', x: '线索已核实：第三行被擦掉过。承诺更新：找到第三行原来的名字。' }
+        ],
+        promise: { text: '找到第三行原来的名字。', tag: '未完成 · 来自她的否认' },
+        add: { 线索: [{ text: '登记册第三行被擦过，擦痕透到纸背。', tag: '已核实 · 夜间护士站' }], 自问: [{ text: '擦掉一个名字，能不能让一个人不存在？', tag: '正在深化' }] },
+        toast: '线索已核实 · 第三行被擦过',
+        objective: '找到能够证明“第三行”存在过的另一位见证者。',
+        state: 'suspicious', moonAlert: true, figureTurned: true
+      },
+
+      end_p_share: {
+        beats: [
+          { t: 'player', l: '你', x: '“我今晚也看见了不该在的东西。也许我们在替同一件事保密。”' },
+          { t: '', l: '赵岚', x: '她看了你很久，久到走廊尽头的灯闪了一次。“……你说的是哪一件？”她既没有否认，也没有承认。她在称你。' },
+          { t: 'perception', l: '显著性网络 · 被动', x: '她的呼吸变慢了。不是放松，是在数你说的话里有几处空白。' },
+          { t: 'inner', l: '内在反应 · 竞争性解释', x: '〔她要我先交出真话，才肯给我一个名字。〕／〔或者她只是在等我说出一个她自己也不敢说的版本。〕' },
+          { t: 'system', l: '笔记本', x: '承诺更新：用一件真话，换她说出第三行的名字。' }
+        ],
+        promise: { text: '用一件真话，换她说出第三行的名字。', tag: '未完成 · 交换尚未成立' },
+        add: { 自问: [{ text: '我准备用哪一件真话去换她的？', tag: '待回答' }] },
+        toast: '对话推进 · 她在称你的分量',
+        objective: '在下次会话里，用一件真话换出第三行的名字。',
+        state: 'opened'
+      },
+
+      end_p_yield: {
+        beats: [
+          { t: 'player', l: '你', x: '你不再追问，退到门边。' },
+          { t: '', l: '赵岚', x: '“对，回去。”她重新背过身，“趁走廊还记得你的房间在哪。”' },
+          { t: 'perception', l: '显著性网络 · 被动', x: '你离开时，钥匙碰了一下桌面。她在提醒你：门仍然可以被打开。' },
+          { t: 'system', l: '笔记本', x: '会话已保留：你没有得到名字，也没有失去她的注意。' }
+        ],
+        add: { 自问: [{ text: '我退开，是因为不想逼她，还是因为怕她答？', tag: '待回答' }] },
+        toast: '对话状态已保留 · 世界继续',
+        objective: '调查走廊尽头那扇没有编号的门。',
+        state: ''
+      },
+
+      end_c_window: {
+        beats: [
+          { t: 'player', l: '你', x: '你走到窗边，站进她的倒影里。' },
+          { t: '', l: '赵岚', x: '玻璃里，你的倒影迟了半拍才到位。她盯着那半拍，喉咙动了一下。“……你也这样？”' },
+          { t: 'perception', l: '显著性网络 · 被动', x: '两个人的倒影同时偏了头，朝走廊的方向——而你们两个都没有动。' },
+          { t: 'inner', l: '内在反应 · 竞争性解释', x: '〔镜子里的我，比我先知道了什么。〕／〔也可能是我在学她，只是自己没察觉。〕' },
+          { t: 'system', l: '笔记本', x: '线索已更新：倒影会先于身体反应。自问深化：是谁在带着我动？' }
+        ],
+        add: {
+          线索: [{ text: '倒影的反应比身体早半拍。', tag: '感知所得 · 尚未核实' }],
+          自问: [{ text: '如果倒影比我先知道，那我是被谁带着走的？', tag: '正在深化' }]
+        },
+        toast: '线索已更新 · 倒影的延迟',
+        objective: '确认倒影的延迟是否只在月光增强时出现。',
+        state: 'opened', moonAlert: true, figureTurned: true
+      },
+
+      end_c_truth: {
+        beats: [
+          { t: 'player', l: '你', x: '“我不知道。但我可以站到你看得见的地方。”' },
+          { t: '', l: '赵岚', x: '她终于正眼看你。“看得见的地方……”她重复了一遍，像在检查这句话有没有缝。“那就站着。别动。”' },
+          { t: 'perception', l: '显著性网络 · 被动', x: '她开始数你身上的细节：袖口、鞋、左手无名指。被看不是威胁，是核对。' },
+          { t: 'inner', l: '内在反应 · 竞争性解释', x: '〔她在核对的是我，还是她记忆里的另一个人？〕' },
+          { t: 'system', l: '笔记本', x: '自问深化：她核对的对象可能不是我。' }
+        ],
+        add: { 自问: [{ text: '她核对的是我，还是她记忆里的另一个人？', tag: '正在深化' }] },
+        toast: '自问正在深化 · 她在核对谁',
+        objective: '让她把“核对”的结果说出来。',
+        state: 'opened'
+      },
+
+      end_c_yield: {
+        beats: [
+          { t: 'player', l: '你', x: '你不回答，任由这个问题留在原地。' },
+          { t: '', l: '赵岚', x: '“……行。”她把钥匙重新压回登记册上，“明天早上七点会有人来换班。你最好在那之前想清楚。”' },
+          { t: 'perception', l: '显著性网络 · 被动', x: '她说“想清楚”的时候，看的是窗户，不是登记册。' },
+          { t: 'system', l: '笔记本', x: '承诺更新：在换班前回到护士站。' }
+        ],
+        promise: { text: '在早上七点换班前回到护士站。', tag: '未完成 · 来自她的期限' },
+        toast: '对话状态已保留 · 换班前回来',
+        objective: '在早上七点换班前回到护士站。',
+        state: ''
+      },
+
+      end_w_key: {
+        beats: [
+          { t: 'player', l: '你', x: '“那把钥匙是哪扇门的？”' },
+          { t: '', l: '赵岚', x: '她的手停在钥匙串上。“储物间。”太快了。回答比你问完还快。' },
+          { t: 'perception', l: '显著性网络 · 被动', x: '钥匙的齿是新的，铜牌却磨得发亮——它被摸过很多次，但很少真的开门。' },
+          { t: 'inner', l: '内在反应 · 竞争性解释', x: '〔她答的是门，可她护着的是牌子。〕' },
+          { t: 'system', l: '笔记本', x: '线索已更新：一把新齿旧牌的钥匙，她说是储物间的。' }
+        ],
+        add: { 线索: [{ text: '一把新齿旧牌的钥匙，她说是储物间的。', tag: '夜间护士站' }] },
+        toast: '线索已更新 · 新齿旧牌的钥匙',
+        objective: '去储物间确认那把钥匙能不能开门。',
+        state: 'suspicious'
+      },
+
+      end_w_register: {
+        beats: [
+          { t: 'player', l: '你', x: '你伸手按住登记册，没有翻开。' },
+          { t: '', l: '赵岚', x: '她没有拦你。她只是把自己的手收回去，慢慢握成拳。“……你比上一个懂事。”' },
+          { t: 'perception', l: '显著性网络 · 被动', x: '“上一个”落地之后，她自己先愣住了。走廊很安静，安静到这句话没地方可去。' },
+          { t: 'inner', l: '内在反应 · 竞争性解释', x: '〔“上一个”不是我。她在跟一个不在场的人说话。〕' },
+          { t: 'system', l: '笔记本', x: '线索已更新：她提到过“上一个”。承诺更新：问出“上一个”的名字。' }
+        ],
+        promise: { text: '问出“上一个”的名字。', tag: '未完成 · 来自她的失言' },
+        add: { 线索: [{ text: '她提到过“上一个”——指的是谁？', tag: '夜间护士站' }] },
+        toast: '线索已更新 · “上一个”',
+        objective: '问出“上一个”是谁。',
+        state: 'suspicious', figureTurned: true
+      },
+
+      end_w_yield: {
+        beats: [
+          { t: 'player', l: '你', x: '你退开半步，把台面还给她。' },
+          { t: '', l: '赵岚', x: '她先动的是钥匙，不是登记册。她把钥匙塞进兜里，才去整理纸页。顺序错了。' },
+          { t: 'perception', l: '显著性网络 · 被动', x: '人在隐瞒的时候，会先保住最贵的那样东西。她把钥匙搬走了。' },
+          { t: 'system', l: '笔记本', x: '线索已更新：对她来说，钥匙比登记册更重要。' }
+        ],
+        add: { 线索: [{ text: '她先收起了钥匙，才去整理登记册。', tag: '感知所得 · 尚未核实' }] },
+        toast: '线索已更新 · 她先收起了钥匙',
+        objective: '在换班前确认那把钥匙的下落。',
+        state: ''
+      },
+
+      end_leave: {
+        beats: [
+          { t: 'player', l: '你', x: '你什么也没说，转身走向门口。' },
+          { t: '', l: '赵岚', x: '“回病房。”她连头都没转，“走廊尽头那扇门别去碰。”' },
+          { t: 'perception', l: '显著性网络 · 被动', x: '这是她今晚第一句不是命令的话。那扇门本来不在你想去的地方。' },
+          { t: 'inner', l: '内在反应 · 竞争性解释', x: '〔她在赶我走，同时给了我一个地址。〕' },
+          { t: 'system', l: '笔记本', x: '会话已保留。新增线索：走廊尽头有一扇没有编号的门。' }
+        ],
+        add: { 线索: [{ text: '她主动提到走廊尽头那扇门。', tag: '夜间护士站' }] },
+        toast: '对话状态已保留 · 世界继续',
+        objective: '调查走廊尽头那扇没有编号的门。',
+        state: ''
+      }
+    };
+
+    // ── 探索层（左侧世界）────────────────────────────────────────────────
+    // 来源：空间与关卡设计.md §3.2（走廊宽 2.5–3.5m）· §3.7（护士站）· §6.4「住院楼 1F 全开放：
+    //       玩家醒来的楼层全部可走——自由探索」；PLAYABLE.md CP-01 must-prove 第 3 条。
+    // 世界坐标、速度、交互距离与下列文案均为原型呈现常量，不进入游戏正典。
+    const WORLD = { width: 4200, depth: 600 };
+    const WALK = { minX: 90, maxX: 4110, minY: 80, maxY: 560 };
+    const SPEED = 620;              // 世界单位 / 秒
+    const REACH = 300;              // 交互距离（世界单位）
+    const UNIT = 170;               // 1 米 ≈ 170 世界单位（走廊宽 2.5–3.5m ⇒ 480 单位）
+    const FLOOR_FAR = 0.46, FLOOR_NEAR = 0.94;
+    const BASE_VIEW = 1900;         // 中间深度处可见的世界宽度
+    const PERSP = { far: 0.72, near: 1.22 };
+    const OBSTACLES = [{ x0: 2900, y0: 210, x1: 3520, y1: 350 }];   // 护士站台面
+    const HINT_EXPLORE = 'WASD / 方向键走动 · 点击地面移动 · 走近后按 E 交互';
+    const HINT_TALK = '对话中 · 数字键或点击选择回应';
+
+    const INTRO_BEATS = [
+      { t: 'scene-text', l: '场景', x: '你在住院楼一层的病房里醒来。走廊尽头的灯只亮了一半，月光从护士站的窗户斜进来。' },
+      { t: 'inner', l: '内在反应 · 竞争性解释', x: '〔你不记得自己是怎么进来的。〕／〔或者你记得，只是不想现在想起来。〕' },
+      { t: 'system', l: '笔记本', x: '承诺已记下：弄清楚护士站为什么提前锁上。' }
+    ];
+
+    // kind：door / window / prop / actor；reach = 玩家可站到的交互点
+    const interactables = [
+      {
+        id: 'room', kind: 'door', x: 200, label: '你的病房', reach: { x: 200, y: 100 },
+        once: [
+          { t: 'scene-text', l: '客观描述', x: '门开着。床单掀在一侧，像有人刚刚离开。输液架上还挂着一袋没滴完的液体。' },
+          { t: 'inner', l: '内在反应 · 竞争性解释', x: '〔这是你的病房。你不记得自己是怎么回来的。〕' }
+        ],
+        again: [{ t: 'scene-text', l: '客观描述', x: '床单还是掀开着。没有人来收拾。' }]
+      },
+      {
+        id: 'ward102', kind: 'door', x: 560, label: '病房 102', reach: { x: 560, y: 100 },
+        once: [
+          { t: 'scene-text', l: '客观描述', x: '门锁着。门牌上的名字被一张不干胶盖住了一半。' },
+          { t: 'perception', l: '显著性网络 · 被动', x: '不干胶的边角翘起来了。底下那个名字的第一个字，像你的姓。' }
+        ],
+        again: [{ t: 'scene-text', l: '客观描述', x: '门还是锁着。' }],
+        add: { 线索: [{ text: '102 的门牌被贴掉了一半，底下的字像我的姓。', tag: '感知所得 · 尚未核实' }] }
+      },
+      {
+        id: 'ward103', kind: 'door', x: 940, label: '病房 103', reach: { x: 940, y: 100 },
+        once: [
+          { t: 'scene-text', l: '客观描述', x: '门缝里透出光。你敲了两下，光灭了。' },
+          { t: 'inner', l: '内在反应 · 竞争性解释', x: '〔里面的人不想见客。〕／〔里面的人只是不想见我。〕' }
+        ],
+        again: [{ t: 'scene-text', l: '客观描述', x: '门缝里的光是黑的。' }],
+        add: { 线索: [{ text: '103 有人。敲门之后灯灭了。', tag: '夜间走廊' }] }
+      },
+      {
+        id: 'ward104', kind: 'door', x: 1320, label: '病房 104', reach: { x: 1320, y: 100 },
+        once: [
+          { t: 'scene-text', l: '客观描述', x: '门半开着。里面没有人，床头柜上摆着一只倒扣的杯子。' },
+          { t: 'perception', l: '显著性网络 · 被动', x: '杯子是倒扣的。有人不想让它再被使用。' }
+        ],
+        again: [{ t: 'scene-text', l: '客观描述', x: '空床，倒扣的杯子。' }],
+        add: { 线索: [{ text: '104 空着，杯子倒扣在床头柜上。', tag: '夜间走廊' }] }
+      },
+      {
+        id: 'store', kind: 'door', x: 2660, label: '储物间', reach: { x: 2660, y: 100 },
+        once: [
+          { t: 'scene-text', l: '客观描述', x: '门锁着。锁孔很新，边缘还留着一点金属屑。' },
+          { t: 'inner', l: '内在反应 · 竞争性解释', x: '〔新锁。刚换的。〕／〔或者有人刚把它撬开过一次。〕' }
+        ],
+        again: [{ t: 'scene-text', l: '客观描述', x: '新锁还是新锁。' }],
+        add: { 线索: [{ text: '储物间换了新锁。', tag: '夜间走廊' }] }
+      },
+      {
+        id: 'window', kind: 'window', x: 3380, label: '窗', reach: { x: 3380, y: 100 },
+        once: [
+          { t: 'perception', l: '显著性网络 · 被动', x: '玻璃里有两个倒影。你的那个，比你慢了半拍才跟上。' },
+          { t: 'inner', l: '内在反应 · 竞争性解释', x: '〔我动的时候它没动。它动的时候我没动。〕' }
+        ],
+        again: [{ t: 'scene-text', l: '客观描述', x: '玻璃只反着走廊。月光在里面是白的。' }],
+        add: { 线索: [{ text: '窗玻璃里的倒影比身体慢半拍。', tag: '感知所得 · 尚未核实' }] }
+      },
+      {
+        id: 'enddoor', kind: 'door', x: 4060, label: '没有编号的门', reach: { x: 4060, y: 100 }, unnumbered: true,
+        once: [
+          { t: 'scene-text', l: '客观描述', x: '门上没有编号，也没有锁孔。你推了一下，它没有动。' },
+          { t: 'inner', l: '内在反应 · 竞争性解释', x: '〔它不是锁着的。〕／〔它是关着的。〕' }
+        ],
+        again: [{ t: 'scene-text', l: '客观描述', x: '门还在那里。不响，也不动。' }],
+        add: { 线索: [{ text: '走廊尽头有一扇没有编号、也没有锁的门。', tag: '夜间走廊' }] }
+      },
+      {
+        id: 'register', kind: 'prop', x: 3040, y: 372, label: '登记册', reach: { x: 3040, y: 400 },
+        once: [
+          { t: 'perception', l: '显著性网络 · 被动', x: '登记册摊开在台面上。第三行的位置被手肘压出一道浅浅的印子。' },
+          { t: 'inner', l: '内在反应 · 竞争性解释', x: '〔压痕在纸上，不在她的手上。〕' }
+        ],
+        again: [{ t: 'scene-text', l: '客观描述', x: '第三行还是空的。压痕还在。' }],
+        add: { 线索: [{ text: '登记册第三行的位置有一道手肘压痕。', tag: '感知所得 · 尚未核实' }] }
+      },
+      {
+        id: 'keys', kind: 'prop', x: 3460, y: 300, label: '钥匙串', reach: { x: 3460, y: 400 },
+        once: [
+          { t: 'perception', l: '显著性网络 · 被动', x: '钥匙串上挂着一把没有编号的铜牌。齿是新的，牌面却磨得发亮。' }
+        ],
+        again: [{ t: 'scene-text', l: '客观描述', x: '钥匙串还在台面上。铜牌朝上。' }],
+        add: { 线索: [{ text: '一把新齿旧牌的钥匙，牌上没有编号。', tag: '感知所得 · 尚未核实' }] }
+      },
+      {
+        id: 'nurse', kind: 'actor', x: 3300, y: 150, label: '赵岚', reach: { x: 3300, y: 400 }, talk: true
+      }
+    ];
+
+    const story = document.querySelector('#story');
+    const notebook = document.querySelector('#notebook');
+    const storyScroll = document.querySelector('#storyScroll');
+    const choices = document.querySelector('#choices');
+    const sceneEl = document.querySelector('#scene');
+    const stage = document.querySelector('#stage');
+    const objectsEl = document.querySelector('#objects');
+    const actorsEl = document.querySelector('#actors');
+    const markersEl = document.querySelector('#markers');
+    const promptEl = document.querySelector('#prompt');
+    const moonpool = document.querySelector('#moonpool');
+    const hintEl = document.querySelector('#controlHint');
+    const toast = document.querySelector('#toast');
+    const objectiveText = document.querySelector('#objectiveText');
+
+    let notes = {};
+    let rect = { w: 1280, h: 640 };
+    const cam = { x: WORLD.width / 2 };
+    const keys = Object.create(null);
+    const state = { mode: 'explore', x: 260, y: 470, tx: null, ty: null, facing: 1, moving: false, talked: false, pending: null, seen: Object.create(null), nearest: null };
+    const els = {};
+
+    // ── 投影：世界坐标 → 屏幕坐标（无 3D 变换，纯计算，便于核对）──
+    function depthOf(y) { return Math.min(Math.max(y / WORLD.depth, 0), 1); }
+    function pxPerWorld(d) { return (PERSP.far + (PERSP.near - PERSP.far) * d) * rect.w / BASE_VIEW; }
+    function project(x, y) {
+      const d = depthOf(y);
+      const per = pxPerWorld(d);
+      const top = rect.h * FLOOR_FAR;
+      const bottom = rect.h * FLOOR_NEAR;
+      // per = 每世界单位对应多少像素；尺寸一律用它换算，不再用归一化比例
+      return { sx: rect.w / 2 + (x - cam.x) * per, sy: top + d * (bottom - top), per: per, d: d };
+    }
+
+    function clampInto(x, y) {
+      let nx = Math.min(Math.max(x, WALK.minX), WALK.maxX);
+      let ny = Math.min(Math.max(y, WALK.minY), WALK.maxY);
+      OBSTACLES.forEach(o => {
+        const pad = 26;
+        if (nx > o.x0 - pad && nx < o.x1 + pad && ny > o.y0 - pad && ny < o.y1 + pad) {
+          const d = [[ny - (o.y0 - pad), 'far'], [(o.y1 + pad) - ny, 'near'], [nx - (o.x0 - pad), 'left'], [(o.x1 + pad) - nx, 'right']];
+          d.sort((a, b) => a[0] - b[0]);
+          if (d[0][1] === 'far') ny = o.y0 - pad;
+          else if (d[0][1] === 'near') ny = o.y1 + pad;
+          else if (d[0][1] === 'left') nx = o.x0 - pad;
+          else nx = o.x1 + pad;
+        }
+      });
+      return { nx, ny };
+    }
+
+    function el(tag, cls, parent) {
+      const node = document.createElement(tag);
+      if (cls) node.className = cls;
+      if (parent) parent.append(node);
+      return node;
+    }
+
+    function drawQuad(node, x0, y0, x1, y1) {
+      const a = project(x0, y0), b = project(x1, y0), c = project(x1, y1), d = project(x0, y1);
+      const left = Math.min(a.sx, b.sx, c.sx, d.sx);
+      const right = Math.max(a.sx, b.sx, c.sx, d.sx);
+      const top = Math.min(a.sy, b.sy, c.sy, d.sy);
+      const bottom = Math.max(a.sy, b.sy, c.sy, d.sy);
+      const w = Math.max(right - left, 1), h = Math.max(bottom - top, 1);
+      node.style.left = left + 'px';
+      node.style.top = top + 'px';
+      node.style.width = w + 'px';
+      node.style.height = h + 'px';
+      node.style.clipPath = 'polygon(' + [a, b, c, d].map(pt => ((pt.sx - left) / w * 100).toFixed(2) + '% ' + ((pt.sy - top) / h * 100).toFixed(2) + '%').join(', ') + ')';
+    }
+
+    function buildWorld() {
+      // 后墙（深度 0）：病房门 / 储物间 / 窗 / 走廊尽头没有编号的门
+      interactables.filter(item => item.kind === 'door' || item.kind === 'window').forEach(item => {
+        const node = el('div', 'obj ' + (item.kind === 'window' ? 'window-glass' : 'door') + (item.unnumbered ? ' unnumbered' : ''), objectsEl);
+        els['obj-' + item.id] = node;
+      });
+      // 护士站台面（地面上的占地矩形，用四边形裁剪表达）
+      const counter = el('div', 'obj counter', objectsEl);
+      const o = OBSTACLES[0];
+      counter.dataset.x0 = o.x0; counter.dataset.y0 = o.y0; counter.dataset.x1 = o.x1; counter.dataset.y1 = o.y1;
+      els.counter = counter;
+      // 台面上的登记册 / 钥匙
+      interactables.filter(item => item.kind === 'prop').forEach(item => {
+        els['obj-' + item.id] = el('div', 'obj prop' + (item.id === 'keys' ? ' keys' : ''), objectsEl);
+      });
+      // 人物
+      els.nurse = el('div', 'actor nurse', actorsEl);
+      els.nurse.append(el('div', 'head'), el('div', 'body'), el('div', 'legs'));
+      els.player = el('div', 'actor player', actorsEl);
+      els.player.append(el('div', 'head'), el('div', 'body'), el('div', 'legs'));
+      // 交互标记
+      interactables.forEach(item => {
+        els['mark-' + item.id] = el('div', 'marker', markersEl);
+      });
+    }
+
+    function layout() {
+      const per = pxPerWorld(depthOf(state.y));
+      const half = (rect.w / 2) / per;
+      cam.x = WORLD.width / 2;
+      if (half < WORLD.width / 2) cam.x = Math.min(Math.max(state.x, half), WORLD.width - half);
+
+      interactables.forEach(item => {
+        const node = els['obj-' + item.id];
+        if (item.kind === 'door') {
+          const p = project(item.x, 0);
+          const w = 1.02 * UNIT * p.per, h = 2.05 * UNIT * p.per;
+          node.style.left = p.sx + 'px';
+          node.style.top = (p.sy - h) + 'px';
+          node.style.width = w + 'px';
+          node.style.height = h + 'px';
+        } else if (item.kind === 'window') {
+          const p = project(item.x, 0);
+          const w = 2.4 * UNIT * p.per, h = 1.4 * UNIT * p.per;
+          node.style.left = p.sx + 'px';
+          node.style.top = (p.sy - (0.9 + 1.4) * UNIT * p.per) + 'px';
+          node.style.width = w + 'px';
+          node.style.height = h + 'px';
+        } else if (item.kind === 'prop') {
+          const p = project(item.x, item.y);
+          const w = 0.34 * UNIT * p.per, h = 0.12 * UNIT * p.per;
+          node.style.left = p.sx + 'px';
+          node.style.top = (p.sy - h) + 'px';
+          node.style.width = w + 'px';
+          node.style.height = Math.max(h, 3) + 'px';
+        }
+        if (item.kind !== 'actor') {
+          node.style.transform = 'translate(-50%, 0)';
+          node.style.zIndex = String(item.kind === 'door' || item.kind === 'window' ? 2 : Math.round(item.y));
+        }
+      });
+
+      els.counter.style.zIndex = String(Math.round(OBSTACLES[0].y1));
+      drawQuad(els.counter, Number(els.counter.dataset.x0), Number(els.counter.dataset.y0), Number(els.counter.dataset.x1), Number(els.counter.dataset.y1));
+
+      const np = project(3300, 150);
+      const nh = 1.72 * UNIT * np.per;
+      els.nurse.style.left = np.sx + 'px';
+      els.nurse.style.top = (np.sy - nh) + 'px';
+      els.nurse.style.width = (nh * 0.42) + 'px';
+      els.nurse.style.height = nh + 'px';
+      els.nurse.style.zIndex = String(Math.round(150));
+
+      const pp = project(state.x, state.y);
+      const ph = 1.72 * UNIT * pp.per;
+      els.player.style.left = pp.sx + 'px';
+      els.player.style.top = (pp.sy - ph) + 'px';
+      els.player.style.width = (ph * 0.42) + 'px';
+      els.player.style.height = ph + 'px';
+      els.player.style.transform = 'translate(-50%, 0) scaleX(' + state.facing + ')';
+      els.player.style.zIndex = String(Math.round(state.y));
+      els.player.classList.toggle('walking', state.moving);
+
+      const win = project(3380, 240);
+      moonpool.style.left = win.sx + 'px';
+      moonpool.style.width = (2.9 * UNIT * win.per) + 'px';
+
+      // 就近交互判定
+      let best = null, bestD = Infinity;
+      interactables.forEach(item => {
+        const p = project(item.x, item.kind === 'prop' || item.kind === 'actor' ? item.y : 0);
+        const mark = els['mark-' + item.id];
+        const dx = state.x - item.reach.x, dy = state.y - item.reach.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const inRange = dist <= REACH;
+        mark.style.left = p.sx + 'px';
+        mark.style.top = (item.kind === 'door' || item.kind === 'window' ? rect.h * FLOOR_FAR : p.sy) + 'px';
+        mark.style.zIndex = String(Math.round(item.reach.y));
+        mark.classList.toggle('near', inRange && state.mode === 'explore' && item !== state.nearest);
+        mark.classList.toggle('done', Boolean(state.seen[item.id]));
+        if (inRange && dist < bestD) { best = item; bestD = dist; }
+      });
+      interactables.forEach(item => {
+        const mark = els['mark-' + item.id];
+        mark.classList.toggle('near', best === item);
+      });
+
+      state.nearest = best;
+      if (best && state.mode === 'explore') {
+        const p = project(best.x, best.kind === 'prop' || best.kind === 'actor' ? best.y : 0);
+        promptEl.textContent = 'E · ' + (best.talk ? '和' + best.label + '说话' : '查看' + best.label);
+        promptEl.style.left = p.sx + 'px';
+        promptEl.style.top = ((best.kind === 'door' || best.kind === 'window' ? rect.h * FLOOR_FAR : p.sy) - 14) + 'px';
+        promptEl.classList.add('show');
+      } else {
+        promptEl.classList.remove('show');
+      }
+    }
+
+    function measure() {
+      const r = sceneEl.getBoundingClientRect();
+      rect = { w: Math.max(r.width, 320), h: Math.max(r.height, 320) };
+    }
+
+    function step(dt) {
+      if (state.mode !== 'explore') { state.moving = false; return; }
+      let dx = 0, dy = 0;
+      if (keys.a || keys.ArrowLeft) dx -= 1;
+      if (keys.d || keys.ArrowRight) dx += 1;
+      if (keys.w || keys.ArrowUp) dy -= 1;
+      if (keys.s || keys.ArrowDown) dy += 1;
+      if (dx || dy) {
+        state.tx = null; state.ty = null; state.pending = null;
+        const len = Math.sqrt(dx * dx + dy * dy);
+        const nx = state.x + (dx / len) * SPEED * dt;
+        const ny = state.y + (dy / len) * SPEED * dt;
+        const moved = clampInto(nx, ny);
+        state.x = moved.nx; state.y = moved.ny;
+        if (dx) state.facing = dx < 0 ? -1 : 1;
+        state.moving = true;
+        return;
+      }
+      if (state.tx !== null) {
+        const ddx = state.tx - state.x, ddy = state.ty - state.y;
+        const dist = Math.sqrt(ddx * ddx + ddy * ddy);
+        if (dist < 22) {
+          state.tx = null; state.ty = null; state.moving = false;
+          if (state.pending) { const id = state.pending; state.pending = null; interact(id); }
+          return;
+        }
+        const s = Math.min(SPEED * dt, dist);
+        const moved = clampInto(state.x + (ddx / dist) * s, state.y + (ddy / dist) * s);
+        state.x = moved.nx; state.y = moved.ny;
+        state.facing = ddx < 0 ? -1 : 1;
+        state.moving = true;
+        return;
+      }
+      state.moving = false;
+    }
+
+    function examine(item) {
+      const first = !state.seen[item.id];
+      state.seen[item.id] = true;
+      const beats = first ? item.once : item.again;
+      const before = storyScroll.scrollHeight;
+      (beats || []).forEach((beat, i) => addBeat(beat, i * 70));
+      if (first && item.add) applyNotes({ add: item.add });
+      requestAnimationFrame(() => { storyScroll.scrollTop = before; });
+    }
+
+    function interact(id) {
+      const item = interactables.find(entry => entry.id === id);
+      if (!item || state.mode !== 'explore') return;
+      if (item.talk) return talk();
+      examine(item);
+    }
+
+    function talk() {
+      if (state.talked || state.mode === 'talk') {
+        addBeat({ t: 'system', l: '笔记本', x: '今晚的话已经说完了。想换一条回应，用右栏的「重看这一段」。' }, 0);
+        return;
+      }
+      state.mode = 'talk';
+      state.tx = null; state.ty = null; state.pending = null;
+      state.nearest = null;
+      promptEl.classList.remove('show');
+      hintEl.textContent = HINT_TALK;
+      go('r1');
+    }
+
+    function worldPointFromEvent(event) {
+      const r = sceneEl.getBoundingClientRect();
+      const px = event.clientX - r.left, py = event.clientY - r.top;
+      const d = Math.min(Math.max((py - rect.h * FLOOR_FAR) / (rect.h * (FLOOR_NEAR - FLOOR_FAR)), 0), 1);
+      const per = pxPerWorld(d);
+      return { x: cam.x + (px - rect.w / 2) / per, y: d * WORLD.depth };
+    }
+
+    // ── 笔记本 ────────────────────────────────────────────────────────────
+    function resetNotes() {
+      notes = {};
+      SECTIONS.forEach(section => { notes[section] = (INITIAL_NOTES[section] || []).map(card => ({ ...card })); });
+      renderNotes();
+    }
+
+    function renderNotes() {
+      notebook.textContent = '';
+      SECTIONS.forEach(section => {
+        const wrap = document.createElement('section');
+        wrap.className = 'note-section';
+        const heading = document.createElement('h2');
+        heading.textContent = section;
+        wrap.append(heading);
+        (notes[section] || []).forEach(card => {
+          const div = document.createElement('div');
+          div.className = 'note-card';
+          div.append(document.createTextNode(card.text));
+          const tag = document.createElement('span');
+          tag.textContent = card.tag;
+          div.append(tag);
+          wrap.append(div);
+        });
+        notebook.append(wrap);
+      });
+    }
+
+    function applyNotes(node) {
+      if (node.promise) notes['承诺'] = [{ ...node.promise }];
+      if (node.add) {
+        Object.keys(node.add).forEach(section => {
+          if (!notes[section]) notes[section] = [];
+          node.add[section].forEach(card => {
+            if (!notes[section].some(existing => existing.text === card.text)) notes[section].push({ ...card });
+          });
+        });
+      }
+      if (node.promise || node.add) renderNotes();
+    }
+
+    // ── 叙事流 ────────────────────────────────────────────────────────────
+    function addBeat(beat, delay) {
+      const article = document.createElement('article');
+      article.className = beat.t ? 'beat ' + beat.t : 'beat';
+      article.style.animationDelay = delay + 'ms';
+      const label = document.createElement('div');
+      label.className = 'label';
+      label.textContent = beat.l;
+      const paragraph = document.createElement('p');
+      paragraph.textContent = beat.x;
+      article.append(label, paragraph);
+      story.append(article);
+    }
+
+    function showToast(message) {
+      if (!message) return;
+      toast.textContent = message;
+      toast.classList.add('show');
+      window.setTimeout(() => toast.classList.remove('show'), 2600);
+    }
+
+    function renderChoices(list) {
+      choices.textContent = '';
+      const header = document.createElement('div');
+      header.className = 'choices-header';
+      const left = document.createElement('span');
+      left.textContent = '选择回应';
+      const right = document.createElement('span');
+      right.textContent = '数字键 1—' + list.length;
+      header.append(left, right);
+      choices.append(header);
+
+      list.forEach((choice, index) => {
+        const button = document.createElement('button');
+        button.className = 'choice';
+        const number = document.createElement('span');
+        number.className = 'choice-index';
+        number.textContent = String(index + 1).padStart(2, '0');
+        const text = document.createElement('span');
+        text.append(document.createTextNode(choice.text));
+        const meta = document.createElement('small');
+        meta.className = 'choice-meta';
+        meta.textContent = choice.meta;
+        text.append(meta);
+        button.append(number, text);
+        button.addEventListener('click', () => go(choice.next));
+        choices.append(button);
+      });
+    }
+
+    function renderEnding() {
+      state.mode = 'explore';
+      state.talked = true;
+      hintEl.textContent = HINT_EXPLORE;
+      choices.textContent = '';
+      const header = document.createElement('div');
+      header.className = 'choices-header';
+      const left = document.createElement('span');
+      left.textContent = '本段对话结束';
+      const right = document.createElement('span');
+      right.textContent = '按 R 或点击重看';
+      header.append(left, right);
+
+      const button = document.createElement('button');
+      button.className = 'replay';
+      button.textContent = '重看这一段';
+      button.addEventListener('click', start);
+      choices.append(header, button);
+    }
+
+    function applyScene(node) {
+      sceneEl.classList.toggle('suspicious', node.state === 'suspicious');
+      sceneEl.classList.toggle('opened', node.state === 'opened');
+      sceneEl.classList.toggle('alert', Boolean(node.moonAlert));
+      els.nurse.classList.toggle('flip', Boolean(node.figureTurned));
+      els.nurse.style.transform = node.figureTurned ? 'translate(-50%, 0) scaleX(-1)' : 'translate(-50%, 0)';
+      if (node.objective) objectiveText.textContent = node.objective;
+      showToast(node.toast);
+    }
+
+    function go(id) {
+      const node = nodes[id];
+      if (!node) return;
+      const before = storyScroll.scrollHeight;
+      node.beats.forEach((beat, index) => addBeat(beat, index * 70));
+      applyNotes(node);
+      applyScene(node);
+      requestAnimationFrame(() => { storyScroll.scrollTop = before; });
+      if (node.choices) renderChoices(node.choices);
+      else renderEnding();
+    }
+
+    function start() {
+      story.textContent = '';
+      resetNotes();
+      sceneEl.className = 'scene';
+      els.nurse.style.transform = 'translate(-50%, 0)';
+      objectiveText.textContent = INITIAL_OBJECTIVE;
+      toast.classList.remove('show');
+      state.mode = 'explore';
+      state.talked = false;
+      state.seen = Object.create(null);
+      state.pending = null;
+      state.tx = null;
+      state.ty = null;
+      state.nearest = null;
+      state.facing = 1;
+      state.x = 260;
+      state.y = 470;
+      hintEl.textContent = HINT_EXPLORE;
+      storyScroll.scrollTop = 0;
+      INTRO_BEATS.forEach((beat, i) => addBeat(beat, i * 70));
+      measure();
+      layout();
+    }
+
+    // ── 输入 ──────────────────────────────────────────────────────────────
+    const SCROLL_KEYS = ['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '];
+
+    function scrollPanel(raw) {
+      const page = storyScroll.clientHeight * 0.86;
+      if (raw === 'ArrowUp') storyScroll.scrollTop -= 72;
+      else if (raw === 'ArrowDown') storyScroll.scrollTop += 72;
+      else if (raw === 'PageUp' || raw === ' ') storyScroll.scrollTop -= page;
+      else if (raw === 'PageDown') storyScroll.scrollTop += page;
+      else if (raw === 'Home') storyScroll.scrollTop = 0;
+      else if (raw === 'End') storyScroll.scrollTop = storyScroll.scrollHeight;
+      else return false;
+      return true;
+    }
+
+    document.addEventListener('keydown', event => {
+      const raw = event.key;
+      const k = raw.length === 1 ? raw.toLowerCase() : raw;
+      const target = event.target instanceof Element ? event.target : null;
+      const inPanel = Boolean(target && target.closest('.narrative-panel'));
+
+      // 对话中或焦点在叙事栏内：方向键/翻页键用于回读，不再驱动移动
+      if (SCROLL_KEYS.includes(raw) && (state.mode === 'talk' || inPanel)) {
+        if (scrollPanel(raw)) { event.preventDefault(); return; }
+      }
+
+      // 移动键只在探索模式生效，且不再无条件 preventDefault
+      if (state.mode === 'explore' && !inPanel &&
+          ['w', 'a', 's', 'd', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(k)) {
+        keys[k === 'ArrowUp' ? 'w' : k === 'ArrowDown' ? 's' : k === 'ArrowLeft' ? 'a' : k === 'ArrowRight' ? 'd' : k] = true;
+        event.preventDefault();
+        return;
+      }
+
+      if (k === 'e' && state.mode === 'explore' && state.nearest) { interact(state.nearest.id); return; }
+      if (k === 'r') {
+        if (state.mode === 'explore' && !document.querySelectorAll('.choice').length) start();
+        return;
+      }
+      if (state.mode !== 'talk') return;
+      const index = Number(event.key);
+      if (!Number.isInteger(index) || index < 1) return;
+      document.querySelectorAll('.choice')[index - 1]?.click();
+    });
+
+    document.addEventListener('keyup', event => {
+      const k = event.key.length === 1 ? event.key.toLowerCase() : event.key;
+      const map = { ArrowUp: 'w', ArrowDown: 's', ArrowLeft: 'a', ArrowRight: 'd' };
+      keys[map[k] || k] = false;
+    });
+
+    window.addEventListener('blur', () => { Object.keys(keys).forEach(key => { keys[key] = false; }); });
+
+    // 按住鼠标上下拖动叙事栏（原生滚轮之外的回读方式）
+    let justDragged = false;
+    (function enableDragScroll() {
+      let dragging = false, moved = false, startY = 0, startTop = 0;
+      storyScroll.addEventListener('pointerdown', event => {
+        if (event.button !== 0) return;
+        dragging = true;
+        moved = false;
+        startY = event.clientY;
+        startTop = storyScroll.scrollTop;
+      });
+      storyScroll.addEventListener('pointermove', event => {
+        if (!dragging) return;
+        const dy = event.clientY - startY;
+        if (!moved && Math.abs(dy) < 5) return;
+        if (!moved) {
+          moved = true;
+          storyScroll.classList.add('dragging');
+          if (storyScroll.setPointerCapture && event.pointerId !== undefined) {
+            try { storyScroll.setPointerCapture(event.pointerId); } catch (error) { /* 捕获失败不影响拖动 */ }
+          }
+        }
+        storyScroll.scrollTop = startTop - dy;
+      });
+      const finish = () => {
+        if (!dragging) return;
+        dragging = false;
+        if (moved) justDragged = true;
+        storyScroll.classList.remove('dragging');
+      };
+      storyScroll.addEventListener('pointerup', finish);
+      storyScroll.addEventListener('pointercancel', finish);
+      storyScroll.addEventListener('click', event => {
+        if (!justDragged) return;
+        justDragged = false;
+        event.stopPropagation();
+        event.preventDefault();
+      }, true);
+    })();
+
+    document.querySelector('#ground').addEventListener('click', event => {
+      if (state.mode !== 'explore') return;
+      const target = clampInto(worldPointFromEvent(event).x, worldPointFromEvent(event).y);
+      state.tx = target.nx;
+      state.ty = target.ny;
+      state.pending = null;
+    });
+
+    // 必须在 buildWorld() 之后调用：元素由 buildWorld 创建，
+    // 早挂会因取不到元素而静默跳过（曾导致 10 个对象点击全失效）。
+    function attachInteractions() {
+      interactables.forEach(item => {
+        const node = els['obj-' + item.id] || els[item.id];
+        if (!node) {
+          console.error('交互挂载失败：缺少元素 ' + item.id);
+          return;
+        }
+        node.style.pointerEvents = 'auto';
+        node.style.cursor = 'pointer';
+        node.addEventListener('click', event => {
+          event.stopPropagation();
+          if (state.mode !== 'explore') return;
+          const target = clampInto(item.reach.x, item.reach.y);
+          state.tx = target.nx;
+          state.ty = target.ny;
+          state.pending = item.id;
+        });
+      });
+    }
+
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        const view = tab.dataset.view;
+        document.querySelectorAll('.tab').forEach(item => {
+          const active = item === tab;
+          item.classList.toggle('active', active);
+          item.setAttribute('aria-pressed', String(active));
+        });
+        story.hidden = view !== 'story';
+        notebook.hidden = view !== 'notebook';
+        choices.style.visibility = view === 'story' ? 'visible' : 'hidden';
+        storyScroll.scrollTop = 0;
+      });
+    });
+
+    let lastTs = 0;
+    function loop(ts) {
+      const dt = Math.min((ts - lastTs) / 1000 || 0, 0.05);
+      lastTs = ts;
+      step(dt);
+      layout();
+      requestAnimationFrame(loop);
+    }
+
+    window.addEventListener('resize', () => { measure(); layout(); });
+
+    buildWorld();
+    attachInteractions();
+    start();
+    requestAnimationFrame(loop);
+  </script>
+</body>
+</html>
