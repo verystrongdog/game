@@ -207,6 +207,14 @@ def main() -> int:
             arm_i, meshes_i = duplicate_instance(arm, item["x_m"] - arm.location.x)
         # 逐实例指派动作（走取道层；5.x 不设 action_slot ⇒ 动作不驱动任何东西）
         action_name = item["action"]
+        if action_name == "-":
+            # 中立姿势：`-` 的实例是**复制出来的**，它会继承复制那一刻来源骨架的**姿势与动画数据**
+            # （实测 #170：来源那时挂着 `PanicCoverEars` ⇒ 占位实例在 x=−5 处**演着别人的动作**，
+            #  而报告里写的是「动作 `-`」——**报告看不出来**，是 owner 目视那一层才会发现的错。
+            #  ⇒ 必须**两件都清**：解开 animation_data（否则 action 会在换帧时把姿势覆盖回来）+ 清姿势）
+            if arm_i.animation_data:
+                arm_i.animation_data_clear()
+            host.clear_pose(arm_i)
         if action_name != "-":
             act = bpy.data.actions.get(action_name)
             if act is None:
@@ -238,7 +246,10 @@ def main() -> int:
             if bp is not None:
                 wp = arm_i.matrix_world @ bp.head
                 hip = [round(wp.x, 4), round(wp.y, 4), round(wp.z, 4)]
-        row = {"序": idx, "x_m": item["x_m"], "动作": action_name,
+        actual_action = (arm_i.animation_data.action.name
+                         if arm_i.animation_data and arm_i.animation_data.action else None)
+        expected_action = None if action_name == "-" else action_name
+        row = {"序": idx, "x_m": item["x_m"], "动作": action_name, "实际动作": actual_action,
                "定格帧": freeze, "定格通道数": (len(frozen) if frozen else 0),
                "定格_髋世界_m": hip,
                "x_实测_m": round(arm_i.location.x, 4),
@@ -256,6 +267,11 @@ def main() -> int:
             report["problems"].append(
                 f"实例 {idx} 可见骨 {row['可见骨数']} ≠ 期望 {EXPECTED_VISIBLE_BONES}"
                 f"（65 变形骨 − 13 标记骨）")
+        if actual_action != expected_action:
+            # 判据：报告写的动作必须就是骨架上挂着的那个（复制实例会**带走来源的动作**——本件实测踩到）
+            report["problems"].append(
+                f"实例 {idx} 的实际动作 {actual_action!r} ≠ 期望 {expected_action!r}"
+                f"（`copy()` 会把来源的 animation_data 一起复制过去）")
         if outliers["非例外的越界骨"]:
             report["problems"].append(
                 f"实例 {idx} 有可见骨伸出皮肤包围盒："
