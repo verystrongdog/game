@@ -150,8 +150,12 @@ CASES = [
     ("I3", "反例：合法轴与状态", vi.PASS, lambda: [subj()], ctx),
 
     # I4 Design 未 ACCEPTED 不得声明 Implementation 迁移
+    # ⚠️ 本用例取例于**活体正典**：所用的能力名必须在
+    #    design/slices/CP-01-ward-1f/slice.md §二 里当次仍为 Design=UNRESOLVED。
+    #    原取「探索与接敌」，#181 把该格由 UNRESOLVED 改成 ACCEPTED 后本用例恒红（预期 fail 实得 pass）
+    #    —— 规则行为正确，是用例的取例失效（#188）。正典再动这一格时必须同步改本用例。
     ("I4", "正例：Design=UNRESOLVED 的能力却声明 Implementation 迁移", vi.FAIL,
-     lambda: [subj(body(能力增量="| 能力 | 轴 | 从 → 到 |\n|---|---|---|\n| 探索与接敌 | Implementation | `NONE` → `PARTIAL` |"))], ctx),
+     lambda: [subj(body(能力增量="| 能力 | 轴 | 从 → 到 |\n|---|---|---|\n| 结束条件 | Implementation | `NONE` → `PARTIAL` |"))], ctx),
     ("I4", "反例：Design=ACCEPTED 的能力", vi.PASS, lambda: [subj()], ctx),
 
     # I5 引用存在性
