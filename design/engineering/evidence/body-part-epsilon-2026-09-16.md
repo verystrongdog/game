@@ -44,6 +44,9 @@
 | `python3 code/tools/validate_cross_refs.py` | **0**（2005 refs / 0 死链 / 0 段引用警告） |
 | `python3 code/tools/validate_trash_isolation.py` | **0** |
 | `python3 code/tools/validate_params.py` | **0**（0 failed / 7 warnings —— **与改前逐条相同**，全在未改动文件上） |
+| `python3 code/tools/validate_grip_cards.py` | **0**（8 checks / 8 passed / 0 failed —— 手部基准卡片未被本次改动波及） |
+| `python3 code/tools/run_all_checks.py`（编排器） | **0**（**16 validators: 16 passed / 0 failed / 0 errors**） |
+| `dotnet test code/src/YouAreNotTheFish.sln` | **未跑** —— 本次**未改 `code/src/`**（先例：[#165](https://github.com/verystrongdog/game/issues/165) / [#167](https://github.com/verystrongdog/game/issues/167) 同记法）。⚠️ 顺手实测一次：本机**无 net8.0 runtime**（只有 10.0.11）⇒ testhost 起不来（与 [P4a 证据](P4a-2026-09-12.md) 第 9 条同一现象），**与本条改动无关** |
 
 > **一处对管线 §7.1 的实测补充（不改文档，登记在此）**：该节记的坑 3 是"`--python` 不吃 `//wsl.localhost/...` 形式"；
 > 本次实测**`Z:` 盘符形式对 `--python` 也可用**（脚本不必先 `Copy-Item` 到 Windows 本地），故复现命令比 #160 那条更短。
