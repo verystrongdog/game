@@ -76,6 +76,11 @@ git -C .scratch/revert-drill2 diff --quiet f4152f6 ; echo $?   # → 0
 7. **两处与 #181 无关的正典缺陷（本阶段发现，未处理）**：
    - `design/framework/six-dimensions.md` §规则·「已完成」表的「SAN恢复规则」行写「内省+5/自省+3/休息+5/**叙事+10**」并引 `核心机制 §5.2`——**该节无此项**，且与 `剧情系统设计 §3.1.1` 的正交约束**互斥**（已在 §3.1.1 末尾写为反向约束）。
    - `design/engineering/issue-process.md` §三 Step 2 / §六 R8 仍写「Unity 门禁本机 `NOT_AVAILABLE`」，与 `gates.json`（`available: true`）和 [build-and-test.md §五](build-and-test.md)（「本机已可跑」）**直接矛盾**；真正阻塞试玩的是 `PLAYABLE.md` 的准入状态，不是门禁。
+8. **三条被点名、实读后确认「不冲突、不改」的不变量**（登记以证明查过，而不是漏查）：
+   - `design/rules/时空结构数学框架.md` §11.6：**只有夜晚第 3 次休息完成才推进 `D`**（`λ = f(D)`）、时段不作场动力学时间粒度 ⇒ 本阶段的 §2.2 只改**休息动机**，**没碰**推进动作、`D` 与时段口径，不撞此不变量。
+   - `design/rules/skill-tree/关键突破.md` §一：「**对话/剧情不直发突破，写 m 只走突破通道**」⇒ 与 §3.1.1 同向（对话效果**连议题状态之外都不越该通道**），已把该不变量写进 §3.1.1 的判据段。
+   - `design/presentation/动作库规格.md` §五：「**Mixamo 仍是唯一动画来源**，HUMOTO 不是来源是参照」⇒ §1.1 的「外部工具生产」**不放开来源位**（已在该行明写：新外部来源须走 §五 登记 + 许可审查，本节不授权）。
+9. **一处 `data/` 面的观察（超出预期差分，未动）**：`§3.1.1` 使用的「感知版本」「世界状态」以及 §1.3 的「核心循环」「并列解决路径」在 `data/term_registry.json` 中**均未登记**。四个选项都不新增机制术语，且 #181 §预期差分声明 `data/` 契约不变 ⇒ 本阶段**不新增注册表条目**；若 owner 认为这几个词需要入表（会影响 `validate_trash_isolation.py` 的判定面），属独立的数据契约 issue。
 
 ---
 *创建: 2026-09-16 | 关联: [#181](https://github.com/verystrongdog/game/issues/181), [证据索引](README.md), [PLAYABLE.md](../../../PLAYABLE.md), [WORKFLOW.md §五](../../../WORKFLOW.md)*
