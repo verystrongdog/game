@@ -175,7 +175,7 @@
 | 计划外变化 | **无**（`git status --short` 提交后为空；`.scratch/` 下的过程物被忽略） |
 | **回滚演练** | 见 §九 |
 | 预期不变项 | 既有**八个宿主**（`chair` / `card1` / `door` / `restate` / `doorpush` / `panic` / `crouch` / `kneel`）逐行未动 · `data/hand_grip_cards.json` 与 `validate_grip_cards.py` 未触碰 · `xbot_contact_phase.py` / `xbot_balance.py` **两个独立件一字未改**（只调用）· `tol_contact = 2.8 mm` 与 `soleMargin = 2.8 mm` 未触碰 · `data/action_set.json`（17 词条不新增）· `PLAYABLE.md`（仍 `NO_AUTHORIZED_PLAYABLE`）· `design/rules/回合战斗流程.md` §10.13 未触碰 · `code/unity/**` 未触碰 · 母版 `.blend` 与源 `X Bot.fbx` 字节未触碰（宿主只写 `.scratch/issue180/` 的副本） |
-| **可复现性（两遍独立进程）** | 主解跑两遍（独立 Blender 进程、同一母版副本）：**结论与整数读数逐值相同**；`frame_params` 的浮点列在第 6 位小数上有差异（同一族的近简并 argmin，先例 #170 已登记为"位级可复现性未成立"）——本件**如实登记为未闭合**（§八#4） |
+| **可复现性（两遍独立进程）** | 主解跑两遍（**两个独立的 Blender 进程**、同一母版副本、最终代码）：**10592 个可比数值逐值相同（值不同 0 处）**——含逐帧参数表、两条接触对的全部读数、刚性/穿模/包握/支撑域读数（只排除 `measured_at` 时间戳与两个 `mathutils.Matrix` 中间量） |
 
 **测试报告定位**：宿主 9 的权威报告与三个变体报告、解空间报告、静帧 PNG、活体窗口日志**都在 `.scratch/issue180/`**（被 `.gitignore` 排除、磁盘保留）；按 #170 的教训，**证据里不建链接**——干净检出上它们必然不存在。复现命令见 §三。
 
@@ -186,7 +186,7 @@
 | 1 | **词条位（U18）未裁**：双手拾取在受控 17 词条里**没有位置**（`Grab2H` 已取消、`Lift1H` 是单手）⇒ 本件走**呈现探针**形态；要不要为它开词条（走 [动作库规格](../../presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md) §3.3 扩展协议）**等这一件验完再裁**（与 §15.7.2 同法） |
 | 2 | **运动质量只报读数、无判据**：口径 §十四 MQ1–MQ6 的基线与实现仍为 0 ⇒ "像不像在使劲 / 太机械"这一类判词**归 owner 目视**（#170 已发生过一次，owner 当时裁定不在该件范围） |
 | 3 | **不主张运行时能力**：道具跟随是运行时的事（导出物 `object_types = {"ARMATURE"}`、animation-only、无网格）⇒ 本件**不复活** §四·戊 的挂点机制（`isKinematic` + 忽略碰撞 + 手骨父子关系），属 §16.2 **丙类**（暂停线） |
-| 4 | **位级可复现性未成立**：两遍独立进程在 `frame_params` 的浮点列第 6 位小数上有差异（判定与整数读数逐值相同）；母版**不可逐字节复现** · 残留 `REF_*` 代理 |
+| 4 | **母版不可逐字节复现** · 残留 `REF_*` 代理（#160 已登记）；⚠️ 与本件有关的一条**已测**：报告层可复现性**成立**（两遍独立进程 **10592 个数值 0 处不同**，见 §七）——与 #170 当时「位级未成立」的情形**不同**，如实分开记 |
 | 5 | **本件的 5 条真缺陷没有进[危险点表](../../engineering/%E5%8D%B1%E9%99%A9%E7%82%B9%E8%A1%A8.md)**（它不在本 issue 的预期差分内；先例 #170/#171 同记法）⇒ 其中三条与**位置**强相关（`matrix_parent_inverse` 的陈旧 `matrix_world` · 深弯腰下"髋↔踝弦 > 骨长" · 判据量的度量对象错层）**值得进表**，须另开件 |
 | 6 | **未做导出 `E0–E6`**：完成定义只到"Blender 侧能连着播"（§16.4 硬边界②）⇒ 导出侧是否全绿**没有读数** |
 | 7 | **只做动作形态，未接 §10.13**（"拎家具当武器"仍不入规则层）· 不做副手 IK · 不做持椅线其余暂停件 |
@@ -214,9 +214,30 @@ git revert --no-edit <docs>    # 证据 + 口径/规格/slice 回填
 | 工作树 | 干净 | ✅ 演练后 `git worktree remove --force` 清掉临时树 |
 | 数据迁移 / 资产 | 无 | ✅ 无（宿主只写 `.scratch/` 的副本；母版 `.blend` 与源 FBX 字节未触碰） |
 
-### 9.1 演练实做读数
+### 9.1 演练实做读数（2026-09-16）
 
-见本条提交组的最后一格（agent 执行时逐条粘贴实跑输出）。
+```bash
+git worktree add --detach .scratch/rollback-drill-180 HEAD
+cd .scratch/rollback-drill-180
+git revert --no-edit b58aed2   # 证据 + 三处回填
+git revert --no-edit 89ddf03   # 宿主 9（+ 可复用件 + CLI）
+git diff c38aeb6 HEAD | wc -l  # ⇒ 0
+```
+
+| 核对项 | 实测 |
+|---|---|
+| 回落点 | ✅ **`git diff c38aeb6 HEAD` = 0 行**（回滚态与 base **逐字节相同**；`--stat` 为空） |
+| `validate_cross_refs.py`（回滚态） | ✅ **2124 refs / 2123 passed / 0 dead / 0 section warnings**——与**同一支 worktree 直接检出 base `c38aeb6`** 的空跑对照**逐值相同**（2124 / 2123 / 0） |
+| `validate_trash_isolation.py`（回滚态） | ✅ 全部通过 |
+| `validate_params.py`（回滚态） | ✅ **56 checks / 49 passed / 0 failed / 7 warnings**（与改前逐值相同） |
+| 工作树 | ✅ 演练后 `git worktree remove --force` 清掉临时树（`git worktree list` 只剩主树） |
+| 数据迁移 / 资产 | ✅ 无（宿主只写 `.scratch/` 的副本；母版 `.blend` 与源 FBX 字节未触碰） |
+
+⇒ **回滚恢复上一状态成立**（以最强形式：逐字节）。⚠️ 两处**数量差**如实登记：主树 `validate_cross_refs` 报 **2143 refs / 2142 passed / 0 dead**（本件新增的引用），回滚态与 base 都是 **2124 / 2123 / 0** ⇒ 差的 **19 个引用**全部来自本件新增的证据文件。
+
+### 9.2 推送与 CI
+
+见本条提交组的最后一次更新（推送由 owner 逐次确认；推送后回填 run id 与最终 SHA）。
 
 ## 十、来源
 
