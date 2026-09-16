@@ -283,7 +283,7 @@ owner 第 2 轮原话的后半句是「**不过这个不是现在要考虑的问
 | 项 | 结果 |
 |---|---|
 | 问题差分 `new_finding = after − mapped(before) − expected_delta` | **空**（哨兵清单见 §十一.1） |
-| 允许变化 vs 实际 diff | 与 [开工记账](../../../.scratch/issue170/开工记账.md) 登记的允许范围一致 + **4 处连带改动逐条登记**（见 §十一.3） |
+| 允许变化 vs 实际 diff | 与**开工记账**（过程物 `.scratch/issue170/开工记账.md`——按 [AGENTS.md §四](../../../AGENTS.md) 由 `.gitignore` 排除、**不入库**，故此处不建链接）登记的允许范围一致 + **4 处连带改动逐条登记**（见 §十一.3） |
 | 回滚演练 | 见 §十一.2（临时 worktree + 逐条 `revert` ⇒ 与 base 逐字节相同 + 门禁重跑） |
 | 工作树 | 提交后 `git status --porcelain` **空**（过程物全在 `.scratch/`，被 `.gitignore` 排除） |
 | 干净检出可复现 | 本件不新增第三方依赖（纯 Python 标准库 + 既有工具链）；`run_all_checks.py` 的 17 个校验器在 CI 上跑（CI 无 Blender ⇒ Blender 侧读数不在 CI 面） |

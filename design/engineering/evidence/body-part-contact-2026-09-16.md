@@ -280,6 +280,19 @@ git revert --no-edit 66d16a0   # 证据 + 口径 + 切片
 
 ⇒ **回滚恢复上一状态成立**（以最强形式：逐字节）。
 
+### 9.0 推送后 CI 抓到的一条**真死链**（暴露的是 [#170] 的文档缺陷，不是本件的）
+
+本次推送是 **#168–#171 那批提交第一次进 CI**（此前它们只在本地）⇒ 干净检出第一次跑 `docs-integrity`，当场抓到：
+
+```
+FAIL  cross_ref  [design/engineering/evidence/balance-support-2026-09-16.md:286]
+      → `../../../.scratch/issue170/开工记账.md` (文件不存在)
+```
+
+根因：那条链接指向**被 `.gitignore` 排除的过程物**（本地磁盘有、仓库里没有）⇒ 干净检出必然红。
+✅ **本次已当场修**（改成散文 + 显式说明"过程物不入库、故不建链接"，符合 [AGENTS.md §四](../../../AGENTS.md)），并顺手扫了全仓活跃文档：**再无指向 `.scratch/` 的 markdown 链接**（`design/archive/` 下的历史记录不动）。
+⚠️ 这也是 9.1 之外的第二条"本地绿 ≠ 干净检出绿"的实例——与 [P4a 证据](P4a-2026-09-12.md) 第 1 条同族。
+
 ### 9.1 另一条与本次改动**无关**的仓库级读数的登记
 
 `python3 code/tools/validate_issues.py --from-github` 报 **2 条 FAIL，都在 [#179]**（`requires: gate:npc-materials-fixtures` 不在 `gates.json` 中 ⇒ I5/I6）——**不是本次改动引入**（本件未改任何 issue 正文；只把 #171 的标签 `needs-triage` → `in-progress`）。#171 自身在 I5/I6/I7/I11 上**全过**（`consumed-by: 待建:…` 只出 WARN，正是 [issue 流程 §4.1.1 例外 3](../../engineering/issue-process.md) 的预期形态）；I13 的 6 条 WARN 全在别的 issue 上（#138/#150/#151/#152/#172/#173）。
