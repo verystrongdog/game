@@ -141,6 +141,7 @@
 |---|---|
 | 同一份母版副本 `--task panic` **两遍独立进程** | 可比数值 **2387** 个，逐值相同 **2381** 个；**6 个差 ≤ 0.01 mm** |
 | 那 6 个差异的来源（已定位，不是随机） | ① 逐指蜷曲量的**离散档**在近简并处翻了一档（2.85 ↔ 2.84，步长 0.1 档 ≈ 0.01 mm 间隙）；② 掌面最低点的 `argmin` 在近平面掌面上取到了相邻的**等价顶点**（面内偏移 0.01 mm 抖动）。**判据量（沿法向间隙 / 时序帧 / 穿透 / 接地）逐值相同** |
+| **预览清理前后**（run6 ↔ run8：只多了一次"删 #163 椅子残留代理"） | **2387 个可比数值逐值相同**（清理只动呈现、不动姿势与读数） |
 | 手部三件工具回归 | `measure_xbot_surface_offset.py`（#168）、`xbot_contact_phase.py`、`validate_grip_cards.py` 本次**未改**且全绿 |
 | 既有四个宿主 | `chair` / `card1` / `door` / `restate` 的**代码路径未改**（只在同文件里新增宿主 6 与库层件）；`--task` 的 `choices` 与 dispatch 两处同步登记 |
 
@@ -164,7 +165,8 @@
 | `panic_f25_front34.png` · `panic_f46_{front34,side,back}.png` | 帧 25 保持中 · 帧 46 保持末 |
 | `lab_single.png` · `lab_three.png` | lab：单实例 / 三实例同屏（间距 5.0 m） |
 
-**可直接在 Blender 里看的一条**：`.scratch/panic/panic_clip.blend`（动作 `PanicCoverEars`，帧 1–46）。
+**owner 目视的形态（2026-09-16 实测可行）**：`Start-Process` 打开 `.scratch/panic/panic_clip.blend` 的 **Windows 侧 GUI 会话**（管线 §7.1 的窗口自证脚本 `.scratch/open_panic_gui.py` 把它打开的东西写进 `.scratch/panic/gui_open_proof.txt`）——实测自证：`objects=[('Armature','ARMATURE'),('Beta_Joints','MESH'),('Beta_Surface','MESH')]`（**#163 的椅子残留已删**）· `assigned=PanicCoverEars` · `frame_current=13` · `range=(1,46) fps=30` · `bone_collections=[('CTRL',False),('MIXAMORIG',True),('HIDDEN_MARKERS',False)]` · `hidden_bones=13`。
+**可直接在 Blender 里看的一条**：`.scratch/panic/panic_clip.blend`（动作 `PanicCoverEars`，帧 1–46，打开即停在**到位帧 13**；空格播放）。
 ⚠️ **我自己看不到图**（本会话的模型不吃图像输入）⇒ 上面的**几何读数**是我能给的替代：肘在肩**外 149 mm / 前 171 mm / 高 71 mm**，两肘间距 **601 mm**，肘角 **119.3°**，头轴与竖直 **25.9°**（缩头）。**"像不像捂着耳朵"这一条只有 owner 能判。**
 
 ## 七、问题差分
@@ -174,7 +176,7 @@
 | 检查 | 结果 |
 |---|---|
 | 预期差分内的文件 | `code/tools/author_xbot_chair_grab.py`（改：新增**宿主 6** `--task panic` + 库层件：部位面框 / 蒙皮带符号判据 / 逐指解 / 多解并列）· `code/tools/lab_multi_instance.py`（**新增**）· `design/engineering/evidence/panic-posture-2026-09-16.md`（**新增**）· `design/presentation/动作描述口径.md`（§15.6.1 加「① 件消费登记」· §15.7 ① 结账）· `design/slices/CP-01-ward-1f/slice.md`（两行四轴表回填） |
-| **连带修改**（逐条登记） | ① [阶段证据说明](README.md) 的「已有证据」表**加一行**；② `author_xbot_chair_grab.py` 的**模块 docstring**（"三个宿主"→ 六个宿主）与 `main()` docstring——**该表已过期两轮**（#166 加 doorpush 时就没跟上），本件顺手更正；③ `visible_bone_outliers()` 加 `meshes=` 可选参数（多实例 lab 必需，见 §4.6 坑 ①）——**旧调用点行为不变**（默认仍是按名字取） |
+| **连带修改**（逐条登记） | 0️⃣ **预览清理**：`main_panic` 删掉 #163 的**椅子残留代理**（`REF_Back`/`REF_Seat`/`REF_Leg0-3`）——依据 = #160 证据 §二登记的"母版既有污染"+ #166 第 2 轮的处置先例（owner 点名"门和椅子重叠"）；**只清呈现**（这 6 个网格无 Armature 修改器、不被任何 action 驱动），读数前后**逐值相同**。① [阶段证据说明](README.md) 的「已有证据」表**加一行**；② `author_xbot_chair_grab.py` 的**模块 docstring**（"三个宿主"→ 六个宿主）与 `main()` docstring——**该表已过期两轮**（#166 加 doorpush 时就没跟上），本件顺手更正；③ `visible_bone_outliers()` 加 `meshes=` 可选参数（多实例 lab 必需，见 §4.6 坑 ①）——**旧调用点行为不变**（默认仍是按名字取） |
 | 计划外变化 | 无 |
 | 工作树 | 提交后干净（`git status --short` 空） |
 | **回滚演练** | ✅ **已演练**：临时 worktree 里逐条 `git revert` 两条提交后 **`git diff d632baa HEAD` 为空**（回滚态与 base **逐字节相同**）、宿主表回到既有五个（`panic` 命中 0 处、lab 文件已删）、四条门禁读数逐值回到改前 ⇒ **回滚恢复上一状态成立**。实做记录见 §九 |

@@ -4459,6 +4459,19 @@ def main_panic() -> int:
             print(f"  帧 {frame:>3} t={t:5.2f} 掌面↔面 "
                   + " · ".join(f"{s} {row['hands'][s]['沿法向间隙_mm']:6.2f} mm" for s in CARD1_SIDES))
 
+    # ---- ⑤′ 预览清理：删掉 #163 的**椅子残留代理**（母版里那条既有污染）----
+    # 来源：#160 证据 §二 登记「母版里有一条既有污染：撤回动作的椅子代理仍在（`REF_Back`/`REF_Seat`/
+    # `REF_Leg0-3`，6 个 8 顶点网格、无 Armature 修改器）」；#166 第 2 轮 owner 点名「门和椅子重叠」
+    # 后的处置就是**在预览里删掉它们**。它们不被任何 action 驱动、不影响任何读数 ⇒ 只清呈现。
+    residue = sorted(o.name for o in bpy.data.objects
+                     if o.name.startswith("REF_")
+                     and not any(m.type == "ARMATURE" for m in o.modifiers))
+    for name in residue:
+        bpy.data.objects.remove(bpy.data.objects[name], do_unlink=True)
+    report["preview_residue_removed"] = residue
+    print(f"预览清理：删掉 #163 椅子残留代理 {len(residue)} 个（{residue}；"
+          f"来源 #160 证据 §二 · 处置先例 #166 第 2 轮）")
+
     # ---- ⑥ 打键（逐帧；控制骨 + 脊柱/颈头 + 手指全打）----
     names = panic_channel_names(arm)
     arm.animation_data_clear()
