@@ -4891,8 +4891,13 @@ CROUCH_TORSO_LEAN_DEG = 8.0
 #: 双臂垂放的肘方向（世界系近似：略向外、略向后、向下）。不给解的话静止姿势是 **T-pose**
 #: ——owner 2026-09-16 在宿主 5 上点名过「机械的平举」（同一处坑）。
 CROUCH_ELBOW_DIR = (0.32, 0.22, -0.92)
-#: 垂放时腕相对**髋骨点**的偏移（身体系；取自宿主 5 的副手解，量级同源）：略外、略后、略下。
-CROUCH_HAND_DROP_OFFSET = (-0.150, 0.041, -0.153)
+#: 垂放时腕相对**肩骨点**的**世界**偏移（m）：略外、略后、向下。
+#: ⚠️ 锚点必须是**肩**而不是髋（第 1 版抄宿主 5 的副手解、锚在髋上，见 `crouch_arms_down` 的 ⚠️）；
+#: 下 0.48 m 的约束来自**可达性**：臂长实测 **0.5617 m** ⇒ 留 82 mm 余量（不夹直）。
+#: 侧 / 后是运动学取值（agent 解，owner 可改）。
+CROUCH_HAND_DROP_M = (0.12, 0.03, -0.48)
+#: 腕高的**垂放断言**（零阈值，见 `crouch_arm_readings`）：腕必须在肩**之下**（>0）·
+#: 不得越过身体中线（该侧分量 ≥ 0）——两条都是布尔，不需要任何阈值来源。
 #: 放松握量（0 = 五指伸直；卡 1 的 F10 逐指基准角 × 本值）。运动学取值，owner 可改。
 CROUCH_RELAX_CURL = 0.35
 
@@ -5084,32 +5089,79 @@ def crouch_body_setup(arm, m3, foot_targets, crouch_m, back_m, back_dir,
             "hips_z_m": round(world_point(arm, f"{BONE_PREFIX}Hips").z, 6)}
 
 
-def crouch_arms_down(arm, m3, curl_axes, t=1.0, relax=CROUCH_RELAX_CURL):
-    """**双臂垂放**：腕落在髋骨点 + `CROUCH_HAND_DROP_OFFSET`（身体系），指尖朝下、掌心内向。
+def crouch_arms_down(arm, m3, curl_axes, t=1.0, relax=CROUCH_RELAX_CURL, post=None):
+    """**双臂垂放**：腕落到「肩骨点 + 世界偏移 `CROUCH_HAND_DROP_M`」，指尖朝下、掌心内向。
 
-    ⚠️ 为什么必须给解：静止姿势是 **T-pose**——不给它，双臂就**水平伸着**（owner 2026-09-16 在
-    宿主 5 上点名过同一处：「右手机械的平举」）。`t` = 0 静止 → 1 垂放（首帧必须严格中立）。
+    ⚠️ **两条实测教训（第 1 版都踩了，owner 目视一眼否掉）**：
+    ① **世界偏移不许再过 `m3.inverted()`**——母版骨架带 **+90° X 旋转**（[#164] 那笔账的同一类
+       "两个系"错误），过一遍就把"向下 0.48 m"转成"向前内"⇒ 实测双臂**横跨身体中线 386 mm、
+       前伸 391 mm**、只比肩低 115 mm（僵尸式前伸）。正确写法同宿主 5 的副手解：
+       `target = 世界肩位 + 世界偏移`（**不碰任何矩阵**）。
+    ② **锚点必须是肩、不是髋**：锚在髋上时，下蹲 0.16 m 会让手跟着"往上缩"（髋降手也降），
+       且"垂放"这件事约束的本来就是"腕在肩下多深"。
+
+    `t` = 0 静止（T-pose）→ 1 垂放（首帧必须严格中立 ⇒ 起手段按 `t` 过渡）。
     """
-    hips = world_point(arm, f"{BONE_PREFIX}Hips")
     out = {}
     for side in CARD1_SIDES:
-        off = Vector(CROUCH_HAND_DROP_OFFSET)
-        target = hips + m3.inverted() @ Vector((off.x * (1.0 if side == "Left" else -1.0),
-                                               off.y, off.z))
-        rest_wrist = world_point(arm, f"{BONE_PREFIX}{side}Hand")
+        sign = 1.0 if side == "Left" else -1.0
+        shoulder = world_point(arm, f"{BONE_PREFIX}{side}Arm")
+        sx, sy, sz = CROUCH_HAND_DROP_M
+        target = shoulder + Vector((sx * sign, sy, sz))          # 世界系，直接加
+        rest_wrist = world_point(arm, f"{BONE_PREFIX}{side}Hand").copy()
         wrist = rest_wrist.lerp(target, t)
-        elbow = Vector(CROUCH_ELBOW_DIR)
-        elbow = Vector((elbow.x * (1.0 if side == "Left" else -1.0), elbow.y, elbow.z))
-        solve_arm(arm, side, wrist, elbow)
+        elbow = Vector((CROUCH_ELBOW_DIR[0] * sign, CROUCH_ELBOW_DIR[1], CROUCH_ELBOW_DIR[2]))
+        # ⚠️ `solve_arm_with_elbow_scan` 返回 **(info, 扫描摘要)** 两件（不是 dict）——本件实测踩到
+        arm_info, elbow_scan = solve_arm_with_elbow_scan(
+            arm, side, wrist, post if post is not None else Vector((0.0, 1.0, 0.0)))
         down = Vector((0.0, 0.0, -1.0))
         _set_world_axes(arm, f"CTRL_{side}Hand", f"{BONE_PREFIX}{side}Hand",
-                        _nlerp(Vector((1.0 if side == "Left" else -1.0, 0.0, 0.0)), down, t),
+                        _nlerp(Vector((sign, 0.0, 0.0)), down, t),
                         Vector((0.0, 1.0, 0.0)))
         for finger in FINGERS:
             _apply_one_finger_curl(arm, side, finger, curl_axes[side][finger], relax * t)
-        out[side] = {"腕目标_m": [round(v, 4) for v in wrist]}
-    update()
+        out[side] = {"腕目标_m": [round(v, 4) for v in target],
+                     "腕目标距肩_m": round((target - shoulder).length, 4),
+                     "臂长_m": arm_info.get("limb_len_m"),
+                     "夹直": bool(arm_info.get("clamped_straight")),
+                     "肘扫描罚分": elbow_scan["罚分"], "肘偏移": elbow_scan["肘偏移"]}
+    update(2)
     return out
+
+
+def crouch_arm_readings(arm, side):
+    """**手臂/腿的目视敏感量**（第 1 版回显卡**一个字都没量**那几项，owner 目视当场否掉）。
+
+    | 量 | 定义（世界系） | 判据形态 |
+    |---|---|---|
+    | `肩→腕_下_mm` | 肩骨点到腕骨点的 **−Δz** | **垂放断言**：> 0（零阈值：腕必须在肩下） |
+    | `肩→腕_侧_mm` | 该侧分量（正 = 朝体侧**外**） | **不越中线**：≥ 0（零阈值：腕不在身体对侧） |
+    | `肩→腕_后_mm` | **+Δy**（正 = 腕在肩**后**） | 只报读数（垂放时前后是小的自由量） |
+    | `肘_侧_mm` / `肘_后_mm` | 肘相对肩-腕弦的垂直分量 | 只报读数（先例：宿主 5 的肘扫描） |
+    | `膝_前_mm` | 膝相对髋-踝弦的**朝前**分量 | 只报读数 |
+    | `膝_侧_mm` | 膝相对该弦的**朝外**分量 | **不内扣**：≥ 0（零阈值） |
+    """
+    B = BONE_PREFIX
+    sign = 1.0 if side == "Left" else -1.0
+    sh = world_point(arm, f"{B}{side}Arm")
+    wr = world_point(arm, f"{B}{side}Hand")
+    el = world_point(arm, f"{B}{side}ForeArm")
+    mid = (sh + wr) * 0.5
+    hip = world_point(arm, f"{B}{side}UpLeg")
+    knee = world_point(arm, f"{B}{side}Leg")
+    ank = world_point(arm, f"{B}{side}Foot")
+    kmid = (hip + ank) * 0.5
+    chord = (ank - hip)
+    axis = chord.normalized() if chord.length > 1e-9 else Vector((0, 0, -1))
+    kperp = (knee - kmid)
+    kperp = kperp - axis * kperp.dot(axis)
+    return {"肩→腕_下_mm": round((sh.z - wr.z) * 1000.0, 1),
+            "肩→腕_侧_mm": round((wr.x - sh.x) * sign * 1000.0, 1),
+            "肩→腕_后_mm": round((wr.y - sh.y) * 1000.0, 1),
+            "肘_侧_mm": round((el.x - mid.x) * sign * 1000.0, 1),
+            "肘_后_mm": round((el.y - mid.y) * 1000.0, 1),
+            "膝_前_mm": round(-kperp.y * 1000.0, 1),
+            "膝_侧_mm": round(kperp.x * sign * 1000.0, 1)}
 
 
 def main_crouch() -> int:
@@ -5256,7 +5308,7 @@ def main_crouch() -> int:
                          / float(CROUCH_FRAME_READY - CROUCH_FRAME_NEUTRAL)))
         tg = crouch_foot_targets(foot_rest, back_dir, params, args.step_foot)
         body = crouch_body_setup(arm, m3, tg, params["crouch_m"], params["back_m"], back_dir)
-        hands = crouch_arms_down(arm, m3, curl_axes, t=t)
+        hands = crouch_arms_down(arm, m3, curl_axes, t=t, post=_posterior(arm))
         captured[frame] = capture_channels(arm, panic_channel_names(arm))
         per_frame.append({**params, "髋_z_m": body["hips_z_m"], "骨盆残差_mm": body["pelvis_err_mm"],
                           "腿残差_mm": {s: round(body["leg_residual"][s]["tip_err_mm"], 2)
@@ -5416,6 +5468,7 @@ def main_crouch() -> int:
                 if row["地面_最坏_mm"] is None or pt.z * 1000.0 < row["地面_最坏_mm"]:
                     row["地面_最坏_mm"], row["地面_最坏处"] = round(pt.z * 1000.0, 2), f"{bn}.{tag}"
         row["地面_违规"] = bool(row["地面_最坏_mm"] is not None and row["地面_最坏_mm"] < 0.0)
+        row["姿态读数"] = {s_: crouch_arm_readings(ev, s_) for s_ in CARD1_SIDES}
         clash.append(row)
     report["clash"] = {"阈值_自穿模_mm": 10.0, "阈值_地面_mm": 0.0,
                        "来源": "动作库规格 §四·戊·5 判据 4 的三个数（骨段零穿透 · 骨心 ≤ 2 cm · 间隙 ≥ 1 cm）；"
@@ -5447,6 +5500,36 @@ def main_crouch() -> int:
         problems.append(f"接地：无支撑区间 {bal['接触相位']['无支撑区间'][:4]}")
     if report["clash"]["违规帧"]:
         problems.append(f"穿模：违规帧 {report['clash']['违规帧'][:8]}")
+    # ---- 目视敏感量的三条**零阈值**断言（第 1 版漏掉的量：手臂/膝）----
+    # ⚠️ **首帧例外**：导出侧 E5 硬约定要求首帧**严格中立**（零通道 ⇒ T-pose 平举，腕与肩等高）
+    #    ⇒ 垂放断言从**首帧之后**起算（这不是放宽阈值，是判据的作用域：那两帧量的是"没有姿势"）。
+    arm_rows = [{"frame": r["frame"], **v} for r in clash for v in r["姿态读数"].values()
+                if r["frame"] != CROUCH_FRAME_NEUTRAL]
+    worst_down = min(r["肩→腕_下_mm"] for r in arm_rows)
+    cross_mid = [r["frame"] for r in arm_rows if r["肩→腕_侧_mm"] < 0.0]
+    knee_in = [r["frame"] for r in arm_rows if r["膝_侧_mm"] < 0.0]
+    report["pose_judgements"] = {
+        "垂放断言（腕在肩之下，零阈值）": {"最坏_肩→腕_下_mm": round(worst_down, 1),
+                                          "作用域": f"帧 {CROUCH_FRAME_NEUTRAL + 1}–{CROUCH_FRAME_END}"
+                                                    f"（首帧必须严格中立 ⇒ 不计入）",
+                                          "违规帧": [r["frame"] for r in arm_rows if r["肩→腕_下_mm"] <= 0.0]},
+        "不越中线（腕的同侧分量 ≥ 0，零阈值）": {"违规帧": sorted(set(cross_mid))},
+        "不内扣（膝的同侧分量 ≥ 0，零阈值）": {"违规帧": sorted(set(knee_in))},
+        "逐帧读数": [{"frame": r["frame"], **{k: v for k, v in r.items() if k != "frame"}}
+                     for r in [{"frame": rr["frame"], **vv} for rr in clash for vv in rr["姿态读数"].values()]],
+    }
+    print(f"  目视敏感量（第 1 版漏掉、owner 目视当场否掉的那几项）："
+          f"肩→腕 下最坏 {worst_down:.1f} mm · 越中线帧 {len(set(cross_mid))} · 膝内扣帧 {len(set(knee_in))}"
+          f" · 帧 {CROUCH_FRAME_IMBALANCE}："
+          + str(next((r for r in report["pose_judgements"]["逐帧读数"]
+                      if r["frame"] == CROUCH_FRAME_IMBALANCE and r["肩→腕_侧_mm"] > 0), {})))
+    if report["pose_judgements"]["垂放断言（腕在肩之下，零阈值）"]["违规帧"]:
+        problems.append(f"垂放断言失败（腕不在肩下）帧："
+                        f"{report['pose_judgements']['垂放断言（腕在肩之下，零阈值）']['违规帧'][:6]}")
+    if cross_mid:
+        problems.append(f"手臂越过身体中线的帧：{sorted(set(cross_mid))[:6]}")
+    if knee_in:
+        problems.append(f"膝内扣（同侧分量为负）的帧：{sorted(set(knee_in))[:6]}")
     for row in per_frame:
         leg = row.get("腿残差_mm") or {}
         if leg and max(abs(v) for v in leg.values()) > 1.0:
@@ -5494,6 +5577,15 @@ def main_crouch() -> int:
                                f"违规帧 {len(report['clash']['违规帧'])}",
                  "容差档": "间隙 ≥ 10 mm（判据 4 的第三个数）· 地面零穿透（第一个数）",
                  "状态": "✅" if not report["clash"]["违规帧"] else "❌"})
+    card.append({"判据量": "手臂垂放：腕在肩**之下**（零阈值）", "判据形态": "带符号分量的布尔",
+                 "产物侧读数": f"最坏 肩→腕_下 = {worst_down:.1f} mm（正 = 腕在肩下）",
+                 "容差档": "0.0 mm（**零阈值**：腕不得与肩等高或更高）",
+                 "状态": "✅" if not report["pose_judgements"]["垂放断言（腕在肩之下，零阈值）"]["违规帧"] else "❌"})
+    card.append({"判据量": "手臂**不越身体中线** / 膝**不内扣**（零阈值）", "判据形态": "带符号分量的布尔",
+                 "产物侧读数": f"越中线帧 {len(set(cross_mid))} · 膝内扣帧 {len(set(knee_in))}"
+                               f"（第 1 版实测：双臂横跨中线 **386 mm**、前伸 391 mm ⇒ 僵尸式前伸）",
+                 "容差档": "0.0 mm（**零阈值**）",
+                 "状态": "✅" if not cross_mid and not knee_in else "❌"})
     report["feedback_card"] = card
 
     print("\n" + "=" * 100)
