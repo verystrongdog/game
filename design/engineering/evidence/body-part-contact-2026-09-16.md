@@ -321,6 +321,18 @@ FAIL  cross_ref  [design/engineering/evidence/balance-support-2026-09-16.md:286]
 - 附**证据评论**（base/head SHA · 逐条命令与退出码 · 验收 7 条逐条 · 交付物提交 · 4 条真缺陷 · 回滚演练 · `new_finding` 空）：`#issuecomment-5697368379`
 - 关闭后 `validate_issues.py --from-github` 的 **I11** 由 ✅ 转 ⚠️（全仓开放 issue 无 `in-progress` = 单线程约束**空跑**）——与 [#170] 结账时同一现象，如实登记
 
+### 10.2 推送与 CI（owner 2026-09-16 授权 "推送到 origin/main"）
+
+| 项 | 读数 |
+|---|---|
+| 推送前 | 本地 `main` 领先 `origin/main` **40 条**（#168–#171 那批提交此前**从未推送**） |
+| 落后 3 条（远端 #174/#175/#176/#178）⇒ 处理 | `git merge origin/main` ——**3 处冲突**全在"两边各自往同一份清单里加东西"：`run_all_checks.py` 的校验器注册表 · `.github/workflows/ci.yml` 的循环与注释 · `build-and-test.md` 的三处计数 ⇒ **一律按并集解**，并把计数 **17 → 18**（机械判据 = 编排器实跑：**18 production validators + 1 fixture suites: 19 passed / 0 failed**） |
+| 第 1 次推送（合并提交 `14f948f`） | ❌ **CI 失败**：`docs-integrity` 的 `validate_cross_refs` 报 1 条死链（[#170] 证据里指向 `.scratch/` 过程物）——**首次进 CI 才暴露**，见 §9.0 |
+| 修后推送（`73bad39`） | ✅ **CI 全绿** —— run **`35096348451`**：`docs-integrity`（18 个生产校验器 + NPC fixture）✅ · `engine`（build + 416 测试 + fixture 比对）✅ · `issues-snapshot` ✅ · `unity` **显式 `NOT_AVAILABLE`**（需 Editor，按 [build-and-test §三](../../engineering/build-and-test.md)） |
+| 远端最终 SHA | `73bad39`（= 本地 `main`，工作树干净） |
+
+⚠️ 两条如实登记：① **第 1 次推送把一笔存量缺陷带进了 CI**（#170 的死链）——这条正说明"本地绿 ≠ 干净检出绿"（与 [P4a 证据](P4a-2026-09-12.md) 第 1 条同族）；② 合并后**校验器计数从 17 变 18**，本证据 §三 表里那格同时保留两个读数（本件改动所在树 17 / 合并后 18）。
+
 ---
 
 *创建: 2026-09-16（agent 执行 [#171](https://github.com/verystrongdog/game/issues/171)）*
