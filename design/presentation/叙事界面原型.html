@@ -197,9 +197,31 @@
 
     .obj.prop.keys { background: linear-gradient(#c9a86a, #6c5a36); }
 
+    .obj.board {
+      border: 1px solid rgba(204, 221, 210, .18);
+      background:
+        repeating-linear-gradient(0deg, transparent 0 7px, rgba(210, 224, 215, .07) 7px 8px),
+        linear-gradient(#cdc7b4, #6f6a5b);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, .45);
+    }
+
+    .obj.block {
+      background: linear-gradient(#5b6763 0 12%, #2a3532 13% 76%, #121a18 77%);
+      border-left: 1px solid rgba(204, 221, 210, .16);
+      border-right: 1px solid rgba(204, 221, 210, .16);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, .5);
+    }
+
+    .obj.decal {
+      border-radius: 50%;
+      background: radial-gradient(ellipse at 42% 40%, rgba(152, 192, 187, .32), rgba(120, 160, 158, .12) 60%, transparent 78%);
+      filter: blur(1px);
+    }
+
     /* 可交互标记：靠近才亮 */
     .marker {
       position: absolute;
+      pointer-events: none;
       width: 9px;
       height: 9px;
       margin: -4px 0 0 -4px;
@@ -747,7 +769,7 @@
           { t: 'inner', l: '内在反应 · 竞争性解释', x: '〔她在否认一件她根本没看的东西。〕／〔她确认的不是走廊，是我身后有没有别人。〕' }
         ],
         choices: [
-          { text: '“那就翻开看一眼。没有第三行，你看一眼就能证明。”', meta: '前提：她始终没有把手从册子上移开', next: 'end_p_show' },
+          { text: '“那就翻开看一眼。没有第三行，你看一眼就能证明。”', meta: '前提：她始终没有把手从册子上移开', next: 'r3_press_open' },
           { text: '“我今晚也看见了不该在的东西。也许我们在替同一件事保密。”', meta: '前提：她刚才确认过走廊里没有别人', next: 'end_p_share' },
           { text: '不再追问，退到门边。', meta: '前提：否认也可以先收下，门还开着', next: 'end_p_yield' }
         ]
@@ -761,7 +783,7 @@
           { t: 'inner', l: '内在反应 · 竞争性解释', x: '〔她在问我，还是在问她自己？〕／〔她早就知道窗户里有两个，她只是想听我怎么答。〕' }
         ],
         choices: [
-          { text: '你走到窗边，站进她的倒影里。', meta: '前提：她一直看的是玻璃，不是你', next: 'end_c_window' },
+          { text: '你走到窗边，站进她的倒影里。', meta: '前提：她一直看的是玻璃，不是你', next: 'r3_care_window' },
           { text: '“我不知道。但我可以站到你看得见的地方。”', meta: '前提：这也是一个你回答不了的问题', next: 'end_c_truth' },
           { text: '不回答。走廊尽头的灯管响了一下。', meta: '前提：这个问题可以留在原处', next: 'end_c_yield' }
         ]
@@ -781,19 +803,48 @@
         ]
       },
 
-      end_p_show: {
+      // 第三层决策节点：它的前四段是「翻开」的直接后果，选择留在这一层
+      r3_press_open: {
         beats: [
           { t: 'player', l: '你', x: '“那就翻开看一眼。没有第三行，你看一眼就能证明。”' },
           { t: '', l: '赵岚', x: '她把登记册推到灯下，翻开。“你看，第三行是空的。”说完就去合册子——比翻开时快得多。' },
           { t: 'perception', l: '显著性网络 · 被动', x: '那一行空得比别处更白。纸被擦过，擦得很轻，像有人怕留下自己的指纹。' },
-          { t: 'inner', l: '内在反应 · 竞争性解释', x: '〔空的一行也是证据。她刚刚亲手替我证明了这一点。〕' },
-          { t: 'system', l: '笔记本', x: '线索已核实：第三行被擦掉过。承诺更新：找到第三行原来的名字。' }
+          { t: 'inner', l: '内在反应 · 竞争性解释', x: '〔空的一行也是证据。她刚刚亲手替我证明了这一点。〕' }
+        ],
+        choices: [
+          { text: '“你擦得很轻。轻到只擦掉了名字。”', meta: '前提：那一行比别处更白', next: 'end_p_nail' },
+          { text: '你什么也不说，把手掌按在那一行的位置上。', meta: '前提：她已经把册子推到了灯下', next: 'end_p_hold' }
+        ]
+      },
+
+      end_p_nail: {
+        beats: [
+          { t: 'player', l: '你', x: '“你擦得很轻。轻到只擦掉了名字，没擦掉别的。”' },
+          { t: '', l: '赵岚', x: '她的手停在册子上。“……我擦了三次。第三次才发现，纸背会记住。”她第一次看着你说话，而不是看着你身后的走廊。' },
+          { t: 'perception', l: '显著性网络 · 被动', x: '她说“三次”的时候，手指在册脊上敲了三下。不是紧张，是数。' },
+          { t: 'inner', l: '内在反应 · 竞争性解释', x: '〔三次。她在给我一个可以核对的数字。〕' },
+          { t: 'system', l: '笔记本', x: '线索已核实：第三行被擦过三次。承诺更新：找到第三行原来的名字。' }
         ],
         promise: { text: '找到第三行原来的名字。', tag: '未完成 · 来自她的否认' },
-        add: { 线索: [{ text: '登记册第三行被擦过，擦痕透到纸背。', tag: '已核实 · 夜间护士站' }], 自问: [{ text: '擦掉一个名字，能不能让一个人不存在？', tag: '正在深化' }] },
-        toast: '线索已核实 · 第三行被擦过',
+        add: { 线索: [{ text: '登记册第三行被擦过三次，纸背有痕。', tag: '已核实 · 夜间护士站' }], 自问: [{ text: '擦掉一个名字，能不能让一个人不存在？', tag: '正在深化' }] },
+        toast: '线索已核实 · 擦过三次',
         objective: '找到能够证明“第三行”存在过的另一位见证者。',
         state: 'suspicious', moonAlert: true, figureTurned: true
+      },
+
+      end_p_hold: {
+        beats: [
+          { t: 'player', l: '你', x: '你什么也没说，只是把手掌按在那一行的位置上。' },
+          { t: '', l: '赵岚', x: '“……你记住了。”她把册子合上，声音低下去，“上一个也记住了。他后来一直站在走廊尽头。”' },
+          { t: 'perception', l: '显著性网络 · 被动', x: '她说“上一个”的时候，看的是走廊尽头那扇没有编号的门。' },
+          { t: 'inner', l: '内在反应 · 竞争性解释', x: '〔“上一个”在走廊尽头。她刚才那句话是给我的地址。〕／〔也可能她只是在提醒我别变成下一个。〕' },
+          { t: 'system', l: '笔记本', x: '线索已更新：她提到“上一个”。承诺更新：弄清走廊尽头那扇门后面有什么。' }
+        ],
+        promise: { text: '弄清走廊尽头那扇门后面有什么。', tag: '未完成 · 来自她的失言' },
+        add: { 线索: [{ text: '“上一个”记住了第三行，后来一直站在走廊尽头。', tag: '夜间护士站' }], 自问: [{ text: '我会不会成为下一个“上一个”？', tag: '正在深化' }] },
+        toast: '线索已更新 · “上一个”在走廊尽头',
+        objective: '调查走廊尽头那扇没有编号的门。',
+        state: '', figureTurned: true
       },
 
       end_p_share: {
@@ -824,21 +875,46 @@
         state: ''
       },
 
-      end_c_window: {
+      // 第三层决策节点：倒影那一线的直接后果，选择留在这一层
+      r3_care_window: {
         beats: [
           { t: 'player', l: '你', x: '你走到窗边，站进她的倒影里。' },
           { t: '', l: '赵岚', x: '玻璃里，你的倒影迟了半拍才到位。她盯着那半拍，喉咙动了一下。“……你也这样？”' },
           { t: 'perception', l: '显著性网络 · 被动', x: '两个人的倒影同时偏了头，朝走廊的方向——而你们两个都没有动。' },
-          { t: 'inner', l: '内在反应 · 竞争性解释', x: '〔镜子里的我，比我先知道了什么。〕／〔也可能是我在学她，只是自己没察觉。〕' },
-          { t: 'system', l: '笔记本', x: '线索已更新：倒影会先于身体反应。自问深化：是谁在带着我动？' }
+          { t: 'inner', l: '内在反应 · 竞争性解释', x: '〔镜子里的我，比我先知道了什么。〕／〔也可能是我在学她，只是自己没察觉。〕' }
         ],
-        add: {
-          线索: [{ text: '倒影的反应比身体早半拍。', tag: '感知所得 · 尚未核实' }],
-          自问: [{ text: '如果倒影比我先知道，那我是被谁带着走的？', tag: '正在深化' }]
-        },
-        toast: '线索已更新 · 倒影的延迟',
-        objective: '确认倒影的延迟是否只在月光增强时出现。',
-        state: 'opened', moonAlert: true, figureTurned: true
+        choices: [
+          { text: '你顺着倒影偏头的方向看过去。', meta: '前提：两个倒影同时看向走廊', next: 'end_c_follow' },
+          { text: '你不动。只看她会不会跟着倒影动。', meta: '前提：她还不知道你已经看见了', next: 'end_c_hold' }
+        ]
+      },
+
+      end_c_follow: {
+        beats: [
+          { t: 'player', l: '你', x: '你顺着倒影偏头的方向看过去。' },
+          { t: '', l: '赵岚', x: '走廊尽头什么也没有。她开口了：“别找。它不在那儿。”停顿了一下，“它在的时候，你会先听见钥匙响。”' },
+          { t: 'perception', l: '显著性网络 · 被动', x: '她说“钥匙响”的时候，兜里的钥匙串响了一声。她自己也愣了一下。' },
+          { t: 'inner', l: '内在反应 · 竞争性解释', x: '〔她在用一件还没有发生的事给我定规矩。〕／〔或者这件事已经发生过一次，只是我不记得。〕' },
+          { t: 'system', l: '笔记本', x: '线索已更新：倒影看向走廊尽头；她说“它”出现前会先有钥匙响。' }
+        ],
+        add: { 线索: [{ text: '倒影看向走廊尽头；她说“它”出现前会先有钥匙响。', tag: '感知所得 · 尚未核实' }] },
+        toast: '线索已更新 · 钥匙响',
+        objective: '在走廊里等到那声钥匙响。',
+        state: 'opened', moonAlert: true
+      },
+
+      end_c_hold: {
+        beats: [
+          { t: 'player', l: '你', x: '你不动，只是站着，让倒影先动。' },
+          { t: '', l: '赵岚', x: '半分钟后，她的倒影先低下了头。她本人还抬着下巴。“……你看见了。”她说，“那就别告诉别人——你看见的是我，还是它。”' },
+          { t: 'perception', l: '显著性网络 · 被动', x: '她颈侧的脉搏跳得很快。倒影的颈侧是静止的。' },
+          { t: 'inner', l: '内在反应 · 竞争性解释', x: '〔倒影背叛了她。她自己知道。〕' },
+          { t: 'system', l: '笔记本', x: '自问深化：倒影和本人不一致时，我该回答哪一个？' }
+        ],
+        add: { 自问: [{ text: '倒影和本人不一致时，我该回答哪一个？', tag: '正在深化' }] },
+        toast: '自问正在深化 · 倒影先低了头',
+        objective: '判断该把倒影的话算在谁头上。',
+        state: 'opened'
       },
 
       end_c_truth: {
@@ -937,7 +1013,11 @@
     const FLOOR_FAR = 0.46, FLOOR_NEAR = 0.94;
     const BASE_VIEW = 1900;         // 中间深度处可见的世界宽度
     const PERSP = { far: 0.72, near: 1.22 };
-    const OBSTACLES = [{ x0: 2900, y0: 210, x1: 3520, y1: 350 }];   // 护士站台面
+    const OBSTACLES = [
+      { x0: 2900, y0: 210, x1: 3520, y1: 350 },   // 护士站台面
+      { x0: 1400, y0: 300, x1: 1620, y1: 430 }    // 治疗车（与 interactables 里 cart 的占地矩形保持一致）
+    ];
+    const PAD = 26;                 // 障碍膨胀量（碰撞与绕行共用）
     const HINT_EXPLORE = 'WASD / 方向键走动 · 点击地面移动 · 走近后按 E 交互';
     const HINT_TALK = '对话中 · 数字键或点击选择回应';
 
@@ -1029,6 +1109,33 @@
         add: { 线索: [{ text: '一把新齿旧牌的钥匙，牌上没有编号。', tag: '感知所得 · 尚未核实' }] }
       },
       {
+        id: 'cart', kind: 'block', x0: 1400, y0: 300, x1: 1620, y1: 430, label: '治疗车', reach: { x: 1510, y: 480 },
+        once: [
+          { t: 'scene-text', l: '客观描述', x: '一辆治疗车停在走廊中间。上层摆着四只药杯，三只空的，一只还满着。' },
+          { t: 'perception', l: '显著性网络 · 被动', x: '满着的那只杯子上贴着一张标签。标签被撕掉了大半，只剩一个“第”字。' }
+        ],
+        again: [{ t: 'scene-text', l: '客观描述', x: '四只药杯还在原地。满的那只没有人来收。' }],
+        add: { 线索: [{ text: '治疗车上有一只满着的药杯，标签只剩“第”字。', tag: '夜间走廊' }] }
+      },
+      {
+        id: 'board', kind: 'board', x: 2000, label: '排班表', reach: { x: 2000, y: 100 },
+        once: [
+          { t: 'scene-text', l: '客观描述', x: '墙上的排班表被透明胶带贴了三层。最上面那张只写了今晚——值班栏是赵岚，另一栏空着。' },
+          { t: 'inner', l: '内在反应 · 竞争性解释', x: '〔今晚只有一个人值班。〕／〔或者另一个人的名字被撕掉了。〕' }
+        ],
+        again: [{ t: 'scene-text', l: '客观描述', x: '排班表还是只写着一个人。' }],
+        add: { 线索: [{ text: '今晚的排班表只有赵岚一个人值班。', tag: '夜间走廊' }] }
+      },
+      {
+        id: 'wettrail', kind: 'decal', x: 2620, y: 500, label: '地上的水印', reach: { x: 2620, y: 470 },
+        once: [
+          { t: 'perception', l: '显著性网络 · 被动', x: '地上一串半干的水印，从走廊尽头一路过来，停在储物间门口。' },
+          { t: 'inner', l: '内在反应 · 竞争性解释', x: '〔不是从外面走进来的。〕／〔是从里面出去的。〕' }
+        ],
+        again: [{ t: 'scene-text', l: '客观描述', x: '水印快干了。方向没变。' }],
+        add: { 线索: [{ text: '一串水印从走廊尽头通向储物间门口，方向朝外。', tag: '感知所得 · 尚未核实' }] }
+      },
+      {
         id: 'nurse', kind: 'actor', x: 3300, y: 150, label: '赵岚', reach: { x: 3300, y: 400 }, talk: true
       }
     ];
@@ -1071,7 +1178,7 @@
       let nx = Math.min(Math.max(x, WALK.minX), WALK.maxX);
       let ny = Math.min(Math.max(y, WALK.minY), WALK.maxY);
       OBSTACLES.forEach(o => {
-        const pad = 26;
+        const pad = PAD;
         if (nx > o.x0 - pad && nx < o.x1 + pad && ny > o.y0 - pad && ny < o.y1 + pad) {
           const d = [[ny - (o.y0 - pad), 'far'], [(o.y1 + pad) - ny, 'near'], [nx - (o.x0 - pad), 'left'], [(o.x1 + pad) - nx, 'right']];
           d.sort((a, b) => a[0] - b[0]);
@@ -1106,20 +1213,21 @@
     }
 
     function buildWorld() {
-      // 后墙（深度 0）：病房门 / 储物间 / 窗 / 走廊尽头没有编号的门
-      interactables.filter(item => item.kind === 'door' || item.kind === 'window').forEach(item => {
-        const node = el('div', 'obj ' + (item.kind === 'window' ? 'window-glass' : 'door') + (item.unnumbered ? ' unnumbered' : ''), objectsEl);
-        els['obj-' + item.id] = node;
+      // 除人物外的所有交互物：形态由 kind 决定
+      //   door/window/board = 贴在后墙（深度 0）· block = 地面占地矩形（四边形裁剪）
+      //   decal = 地面贴花 · prop = 台面小物件
+      const KIND_CLASS = { door: 'door', window: 'window-glass', board: 'board', block: 'block', decal: 'decal', prop: 'prop' };
+      interactables.filter(item => item.kind !== 'actor').forEach(item => {
+        let cls = 'obj ' + (KIND_CLASS[item.kind] || item.kind);
+        if (item.id === 'keys') cls += ' keys';
+        if (item.unnumbered) cls += ' unnumbered';
+        els['obj-' + item.id] = el('div', cls, objectsEl);
       });
       // 护士站台面（地面上的占地矩形，用四边形裁剪表达）
       const counter = el('div', 'obj counter', objectsEl);
       const o = OBSTACLES[0];
       counter.dataset.x0 = o.x0; counter.dataset.y0 = o.y0; counter.dataset.x1 = o.x1; counter.dataset.y1 = o.y1;
       els.counter = counter;
-      // 台面上的登记册 / 钥匙
-      interactables.filter(item => item.kind === 'prop').forEach(item => {
-        els['obj-' + item.id] = el('div', 'obj prop' + (item.id === 'keys' ? ' keys' : ''), objectsEl);
-      });
       // 人物
       els.nurse = el('div', 'actor nurse', actorsEl);
       els.nurse.append(el('div', 'head'), el('div', 'body'), el('div', 'legs'));
@@ -1129,6 +1237,13 @@
       interactables.forEach(item => {
         els['mark-' + item.id] = el('div', 'marker', markersEl);
       });
+    }
+
+    // 物件锚点：贴墙件锚在墙脚，占地块锚在近端边中点，其余锚在自身位置
+    function anchorOf(item) {
+      if (item.kind === 'door' || item.kind === 'window' || item.kind === 'board') return { x: item.x, y: 0 };
+      if (item.kind === 'block') return { x: (item.x0 + item.x1) / 2, y: item.y1 };
+      return { x: item.x, y: item.y };
     }
 
     function layout() {
@@ -1153,6 +1268,22 @@
           node.style.top = (p.sy - (0.9 + 1.4) * UNIT * p.per) + 'px';
           node.style.width = w + 'px';
           node.style.height = h + 'px';
+        } else if (item.kind === 'board') {
+          const p = project(item.x, 0);
+          const w = 1.3 * UNIT * p.per, h = 0.95 * UNIT * p.per;
+          node.style.left = p.sx + 'px';
+          node.style.top = (p.sy - (1.15 + 0.95) * UNIT * p.per) + 'px';
+          node.style.width = w + 'px';
+          node.style.height = h + 'px';
+        } else if (item.kind === 'block') {
+          drawQuad(node, item.x0, item.y0, item.x1, item.y1);
+        } else if (item.kind === 'decal') {
+          const p = project(item.x, item.y);
+          const w = 1.3 * UNIT * p.per, h = 0.62 * UNIT * p.per;
+          node.style.left = p.sx + 'px';
+          node.style.top = (p.sy - h) + 'px';
+          node.style.width = w + 'px';
+          node.style.height = Math.max(h, 4) + 'px';
         } else if (item.kind === 'prop') {
           const p = project(item.x, item.y);
           const w = 0.34 * UNIT * p.per, h = 0.12 * UNIT * p.per;
@@ -1162,8 +1293,10 @@
           node.style.height = Math.max(h, 3) + 'px';
         }
         if (item.kind !== 'actor') {
-          node.style.transform = 'translate(-50%, 0)';
-          node.style.zIndex = String(item.kind === 'door' || item.kind === 'window' ? 2 : Math.round(item.y));
+          // 占地块由 drawQuad 自己算绝对框，不能再叠加居中位移
+          node.style.transform = item.kind === 'block' ? 'none' : 'translate(-50%, 0)';
+          const wallMounted = item.kind === 'door' || item.kind === 'window' || item.kind === 'board';
+          node.style.zIndex = String(wallMounted ? 2 : Math.round(anchorOf(item).y));
         }
       });
 
@@ -1195,13 +1328,14 @@
       // 就近交互判定
       let best = null, bestD = Infinity;
       interactables.forEach(item => {
-        const p = project(item.x, item.kind === 'prop' || item.kind === 'actor' ? item.y : 0);
+        const a = anchorOf(item);
+        const p = project(a.x, a.y);
         const mark = els['mark-' + item.id];
         const dx = state.x - item.reach.x, dy = state.y - item.reach.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
         const inRange = dist <= REACH;
         mark.style.left = p.sx + 'px';
-        mark.style.top = (item.kind === 'door' || item.kind === 'window' ? rect.h * FLOOR_FAR : p.sy) + 'px';
+        mark.style.top = p.sy + 'px';
         mark.style.zIndex = String(Math.round(item.reach.y));
         mark.classList.toggle('near', inRange && state.mode === 'explore' && item !== state.nearest);
         mark.classList.toggle('done', Boolean(state.seen[item.id]));
@@ -1214,10 +1348,11 @@
 
       state.nearest = best;
       if (best && state.mode === 'explore') {
-        const p = project(best.x, best.kind === 'prop' || best.kind === 'actor' ? best.y : 0);
+        const ba = anchorOf(best);
+        const p = project(ba.x, ba.y);
         promptEl.textContent = 'E · ' + (best.talk ? '和' + best.label + '说话' : '查看' + best.label);
         promptEl.style.left = p.sx + 'px';
-        promptEl.style.top = ((best.kind === 'door' || best.kind === 'window' ? rect.h * FLOOR_FAR : p.sy) - 14) + 'px';
+        promptEl.style.top = (p.sy - 14) + 'px';
         promptEl.classList.add('show');
       } else {
         promptEl.classList.remove('show');
@@ -1227,6 +1362,41 @@
     function measure() {
       const r = sceneEl.getBoundingClientRect();
       rect = { w: Math.max(r.width, 320), h: Math.max(r.height, 320) };
+    }
+
+    // 直线是否穿过轴对齐矩形（Liang–Barsky 裁剪）
+    function segHitsRect(x0, y0, x1, y1, r) {
+      let t0 = 0, t1 = 1;
+      const dx = x1 - x0, dy = y1 - y0;
+      const p = [-dx, dx, -dy, dy];
+      const q = [x0 - r.x0, r.x1 - x0, y0 - r.y0, r.y1 - y0];
+      for (let i = 0; i < 4; i++) {
+        if (p[i] === 0) { if (q[i] < 0) return false; continue; }
+        const t = q[i] / p[i];
+        if (p[i] < 0) { if (t > t1) return false; if (t > t0) t0 = t; }
+        else { if (t < t0) return false; if (t < t1) t1 = t; }
+      }
+      return true;
+    }
+
+    // 点击移动的转向层：直线被占地障碍挡住时，先绕到该障碍的一个外角（取总路程最短者）。
+    // 没有这一步，点被障碍挡在后面的物件时角色会被推出逻辑摁在障碍边缘上原地打转。
+    function steerAround(from, to) {
+      for (let i = 0; i < OBSTACLES.length; i++) {
+        const o = OBSTACLES[i];
+        const r = { x0: o.x0 - PAD, y0: o.y0 - PAD, x1: o.x1 + PAD, y1: o.y1 + PAD };
+        if (!segHitsRect(from.x, from.y, to.x, to.y, r)) continue;
+        const clear = PAD + 8;
+        let best = to, bestLen = Infinity;
+        [[r.x0 - clear, r.y0 - clear], [r.x1 + clear, r.y0 - clear],
+         [r.x0 - clear, r.y1 + clear], [r.x1 + clear, r.y1 + clear]].forEach(corner => {
+          const c = clampInto(corner[0], corner[1]);
+          const len = Math.hypot(from.x - c.nx, from.y - c.ny) + Math.hypot(c.nx - to.x, c.ny - to.y);
+          if (len < bestLen) { bestLen = len; best = { x: c.nx, y: c.ny }; }
+        });
+        return best;
+      }
+      return to;
     }
 
     function step(dt) {
@@ -1248,17 +1418,24 @@
         return;
       }
       if (state.tx !== null) {
-        const ddx = state.tx - state.x, ddy = state.ty - state.y;
-        const dist = Math.sqrt(ddx * ddx + ddy * ddy);
-        if (dist < 22) {
+        if (Math.hypot(state.tx - state.x, state.ty - state.y) < 22) {
           state.tx = null; state.ty = null; state.moving = false;
           if (state.pending) { const id = state.pending; state.pending = null; interact(id); }
           return;
         }
-        const s = Math.min(SPEED * dt, dist);
-        const moved = clampInto(state.x + (ddx / dist) * s, state.y + (ddy / dist) * s);
+        const goal = steerAround({ x: state.x, y: state.y }, { x: state.tx, y: state.ty });
+        const gdx = goal.x - state.x, gdy = goal.y - state.y;
+        const gdist = Math.hypot(gdx, gdy);
+        if (gdist < 8) {                 // 已抵绕行角点：贴过去，下一帧按新位置重算
+          const snapped = clampInto(goal.x, goal.y);
+          state.x = snapped.nx; state.y = snapped.ny;
+          state.moving = true;
+          return;
+        }
+        const s = Math.min(SPEED * dt, gdist);
+        const moved = clampInto(state.x + (gdx / gdist) * s, state.y + (gdy / gdist) * s);
         state.x = moved.nx; state.y = moved.ny;
-        state.facing = ddx < 0 ? -1 : 1;
+        state.facing = gdx < 0 ? -1 : 1;
         state.moving = true;
         return;
       }
