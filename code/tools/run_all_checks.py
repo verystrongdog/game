@@ -2,7 +2,7 @@
 """
 run_all_checks.py — Layer 1 预检查编排器
 
-运行 code/tools/validate_*.py 全部脚本，汇总输出。
+运行已登记的生产校验器与 fixture 套件，汇总输出。
 检测文件变更，标注需要人类审核的项。
 
 用法:
@@ -23,7 +23,7 @@ from datetime import datetime
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from tools.md_utils import ROOT, collect_md_files
 
-# 校验脚本注册表（单一列表，不再用三个分散列表）
+# 检查脚本注册表（生产校验器与 fixture 套件共用一个登记点）
 #
 # 2026-09-12 修复：本表原与 CI 的校验器循环（.github/workflows/ci.yml 的
 # `for v in ...` 共 11 个）不一致——少了 5 个 2026-09 新增的校验器，且把
@@ -52,6 +52,10 @@ VALIDATOR_REGISTRY = {
     # #165：接触相位识别件（注册表术语定义 ↔ M2 取点口径 ↔ soleMargin 容差 ↔ 证据逐帧表 四处不许漂移）
     #   ⚠️ 它**不需要 bpy**：无参数时走离线机械判据 R1–R5；Blender 侧读产物是另一条路（`--blend`）。
     "xbot_contact_phase.py":       {"status": "active", "json": False},
+    # #174：NPC manifest ↔ 16 组素材 ↔ 资格回放 ↔ 两份台账
+    "validate_npc_materials.py":   {"status": "active", "json": False},
+    # #174：生产校验器自身的缺失/漂移/假阳性 mutation fixtures
+    "test_validate_npc_materials.py": {"status": "fixture", "json": False},
 }
 
 STATE_FILE = ROOT / ".checks-state.json"   # 运行状态（2026-09-12：原 .scratch/.last_check_state.json，随 .scratch 移出版本控制而迁出）
@@ -66,6 +70,12 @@ def get_active_validators() -> list[Path]:
     """获取所有活跃校验脚本的路径"""
     return [TOOLS_DIR / name for name, info in VALIDATOR_REGISTRY.items()
             if info["status"] == "active" and (TOOLS_DIR / name).exists()]
+
+
+def get_fixture_suites() -> list[Path]:
+    """获取独立 fixture 套件；它们不计入生产校验器数量。"""
+    return [TOOLS_DIR / name for name, info in VALIDATOR_REGISTRY.items()
+            if info["status"] == "fixture" and (TOOLS_DIR / name).exists()]
 
 
 def run_validator(script: Path) -> dict:
@@ -157,12 +167,18 @@ def format_output(validator_results: list[dict], new_files: list[str], fmt: str 
 
     print("# run_all_checks.py — Layer 1 预检查编排器\n")
     print("## 检查范围")
-    print(f"- 校验脚本: {len(validator_results)} 个")
+    production_count = sum(
+        1 for result in validator_results
+        if VALIDATOR_REGISTRY[result["name"]]["status"] == "active"
+    )
+    fixture_count = len(validator_results) - production_count
+    print(f"- 生产校验器: {production_count} 个")
+    print(f"- fixture 套件: {fixture_count} 个")
     for r in validator_results:
         status = "✅" if r["exit_code"] == 0 else ("❌" if r["exit_code"] > 0 else "💥")
         print(f"  - {status} {r['name']}")
-    active_names = [n for n, i in VALIDATOR_REGISTRY.items() if i["status"] == "active"]
-    missing = [v for v in active_names if not (TOOLS_DIR / v).exists()]
+    runnable_names = [n for n, i in VALIDATOR_REGISTRY.items() if i["status"] in {"active", "fixture"}]
+    missing = [v for v in runnable_names if not (TOOLS_DIR / v).exists()]
     if missing:
         print(f"\n- ⚠️ 未实现的校验脚本 ({len(missing)} 个): {', '.join(missing)}")
     deprecated = [n for n, i in VALIDATOR_REGISTRY.items() if i["status"] == "deprecated"]
@@ -192,7 +208,10 @@ def format_output(validator_results: list[dict], new_files: list[str], fmt: str 
             print(f"  [stderr] {r['stderr'][:200]}")
 
     print(f"\n## 汇总")
-    print(f"{len(validator_results)} validators: {n_pass} passed, {n_fail} failed, {n_err} errors")
+    print(
+        f"{production_count} production validators + {fixture_count} fixture suites: "
+        f"{n_pass} passed, {n_fail} failed, {n_err} errors"
+    )
     if new_files:
         print(f"{len(new_files)} files changed since last run — 建议人工审核")
 
@@ -213,8 +232,10 @@ def main():
         return
 
     new_files = detect_new_files()
-    scripts = get_active_validators()
-    if not scripts:
+    production_scripts = get_active_validators()
+    fixture_suites = get_fixture_suites()
+    scripts = production_scripts + fixture_suites
+    if not production_scripts:
         # WORKFLOW.md §5.1：未运行不是通过。找不到校验器必须显式失败，
         # 不得以「0 个校验器、0 个失败」退出 0——那正是本文件 2026-09-12 修复的缺陷形态。
         print("💥 未找到任何活跃校验器——拒绝在零校验状态下返回成功", file=sys.stderr)
