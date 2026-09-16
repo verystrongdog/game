@@ -176,6 +176,27 @@ class NpcMaterialAuditTests(unittest.TestCase):
         _write_json(path, draft)
         self.assert_fails_with("ELIGIBILITY_INPUT_INVALID")
 
+    def test_unknown_declaration_atom_is_rejected(self) -> None:
+        path = self.root / DRAFTS_REL / "贺春兰.gen.json"
+        draft = _read_json(path)
+        draft["资格声明（#87 规范化声明）"]["NOT_A_REAL_ATOM"] = 1
+        _write_json(path, draft)
+        self.assert_fails_with("ADAPTER_UNKNOWN_DECLARATION_ATOM")
+
+    def test_raw_gen_json_is_rejected_by_eligibility_cli(self) -> None:
+        result = subprocess.run(
+            [
+                sys.executable,
+                str(ROOT / "code/tools/validate_eligibility.py"),
+                str(self.root / DRAFTS_REL / "周卫国.gen.json"),
+            ],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        self.assertEqual(1, result.returncode)
+        self.assertIn("缺少规范顶层字段", result.stderr)
+
     def test_legacy_relabelled_validated_cannot_false_pass(self) -> None:
         manifest = self.manifest()
         self.entry(manifest, "顾维扬")["status"] = "validated"
