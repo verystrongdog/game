@@ -34,6 +34,10 @@ EXPECTED_REPLAYED = {
     "唐念安",
     "许一鸣",
     "贺春兰",
+    "马会宁",
+    "郭月芹",
+    "罗惠琴",
+    "方海潮",
 }
 
 
@@ -114,15 +118,15 @@ class NpcMaterialAuditTests(unittest.TestCase):
     def test_real_repository_baseline(self) -> None:
         report = audit_repository(ROOT)
         self.assertTrue(report.ok, [(item.code, item.subject) for item in report.findings])
-        self.assertEqual(16, report.material_count)
-        self.assertEqual(13, report.patient_count)
-        self.assertEqual(7, report.replay_count)
+        self.assertEqual(20, report.material_count)
+        self.assertEqual(17, report.patient_count)
+        self.assertEqual(11, report.replay_count)
         self.assertEqual(EXPECTED_REPLAYED, set(report.replayed_names))
 
     def test_fixture_baseline_matches_real_contract(self) -> None:
         report = audit_repository(self.root)
         self.assertTrue(report.ok, [(item.code, item.subject) for item in report.findings])
-        self.assertEqual((16, 13, 7), (report.material_count, report.patient_count, report.replay_count))
+        self.assertEqual((20, 17, 11), (report.material_count, report.patient_count, report.replay_count))
         self.assertEqual(EXPECTED_REPLAYED, set(report.replayed_names))
 
     def test_missing_pair_members_fail(self) -> None:
