@@ -1,6 +1,7 @@
 ---
-status: approved
+status: ready-for-execution
 issue: 177
+pr: 178
 created: 2026-09-16
 ---
 
