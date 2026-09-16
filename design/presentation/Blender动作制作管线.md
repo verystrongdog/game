@@ -516,6 +516,59 @@ B=<解压目录>/blender-4.5.13-linux-x64/blender
 2. **默认只绑 `127.0.0.1`**；要从 WSL 连必须显式把 `BB_HOST` 设成 WSL 网卡 IP，**那之后同网段其他机器也能连**（有 token 就行）。用完关窗口。
 3. **不是常驻服务**：Blender 一关桥就没了——这正是「活体」的含义，别拿它当自动化后端。
 4. **为什么不用现成的 Blender MCP**：MCP 生态确实有（[harveyxiacn/blender-mcp](https://github.com/harveyxiacn/blender-mcp) · [Blender_mcp](https://github.com/Immunogenic-prismspectroscope589/Blender_mcp) · [blender-mcp-bridge](https://pypi.org/project/blender-mcp-bridge/) · [blender-agent](https://projects.blender.org/Rich-Siomporas/blender-agent)），DSH 也支持 MCP（`@deepseek-ai/dsh-mcp-client`，工具以 `mcp__<server>__<tool>` 出现）。不选它的理由具体：① 那类 MCP 的 Blender 侧内核也是监听 socket 的插件，本桥 120 行就覆盖了本工程要用的那一格；② 多一层第三方依赖（要装、跟版本、信任其代码；本机还没有 `uv`/`uvx`）；③ **MCP 工具只在新会话里出现**，「现在这个会话里帮我摆个姿势」它答不了；④ 本工程已有 [`unity-cli`](../../code/tools/unity-cli/README.md) 这个自建直驱先例。**若将来要接 MCP，本 addon 可直接当它的后端。**
+   > 🔧 **2026-09-16（[#172](https://github.com/verystrongdog/game/issues/172) 复核）**：本条四条理由**逐条复核后成立**，路线维持（owner 决策见 **§7.7**）；但其中两处事实**与实测不符**——「本桥 120 行」与「`unity-cli` 是自建直驱桥」——已在 §7.7 的"与文档不符"表里逐条更正。**协议未改、安全行为未改、代码一字未动。**
+
+### 7.7 接口路线决策：维持现有桥，不接标准 MCP（2026-09-16 · [#172](https://github.com/verystrongdog/game/issues/172)）
+
+> **决策（owner，2026-09-16）：选 A —— 维持现有自建桥，本阶段不引入 MCP。**
+> 选项 **C**（在桥外增加标准 MCP facade）的**启动条件与首批工具面**在下面**预登记**（预登记 ≠ 已实施）；
+> 选项 **B**（整体替换为第三方 Blender MCP）**不采纳**。
+> 本决策**只裁接口路线**：桥的协议、token 门禁、安全行为与 `code/tools/blender-bridge/` 代码**一字未改**。
+
+**为什么是 A（owner 依据三条）**
+
+1. **桥不是"待评估的新件"，而是已在产线上被消费的件**：宿主脚本 [`author_xbot_chair_grab.py`](../../code/tools/author_xbot_chair_grab.py)（**6903 行 / 8 个 `--task`**）内有 **7 处 `--host live` 分支**——[动作描述口径](动作描述口径.md) §九 的「预览回路」就靠它；[#163](https://github.com/verystrongdog/game/issues/163) / [#166](https://github.com/verystrongdog/game/issues/166) / [#170](https://github.com/verystrongdog/game/issues/170) / [#171](https://github.com/verystrongdog/game/issues/171) 的 owner 目视**全部经活体窗口**完成（#170 另起独立桥 9879，专门不碰 owner 已开的那个会话）。
+2. **C 的唯一硬收益当前没有消费者**：工具发现 / JSON Schema / 跨客户端 / 最小权限，这四项只在出现**具名的第二消费者**或**明确需求**时兑现。实测本机：`codex mcp list` → `No MCP servers configured yet`；`~/.claude.json` 的 `mcpServers` 为空。而单 Agent 场景下 agent 本来就能用 `bb.py` + bash 直驱——**raw Python 比七个具名工具更强**。
+3. **B 要重新挣已经挣到的东西**：活体会话语义、WSL→Windows 路径、主线程、5.x slotted Action、重绘、token 边界与下表七条实测坑。第三方 MCP 的 Blender 侧通常也是它**自己的** addon，不提供「驱动**你正开着**那个会话」这一格。
+
+**复核读数（一）：现有桥的已验证能力**——逐条核过，来源可查
+
+| 能力 | 实测事实 | 来源 |
+|---|---|---|
+| 活体 GUI 回路 | 真实产姿势脚本在**已开着**的会话里跑完 **66.96 s**；摆 `CTRL_LeftArm` Z+40° → 左手位移 **384.2 mm** | [#162 证据](../engineering/evidence/action-description-live-loop-2026-09-14.md) §4.1 |
+| 长输出不丢 | **48172 字符**落 `bb-outbox/`，回包给 `stdout_file_name` | 同上 §4.3 |
+| 与 headless 等价 | 同一段代码两侧**逐位一致**（6 位小数全同） | 同上 §4.5 |
+| 起桥不再杀窗口 | 有活桥时**复用**（进程 2→2）；旧行为改为显式 `BB_KILL_EXISTING=1` | 同上 §4.4 |
+| 已被真实工作消费 | 7 处 `--host live` 分支；#163/#166/#170/#171 的 owner 目视走活体窗口 | 代码 · [口径](动作描述口径.md) §九 · [#170 证据](../engineering/evidence/balance-support-2026-09-16.md) §六 |
+| 安全边界 | 随机 token + 默认绑 `127.0.0.1` + **无沙箱 raw Python**；WSL 连入须显式设 `BB_HOST`（此后同网段可连） | [blender-bridge README](../../code/tools/blender-bridge/README.md) §四 · 本文 §7.6 |
+| 已付代价的坑 | README §五 六条（`id` 残留污染 / socket 超时贴太近 / WSL→Windows 环境变量不传递 / addon 热升级不可靠 / 状态文件路径不一致 / 长任务冻结 GUI）+ #170 的**模块缓存**一条 | 同上 §五 · [#170 证据](../engineering/evidence/balance-support-2026-09-16.md) §六 |
+
+**复核读数（二）：标准 MCP 的收益边界**
+
+| 项 | 实测事实 | 边界（**不得声称**） |
+|---|---|---|
+| 收益 | 工具发现 + `inputSchema`；跨客户端同形命名 `mcp__<server>__<tool>`；把 raw Python 收窄成**具名工具**（这才是真正的最小权限面） | 与 IK、动作自然度、接触判据、Unity 回导质量**无关**——MCP 只搬调用面 |
+| DSH 侧能力 | `@deepseek-ai/dsh-mcp-client` 支持 stdio 与 streamable-http；**只桥接 `tools`**（resources / prompts 无消费者）；配置在 `cordis.yml` / profile patch，编辑条目热重连 | 不消除桥的四条结构性代价（WSL 路径 · 主线程冻结 · 超时不取消 · 桥自身升级要重起会话）——facade 后面仍是同一个 addon |
+| 超时语义 | DSH 侧 `toolCallTimeoutMs` 默认 **60000**，而桥实测最长任务 **66.96 s** ⇒ 长任务会在 **MCP 层**先被掐 | 桥的「超时**不取消**脚本」只有一个 MCP error 语义可映射，须专门设计，不会自动变好 |
+| 本机前置 | `python3 -c "import mcp"` → `ModuleNotFoundError`；无 `uv` / `uvx` | 走 C 要先解决 SDK 落地，不能假设"装上就能用" |
+
+**若将来启动 C：启动条件与首批工具面**（预登记；触发前**不因"协议更标准"单独实施**）
+
+- **启动条件（任一）**：① 出现**具名的第二 MCP 客户端 / 下游消费者**（例如让 Codex / Claude 控 Blender）；或 ② 明确需要 **Schema / 审计 / 最小权限**中的一项。
+- **结构**：`MCP Client → 项目 MCP Server/Facade → 现有 bb 协议 → blender_ai_bridge.py → bpy`——不重写已验证的 Blender/WSL 通信。
+- **首批工具面**：`get_session_status` · `inspect_rig` · `list_actions` · `run_author_recipe` · `preview_action` · `measure_action` · `export_unity_fbx`；**默认不暴露任意 Python**，调试型 `execute_python` 单独授权、仅本机启用、记调用摘要。
+- **实验边界**（#172 验收第 5 条）：只建**独立限界 Experiment**，证明 facade 能复用现有活体会话完成**一次状态查询 + 一次受控姿势/Action 调用 + 一次结构化返回**；**不以删除旧桥为前置**。
+- **接入模板已有先例**：本机 `~/.dsh/profiles/web/cordis.patch.yml` 里的 `mcp-unitycli`（`/mnt/c/.../unity.exe mcp --project-path ...`），照抄即可（见下表第 2 条）。
+
+**推翻路径**：若 A 日后被推翻，本节标 **`SUPERSEDED`** 并恢复"现有桥为唯一已验证后端"的上一状态；实施性变更由后续独立 issue 自带回滚方案（#172 §回滚）。
+
+**复核中发现的"与文档不符"三条**——owner 2026-09-16 裁：**只登记、不开 issue**；本件**不改 `code/tools/**`**（#172 预期差分）
+
+| # | 事实（实测） | 处置 |
+|---|---|---|
+| 1 | [blender-bridge README](../../code/tools/blender-bridge/README.md) §五 括注「都在[危险点表](../engineering/危险点表.md) §七 有行」**不成立**：该表 227 行里**没有任何活体桥行**（`bb-outbox` / `SO_REUSEADDR` / `token mismatch` / `状态文件` 四个检索词零命中）；#170 又添第 6 条（活体 `exec` 的模块缓存） | 候选队列：下次碰桥时补表 |
+| 2 | README §六-④ 与本文 §7.6-④ 把 [`unity-cli`](../../code/tools/unity-cli/README.md) 当作「本工程**自建**直驱先例」**不准确**：它是**官方 Unity CLI**（`com.unity.pipeline`）+ 项目封装脚本，且官方 CLI **自带 `mcp` 子命令**；本机已按 MCP 接进 DSH（`mcp-unitycli`），而这条接线在仓库里**没有任何记录**（`grep -rni mcp design/` 只命中桥 README 与本节）⇒ 「本工程不用 MCP」不是事实，准确说法是「**Blender 侧不用 MCP，Unity 侧已经在用，只是没落文档**」 | 同上 |
+| 3 | 「本桥 **120 行**」（README §六-① · 本文 §7.6-④）与库内实际**从未相符**：落库提交 `75e5132` 时三件 **324 行**（addon 197 / 客户端 66 / 启动器 61）；#162 加固后 **444 行**（addon 244 / 客户端 112 / 启动器 88）⇒ 论"内核简单"只能论**协议**（一行 JSON 请求 / 回包 + token 门禁），**不能论行数** | 本文 §7.6-④ 已就地加更正注记；README 侧随第 1 条一起改 |
 
 ## 七·B、~~动作素材：`BendGripChairBack`~~ ⏸ **已撤回（2026-09-14）**
 
@@ -591,6 +644,6 @@ owner 将**另开 issue 专门解决语言描述口径**，之后再回来调动
 | X Bot 的 Unity 导入设置口径（`animationType: 3` / `avatarSetup: 1`） | `code/tools/validate_unity_assets.py` A4 规则注释 |
 
 ---
-*创建: 2026-09-14 | 更新: 2026-09-14（🔧 第六次：**新增 §7·B 动作素材 `BendGripChairBack`**（弯腰双手抓椅背）——脚本化产出 `code/tools/author_xbot_chair_grab.py`（临时 IK 解 + 捕获成控制骨角度），实测抓点残差 **0.0 mm**、肘 133°、逐帧脚漂移 **0.0 mm**、手指自测蜷曲轴 Z/−1；导出与 Unity 导入全绿。**并挖出三个真 bug**：FBX 导出的 bind pose 取当前帧姿势（E5 报 86 m，探针一直裸奔侥幸过）· `pose_position=REST` 是错误修法（压成常量）· `actions.new()` 重名静默建 `.001`。⚠️ 本动作**未登记动作词条**（词表受控，属设计裁定）。🔧 第五次：**新增 §7.5 活体桥 + §7.6 边界与安全**——落库 `code/tools/blender-bridge/`（`blender_ai_bridge.py` + `bb.py` + `bb-launch.sh` + README），实测驱动已开着的窗口：摆 `CTRL_LeftArm` Z+40° → 左手位移 **384.2 mm**，并读回 13 根控制骨与两组集合；含「为什么不用现成 Blender MCP」的四条具体理由。🔧 第四次：**新增 §2.1 GUI 操作手册**（打开方式 · 六步动作序列 · 两条红线）+ **§2.1.1 逐根控制骨的实测轴向语义表**（13 根 × 3 轴，链末标志点位移）+ **§2.1.2 符号规则**（实测：腿左右同轴、臂左右镜像 ⇒ 不能整套取负号）+ §2.1.3 三个自查。测量脚本口径见 §7.4。🔧 第三次：**验证基线由 4.5.13 LTS 切换为 Blender 5.1.2**——入库探针 FBX 由 5.1.2 重建（与 4.5 产物内容等价 **0.000967 mm**）、Unity 侧重跑全量断言转绿；4.5 分支保留在取道层但本机不再保留便携包。🔧 第二次：**移植为 Blender 4.5 / 5.x 双兼容**（新增取道层 `code/tools/blender_action_compat.py`：slotted actions 曲线取道 · `action_slot` 指派 · 姿态骨选择位）+ **母版 GUI 可用性**（骨骼集合 `CTRL`/`MIXAMORIG` + 配色，V9 自检；已复核导出物内容等价 **0.000000 mm**）+ 新增 §4.4「导出物不可逐字节复现」与 §7.1 双版本差异表；E5 判据由矩阵元素改为骨端点坐标）*
+*创建: 2026-09-14 | 更新: 2026-09-16（🔧 第七次：**新增 §7.7 接口路线决策（[#172](https://github.com/verystrongdog/game/issues/172)）**——owner **选 A：维持现有自建桥、本阶段不接 MCP**；B（整体替换为第三方 Blender MCP）不采纳；**C（桥外加 MCP facade）的启动条件与首批七个工具面预登记**。含两张复核读数表（桥的已验证能力七条 · 标准 MCP 的收益边界四条）与**三条"与文档不符"更正**：危险点表无任何活体桥行 · `unity-cli` 实为**官方 Unity CLI 且自带 `mcp` 子命令**（本机已在用、仓库无记录）·「本桥 120 行」与库内（324 → 444 行）**从未相符**。协议、token 门禁与安全行为**一字未改**。🔧 第六次：**新增 §7·B 动作素材 `BendGripChairBack`**（弯腰双手抓椅背）——脚本化产出 `code/tools/author_xbot_chair_grab.py`（临时 IK 解 + 捕获成控制骨角度），实测抓点残差 **0.0 mm**、肘 133°、逐帧脚漂移 **0.0 mm**、手指自测蜷曲轴 Z/−1；导出与 Unity 导入全绿。**并挖出三个真 bug**：FBX 导出的 bind pose 取当前帧姿势（E5 报 86 m，探针一直裸奔侥幸过）· `pose_position=REST` 是错误修法（压成常量）· `actions.new()` 重名静默建 `.001`。⚠️ 本动作**未登记动作词条**（词表受控，属设计裁定）。🔧 第五次：**新增 §7.5 活体桥 + §7.6 边界与安全**——落库 `code/tools/blender-bridge/`（`blender_ai_bridge.py` + `bb.py` + `bb-launch.sh` + README），实测驱动已开着的窗口：摆 `CTRL_LeftArm` Z+40° → 左手位移 **384.2 mm**，并读回 13 根控制骨与两组集合；含「为什么不用现成 Blender MCP」的四条具体理由。🔧 第四次：**新增 §2.1 GUI 操作手册**（打开方式 · 六步动作序列 · 两条红线）+ **§2.1.1 逐根控制骨的实测轴向语义表**（13 根 × 3 轴，链末标志点位移）+ **§2.1.2 符号规则**（实测：腿左右同轴、臂左右镜像 ⇒ 不能整套取负号）+ §2.1.3 三个自查。测量脚本口径见 §7.4。🔧 第三次：**验证基线由 4.5.13 LTS 切换为 Blender 5.1.2**——入库探针 FBX 由 5.1.2 重建（与 4.5 产物内容等价 **0.000967 mm**）、Unity 侧重跑全量断言转绿；4.5 分支保留在取道层但本机不再保留便携包。🔧 第二次：**移植为 Blender 4.5 / 5.x 双兼容**（新增取道层 `code/tools/blender_action_compat.py`：slotted actions 曲线取道 · `action_slot` 指派 · 姿态骨选择位）+ **母版 GUI 可用性**（骨骼集合 `CTRL`/`MIXAMORIG` + 配色，V9 自检；已复核导出物内容等价 **0.000000 mm**）+ 新增 §4.4「导出物不可逐字节复现」与 §7.1 双版本差异表；E5 判据由矩阵元素改为骨端点坐标）*
 *状态: 与 [动画处理能力对照实验](%E5%8A%A8%E7%94%BB%E5%A4%84%E7%90%86%E8%83%BD%E5%8A%9B%E5%AF%B9%E7%85%A7%E5%AE%9E%E9%AA%8C.md) 同为**两条线共用的口径正典**；本文只覆盖 Blender 线。*
 *关联: [动画处理能力对照实验](%E5%8A%A8%E7%94%BB%E5%A4%84%E7%90%86%E8%83%BD%E5%8A%9B%E5%AF%B9%E7%85%A7%E5%AE%9E%E9%AA%8C.md), [动作库规格](%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md), [code/unity/README.md](../../code/unity/README.md), [危险点表](../engineering/%E5%8D%B1%E9%99%A9%E7%82%B9%E8%A1%A8.md)*
