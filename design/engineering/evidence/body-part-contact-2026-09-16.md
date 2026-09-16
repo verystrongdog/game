@@ -302,6 +302,14 @@ git revert --no-edit 66d16a0   # 证据 + 口径 + 切片
 
 ---
 
+### 10.1 同日结账（owner 2026-09-16 裁定「可以关闭」）
+
+- [#171] 已**关闭**（`type:experiment` 保留 · `state:in-progress` 已清 —— [WORKFLOW §一](../../../WORKFLOW.md) 规定全仓同时只允许一个 `in-progress`、闭合的 issue 不得挂着它）
+- 附**证据评论**（base/head SHA · 逐条命令与退出码 · 验收 7 条逐条 · 交付物提交 · 4 条真缺陷 · 回滚演练 · `new_finding` 空）：`#issuecomment-5697368379`
+- 关闭后 `validate_issues.py --from-github` 的 **I11** 由 ✅ 转 ⚠️（全仓开放 issue 无 `in-progress` = 单线程约束**空跑**）——与 [#170] 结账时同一现象，如实登记
+
+---
+
 *创建: 2026-09-16（agent 执行 [#171](https://github.com/verystrongdog/game/issues/171)）*
 *状态: 收口证据——假设**支持** · owner 目视**通过**（2026-09-16 · 0 轮返工）；未闭合 9 项见 §八*
 *关联: [#171](https://github.com/verystrongdog/game/issues/171) · [#168](https://github.com/verystrongdog/game/issues/168) · [#169](https://github.com/verystrongdog/game/issues/169) · [#170](https://github.com/verystrongdog/game/issues/170) · [#165](https://github.com/verystrongdog/game/issues/165) · [#164](https://github.com/verystrongdog/game/issues/164) · [动作描述口径](../../presentation/%E5%8A%A8%E4%BD%9C%E6%8F%8F%E8%BF%B0%E5%8F%A3%E5%BE%84.md) · [阶段证据说明](README.md)*
