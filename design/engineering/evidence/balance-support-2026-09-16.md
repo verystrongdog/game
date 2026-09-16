@@ -232,7 +232,7 @@ python3 code/tools/xbot_balance.py --verify          # B1–B5 5/5
 | 项 | 结果 |
 |---|---|
 | 问题差分 `new_finding = after − mapped(before) − expected_delta` | **空**（哨兵清单见 §十一.1） |
-| 允许变化 vs 实际 diff | 与 [开工记账](../../../.scratch/issue170/开工记账.md) 登记的允许范围一致（新增/改动的仓库路径逐条对得上） |
+| 允许变化 vs 实际 diff | 与 [开工记账](../../../.scratch/issue170/开工记账.md) 登记的允许范围一致 + **4 处连带改动逐条登记**（见 §十一.3） |
 | 回滚演练 | 见 §十一.2（临时 worktree + 逐条 `revert` ⇒ 与 base 逐字节相同 + 门禁重跑） |
 | 工作树 | 提交后 `git status --porcelain` **空**（过程物全在 `.scratch/`，被 `.gitignore` 排除） |
 | 干净检出可复现 | 本件不新增第三方依赖（纯 Python 标准库 + 既有工具链）；`run_all_checks.py` 的 17 个校验器在 CI 上跑（CI 无 Blender ⇒ Blender 侧读数不在 CI 面） |
@@ -247,6 +247,19 @@ python3 code/tools/xbot_balance.py --verify          # B1–B5 5/5
 | ② 件 | 无 | `CrouchPushedBack`（72 帧）+ 宿主 7 |
 | lab | 装配器 + 1 实例真跑 | **批槽位预设（两件同屏）+ 逐实例定格** |
 | slice 四轴表「平衡与支撑」行 | Implementation `NONE` | **`PARTIAL`** |
+
+### 十一.3 允许范围**之外**的连带改动（逐条登记，不静默）
+
+issue 的「预期差分 · 允许变化」列了 6 个路径；本件实际还动了 **4 个**（都在下面逐条给出授权来源）：
+
+| 路径 | 改了什么 | 授权来源 |
+|---|---|---|
+| `code/tools/run_all_checks.py` | 登记第 17 个校验器（`xbot_balance.py`） | issue「**原型去向**」逐字："离线判据按先例登记进 `run_all_checks.py` 与 CI 循环，[#165] 曾把计数 15 → 16" |
+| `.github/workflows/ci.yml` | 校验器循环加 `xbot_balance` + 两处计数 16 → 17 | 同上（CI 循环是同一句话的一半） |
+| `design/engineering/build-and-test.md` | 三处计数 16 → 17（`docs-integrity` job / 判据表 / 依赖表） | 同上（[#165] 的先例把这三处一起改，见其证据 §第十二） |
+| `design/engineering/evidence/README.md` | 证据索引表加本件一行 | 仓库既有约定（每份证据都在索引里有一行；#168 / #169 同例） |
+
+⚠️ **本件不动的边界**（逐条核过）：`data/term_registry.json`（那两句现状句失效 ⇒ **另开件**，见 §十二#6）· `code/tools/xbot_contact_phase.py`（**只引用**）· `data/action_set.json` / `data/hand_grip_cards.json` · `code/unity/**` · `design/rules/回合战斗流程.md` §10.13 · `PLAYABLE.md` · `design/engineering/危险点表.md`（§九 那四条坑的**入库**属另一件的范围，如实登记为未闭合）。
 
 ### 十一.2 回滚演练（**实做**，不是承诺）
 
@@ -286,6 +299,7 @@ git revert --no-edit 3d497ce    # feat：凸包件（delete mode code/tools/xbot
 | 7 | 只做**动作形态**（"被推退"的姿势与判据），未接规则层 §10.13 | 已知范围 | 与"推 1 格方向""推送目标需在控制区内"的映射未做 |
 | 8 | 穿模判据量**骨段**（owner 看蒙皮）；未做逐顶点求交 | 已知偏差（口径 §十 已登记） | 同族：#169 的"骨在肉里 ⇒ 假红 −4.21 mm" |
 | 9 | 未做导出 E0–E6（本件不导 FBX）· 未做整机重启复现 | 已知范围 | 与"能播"的判定面无关（口径 §13.6 的导出面属另一件） |
+| 10 | §九 的四条坑（背向 z 分量 · 失衡帧推导 · lab 参数顺序 · 定格帧）**未入 [危险点表](../%E5%8D%B1%E9%99%A9%E7%82%B9%E8%A1%A8.md)** | 待另开件（本件预期差分不含该文件） | 那四条按"位置检索"属于 `code/tools/lab_multi_instance.py` 与宿主位移一类，正是该表的用法 |
 
 ## 十三、机器读的样本段（**真值表**：B4 / B5 从这里重算）
 
