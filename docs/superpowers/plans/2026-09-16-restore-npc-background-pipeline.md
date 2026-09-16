@@ -1,7 +1,7 @@
 ---
-status: plan-review
+status: ready-for-execution
 issue: 174
-pr: null
+pr: 175
 created: 2026-09-16
 ---
 
