@@ -53,12 +53,43 @@ DEFAULT_SPACING_M = 5.0
 #: 可见性收敛后的期望可见骨数：65 变形骨 − 13 根标记骨（口径 §15.4 / 管线 §2.1.5 规矩 1）
 EXPECTED_VISIBLE_BONES = 52
 
+#: **本批三件的实例预设**（口径 §15.8：三份实例沿世界 X 轴等距 −5.0 / 0 / +5.0 m）。
+#: - `①` 恐慌姿态（[#169](https://github.com/verystrongdog/game/issues/169)）= **0.0 m**：母版原件留在原位
+#:   （装配器把 0 号实例当作模板，改动最小）；
+#: - `②` 下蹲/被推退（[#170](https://github.com/verystrongdog/game/issues/170)）= **+5.0 m**（本件加的**第 2 个实例**）；
+#: - `③` 跪地/顶肘（[#171](https://github.com/verystrongdog/game/issues/171)）= **−5.0 m**，**未落地** ⇒ `None`
+#:   （`--batch` 会把它渲染成中立姿势的占位，并在报告里登记"③ 未落"）。
+#: ⚠️ 本仓库把"加第 2 个实例"落成**批预设 + 实跑**，而不是改复制逻辑：装配器在 #169 已按
+#:   `--instances` 列表泛化（复制 / 平移 / 逐实例收敛 / 指派 action 都在),第 2 件不需要新机制。
+#: 末项 = **定格帧**：每件停在自己的判据帧上（① 捂耳到位帧 13 · ② 失衡极值帧 34）。
+#: ⚠️ 为什么要有它：#169 那次静帧停在 `scene.frame_start`(=1)，而两条动作的首帧都被
+#:   导出侧 E5 硬约定要求为**中立姿势** ⇒ 那样拍出来的"三件同屏"其实是**三个站着不动的人**。
+BATCH_SLOTS = ((0.0, "PanicCoverEars", "① 恐慌姿态（#169）", 13),
+               (5.0, "CrouchPushedBack", "② 下蹲/被推退（#170）", 34),
+               (-5.0, None, "③ 跪地/顶肘（#171，未落地）", None))
+
+
+def batch_instances(include_unlanded=True):
+    """本批三件的 `--instances` 串（③ 未落地时写 `-` = 中立姿势占位）。"""
+    out = []
+    for x, action, _label, frame in BATCH_SLOTS:
+        if action is None and not include_unlanded:
+            continue
+        item = f"{x:g}:{action or '-'}"
+        if frame is not None:
+            item += f":{frame}"
+        out.append(item)
+    return ",".join(out)
+
 
 def parse_args(argv):
     argv = argv[argv.index("--") + 1:] if "--" in argv else []
     ap = argparse.ArgumentParser(prog="lab_multi_instance.py")
     ap.add_argument("--template", default=str(Path(__file__).resolve().parents[2] /
                                              ".scratch/panic/panic_clip.blend"))
+    ap.add_argument("--batch", action="store_true",
+                    help="用**本批三件的槽位预设**（0 / +5 / −5 m；③ 未落地 ⇒ 中立姿势占位）"
+                         "覆盖 --instances（口径 §15.8）")
     ap.add_argument("--instances", default="0:PanicCoverEars",
                     help="逗号分隔的 `<x 米>:<动作名>`；动作名 `-` = 中立姿势")
     ap.add_argument("--spacing", type=float, default=DEFAULT_SPACING_M,
@@ -76,10 +107,18 @@ def host_module():
 
 
 def instances_from_spec(spec):
+    """`<x 米>:<动作名>[:<定格帧>]` → 实例表。动作名 `-` = 中立姿势；定格帧缺省 = 场景起帧。
+
+    ⚠️ 定格帧是**呈现用**的：lab **不重算任何判据**（口径 §15.8 硬规矩 2），它只是把该实例
+    停在自己的判据帧上，好让 owner 在一屏里看见"每件最该看的那一帧"。
+    """
     out = []
     for item in [x.strip() for x in spec.split(",") if x.strip()]:
-        x_str, _, action = item.partition(":")
-        out.append({"x_m": float(x_str), "action": (action.strip() or "-")})
+        parts = item.split(":")
+        x_str = parts[0]
+        action = (parts[1].strip() or "-") if len(parts) > 1 else "-"
+        frame = int(parts[2]) if len(parts) > 2 and parts[2].strip() else None
+        out.append({"x_m": float(x_str), "action": action, "freeze_frame": frame})
     return out
 
 
@@ -133,7 +172,7 @@ def main() -> int:
     if not tmpl.is_file():
         print(f"[ERROR] 母版/剪辑不存在：{tmpl}")
         return 2
-    spec = instances_from_spec(args.instances)
+    spec = instances_from_spec(batch_instances() if args.batch else args.instances)
     if not spec:
         print("[ERROR] --instances 为空")
         return 2
@@ -152,8 +191,12 @@ def main() -> int:
 
     report = {"script": Path(__file__).name, "blender": bpy.app.version_string,
               "template": str(tmpl), "measured_at": datetime.now().isoformat(timespec="seconds"),
-              "spacing_m": args.spacing, "instances": [], "problems": []}
+              "spacing_m": args.spacing, "instances": [], "problems": [],
+              "batch": bool(args.batch),
+              "batch_slots": ([{"x_m": x, "动作": a, "标签": lb, "定格帧": fr}
+                               for x, a, lb, fr in BATCH_SLOTS] if args.batch else None)}
     rows = []
+    frozen_store = []
     for idx, item in enumerate(spec):
         if idx == 0:
             arm_i, meshes_i = arm, base_meshes
@@ -181,14 +224,34 @@ def main() -> int:
         cleanup = host.door_push_preview_cleanup(arm_i)
         # ⚠️ 必须把**该实例自己的网格**传进去：按名字取会取到原实例的皮肤（实测假红 51 根 × 5000 mm）
         outliers = host.visible_bone_outliers(arm_i, meshes=meshes_i)
+        freeze = item.get("freeze_frame")
+        frozen = None
+        if freeze is not None:
+            bpy.context.scene.frame_set(freeze)
+            host.update()
+            frozen = host.capture_channels(arm_i, [pb.name for pb in arm_i.pose.bones])
+        hip = None
+        if frozen:
+            # 定格的**读数**（不是判据）：髋骨世界位置——用来证明"停的不是中立姿势"（中立姿势的
+            # 髋 z 是 1.0427 m，两条动作的判据帧分别是 1.0127 / 0.8827 m，本件实测值见证据）
+            bp = arm_i.pose.bones.get("mixamorig:Hips")
+            if bp is not None:
+                wp = arm_i.matrix_world @ bp.head
+                hip = [round(wp.x, 4), round(wp.y, 4), round(wp.z, 4)]
         row = {"序": idx, "x_m": item["x_m"], "动作": action_name,
+               "定格帧": freeze, "定格通道数": (len(frozen) if frozen else 0),
+               "定格_髋世界_m": hip,
                "x_实测_m": round(arm_i.location.x, 4),
                "隐藏的骨集合": cleanup["隐藏的骨集合"], "藏起来的标记骨": cleanup["藏起来的标记骨"],
                "可见骨数": outliers["可见骨数"], "非例外的越界骨": outliers["非例外的越界骨"],
                "包围盒": instance_bbox(arm_i, meshes_i)}
         rows.append(row)
+        if frozen:
+            frozen_store.append((arm_i, frozen))
         print(f"  实例 {idx} · x={item['x_m']:+.1f} m（实测 {row['x_实测_m']:+.4f}）· 动作 {action_name} · "
-              f"可见骨 {row['可见骨数']} · 非例外越界 {len(outliers['非例外的越界骨'])}")
+              f"可见骨 {row['可见骨数']} · 非例外越界 {len(outliers['非例外的越界骨'])}"
+              + (f" · **定格在帧 {freeze}**（{len(frozen)} 个通道 · 髋世界 "
+                 f"({hip[0]:+.4f}, {hip[1]:+.4f}, {hip[2]:+.4f}) m）" if frozen else ""))
         if row["可见骨数"] != EXPECTED_VISIBLE_BONES:
             report["problems"].append(
                 f"实例 {idx} 可见骨 {row['可见骨数']} ≠ 期望 {EXPECTED_VISIBLE_BONES}"
@@ -199,7 +262,11 @@ def main() -> int:
                 + "; ".join(f"{x['骨']}({x['伸出量_mm']:.1f} mm)" for x in outliers["非例外的越界骨"][:6]))
 
     # 静态校核：**一次**（口径 §15.8：不做逐帧判据）+ 间距核对
-    boxes = [(r["序"], r["包围盒"]) for r in rows if r["包围盒"]]
+    # ⚠️ 相邻对必须按**实测 x 升序**取（原实现按 `--instances` 的**参数顺序**取 ⇒ 参数写成
+    #    `0:…,5:…,-5:…` 时会把两端当成相邻、误报"包围盒重叠"——#170 实测踩到）。
+    boxes = sorted([(r["序"], r["包围盒"], r["x_实测_m"]) for r in rows if r["包围盒"]],
+                   key=lambda t: t[2])
+    boxes = [(i, b) for i, b, _x in boxes]
     gaps = []
     for (i, a), (j, b) in zip(boxes, boxes[1:]):
         gaps.append({"对": [i, j], "x 间隙_m": round(b["min"][0] - a["max"][0], 4),
@@ -224,6 +291,14 @@ def main() -> int:
           f"包围盒重叠 {report['static_check']['任意重叠']}")
     report["ok"] = not report["problems"]
 
+    # 逐实例定格：解开动画后把捕获的通道写回去（顺序：全部捕获完再统一应用，避免相互影响）
+    for arm_i, channels in frozen_store:
+        if arm_i.animation_data:
+            arm_i.animation_data.action = None
+        host.apply_channels(arm_i, channels)
+    if frozen_store:
+        report["frozen"] = [{"序": r["序"], "定格帧": r["定格帧"]} for r in rows if r.get("定格帧")]
+        print(f"逐实例定格：{len(frozen_store)} 个实例停在自己的判据帧上（lab **不重算判据**，只呈现）")
     bpy.context.scene.frame_set(bpy.context.scene.frame_start
                                if bpy.context.scene.frame_start else 1)
     if args.still and xs:
