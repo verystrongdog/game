@@ -188,6 +188,7 @@
 
 ### 呈现
 - [战斗界面布局](presentation/%E6%88%98%E6%96%97%E7%95%8C%E9%9D%A2%E5%B8%83%E5%B1%80.md) — 37项决策：整体布局/操作流/脑区面板/HUD/信息展示/过渡/键盘快捷键
+- [叙事界面布局](presentation/%E5%8F%99%E4%BA%8B%E7%95%8C%E9%9D%A2%E5%B8%83%E5%B1%80.md) — 左侧**可行走探索层**（点击移动 / 键盘走动 + 就近交互 + 对话期间锁移动）+ 右侧叙事流/回应/笔记；六种叙事类型分层与选择区固定；含单文件自包含交互原型（2026-09-17 [#186](https://github.com/verystrongdog/game/issues/186)）
 - [3D可视化](presentation/visualization-3d) — 可视化规范/Blender管线/HTML原型（目录在规则/下）
 - [Unity 呈现沙盘工程](../code/unity/README.md) — 白盒回合沙盘/KiWalkerLab 真人动画演示（2026-09-06 grilling #122）
 - [Unity 沙盘动作集规格](presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md) — 动作受控词表/引用契约/来源矩阵/扩展协议（2026-09-07 grilling #123）
