@@ -122,11 +122,13 @@ DIGITS = ("Index", "Middle", "Ring", "Pinky", "Thumb")
 def parse_args(argv):
     argv = argv[argv.index("--") + 1:] if "--" in argv else []
     ap = argparse.ArgumentParser(prog="author_xbot_chair_grab.py")
-    ap.add_argument("--task", choices=("chair", "card1", "door", "restate", "doorpush", "panic"),
+    ap.add_argument("--task", choices=("chair", "card1", "door", "restate", "doorpush", "panic",
+                                       "crouch"),
                     default="chair",
                     help="宿主：#163 抓椅背（chair，默认）· 卡 1 掐棱测量（card1）· 门边动作（door）"
                          "· 门边「推到底」能播段（doorpush，#166）"
                          "· 恐慌姿态 抱头/捂耳（panic，#169——第四系「目标部位局部系」首件）"
+                         "· 下蹲/被推退（crouch，#170——凸包件「重心 ↔ 支撑多边形」的载体）"
                          "· 重述对拍（restate，纯算术，不需要 Blender）")
     ap.add_argument("--template", default=str(Path(__file__).resolve().parents[2] /
                                              ".scratch/blender_assets/xbot/XBot_AnimationTemplate.blend"))
@@ -171,6 +173,21 @@ def parse_args(argv):
     ap.add_argument("--hand-shape", choices=("flat", "hug"), default=PANIC_FINAL_HAND_SHAPE,
                     help="手型两解（F10）：flat = **平掌**（五指近伸展；owner 2026-09-16 目视第 1 轮指名"
                          "「手应该是手掌的姿势」）· hug = 逐指拟合贴住头面（原默认，作对照解）")
+    # ---- #170：下蹲 / 被推退宿主的量 ----
+    ap.add_argument("--crouch-depth", type=float, default=CROUCH_DEPTH_M,
+                    help="下蹲下沉量（m）；默认 = CROUCH_DEPTH_M")
+    ap.add_argument("--push-back", type=float, default=CROUCH_PUSH_BACK_M,
+                    help="被推的骨盆后移量（m，沿背向）；它决定「重心出域多深」")
+    ap.add_argument("--step-back", type=float, default=CROUCH_STEP_BACK_M,
+                    help="后撤步长（m，踝目标沿背向）")
+    ap.add_argument("--step-foot", choices=("Right", "Left"), default=CROUCH_STEP_FOOT,
+                    help="后撤的那只脚（自由度的一行；两解都解，读数并列）")
+    ap.add_argument("--name", default=None,
+                    help="样本名（写进凸包件的 markdown 段与报告）")
+    ap.add_argument("--markdown", default=None,
+                    help="凸包件证据段落的落点（由 `xbot_balance.sample_markdown` 发射）")
+    ap.add_argument("--scan-posture", action="store_true",
+                    help="只跑身体条件（下蹲量 × 被推后移量）的解空间扫描——口径 §4.2 硬规矩 5")
     ap.add_argument("--ear-drop-mm", type=float, default=PANIC_FINAL_DROP_MM,
                     help="捂耳时掌面沿头骨长轴**再向下**这么多 mm（owner 第 1 轮指名「手应该再向下一点」；"
                          "默认 0 = 掌面重心落在该面的 ε 锚点上——这个默认值本身已经比改前低 ≈80 mm）")
@@ -4835,6 +4852,690 @@ def main_panic() -> int:
 
 
 # ══════════════════════════════════════════════════════════════════════════════
+# 宿主 7：下蹲 / 被推退（`--task crouch`）——[#170] 的交付 · 口径 §15.7 ② 件（C′ 平衡与支撑）
+#
+#   关系类型 **C′ 平衡与支撑**：本件的判据面不是"手 ↔ 某个目标"，而是
+#   **重心（`mixamorig:Hips` 世界位置水平投影）↔ 支撑多边形（着地足底点凸包）**——
+#   判据与算法在**独立件** `code/tools/xbot_balance.py` 里（本宿主**只调用它，不重算**）。
+#
+#   F12 消费者 = 规则层 [回合战斗流程 §10.13]「**推挤（对角色）**——目标需在控制区内，推 1 格方向」
+#   （同一节还有「推下高台 / 楼梯时适用坠落伤害」）；实测先例 = [#166] 的「被门推着退」。
+#   ⇒ 本动作两段：**① 下蹲**（重心下降但仍**在域内**）→ **② 被推退**（骨盆后移、脚不动 ⇒ 重心**出域**、
+#   判据**当场报红**）→ **③ 后撤步**（域跟着脚后移 ⇒ 重心重新入域）。**报红帧是构造出来的、不是碰巧**：
+#   它就是口径 §4.2 硬规矩 2 要的"非退化对照"（判据必须能失败）。
+#
+#   ⚠️ **本宿主不建第二个接触判据**：接地 / 支撑区间 / 换脚帧一律从 `xbot_balance.read_current()`
+#      （它再引用 `xbot_contact_phase`）里取——[危险点表]「同一几何只允许一个来源」。
+# ══════════════════════════════════════════════════════════════════════════════
+
+CROUCH_ACTION = "CrouchPushedBack"
+
+#: 下蹲下沉量（m）。运动学取值（owner 可改）：本仓已有的同族读数是宿主 5 的
+#: `DOOR_PUSH_CROUCH_M = 0.06`（实测下沉 0.06 m 时踝相对骨盆偏 0.20 m 仍残差 0）；
+#: 本件更深（下蹲是被推挤的第一反应），**实际可达性由逐帧解析解的残差当场报出**（`problems` 里不静默）。
+CROUCH_DEPTH_M = 0.16
+
+#: **被推**的骨盆后移量（m）——沿**背向**（姿势现算的 `posterior`，角色不转身时 ≈ 世界 +Y）。
+#: 运动学取值（owner 可改）；它决定"重心出域多深"，故 `--scan-posture` 会把候选并列读数。
+CROUCH_PUSH_BACK_M = 0.14
+
+#: **后撤步**的步长（m）——踝目标沿背向移动的距离；摆动期抬脚 `CROUCH_STEP_LIFT_M`（只要求明确离地）。
+#: 来源同宿主 5 的迈步预算（每步 ≤ `DOOR_PUSH_STEP_BUDGET_M = 0.20` 是"踝相对骨盆偏移"的预算，
+#: 本件的步长是**踝的绝对位移**，两者的量不同 ⇒ 本件用自己的残差读数作判据）。
+CROUCH_STEP_BACK_M = 0.26
+CROUCH_STEP_LIFT_M = 0.05
+
+#: 躯干前倾（三段脊柱各 1/3）。轴语义有来源（管线 §2.1.4：脊柱局部 X = 前倾）；量是运动学取值。
+CROUCH_TORSO_LEAN_DEG = 8.0
+
+#: 双臂垂放的肘方向（世界系近似：略向外、略向后、向下）。不给解的话静止姿势是 **T-pose**
+#: ——owner 2026-09-16 在宿主 5 上点名过「机械的平举」（同一处坑）。
+CROUCH_ELBOW_DIR = (0.32, 0.22, -0.92)
+#: 垂放时腕相对**髋骨点**的偏移（身体系；取自宿主 5 的副手解，量级同源）：略外、略后、略下。
+CROUCH_HAND_DROP_OFFSET = (-0.150, 0.041, -0.153)
+#: 放松握量（0 = 五指伸直；卡 1 的 F10 逐指基准角 × 本值）。运动学取值，owner 可改。
+CROUCH_RELAX_CURL = 0.35
+
+#: 帧表（30 fps）。这些是**声明**，不是结论——口径 §十 的「时序」判据要求
+#: "声明的到位帧 == 从产物算出的判据量极值帧"（零阈值，比的是两个帧号相不相等）。
+CROUCH_FRAME_NEUTRAL = 1        # 首帧严格中立（导出侧 E5 硬约定，同宿主 5/6）
+CROUCH_FRAME_READY = 13         # **下蹲到位** —— 判据量 = 髋骨世界高度曲线的首个极小
+CROUCH_FRAME_PUSH = 24          # 被推开始（骨盆从这一帧起沿背向移动，双脚不动）
+CROUCH_FRAME_PUSH_END = 33      # 被推结束（骨盆后移到位；此后**域**跟着脚后移）
+CROUCH_FRAME_STEP_END = 45      # 后撤脚落地（换脚帧）
+CROUCH_FRAME_RECOVER = 57       # 起身（下蹲量减半）· 重心回到域内
+CROUCH_FRAME_END = 72
+
+
+#: 摆动段占迈步窗口的比例（余下为双支撑）。运动学取值，同宿主 5 的 `DOOR_PUSH_SWING_FRACTION`。
+CROUCH_SWING_FRACTION = 0.7
+#: 后撤的那只脚（自由度的一行，`agent 解`）——另一解由 `--step-foot` 给出并在 `--scan-posture` 里并列。
+CROUCH_STEP_FOOT = "Right"
+
+
+def crouch_swing_window():
+    """摆动窗口 `(f0, f1)`：从"被推结束"到"后撤脚落地"这一段里，**摆动**占前 `CROUCH_SWING_FRACTION`。"""
+    return (CROUCH_FRAME_PUSH_END,
+            CROUCH_FRAME_PUSH_END + CROUCH_SWING_FRACTION * (CROUCH_FRAME_STEP_END
+                                                             - CROUCH_FRAME_PUSH_END))
+
+
+def crouch_imbalance_frame(lift_m=CROUCH_STEP_LIFT_M, margin_m=DOOR_PUSH_SOLE_MARGIN_MM):
+    """**失衡极值帧 = 摆动脚首次离地的那一帧**——**推导量，不是选定值**（同 `door_pass_open_deg()` 的地位）。
+
+    推导：摆动期的抬脚高度 `lift(f) = CROUCH_STEP_LIFT_M · sin(π · p(f))`，`p` = 摆动进度；
+    脚**离地**的判据就是接触相位件的那个容差（`soleMargin = 2.8 mm`）⇒
+    `p > asin(margin / lift) / π` ⇒ `f = ceil(f0 + (f1 − f0) · asin(margin/lift) / π)`。
+
+    为什么"离地那一帧"是最不稳的一帧：域从**双脚**缩到**单脚**（域当场变小），而重心还停在
+    被推位移上 ⇒ 余量的全局极小落在这里（**这条是期望，由"时序"判据当场核**：声明帧 == 产物极值帧）。
+    """
+    f0, f1 = crouch_swing_window()
+    frac = math.asin(min(1.0, (margin_m / 1000.0) / lift_m)) / math.pi
+    return int(math.ceil(f0 + (f1 - f0) * frac))
+
+
+#: **失衡极值帧**（推导见 `crouch_imbalance_frame()`；本仓 soleMargin 口径 = 世界 z 0 上 2.8 mm）
+CROUCH_FRAME_IMBALANCE = crouch_imbalance_frame()
+
+#: 穿模判据（动作库规格 §四·戊·5 **判据 4** 的形态）在本件的碰撞体 = **自身与地面**（本件无道具）：
+#: ① **自穿模**：两条腿之间 · 手/前臂与同侧大腿之间（非接触部位 ⇒ 间隙 ≥ 1 cm = 判据 4 的第三个数）；
+#: ② **地面**：髋以上骨段不得低于地面（骨段零穿透 = 判据 4 的第一个数，阈值 0）。
+#: ⚠️ 判据量的是**骨段**；owner 看的是**蒙皮** ⇒ 层差登记为已知偏差（口径 §十 的能播类三项表）。
+CROUCH_CLASH_PAIRS = (
+    ("左腿 ↔ 右腿", 10.0,
+     ("LeftUpLeg", "LeftLeg", "LeftFoot"), ("RightUpLeg", "RightLeg", "RightFoot")),
+    ("手/前臂 ↔ 腿", 10.0,
+     ("LeftForeArm", "LeftHand", "RightForeArm", "RightHand"),
+     ("LeftUpLeg", "LeftLeg", "RightUpLeg", "RightLeg")),
+)
+#: 地面判据的骨集：**脚与趾除外**（它们就是接触部位，接地判据管它们）。
+CROUCH_GROUND_BONES = ("Hips", "Spine", "Spine1", "Spine2", "Neck", "Head",
+                       "LeftUpLeg", "RightUpLeg", "LeftLeg", "RightLeg",
+                       "LeftForeArm", "RightForeArm")
+
+#: `--scan-posture` 的解空间（口径 §4.2 硬规矩 5：`agent 解` 的行必须并列 ≥2 个可行解）。
+#: 两个量各扫三档：下蹲下沉量 × 被推后移量。
+CROUCH_DEPTH_CANDIDATES = (0.10, 0.16, 0.22)
+CROUCH_PUSH_CANDIDATES = (0.08, 0.14, 0.20)
+
+
+def segment_gap_mm(a0, a1, b0, b1):
+    """两条**骨段**（线段）的最近距离（mm，恒 ≥ 0）——判据 4 的"骨段零穿透 / 间隙 ≥ 1 cm"用它。
+
+    标准线段-线段最近点（Ericson, *Real-Time Collision Detection* §5.1.9 的 `ClosestPtSegmentSegment`），
+    **无阈值**：阈值由调用方按判据 4 的三个数给。
+    """
+    d1, d2, r = a1 - a0, b1 - b0, a0 - b0
+    a, e, f = d1.dot(d1), d2.dot(d2), d2.dot(r)
+    if a <= 1e-18 and e <= 1e-18:
+        return (a0 - b0).length * 1000.0
+    if a <= 1e-18:
+        s, t = 0.0, max(0.0, min(1.0, f / e))
+    else:
+        c = d1.dot(r)
+        if e <= 1e-18:
+            t, s = 0.0, max(0.0, min(1.0, -c / a))
+        else:
+            b = d1.dot(d2)
+            denom = a * e - b * b
+            s = max(0.0, min(1.0, (b * f - c * e) / denom)) if denom > 1e-18 else 0.0
+            t = (b * s + f) / e
+            if t < 0.0:
+                t, s = 0.0, max(0.0, min(1.0, -c / a))
+            elif t > 1.0:
+                t, s = 1.0, max(0.0, min(1.0, (b - c) / a))
+    return ((a0 + d1 * s) - (b0 + d2 * t)).length * 1000.0
+
+
+def crouch_frame_params(frame: int, depth: float = CROUCH_DEPTH_M,
+                        push_back: float = CROUCH_PUSH_BACK_M,
+                        step_back: float = CROUCH_STEP_BACK_M) -> dict:
+    """**纯函数**：帧号 → 该帧的身体参数（可复算；报告里逐帧记的就是它的输出）。
+
+    | 段 | 帧 | 下蹲量 | 被推后移 | 后撤步进度 |
+    |---|---|---|---|---|
+    | 下蹲 | 1–13 | 0 → `depth` | 0 | 0 |
+    | 待推 | 13–24 | `depth` | 0 | 0 |
+    | **被推** | 24–33 | `depth` | 0 → `push_back` | 0（**双脚不动** ⇒ 重心出域） |
+    | **后撤步** | 33–45 | `depth` | `push_back` → 0 | 0 → 1（摆动占前 `CROUCH_SWING_FRACTION`） |
+    | 起身 | 45–57 | `depth` → `depth/2` | 0 | 1 |
+    | 站定 | 57–72 | `depth/2` | 0 | 1 |
+    """
+    def ramp(f, f0, f1):
+        return min(1.0, max(0.0, (f - f0) / float(f1 - f0)))
+
+    if frame <= CROUCH_FRAME_READY:
+        crouch, back, prog = depth * ramp(frame, CROUCH_FRAME_NEUTRAL, CROUCH_FRAME_READY), 0.0, 0.0
+    elif frame <= CROUCH_FRAME_PUSH:
+        crouch, back, prog = depth, 0.0, 0.0
+    elif frame <= CROUCH_FRAME_PUSH_END:
+        crouch, back, prog = depth, push_back * ramp(frame, CROUCH_FRAME_PUSH, CROUCH_FRAME_PUSH_END), 0.0
+    elif frame <= CROUCH_FRAME_STEP_END:
+        p = ramp(frame, CROUCH_FRAME_PUSH_END, CROUCH_FRAME_STEP_END)
+        crouch, back, prog = depth, push_back * (1.0 - p), p
+    elif frame <= CROUCH_FRAME_RECOVER:
+        p = ramp(frame, CROUCH_FRAME_STEP_END, CROUCH_FRAME_RECOVER)
+        crouch, back, prog = depth * (1.0 - 0.5 * p), 0.0, 1.0
+    else:
+        crouch, back, prog = depth / 2.0, 0.0, 1.0
+    swing_end = crouch_swing_window()[1]
+    lifted = (0.0 < prog < 1.0) and frame <= swing_end
+    return {"frame": frame, "crouch_m": round(crouch, 6), "back_m": round(back, 6),
+            "step_progress": round(prog, 6),
+            "step_offset_m": round(step_back * prog, 6),
+            "step_lift_m": round(CROUCH_STEP_LIFT_M * math.sin(math.pi * prog), 6) if lifted else 0.0,
+            "摆动中": bool(lifted)}
+
+
+def crouch_back_dir_xy(back_dir):
+    """背向的**水平化**单位向量。
+
+    ⚠️ 实测踩到（本件第 1 版）：姿势现算的 `posterior` 带 z 分量（实测 `(0, +0.9985, −0.0551)`），
+    直接拿它乘位移会把**脚目标带到地下**——后撤 0.26 m ⇒ 陷深 **14.33 mm**（= 0.26 × 0.0551），
+    接地读数当场报出。⇒ 位移只用它的水平分量（位移是"沿地面"的，不是"沿背轴"的）。
+    """
+    v = Vector((back_dir.x, back_dir.y, 0.0))
+    return v.normalized() if v.length > 1e-9 else Vector((0.0, 1.0, 0.0))
+
+
+def crouch_foot_targets(foot_rest, back_dir, params, step_foot=CROUCH_STEP_FOOT):
+    """双脚踝目标（世界坐标）：后撤的那只脚沿**水平背向** `step_offset_m`、摆动期再抬高 `step_lift_m`。"""
+    d = crouch_back_dir_xy(back_dir)
+    out = {}
+    for side in CARD1_SIDES:
+        t = foot_rest[side].copy()
+        if side == step_foot:
+            t = t + d * params["step_offset_m"] + Vector((0.0, 0.0, params["step_lift_m"]))
+        out[side] = t
+    return out
+
+
+def crouch_body_setup(arm, m3, foot_targets, crouch_m, back_m, back_dir,
+                      lean_deg=CROUCH_TORSO_LEAN_DEG, gaze=True):
+    """下蹲 + 被推的身体条件：骨盆 = 「双脚中点 + 背向 `back_m`」，高度 = 静止髋 − `crouch_m`。
+
+    | 项 | 写法 | 轴语义 / 方法来源 |
+    |---|---|---|
+    | 下沉 | `set_pelvis_world(...)` + 双腿解析解拉回脚目标 | 宿主 5/6 同法（实测回代，不假设写入口径） |
+    | 被推后移 | 骨盆 xy 沿**背向**（姿势现算的 `posterior`） | 宿主 5 的 `set_pelvis_world`（真世界位移，与 yaw 无关，已核） |
+    | 躯干前倾 | `door_push_torso_lean(lean_deg)`（三段脊柱各 1/3） | 管线 §2.1.4：脊柱局部 X = **前倾** |
+    | 目视水平 | `solve_gaze_scan(scale=…)`（**确定性扫描**，不用会发散的牛顿法） | 宿主 5 §七 的实测（牛顿法在转身 ≥ 45° 发散） |
+    """
+    mid = Vector(((foot_targets["Left"].x + foot_targets["Right"].x) / 2.0,
+                  (foot_targets["Left"].y + foot_targets["Right"].y) / 2.0))
+    rest_hips = world_point(arm, f"{BONE_PREFIX}Hips")
+    hips_z = rest_hips.z - crouch_m
+    dxy = crouch_back_dir_xy(back_dir)
+    xy = (mid.x + dxy.x * back_m, mid.y + dxy.y * back_m)
+    err = set_pelvis_world(arm, m3, xy, hips_z)
+    lean = door_push_torso_lean(arm, lean_deg)
+    if gaze:
+        solve_gaze_scan(arm, scale=1.0)
+    update()
+    _, _, posterior = body_frame(arm)
+    residuals = {}
+    for side in CARD1_SIDES:
+        res = solve_leg(arm, side, foot_targets[side], -posterior)
+        set_foot_world_orientation(arm, side, 0.0)
+        residuals[side] = res
+    update()
+    return {"pelvis_err_mm": err, "lean": lean, "leg_residual": residuals,
+            "hips_z_m": round(world_point(arm, f"{BONE_PREFIX}Hips").z, 6)}
+
+
+def crouch_arms_down(arm, m3, curl_axes, t=1.0, relax=CROUCH_RELAX_CURL):
+    """**双臂垂放**：腕落在髋骨点 + `CROUCH_HAND_DROP_OFFSET`（身体系），指尖朝下、掌心内向。
+
+    ⚠️ 为什么必须给解：静止姿势是 **T-pose**——不给它，双臂就**水平伸着**（owner 2026-09-16 在
+    宿主 5 上点名过同一处：「右手机械的平举」）。`t` = 0 静止 → 1 垂放（首帧必须严格中立）。
+    """
+    hips = world_point(arm, f"{BONE_PREFIX}Hips")
+    out = {}
+    for side in CARD1_SIDES:
+        off = Vector(CROUCH_HAND_DROP_OFFSET)
+        target = hips + m3.inverted() @ Vector((off.x * (1.0 if side == "Left" else -1.0),
+                                               off.y, off.z))
+        rest_wrist = world_point(arm, f"{BONE_PREFIX}{side}Hand")
+        wrist = rest_wrist.lerp(target, t)
+        elbow = Vector(CROUCH_ELBOW_DIR)
+        elbow = Vector((elbow.x * (1.0 if side == "Left" else -1.0), elbow.y, elbow.z))
+        solve_arm(arm, side, wrist, elbow)
+        down = Vector((0.0, 0.0, -1.0))
+        _set_world_axes(arm, f"CTRL_{side}Hand", f"{BONE_PREFIX}{side}Hand",
+                        _nlerp(Vector((1.0 if side == "Left" else -1.0, 0.0, 0.0)), down, t),
+                        Vector((0.0, 1.0, 0.0)))
+        for finger in FINGERS:
+            _apply_one_finger_curl(arm, side, finger, curl_axes[side][finger], relax * t)
+        out[side] = {"腕目标_m": [round(v, 4) for v in wrist]}
+    update()
+    return out
+
+
+def main_crouch() -> int:
+    """下蹲 / 被推退宿主：逐帧解算 → 逐帧打键 → 从**产物**读凸包判据（引用 `xbot_balance`）。"""
+    from datetime import datetime
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    import xbot_balance as xb
+
+    args = parse_args(list(sys.argv))
+    tmpl = Path(args.template)
+    if not tmpl.is_file():
+        print(f"[ERROR] 母版不存在：{tmpl}")
+        return 2
+    if args.host == "headless":
+        bpy.ops.wm.open_mainfile(filepath=str(tmpl))
+    elif not bpy.data.filepath:
+        print("[ERROR] --host live 要求母版已经在当前会话里打开")
+        return 2
+    bpy.context.scene.render.fps = args.fps
+    arm, m3 = make_context()
+    drop_temp(arm)
+    clear_pose(arm)
+
+    action_name = args.action if args.action != "BendGripChairBack" else CROUCH_ACTION
+    if action_name != args.action:
+        print(f"[WARN] --action 未显式给出（默认 {args.action}）⇒ 本宿主按 {action_name} 命名动作")
+
+    report = {"script": Path(__file__).name, "task": "crouch", "action": action_name,
+              "blender": bpy.app.version_string, "template": str(tmpl), "host": args.host,
+              "measured_at": datetime.now().isoformat(timespec="seconds"),
+              "step_foot": args.step_foot, "problems": []}
+    print(f"下蹲 / 被推退（口径 §15.7 ② 件 · C′ 平衡与支撑 · 凸包件 #170）· 动作名 {action_name}")
+    print(f"帧表：中立 {CROUCH_FRAME_NEUTRAL} · **下蹲到位 {CROUCH_FRAME_READY}** · 被推 {CROUCH_FRAME_PUSH}"
+          f"→{CROUCH_FRAME_PUSH_END} · **失衡极值 {CROUCH_FRAME_IMBALANCE}**（推导 = 摆动脚首次离地，"
+          f"见 crouch_imbalance_frame()）· **后撤落地 {CROUCH_FRAME_STEP_END}** · "
+          f"起身 {CROUCH_FRAME_RECOVER} · 末帧 {CROUCH_FRAME_END}（{args.fps} fps）")
+
+    foot_rest = {s: world_point(arm, f"{BONE_PREFIX}{s}Foot").copy() for s in CARD1_SIDES}
+    hips_rest = world_point(arm, f"{BONE_PREFIX}Hips").copy()
+    back_dir = _posterior(arm).copy()
+    curl = {s: detect_curl_axis_group(arm, s, "四指") for s in CARD1_SIDES}
+    curl_thumb = {s: detect_curl_axis_group(arm, s, "拇指") for s in CARD1_SIDES}
+    curl_axes = {s: {f: (curl_thumb[s] if f == "Thumb" else curl[s]) for f in FINGERS}
+                 for s in CARD1_SIDES}
+    print(f"身体条件：背向（姿势现算 `posterior`）= "
+          f"({back_dir.x:+.4f}, {back_dir.y:+.4f}, {back_dir.z:+.4f}) · "
+          f"静止髋 ({hips_rest.x:+.4f}, {hips_rest.y:+.4f}, {hips_rest.z:+.4f})")
+    for s in CARD1_SIDES:
+        print(f"  静止踝 {s}: ({foot_rest[s].x:+.4f}, {foot_rest[s].y:+.4f}, {foot_rest[s].z:+.4f})")
+    report["rest"] = {"背向": [round(v, 6) for v in back_dir],
+                      "静止髋_m": [round(v, 6) for v in hips_rest],
+                      "静止踝_m": {s: [round(v, 6) for v in foot_rest[s]] for s in CARD1_SIDES},
+                      "f3_curl": {"四指": curl, "拇指": curl_thumb}}
+
+    report["freedom_table"] = [
+        {"行": "身体：下蹲下沉量", "值": args.crouch_depth, "单位": "m", "状态": "agent 解（本件选定）",
+         "来源": "本件选定 + `--scan-posture` 并列 3 档（口径 §4.2 硬规矩 5）；同族先例 "
+                 "`DOOR_PUSH_CROUCH_M = 0.06`（宿主 5 实测下沉 0.06 m 时踝偏 0.20 m 仍残差 0）"},
+        {"行": "身体：被推后移量", "值": args.push_back, "单位": "m", "状态": "agent 解（本件选定）",
+         "来源": "本件选定 + `--scan-posture` 并列 3 档；它决定「重心出域多深」"},
+        {"行": "后撤步长 / 抬脚高度", "值": [args.step_back, CROUCH_STEP_LIFT_M], "单位": "m",
+         "状态": "agent 解", "来源": "抬脚高度沿用宿主 5 的 `DOOR_PUSH_STEP_LIFT_M = 0.05`（同一量级）"},
+        {"行": "后撤的那只脚", "值": args.step_foot, "单位": "—", "状态": "agent 解",
+         "来源": "两解都解（`--step-foot`），读数并列在证据里"},
+        {"行": "躯干前倾", "值": CROUCH_TORSO_LEAN_DEG, "单位": "°", "状态": "agent 解",
+         "来源": "管线 §2.1.4（脊柱局部 X = 前倾）"},
+        {"行": "**F4a 判据时域**（必填）", "值": "接地 = `持续`（整段）· 支撑域判定 = `逐帧`（判据面本身）· "
+                                              "时序 = `一次性`（下蹲到位帧 / 失衡极值帧）",
+         "单位": "—", "状态": "owner（涉观感）/ agent", "来源": "口径 §13.3 F4a · §13.4.1"},
+        {"行": "支撑域 = 哪一层", "值": "**两层并列**（骨点层 / 蒙皮层）", "单位": "—",
+         "状态": "**待 owner 裁**（#165 证据 §七 #4 的未裁项）",
+         "来源": "凸包件 `xbot_balance.py`；本件的读数与建议见证据"},
+    ]
+
+    # ---- ① `--scan-posture`：身体条件的解空间（口径 §4.2 硬规矩 5 的 ≥2 解并列）----
+    if args.scan_posture:
+        print("\n身体条件解空间（口径 §4.2 硬规矩 5：agent 解的行必须并列 ≥2 个可行解）")
+        print(f"  {'下蹲_m':>8}{'后移_m':>8}{'段':>6}{'髋_z_mm':>10}{'骨盆残差_mm':>12}"
+              f"{'腿残差_mm':>11}{'骨点层余量':>12}{'蒙皮层余量':>12}{'骨判定':>7}{'皮判定':>7}")
+        rows = []
+        for depth in CROUCH_DEPTH_CANDIDATES:
+            for back in CROUCH_PUSH_CANDIDATES:
+                for tag, params in (("下蹲", crouch_frame_params(CROUCH_FRAME_READY, depth, back)),
+                                    ("推到位", crouch_frame_params(CROUCH_FRAME_PUSH_END, depth, back))):
+                    clear_pose(arm)
+                    drop_temp(arm, also_objects=False)
+                    tg = crouch_foot_targets(foot_rest, back_dir, params, args.step_foot)
+                    body = crouch_body_setup(arm, m3, tg, params["crouch_m"], params["back_m"], back_dir)
+                    crouch_arms_down(arm, m3, curl_axes)
+                    legs = {s: body["leg_residual"][s] for s in CARD1_SIDES}
+                    leg_res = max(abs(legs[s]["tip_err_mm"]) for s in CARD1_SIDES)
+                    # 读数必须**当场量**（先 clear_pose 再量就量成了中立姿势的读数——宿主 6 踩过）
+                    com = world_point(arm, f"{BONE_PREFIX}Hips")
+                    bone_pts, skin_pts = [], []
+                    for s in CARD1_SIDES:
+                        for sfx in xb.BONE_POINT_SUFFIXES:
+                            p = world_point(arm, f"{BONE_PREFIX}{s}{sfx}")
+                            if p.z - 0.0 <= DOOR_PUSH_SOLE_MARGIN_MM / 1000.0:
+                                bone_pts.append((p.x * 1000.0, p.y * 1000.0))
+                    for s in CARD1_SIDES:
+                        try:
+                            idx = xb.cp._skin_index(arm, s)
+                            skin_pts += [(x * 1000.0, y * 1000.0) for x, y in
+                                         xb._skin_ground_points(arm, idx, DOOR_PUSH_SOLE_MARGIN_MM / 1000.0)]
+                        except Exception as exc:
+                            report["problems"].append(f"扫描：蒙皮层读数不可用（{exc}）")
+                    com_xy = (com.x * 1000.0, com.y * 1000.0)
+                    b = xb.balance_of_points(bone_pts, com_xy)
+                    sk = xb.balance_of_points(skin_pts, com_xy)
+                    row = {"下蹲_m": depth, "后移_m": back, "段": tag,
+                           "髋_z_mm": round(com.z * 1000.0, 1),
+                           "骨盆残差_mm": body["pelvis_err_mm"], "腿残差_mm": round(leg_res, 2),
+                           "骨点层余量_mm": b["余量_mm"], "蒙皮层余量_mm": sk["余量_mm"],
+                           "骨点层着地点数": b["着地足底点数"], "蒙皮层着地点数": sk["着地足底点数"],
+                           "骨点层判定": b["判定"], "蒙皮层判定": sk["判定"]}
+                    rows.append(row)
+                    print(f"  {depth:8.2f}{back:8.2f}{tag:>6}{row['髋_z_mm']:10.1f}"
+                          f"{row['骨盆残差_mm']:12.2f}{row['腿残差_mm']:11.2f}"
+                          f"{str(row['骨点层余量_mm']):>12}{str(row['蒙皮层余量_mm']):>12}"
+                          f"{row['骨点层判定']:>7}{row['蒙皮层判定']:>7}")
+        report["scan_posture"] = {"行": rows,
+                                  "来源": "本件选定；容差与判据面 = 凸包件 `xbot_balance.py`",
+                                  "如实登记": "每行都在**同一个解算路径**下量（不 clear_pose 再量）"}
+        if args.report:
+            Path(args.report).write_text(json.dumps(report, ensure_ascii=False, indent=1),
+                                         encoding="utf-8")
+            print(f"报告: {args.report}")
+        return 0
+
+    # ---- ② 逐帧解算（每帧解、每帧记参数；帧表由 `crouch_frame_params` 纯函数给出）----
+    captured, per_frame = {}, []
+    print(f"\n逐帧解算（帧 {CROUCH_FRAME_NEUTRAL}–{CROUCH_FRAME_END}，每帧解、每帧打键）")
+    for frame in range(CROUCH_FRAME_NEUTRAL, CROUCH_FRAME_END + 1):
+        clear_pose(arm)
+        drop_temp(arm, also_objects=False)
+        params = crouch_frame_params(frame, args.crouch_depth, args.push_back, args.step_back)
+        if frame == CROUCH_FRAME_NEUTRAL:
+            # ⚠️ 首帧必须严格中立（导出侧 E5 硬约定：导出时的姿势会被写进骨节点默认变换）
+            captured[frame] = capture_channels(arm, panic_channel_names(arm))
+            per_frame.append({**params, "中立": True})
+            print(f"  帧 {frame:>3} **中立姿势**（零通道；导出侧 Rest Pose 一口清）")
+            continue
+        t = min(1.0, max(0.0, (frame - CROUCH_FRAME_NEUTRAL)
+                         / float(CROUCH_FRAME_READY - CROUCH_FRAME_NEUTRAL)))
+        tg = crouch_foot_targets(foot_rest, back_dir, params, args.step_foot)
+        body = crouch_body_setup(arm, m3, tg, params["crouch_m"], params["back_m"], back_dir)
+        hands = crouch_arms_down(arm, m3, curl_axes, t=t)
+        captured[frame] = capture_channels(arm, panic_channel_names(arm))
+        per_frame.append({**params, "髋_z_m": body["hips_z_m"], "骨盆残差_mm": body["pelvis_err_mm"],
+                          "腿残差_mm": {s: round(body["leg_residual"][s]["tip_err_mm"], 2)
+                                        for s in CARD1_SIDES}, "腕目标_m": hands})
+        if frame in (CROUCH_FRAME_PUSH, CROUCH_FRAME_IMBALANCE, CROUCH_FRAME_STEP_END,
+                     CROUCH_FRAME_RECOVER, CROUCH_FRAME_END):
+            print(f"  帧 {frame:>3} 下蹲 {params['crouch_m']:.3f} m · 后移 {params['back_m']:.3f} m · "
+                  f"后撤 {params['step_offset_m']:.3f} m（抬 {params['step_lift_m']:.3f} m）· "
+                  f"髋 z {body['hips_z_m']:.4f} m · 骨盆残差 {body['pelvis_err_mm']:.2f} mm · "
+                  f"腿残差 {max(abs(v) for v in per_frame[-1]['腿残差_mm'].values()):.2f} mm")
+    report["frame_params"] = per_frame
+
+    # ---- ③ 预览清理（#163 的椅子残留代理；先例 #166 第 2 轮 / 宿主 6）----
+    residue = sorted(o.name for o in bpy.data.objects
+                     if o.name.startswith("REF_")
+                     and not any(m.type == "ARMATURE" for m in o.modifiers))
+    for name in residue:
+        bpy.data.objects.remove(bpy.data.objects[name], do_unlink=True)
+    report["preview_residue_removed"] = residue
+
+    # ---- ④ 打键（逐帧；控制骨 + 脊柱/颈头 + 手指全打）----
+    names = panic_channel_names(arm)
+    arm.animation_data_clear()
+    ad = arm.animation_data_create()
+    for stale in [a for a in bpy.data.actions
+                  if a.name == action_name or a.name.startswith(action_name + ".")]:
+        bpy.data.actions.remove(stale)
+    action = bpy.data.actions.new(action_name)
+    action.use_fake_user = True
+    try:
+        import blender_action_compat as bac
+        bac.assign_action(ad, action)
+    except Exception as exc:
+        print(f"[WARN] 取道层不可用（{exc}），退回直接指派")
+        ad.action = action
+    for frame in range(CROUCH_FRAME_NEUTRAL, CROUCH_FRAME_END + 1):
+        bpy.context.scene.frame_set(frame)
+        clear_pose(arm)
+        drop_temp(arm, also_objects=False)
+        apply_channels(arm, captured[frame])
+        for name in list(captured[frame]):
+            pb = arm.pose.bones[name]
+            pb.rotation_mode = "XYZ"
+            pb.keyframe_insert("rotation_euler", frame=frame)
+            if name == "CTRL_Hips":
+                pb.keyframe_insert("location", frame=frame)
+    bpy.context.scene.frame_start = CROUCH_FRAME_NEUTRAL
+    bpy.context.scene.frame_end = CROUCH_FRAME_END
+    report["frames"] = {"起": CROUCH_FRAME_NEUTRAL, "下蹲到位": CROUCH_FRAME_READY,
+                        "被推": [CROUCH_FRAME_PUSH, CROUCH_FRAME_PUSH_END],
+                        "失衡极值": CROUCH_FRAME_IMBALANCE,
+                        "后撤落地": CROUCH_FRAME_STEP_END, "末": CROUCH_FRAME_END}
+    report["keyed_channels"] = names
+    report["preview_cleanup"] = door_push_preview_cleanup(arm)
+    report["visible_bones"] = visible_bone_outliers(arm)
+    print(f"\n已打键：动作 {action_name} · 帧 {CROUCH_FRAME_NEUTRAL}–{CROUCH_FRAME_END} · "
+          f"通道 {len(names)} 个（含腿脚 "
+          f"{sum(1 for n in names if 'Leg' in n or 'Foot' in n)} 个）")
+    if report["visible_bones"]["非例外的越界骨"]:
+        report["problems"].append(
+            "可见骨伸出皮肤包围盒：" + "; ".join(
+                f"{x['骨']}({x['伸出量_mm']:.1f} mm)" for x in report["visible_bones"]["非例外的越界骨"][:8]))
+
+    # ---- ⑤ 产物侧读数：凸包 / 重心 / 接地（**全部来自凸包件**，本宿主不重算）----
+    bal = xb.read_current(arm, action_name, fps=args.fps)
+    report["balance"] = {k: bal[k] for k in ("逐帧", "结构", "接触相位", "静息对照", "读数指纹_sha256")}
+    st = bal["结构"]
+    for p in bal["problems"]:
+        report["problems"].append(f"凸包件自核：{p}")
+    print(f"\n凸包判据（凸包件 `xbot_balance.py` 读产物；接地/支撑区间引用 `xbot_contact_phase.py`）")
+    for layer in xb.LAYERS:
+        s = st[layer]
+        print(f"  {layer}：可判 {s['可判帧数']}/{st['帧数']} · 域内 {s['域内帧数']} · "
+              f"域外 {s['域外帧数']} [{xb.frame_list_cell(s['域外帧'])}] · 退化 {len(s['退化帧'])} · "
+              f"余量最小 {s['余量最小_mm']} mm（帧 {s['余量最小帧']}）")
+    print(f"  层选对照：判定不一致 {len(st['层选对照']['判定不一致帧'])} 帧 · "
+          f"最大余量差 {st['层选对照']['最大余量差_mm']} mm（帧 {st['层选对照']['最大余量差帧']}）")
+    print(f"  接地：无支撑区间 {xb.iv_cell(bal['接触相位']['无支撑区间'])} · "
+          f"换脚帧 {xb.frame_list_cell(bal['接触相位']['换脚帧'])} · "
+          f"双支撑 {xb.iv_cell(bal['接触相位']['双支撑区间'])}")
+
+    # 派生判据：① 报红断言（失衡窗口里必须有域外帧）② 支撑断言（下蹲与站定期逐帧在域内）
+    per_frame_bal = {r["帧"]: r for r in bal["逐帧"]}
+    imbalance_window = list(range(CROUCH_FRAME_PUSH + 1, CROUCH_FRAME_STEP_END + 1))
+    stable_frames = (list(range(CROUCH_FRAME_READY, CROUCH_FRAME_PUSH + 1))
+                     + list(range(CROUCH_FRAME_RECOVER, CROUCH_FRAME_END + 1)))
+    crit = {}
+    for layer in xb.LAYERS:
+        out_frames = [f for f in imbalance_window if per_frame_bal[f][layer]["判定"] == xb.V_OUT]
+        bad = [f for f in stable_frames if per_frame_bal[f][layer]["判定"] != xb.V_IN]
+        crit[layer] = {"失衡窗口": [CROUCH_FRAME_PUSH + 1, CROUCH_FRAME_STEP_END],
+                       "失衡窗口内的域外帧": out_frames,
+                       "稳定段": [stable_frames[0], stable_frames[-1]],
+                       "稳定段内的非域内帧": bad}
+    report["balance_criterion"] = crit
+    print(f"\n判据断言（口径 §4.2 硬规矩 2：判据必须**能报红**）")
+    for layer in xb.LAYERS:
+        c = crit[layer]
+        print(f"  {layer}：失衡窗口 {c['失衡窗口']} 内域外帧 {len(c['失衡窗口内的域外帧'])} 个 "
+              f"[{xb.frame_list_cell(c['失衡窗口内的域外帧'])}] · 稳定段 {c['稳定段']} 内非域内帧 "
+              f"{len(c['稳定段内的非域内帧'])} 个 [{xb.frame_list_cell(c['稳定段内的非域内帧'])}]")
+
+    # ---- ⑥ 时序（V-f 的机械面，零阈值）：声明的两个极值帧 == 产物侧极值帧 ----
+    hips_curve = [(r["帧"], r["重心_z_mm"]) for r in bal["逐帧"] if "重心_z_mm" in r]
+    margin_curve = [(r["帧"], per_frame_bal[r["帧"]][xb.LAYER_SKIN]["余量_mm"])
+                    for r in bal["逐帧"] if per_frame_bal[r["帧"]][xb.LAYER_SKIN]["余量_mm"] is not None]
+    arg_hips = min(hips_curve, key=lambda t: t[1])[0] if hips_curve else None
+    arg_margin = min(margin_curve, key=lambda t: t[1])[0] if margin_curve else None
+    report["timing"] = {
+        "下蹲到位": {"声明": CROUCH_FRAME_READY, "产物": arg_hips,
+                     "判据量": "`mixamorig:Hips` 骨世界高度的**首个极小**（平段取首帧，先例 §2.2 的定帧规则）",
+                     "曲线": [{"帧": f, "髋_z_mm": round(z * 1000.0, 4)} for f, z in hips_curve]},
+        "失衡极值": {"声明": CROUCH_FRAME_IMBALANCE, "产物": arg_margin,
+                     "判据量": f"重心到支撑域边界的带符号余量（{xb.LAYER_SKIN}）的最小值帧",
+                     "曲线": [{"帧": f, "余量_mm": v} for f, v in margin_curve]},
+    }
+    report["timing"]["下蹲到位"]["一致"] = bool(arg_hips == CROUCH_FRAME_READY)
+    report["timing"]["失衡极值"]["一致"] = bool(arg_margin == CROUCH_FRAME_IMBALANCE)
+    print(f"  时序：下蹲到位 声明 {CROUCH_FRAME_READY} / 产物 {arg_hips} ⇒ "
+          f"{'一致 ✅' if arg_hips == CROUCH_FRAME_READY else '不一致 ❌'} · "
+          f"失衡极值 声明 {CROUCH_FRAME_IMBALANCE} / 产物 {arg_margin} ⇒ "
+          f"{'一致 ✅' if arg_margin == CROUCH_FRAME_IMBALANCE else '不一致 ❌'}")
+
+    # ---- ⑦ 穿模（判据 4 的形态：自穿模 + 地面）----
+    def product_frame(frame):
+        bpy.context.scene.frame_set(frame)
+        update()
+        d = bpy.context.evaluated_depsgraph_get()
+        return arm.evaluated_get(d)
+
+    clash = []
+    for frame in range(CROUCH_FRAME_NEUTRAL, CROUCH_FRAME_END + 1):
+        ev = product_frame(frame)
+        row = {"frame": frame, "对": {}, "地面_最坏_mm": None, "地面_最坏处": None}
+        for cname, cthr, bones_a, bones_b in CROUCH_CLASH_PAIRS:
+            worst, where = None, None
+            for ba in bones_a:
+                if f"{BONE_PREFIX}{ba}" not in ev.pose.bones:
+                    continue
+                for bb in bones_b:
+                    if f"{BONE_PREFIX}{bb}" not in ev.pose.bones:
+                        continue
+                    a0, a1 = world_point(ev, f"{BONE_PREFIX}{ba}"), world_point(ev, f"{BONE_PREFIX}{ba}", "tail")
+                    b0, b1 = world_point(ev, f"{BONE_PREFIX}{bb}"), world_point(ev, f"{BONE_PREFIX}{bb}", "tail")
+                    g = segment_gap_mm(a0, a1, b0, b1)
+                    if worst is None or g < worst:
+                        worst, where = g, f"{ba}↔{bb}"
+            row["对"][cname] = {"阈值_mm": cthr, "最坏_mm": None if worst is None else round(worst, 2),
+                                "最坏处": where, "违规": bool(worst is not None and worst < cthr)}
+        for bn in CROUCH_GROUND_BONES:
+            if f"{BONE_PREFIX}{bn}" not in ev.pose.bones:
+                continue
+            for tag, pt in (("head", world_point(ev, f"{BONE_PREFIX}{bn}")),
+                            ("mid", (world_point(ev, f"{BONE_PREFIX}{bn}")
+                                     + world_point(ev, f"{BONE_PREFIX}{bn}", "tail")) * 0.5),
+                            ("tail", world_point(ev, f"{BONE_PREFIX}{bn}", "tail"))):
+                if row["地面_最坏_mm"] is None or pt.z * 1000.0 < row["地面_最坏_mm"]:
+                    row["地面_最坏_mm"], row["地面_最坏处"] = round(pt.z * 1000.0, 2), f"{bn}.{tag}"
+        row["地面_违规"] = bool(row["地面_最坏_mm"] is not None and row["地面_最坏_mm"] < 0.0)
+        clash.append(row)
+    report["clash"] = {"阈值_自穿模_mm": 10.0, "阈值_地面_mm": 0.0,
+                       "来源": "动作库规格 §四·戊·5 判据 4 的三个数（骨段零穿透 · 骨心 ≤ 2 cm · 间隙 ≥ 1 cm）；"
+                               "本件的碰撞体 = 自身与地面（本件无道具）",
+                       "行": clash,
+                       "违规帧": [r["frame"] for r in clash
+                                  if r["地面_违规"] or any(v["违规"] for v in r["对"].values())]}
+    worst_pair = min([v["最坏_mm"] for r in clash for v in r["对"].values()
+                      if v["最坏_mm"] is not None] or [float("nan")])
+    worst_ground = min([r["地面_最坏_mm"] for r in clash if r["地面_最坏_mm"] is not None]
+                       or [float("nan")])
+    report["clash"]["最坏_自穿模_mm"] = None if worst_pair != worst_pair else round(worst_pair, 2)
+    report["clash"]["最坏_地面_mm"] = None if worst_ground != worst_ground else round(worst_ground, 2)
+    print(f"  穿模（判据 4 的形态）：自穿模最坏 {worst_pair:.2f} mm（阈值 10）· "
+          f"地面最坏 {worst_ground:.2f} mm（阈值 0）⇒ 违规帧 {len(report['clash']['违规帧'])}")
+
+    # ---- ⑧ 判据汇总（problems）----
+    problems = report["problems"]
+    if not crit[xb.LAYER_SKIN]["失衡窗口内的域外帧"]:
+        problems.append("报红断言失败：失衡窗口内**没有任何域外帧**（判据在蒙皮层上不退化性未证）")
+    if crit[xb.LAYER_SKIN]["稳定段内的非域内帧"]:
+        problems.append(f"支撑断言失败（蒙皮层）：稳定段内非域内帧 "
+                        f"{crit[xb.LAYER_SKIN]['稳定段内的非域内帧'][:8]}")
+    if not report["timing"]["下蹲到位"]["一致"]:
+        problems.append(f"时序：下蹲到位 声明 {CROUCH_FRAME_READY} ≠ 产物极值帧 {arg_hips}")
+    if not report["timing"]["失衡极值"]["一致"]:
+        problems.append(f"时序：失衡极值 声明 {CROUCH_FRAME_IMBALANCE} ≠ 产物极值帧 {arg_margin}")
+    if bal["接触相位"]["无支撑区间"]:
+        problems.append(f"接地：无支撑区间 {bal['接触相位']['无支撑区间'][:4]}")
+    if report["clash"]["违规帧"]:
+        problems.append(f"穿模：违规帧 {report['clash']['违规帧'][:8]}")
+    for row in per_frame:
+        leg = row.get("腿残差_mm") or {}
+        if leg and max(abs(v) for v in leg.values()) > 1.0:
+            problems.append(f"帧 {row['frame']}：腿解析解残差 {leg} mm > 1.0（踝没到目标）")
+    report["ok"] = not problems
+    report["构造的报红帧"] = crit[xb.LAYER_SKIN]["失衡窗口内的域外帧"]
+
+    # ---- ⑨ 回显卡（口径 §四：每一项都要有产物侧读数）----
+    card = []
+    for layer in xb.LAYERS:
+        s = st[layer]
+        card.append({"判据量": f"重心（Hips 水平投影）∈ 支撑凸包（**{layer}**）",
+                     "判据形态": "点 ∈ 凸包（布尔，含边界）",
+                     "产物侧读数": f"域内 {s['域内帧数']} / 域外 {s['域外帧数']} / 退化 {len(s['退化帧'])}"
+                                   f"（余量最小 {s['余量最小_mm']} mm @ 帧 {s['余量最小帧']}）",
+                     "容差档": "**零阈值**（布尔；余量只报读数）",
+                     "状态": "✅" if s["域外帧"] else "❌ 判据退化（无域外帧）"})
+    card.append({"判据量": "报红断言：失衡窗口内存在域外帧（判据**能失败**）",
+                 "判据形态": "布尔存在性（非退化对照）",
+                 "产物侧读数": f"蒙皮层 {len(crit[xb.LAYER_SKIN]['失衡窗口内的域外帧'])} 帧 · "
+                               f"骨点层 {len(crit[xb.LAYER_BONE]['失衡窗口内的域外帧'])} 帧",
+                 "容差档": "—", "状态": "✅" if crit[xb.LAYER_SKIN]["失衡窗口内的域外帧"] else "❌"})
+    card.append({"判据量": "支撑断言：下蹲段与站定段逐帧在域内",
+                 "判据形态": "逐帧布尔（持续型，松一帧即红）",
+                 "产物侧读数": f"蒙皮层非域内帧 {len(crit[xb.LAYER_SKIN]['稳定段内的非域内帧'])} · "
+                               f"骨点层非域内帧 {len(crit[xb.LAYER_BONE]['稳定段内的非域内帧'])}",
+                 "容差档": "—", "状态": "✅" if not crit[xb.LAYER_SKIN]["稳定段内的非域内帧"] else "❌"})
+    card.append({"判据量": "时序：下蹲到位帧（髋高曲线极值）", "判据形态": "帧号相等（无阈值）",
+                 "产物侧读数": f"声明 {CROUCH_FRAME_READY} · 产物 {arg_hips}",
+                 "容差档": "—", "状态": "✅" if arg_hips == CROUCH_FRAME_READY else "❌"})
+    card.append({"判据量": "时序：失衡极值帧（余量曲线极值）", "判据形态": "帧号相等（无阈值）",
+                 "产物侧读数": f"声明 {CROUCH_FRAME_IMBALANCE} · 产物 {arg_margin}",
+                 "容差档": "—", "状态": "✅" if arg_margin == CROUCH_FRAME_IMBALANCE else "❌"})
+    card.append({"判据量": "接地：足底 ↔ 地面（M2，**持续**，引用 #165 的件）",
+                 "判据形态": "点↔面（`soleMargin`）",
+                 "产物侧读数": f"无支撑区间 {xb.iv_cell(bal['接触相位']['无支撑区间'])} · "
+                               f"换脚帧 {xb.frame_list_cell(bal['接触相位']['换脚帧'])} · "
+                               f"最坏陷入 {min(min(r['左最低_mm'], r['右最低_mm']) for r in bal['逐帧']):.2f} mm",
+                 "容差档": f"soleMargin {DOOR_PUSH_SOLE_MARGIN_MM} mm（沿用）",
+                 "状态": "✅" if not bal["接触相位"]["无支撑区间"] else "❌"})
+    card.append({"判据量": "穿模：自穿模（腿↔腿 / 手↔腿）与地面（**持续**）",
+                 "判据形态": "骨段↔骨段 / 骨段↔面（判据 4 的形态）",
+                 "产物侧读数": f"自穿模最坏 {report['clash']['最坏_自穿模_mm']} mm · "
+                               f"地面最坏 {report['clash']['最坏_地面_mm']} mm · "
+                               f"违规帧 {len(report['clash']['违规帧'])}",
+                 "容差档": "间隙 ≥ 10 mm（判据 4 的第三个数）· 地面零穿透（第一个数）",
+                 "状态": "✅" if not report["clash"]["违规帧"] else "❌"})
+    report["feedback_card"] = card
+
+    print("\n" + "=" * 100)
+    print(f"回显卡（口径 §四：每一项都要有产物侧读数）· 动作 {action_name}")
+    for row in card:
+        print(f"  {row['判据量'][:40]:<42}{row['判据形态'][:22]:<24}{str(row['产物侧读数'])[:70]:<72}"
+              f"{row['状态']}")
+    print("=" * 100)
+
+    if args.report:
+        Path(args.report).write_text(json.dumps(report, ensure_ascii=False, indent=1),
+                                     encoding="utf-8")
+        print(f"报告: {args.report}")
+    if args.markdown:
+        xb_sample = {"id": args.name or Path(tmpl).stem, "名称": args.name or "crouch",
+                     "动作": action_name, "样本文件": str(tmpl), "fps": bal["fps"],
+                     "帧范围": st["帧范围"], "逐帧": bal["逐帧"], "结构": st,
+                     "接触相位": bal["接触相位"]}
+        Path(args.markdown).write_text(xb.sample_markdown(xb_sample), encoding="utf-8")
+        print(f"markdown（凸包件样本段）: {args.markdown}")
+    if args.still:
+        best = crit[xb.LAYER_SKIN]["失衡窗口内的域外帧"] or [CROUCH_FRAME_IMBALANCE]
+        for frame, suffix in ((CROUCH_FRAME_READY, "ready"), (best[0], "imbalance"),
+                              (CROUCH_FRAME_STEP_END, "step"), (CROUCH_FRAME_END, "end")):
+            bpy.context.scene.frame_set(frame)
+            update()
+            pt = world_point(arm, f"{BONE_PREFIX}Hips")
+            path = str(args.still).replace(".png", f"_{suffix}.png")
+            render_still(path, pt + Vector((1.9, 1.4, 0.7)), pt)
+            print(f"静帧：{path}")
+    if args.host == "live":
+        bpy.context.scene.frame_set(CROUCH_FRAME_IMBALANCE)
+        update()
+        print(f"[live] 停在失衡极值帧 {CROUCH_FRAME_IMBALANCE}（预览；未写回文件）")
+    elif not args.no_save:
+        bpy.ops.wm.save_as_mainfile(filepath=str(tmpl))
+        print(f"已写回母版副本：{tmpl}")
+    print(f"结论: {'OK' if report['ok'] else 'FAIL'} —— problems {report['problems']}")
+    return 0 if report["ok"] else 1
+
+
+# ══════════════════════════════════════════════════════════════════════════════
 # 宿主 4：重述对拍（`--task restate`）——口径 §13.8 判据 1
 #
 #   「#163 既有读数 vs 用**卡片语言**复现 ⇒ 差异 0」——**纯算术**，不跑 Blender、不请 owner 目视。
@@ -4925,7 +5626,8 @@ def main() -> int:
             if idx + 1 < len(tail):
                 task = tail[idx + 1]
     return {"chair": main_chair, "card1": main_card1, "door": main_door,
-            "doorpush": main_door_push, "panic": main_panic, "restate": main_restate}[task]()
+            "doorpush": main_door_push, "panic": main_panic, "crouch": main_crouch,
+            "restate": main_restate}[task]()
 
 
 if __name__ == "__main__":
