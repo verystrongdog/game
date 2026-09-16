@@ -19,7 +19,7 @@
 | 字段 | 值 |
 |---|---|
 | base SHA | `f5f5640`（#170 结账那次提交；开工时工作树干净、三条校验器 0 死链 / 0 失败） |
-| head SHA | 本条提交组（见 §七 的提交组清单；最后一条提交见文末） |
+| head SHA | 本条**提交组**（按主题分 6 条）：`8a318e0`（工具扩展：膝/肘 ε）· `c411f44`（宿主 8）· `ce8fb2c`（lab 第 3 个实例 + 道具代理）· `66d16a0`（证据 + 口径 + 切片 + 证据索引）· `b5a43b2`（回滚演练 + 两遍独立进程 + issue 校验器登记）· `5f76f2f`（一处引用读数更正） |
 | 阶段 | [#171](https://github.com/verystrongdog/game/issues/171)（Experiment · `state:in-progress`，2026-09-16 开工） |
 | 执行者 | DSH agent（本机 WSL → Windows 侧 Blender） |
 | 工具版本 | Blender **5.1.2**（`hash ec6e62d40fa9`，built 2026-05-19 01:37:34）· Windows 11 家庭中文版 |
