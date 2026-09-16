@@ -52,6 +52,9 @@ VALIDATOR_REGISTRY = {
     # #165：接触相位识别件（注册表术语定义 ↔ M2 取点口径 ↔ soleMargin 容差 ↔ 证据逐帧表 四处不许漂移）
     #   ⚠️ 它**不需要 bpy**：无参数时走离线机械判据 R1–R5；Blender 侧读产物是另一条路（`--blend`）。
     "xbot_contact_phase.py":       {"status": "active", "json": False},
+    # #170：凸包件（注册表 `重心`/`支撑多边形` 定义核 ↔ 单一来源 ↔ 证据逐帧凸包表 ↔ 与 #165 逐值一致）
+    #   ⚠️ 同样**不需要 bpy**：无参数时走离线机械判据 B1–B5；Blender 侧读产物是另一条路（`--blend`）。
+    "xbot_balance.py":             {"status": "active", "json": False},
 }
 
 STATE_FILE = ROOT / ".checks-state.json"   # 运行状态（2026-09-12：原 .scratch/.last_check_state.json，随 .scratch 移出版本控制而迁出）
