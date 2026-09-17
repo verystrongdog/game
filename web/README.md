@@ -22,3 +22,9 @@ bun run preview
 构建结果写入 `web/dist/`（不入库），预览地址为 <http://localhost:4173/>。
 
 当前页面是交互原型，不连接游戏后端或 Unity StoryEngine；加入 Vite 只解决稳定托管、热更新和宿主浏览器访问。
+
+## Unity Web 阶段 A
+
+Unity 生成物写入 `web/public/unity/`，该目录不入库。Vite 会把它以 `/unity/` 暴露，并在生产构建时复制到 `web/dist/unity/`。Unity Editor 中执行菜单 `YANTF → Web → 构建阶段 A 到 web/public/unity` 后，网页宿主从 `/unity/manifest.json` 读取带哈希或压缩后缀的实际文件名。
+
+`web/src/scene-host/` 是网页与三维运行时之间的唯一接缝；页面代码不得直接持有 Unity 实例或调用 `SendMessage`。

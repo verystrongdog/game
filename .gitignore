@@ -175,6 +175,7 @@ TestResults/
 # Web UI 本地开发依赖与构建产物
 web/node_modules/
 web/dist/
+web/public/unity/
 
 # Agent 本机文件（P4a：不得入库——含机器绝对路径；.claude/ 已整体忽略，
 # 以下为曾被强制入库者，显式列出防复发）

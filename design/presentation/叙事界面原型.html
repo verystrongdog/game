@@ -87,7 +87,22 @@
       touch-action: none;
     }
 
-    .world-3d-loading, .world-3d-prompt, .world-3d-state {
+    .unity-web-canvas {
+      position: absolute;
+      z-index: 2;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      border: 0;
+      outline: 0;
+      background: #07100f;
+      touch-action: none;
+    }
+
+    .scene.unity-web-active .world-3d-canvas { visibility: hidden; }
+
+    .world-3d-loading, .world-3d-prompt, .world-3d-state, .unity-web-status {
       position: absolute;
       z-index: 13;
       border: 1px solid rgba(197,222,214,.2);
@@ -104,10 +119,30 @@
     .world-3d-prompt { left: 50%; bottom: 112px; transform: translateX(-50%); padding: 9px 12px; opacity: 0; transition: opacity .16s; }
     .world-3d-prompt.show { opacity: 1; }
     .world-3d-state { right: 24px; top: 88px; padding: 7px 9px; color: #90a099; }
+    .unity-web-status {
+      left: 24px;
+      top: 88px;
+      display: flex;
+      gap: 9px;
+      align-items: center;
+      padding: 7px 9px;
+      pointer-events: auto;
+    }
+    .unity-web-status[hidden] { display: none; }
+    .unity-web-status button {
+      border: 1px solid rgba(197,222,214,.28);
+      padding: 3px 7px;
+      background: rgba(144,160,153,.12);
+      color: #cbd9d3;
+      font: inherit;
+      cursor: pointer;
+    }
+    .unity-web-status button[hidden] { display: none; }
     .scene.world-3d-active .hallway,
     .scene.world-3d-active .scene-hotspot,
     .scene.world-3d-active .door-entry { display: none; }
     .scene.template-active .world-3d-canvas,
+    .scene.template-active .unity-web-canvas,
     .scene.template-active .world-3d-prompt,
     .scene.template-active .world-3d-state { display: none; }
 
@@ -970,6 +1005,10 @@
       <canvas class="world-3d-canvas" id="world3dCanvas" aria-label="可行走探索的三维夜间护士站"></canvas>
       <div class="world-3d-loading" id="world3dLoading">正在构建三维护士站…</div>
       <div class="world-3d-state" id="world3dState">IDLE · 等距视角 · WASD 移动</div>
+      <div class="unity-web-status" id="unityWebStatus" hidden>
+        <span id="unityWebStatusText"></span>
+        <button type="button" id="unityWebRetry" hidden>重试</button>
+      </div>
       <div class="world-3d-prompt" id="world3dPrompt"></div>
 
       <section class="template-room" id="templateRoom" aria-label="人体统一模板校准间" aria-hidden="true">
@@ -2838,6 +2877,81 @@
     setView('front');
     animate();
     new ResizeObserver(resize).observe(stage);
+
+    // 阶段 A：默认仍使用 Three.js；Vite 地址加 ?renderer=unity 时尝试挂载 Unity Web。
+    // 来源：design/presentation/Unity Web集成设计.md §九「阶段 A」。
+    let unityPreviewMounting = false;
+    let unityPreviewSession = null;
+
+    function setUnityWebStatus(message, { retry = false } = {}) {
+      const status = document.querySelector('#unityWebStatus');
+      status.hidden = false;
+      document.querySelector('#unityWebStatusText').textContent = message;
+      document.querySelector('#unityWebRetry').hidden = !retry;
+    }
+
+    async function mountUnityWebPreview() {
+      if (new URLSearchParams(window.location.search).get('renderer') !== 'unity' || unityPreviewMounting) return;
+
+      const sceneElement = document.querySelector('#scene');
+      const panelElement = document.querySelector('.narrative-panel');
+      unityPreviewMounting = true;
+      document.querySelector('#unityWebRetry').disabled = true;
+      try {
+        if (unityPreviewSession) {
+          await unityPreviewSession.dispose();
+          unityPreviewSession = null;
+        }
+        sceneElement.classList.remove('unity-web-active');
+        const { createSceneHost, createUnityWebAdapter } = await import('/scene-host/index.js');
+        const host = createSceneHost({
+          adapters: { unity: createUnityWebAdapter() },
+          onStatus(status) {
+            if (status.state === 'loading') {
+              setUnityWebStatus(`UNITY WEB · LOADING ${Math.round((status.progress || 0) * 100)}%`);
+            }
+          },
+        });
+        const session = await host.mount({
+          adapter: 'unity',
+          container: sceneElement,
+          build: { manifestUrl: '/unity/manifest.json' },
+        });
+
+        session.subscribe(message => {
+          if (message.type === 'runtime.ready') {
+            sceneElement.classList.add('unity-web-active');
+            setUnityWebStatus('UNITY WEB · READY');
+          }
+          if (message.type === 'runtime.error') {
+            setUnityWebStatus(`UNITY WEB · ${message.payload?.message || 'ERROR'}`);
+          }
+        });
+        unityPreviewSession = session;
+
+        const setInputMode = mode => session.dispatch({
+          v: 1,
+          kind: 'command',
+          type: 'input.mode.set',
+          payload: { mode },
+        });
+        sceneElement.addEventListener('pointerdown', event => {
+          if (event.target.matches('.unity-web-canvas')) setInputMode('world');
+        });
+        panelElement.addEventListener('focusin', () => setInputMode('ui'));
+        panelElement.addEventListener('pointerdown', () => setInputMode('ui'));
+      } catch (error) {
+        sceneElement.classList.remove('unity-web-active');
+        setUnityWebStatus(`UNITY WEB 加载失败 · 已保留 THREE 原型 · ${error?.message || error}`, { retry: true });
+        console.error('[Unity Web Preview]', error);
+      } finally {
+        unityPreviewMounting = false;
+        document.querySelector('#unityWebRetry').disabled = false;
+      }
+    }
+
+    document.querySelector('#unityWebRetry').addEventListener('click', mountUnityWebPreview);
+    mountUnityWebPreview();
   </script>
 </body>
 </html>

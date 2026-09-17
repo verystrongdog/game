@@ -33,7 +33,7 @@ function narrativePrototypeEntry() {
 export default defineConfig({
   root: presentationRoot,
   cacheDir: resolve(import.meta.dirname, 'node_modules/.vite'),
-  publicDir: false,
+  publicDir: resolve(import.meta.dirname, 'public'),
   appType: 'mpa',
   plugins: [narrativePrototypeEntry()],
   resolve: {
@@ -41,6 +41,7 @@ export default defineConfig({
     // the same vendored module as the page instead of adding a second copy.
     alias: {
       three: resolve(presentationRoot, 'vendor/three/build/three.module.js'),
+      '/scene-host': resolve(import.meta.dirname, 'src/scene-host'),
     },
   },
   server: {
@@ -48,6 +49,11 @@ export default defineConfig({
     host: 'localhost',
     port: 5174,
     strictPort: true,
+    fs: {
+      // Presentation FBX symlinks resolve into code/unity; allow this repository
+      // only, not the user's home directory.
+      allow: [resolve(import.meta.dirname, '..')],
+    },
   },
   preview: {
     host: 'localhost',
