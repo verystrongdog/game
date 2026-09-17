@@ -266,6 +266,12 @@ Unity 构建生成物不作为源码提交；部署流程把它与 Vite 产物�
 
 阶段 A 只证明集成接缝成立，不证明正式关卡、正式剧情或性能目标已经完成。
 
+## 十一、实施状态
+
+截至 2026-09-17，阶段 A 的源码骨架已完成：网页宿主、Unity 适配器、单一跨端桥、最小场景生成器、错误回退与重试入口均已接线。网页单元测试和 Vite 生产构建已通过。
+
+Unity Editor 当前不可用，因此 `NarrativeWebScene.unity` 和 `web/public/unity/` 尚未生成，C# 编译、PlayMode 测试和真实 `runtime.ready` 往返仍待首次 Unity 实机验证。
+
 ---
-*创建: 2026-09-17 · 状态: 设计基线，尚未形成 Unity Web 可运行构建*
+*创建: 2026-09-17 · 状态: 阶段 A 源码骨架已完成，待 Unity Editor 实机验证*
 *关联: [叙事界面布局](叙事界面布局.md), [动作库规格](动作库规格.md), [架构](../../ARCHITECTURE.md), [Unity Web 参考](../../docs/reference/unity-webgl.md)*
