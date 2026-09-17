@@ -13,6 +13,7 @@
 | 项 | 内容 |
 |----|------|
 | 场景 | **现行基准场景**：`Assets/Scenes/ActionLab.unity`（入库，#136）——动作系统（13 词表 / 契约 A+B）+ 就座交互 + 持椅挂点；其余 lab 场景由 Editor 菜单重建、不入库 |
+| 叙事 UI 预览 | `ActionLab` 进入 Play 后自动挂载 UI Toolkit 展示层：左侧保留 3D 世界，右侧显示对话/笔记；当前只验证页面，不接 StoryEngine，所有内容均为非正典演示数据 |
 | ~~白盒战斗沙盘~~ | 🚫 **2026-09-13 整体退役**（#155）：演示者/陪练两个白盒小人 + 指令回合 + HUD 那一套连同它的场景生成器与冒烟测试一并删除 |
 | 数值源 | 🚫 **随沙盘一起消失**：原 `WhiteboxSolver`（手抄 `CalibrationConfig.Default` 常量）就是 [ARCHITECTURE.md §四](../../ARCHITECTURE.md) 认定的**本仓唯一反向污染点**——owner 裁定把宿主整套退役，该风险随之归零。Core→Unity 接缝的技术定案（[§4.1](../../ARCHITECTURE.md)）与桥接工程保留，**接线推迟到接缝真正需要时** |
 
@@ -21,9 +22,16 @@
 前置：Unity 6 Editor（6000.0.x；本工程 `ProjectVersion.txt` 锁 6000.5.2f1——版本不一致时 Unity 会提示升级/降级，接受即可，或改该文件为你的版本）。
 
 1. 用 Unity Hub/Editor 打开本目录（`code/unity/`）作为工程；首次导入会自动还原包（uGUI + Test Framework）。
-2. 打开基准场景 **`Assets/Scenes/ActionLab.unity`** → 按 **Play**（其余 lab 场景由 `Assets/Editor/` 下各 builder 的菜单重建；🔧 `YANTF → 呈现沙盘 → 创建 Demo 场景` 那条菜单已随白盒沙盘退役，#155）。
-3. 操作见 §二·J/§二·M/§二·N 各节（动作系统、就座交互、持椅挂点）。
+2. 打开基准场景 **`Assets/Scenes/ActionLab.unity`** → 按 **Play**。右侧会自动出现叙事 UI 预览；点“对话 / 笔记”可检查两种信息层级，缩窄 Game View 可检查上下布局（其余 lab 场景由 `Assets/Editor/` 下各 builder 的菜单重建；🔧 `YANTF → 呈现沙盘 → 创建 Demo 场景` 那条菜单已随白盒沙盘退役，#155）。
+3. 左侧游戏画面仍可使用原 ActionLab 操作，见 §二·J/§二·M/§二·N 各节（动作系统、就座交互、持椅挂点）。叙事选项当前仅展示按下/焦点反馈，不推进剧情；真实逻辑等待 `data/story/` 与 Core `StoryEngine` 接入。
 4. 跑测试：**Window → General → Test Runner → PlayMode → Run All**（计数以最近一次实测为准，见 §二·O）。
+
+### 叙事 UI 展示层边界（2026-09-17）
+
+- 结构与样式：`Assets/Resources/NarrativeUI/NarrativeHud.uxml` + `NarrativeHud.uss`。
+- 预览挂载与“对话 / 笔记”页签：`Assets/Scripts/NarrativeUiPreview.cs`；仅在场景名为 `ActionLab` 时创建，退出 Play 即销毁。
+- 左侧透明区域不吞鼠标事件，仍可观察和操作 3D 世界；右侧叙事栏拥有自己的滚动与焦点。
+- 静态文案只用于看页面，不是剧情事实、节点、条件或效果。后续实现必须由 Unity 适配层消费真实 Core 视图模型，不得把本文件中的示例文本升级成规则源。
 
 ### unity-cli 自动化（可选）
 

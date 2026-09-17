@@ -481,6 +481,10 @@ namespace YANTF.ActionLab
 
         private void OnGUI()
         {
+            // 叙事展示页接管 ActionLab 的屏幕信息层级时，隐藏旧 IMGUI 调试条，避免视觉重叠。
+            // 这只影响展示；NarrativeUiPreview 不拥有动作或剧情状态。
+            if (YANTF.NarrativeUI.NarrativeUiPreview.IsVisible) return;
+
             string actionName = player != null ? player.CurrentActionDisplay : "—";
             string hint = "WASD 移动 / Shift 跑 / Space 跳 / 1物攻 2精攻 3防御 4受击 5倒下 / 6坐（需走到椅子前）7起身 / R 重置";
             GUILayout.BeginArea(new Rect(12f, 12f, 560f, 110f));
