@@ -42,6 +42,7 @@
 | [`code/sim/`](code/sim) | Python 数值模拟验证脚本 |
 | [`code/tools/`](code/tools) | 数据生成 / 迁移 / 测量工具（`build_*` · `gen_*` · `migrate_*` · `measure_*`）与 Blender 桥；原 `validate_*.py` 校验器已于 2026-09-17 删除 |
 | [`data/`](data/README.md) | 结构化数据契约：脑区、三体神经模型、情境原型、病理边、术语注册表 |
+| [`web/`](web/README.md) | 叙事 Web UI 的 Vite 本地开发入口；直接托管 `design/presentation/叙事界面原型.html` |
 
 ## 从哪里开始读
 
@@ -61,6 +62,16 @@
 | 怎么提交 | [协作指南](CONTRIBUTING.md) |
 
 ## 维护约定
+
+### 本地打开叙事 Web UI
+
+```bash
+cd web
+bun install
+bun run dev
+```
+
+然后访问 <http://localhost:5174/>。该入口只托管呈现原型，不启动或模拟 StoryEngine；端口与电车项目的 `5173` 分开，可以同时运行。
 
 - **设计驱动代码**：先有设计文档，再写代码。边界见 [项目规约 §一](design/conventions/README.md)
 - **改动后的底线**：`dotnet test code/src/YouAreNotTheFish.sln` 全绿（CI 里跑的只有这一件）。⚠️ 2026-09-17 全部门禁已撤销——文档与数据的交叉引用、参数一致性不再有机械校验，改完只能靠人核对

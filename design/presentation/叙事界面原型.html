@@ -4,6 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>子非鱼｜叙事界面原型</title>
+  <script type="importmap">
+    { "imports": { "three": "./vendor/three/build/three.module.js" } }
+  </script>
   <style>
     /* 来源：design/presentation/叙事界面布局.md §二—§五。以下尺寸均为原型呈现常量，不是游戏规则参数。 */
     :root {
@@ -73,6 +76,40 @@
       pointer-events: none;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
     }
+
+    .world-3d-canvas {
+      position: absolute;
+      z-index: 1;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      touch-action: none;
+    }
+
+    .world-3d-loading, .world-3d-prompt, .world-3d-state {
+      position: absolute;
+      z-index: 13;
+      border: 1px solid rgba(197,222,214,.2);
+      background: rgba(7,13,12,.84);
+      color: #cbd9d3;
+      font: 9px/1.35 ui-monospace, monospace;
+      letter-spacing: .08em;
+      pointer-events: none;
+      backdrop-filter: blur(7px);
+    }
+
+    .world-3d-loading { left: 50%; top: 50%; transform: translate(-50%, -50%); padding: 10px 13px; }
+    .world-3d-loading[hidden] { display: none; }
+    .world-3d-prompt { left: 50%; bottom: 112px; transform: translateX(-50%); padding: 9px 12px; opacity: 0; transition: opacity .16s; }
+    .world-3d-prompt.show { opacity: 1; }
+    .world-3d-state { right: 24px; top: 88px; padding: 7px 9px; color: #90a099; }
+    .scene.world-3d-active .hallway,
+    .scene.world-3d-active .scene-hotspot,
+    .scene.world-3d-active .door-entry { display: none; }
+    .scene.template-active .world-3d-canvas,
+    .scene.template-active .world-3d-prompt,
+    .scene.template-active .world-3d-state { display: none; }
 
     .hallway {
       position: absolute;
@@ -239,56 +276,278 @@
     .figure {
       position: absolute;
       z-index: 5;
-      left: 49%;
-      top: 31%;
-      width: 7%;
-      min-width: 44px;
-      height: 33%;
-      filter: drop-shadow(0 12px 12px rgba(0,0,0,.8));
-      transition: transform 700ms cubic-bezier(.2,.7,.2,1);
+      left: 45.5%;
+      top: 24%;
+      width: clamp(92px, 11vw, 154px);
+      height: 48%;
+      transform-origin: 50% 86%;
+      filter: drop-shadow(0 18px 14px rgba(0,0,0,.82));
+      transition: transform 850ms cubic-bezier(.2,.72,.2,1), filter 850ms ease;
     }
 
-    .figure.turned { transform: translateX(-9%) rotate(-2deg); }
-
-    .head {
-      position: absolute;
-      left: 31%;
-      top: 0;
-      width: 38%;
-      aspect-ratio: .82;
-      border-radius: 48% 48% 42% 42%;
-      background: #3a3c37;
-      box-shadow: inset -7px -4px 12px #171a18;
-    }
-
-    .body {
-      position: absolute;
-      left: 14%;
-      top: 19%;
-      width: 72%;
-      height: 52%;
-      clip-path: polygon(18% 0, 82% 0, 100% 100%, 0 100%);
-      background: linear-gradient(90deg, #d2d5ca, #737b72 70%, #414842);
-    }
-
-    .body::after {
+    .figure::after {
       content: "";
       position: absolute;
-      left: 45%;
-      top: 0;
-      width: 8%;
-      height: 100%;
-      background: rgba(41, 59, 56, .45);
+      z-index: -1;
+      left: 19%;
+      right: 8%;
+      bottom: -2%;
+      height: 7%;
+      border-radius: 50%;
+      background: rgba(0,0,0,.65);
+      filter: blur(7px);
+      transform: rotate(-4deg);
     }
 
-    .legs {
+    .figure.turned {
+      transform: translateX(-12%) rotate(-3deg) scale(1.025);
+      filter: drop-shadow(0 18px 14px rgba(0,0,0,.72)) drop-shadow(6px 0 12px rgba(190,224,213,.08));
+    }
+
+    .figure-model {
+      display: block;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    .figure .turned-highlight {
+      opacity: 0;
+      transition: opacity 520ms ease 160ms;
+    }
+
+    .figure.turned .turned-highlight { opacity: 1; }
+
+    .figure .mask-face {
+      transform-box: fill-box;
+      transform-origin: center;
+      transition: transform 700ms cubic-bezier(.2,.72,.2,1), filter 600ms ease;
+    }
+
+    .figure.turned .mask-face {
+      transform: translateX(3px) rotate(2deg);
+      filter: drop-shadow(-3px 1px 5px rgba(211,239,230,.16));
+    }
+
+    .figure .back-shadow { transition: opacity 450ms ease; }
+    .figure.turned .back-shadow { opacity: .34; }
+
+    .figure .lanyard-card {
+      transform-box: fill-box;
+      transform-origin: 50% 0;
+      animation: badge-sway 4.2s ease-in-out infinite;
+    }
+
+    @keyframes badge-sway {
+      0%, 100% { transform: rotate(-1.5deg); }
+      50% { transform: rotate(2deg); }
+    }
+
+    .hotspot {
       position: absolute;
-      left: 26%;
-      top: 68%;
-      width: 48%;
-      height: 32%;
-      border-left: 10px solid #242d2b;
-      border-right: 10px solid #1c2422;
+      z-index: 11;
+      width: 26px;
+      height: 26px;
+      padding: 0;
+      border: 1px solid rgba(207,235,225,.7);
+      border-radius: 50%;
+      background: rgba(18,30,28,.46);
+      color: var(--moon-strong);
+      cursor: pointer;
+      box-shadow: 0 0 0 5px rgba(185,224,212,.06), 0 0 18px rgba(185,224,212,.16);
+      backdrop-filter: blur(3px);
+      transition: transform .18s ease, border-color .18s ease, background .18s ease, opacity .18s ease;
+      animation: hotspot-pulse 2.6s ease-in-out infinite;
+    }
+
+    .hotspot::before {
+      content: "";
+      position: absolute;
+      inset: 8px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .hotspot span {
+      position: absolute;
+      left: 50%;
+      bottom: calc(100% + 9px);
+      width: max-content;
+      max-width: 150px;
+      padding: 6px 9px;
+      border: 1px solid rgba(218,235,227,.13);
+      background: rgba(7,12,11,.9);
+      color: #dce8e2;
+      font: 10px/1.2 ui-monospace, monospace;
+      letter-spacing: .08em;
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, 4px);
+      transition: opacity .16s ease, transform .16s ease;
+      white-space: nowrap;
+    }
+
+    .hotspot:hover,
+    .hotspot:focus-visible {
+      outline: none;
+      transform: scale(1.12);
+      border-color: var(--moon-strong);
+      background: rgba(43,73,67,.72);
+    }
+
+    .hotspot:hover span,
+    .hotspot:focus-visible span { opacity: 1; transform: translate(-50%, 0); }
+    .hotspot.visited { opacity: .38; animation: none; }
+    .hotspot.register { left: 52%; top: 52%; }
+    .hotspot.reflection { left: 48%; top: 24%; }
+    .hotspot.unnumbered-door { left: 81%; top: 47%; }
+
+    .door-entry {
+      position: absolute;
+      z-index: 12;
+      right: 7%;
+      top: 54%;
+      padding: 9px 13px;
+      border: 1px solid rgba(197,222,214,.34);
+      background: rgba(8,15,14,.82);
+      color: #dcebe5;
+      cursor: pointer;
+      font: 10px/1.2 ui-monospace, monospace;
+      letter-spacing: .1em;
+      box-shadow: 0 10px 28px rgba(0,0,0,.34);
+    }
+
+    .door-entry:hover, .door-entry:focus-visible {
+      outline: none;
+      border-color: var(--moon);
+      background: rgba(31,57,52,.92);
+    }
+
+    /* 来源：design/presentation/动作描述口径.md §十五、Blender动作制作管线.md §二。
+       房间内几何仅用于母版评审，不是已接受的正式人体比例参数。 */
+    .template-room {
+      position: absolute;
+      z-index: 10;
+      inset: 0;
+      display: none;
+      grid-template-columns: minmax(170px, .8fr) minmax(270px, 1.35fr) minmax(190px, .9fr);
+      gap: clamp(12px, 1.5vw, 22px);
+      padding: 92px 25px 118px;
+      overflow: auto;
+      background:
+        linear-gradient(rgba(166,202,190,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(166,202,190,.035) 1px, transparent 1px),
+        radial-gradient(circle at 50% 42%, rgba(125,176,161,.18), transparent 32%),
+        linear-gradient(145deg, #162322, #09100f 62%, #121815);
+      background-size: 38px 38px, 38px 38px, auto, auto;
+    }
+
+    .scene.template-active .template-room { display: grid; }
+    .scene.template-active .hallway,
+    .scene.template-active .scene-hotspot,
+    .scene.template-active .door-entry { display: none; }
+
+    .template-card {
+      min-width: 0;
+      align-self: center;
+      border: 1px solid rgba(206,229,218,.14);
+      background: rgba(10,17,15,.76);
+      box-shadow: 0 18px 50px rgba(0,0,0,.25);
+      backdrop-filter: blur(7px);
+    }
+
+    .template-card header { padding: 14px 15px 11px; border-bottom: 1px solid var(--line); }
+    .template-card h2 { margin: 5px 0 0; font-size: 15px; font-weight: 500; }
+    .template-card-body { padding: 13px 15px 15px; }
+    .template-status { color: #c88768; font: 9px/1.2 ui-monospace, monospace; letter-spacing: .14em; }
+    .template-summary { margin: 0 0 13px; color: #aeb8b2; font-size: 11px; line-height: 1.55; }
+
+    .base-facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin-bottom: 13px; }
+    .base-fact { padding: 8px 4px; text-align: center; border: 1px solid rgba(206,229,218,.1); background: rgba(255,255,255,.018); }
+    .base-fact strong { display: block; color: var(--moon); font: 18px/1 ui-monospace, monospace; }
+    .base-fact span { display: block; margin-top: 5px; color: #77817c; font-size: 8px; }
+
+    .layer-stack { display: grid; gap: 5px; }
+    .layer-row { display: grid; grid-template-columns: 20px 1fr; gap: 8px; padding: 7px 8px; border-left: 2px solid #4e5e58; background: rgba(255,255,255,.025); }
+    .layer-row b { color: #b96748; font: 10px/1.35 ui-monospace, monospace; }
+    .layer-row span { color: #aeb6b0; font-size: 10px; line-height: 1.4; }
+    .layer-row.candidate { border-left-color: #785340; }
+
+    .mannequin-stage {
+      position: relative;
+      min-height: 500px;
+      align-self: stretch;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      border: 1px solid rgba(205,231,220,.12);
+      background: linear-gradient(90deg, transparent 49.85%, rgba(197,222,214,.14) 50%, transparent 50.15%);
+    }
+
+    .human-template { display: none !important; }
+    .human-3d-canvas { display: none; }
+    .human-3d-canvas.dragging { cursor: grabbing; }
+    .bot-3d-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
+    .bot-3d-canvas:active { cursor: grabbing; }
+    .model-loading { position: absolute; z-index: 3; inset: 50% auto auto 50%; transform: translate(-50%, -50%); padding: 10px 13px; border: 1px solid rgba(197,222,214,.2); background: rgba(7,13,12,.88); color: #9eaaa4; font: 9px/1.4 ui-monospace, monospace; letter-spacing: .08em; pointer-events: none; }
+    .model-loading.error { color: #d28a6d; border-color: rgba(210,110,78,.35); }
+    .model-loading[hidden] { display: none; }
+    .human-template[hidden] { display: none; }
+    .view-label { position: absolute; z-index: 2; left: 12px; top: 12px; color: #60706a; font: 8px/1 ui-monospace, monospace; letter-spacing: .18em; }
+    .orthographic-views { position: absolute; right: 12px; top: 10px; z-index: 2; display: flex; gap: 4px; }
+    .ortho-button { padding: 6px 8px; border: 1px solid rgba(198,220,211,.15); background: rgba(7,13,12,.78); color: #76827c; cursor: pointer; font: 9px/1 ui-monospace, monospace; }
+    .ortho-button.active { color: #eef8f3; border-color: rgba(197,222,214,.5); background: rgba(48,76,68,.7); }
+    .template-segment { cursor: pointer; outline: none; }
+    .template-segment .body-fill { fill: #83918a; stroke: #c5d6ce; stroke-width: 1.2; transition: fill .16s, filter .16s; }
+    .template-segment:hover .body-fill,
+    .template-segment:focus .body-fill,
+    .template-segment.active .body-fill { fill: #b46b4d; filter: drop-shadow(0 0 7px rgba(190,108,76,.48)); }
+    .body-seam { fill: none; stroke: rgba(10,17,15,.58); stroke-width: 1.2; pointer-events: none; }
+    .rig-layer { fill: none; stroke: #d5eee5; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; opacity: .82; }
+    .pose-bone { pointer-events: none; }
+    .pose-joint { fill: #15211e; stroke: #d5eee5; stroke-width: 1.5; pointer-events: all; cursor: grab; transition: r .12s, fill .12s; }
+    .pose-joint:hover, .pose-joint:focus { r: 8px; fill: #b46b4d; outline: none; }
+    .pose-joint.dragging { cursor: grabbing; fill: #d38a68; r: 9px; }
+    .side-body, .back-body { fill: #7c8983; stroke: #c5d6ce; stroke-width: 1.2; }
+    .back-detail { fill: none; stroke: rgba(17,27,24,.62); stroke-width: 1.4; }
+    .guide-layer { stroke: rgba(188,216,205,.22); stroke-width: 1; stroke-dasharray: 4 5; }
+    .anchor-layer circle { fill: #bd7658; stroke: #ffe5d8; stroke-width: 1; }
+    .human-template.hide-rig .rig-layer,
+    .human-template.hide-guides .guide-layer,
+    .human-template.hide-anchors .anchor-layer { display: none; }
+
+    .view-controls { position: absolute; z-index: 2; left: 12px; right: 12px; bottom: 12px; display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
+    .view-toggle, .room-return {
+      padding: 7px 9px;
+      border: 1px solid rgba(198,220,211,.18);
+      background: rgba(7,13,12,.86);
+      color: #89958f;
+      cursor: pointer;
+      font: 9px/1 ui-monospace, monospace;
+    }
+    .view-toggle.active { color: #e0eee8; border-color: rgba(197,222,214,.48); }
+
+    .segment-name { margin: 0 0 5px; color: #e3ede8; font-size: 18px; font-weight: 500; }
+    .segment-index { color: #bd7355; font: 9px/1.3 ui-monospace, monospace; letter-spacing: .12em; }
+    .segment-copy { min-height: 48px; margin: 11px 0 13px; color: #aeb7b1; font-size: 11px; line-height: 1.55; }
+    .partition-list { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin: 0 0 13px; padding: 0; list-style: none; }
+    .partition-list li { padding: 5px 6px; color: #86918b; border: 1px solid rgba(206,229,218,.07); font: 8px/1.2 ui-monospace, monospace; }
+    .partition-list li.current { color: #f0d6ca; border-color: rgba(190,108,76,.36); background: rgba(190,108,76,.09); }
+    .decision-note { padding: 9px 10px; border-left: 2px solid var(--rust); background: rgba(186,108,75,.07); color: #a9afa9; font-size: 10px; line-height: 1.45; }
+    .pose-tools { margin-top: 11px; padding-top: 11px; border-top: 1px solid var(--line); }
+    .pose-tools label { display: block; margin-bottom: 6px; color: #77827c; font: 8px/1.2 ui-monospace, monospace; letter-spacing: .12em; }
+    .pose-name, .pose-library { width: 100%; padding: 8px 9px; border: 1px solid rgba(206,229,218,.14); background: #0a100f; color: #d9e4df; font: 10px/1.2 ui-monospace, monospace; }
+    .pose-library { margin-top: 6px; color: #aeb9b3; }
+    .pose-actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin-top: 6px; }
+    .pose-action { padding: 7px 4px; border: 1px solid rgba(206,229,218,.14); background: rgba(255,255,255,.025); color: #a8b2ad; cursor: pointer; font-size: 9px; }
+    .pose-action:hover { color: #edf7f2; border-color: rgba(197,222,214,.4); }
+    .pose-status { min-height: 14px; margin: 7px 0 0; color: #bd7355; font: 8px/1.4 ui-monospace, monospace; }
+    .pose-warning { margin: 8px 0 0; color: #69756f; font-size: 9px; line-height: 1.4; }
+    .room-return { width: 100%; margin-top: 11px; color: #d9e5df; padding: 9px; }
+
+    @keyframes hotspot-pulse {
+      0%, 100% { box-shadow: 0 0 0 4px rgba(185,224,212,.05), 0 0 13px rgba(185,224,212,.12); }
+      50% { box-shadow: 0 0 0 8px rgba(185,224,212,.015), 0 0 22px rgba(185,224,212,.22); }
     }
 
     .scene-topbar {
@@ -353,6 +612,9 @@
       position: relative;
       z-index: 15;
       min-width: 0;
+      min-height: 0;
+      height: 100dvh;
+      overflow: hidden;
       display: grid;
       grid-template-rows: auto minmax(0, 1fr) auto;
       border-left: 1px solid rgba(226, 237, 224, .15);
@@ -365,7 +627,7 @@
     .panel-header {
       display: flex;
       align-items: stretch;
-      min-height: 78px;
+      min-height: 70px;
       border-bottom: 1px solid var(--line);
       background: rgba(255,255,255,.012);
     }
@@ -382,9 +644,9 @@
         repeating-linear-gradient(135deg, transparent 0 6px, rgba(255,255,255,.014) 7px);
     }
 
-    .speaker-heading { flex: 1; min-width: 0; padding: 15px 18px 13px; }
-    .speaker-heading h1 { margin: 2px 0 3px; font-size: 19px; font-weight: 500; }
-    .speaker-heading p { margin: 0; color: var(--quiet); font-size: 12px; }
+    .speaker-heading { flex: 1; min-width: 0; padding: 11px 16px 10px; }
+    .speaker-heading h1 { margin: 2px 0 3px; font-size: 17px; font-weight: 500; }
+    .speaker-heading p { margin: 0; color: var(--quiet); font-size: 11px; }
 
     .tabs { flex: 0 0 auto; display: flex; align-items: stretch; }
     .tab {
@@ -404,47 +666,69 @@
     .tab:hover, .tab.active { color: var(--ink); background: rgba(255,255,255,.03); }
 
     .story-scroll {
+      position: relative;
       min-height: 0;
-      overflow-y: auto;
+      height: 100%;
+      overflow-y: scroll;
+      overflow-x: hidden;
+      scrollbar-gutter: stable;
       scroll-behavior: smooth;
+      overscroll-behavior: contain;
+      touch-action: pan-y;
+      -webkit-overflow-scrolling: touch;
       scrollbar-width: thin;
-      scrollbar-color: #48514c transparent;
+      scrollbar-color: #64716b rgba(255,255,255,.025);
     }
 
-    .story, .notebook { padding: 28px clamp(24px, 3vw, 46px) 44px; }
+    .story-scroll::-webkit-scrollbar { width: 8px; }
+    .story-scroll::-webkit-scrollbar-track {
+      background: rgba(255,255,255,.02);
+      border-left: 1px solid rgba(226,237,224,.05);
+    }
+    .story-scroll::-webkit-scrollbar-thumb {
+      min-height: 42px;
+      border: 2px solid #121714;
+      border-radius: 6px;
+      background: #64716b;
+    }
+    .story-scroll::-webkit-scrollbar-thumb:hover {
+      background: #829089;
+    }
+
+    .story, .notebook { padding: 19px clamp(22px, 2.4vw, 36px) 28px; }
     .notebook[hidden], .story[hidden] { display: none; }
 
-    .beat { margin: 0 0 26px; animation: rise .45s ease both; }
+    .beat { margin: 0 0 16px; animation: rise .45s ease both; }
     .beat .label {
       display: flex;
       align-items: center;
       gap: 8px;
-      margin-bottom: 8px;
+      margin-bottom: 5px;
       color: var(--rust);
-      font: 700 10px/1.2 ui-monospace, monospace;
+      font: 700 9px/1.2 ui-monospace, monospace;
       letter-spacing: .14em;
       text-transform: uppercase;
     }
 
     .beat .label::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, var(--rust-soft), transparent); }
-    .beat p { margin: 0; color: #d9d9cf; font-size: clamp(15px, 1.25vw, 18px); line-height: 1.85; }
+    .beat p { margin: 0; color: #d9d9cf; font-size: clamp(12.5px, .95vw, 15px); line-height: 1.58; }
     .beat.scene-text p { color: #c5c9c1; font-style: italic; }
     .beat.player { padding-left: 16px; border-left: 2px solid rgba(197,222,214,.28); }
     .beat.player p { color: #cbd4ce; }
 
     .beat.perception {
       position: relative;
-      padding: 16px 17px 17px;
+      padding: 11px 13px 12px;
       border: 1px solid rgba(166, 202, 190, .13);
       background: linear-gradient(120deg, rgba(124, 166, 153, .09), transparent 70%);
     }
 
     .beat.perception p { color: #d7eee7; }
-    .beat.system p { color: #c2c9bd; font-size: 14px; }
+    .beat.system p { color: #c2c9bd; font-size: 13px; }
 
     .choices {
       position: relative;
-      padding: 15px 22px 21px;
+      padding: 10px 18px 13px;
       border-top: 1px solid var(--line);
       background: linear-gradient(rgba(17,22,20,.84), #0c100f 30%);
     }
@@ -452,7 +736,7 @@
     .choices-header {
       display: flex;
       justify-content: space-between;
-      margin: 0 4px 10px;
+      margin: 0 4px 6px;
       color: var(--quiet);
       font: 9px/1.2 ui-monospace, monospace;
       letter-spacing: .15em;
@@ -465,14 +749,15 @@
       grid-template-columns: 27px minmax(0, 1fr);
       gap: 10px;
       align-items: baseline;
-      padding: 10px 12px;
+      padding: 7px 10px;
       border: 0;
       border-left: 2px solid transparent;
       background: transparent;
       color: #c7c6bb;
       text-align: left;
       cursor: pointer;
-      line-height: 1.45;
+      font-size: 12px;
+      line-height: 1.36;
       transition: color .16s, background .16s, transform .16s, border-color .16s;
     }
 
@@ -484,13 +769,28 @@
       transform: translateX(4px);
     }
 
+    .choice:disabled {
+      color: #59615d;
+      cursor: default;
+      opacity: .58;
+    }
+
+    .choice:disabled:hover {
+      border-left-color: transparent;
+      background: transparent;
+      transform: none;
+    }
+
+    .choice.utility { margin-top: 3px; border-top: 1px solid rgba(226,237,224,.06); }
+
     .choice-index { color: var(--rust); font: 700 11px/1.4 ui-monospace, monospace; }
-    .choice-meta { display: block; margin-top: 3px; color: #747d78; font: 10px/1.3 ui-monospace, monospace; }
+    .choice-meta { display: block; margin-top: 2px; color: #747d78; font: 9px/1.25 ui-monospace, monospace; }
 
     .note-section { margin-bottom: 34px; }
     .note-section h2 { margin: 0 0 13px; color: var(--rust); font: 700 11px/1.2 ui-monospace, monospace; letter-spacing: .17em; }
     .note-card { padding: 13px 15px; margin-bottom: 9px; border-left: 2px solid #59655f; background: rgba(255,255,255,.025); }
     .note-card span { display: block; color: var(--quiet); margin-top: 4px; font-size: 12px; }
+
 
     .prototype-badge {
       position: absolute;
@@ -535,7 +835,7 @@
     @media (max-width: 840px) {
       html, body { overflow: auto; }
       .game-shell { grid-template-columns: 1fr; grid-template-rows: 42dvh 58dvh; min-height: 100dvh; }
-      .narrative-panel { border-left: 0; border-top: 1px solid var(--line); }
+      .narrative-panel { height: 58dvh; border-left: 0; border-top: 1px solid var(--line); }
       .scene-topbar { padding: 15px 16px; }
       .scene-bottom { padding: 50px 16px 13px; }
       .player-vitals { display: none; }
@@ -547,10 +847,17 @@
       .tab { min-width: 44px; padding: 0 10px; }
       .story, .notebook { padding: 22px 22px 36px; }
       .beat { margin-bottom: 21px; }
-      .beat p { font-size: 15px; line-height: 1.7; }
+      .beat p { font-size: 13px; line-height: 1.65; }
       .choices { padding: 11px 12px 14px; }
       .choice { padding: 8px 8px; }
       .toast { left: 14px; right: 14px; bottom: calc(58dvh + 12px); }
+      .figure { width: clamp(64px, 13vw, 92px); top: 22%; }
+      .hotspot { width: 22px; height: 22px; }
+      .hotspot::before { inset: 7px; }
+      .template-room { grid-template-columns: 1fr; padding: 70px 14px 70px; }
+      .template-card:first-child { display: none; }
+      .template-card:last-child { align-self: start; }
+      .mannequin-stage { min-height: 420px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -560,7 +867,7 @@
 </head>
 <body>
   <main class="game-shell">
-    <section class="scene" aria-label="住院楼一层护士站场景">
+    <section class="scene" id="scene" aria-label="住院楼一层护士站场景">
       <div class="hallway" id="hallway" aria-hidden="true">
         <div class="ceiling"></div>
         <div class="floor"></div>
@@ -573,21 +880,272 @@
         <div class="moon" id="moon"></div>
         <div class="moonbeam"></div>
         <div class="nurse-station"></div>
-        <div class="figure" id="figure">
-          <div class="head"></div>
-          <div class="body"></div>
-          <div class="legs"></div>
+        <div class="figure" id="figure" aria-label="值班护士赵岚背对走廊站在护士站前">
+          <svg class="figure-model" viewBox="0 0 180 460" role="img" aria-hidden="true">
+            <defs>
+              <linearGradient id="uniform" x1="0" x2="1">
+                <stop offset="0" stop-color="#d7ddd2"/>
+                <stop offset=".48" stop-color="#a7b0a7"/>
+                <stop offset="1" stop-color="#59645f"/>
+              </linearGradient>
+              <linearGradient id="uniformShadow" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#73817a"/>
+                <stop offset="1" stop-color="#303a37"/>
+              </linearGradient>
+              <linearGradient id="skin" x1="0" x2="1">
+                <stop offset="0" stop-color="#958276"/>
+                <stop offset=".55" stop-color="#bba99a"/>
+                <stop offset="1" stop-color="#695d56"/>
+              </linearGradient>
+              <radialGradient id="hair" cx="36%" cy="25%" r="80%">
+                <stop offset="0" stop-color="#454541"/>
+                <stop offset=".7" stop-color="#252824"/>
+                <stop offset="1" stop-color="#111512"/>
+              </radialGradient>
+              <linearGradient id="surgicalMask" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#c2ddd8"/>
+                <stop offset=".5" stop-color="#87aaa4"/>
+                <stop offset="1" stop-color="#496963"/>
+              </linearGradient>
+              <filter id="softGlow" x="-60%" y="-60%" width="220%" height="220%">
+                <feGaussianBlur stdDeviation="3"/>
+              </filter>
+            </defs>
+
+            <path d="M51 292 L88 292 L84 421 L47 421 Z" fill="#27312e"/>
+            <path d="M91 292 L127 292 L139 421 L99 421 Z" fill="#1b2421"/>
+            <path d="M45 415 Q65 408 87 419 L86 437 L34 437 Q34 422 45 415Z" fill="#111715"/>
+            <path d="M100 416 Q122 407 141 419 L151 437 L99 437Z" fill="#0d1211"/>
+            <path d="M89 300 L92 414" stroke="#87918b" stroke-opacity=".14" stroke-width="3"/>
+
+            <path d="M44 133 Q66 115 87 116 Q113 113 137 136 L150 309 Q116 326 33 307 Z" fill="url(#uniform)"/>
+            <path class="back-shadow" d="M91 119 Q126 118 138 139 L150 309 Q129 318 106 319 L97 151Z" fill="url(#uniformShadow)" opacity=".78"/>
+            <path d="M38 146 Q19 167 17 231 L31 284 L51 276 L47 202Z" fill="url(#uniform)"/>
+            <path d="M136 145 Q157 171 161 231 L151 277 L132 269 L134 199Z" fill="url(#uniformShadow)"/>
+            <path d="M46 176 Q89 191 139 174" fill="none" stroke="#eef3e9" stroke-opacity=".18" stroke-width="2"/>
+            <path d="M91 143 L91 309" fill="none" stroke="#35423e" stroke-opacity=".66" stroke-width="3"/>
+            <g fill="#b9c2b9" opacity=".7">
+              <circle cx="91" cy="185" r="2.2"/><circle cx="91" cy="214" r="2.2"/><circle cx="91" cy="243" r="2.2"/>
+            </g>
+            <path d="M52 301 Q91 310 144 298" fill="none" stroke="#303b37" stroke-opacity=".5" stroke-width="3"/>
+
+            <path d="M72 117 L75 93 L108 93 L111 119 Q91 134 72 117Z" fill="url(#skin)"/>
+            <path d="M70 115 L91 142 L72 159 L55 130Z" fill="#e3e7dd"/>
+            <path d="M111 115 L91 142 L110 159 L130 130Z" fill="#c4ccc3"/>
+            <path d="M58 59 Q59 19 92 14 Q128 17 132 59 L122 105 Q108 122 89 119 Q66 115 56 94Z" fill="url(#hair)"/>
+            <ellipse cx="92" cy="26" rx="25" ry="14" fill="#5b5a53" opacity=".25"/>
+            <path d="M60 66 Q56 104 73 119 L85 98 L86 48 Q70 48 60 66Z" fill="#171b18" opacity=".88"/>
+            <path d="M124 57 Q135 91 113 117 L102 96 L103 43 Q118 45 124 57Z" fill="#121613" opacity=".82"/>
+            <path d="M77 28 Q91 48 123 55" fill="none" stroke="#74736b" stroke-opacity=".24" stroke-width="4"/>
+
+            <g class="mask-face">
+              <path d="M70 48 Q89 33 109 41 Q124 48 123 73 Q122 94 107 108 Q94 116 80 105 Q68 92 67 72 Q67 57 70 48Z" fill="#756b64"/>
+              <path d="M70 48 Q88 32 110 41 Q121 46 124 59 Q104 48 78 57 L68 72 Q66 58 70 48Z" fill="url(#hair)"/>
+              <path d="M76 66 Q85 61 94 66 Q87 71 78 70Z" fill="#171b19" opacity=".82"/>
+              <path d="M101 65 Q111 60 119 66 Q113 71 103 69Z" fill="#131816" opacity=".82"/>
+              <path d="M70 72 Q95 65 123 72 L119 103 Q99 118 77 103Z" fill="url(#surgicalMask)" stroke="#d6ebe6" stroke-opacity=".42" stroke-width="1.2"/>
+              <path d="M72 73 Q96 68 121 73" fill="none" stroke="#dceeea" stroke-opacity=".76" stroke-width="2.2"/>
+              <path d="M76 82 Q97 87 119 81 M77 89 Q97 94 118 88 M79 96 Q98 101 116 95" fill="none" stroke="#d3e7e2" stroke-opacity=".4" stroke-width="1.3"/>
+              <path d="M70 75 Q59 72 57 83 Q58 94 75 98 M123 75 Q132 72 132 83 Q130 94 119 99" fill="none" stroke="#a8c3bd" stroke-width="1.8"/>
+              <path d="M112 43 L106 54 L111 61" fill="none" stroke="#303733" stroke-opacity=".55" stroke-width="1"/>
+            </g>
+            <path class="turned-highlight" d="M74 74 Q96 68 118 73" fill="none" stroke="#e2fff5" stroke-width="3" stroke-linecap="round" opacity=".3" filter="url(#softGlow)"/>
+
+            <g class="lanyard-card">
+              <path d="M78 145 L70 205 M104 145 L108 205" stroke="#46534e" stroke-width="2"/>
+              <rect x="67" y="198" width="44" height="31" rx="2" fill="#d0d8cf" opacity=".83"/>
+              <rect x="72" y="203" width="11" height="13" rx="1" fill="#5f7770"/>
+              <path d="M87 205 H106 M87 210 H103 M72 221 H105" stroke="#485650" stroke-width="1.5" opacity=".7"/>
+            </g>
+            <path d="M120 171 V210" stroke="#465751" stroke-width="4"/>
+            <path d="M126 172 V205" stroke="#7d5545" stroke-width="3"/>
+            <path d="M50 233 Q37 261 43 278 Q50 287 59 273 L70 239Z" fill="url(#skin)"/>
+            <path d="M135 230 L126 267 Q126 283 138 282 Q147 278 148 260Z" fill="url(#skin)"/>
+            <path d="M41 278 Q51 289 65 281" fill="none" stroke="#50463f" stroke-width="2" opacity=".7"/>
+            <path d="M127 278 Q138 287 149 277" fill="none" stroke="#50463f" stroke-width="2" opacity=".7"/>
+          </svg>
         </div>
       </div>
+
+      <canvas class="world-3d-canvas" id="world3dCanvas" aria-label="可行走探索的三维夜间护士站"></canvas>
+      <div class="world-3d-loading" id="world3dLoading">正在构建三维护士站…</div>
+      <div class="world-3d-state" id="world3dState">IDLE · 等距视角 · WASD 移动</div>
+      <div class="world-3d-prompt" id="world3dPrompt"></div>
+
+      <section class="template-room" id="templateRoom" aria-label="人体统一模板校准间" aria-hidden="true">
+        <article class="template-card">
+          <header>
+            <div class="template-status">HUMAN MASTER · REVIEW 0.1</div>
+            <h2>统一母版的边界</h2>
+          </header>
+          <div class="template-card-body">
+            <p class="template-summary">所有人类 NPC 从同一基础结构出发。母版只统一拓扑、骨架接口和身体分区，不统一身份与职业外观。</p>
+            <div class="base-facts" aria-label="现有制作管线事实">
+              <div class="base-fact"><strong>65</strong><span>变形骨</span></div>
+              <div class="base-fact"><strong>13</strong><span>控制骨</span></div>
+              <div class="base-fact"><strong>19</strong><span>身体分区</span></div>
+            </div>
+            <div class="layer-stack" aria-label="候选模板层级">
+              <div class="layer-row"><b>01</b><span>基础人体：中性轮廓、统一拓扑</span></div>
+              <div class="layer-row"><b>02</b><span>动作接口：骨架、控制器、锚点</span></div>
+              <div class="layer-row"><b>03</b><span>身体变化：身高、体格、年龄</span></div>
+              <div class="layer-row candidate"><b>04</b><span>身份外壳：肤色、头发、脸或面具</span></div>
+              <div class="layer-row candidate"><b>05</b><span>角色外壳：职业服装、道具、状态</span></div>
+            </div>
+          </div>
+        </article>
+
+        <div class="mannequin-stage" id="mannequinStage" aria-label="可检查并摆姿势的人体三视图">
+          <div class="view-label" id="viewLabel">FRONT / 正视图</div>
+          <div class="orthographic-views" aria-label="选择人体视图">
+            <button class="ortho-button active" type="button" data-view="front" aria-pressed="true">正面</button>
+            <button class="ortho-button" type="button" data-view="side" aria-pressed="false">侧面</button>
+            <button class="ortho-button" type="button" data-view="back" aria-pressed="false">背面</button>
+          </div>
+          <canvas class="human-3d-canvas" id="human3dCanvas" aria-label="可拖动关节的三维人体正交投影"></canvas>
+          <canvas class="bot-3d-canvas" id="xBotCanvas" aria-label="可旋转观察并调整骨骼的 X Bot 三维人体模型"></canvas>
+          <div class="model-loading" id="modelLoading">正在加载仓库中的 X Bot…</div>
+          <svg class="human-template" id="humanTemplateFront" data-pose-view="front" viewBox="0 0 300 600" role="img" aria-label="中性人体统一母版正视图，点击身体区域或拖动骨骼节点">
+            <g class="guide-layer" aria-hidden="true">
+              <path d="M32 70H268 M32 148H268 M32 256H268 M32 354H268 M32 465H268 M32 562H268"/>
+              <path d="M50 28V572 M250 28V572"/>
+            </g>
+
+            <g class="template-segment" data-segment="head" tabindex="0" role="button" aria-label="头部与颈部">
+              <ellipse class="body-fill" cx="150" cy="62" rx="39" ry="47"/>
+              <path class="body-fill" d="M132 102 L168 102 L172 137 Q150 151 128 137Z"/>
+            </g>
+            <g class="template-segment" data-segment="torso" tabindex="0" role="button" aria-label="躯干与脊柱">
+              <path class="body-fill" d="M102 133 Q123 121 132 121 Q150 137 168 121 Q178 121 198 133 L185 264 Q170 281 150 281 Q130 281 115 264Z"/>
+              <path class="body-seam" d="M150 141V273 M112 212Q150 225 188 212"/>
+            </g>
+            <g class="template-segment" data-segment="pelvis" tabindex="0" role="button" aria-label="骨盆与髋部">
+              <path class="body-fill" d="M115 264 Q150 281 185 264 L196 322 Q174 344 150 344 Q126 344 104 322Z"/>
+              <path class="body-seam" d="M112 294Q150 309 188 294"/>
+            </g>
+            <g class="template-segment" data-segment="arms" tabindex="0" role="button" aria-label="双肩与双肘">
+              <path class="body-fill" d="M105 134 Q80 132 70 153 L45 259 Q43 277 57 282 Q72 284 78 267 L105 176Z"/>
+              <path class="body-fill" d="M195 134 Q220 132 230 153 L255 259 Q257 277 243 282 Q228 284 222 267 L195 176Z"/>
+              <path class="body-seam" d="M58 222L76 227 M242 222L224 227"/>
+            </g>
+            <g class="template-segment" data-segment="hands" tabindex="0" role="button" aria-label="双手与双腕">
+              <path class="body-fill" d="M44 263 Q52 254 62 264 L68 295 L61 326 Q51 339 42 324 L37 291Z"/>
+              <path class="body-fill" d="M256 263 Q248 254 238 264 L232 295 L239 326 Q249 339 258 324 L263 291Z"/>
+              <path class="body-seam" d="M41 284L65 281 M259 284L235 281"/>
+            </g>
+            <g class="template-segment" data-segment="legs" tabindex="0" role="button" aria-label="双腿、双膝与双踝">
+              <path class="body-fill" d="M105 317 Q123 333 146 339 L139 432 L130 532 Q115 543 101 530 L96 430Z"/>
+              <path class="body-fill" d="M195 317 Q177 333 154 339 L161 432 L170 532 Q185 543 199 530 L204 430Z"/>
+              <path class="body-seam" d="M99 428L140 429 M201 428L160 429 M102 517L132 519 M198 517L168 519"/>
+            </g>
+            <g class="template-segment" data-segment="feet" tabindex="0" role="button" aria-label="双脚与脚趾">
+              <path class="body-fill" d="M101 526 Q116 518 132 528 L135 560 L122 579 H72 Q69 565 86 555Z"/>
+              <path class="body-fill" d="M199 526 Q184 518 168 528 L165 560 L178 579 H228 Q231 565 214 555Z"/>
+            </g>
+
+            <g class="rig-layer" data-pose-rig></g>
+            <g class="anchor-layer" aria-hidden="true">
+              <circle cx="150" cy="137" r="4"/><circle cx="150" cy="307" r="4"/>
+              <circle cx="53" cy="286" r="4"/><circle cx="247" cy="286" r="4"/>
+              <circle cx="116" cy="544" r="4"/><circle cx="184" cy="544" r="4"/>
+            </g>
+          </svg>
+
+          <svg class="human-template" data-pose-view="side" viewBox="0 0 300 600" role="img" aria-label="中性人体统一母版侧视图，可拖动骨骼节点" hidden>
+            <g class="guide-layer" aria-hidden="true">
+              <path d="M32 70H268 M32 148H268 M32 256H268 M32 354H268 M32 465H268 M32 562H268"/><path d="M150 28V572"/>
+            </g>
+            <g aria-hidden="true">
+              <path class="side-body" d="M132 22 Q169 11 181 47 Q188 79 170 105 L168 130 Q188 145 185 184 L177 272 Q190 297 177 329 L171 424 L183 527 Q177 541 163 535 L149 430 L144 344 L132 430 L126 531 Q113 539 103 527 L111 421 L114 324 Q105 291 121 267 L118 174 Q117 143 136 128 L137 105 Q119 87 120 57 Q120 34 132 22Z"/>
+              <path class="side-body" d="M132 145 Q111 154 103 184 L83 282 Q87 295 99 288 L126 207Z"/>
+              <path class="side-body" d="M164 145 Q181 159 187 190 L202 280 Q198 293 187 286 L159 205Z"/>
+              <path class="side-body" d="M84 277 Q95 270 101 284 L99 326 Q88 340 79 324 L76 294Z"/>
+              <path class="side-body" d="M201 276 Q190 270 185 284 L187 326 Q198 339 207 323 L210 293Z"/>
+              <path class="back-detail" d="M125 214 Q150 224 178 211 M116 322Q145 335 176 324"/>
+            </g>
+            <g class="rig-layer" data-pose-rig></g>
+            <g class="anchor-layer" aria-hidden="true"><circle cx="148" cy="137" r="4"/><circle cx="146" cy="307" r="4"/><circle cx="91" cy="286" r="4"/><circle cx="194" cy="286" r="4"/></g>
+          </svg>
+
+          <svg class="human-template" data-pose-view="back" viewBox="0 0 300 600" role="img" aria-label="中性人体统一母版背视图，可拖动骨骼节点" hidden>
+            <g class="guide-layer" aria-hidden="true">
+              <path d="M32 70H268 M32 148H268 M32 256H268 M32 354H268 M32 465H268 M32 562H268"/><path d="M50 28V572 M250 28V572"/>
+            </g>
+            <g aria-hidden="true">
+              <ellipse class="back-body" cx="150" cy="62" rx="39" ry="47"/>
+              <path class="back-body" d="M132 102L168 102L172 132 Q198 132 210 154 L232 269 Q235 282 247 267 L255 291 L258 324 Q249 338 239 326 L223 283 L196 180 L185 264 L196 322 Q182 335 174 342 L199 530 Q187 542 170 532 L154 344 H146 L130 532 Q113 542 101 530 L126 342 Q118 335 104 322 L115 264 L104 180 L77 283 L61 326 Q51 338 42 324 L45 291 L53 267 Q65 282 68 269 L90 154 Q102 132 128 132Z"/>
+              <path class="back-detail" d="M150 132V318 M117 174Q132 198 147 183 M183 174Q168 198 153 183 M111 294Q150 313 189 294 M104 430L140 429 M196 430L160 429"/>
+            </g>
+            <g class="rig-layer" data-pose-rig></g>
+            <g class="anchor-layer" aria-hidden="true"><circle cx="150" cy="137" r="4"/><circle cx="150" cy="307" r="4"/><circle cx="53" cy="286" r="4"/><circle cx="247" cy="286" r="4"/><circle cx="116" cy="544" r="4"/><circle cx="184" cy="544" r="4"/></g>
+          </svg>
+
+          <div class="view-controls" aria-label="模板显示层">
+            <button class="view-toggle active" type="button" data-layer="rig">骨架</button>
+            <button class="view-toggle active" type="button" data-layer="guides">对齐线</button>
+            <button class="view-toggle active" type="button" data-layer="anchors">锚点</button>
+          </div>
+        </div>
+
+        <article class="template-card">
+          <header>
+            <div class="template-status">BODY PART INSPECTOR</div>
+            <h2 class="segment-name" id="segmentName">选择身体区域</h2>
+          </header>
+          <div class="template-card-body">
+            <div class="segment-index" id="segmentIndex">19 分区 / 11 行索引</div>
+            <p class="segment-copy" id="segmentCopy">点击中央人体，检查该区域包含的正式身体分区与模板职责。</p>
+            <ul class="partition-list" id="partitionList" aria-label="十九个身体分区">
+              <li data-part="pelvis">骨盆</li><li data-part="spine">脊柱</li>
+              <li data-part="neck-head">颈部／头部</li><li data-part="left-hip">左髋</li>
+              <li data-part="right-hip">右髋</li><li data-part="left-knee">左膝</li>
+              <li data-part="right-knee">右膝</li><li data-part="left-ankle">左踝</li>
+              <li data-part="right-ankle">右踝</li><li data-part="left-shoulder">左肩</li>
+              <li data-part="right-shoulder">右肩</li><li data-part="left-elbow">左肘</li>
+              <li data-part="right-elbow">右肘</li><li data-part="left-wrist">左腕</li>
+              <li data-part="right-wrist">右腕</li><li data-part="left-toes">左脚趾</li>
+              <li data-part="right-toes">右脚趾</li><li data-part="left-hand">左手</li>
+              <li data-part="right-hand">右手</li>
+            </ul>
+            <div class="decision-note">待你裁决：轮廓比例、体格基准、可变化范围，以及哪些身份层必须进入母版。</div>
+            <div class="pose-tools">
+              <label for="poseName">动作草图名称</label>
+              <input class="pose-name" id="poseName" value="站立基准" maxlength="24">
+              <select class="pose-library" id="poseLibrary" aria-label="读取已保存动作">
+                <option value="">读取已保存动作…</option>
+              </select>
+              <div class="pose-actions">
+                <button class="pose-action" id="resetPose" type="button">重置本视图</button>
+                <button class="pose-action" id="savePose" type="button">保存动作</button>
+                <button class="pose-action" id="copyPose" type="button">复制数据</button>
+              </div>
+              <p class="pose-status" id="poseStatus" aria-live="polite">拖动发亮的骨骼节点开始摆姿势。</p>
+              <p class="pose-warning">直接复用仓库 X Bot 与 Mixamo 骨架。点击节点后拖动三维旋转环，蒙皮会随骨骼变化；导出的四元数动作可供后续界面复用。</p>
+            </div>
+            <button class="room-return" id="returnToHallway" type="button">← 返回夜间护士站</button>
+          </div>
+        </article>
+      </section>
+
+      <button class="hotspot scene-hotspot register" type="button" data-hotspot="register" aria-label="观察护士站上的登记册">
+        <span>观察登记册</span>
+      </button>
+      <button class="hotspot scene-hotspot reflection" type="button" data-hotspot="reflection" aria-label="观察窗户里的倒影">
+        <span>观察窗户倒影</span>
+      </button>
+      <button class="hotspot scene-hotspot unnumbered-door" type="button" data-hotspot="door" aria-label="观察走廊尽头没有编号的门">
+        <span>观察无编号门</span>
+      </button>
+      <button class="door-entry" id="enterTemplateRoom" type="button">进入人体模板校准间 →</button>
 
       <div class="prototype-badge">interactive presentation prototype</div>
 
       <header class="scene-topbar">
         <div>
-          <div class="location-kicker">住院楼 · 一层</div>
-          <div class="location-title">夜间护士站</div>
+          <div class="location-kicker" id="locationKicker">住院楼 · 一层</div>
+          <div class="location-title" id="locationTitle">夜间护士站</div>
         </div>
-        <div class="time-readout">第 01 日<br>夜晚 · 月光增强</div>
+        <div class="time-readout" id="timeReadout">第 01 日<br>夜晚 · 月光增强</div>
       </header>
 
       <footer class="scene-bottom">
@@ -608,11 +1166,11 @@
 
     <aside class="narrative-panel" aria-label="叙事面板">
       <header class="panel-header">
-        <div class="speaker-mark" aria-hidden="true">护</div>
+        <div class="speaker-mark" id="speakerMark" aria-hidden="true">护</div>
         <div class="speaker-heading">
-          <div class="eyebrow">值班护士</div>
-          <h1>赵岚</h1>
-          <p>她没有看你。她在看玻璃上的倒影。</p>
+          <div class="eyebrow" id="speakerRole">值班护士</div>
+          <h1 id="speakerName">赵岚</h1>
+          <p id="speakerDescription">她没有看你。她在看玻璃上的倒影。</p>
         </div>
         <nav class="tabs" aria-label="侧栏视图">
           <button class="tab active" data-view="story" aria-pressed="true">对话</button>
@@ -653,6 +1211,7 @@
             <div class="note-card">如果所有人看见的都不一样，隐瞒还算是说谎吗？<span>正在深化</span></div>
           </section>
         </div>
+
       </div>
 
       <footer class="choices" id="choices">
@@ -667,7 +1226,7 @@
         </button>
         <button class="choice" data-choice="leave">
           <span class="choice-index">03</span>
-          <span>暂时离开，去走廊另一端看看。<small class="choice-meta">保留这次对话，状态不会回滚</small></span>
+          <span>“你压住的钥匙，是开哪扇门的？”<small class="choice-meta">追问钥匙与无编号门的关系</small></span>
         </button>
       </footer>
     </aside>
@@ -683,6 +1242,545 @@
     const figure = document.querySelector('#figure');
     const toast = document.querySelector('#toast');
     const objectiveText = document.querySelector('#objectiveText');
+    const scene = document.querySelector('#scene');
+    const templateRoom = document.querySelector('#templateRoom');
+    const humanTemplates = [...document.querySelectorAll('.human-template')];
+    const poseStatus = document.querySelector('#poseStatus');
+    const poseLibrary = document.querySelector('#poseLibrary');
+    const locationKicker = document.querySelector('#locationKicker');
+    const locationTitle = document.querySelector('#locationTitle');
+    const timeReadout = document.querySelector('#timeReadout');
+    const speakerMark = document.querySelector('#speakerMark');
+    const speakerRole = document.querySelector('#speakerRole');
+    const speakerName = document.querySelector('#speakerName');
+    const speakerDescription = document.querySelector('#speakerDescription');
+    let inTemplateRoom = false;
+    let templateVisitRecorded = false;
+    let currentNarrativeObjective = objectiveText.textContent;
+    let currentPoseView = 'front';
+
+    // 来源：design/presentation/动作描述口径.md §十五。关节名称沿用身体侧与部位口径；
+    // 以下坐标仅是三视图评审画布的初始站姿，不是正式骨长或人体比例参数。
+    const poseBones = [
+      ['head', 'neck'], ['neck', 'pelvis'],
+      ['neck', 'leftShoulder'], ['leftShoulder', 'leftElbow'], ['leftElbow', 'leftWrist'],
+      ['neck', 'rightShoulder'], ['rightShoulder', 'rightElbow'], ['rightElbow', 'rightWrist'],
+      ['pelvis', 'leftHip'], ['leftHip', 'leftKnee'], ['leftKnee', 'leftAnkle'], ['leftAnkle', 'leftToe'],
+      ['pelvis', 'rightHip'], ['rightHip', 'rightKnee'], ['rightKnee', 'rightAnkle'], ['rightAnkle', 'rightToe']
+    ];
+
+    const defaultPoses = {
+      front: {
+        head: [150, 62], neck: [150, 137], pelvis: [150, 307],
+        leftShoulder: [213, 158], leftElbow: [233, 222], leftWrist: [247, 286],
+        rightShoulder: [87, 158], rightElbow: [67, 222], rightWrist: [53, 286],
+        leftHip: [180, 337], leftKnee: [182, 429], leftAnkle: [184, 531], leftToe: [209, 565],
+        rightHip: [120, 337], rightKnee: [118, 429], rightAnkle: [116, 531], rightToe: [91, 565]
+      },
+      side: {
+        head: [150, 62], neck: [148, 137], pelvis: [146, 307],
+        leftShoulder: [137, 158], leftElbow: [112, 222], leftWrist: [91, 286],
+        rightShoulder: [158, 158], rightElbow: [178, 222], rightWrist: [194, 286],
+        leftHip: [134, 337], leftKnee: [126, 429], leftAnkle: [116, 531], leftToe: [91, 565],
+        rightHip: [158, 337], rightKnee: [166, 429], rightAnkle: [174, 531], rightToe: [196, 565]
+      },
+      back: {
+        head: [150, 62], neck: [150, 137], pelvis: [150, 307],
+        leftShoulder: [87, 158], leftElbow: [67, 222], leftWrist: [53, 286],
+        rightShoulder: [213, 158], rightElbow: [233, 222], rightWrist: [247, 286],
+        leftHip: [120, 337], leftKnee: [118, 429], leftAnkle: [116, 531], leftToe: [91, 565],
+        rightHip: [180, 337], rightKnee: [182, 429], rightAnkle: [184, 531], rightToe: [209, 565]
+      }
+    };
+
+    let poseState = JSON.parse(JSON.stringify(defaultPoses));
+    const poseLabels = {
+      head: '头部', neck: '颈部', chest: '胸廓', pelvis: '骨盆',
+      leftShoulder: '左肩', leftElbow: '左肘', leftWrist: '左腕',
+      rightShoulder: '右肩', rightElbow: '右肘', rightWrist: '右腕',
+      leftHip: '左髋', leftKnee: '左膝', leftAnkle: '左踝', leftToe: '左脚趾',
+      rightHip: '右髋', rightKnee: '右膝', rightAnkle: '右踝', rightToe: '右脚趾'
+    };
+
+    // 同一套三维关节坐标由三个正交相机投影；单位只用于原型内部相对计算。
+    const defaultPose3d = {
+      pelvis: [0, 2.82, 0], chest: [0, 4.35, 0], neck: [0, 4.92, 0], head: [0, 5.5, 0.02],
+      leftShoulder: [0.82, 4.58, 0.04], leftElbow: [1.18, 3.72, 0.03], leftWrist: [1.28, 2.86, 0.08],
+      rightShoulder: [-0.82, 4.58, -0.04], rightElbow: [-1.18, 3.72, -0.03], rightWrist: [-1.28, 2.86, -0.08],
+      leftHip: [0.42, 2.72, 0.02], leftKnee: [0.43, 1.55, 0.08], leftAnkle: [0.42, 0.38, 0], leftToe: [0.46, 0.08, 0.42],
+      rightHip: [-0.42, 2.72, -0.02], rightKnee: [-0.43, 1.55, -0.08], rightAnkle: [-0.42, 0.38, 0], rightToe: [-0.46, 0.08, 0.42]
+    };
+    let pose3dState = JSON.parse(JSON.stringify(defaultPose3d));
+    let selected3dJoint = null;
+    const pose3dParents = {
+      chest: 'pelvis', neck: 'chest', head: 'neck',
+      leftShoulder: 'chest', leftElbow: 'leftShoulder', leftWrist: 'leftElbow',
+      rightShoulder: 'chest', rightElbow: 'rightShoulder', rightWrist: 'rightElbow',
+      leftHip: 'pelvis', leftKnee: 'leftHip', leftAnkle: 'leftKnee', leftToe: 'leftAnkle',
+      rightHip: 'pelvis', rightKnee: 'rightHip', rightAnkle: 'rightKnee', rightToe: 'rightAnkle'
+    };
+    const pose3dChildren = {};
+    Object.entries(pose3dParents).forEach(([child, parent]) => {
+      (pose3dChildren[parent] ||= []).push(child);
+    });
+
+    const segmentDetails = {
+      head: {
+        name: '头部与颈部',
+        index: '第 10 行 · 中轴区域',
+        copy: '统一头颈连接与视线基准。面部、头发、口罩或面具属于身份外壳，不写死在人体母版里。',
+        parts: ['neck-head']
+      },
+      torso: {
+        name: '躯干与脊柱',
+        index: '第 8 行 · 中轴区域',
+        copy: '脊柱是全身姿态传递的主轴；服装轮廓可以改变，但动作接口保持一致。',
+        parts: ['spine']
+      },
+      pelvis: {
+        name: '骨盆与双髋',
+        index: '第 1—2 行 · 根节点区域',
+        copy: '骨盆承担整体位移与重心基准，左右髋从这里分出。体格变化不应破坏这组接口。',
+        parts: ['pelvis', 'left-hip', 'right-hip']
+      },
+      arms: {
+        name: '双肩与双肘',
+        index: '第 5—6 行 · 双侧区域',
+        copy: '左右肢体严格分侧，肩与肘分别保留独立动作和接触判断。',
+        parts: ['left-shoulder', 'right-shoulder', 'left-elbow', 'right-elbow']
+      },
+      hands: {
+        name: '双腕与双手',
+        index: '第 7、11 行 · 双侧末端',
+        copy: '手腕负责末端朝向，手部负责握持与接触。道具通过锚点接入，不并入基础人体。',
+        parts: ['left-wrist', 'right-wrist', 'left-hand', 'right-hand']
+      },
+      legs: {
+        name: '双腿关节链',
+        index: '第 3—4 行 · 双侧区域',
+        copy: '髋、膝、踝沿同一关节链工作，左右侧分别索引，以支持站立、行走和失衡状态。',
+        parts: ['left-hip', 'right-hip', 'left-knee', 'right-knee', 'left-ankle', 'right-ankle']
+      },
+      feet: {
+        name: '双脚与脚趾',
+        index: '第 9 行 · 双侧末端',
+        copy: '脚趾分区用于支撑边界和步态末端；鞋袜是角色外壳，不改变基础接触接口。',
+        parts: ['left-toes', 'right-toes']
+      }
+    };
+
+    const svgNamespace = 'http://www.w3.org/2000/svg';
+    const poseStorageKey = 'zfy-xbot-pose-library-v1';
+
+    function updatePoseRig(view) {
+      const svg = document.querySelector(`[data-pose-view="${view}"]`);
+      if (!svg) return;
+      svg.querySelectorAll('.pose-bone').forEach(line => {
+        const start = poseState[view][line.dataset.start];
+        const end = poseState[view][line.dataset.end];
+        line.setAttribute('x1', start[0]);
+        line.setAttribute('y1', start[1]);
+        line.setAttribute('x2', end[0]);
+        line.setAttribute('y2', end[1]);
+      });
+      svg.querySelectorAll('.pose-joint').forEach(circle => {
+        const point = poseState[view][circle.dataset.joint];
+        circle.setAttribute('cx', point[0]);
+        circle.setAttribute('cy', point[1]);
+      });
+    }
+
+    function pointerToSvg(svg, event) {
+      const point = svg.createSVGPoint();
+      point.x = event.clientX;
+      point.y = event.clientY;
+      return point.matrixTransform(svg.getScreenCTM().inverse());
+    }
+
+    function moveJoint(view, joint, x, y) {
+      poseState[view][joint] = [
+        Math.round(Math.max(18, Math.min(282, x))),
+        Math.round(Math.max(18, Math.min(582, y)))
+      ];
+      updatePoseRig(view);
+      poseStatus.textContent = `${poseLabels[joint]}已调整 · ${view.toUpperCase()} 视图`;
+    }
+
+    function bindJointDrag(circle, svg, view, joint) {
+      let pointerId = null;
+      circle.addEventListener('pointerdown', event => {
+        event.preventDefault();
+        event.stopPropagation();
+        pointerId = event.pointerId;
+        circle.setPointerCapture(pointerId);
+        circle.classList.add('dragging');
+      });
+      circle.addEventListener('pointermove', event => {
+        if (pointerId !== event.pointerId) return;
+        const point = pointerToSvg(svg, event);
+        moveJoint(view, joint, point.x, point.y);
+      });
+      const finishDrag = event => {
+        if (pointerId !== event.pointerId) return;
+        circle.classList.remove('dragging');
+        pointerId = null;
+      };
+      circle.addEventListener('pointerup', finishDrag);
+      circle.addEventListener('pointercancel', finishDrag);
+      circle.addEventListener('keydown', event => {
+        if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.key)) return;
+        event.preventDefault();
+        const step = event.shiftKey ? 10 : 2;
+        const [x, y] = poseState[view][joint];
+        moveJoint(
+          view,
+          joint,
+          x + (event.key === 'ArrowRight' ? step : event.key === 'ArrowLeft' ? -step : 0),
+          y + (event.key === 'ArrowDown' ? step : event.key === 'ArrowUp' ? -step : 0)
+        );
+      });
+    }
+
+    function buildPoseRigs() {
+      humanTemplates.forEach(svg => {
+        const view = svg.dataset.poseView;
+        const rig = svg.querySelector('[data-pose-rig]');
+        rig.replaceChildren();
+        poseBones.forEach(([start, end]) => {
+          const line = document.createElementNS(svgNamespace, 'line');
+          line.classList.add('pose-bone');
+          line.dataset.start = start;
+          line.dataset.end = end;
+          rig.append(line);
+        });
+        Object.keys(poseState[view]).forEach(joint => {
+          const circle = document.createElementNS(svgNamespace, 'circle');
+          circle.classList.add('pose-joint');
+          circle.dataset.joint = joint;
+          circle.setAttribute('r', joint === 'pelvis' ? '7' : '6');
+          circle.setAttribute('tabindex', '0');
+          circle.setAttribute('role', 'button');
+          circle.setAttribute('aria-label', `拖动${poseLabels[joint]}节点`);
+          bindJointDrag(circle, svg, view, joint);
+          rig.append(circle);
+        });
+        updatePoseRig(view);
+      });
+    }
+
+    function switchPoseView(view) {
+      currentPoseView = view;
+      document.querySelectorAll('.ortho-button').forEach(button => {
+        const active = button.dataset.view === view;
+        button.classList.toggle('active', active);
+        button.setAttribute('aria-pressed', String(active));
+      });
+      const labels = { front: 'FRONT / 正视图', side: 'SIDE / 侧视图', back: 'BACK / 背视图' };
+      document.querySelector('#viewLabel').textContent = labels[view];
+      poseStatus.textContent = `正在编辑${labels[view].split('/ ')[1]} · 三维姿势保持同步`;
+      if (window.human3dEditor?.ready) window.human3dEditor.setView(view);
+    }
+
+    function exportedPose() {
+      if (window.human3dEditor?.ready) {
+        return window.human3dEditor.exportPose(document.querySelector('#poseName').value.trim() || '未命名动作');
+      }
+      return {
+        schema: 'human-pose-3d/v1',
+        name: document.querySelector('#poseName').value.trim() || '未命名动作',
+        coordinateSystem: 'character-local / Y-up / Z-forward',
+        joints: JSON.parse(JSON.stringify(pose3dState))
+      };
+    }
+
+    function readPoseLibrary() {
+      try {
+        return JSON.parse(localStorage.getItem(poseStorageKey) || '{}');
+      } catch {
+        return {};
+      }
+    }
+
+    function refreshPoseLibrary(selectedName = '') {
+      const library = readPoseLibrary();
+      poseLibrary.innerHTML = '<option value="">读取已保存动作…</option>';
+      Object.keys(library).sort().forEach(name => {
+        const option = document.createElement('option');
+        option.value = name;
+        option.textContent = name;
+        poseLibrary.append(option);
+      });
+      poseLibrary.value = selectedName;
+    }
+
+    function saveCurrentPose() {
+      const pose = exportedPose();
+      const library = readPoseLibrary();
+      library[pose.name] = pose;
+      try {
+        localStorage.setItem(poseStorageKey, JSON.stringify(library));
+        refreshPoseLibrary(pose.name);
+        poseStatus.textContent = `已保存“三视图动作：${pose.name}”`;
+      } catch {
+        poseStatus.textContent = '浏览器阻止了本地保存，请使用“复制数据”。';
+      }
+    }
+
+    async function copyCurrentPose() {
+      const text = JSON.stringify(exportedPose(), null, 2);
+      try {
+        await navigator.clipboard.writeText(text);
+        poseStatus.textContent = '三视图动作 JSON 已复制，可交给后续界面复用。';
+      } catch {
+        poseStatus.textContent = '剪贴板不可用；请通过 HTTP 页面访问后再复制。';
+      }
+    }
+
+    const human3dCanvas = document.querySelector('#human3dCanvas');
+    const human3dContext = human3dCanvas.getContext('2d');
+    const projectedJointCache = {};
+    let human3dViewport = { width: 1, height: 1, scale: 1, originX: 0, floorY: 0 };
+    let drag3d = null;
+
+    const bodySegments3d = [
+      ['pelvis', 'chest', .74, 'torso'], ['chest', 'neck', .52, 'torso'],
+      ['chest', 'leftShoulder', .34, 'upper'], ['leftShoulder', 'leftElbow', .3, 'upper'], ['leftElbow', 'leftWrist', .24, 'lower'],
+      ['chest', 'rightShoulder', .34, 'upper'], ['rightShoulder', 'rightElbow', .3, 'upper'], ['rightElbow', 'rightWrist', .24, 'lower'],
+      ['pelvis', 'leftHip', .45, 'upper'], ['leftHip', 'leftKnee', .42, 'upper'], ['leftKnee', 'leftAnkle', .32, 'lower'], ['leftAnkle', 'leftToe', .25, 'lower'],
+      ['pelvis', 'rightHip', .45, 'upper'], ['rightHip', 'rightKnee', .42, 'upper'], ['rightKnee', 'rightAnkle', .32, 'lower'], ['rightAnkle', 'rightToe', .25, 'lower']
+    ];
+
+    function poseLayerVisible(layer) {
+      return document.querySelector(`.view-toggle[data-layer="${layer}"]`)?.classList.contains('active');
+    }
+
+    function resizeHuman3dCanvas() {
+      const rect = human3dCanvas.getBoundingClientRect();
+      if (rect.width < 2 || rect.height < 2) return false;
+      const density = Math.min(window.devicePixelRatio || 1, 2);
+      const pixelWidth = Math.round(rect.width * density);
+      const pixelHeight = Math.round(rect.height * density);
+      if (human3dCanvas.width !== pixelWidth || human3dCanvas.height !== pixelHeight) {
+        human3dCanvas.width = pixelWidth;
+        human3dCanvas.height = pixelHeight;
+      }
+      human3dContext.setTransform(density, 0, 0, density, 0, 0);
+      human3dViewport = {
+        width: rect.width,
+        height: rect.height,
+        scale: Math.min(rect.width / 3.7, rect.height / 6.2) * .9,
+        originX: rect.width / 2,
+        floorY: rect.height * .92
+      };
+      return true;
+    }
+
+    function projectJoint3d(point) {
+      const { scale, originX, floorY } = human3dViewport;
+      if (currentPoseView === 'side') {
+        return { x: originX + point[2] * scale, y: floorY - point[1] * scale, depth: point[0] };
+      }
+      if (currentPoseView === 'back') {
+        return { x: originX - point[0] * scale, y: floorY - point[1] * scale, depth: -point[2] };
+      }
+      return { x: originX + point[0] * scale, y: floorY - point[1] * scale, depth: point[2] };
+    }
+
+    function drawHuman3dGuide() {
+      const context = human3dContext;
+      const { width, height, originX, floorY, scale } = human3dViewport;
+      context.save();
+      context.strokeStyle = 'rgba(190, 218, 207, .12)';
+      context.lineWidth = 1;
+      context.setLineDash([4, 6]);
+      for (let level = 0; level <= 6; level += 1) {
+        const y = floorY - level * scale;
+        context.beginPath(); context.moveTo(24, y); context.lineTo(width - 24, y); context.stroke();
+      }
+      context.setLineDash([]);
+      context.strokeStyle = 'rgba(190, 218, 207, .2)';
+      context.beginPath(); context.moveTo(originX, 25); context.lineTo(originX, height - 24); context.stroke();
+      context.restore();
+    }
+
+    function drawCapsule3d(startName, endName, worldWidth, kind, depth) {
+      const context = human3dContext;
+      const start = projectJoint3d(pose3dState[startName]);
+      const end = projectJoint3d(pose3dState[endName]);
+      const shade = Math.max(0, Math.min(30, Math.round((depth + 1.5) * 8)));
+      const base = kind === 'torso' ? 92 : kind === 'upper' ? 106 : 116;
+      context.beginPath();
+      context.moveTo(start.x, start.y);
+      context.lineTo(end.x, end.y);
+      context.lineWidth = worldWidth * human3dViewport.scale * (currentPoseView === 'side' && kind === 'torso' ? .62 : 1);
+      context.lineCap = 'round';
+      context.strokeStyle = `rgb(${base + shade}, ${base + 15 + shade}, ${base + 10 + shade})`;
+      context.stroke();
+      context.lineWidth = 1;
+      context.strokeStyle = 'rgba(218,235,227,.32)';
+      context.stroke();
+    }
+
+    function renderHuman3d() {
+      if (!resizeHuman3dCanvas()) return;
+      const context = human3dContext;
+      const { width, height, scale } = human3dViewport;
+      context.clearRect(0, 0, width, height);
+      if (poseLayerVisible('guides')) drawHuman3dGuide();
+
+      const sortedSegments = bodySegments3d.map(segment => {
+        const a = projectJoint3d(pose3dState[segment[0]]);
+        const b = projectJoint3d(pose3dState[segment[1]]);
+        return { segment, depth: (a.depth + b.depth) / 2 };
+      }).sort((a, b) => a.depth - b.depth);
+      sortedSegments.forEach(({ segment, depth }) => drawCapsule3d(...segment, depth));
+
+      const head = projectJoint3d(pose3dState.head);
+      context.beginPath();
+      context.ellipse(head.x, head.y, scale * (currentPoseView === 'side' ? .29 : .37), scale * .46, 0, 0, Math.PI * 2);
+      context.fillStyle = '#8e9c95';
+      context.fill();
+      context.strokeStyle = 'rgba(222,239,231,.42)';
+      context.lineWidth = 1.2;
+      context.stroke();
+
+      context.save();
+      context.strokeStyle = 'rgba(24,36,32,.62)';
+      context.lineWidth = 1.4;
+      if (currentPoseView === 'front') {
+        context.beginPath();
+        context.moveTo(head.x - scale * .18, head.y - scale * .06);
+        context.lineTo(head.x - scale * .06, head.y - scale * .06);
+        context.moveTo(head.x + scale * .06, head.y - scale * .06);
+        context.lineTo(head.x + scale * .18, head.y - scale * .06);
+        context.stroke();
+      } else if (currentPoseView === 'side') {
+        context.beginPath();
+        context.moveTo(head.x + scale * .28, head.y - scale * .08);
+        context.lineTo(head.x + scale * .4, head.y + scale * .02);
+        context.lineTo(head.x + scale * .27, head.y + scale * .07);
+        context.stroke();
+      } else {
+        const neck = projectJoint3d(pose3dState.neck);
+        const pelvis = projectJoint3d(pose3dState.pelvis);
+        context.beginPath();
+        context.moveTo(neck.x, neck.y);
+        context.lineTo(pelvis.x, pelvis.y);
+        context.stroke();
+      }
+      context.restore();
+
+      Object.entries(pose3dState).forEach(([joint, point]) => {
+        projectedJointCache[joint] = projectJoint3d(point);
+      });
+
+      if (poseLayerVisible('rig')) {
+        context.save();
+        context.strokeStyle = 'rgba(220,244,235,.75)';
+        context.lineWidth = 1.4;
+        Object.entries(pose3dParents).forEach(([child, parent]) => {
+          const a = projectedJointCache[parent];
+          const b = projectedJointCache[child];
+          context.beginPath(); context.moveTo(a.x, a.y); context.lineTo(b.x, b.y); context.stroke();
+        });
+        Object.entries(projectedJointCache).forEach(([joint, point]) => {
+          context.beginPath();
+          context.arc(point.x, point.y, selected3dJoint === joint ? 8 : 5.5, 0, Math.PI * 2);
+          context.fillStyle = selected3dJoint === joint ? '#cf8060' : '#14201d';
+          context.fill();
+          context.strokeStyle = '#d7eee5';
+          context.stroke();
+        });
+        context.restore();
+      }
+
+      if (poseLayerVisible('anchors')) {
+        ['leftWrist', 'rightWrist', 'leftToe', 'rightToe'].forEach(joint => {
+          const point = projectedJointCache[joint];
+          context.beginPath(); context.arc(point.x, point.y, 3.2, 0, Math.PI * 2);
+          context.fillStyle = '#c27658'; context.fill();
+        });
+      }
+    }
+
+    function descendantsOf3d(joint, result = []) {
+      (pose3dChildren[joint] || []).forEach(child => {
+        result.push(child);
+        descendantsOf3d(child, result);
+      });
+      return result;
+    }
+
+    function move3dJointFromPointer(event) {
+      if (!drag3d) return;
+      const dx = event.clientX - drag3d.startX;
+      const dy = event.clientY - drag3d.startY;
+      const scale = drag3d.scale;
+      const original = drag3d.pose[drag3d.joint];
+      const desired = [...original];
+      if (currentPoseView === 'front') desired[0] += dx / scale;
+      if (currentPoseView === 'back') desired[0] -= dx / scale;
+      if (currentPoseView === 'side') desired[2] += dx / scale;
+      desired[1] -= dy / scale;
+
+      if (drag3d.joint === 'pelvis') {
+        const delta = desired.map((value, index) => value - original[index]);
+        Object.keys(pose3dState).forEach(joint => {
+          pose3dState[joint] = drag3d.pose[joint].map((value, index) => value + delta[index]);
+        });
+      } else {
+        const parentName = pose3dParents[drag3d.joint];
+        const parent = drag3d.pose[parentName];
+        const originalVector = original.map((value, index) => value - parent[index]);
+        const targetVector = desired.map((value, index) => value - parent[index]);
+        const boneLength = Math.hypot(...originalVector);
+        const targetLength = Math.hypot(...targetVector) || 1;
+        const constrained = parent.map((value, index) => value + targetVector[index] * boneLength / targetLength);
+        const delta = constrained.map((value, index) => value - original[index]);
+        pose3dState[drag3d.joint] = constrained;
+        descendantsOf3d(drag3d.joint).forEach(child => {
+          pose3dState[child] = drag3d.pose[child].map((value, index) => value + delta[index]);
+        });
+      }
+      poseStatus.textContent = `${poseLabels[drag3d.joint] || drag3d.joint}已调整 · 三个视图同步更新`;
+      renderHuman3d();
+    }
+
+    human3dCanvas.addEventListener('pointerdown', event => {
+      if (!poseLayerVisible('rig')) return;
+      renderHuman3d();
+      const rect = human3dCanvas.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+      const nearest = Object.entries(projectedJointCache)
+        .map(([joint, point]) => ({ joint, distance: Math.hypot(point.x - x, point.y - y) }))
+        .filter(item => item.distance <= 14)
+        .sort((a, b) => a.distance - b.distance)[0];
+      if (!nearest) return;
+      selected3dJoint = nearest.joint;
+      drag3d = {
+        joint: nearest.joint,
+        pointerId: event.pointerId,
+        startX: event.clientX,
+        startY: event.clientY,
+        scale: human3dViewport.scale,
+        pose: JSON.parse(JSON.stringify(pose3dState))
+      };
+      human3dCanvas.setPointerCapture(event.pointerId);
+      human3dCanvas.classList.add('dragging');
+      renderHuman3d();
+    });
+    human3dCanvas.addEventListener('pointermove', event => {
+      if (drag3d?.pointerId === event.pointerId) move3dJointFromPointer(event);
+    });
+    function endHuman3dDrag(event) {
+      if (drag3d?.pointerId !== event.pointerId) return;
+      drag3d = null;
+      human3dCanvas.classList.remove('dragging');
+    }
+    human3dCanvas.addEventListener('pointerup', endHuman3dDrag);
+    human3dCanvas.addEventListener('pointercancel', endHuman3dDrag);
+    window.addEventListener('resize', () => { if (inTemplateRoom) renderHuman3d(); });
 
     const branches = {
       observe: {
@@ -704,13 +1802,51 @@
         objective: '判断窗户中的倒影是否正在模仿你们。'
       },
       leave: {
-        player: '你没有回答。你让脚步声替你结束这次会话。',
-        response: '“对，回去。”她重新背过身，“趁走廊还记得你的房间在哪。”',
-        perception: '你离开时，钥匙碰了一下桌面。她在提醒你：门仍然可以被打开。',
-        system: '会话已保留。你可以在取得新线索后回来。',
-        toast: '对话状态已保留 · 世界继续',
-        state: '',
+        player: '“你压住的钥匙，是开哪扇门的？”',
+        response: '她的拇指摩挲着最短的那把钥匙。\n\n“病房的门都有编号。没有编号的门，不该有人想打开。”',
+        perception: '钥匙齿上沾着一小片蓝色漆皮，和走廊尽头那扇门的颜色相同。',
+        system: '线索更新：无编号门的钥匙。',
+        toast: '线索已更新 · 无编号门的钥匙',
+        state: 'suspicious',
         objective: '调查走廊尽头那扇没有编号的门。'
+      }
+    };
+
+    const choicePrompts = {
+      observe: {
+        index: '01',
+        text: '“登记册第三行是谁？”',
+        meta: '直接指出她正在回避的东西'
+      },
+      gentle: {
+        index: '02',
+        text: '“我不是来拿药的。你看起来需要有人陪一会儿。”',
+        meta: '尝试降低她的戒备'
+      },
+      leave: {
+        index: '03',
+        text: '“你压住的钥匙，是开哪扇门的？”',
+        meta: '追问钥匙与无编号门的关系'
+      }
+    };
+
+    const askedChoices = new Set();
+
+    const hotspotObservations = {
+      register: {
+        label: '登记册',
+        text: '封皮边缘留着潮湿的指印。第三行被反复描过，墨迹比这一页上的其他名字都新。',
+        note: '登记册第三行的墨迹异常新。'
+      },
+      reflection: {
+        label: '窗户倒影',
+        text: '倒影里的赵岚戴着口罩，却没有随着她呼吸。你移开视线时，它仍朝着原来的方向。',
+        note: '窗户中的倒影与本人动作不同步。'
+      },
+      door: {
+        label: '无编号门',
+        text: '走廊尽头的门没有编号，门缝下却透出护士站同样的冷光。锁孔周围有新鲜划痕。',
+        note: '无编号门近期曾被人反复开启。'
       }
     };
 
@@ -732,10 +1868,80 @@
       window.setTimeout(() => toast.classList.remove('show'), 2400);
     }
 
+    function choiceButton(id, prompt) {
+      const button = document.createElement('button');
+      button.className = 'choice';
+      button.dataset.choice = id;
+      button.disabled = askedChoices.has(id);
+
+      const index = document.createElement('span');
+      index.className = 'choice-index';
+      index.textContent = askedChoices.has(id) ? '✓' : prompt.index;
+
+      const content = document.createElement('span');
+      content.textContent = prompt.text;
+      const meta = document.createElement('small');
+      meta.className = 'choice-meta';
+      meta.textContent = askedChoices.has(id) ? '已经询问' : prompt.meta;
+      content.append(meta);
+      button.append(index, content);
+      return button;
+    }
+
+    function renderChoices() {
+      choices.replaceChildren();
+
+      const header = document.createElement('div');
+      header.className = 'choices-header';
+      const remaining = Object.keys(choicePrompts).length - askedChoices.size;
+      header.innerHTML = `<span>${askedChoices.size ? '继续询问' : '选择回应'}</span><span>剩余话题 ${remaining}</span>`;
+      choices.append(header);
+
+      Object.entries(choicePrompts).forEach(([id, prompt]) => {
+        choices.append(choiceButton(id, prompt));
+      });
+
+      const end = document.createElement('button');
+      end.className = 'choice utility';
+      end.dataset.action = 'end';
+      end.innerHTML = '<span class="choice-index">×</span><span>结束这次交谈<small class="choice-meta">之后仍可重新与赵岚交谈</small></span>';
+      choices.append(end);
+    }
+
+    function pauseConversation() {
+      choices.innerHTML = '<div class="choices-header"><span>交谈已暂停</span><span>赵岚仍在护士站</span></div><button class="choice utility" data-action="resume"><span class="choice-index">↩</span><span>重新与赵岚交谈<small class="choice-meta">返回尚未询问的话题</small></span></button>';
+      showToast('交谈已暂停 · 可随时返回');
+    }
+
+    function observeHotspot(button) {
+      if (button.classList.contains('visited')) return;
+      const observation = hotspotObservations[button.dataset.hotspot];
+      if (!observation) return;
+
+      if (document.querySelector('#story').hidden) {
+        document.querySelector('[data-view="story"]').click();
+      }
+
+      button.classList.add('visited');
+      button.setAttribute('aria-label', `${button.getAttribute('aria-label')}，已观察`);
+      addBeat('perception', `环境观察 · ${observation.label}`, observation.text);
+
+      const note = document.createElement('div');
+      note.className = 'note-card';
+      note.textContent = observation.note;
+      const source = document.createElement('span');
+      source.textContent = `环境观察 · ${observation.label}`;
+      note.append(source);
+      document.querySelectorAll('.note-section')[1].append(note);
+
+      showToast(`观察已记录 · ${observation.label}`);
+      window.requestAnimationFrame(() => { storyScroll.scrollTop = storyScroll.scrollHeight; });
+    }
+
     function choose(id) {
       const branch = branches[id];
-      if (!branch || choices.dataset.resolved === 'true') return;
-      choices.dataset.resolved = 'true';
+      if (!branch || askedChoices.has(id)) return;
+      askedChoices.add(id);
       addBeat('player', '你', branch.player);
       addBeat('', '赵岚', branch.response);
       addBeat('perception', '感知回声', branch.perception);
@@ -744,17 +1950,147 @@
       moon.classList.toggle('alert', id !== 'leave');
       figure.classList.toggle('turned', id !== 'leave');
       objectiveText.textContent = branch.objective;
+      currentNarrativeObjective = branch.objective;
       showToast(branch.toast);
-      choices.innerHTML = '<div class="choices-header"><span>本段演示结束</span><span>切换至“笔记”查看记录</span></div>';
+      renderChoices();
       window.requestAnimationFrame(() => { storyScroll.scrollTop = storyScroll.scrollHeight; });
     }
 
-    document.querySelectorAll('.choice').forEach(button => {
-      button.addEventListener('click', () => choose(button.dataset.choice));
+    choices.addEventListener('click', event => {
+      const button = event.target.closest('.choice');
+      if (!button) return;
+      if (button.dataset.choice) choose(button.dataset.choice);
+      if (button.dataset.action === 'end') pauseConversation();
+      if (button.dataset.action === 'resume') renderChoices();
     });
 
+    document.querySelectorAll('.hotspot').forEach(button => {
+      button.addEventListener('click', () => observeHotspot(button));
+    });
+
+    function enterTemplateRoom() {
+      if (inTemplateRoom) return;
+      inTemplateRoom = true;
+      scene.classList.add('template-active');
+      scene.setAttribute('aria-label', '人体统一模板校准间');
+      templateRoom.setAttribute('aria-hidden', 'false');
+      locationKicker.textContent = '无编号门后 · 校准室';
+      locationTitle.textContent = '人体统一模板校准间';
+      timeReadout.innerHTML = '评审提案 0.1<br>等待接受或调整';
+      objectiveText.textContent = '检查人体母版的边界、比例与十九个身体分区。';
+      speakerMark.textContent = '模';
+      speakerRole.textContent = '设计评审';
+      speakerName.textContent = '人类基础母版';
+      speakerDescription.textContent = '当前只是一份可交互提案，不会自动成为正式标准。';
+      choices.style.visibility = 'hidden';
+
+      if (!templateVisitRecorded) {
+        addBeat('system', '房间记录', '无编号门后是一间人体模板校准室。中央模型没有具体身份，等待你决定是否成为所有人类 NPC 的共同起点。');
+        templateVisitRecorded = true;
+      }
+      window.requestAnimationFrame(() => {
+        if (window.human3dEditor?.ready) window.human3dEditor.resize();
+      });
+      showToast('已进入 · 人体统一模板校准间');
+    }
+
+    function returnToHallway() {
+      inTemplateRoom = false;
+      scene.classList.remove('template-active');
+      scene.setAttribute('aria-label', '住院楼一层护士站场景');
+      templateRoom.setAttribute('aria-hidden', 'true');
+      locationKicker.textContent = '住院楼 · 一层';
+      locationTitle.textContent = '夜间护士站';
+      timeReadout.innerHTML = '第 01 日<br>夜晚 · 月光增强';
+      objectiveText.textContent = currentNarrativeObjective;
+      speakerMark.textContent = '护';
+      speakerRole.textContent = '值班护士';
+      speakerName.textContent = '赵岚';
+      speakerDescription.textContent = '她没有看你。她在看玻璃上的倒影。';
+      const storyTab = document.querySelector('[data-view="story"]');
+      choices.style.visibility = storyTab.classList.contains('active') ? 'visible' : 'hidden';
+      showToast('已返回 · 夜间护士站');
+    }
+
+    function inspectSegment(segment) {
+      const detail = segmentDetails[segment.dataset.segment];
+      if (!detail) return;
+      document.querySelectorAll('.template-segment').forEach(item => item.classList.toggle('active', item === segment));
+      document.querySelector('#segmentName').textContent = detail.name;
+      document.querySelector('#segmentIndex').textContent = detail.index;
+      document.querySelector('#segmentCopy').textContent = detail.copy;
+      document.querySelectorAll('#partitionList li').forEach(item => {
+        item.classList.toggle('current', detail.parts.includes(item.dataset.part));
+      });
+    }
+
+    document.querySelector('#enterTemplateRoom').addEventListener('click', enterTemplateRoom);
+    document.querySelector('#returnToHallway').addEventListener('click', returnToHallway);
+
+    document.querySelectorAll('.template-segment').forEach(segment => {
+      segment.addEventListener('click', () => inspectSegment(segment));
+      segment.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          inspectSegment(segment);
+        }
+      });
+    });
+
+    document.querySelectorAll('.view-toggle').forEach(toggle => {
+      toggle.addEventListener('click', () => {
+        const active = toggle.classList.toggle('active');
+        toggle.setAttribute('aria-pressed', String(active));
+        humanTemplates.forEach(svg => svg.classList.toggle(`hide-${toggle.dataset.layer}`, !active));
+        if (window.human3dEditor?.ready) window.human3dEditor.setLayer(toggle.dataset.layer, active);
+      });
+      toggle.setAttribute('aria-pressed', 'true');
+    });
+
+    document.querySelectorAll('.ortho-button').forEach(button => {
+      button.addEventListener('click', () => switchPoseView(button.dataset.view));
+    });
+
+    document.querySelector('#resetPose').addEventListener('click', () => {
+      if (window.human3dEditor?.ready) {
+        window.human3dEditor.resetPose();
+        poseStatus.textContent = 'X Bot 已恢复为仓库原始站立姿势。';
+        return;
+      }
+      pose3dState = JSON.parse(JSON.stringify(defaultPose3d));
+      selected3dJoint = null;
+      renderHuman3d();
+      poseStatus.textContent = '三维人体已恢复为站立基准，三个投影视图同步重置。';
+    });
+
+    document.querySelector('#savePose').addEventListener('click', saveCurrentPose);
+    document.querySelector('#copyPose').addEventListener('click', copyCurrentPose);
+
+    poseLibrary.addEventListener('change', () => {
+      if (!poseLibrary.value) return;
+      const saved = readPoseLibrary()[poseLibrary.value];
+      if (window.human3dEditor?.ready && saved?.schema === 'mixamo-bone-pose/v1') {
+        window.human3dEditor.loadPose(saved);
+        document.querySelector('#poseName').value = saved.name;
+        poseStatus.textContent = `已读取 X Bot 动作：${saved.name}`;
+        return;
+      }
+      if (saved?.schema !== 'human-pose-3d/v1' || !saved.joints?.pelvis) {
+        poseStatus.textContent = '该动作数据不完整，无法读取。';
+        return;
+      }
+      pose3dState = JSON.parse(JSON.stringify(saved.joints));
+      document.querySelector('#poseName').value = saved.name;
+      renderHuman3d();
+      poseStatus.textContent = `已读取动作：${saved.name}`;
+    });
+
+    refreshPoseLibrary();
+
+    renderChoices();
+
     document.addEventListener('keydown', event => {
-      if (event.key >= '1' && event.key <= '3') {
+      if (!inTemplateRoom && !event.target.matches('input, select, textarea') && event.key >= '1' && event.key <= '3') {
         const button = document.querySelectorAll('.choice')[Number(event.key) - 1];
         button?.click();
       }
@@ -770,10 +2106,738 @@
         });
         document.querySelector('#story').hidden = view !== 'story';
         document.querySelector('#notebook').hidden = view !== 'notebook';
-        choices.style.visibility = view === 'story' ? 'visible' : 'hidden';
+        choices.style.visibility = view === 'story' && !inTemplateRoom ? 'visible' : 'hidden';
         storyScroll.scrollTop = 0;
       });
     });
+  </script>
+  <script type="module">
+    import * as THREE from 'three';
+    import { FBXLoader } from './vendor/three/examples/jsm/loaders/FBXLoader.js';
+    import { OrbitControls } from './vendor/three/examples/jsm/controls/OrbitControls.js';
+    import { TransformControls } from './vendor/three/examples/jsm/controls/TransformControls.js';
+    import { retargetClip } from './vendor/three/examples/jsm/utils/SkeletonUtils.js';
+
+    // new URL(..., import.meta.url) keeps FBX files addressable in both the
+    // source-page dev server and Vite's hashed production output.
+    const xBotAssetUrl = new URL('./assets/x-bot.fbx', import.meta.url).href;
+    const actionLabAssetUrls = {
+      idle: new URL('./assets/actionlab/idle.fbx', import.meta.url).href,
+      walk: new URL('./assets/actionlab/walk.fbx', import.meta.url).href,
+      run: new URL('./assets/actionlab/run.fbx', import.meta.url).href,
+      jump: new URL('./assets/actionlab/jump.fbx', import.meta.url).href,
+    };
+
+    const canvas = document.querySelector('#xBotCanvas');
+    const loading = document.querySelector('#modelLoading');
+    const status = document.querySelector('#poseStatus');
+    const stage = document.querySelector('#mannequinStage');
+    const scene3d = new THREE.Scene();
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.setClearColor(0x07100e, 0);
+
+    const camera = new THREE.OrthographicCamera(-3, 3, 3.25, -3.25, .01, 100);
+    const orbit = new OrbitControls(camera, canvas);
+    orbit.enableDamping = true;
+    orbit.enablePan = false;
+    orbit.minZoom = .65;
+    orbit.maxZoom = 2.4;
+    orbit.target.set(0, 2.7, 0);
+
+    scene3d.add(new THREE.HemisphereLight(0xd9eee6, 0x15201c, 2.1));
+    const keyLight = new THREE.DirectionalLight(0xfff4e8, 2.2);
+    keyLight.position.set(4, 7, 5);
+    scene3d.add(keyLight);
+    const rimLight = new THREE.DirectionalLight(0x78a99b, 1.4);
+    rimLight.position.set(-5, 3, -4);
+    scene3d.add(rimLight);
+
+    const grid = new THREE.GridHelper(8, 16, 0x59776d, 0x263a34);
+    grid.material.transparent = true;
+    grid.material.opacity = .34;
+    scene3d.add(grid);
+
+    const transform = new TransformControls(camera, canvas);
+    transform.setMode('rotate');
+    transform.setSpace('local');
+    transform.setSize(.62);
+    transform.visible = false;
+    scene3d.add(transform);
+    transform.addEventListener('dragging-changed', event => { orbit.enabled = !event.value; });
+    transform.addEventListener('objectChange', () => {
+      if (status && transform.object) status.textContent = `正在调整骨骼：${transform.object.name}`;
+    });
+
+    const raycaster = new THREE.Raycaster();
+    const pointer = new THREE.Vector2();
+    const handleGroup = new THREE.Group();
+    scene3d.add(handleGroup);
+    const handleGeometry = new THREE.SphereGeometry(.055, 14, 10);
+    const regularHandleMaterial = new THREE.MeshBasicMaterial({ color: 0xd8eee6, depthTest: false, transparent: true, opacity: .88 });
+    const anchorHandleMaterial = new THREE.MeshBasicMaterial({ color: 0xc77959, depthTest: false, transparent: true, opacity: .95 });
+    const handles = [];
+    const bones = new Map();
+    const basePose = new Map();
+    let model = null;
+    let skeletonHelper = null;
+    let helpersVisible = true;
+    let anchorsVisible = true;
+
+    const editableSuffixes = [
+      'hips', 'spine', 'spine1', 'spine2', 'neck', 'head',
+      'leftshoulder', 'leftarm', 'leftforearm', 'lefthand',
+      'rightshoulder', 'rightarm', 'rightforearm', 'righthand',
+      'leftupleg', 'leftleg', 'leftfoot', 'lefttoebase',
+      'rightupleg', 'rightleg', 'rightfoot', 'righttoebase'
+    ];
+    const anchorSuffixes = new Set(['lefthand', 'righthand', 'leftfoot', 'rightfoot', 'lefttoebase', 'righttoebase']);
+    const normalizeBoneName = name => name.toLowerCase().replace(/[^a-z0-9]/g, '');
+
+    function matchedSuffix(name) {
+      const normalized = normalizeBoneName(name);
+      return editableSuffixes
+        .filter(suffix => normalized.endsWith(suffix))
+        .sort((a, b) => b.length - a.length)[0];
+    }
+
+    function resize() {
+      const rect = stage.getBoundingClientRect();
+      if (rect.width < 2 || rect.height < 2) return;
+      renderer.setSize(rect.width, rect.height, false);
+      const halfHeight = 3.25;
+      const halfWidth = halfHeight * rect.width / rect.height;
+      camera.left = -halfWidth;
+      camera.right = halfWidth;
+      camera.top = halfHeight;
+      camera.bottom = -halfHeight;
+      camera.updateProjectionMatrix();
+    }
+
+    function setView(view) {
+      const distance = 10;
+      if (view === 'side') camera.position.set(distance, 2.7, 0);
+      else if (view === 'back') camera.position.set(0, 2.7, -distance);
+      else camera.position.set(0, 2.7, distance);
+      camera.up.set(0, 1, 0);
+      orbit.target.set(0, 2.7, 0);
+      camera.lookAt(orbit.target);
+      orbit.update();
+    }
+
+    function makeHandles() {
+      model.traverse(object => {
+        if (!object.isBone) return;
+        bones.set(object.name, object);
+        basePose.set(object.name, {
+          position: object.position.toArray(),
+          quaternion: object.quaternion.toArray()
+        });
+        const suffix = matchedSuffix(object.name);
+        if (!suffix) return;
+        const isAnchor = anchorSuffixes.has(suffix);
+        const handle = new THREE.Mesh(handleGeometry, isAnchor ? anchorHandleMaterial : regularHandleMaterial);
+        handle.renderOrder = 20;
+        handle.userData.bone = object;
+        handle.userData.isAnchor = isAnchor;
+        handleGroup.add(handle);
+        handles.push(handle);
+      });
+    }
+
+    function updateHandles() {
+      handles.forEach(handle => {
+        handle.userData.bone.getWorldPosition(handle.position);
+        handle.visible = helpersVisible && (anchorsVisible || !handle.userData.isAnchor);
+      });
+    }
+
+    function selectBone(event) {
+      if (!helpersVisible || transform.dragging) return;
+      const rect = canvas.getBoundingClientRect();
+      pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+      raycaster.setFromCamera(pointer, camera);
+      const hit = raycaster.intersectObjects(handles.filter(handle => handle.visible), false)[0];
+      if (!hit) return;
+      transform.attach(hit.object.userData.bone);
+      transform.visible = true;
+      if (status) status.textContent = `已选择 ${hit.object.userData.bone.name} · 拖动彩色旋转环`;
+      event.stopPropagation();
+    }
+    canvas.addEventListener('pointerdown', selectBone, true);
+
+    function exportPose(name) {
+      const exportedBones = {};
+      bones.forEach((bone, boneName) => {
+        exportedBones[boneName] = {
+          position: bone.position.toArray().map(value => Number(value.toFixed(6))),
+          quaternion: bone.quaternion.toArray().map(value => Number(value.toFixed(7)))
+        };
+      });
+      return {
+        schema: 'mixamo-bone-pose/v1',
+        name,
+        asset: 'code/unity/Assets/Mixamo/Characters/X Bot.fbx',
+        bones: exportedBones
+      };
+    }
+
+    function loadPose(pose) {
+      Object.entries(pose.bones || {}).forEach(([boneName, value]) => {
+        const bone = bones.get(boneName);
+        if (!bone) return;
+        if (Array.isArray(value.position)) bone.position.fromArray(value.position);
+        if (Array.isArray(value.quaternion)) bone.quaternion.fromArray(value.quaternion).normalize();
+      });
+      model.updateMatrixWorld(true);
+    }
+
+    function resetPose() {
+      basePose.forEach((value, boneName) => {
+        const bone = bones.get(boneName);
+        bone.position.fromArray(value.position);
+        bone.quaternion.fromArray(value.quaternion);
+      });
+      transform.detach();
+      transform.visible = false;
+      model.updateMatrixWorld(true);
+    }
+
+    window.human3dEditor = {
+      ready: false,
+      resize,
+      setView,
+      exportPose,
+      loadPose,
+      resetPose,
+      setLayer(layer, active) {
+        if (layer === 'rig') {
+          helpersVisible = active;
+          handleGroup.visible = active;
+          if (skeletonHelper) skeletonHelper.visible = active;
+          transform.visible = active && Boolean(transform.object);
+        }
+        if (layer === 'guides') grid.visible = active;
+        if (layer === 'anchors') anchorsVisible = active;
+      }
+    };
+
+    new FBXLoader().load(
+      xBotAssetUrl,
+      object => {
+        model = object;
+        model.updateMatrixWorld(true);
+        const initialBox = new THREE.Box3().setFromObject(model);
+        const initialHeight = initialBox.max.y - initialBox.min.y;
+        const scale = 5.35 / initialHeight;
+        model.scale.setScalar(scale);
+        model.updateMatrixWorld(true);
+        const box = new THREE.Box3().setFromObject(model);
+        const center = box.getCenter(new THREE.Vector3());
+        model.position.x -= center.x;
+        model.position.z -= center.z;
+        model.position.y -= box.min.y;
+        model.traverse(child => {
+          if (!child.isMesh) return;
+          child.frustumCulled = false;
+          if (child.material) {
+            child.material.side = THREE.FrontSide;
+            child.material.needsUpdate = true;
+          }
+        });
+        scene3d.add(model);
+        model.updateMatrixWorld(true);
+        skeletonHelper = new THREE.SkeletonHelper(model);
+        skeletonHelper.material.transparent = true;
+        skeletonHelper.material.opacity = .48;
+        skeletonHelper.material.depthTest = false;
+        skeletonHelper.renderOrder = 15;
+        scene3d.add(skeletonHelper);
+        makeHandles();
+        window.human3dEditor.ready = true;
+        loading.hidden = true;
+        if (status) status.textContent = `X Bot 已加载 · ${bones.size} 根骨骼 · 点击节点后旋转关节`;
+        resize();
+        setView('front');
+      },
+      undefined,
+      error => {
+        loading.textContent = 'X Bot 加载失败，请确认页面由 HTTP 服务打开。';
+        loading.classList.add('error');
+        if (status) status.textContent = `模型加载失败：${error?.message || '未知错误'}`;
+      }
+    );
+
+    // 三维护士站：移动数值复用 ActionLabDriver / AnimatorWalker；动画原件缺失时由同名骨架状态槽生成预览姿势。
+    const worldCanvas = document.querySelector('#world3dCanvas');
+    const worldLoading = document.querySelector('#world3dLoading');
+    const worldState = document.querySelector('#world3dState');
+    const worldPrompt = document.querySelector('#world3dPrompt');
+    const worldScene = new THREE.Scene();
+    worldScene.background = new THREE.Color(0x07100f);
+    worldScene.fog = new THREE.Fog(0x07100f, 8, 24);
+    const worldRenderer = new THREE.WebGLRenderer({ canvas: worldCanvas, antialias: true });
+    worldRenderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    worldRenderer.outputColorSpace = THREE.SRGBColorSpace;
+    worldRenderer.shadowMap.enabled = true;
+    worldRenderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    const worldCamera = new THREE.OrthographicCamera(-5, 5, 4, -4, .05, 60);
+    const worldClock = new THREE.Clock();
+    const worldKeys = new Set();
+    const walkSpeed = 3;
+    const runSpeed = 6;
+    const jumpHeight = 1.4;
+    const gravity = -22;
+    const airControl = .15;
+    const airDrag = .5;
+    let worldPlayer = null;
+    let worldNurse = null;
+    let worldNurseHead = null;
+    let nurseMask = null;
+    let verticalSpeed = 0;
+    let grounded = true;
+    const worldAirVelocity = new THREE.Vector3();
+    const worldHorizontalVelocity = new THREE.Vector3();
+    let locomotionState = 'Idle';
+    let locomotionTime = 0;
+    let worldMixer = null;
+    let formalLocomotionReady = false;
+    let activeWorldAction = null;
+    let activeWorldActionName = '';
+    const worldActions = new Map();
+    let nearbyInteraction = null;
+    const worldBoneMap = new Map();
+    const worldBasePose = new Map();
+    const worldTarget = new THREE.Vector3();
+    const worldCameraWant = new THREE.Vector3();
+
+    worldScene.add(new THREE.HemisphereLight(0xb8d8cf, 0x111817, 1.45));
+    const moonLight = new THREE.DirectionalLight(0xb7d7ce, 2.2);
+    moonLight.position.set(3, 8, 5);
+    moonLight.castShadow = true;
+    worldScene.add(moonLight);
+    const nurseLight = new THREE.PointLight(0x9ed8ca, 4.2, 9, 1.8);
+    nurseLight.position.set(0, 3, -4.5);
+    worldScene.add(nurseLight);
+
+    function addWorldBox(size, position, color, roughness = .86) {
+      const mesh = new THREE.Mesh(
+        new THREE.BoxGeometry(size[0], size[1], size[2]),
+        new THREE.MeshStandardMaterial({ color, roughness, metalness: .04 })
+      );
+      mesh.position.set(position[0], position[1], position[2]);
+      mesh.receiveShadow = true;
+      mesh.castShadow = true;
+      worldScene.add(mesh);
+      return mesh;
+    }
+
+    addWorldBox([12, .18, 20], [0, -.09, -2], 0x182321);
+    addWorldBox([.22, 4.8, 20], [-6, 2.4, -2], 0x263330);
+    // 来源：等距叙事场景的剖切呈现需要保持人物与热点可读；近侧墙降至腰线高度，顶棚不参与渲染。
+    addWorldBox([.22, 1.15, 20], [6, .575, -2], 0x202c2a);
+    addWorldBox([12, 4.8, .22], [0, 2.4, -12], 0x24322f);
+    addWorldBox([5.2, 1.15, 1.15], [0, .575, -4.25], 0x485650);
+    addWorldBox([5.3, .12, 1.3], [0, 1.18, -4.25], 0x78847e, .7);
+    addWorldBox([1.65, 3.4, .18], [4.45, 1.7, -11.78], 0x263d3a);
+    addWorldBox([1.48, .07, .05], [4.45, .08, -11.62], 0x86b7aa);
+    const windowGlow = new THREE.Mesh(
+      new THREE.PlaneGeometry(3.2, 1.75),
+      new THREE.MeshBasicMaterial({ color: 0x8fbeb2, transparent: true, opacity: .28 })
+    );
+    windowGlow.position.set(-1.6, 2.75, -11.86);
+    worldScene.add(windowGlow);
+
+    function loadWorldFbx(url) {
+      return new Promise((resolve, reject) => new FBXLoader().load(
+        url,
+        resolve,
+        undefined,
+        error => {
+          console.error(`[FBX] ${url} 解析失败\n${error?.stack || error}`);
+          reject(new Error(`${url}：${error?.message || 'FBX 解析失败'}`, { cause: error }));
+        }
+      ));
+    }
+
+    function normalizeWorldModel(object, targetHeight) {
+      object.updateMatrixWorld(true);
+      let box = new THREE.Box3().setFromObject(object);
+      const height = box.max.y - box.min.y;
+      object.scale.setScalar(targetHeight / height);
+      object.updateMatrixWorld(true);
+      box = new THREE.Box3().setFromObject(object);
+      const center = box.getCenter(new THREE.Vector3());
+      object.position.set(-center.x, -box.min.y, -center.z);
+      object.traverse(child => {
+        if (!child.isMesh) return;
+        child.castShadow = true;
+        child.receiveShadow = true;
+        child.frustumCulled = false;
+      });
+      return object;
+    }
+
+    function collectWorldBones(object) {
+      object.traverse(child => {
+        if (!child.isBone) return;
+        const normalized = normalizeBoneName(child.name);
+        const suffix = editableSuffixes
+          .filter(candidate => normalized.endsWith(candidate))
+          .sort((a, b) => b.length - a.length)[0];
+        if (!suffix) return;
+        worldBoneMap.set(suffix, child);
+        worldBasePose.set(suffix, {
+          position: child.position.clone(),
+          quaternion: child.quaternion.clone()
+        });
+      });
+    }
+
+    function tintWorldModel(object, color) {
+      object.traverse(child => {
+        if (!child.isMesh || !child.material) return;
+        const tint = material => {
+          const cloned = material.clone();
+          if (cloned.color) cloned.color.lerp(new THREE.Color(color), .28);
+          if ('roughness' in cloned) cloned.roughness = .78;
+          return cloned;
+        };
+        child.material = Array.isArray(child.material) ? child.material.map(tint) : tint(child.material);
+      });
+    }
+
+    function restoreWorldPose() {
+      worldBasePose.forEach((pose, suffix) => {
+        const bone = worldBoneMap.get(suffix);
+        bone.position.copy(pose.position);
+        bone.quaternion.copy(pose.quaternion);
+      });
+    }
+
+    function rotateWorldBone(suffix, x = 0, y = 0, z = 0) {
+      const bone = worldBoneMap.get(suffix);
+      const base = worldBasePose.get(suffix);
+      if (!bone || !base) return;
+      bone.quaternion.copy(base.quaternion).multiply(
+        new THREE.Quaternion().setFromEuler(new THREE.Euler(x, y, z, 'XYZ'))
+      );
+    }
+
+    function animateWorldPose(delta) {
+      if (!worldPlayer) return;
+      locomotionTime += delta;
+      restoreWorldPose();
+      if (locomotionState === 'Jump') {
+        rotateWorldBone('leftarm', -1.0, 0, -.18);
+        rotateWorldBone('rightarm', -1.0, 0, .18);
+        rotateWorldBone('leftupleg', -.42);
+        rotateWorldBone('rightupleg', -.42);
+        rotateWorldBone('leftleg', .72);
+        rotateWorldBone('rightleg', .72);
+        return;
+      }
+      const moving = locomotionState === 'Walk' || locomotionState === 'Run';
+      if (!moving) {
+        rotateWorldBone('spine2', Math.sin(locomotionTime * 1.6) * .012);
+        return;
+      }
+      const running = locomotionState === 'Run';
+      const phase = locomotionTime * (running ? 9.2 : 6.2);
+      const swing = Math.sin(phase) * (running ? .78 : .46);
+      const kneeLeft = Math.max(0, -Math.sin(phase)) * (running ? .9 : .5);
+      const kneeRight = Math.max(0, Math.sin(phase)) * (running ? .9 : .5);
+      rotateWorldBone('leftupleg', swing);
+      rotateWorldBone('rightupleg', -swing);
+      rotateWorldBone('leftleg', kneeLeft);
+      rotateWorldBone('rightleg', kneeRight);
+      rotateWorldBone('leftarm', -swing * .8);
+      rotateWorldBone('rightarm', swing * .8);
+      rotateWorldBone('leftforearm', running ? -.35 : -.16);
+      rotateWorldBone('rightforearm', running ? -.35 : -.16);
+      rotateWorldBone('spine2', running ? .14 : .05);
+    }
+
+    const retargetBoneNames = {
+      'mixamorig:Hips': 'B-hips',
+      'mixamorig:Spine': 'B-spine',
+      'mixamorig:Spine1': 'B-spineProxy',
+      'mixamorig:Spine2': 'B-chest',
+      'mixamorig:Neck': 'B-neck',
+      'mixamorig:Head': 'B-head',
+      'mixamorig:LeftShoulder': 'B-shoulder.L',
+      'mixamorig:LeftArm': 'B-upperArm.L',
+      'mixamorig:LeftForeArm': 'B-forearm.L',
+      'mixamorig:LeftHand': 'B-hand.L',
+      'mixamorig:RightShoulder': 'B-shoulder.R',
+      'mixamorig:RightArm': 'B-upperArm.R',
+      'mixamorig:RightForeArm': 'B-forearm.R',
+      'mixamorig:RightHand': 'B-hand.R',
+      'mixamorig:LeftUpLeg': 'B-thigh.L',
+      'mixamorig:LeftLeg': 'B-shin.L',
+      'mixamorig:LeftFoot': 'B-foot.L',
+      'mixamorig:LeftToeBase': 'B-toe.L',
+      'mixamorig:RightUpLeg': 'B-thigh.R',
+      'mixamorig:RightLeg': 'B-shin.R',
+      'mixamorig:RightFoot': 'B-foot.R',
+      'mixamorig:RightToeBase': 'B-toe.R'
+    };
+
+    function firstSkinnedMesh(object) {
+      let result = null;
+      object.traverse(child => { if (!result && child.isSkinnedMesh) result = child; });
+      return result;
+    }
+
+    function retargetNamesFor(targetMesh) {
+      const byNormalizedName = new Map(
+        Object.entries(retargetBoneNames).map(([target, source]) => [normalizeBoneName(target), source])
+      );
+      const names = {};
+      targetMesh.skeleton.bones.forEach(bone => {
+        const sourceName = byNormalizedName.get(normalizeBoneName(bone.name));
+        if (sourceName) names[bone.name] = sourceName;
+      });
+      return names;
+    }
+
+    function buildRetargetedAction(targetMesh, sourceObject, name, loop) {
+      const sourceMesh = firstSkinnedMesh(sourceObject);
+      const sourceClip = sourceObject.animations?.[0];
+      if (!sourceMesh || !sourceClip) throw new Error(`${name} 缺少可重定向的骨架或动画轨道`);
+      const clip = retargetClip(targetMesh, sourceMesh.skeleton, sourceClip, {
+        hip: 'B-hips',
+        names: retargetNamesFor(targetMesh),
+        preserveHipPosition: true,
+        preservePosition: true,
+        useFirstFramePosition: true,
+        fps: 30
+      });
+      clip.name = name;
+      // 位移由 ActionLab 的角色控制器负责；剥离动画根位移，避免模型在容器内二次前进。
+      clip.tracks = clip.tracks.filter(track => !track.name.endsWith('.position'));
+      const action = worldMixer.clipAction(clip, targetMesh);
+      action.setLoop(loop ? THREE.LoopRepeat : THREE.LoopOnce, loop ? Infinity : 1);
+      action.clampWhenFinished = !loop;
+      worldActions.set(name, action);
+    }
+
+    function playWorldAction(name) {
+      if (!worldMixer || activeWorldActionName === name) return;
+      const next = worldActions.get(name);
+      if (!next) return;
+      const fade = name === 'Jump' ? .06 : .12;
+      next.reset().setEffectiveTimeScale(1).setEffectiveWeight(1).fadeIn(fade).play();
+      if (activeWorldAction) activeWorldAction.fadeOut(fade);
+      activeWorldAction = next;
+      activeWorldActionName = name;
+    }
+
+    function worldInputAllowed(event) {
+      if (!document.querySelector('#scene').classList.contains('world-3d-active')) return false;
+      if (document.querySelector('#scene').classList.contains('template-active')) return false;
+      return !event.target.matches('input, select, textarea, button');
+    }
+
+    window.addEventListener('keydown', event => {
+      if (!worldInputAllowed(event)) return;
+      if (['KeyW', 'KeyA', 'KeyS', 'KeyD', 'ShiftLeft', 'ShiftRight', 'Space'].includes(event.code)) {
+        worldKeys.add(event.code);
+        if (event.code === 'Space') event.preventDefault();
+      }
+      if (event.code === 'KeyE' && nearbyInteraction) {
+        if (nearbyInteraction === 'door') document.querySelector('#enterTemplateRoom').click();
+        if (nearbyInteraction === 'nurse') {
+          document.querySelector('[data-view="story"]')?.click();
+          document.querySelector('.choice:not(:disabled)')?.focus();
+          worldPrompt.textContent = '已与赵岚交谈 · 在右侧选择问题';
+          worldPrompt.classList.add('show');
+        }
+      }
+    });
+    window.addEventListener('keyup', event => worldKeys.delete(event.code));
+    window.addEventListener('blur', () => worldKeys.clear());
+
+    function resolveWorldCollision(next) {
+      next.x = THREE.MathUtils.clamp(next.x, -5.25, 5.25);
+      next.z = THREE.MathUtils.clamp(next.z, -10.8, 6.6);
+      const insideDesk = Math.abs(next.x) < 2.95 && next.z < -3.25 && next.z > -5.05;
+      if (insideDesk) return worldPlayer.position.clone().setY(next.y);
+      return next;
+    }
+
+    function updateWorldInteraction() {
+      if (!worldPlayer) return;
+      const doorDistance = Math.hypot(worldPlayer.position.x - 4.45, worldPlayer.position.z + 10.8);
+      const nurseDistance = Math.hypot(worldPlayer.position.x, worldPlayer.position.z + 3.2);
+      nearbyInteraction = doorDistance < 1.65 ? 'door' : nurseDistance < 2.2 ? 'nurse' : null;
+      if (nearbyInteraction === 'door') worldPrompt.textContent = 'E · 进入人体模板校准间';
+      if (nearbyInteraction === 'nurse') worldPrompt.textContent = 'E · 与赵岚交谈';
+      worldPrompt.classList.toggle('show', Boolean(nearbyInteraction));
+    }
+
+    function updateWorld(delta) {
+      if (!worldPlayer) return;
+      const active = document.querySelector('#scene').classList.contains('world-3d-active')
+        && !document.querySelector('#scene').classList.contains('template-active');
+      if (!active) return;
+
+      const inputX = Number(worldKeys.has('KeyD')) - Number(worldKeys.has('KeyA'));
+      const inputZ = Number(worldKeys.has('KeyS')) - Number(worldKeys.has('KeyW'));
+      const inputLength = Math.hypot(inputX, inputZ);
+      const running = worldKeys.has('ShiftLeft') || worldKeys.has('ShiftRight');
+      const targetSpeed = inputLength > 0 ? (running ? runSpeed : walkSpeed) : 0;
+      const direction = new THREE.Vector3(inputX, 0, inputZ);
+      if (inputLength > 0) direction.multiplyScalar(1 / inputLength);
+
+      if (grounded && worldKeys.has('Space')) {
+        verticalSpeed = Math.sqrt(2 * Math.abs(gravity) * jumpHeight);
+        worldAirVelocity.copy(direction).multiplyScalar(targetSpeed);
+        grounded = false;
+        worldKeys.delete('Space');
+      }
+      if (grounded) {
+        verticalSpeed = -1;
+        worldHorizontalVelocity.copy(direction).multiplyScalar(targetSpeed);
+      } else {
+        const wanted = direction.multiplyScalar(targetSpeed);
+        worldAirVelocity.lerp(wanted, airControl * delta);
+        worldAirVelocity.multiplyScalar(Math.max(0, 1 - airDrag * delta));
+        worldHorizontalVelocity.copy(worldAirVelocity);
+      }
+      verticalSpeed = Math.max(verticalSpeed + gravity * delta, -40);
+      const next = worldPlayer.position.clone();
+      next.addScaledVector(worldHorizontalVelocity, delta);
+      next.y += verticalSpeed * delta;
+      if (next.y <= 0) {
+        next.y = 0;
+        verticalSpeed = 0;
+        grounded = true;
+      }
+      worldPlayer.position.copy(resolveWorldCollision(next));
+      if (worldHorizontalVelocity.lengthSq() > .01) {
+        const wantedYaw = Math.atan2(worldHorizontalVelocity.x, worldHorizontalVelocity.z);
+        const wantedRotation = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), wantedYaw);
+        worldPlayer.quaternion.slerp(wantedRotation, Math.min(1, delta * 10));
+      }
+
+      const horizontalSpeed = worldHorizontalVelocity.length();
+      locomotionState = !grounded ? 'Jump' : horizontalSpeed < .4 ? 'Idle'
+        : horizontalSpeed < (walkSpeed + runSpeed) * .5 ? 'Walk' : 'Run';
+      worldState.textContent = `${locomotionState.toUpperCase()} · ${formalLocomotionReady ? 'ACTIONLAB CLIP' : 'FALLBACK'} · WASD / SHIFT / SPACE / E`;
+      if (worldMixer) {
+        playWorldAction(locomotionState);
+        worldMixer.update(delta);
+      } else {
+        animateWorldPose(delta);
+      }
+      updateWorldInteraction();
+
+      worldTarget.set(worldPlayer.position.x, worldPlayer.position.y + .75, worldPlayer.position.z - .45);
+      worldCameraWant.set(worldPlayer.position.x + 7.6, worldPlayer.position.y + 8.6, worldPlayer.position.z + 8.8);
+      worldCamera.position.lerp(worldCameraWant, 1 - Math.exp(-4.2 * delta));
+      worldCamera.lookAt(worldTarget);
+    }
+
+    function resizeWorld() {
+      const rect = document.querySelector('#scene').getBoundingClientRect();
+      if (rect.width < 2 || rect.height < 2) return;
+      worldRenderer.setSize(rect.width, rect.height, false);
+      const halfHeight = 4.25;
+      const halfWidth = halfHeight * rect.width / rect.height;
+      worldCamera.left = -halfWidth;
+      worldCamera.right = halfWidth;
+      worldCamera.top = halfHeight;
+      worldCamera.bottom = -halfHeight;
+      worldCamera.updateProjectionMatrix();
+    }
+
+    Promise.all([
+      loadWorldFbx(xBotAssetUrl),
+      loadWorldFbx(xBotAssetUrl),
+      loadWorldFbx(actionLabAssetUrls.idle),
+      loadWorldFbx(actionLabAssetUrls.walk),
+      loadWorldFbx(actionLabAssetUrls.run),
+      loadWorldFbx(actionLabAssetUrls.jump)
+    ]).then(([player, nurse, idleSource, walkSource, runSource, jumpSource]) => {
+      worldPlayer = normalizeWorldModel(player, 1.75);
+      worldPlayer.position.set(0, 0, 4.7);
+      tintWorldModel(worldPlayer, 0x798983);
+      collectWorldBones(worldPlayer);
+      worldScene.add(worldPlayer);
+      const targetMesh = firstSkinnedMesh(worldPlayer);
+      if (!targetMesh) throw new Error('X Bot 缺少 SkinnedMesh，无法接入正式动作');
+      try {
+        worldMixer = new THREE.AnimationMixer(targetMesh);
+        buildRetargetedAction(targetMesh, idleSource, 'Idle', true);
+        buildRetargetedAction(targetMesh, walkSource, 'Walk', true);
+        buildRetargetedAction(targetMesh, runSource, 'Run', true);
+        buildRetargetedAction(targetMesh, jumpSource, 'Jump', false);
+        targetMesh.skeleton.pose();
+        worldPlayer.updateMatrixWorld(true);
+        formalLocomotionReady = true;
+        playWorldAction('Idle');
+      } catch (animationError) {
+        console.error('[ActionLab Web] 正式动作重定向失败，退回骨架预览：', animationError);
+        worldMixer = null;
+        worldActions.clear();
+        targetMesh.skeleton.pose();
+      }
+
+      worldNurse = normalizeWorldModel(nurse, 1.7);
+      worldNurse.position.set(0, 0, -5.18);
+      worldNurse.rotation.y = 0;
+      tintWorldModel(worldNurse, 0xd8e1dc);
+      worldScene.add(worldNurse);
+      worldNurse.traverse(child => {
+        if (child.isBone && normalizeBoneName(child.name).endsWith('head')) worldNurseHead = child;
+      });
+      nurseMask = new THREE.Mesh(
+        new THREE.BoxGeometry(.22, .095, .025),
+        new THREE.MeshStandardMaterial({ color: 0x9fc9c0, roughness: .82 })
+      );
+      worldScene.add(nurseMask);
+
+      document.querySelector('#scene').classList.add('world-3d-active');
+      worldLoading.hidden = true;
+      worldState.textContent = formalLocomotionReady
+        ? 'IDLE · ActionLab 正式动作 · WASD 移动'
+        : 'IDLE · 动作重定向失败，使用骨架后备';
+      resizeWorld();
+    }).catch(error => {
+      console.error('[World 3D] 场景加载失败', error, error?.cause);
+      worldLoading.textContent = `三维场景加载失败：${error?.message || '未知错误'}`;
+    });
+
+    function animateWorld() {
+      requestAnimationFrame(animateWorld);
+      const delta = Math.min(worldClock.getDelta(), .05);
+      updateWorld(delta);
+      if (worldNurseHead && nurseMask) {
+        worldNurseHead.getWorldPosition(nurseMask.position);
+        worldNurseHead.getWorldQuaternion(nurseMask.quaternion);
+        nurseMask.position.add(new THREE.Vector3(0, -.05, .105).applyQuaternion(nurseMask.quaternion));
+      }
+      worldRenderer.render(worldScene, worldCamera);
+    }
+    resizeWorld();
+    worldCamera.position.set(7.6, 8.6, 13.5);
+    worldCamera.lookAt(0, .75, 4.25);
+    animateWorld();
+    new ResizeObserver(resizeWorld).observe(document.querySelector('#scene'));
+
+    function animate() {
+      requestAnimationFrame(animate);
+      if (model) updateHandles();
+      orbit.update();
+      renderer.render(scene3d, camera);
+    }
+    resize();
+    setView('front');
+    animate();
+    new ResizeObserver(resize).observe(stage);
   </script>
 </body>
 </html>
