@@ -2399,7 +2399,8 @@ def main_card1() -> int:
     if args.thickness_mm is None:
         card_out = Path(args.card_out) if args.card_out else REPO_ROOT / "data/hand_grip_cards.json"
         card_out.parent.mkdir(parents=True, exist_ok=True)
-        # 机器源落点：data/hand_grip_cards.json（`role: generator-input`；被 validate_grip_cards.py 核）
+        # 机器源落点：data/hand_grip_cards.json（`role: generator-input`；原由 validate_grip_cards.py 核——
+        # ⚠️ 2026-09-17 该脚本已随全部门禁删除，落点与格式不变，但不再有机械核对）
         card_out.write_text(json.dumps(card1_json(report, args), ensure_ascii=False, indent=1),
                             encoding="utf-8")
         print(f"机器源: {card_out}")

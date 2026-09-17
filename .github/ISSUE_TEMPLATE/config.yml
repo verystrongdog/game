@@ -2,7 +2,7 @@ blank_issues_enabled: false
 contact_links:
   - name: Issue 创建约束与分解规则
     url: https://github.com/verystrongdog/game/blob/main/design/engineering/issue-process.md
-    about: 创建 issue 前先读这份契约：六类型、9 个必填字段、依赖与门禁的机械判定（§4/§5）
+    about: 创建 issue 前先读这份契约：六类型、9 个必填字段、依赖与字段判定（§4/§5）——⚠️ 2026-09-17 起全部门禁已撤销，原「机械判定」改人工核对
   - name: 工作流程
     url: https://github.com/verystrongdog/game/blob/main/WORKFLOW.md
     about: 单线程约束、四轴状态模型、六种 issue 类型的最小用途与闭合判据（§二/§三/§六）

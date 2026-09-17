@@ -6,7 +6,7 @@
 
 ## 权威来源（本件的定义**逐字**取自这两条，不得自行发挥）
 
-**① 术语定义**（`data/term_registry.json`，2026-09-15 入库，**逐字**——B1 每次门禁核它）：
+**① 术语定义**（`data/term_registry.json`，2026-09-15 入库，**逐字**——B1 每次校验核它）：
 
 > `重心`：本仓的**躯体代表点**，用于判「站得住吗」：取值 = `mixamorig:Hips` 骨**世界位置的水平投影**（x, y）——**不含质量模型**。
 
@@ -42,7 +42,7 @@
 |---|---|---|---|
 | **Blender 侧读产物** | `--blend <样本> --action <名>`（须在 Blender 里跑） | 逐帧求值那条动作，从 **`object.evaluated_get(depsgraph)`** 读骨与蒙皮，算凸包 + 判据 + 层选对照，写报告 + markdown | #170 的样本（下蹲/被推退）与其交叉核对 |
 | **在会话里读**（同一实现） | `read_current(arm, action)` —— 宿主在**打键之后**直接调用 | 同上，但不打开文件（动作就在当前会话里） | `author_xbot_chair_grab.py --task crouch` |
-| **离线机械校验** | 无参数 / `--verify`（`--only B4` 只跑一条；纯 Python，不需要 bpy） | 对本仓库的文件跑 B1–B5（见下），进 `run_all_checks.py` 与 CI | 门禁 `docs-integrity` |
+| **离线机械校验** | 无参数 / `--verify`（`--only B4` 只跑一条；纯 Python，不需要 bpy） | 对本仓库的文件跑 B1–B5（见下）——原由 `run_all_checks.py` 与 CI 编排，⚠️ 2026-09-17 两者已随全部门禁删除，现在须手动跑 | ~~门禁 `docs-integrity`~~（已删） |
 
 ### 取帧口径（Blender 侧，**照 #165 的件**，否则读数不可比）
 

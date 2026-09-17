@@ -3,6 +3,8 @@
 > 游戏设计的六维分类框架与实时状态。**设计讨论的导航入口与全局检查点**：改动设计前读本文件确认维度归属与已有设计，改动后更新对应维度的状态。
 >
 > 表格中 `Grilling #NN` 是历史溯源标注（指向 [决策树](../decisions/README.md) 对应条目），不是流程要求。
+>
+> 🔧 **2026-09-17（owner 裁定）：全部门禁已撤销。** 下文各表里出现的 `validate_*.py`（`validate_link_data` / `validate_spatial` / `validate_disease` / `validate_grip_cards` / `validate_eligibility` / `validate_npc_materials` …）、`run_all_checks.py`、`gates.json` 与 CI 的 `docs-integrity` job **已一并删除**。那些格子记的是**当时的状态**（多为 2026-08 ~ 09 的历史溯源），状态本身不改写；但凡是把它读成「现在有脚本在守」的地方，现在都不成立——只剩 `dotnet test` 与人工核对。
 
 ---
 

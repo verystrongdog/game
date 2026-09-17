@@ -228,7 +228,7 @@ NPC AI §4.2「敏化-威胁」+「抑制不足」双标签（多标签叠加取
 
 - 触发条件：source/target 组合在 tripartite_model.json 四列表（cstc 47 + corticocortical 776 + brainstem 114 + privileged_pathways 112）**均未命中**。
 - 处置优先级：**语义转移优先**（找同功能域/同调质现有边承载，如 PTSD link_315 PAG→insula → e05 LC→insula）；确需保留直连才标 `病理新增`（须有文献支持该连接在疾病中出现）。
-- 校验：`validate_disease.py` 后续按本规则升级（查四列表命中；命中即用原 type，未命中报 `病理新增` 提示人工复核）。
+- 校验：~~`validate_disease.py` 后续按本规则升级~~ → ⚠️ **2026-09-17 该脚本已随全部门禁删除，升级不再发生**：本规则（查四列表命中；命中即用原 type，未命中报 `病理新增` 提示人工复核）改由人工执行。
 
 ### 6.5 laterality_delta 赋值规则
 

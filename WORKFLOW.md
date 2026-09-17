@@ -67,7 +67,7 @@
 
 **实质修改 Issue 的范围、行为、证据标准或依赖后，必须返回 triage 重新准入。**
 
-**创建一条 issue 需要哪些字段、依赖怎么写、门禁怎么绑、需求怎么分解成有序的多条**——见 [design/engineering/issue-process.md](design/engineering/issue-process.md)。该文档还规定了两件事：讨论阶段**不建 issue**（讨论的产物是决策，落 `design/`），以及新建 issue 必须过 `code/tools/validate_issues.py` 的门禁。
+**创建一条 issue 需要哪些字段、依赖怎么写、需求怎么分解成有序的多条**——见 [design/engineering/issue-process.md](design/engineering/issue-process.md)。该文档还规定了两件事：讨论阶段**不建 issue**（讨论的产物是决策，落 `design/`），以及新建 issue 的字段完整性由**人**核对——⚠️ 2026-09-17 全部门禁已撤销，原守住这一条的 `code/tools/validate_issues.py` 已删除，CI 只剩构建与测试。
 
 ## 四、阶段的两次闭合
 

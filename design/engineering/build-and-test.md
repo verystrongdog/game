@@ -3,6 +3,11 @@
 > 「怎么把仓库跑起来、怎么验证」的**唯一权威**。工具版本、命令、判据以本文为准。
 >
 > 对应 owner 方案 P4a（锁定当前切片所需环境 + 建立最小 CI）。
+>
+> 🔧 **2026-09-17（owner 裁定）：本文描述的机械校验机制已全部撤销。**
+> §2.1 的 18 个生产校验器与 `test_validate_npc_materials.py` 套件、`check_clean_checkout.py`、`run_all_checks.py`、§2.2.1 的 `compare_fixture_verdicts.py`、§2.4 的 `validate_ceiling_generator.py`，连同 `design/engineering/gates.json` 注册表与 §三 的 `docs-integrity` / `issues-snapshot` / `unity` 三个 job，**已于 2026-09-17 一并删除**。
+> **CI 现在只有一个 job：`engine`**（`dotnet restore` → `build` → `test`）。文档与数据的交叉引用、参数一致性、归档隔离、数据契约、issue 字段完整性**没有任何机械校验**，只能人工核对——输出为空不代表通过，也不再有人替它把关。
+> **正文是撤销前的记录**（各节读数都绑定当时的 commit）：§2.1 / §2.2.1 / §2.4 / §三 / §四 里的校验器命令与 job 表**描述的是历史机制，不要再照跑**；§一 环境锁定与 §2.2 引擎命令仍然有效。
 
 ## 目录
 
@@ -21,8 +26,8 @@
 | .NET SDK | **10.0.400** | [`global.json`](../../global.json)（`rollForward: latestFeature`） | 工程目标框架是 **net8.0**；SDK 10 可编译。**本机无 net8.0 runtime**，跑测试须 `DOTNET_ROLL_FORWARD=Major`——**口径的唯一权威处，理由与实测见 §1.3** |
 | NuGet 源 | nuget.org | [`NuGet.config`](../../NuGet.config) | 此前包路径被烘焙进 `obj/*.nuget.g.props` 指向开发机（`/home/dog/game/.nuget-pkgs`），**干净检出无法复现**——本文件修掉该问题 |
 | NuGet 依赖锁定 | 三份 `code/src/<工程>/packages.lock.json` + `RestoreLockedMode` | 三个 `.csproj` | 锁的是**包图**（含传递依赖），不是"源"。漂移即 `NU1004` 失败；做法与实测见 §1.2。**自 2026-09-13（#129）** |
-| Python | **3.10.12** | CI 的 `setup-python` | 校验器与 sim 脚本 |
-| 校验器依赖 | `PyYAML==6.0.3` · `numpy==2.2.6` | [`code/tools/requirements.txt`](../../code/tools/requirements.txt) | 18 个生产校验器里**只有两个**需要第三方库：`validate_disease.py`（YAML frontmatter）与 `validate_ceiling_generator.py`（numpy——它要真跑一次生成器，#134）；NPC fixture 套件仅用标准库 |
+| Python | **3.10.12** | （原 CI 的 `setup-python`，2026-09-17 已删） | sim 脚本；校验器已于 2026-09-17 删除 |
+| `code/tools/` 依赖 | `numpy==2.2.6` | [`code/tools/requirements.txt`](../../code/tools/requirements.txt) | 🔧 **2026-09-17 重写**：原文按「校验器依赖」写（`PyYAML==6.0.3` · `numpy==2.2.6`，18 个生产校验器里只有两个需要第三方库）；那些校验器删除后本文件只剩**生成器的**依赖——`numpy`，消费方 `gen_modulation_ceiling.py` / `gen_modulation_ceiling_v2.py` / `process_hospital_atlas.py`；`PyYAML` 已无消费方，一并移出 |
 | 数值实验依赖 | `numpy==2.2.6` · `scipy==1.15.3` · `numba==0.67.0` | [`code/sim/requirements.txt`](../../code/sim/requirements.txt) | 15 个 sim 脚本里只有 3 个需要 |
 | Unity Editor | **6000.5.2f1**（revision `eb73d3b415a1`） | [`code/unity/ProjectSettings/ProjectVersion.txt`](../../code/unity/ProjectSettings/ProjectVersion.txt) | 版本与 revision 自 #136 起随工程入库（此前该文件只有 `m_EditorVersion` 一行）；包版本另有 `code/unity/Packages/packages-lock.json` 可复现。Unity 侧的**未验证项**见 §五 |
 
@@ -93,8 +98,8 @@ dotnet restore code/src/YouAreNotTheFish.sln --force-evaluate
 
 **为什么规定 `Major` 而不是 `LatestMajor`**（两个值在本机都可行，所以必须写明理由，不能"任选其一"）：
 `Major` 取**最近**的高主版本，`LatestMajor` 取**最高**的。本机将来装上 11/12 时，前者仍优先选最近的 runtime，
-行为更保守、更可预测——门禁要的是"能跑起来"而不是"跑在最新上"。`gates.json` 的 `engine` 命令与
-`code/tools/compare_fixture_verdicts.py` 的默认值同为此值。
+行为更保守、更可预测——判据要的是"能跑起来"而不是"跑在最新上"。⚠️ 2026-09-17 注：原文此处写「`gates.json` 的 `engine` 命令与
+`code/tools/compare_fixture_verdicts.py` 的默认值同为此值」——两者已随全部门禁删除，本条口径现在只由 `dotnet test` 与 §2.2 的命令体现。
 
 > ⚠️ **实测推翻了 #131 立题时的一个前提**：两个值**不是**"只可能有一个成立"——只装一个主版本（10）时，
 > 两者解析到同一个 runtime。真正会失败的是**不设**这一项（第 3 行）。所以本 issue 的结论不是"改正一个错值"，
@@ -106,7 +111,10 @@ dotnet restore code/src/YouAreNotTheFish.sln --force-evaluate
 
 ## 二、命令
 
-### 2.1 设计正典与数据契约（改文档或数据后必跑）
+### 2.1 设计正典与数据契约（原「改文档或数据后必跑」；2026-09-17 起无命令可跑）
+
+> 🔧 **2026-09-17：本节列的命令全部失效。** 18 个生产校验器（`validate_*.py`）、NPC fixture 套件（`test_validate_npc_materials.py`）、issue 契约（`validate_issues.py` / `test_validate_issues.py`）、`check_clean_checkout.py`、`run_all_checks.py` 与 `build_runtime_data_fixtures.py --check` 已随全部门禁一并删除。
+> **改设计文档或数据后没有任何命令可跑**——死链、废弃术语残留、参数漂移、数据清单一致性只能人工核对。下面各代码块保留为**撤销前的清单**，只作历史记录，不要再照跑。
 
 ```bash
 pip install -r code/tools/requirements.txt
@@ -131,13 +139,13 @@ python3 code/tools/validate_npc_materials.py      # NPC manifest ↔ 16 组素�
 python3 code/tools/build_runtime_data_fixtures.py --check   # fixture 索引与磁盘一致
 ```
 
-NPC 素材生产校验器另有一个独立 mutation fixture 套件；它不计入上述 18 个生产校验器：
+NPC 素材生产校验器另有一个独立 mutation fixture 套件（2026-09-17 已删）；它不计入上述 18 个生产校验器：
 
 ```bash
 python3 code/tools/test_validate_npc_materials.py  # 真实基线 + 缺失/漂移/假阳性反例（#174）
 ```
 
-**issue 契约**（新建或修改 issue 后跑；需要 `gh` 已认证或 `GH_TOKEN`）：
+**issue 契约**（2026-09-17 已删：`validate_issues.py` 曾是「新建或修改 issue 后跑」的那道门禁，需要 `gh` 已认证或 `GH_TOKEN`）：
 
 ```bash
 python3 code/tools/test_validate_issues.py                 # 规则 fixture：14 条规则各一正一反（36 条用例，不联网）
@@ -149,7 +157,7 @@ python3 code/tools/validate_issues.py --file <草稿.md>      # 创建前的门�
 
 > **为什么要 fixture**：`validate_issues.py` 是 1400+ 行、14 条规则的**元工具**——它错了没人替它把关。此前它没有任何自动化测试，代价已经付过两次：① §4.1.1 例外 1「门禁可引用尚不存在的脚本」**文档承诺了、代码从未实现**，存活到 #142 首次交付新门禁才被撞出；② #134 的门禁行因解析器从散文里误抓到一个**已存在的文档路径**而空过（越啰嗦越安全）。`test_validate_issues.py` 落地当天即抓出两处：**I13 读的 `snapshot["closed_numbers"]` 从未被 `fetch_snapshot` 产出**（恒为空集 → 「blocked-by 全部已关闭」判据永不成立）、**I8 的豁免标记会被路径自身的文件名命中**（`根本不存在.py` 让真缺失的引用被降级为警告）。两条都已修，并各有对应用例钉住。
 
-**干净检出检查**（CI 已纳入）：
+**干净检出检查**（2026-09-17 已删；当时 CI 已纳入）：
 
 ```bash
 python3 code/tools/check_clean_checkout.py
@@ -160,9 +168,9 @@ python3 code/tools/check_clean_checkout.py
 
 > 为何需要它：2026-09-12 CI 首跑失败的三类缺陷，**全部**是这一类——本地有残留产物与残留文件，模拟测试无法发现。
 
-编排器：`python3 code/tools/run_all_checks.py`（⚠️ **有副作用**——写 `.checks-state.json`，CI 里不要用）
+编排器（2026-09-17 已删）：`python3 code/tools/run_all_checks.py`（当时 ⚠️ **有副作用**——写 `.checks-state.json`，CI 里不用）
 
-> 2026-09-12 修：编排器此前把校验器目录写成 `ROOT / "tools"`（Phase 3 之后该目录已不存在），于是 `get_active_validators()` 返回空列表——**跑了 0 个校验器却退出码 0**，是静默全绿。现已改为 `code/tools/`，注册表与 CI 的 18 个生产校验器逐项对齐，并加「找不到校验器即退出 2」的断言；#174 的 NPC fixture 套件也由同一注册表编排，但在 CI 中保持独立步骤。判据：编排器读数必须与 §三 的 `docs-integrity` job 一致。
+> 2026-09-12 修：编排器此前把校验器目录写成 `ROOT / "tools"`（Phase 3 之后该目录已不存在），于是 `get_active_validators()` 返回空列表——**跑了 0 个校验器却退出码 0**，是静默全绿。现已改为 `code/tools/`，注册表与 CI 的 18 个生产校验器逐项对齐，并加「找不到校验器即退出 2」的断言；#174 的 NPC fixture 套件也由同一注册表编排，但在 CI 中保持独立步骤。判据：编排器读数必须与 §三 的 `docs-integrity` job 一致。⚠️ 2026-09-17：编排器与该 job 均已删除，这条判据随之失效。
 
 ### 2.2 引擎（改代码后必跑）
 
@@ -183,6 +191,8 @@ dotnet test    code/src/YouAreNotTheFish.sln --no-build  -c Release
 
 ### 2.2.1 跨语言数据契约（P4c）
 
+> 🔧 **2026-09-17：`compare_fixture_verdicts.py` 已随全部门禁删除**——下面的命令不再可跑，CI 的 `engine` job 也不再跑它（现在只 restore + build + test）。53 条 fixture 与两侧规则表仍在 `data/runtime-fixtures/` 与 `code/src/` 里，但**两侧判定是否一致，现在没有东西在核**。
+
 ```bash
 python3 code/tools/compare_fixture_verdicts.py
 ```
@@ -192,7 +202,7 @@ python3 code/tools/compare_fixture_verdicts.py
 
 **为何不能只"共用 fixture"**：两侧读同一批输入 ≠ 两侧给出同一判定。
 owner 方案 §9.3 的判据是「跨语言**接受/拒绝集合一致**」——只有把判定逐条比对、
-且差异为空，判据才成立。本脚本就是那条比对，CI 的 `engine` job 会跑它。
+且差异为空，判据才成立。本脚本就是那条比对（当年 CI 的 `engine` job 会跑它，该步已于 2026-09-17 删除）。
 
 **两侧的分工**（不是分叉）：
 
@@ -216,7 +226,7 @@ sim 脚本用**扁平 import**（`from sim_consciousness_cs4_test import ...`）
 
 ```bash
 python3 code/tools/gen_modulation_ceiling.py --md-only   # 只写参考表，不重写数据契约（安全）
-python3 code/tools/validate_ceiling_generator.py         # 把"解耦成立"钉成判据（CI 已纳入）
+python3 code/tools/validate_ceiling_generator.py         # 把"解耦成立"钉成判据（2026-09-17 已删——原 CI 已纳入，现无此步）
 ```
 
 `gen_modulation_ceiling.py`（v1）默认模式会**重算并重写** `data/connectivity/link_modulation_ceiling.json`——
@@ -246,16 +256,18 @@ MD 参考表的默认落点是被 gitignore 的 `artifacts/链路调制上限参
 
 ## 三、CI
 
-[`.github/workflows/ci.yml`](../../.github/workflows/ci.yml) — 四个 job，对应切片三轴 + issue 契约：
+[`.github/workflows/ci.yml`](../../.github/workflows/ci.yml) — 🔧 **2026-09-17 起只有一个 job**（owner 裁定撤销全部门禁）：
 
 | job | 覆盖 | 本机可复现 |
 |---|---|---|
-| `docs-integrity` | 18 个生产校验器（与 §2.1 同一循环）+ 1 个 NPC fixture 套件 + fixture 索引契约 | ✅ |
-| `engine` | SDK 版本核对 → restore → Release build → Release test → **跨语言 fixture 判定比对** → trx artifact | ✅ |
-| `issues-snapshot` | 规则 fixture（`test_validate_issues.py`，不联网）+ 开放 issue 的契约校验（`validate_issues.py --from-github`，需 `issues: read`） | ✅ |
-| `unity` | **显式报告 `NOT_AVAILABLE`** | ❌ 需 Editor |
+| `engine` | SDK 版本核对 → restore → Release build → 桥接工程单独再编一次（[#155](https://github.com/verystrongdog/game/issues/155) 护栏）→ Release test → trx artifact | ✅ |
+| ~~`docs-integrity`~~ | 18 个生产校验器（与 §2.1 同一循环）+ 1 个 NPC fixture 套件 + fixture 索引契约 | ❌ **2026-09-17 已删** |
+| ~~`issues-snapshot`~~ | 规则 fixture（`test_validate_issues.py`，不联网）+ 开放 issue 的契约校验（`validate_issues.py --from-github`，需 `issues: read`） | ❌ **2026-09-17 已删** |
+| ~~`unity`~~ | **显式报告 `NOT_AVAILABLE`** | ❌ **2026-09-17 已删**——连"未运行不是通过"的那份显式报告也没有了 |
 
-**为何 `unity` job 是一个"什么也不做"的 job**：按 [WORKFLOW.md §五](../../WORKFLOW.md)，**未运行不是通过**。若直接省略该 job，整个 workflow 会全绿，而 Unity 门禁（P4b/P4d/P5）实际未执行——那是静默跳过。因此它存在、具名标注 `NOT_AVAILABLE`、并在作业摘要里列出受影响的门禁。
+`engine` job 里原有的**跨语言 fixture 判定比对**一步（`compare_fixture_verdicts.py`）同期删除；现在的 `engine` 只有 restore / build / test。
+
+**为何 `unity` job 曾是一个"什么也不做"的 job**（历史）：按 [WORKFLOW.md §五](../../WORKFLOW.md)，**未运行不是通过**。若直接省略该 job，整个 workflow 会全绿，而 Unity 门禁（P4b/P4d/P5）实际未执行——那是静默跳过。因此它存在、具名标注 `NOT_AVAILABLE`、并在作业摘要里列出受影响的门禁。
 
 ## 四、判据
 
@@ -275,20 +287,20 @@ MD 参考表的默认落点是被 gitignore 的 `artifacts/链路调制上限参
 
 | 判据 | 要求 |
 |---|---|
-| 生产校验器与 NPC fixture | 18/18 生产校验器退出码 0；`test_validate_npc_materials.py` 独立退出码 0 |
-| `validate_cross_refs` | **0 死链 / 0 段引用警告** |
-| 引擎测试 | **416 passed / 0 failed**（唯一权威；其余文档引用本节） |
-| 跨语言 fixture 判定 | `compare_fixture_verdicts.py` 逐条比对 Python 与 C# 的接受/拒绝，**差异为空**（53 条） |
+| 引擎测试 | **416 passed / 0 failed**（唯一权威；其余文档引用本节）——⚠️ 2026-09-17 起这是**唯一**还在跑的判据 |
 | 干净检出 | 无本地缓存（`.nuget-pkgs`）也能 restore + 构建 + 测试 |
 | SDK 版本 | 与 `global.json` 一致，不一致即失败（CI 有显式断言） |
-| issue 契约 | `validate_issues.py --from-github` 退出码 0（存量 issue 按 [issue-process.md §7.4](issue-process.md) 显式跳过，不算通过） |
-| 工作树 | 跑完检查后**无非预期变化**（校验器不写工作树） |
+| ~~生产校验器与 NPC fixture~~ | ❌ 2026-09-17 已删——原要求「18/18 生产校验器退出码 0；`test_validate_npc_materials.py` 独立退出码 0」 |
+| ~~`validate_cross_refs`~~ | ❌ 2026-09-17 已删——原要求「**0 死链 / 0 段引用警告**」；现在只能人工核对 |
+| ~~跨语言 fixture 判定~~ | ❌ 2026-09-17 已删——原用 `compare_fixture_verdicts.py` 逐条比对 Python 与 C# 的接受/拒绝，**差异为空**（53 条） |
+| ~~issue 契约~~ | ❌ 2026-09-17 已删——原要求 `validate_issues.py --from-github` 退出码 0（存量 issue 按 [issue-process.md §7.4](issue-process.md) 显式跳过，不算通过） |
+| ~~工作树~~ | ❌ 2026-09-17 已删——原要求「跑完检查后**无非预期变化**（校验器不写工作树）」；已无校验器可写 |
 
 ## 五、已知缺口
 
 | 缺口 | 影响 | 解除条件 |
 |---|---|---|
-| **Unity 门禁** | ✏️ 2026-09-12：**本机已可跑**——Linux 侧是同一台 Windows 上的 WSL2，`unity.exe` 经 interop 直驱 Windows Editor（实测 `unity status` → `state: ready`、`unity open` 工程 → 编译 0 错误）。**CI（ubuntu）侧仍不可用**，其 `unity` job 继续显式报告 `NOT_AVAILABLE`。判据按 [gates.json](gates.json) 的 `environment` 判定 | — |
+| ~~**Unity 门禁**~~ | ✏️ 2026-09-12 记录：**本机已可跑**——Linux 侧是同一台 Windows 上的 WSL2，`unity.exe` 经 interop 直驱 Windows Editor（实测 `unity status` → `state: ready`、`unity open` 工程 → 编译 0 错误）。**CI（ubuntu）侧仍不可用**，其 `unity` job 当年显式报告 `NOT_AVAILABLE`。⚠️ 2026-09-17：该门禁、那个 job 与 `gates.json` 已一并删除——**Unity 侧现在没有任何东西在跑**，WSL interop 这条环境事实仍然成立，只是要靠人手动执行 | — |
 | `code/unity/Packages/packages-lock.json` 缺失 | 包版本不可复现 | ✅ 2026-09-12 **已入库**（`code/unity/Packages/packages-lock.json` + 与之同源的 `manifest.json`——只提交锁会让两者立刻不一致）。一致性机械核法：锁里 builtin 依赖版本 = Editor 6000.5.2f1 安装自带的版本（`com.unity.ugui` 2.5.0 / `com.unity.test-framework` 1.7.0，取自该安装的 `BuiltInPackages/`） |
 | `.meta` 2 个 / 场景 0 个 | Unity 工程不完整，场景靠 Editor 菜单运行时生成；**Blend Tree 阈值 / transition 参数 / Avatar Mask 无处安放**——手调动画成果无法入库。更具体地说：9 个 Mixamo FBX **已在 git 里却没有 `.meta`** → 干净检出每次开工程都重发 GUID，`ActionLab.controller` 的 clip 绑定必然失效 | ✅ 2026-09-12 [#136](https://github.com/verystrongdog/game/issues/136) 闭合：`.meta` **2 → 57**、场景 **0 → 1**（`ActionLab.unity`）、controller **0 → 1**、`ProjectSettings/` **1 → 23**，共 80 个新文件 + 2 个文件改动（`code/src/` 与 `data/` 零改动）。实测记录与证据见 [code/unity/README.md §二·H](../../code/unity/README.md)。**残留**：controller 的 4 条 locomotion 态仍引用不入库的 KI 包（#139 工作面）；干净检出的首次导入未实测（Editor 只跑在 Windows 拷贝上）；资产身份尚无常驻校验器 |
 | 无 `NuGet.lock`（packages.lock.json） | 传递依赖版本可漂移 | ✅ 2026-09-13 [#129](https://github.com/verystrongdog/game/issues/129) 闭合：三个工程提交 `packages.lock.json` 并打开 `RestoreLockedMode`（SDK 10.0.400 · 锁定日 2026-09-13）——干净 worktree + **空**包目录下 restore/build/test 通过（**416 passed / 0 failed**），注入漂移实测 `NU1004`，锁文件生成确定性成立。读数见 §1.2 |
@@ -302,5 +314,5 @@ MD 参考表的默认落点是被 gitignore 的 `artifacts/链路调制上限参
 - **资产身份无常驻机械校验器**（`.meta` 齐全性、GUID 唯一性、场景与 controller 的引用可解析性）——#136 是用一次性脚本核的（294 个 `.meta` → 294 个唯一 GUID / 0 冲突）。缺它则本次的判据无法回归
 
 ---
-*创建: 2026-09-12 | 更新: 2026-09-13（§1.2 依赖锁定 #129 · §1.3 roll-forward 口径 #131 · §2.4 生成链解耦 #134）*
+*创建: 2026-09-12 | 更新: 2026-09-17（门禁撤销：§2.1/§2.2.1/§2.4 的命令、§三 的三个门禁 job 与 §四 的校验器判据全部标记为已删；§一 环境锁定与 §2.2 引擎命令仍有效）*
 *关联: [工程文档索引](README.md), [WORKFLOW.md](../../WORKFLOW.md), [ARCHITECTURE.md](../../ARCHITECTURE.md), [证据](evidence/README.md)*

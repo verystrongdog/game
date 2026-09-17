@@ -60,7 +60,7 @@ md 文档（设计层）          JSON 文件（数据层）          C# 引擎 
   属性更新是人工动作 `--refresh`。
 
 **runtime allowlist**：引擎只允许消费 `role=runtime` 的 8 个文件（由 `GameDataLoader.LoadAll` 实测确定，
-双向校验见 [`validate_data_manifest.py`](../code/tools/validate_data_manifest.py)）。
+双向校验原由 `code/tools/validate_data_manifest.py` 做——⚠️ 该脚本已于 2026-09-17 随全部门禁删除，现在只能人工对照 manifest 与 `GameDataLoader.LoadAll`）。
 
 **外部数据来源**：`data/connectivity/` 下的外部数据集（Yeo2011 / Hansen2024 / CAB-NP / ENIGMA / Kroell）
 的来源、许可、文件清单与消费方见 [connectivity/external-sources.md](connectivity/external-sources.md)。
@@ -115,11 +115,13 @@ md 文档（设计层）          JSON 文件（数据层）          C# 引擎 
 
 生成与校验：
 
+> ⚠️ **2026-09-17**：`validate_runtime_fixtures.py` 与 `compare_fixture_verdicts.py` 已随全部门禁删除。下面四条里**只有 fixture 生成侧的两条仍可跑**；「跨语言接受/拒绝集合一致」这条判据（`data/runtime-fixtures/index.json` 的 `_rules` 末条）现在没有东西在核。
+
 ```bash
 python3 code/tools/build_runtime_data_fixtures.py --refresh   # 重建
 python3 code/tools/build_runtime_data_fixtures.py --check     # 索引与磁盘一致
-python3 code/tools/validate_runtime_fixtures.py               # Python 侧判定
-python3 code/tools/compare_fixture_verdicts.py                # 跨语言逐条比对（需 dotnet）
+python3 code/tools/validate_runtime_fixtures.py               # Python 侧判定（2026-09-17 已删）
+python3 code/tools/compare_fixture_verdicts.py                # 跨语言逐条比对（2026-09-17 已删）
 ```
 
 ---

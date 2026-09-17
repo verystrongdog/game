@@ -41,7 +41,7 @@
 | 许可 | **未登记**——见 [§二](#二已知缺口) |
 | 本仓文件 | `brainstemfc_Schaefer400.npy` · `mesulam_schaefer400.csv` · `region_info_Schaefer400.csv` · `subcortex_coords.csv` · `voneconomo_schaefer400.csv` · `brainstem_coords.txt` · `brainstem_coords_labels.txt` |
 | 用途 | 脑干核团（10/10 覆盖）的 MNI 坐标与皮层 FC 定性分层；**数值权威的裁定见 §二 缺口 1（2026-09-13：#132 裁定 C）** |
-| 消费方 | ✅ **已有受控消费者（只读）**：`code/tools/validate_hansen_intake.py`（#133）读 `region_info_Schaefer400.csv` · `subcortex_coords.csv` · `brainstem_coords.txt` · `brainstem_coords_labels.txt` 做结构校验；**`brainstemfc_Schaefer400.npy`（fc 矩阵）· `mesulam_*.csv` · `voneconomo_*.csv` 仍零消费者**——裁定 C 明确不读矩阵。见 [§二](#二已知缺口) |
+| 消费方 | ✅ **曾有受控消费者（只读）**：`code/tools/validate_hansen_intake.py`（#133）读 `region_info_Schaefer400.csv` · `subcortex_coords.csv` · `brainstem_coords.txt` · `brainstem_coords_labels.txt` 做结构校验——⚠️ **2026-09-17 该脚本已随全部门禁删除，这些文件现在是零消费者**；**`brainstemfc_Schaefer400.npy`（fc 矩阵）· `mesulam_*.csv` · `voneconomo_*.csv` 从来就是零消费者**——裁定 C 明确不读矩阵。见 [§二](#二已知缺口) |
 | 设计依据 | [决策树 §D8](../decisions/03-topics-2026-08-01-to-08-11.md)；脑干核团坐标的落库形式是 `data/brain_regions.json` |
 
 ### 1.3 `data/connectivity/cab-np/` — 皮层下网络分配（CAB-NP v1.1）
@@ -108,7 +108,7 @@ abagen 基因表达数据当前无任何 runtime 或生成链消费者。
 
 | 文件 | 消费方 |
 |---|---|
-| `region_info_Schaefer400.csv` · `subcortex_coords.csv` · `brainstem_coords.txt` · `brainstem_coords_labels.txt` | ✅ `code/tools/validate_hansen_intake.py`（**只读**结构校验：配对完整性 / 16 条项目条目逐条有判定 / 两组坐标配对一致 / 运行前后指纹不变）；接进 `docs-integrity` |
+| `region_info_Schaefer400.csv` · `subcortex_coords.csv` · `brainstem_coords.txt` · `brainstem_coords_labels.txt` | ~~✅ `code/tools/validate_hansen_intake.py`（**只读**结构校验：配对完整性 / 16 条项目条目逐条有判定 / 两组坐标配对一致 / 运行前后指纹不变）；接进 `docs-integrity`~~ → ⚠️ **2026-09-17 已删**：该脚本、`docs-integrity` job 随全部门禁一并移除，四个文件现在零消费者 |
 | `brainstemfc_Schaefer400.npy`（fc 矩阵）· `mesulam_schaefer400.csv` · `voneconomo_schaefer400.csv` | 仍 **0**——裁定 C 明确**不读 fc 矩阵**（那是被否决的 A）。这三条的零消费者状态是**有意保留**的，不再是缺口 |
 
 而 [`gen_modulation_ceiling.py`](../../code/tools/gen_modulation_ceiling.py) 当时用硬编码数值

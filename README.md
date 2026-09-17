@@ -33,14 +33,14 @@
 | [`design/framework/`](design/framework) | 六维状态路由表 + 六维度索引 |
 | [`design/decisions/`](design/decisions/README.md) | 决策树——93 个条目的设计决策分叉记录 |
 | [`design/conventions/`](design/conventions/README.md) | 项目规约、写作与引用规范、agent 工作流文档 |
-| [`design/engineering/`](design/engineering/README.md) | **工程侧权威**：构建与测试、issue 创建约束、门禁能力表（`gates.json`）、阶段证据；含 [**工程危险点表**](design/engineering/危险点表.md)（按**位置**检索的排障索引） |
+| [`design/engineering/`](design/engineering/README.md) | **工程侧权威**：构建与测试、issue 创建约束、阶段证据；含 [**工程危险点表**](design/engineering/危险点表.md)（按**位置**检索的排障索引）——⚠️ 原门禁能力表 `gates.json` 已于 2026-09-17 随全部门禁撤销一并删除 |
 | [`design/slices/`](design/slices/README.md) | 当前可玩目标的**四轴状态**与试玩证据（准入状态见 [PLAYABLE.md](PLAYABLE.md)） |
 | [`design/archive/`](design/archive) | 归档：`grilling/`（各轮源记录 + 122 issue 存档）· `owner-plan/`。**垃圾箱已于 2026-09-13 移出仓库**——本地保留在 `.trash/`（被忽略、26 个文件），历史可 `git show <sha>:design/archive/trash/<路径>` 取回 |
 | [`reference/`](reference) | 文献、书籍、灵感收件箱；`deprecated/` 保留已废弃子系统为参考数据源 |
 | [`code/src/`](code/src) | C# 逻辑引擎（.NET 8 库 + Console harness + 引擎测试；**测试计数见** [构建与测试 §四](design/engineering/build-and-test.md)） |
 | [`code/unity/`](code/unity) | Unity 6 呈现沙盘工程 |
 | [`code/sim/`](code/sim) | Python 数值模拟验证脚本 |
-| [`code/tools/`](code/tools) | 校验器（`validate_*.py`）与数据生成工具 |
+| [`code/tools/`](code/tools) | 数据生成 / 迁移 / 测量工具（`build_*` · `gen_*` · `migrate_*` · `measure_*`）与 Blender 桥；原 `validate_*.py` 校验器已于 2026-09-17 删除 |
 | [`data/`](data/README.md) | 结构化数据契约：脑区、三体神经模型、情境原型、病理边、术语注册表 |
 
 ## 从哪里开始读
@@ -53,7 +53,7 @@
 | 代码和设计之间的边界 | [ARCHITECTURE.md](ARCHITECTURE.md) |
 | 这个游戏现在设计到哪一步了 | [设计框架-六维状态](design/framework/six-dimensions.md) |
 | **某个位置反复出什么事、怎么躲** | [**工程危险点表**](design/engineering/危险点表.md)——按**位置**做主键（导入期 / 生成期 / 场景装配 / 播放期 / 编辑器驱动 / 提交期 / 引擎层，共 30 个位置键），症状做列，可 grep 症状词排障 |
-| **怎么造 / 怎么验证 / 门禁是什么** | [工程文档索引](design/engineering/README.md)：[构建与测试](design/engineering/build-and-test.md) · [issue 创建约束](design/engineering/issue-process.md) · [`gates.json`](design/engineering/gates.json) · [阶段证据](design/engineering/evidence/README.md) |
+| **怎么造 / 怎么验证** | [工程文档索引](design/engineering/README.md)：[构建与测试](design/engineering/build-and-test.md) · [issue 创建约束](design/engineering/issue-process.md) · [阶段证据](design/engineering/evidence/README.md)。⚠️ 机械校验已于 2026-09-17 全部撤销，CI 只做构建与测试（`dotnet test code/src/YouAreNotTheFish.sln`） |
 | 某个机制怎么结算 | [design/rules/核心机制.md](design/rules) |
 | 某个设计为什么这么定 | [决策树](design/decisions/README.md) → 对应轮的[源记录](design/archive/grilling/) |
 | 某个名词在这个项目里是什么意思 | [`data/term_registry.json`](data/term_registry.json)（看 `status` 字段——很多常规词汇在本项目里是**已废弃**的旧模型） |
@@ -63,7 +63,7 @@
 ## 维护约定
 
 - **设计驱动代码**：先有设计文档，再写代码。边界见 [项目规约 §一](design/conventions/README.md)
-- **改动后跑校验**：`python3 code/tools/validate_cross_refs.py` 报 0 死链、`dotnet test code/src/YouAreNotTheFish.sln` 全绿，是提交前的底线
+- **改动后的底线**：`dotnet test code/src/YouAreNotTheFish.sln` 全绿（CI 里跑的只有这一件）。⚠️ 2026-09-17 全部门禁已撤销——文档与数据的交叉引用、参数一致性不再有机械校验，改完只能靠人核对
 - **过程物不入库**：外部 AI 会话存档、书籍全文、运行日志、模拟结果由 `.gitignore` 排除，磁盘保留
 - **Git**：提交信息用中文，`类型: 描述`；按主题小步提交
 
@@ -78,5 +78,5 @@
 仓库中存在许可仍待复核的外部原始素材与参考资料。公开仓库可见不代表这些材料可被提取或再利用；它们在完成逐文件许可审计前不得进入发行包。
 
 ---
-*创建: 2026-09-06 | 更新: 2026-09-16（产品定位裁定为叙事驱动的心理 CRPG · #181 选项 A）*
+*创建: 2026-09-06 | 更新: 2026-09-17（§ 门禁撤销：`code/tools/validate_*.py` 与 `design/engineering/gates.json` 已删，改后底线只剩 `dotnet test`）*
 *关联: [AGENTS.md](AGENTS.md), [PLAYABLE.md](PLAYABLE.md), [WORKFLOW.md](WORKFLOW.md), [架构](ARCHITECTURE.md), [设计总览](design/README.md), [项目规约](design/conventions/README.md)*
