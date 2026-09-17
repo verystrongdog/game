@@ -42,6 +42,7 @@
 | [`code/sim/`](code/sim) | Python 数值模拟验证脚本 |
 | [`code/tools/`](code/tools) | 校验器（`validate_*.py`）与数据生成工具 |
 | [`data/`](data/README.md) | 结构化数据契约：脑区、三体神经模型、情境原型、病理边、术语注册表 |
+| [`web/`](web/README.md) | 叙事 Web UI 的 Vite 本地开发入口；直接托管 `design/presentation/叙事界面原型.html` |
 
 ## 从哪里开始读
 
@@ -61,6 +62,16 @@
 | 怎么提交 | [协作指南](CONTRIBUTING.md) |
 
 ## 维护约定
+
+### 本地打开叙事 Web UI
+
+```bash
+cd web
+bun install
+bun run dev
+```
+
+然后访问 <http://localhost:5174/>。该入口只托管呈现原型，不启动或模拟 StoryEngine；端口与电车项目的 `5173` 分开，可以同时运行。
 
 - **设计驱动代码**：先有设计文档，再写代码。边界见 [项目规约 §一](design/conventions/README.md)
 - **改动后跑校验**：`python3 code/tools/validate_cross_refs.py` 报 0 死链、`dotnet test code/src/YouAreNotTheFish.sln` 全绿，是提交前的底线
