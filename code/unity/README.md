@@ -241,7 +241,7 @@ ActionLab 的 `Main Camera` **自带环绕跟随**：`ActionLabBuilder.CreateSce
 
 | 排除项 | 理由 |
 |---|---|
-| `Assets/Kevin Iglesias/`（**68 MB**） | 第三方资产包；来源已整条切 Mixamo（[动作库规格 §五](../../design/presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md)）；[#139](https://github.com/verystrongdog/game/issues/139) 的验收标准明写「干净检出下 `Assets/Kevin Iglesias/` 不存在」。`.gitignore` 已排除 |
+| `Assets/Kevin Iglesias/`（**68 MB**） | 第三方资产包；来源曾整条切 Mixamo（[动作库规格 §五](../../design/presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md)）。🔧 **2026-09-17（owner 裁定）**：整包仍排除，但**放行了 locomotion 的最小依赖闭包 6 件共 3.5 MB**（4 条 clip + Avatar 源 + Avatar Mask），见 `.gitignore` 里的逐级 `!` 规则——理由与实测依据见 §五 修正块。原写的「#139 验收标准要求干净检出下该目录不存在」随 #139 关闭而失效 |
 | `Assets/Temp/` | #137 站↔坐探针的过程物（`SitCheck.controller` + 两张截图），不是工程资产 |
 | `WalkerLab` / `KiWalkerLab` 两个 lab 场景 | 由 builder 菜单重建，随各自 issue 落地。（`DemoSandbox` 已于 2026-09-13 随白盒沙盘整体退役并删除，#155） |
 | `Assets/Settings/Pipeline/EditorPipelineManager.asset` | `com.unity.pipeline` 首次使用的自动产物，可再生 |
@@ -275,13 +275,13 @@ ActionLab 的 `Main Camera` **自带环绕跟随**：`ActionLabBuilder.CreateSce
 
 ### 残留缺口（诚实清单）
 
-1. **4 条 locomotion 态仍引用不入库的 KI 包**：`ActionLab.controller` 的 Idle/Walk/Run/Jump 指向 `Assets/Kevin Iglesias/...`。干净检出下这 4 态是「状态存在 + clip 空（Missing）」——正是 [#139](https://github.com/verystrongdog/game/issues/139) 的工作面（整条切 Mixamo 并落库）。入库的是**工程当前的真实状态**，不是伪造的完整态。
+1. ~~**4 条 locomotion 态仍引用不入库的 KI 包**~~ —— **✅ 2026-09-17 已闭合（owner 裁定放行最小闭包）**。原文：`ActionLab.controller` 的 Idle/Walk/Run/Jump 指向 `Assets/Kevin Iglesias/...`，该包原先整份不入库，故干净检出下这 4 态是「状态存在 + clip 空（Missing）」。现改为**入库最小依赖闭包 6 件共 3.5 MB**（4 条 clip + Avatar 源 `HumanM_Model.fbx` + `Human Body Full Mask.mask`），`.gitignore` 逐级 `!` 放行、整包 68 MB 仍排除——干净检出下这 4 态的 `m_Motion` 现在**可解析**。理由、闭包的实测依据（读 `.meta` 得出，非猜）、以及**仍未解决**的跨族 retarget 与契约 B 问题见 [动作库规格.md §五](../../design/presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md)；许可登记见 [`THIRD_PARTY_NOTICES.md`](../../THIRD_PARTY_NOTICES.md)。
 2. **2 项常红 PlayMode 断言的真因与 #139 的归因不符**（实测见上表）：那两条是 `ActionPlayer` 的纯逻辑缺陷，落 5 条 clip **不会**让它们转绿；而 `ActionPlayer.cs` / 断言文件都不在 #139 的「允许变化」里 → #139 按现文写达不到自己的验收标准。按 [WORKFLOW.md §一](../../WORKFLOW.md) 非阻塞发现进候选队列，**不在 #136 里顺手修**。
    - **🔧 2026-09-12 已修（随坐立三段那一批，非顺手牵羊——两条都在坐立路径上）**：
      - ① `OneShotElapsed`——C# 允许浮点运算使用**高于结果类型的精度**：`elapsed >= clipLength + OneShotTailSeconds` 的右侧可能以 **double 中间值**参与比较，与外部按 float 落回的同一个和**差 1 ulp**，恰好到点被判"未到点"（实测：`a = clipLen + 0.05f` 与函数内的和同为 bits `1065772646`，函数却返回 `False`）。改为显式落回 float 再比。此计时正是 `Sit` 播完切 `SitIdle` 的依据。
      - ② `ResetToIdle` 不清 `CurrentActionId`——重置后仍留旧值，凡靠它做输入守卫的路径被误导（例：7 起身的守卫要求"当前是 `SitIdle`"）。
    - **证据**：PlayMode **23 项 23 过 / 0 红**（此前 21 项中 2 项常红，见 §二·I）。
-3. **干净检出的首次导入 / 编译 / Play 未实测**：Editor 只跑在 Windows 拷贝上（Linux 侧无 Editor，且 WSL 对 `/mnt/c` 只读）。正确性由三条间接证据支撑：① 84/84 逐文件字节一致；② 场景与 controller 的 GUID 引用全部可解析到已跟踪资产（含 X Bot.fbx、5 条 combat clip）〔🔧 2026-09-13 更正：**此句当时写宽了**——`ActionLab.controller` 的 4 条 locomotion 态引用**不可解析**（KI 包未入库），即下方残留缺口 ①；现由 `validate_unity_assets.py` 的 A3 每次报出，并登记在允许清单 `known_dangling`——⚠️ 2026-09-17：该脚本与允许清单已随全部门禁删除，这条悬空引用回到人工核对〕；③ 来源工程（就是提交的那批字节）内 Editor 0 错误、16 项测试跑通。
+3. **干净检出的首次导入 / 编译 / Play 未实测**：Editor 只跑在 Windows 拷贝上（Linux 侧无 Editor，且 WSL 对 `/mnt/c` 只读）。正确性由三条间接证据支撑：① 84/84 逐文件字节一致；② 场景与 controller 的 GUID 引用全部可解析到已跟踪资产（含 X Bot.fbx、5 条 combat clip）〔🔧 2026-09-13 更正：**此句当时写宽了**——`ActionLab.controller` 的 4 条 locomotion 态引用**不可解析**（KI 包未入库），即上方残留缺口 ①；~~现由 `validate_unity_assets.py` 的 A3 每次报出，并登记在允许清单 `known_dangling`~~——⚠️ 2026-09-17：该脚本与允许清单已随全部门禁删除；**同日该缺口本身也闭合**（KI 最小闭包入库），4 条引用现已可解析〕；③ 来源工程（就是提交的那批字节）内 Editor 0 错误、16 项测试跑通。
 4. ~~**资产身份还没有常驻机械校验器**~~ → **✅ 2026-09-13 已闭合（#142）** → ⚠️ **2026-09-17 退回未闭合**：当时 `.meta` 齐全性、GUID 唯一性、场景/controller 引用可解析性是用一次性脚本核的（294 个 `.meta` → 294 个唯一 GUID，0 冲突），**核完即弃**；随后常驻 **`code/tools/validate_unity_assets.py`**（四条规则：成对性 / GUID 唯一性 / 引用可解析 / FBX Rig，**不需要 Unity Editor**，故在 CI 上也能拦）——但该脚本、它的三段允许清单 `code/tools/validate_unity_assets_exceptions.json` 与 `docs-integrity` job **已随全部门禁于 2026-09-17 删除**，四条规则现在没有任何东西在跑，包含 4 条 KI 悬空引用（归属 [#139](https://github.com/verystrongdog/game/issues/139)）在内的全部例外**重新变成人工核对的账**。
 
 ### 怎么复核

@@ -100,11 +100,65 @@ code/unity/*.log
 
 # Unity 资产——**刻意不入库**（2026-09-12 #136 裁定，范围与理由见 code/unity/README.md §二·H）
 #
-# Kevin Iglesias Human Animations（68 MB 第三方资产包）：来源已整条切 Mixamo
-# （design/presentation/动作库规格.md §五），且 #139 的验收标准明写「干净检出下
-# Assets/Kevin Iglesias/ 不存在」——故它既不入库、也不得再作为受控文件的引用目标。
-# 它只存在于本机工程里，供 KiWalkerLab 历史对照场景使用。
-code/unity/Assets/Kevin Iglesias/
+# ── Kevin Iglesias Human Animations（68 MB 第三方资产包）──────────────────────
+# 🔧 2026-09-17（owner 裁定）：**整包仍不入库，只放行 ActionLab locomotion 需要的
+# 最小依赖闭包**，使干净检出下 ActionLab 的 Idle/Walk/Run/Jump 四态有 clip 可播。
+# 放行的 6 件（共 3.5 MB）与其理由见 design/presentation/动作库规格.md §五 修正块：
+#   · Animations/Male/Idles/HumanM@Idle01.fbx
+#   · Animations/Male/Movement/{Walk/HumanM@Walk01_Forward, Run/HumanM@Run01_Forward, Jump/HumanM@Jump01}.fbx
+#   · Models/HumanM_Model.fbx（这 4 条 clip 的 Avatar 源——其 .meta 里 avatarSetup: 2
+#     = CopyFromOtherModel，指的就是它；缺它会让人形重定向失效）
+#   · Models/Avatar Masks/Human Body Full Mask.mask（clip 的 maskSource）
+#
+# ⚠️ 写法要点：用 `路径/*` 而**不是** `路径/`——git 无法重新放行「父目录已被排除」
+# 的文件，用 `/*` 排除内容但不排除目录本身，`!` 才生效。目录 .meta 也要逐个放行。
+# 依赖闭包是读 .meta 实测得出的，不是猜的；新增放行项前先照同一办法核依赖。
+#
+# 历史：原规则为整包排除（来源曾整条切 Mixamo，#139 要求干净检出下该目录不存在）。
+# 该路线未走完（需人工从 Mixamo 下载），owner 改判为放行最小闭包。
+code/unity/Assets/Kevin Iglesias/*
+!code/unity/Assets/Kevin Iglesias/Human Animations/
+!code/unity/Assets/Kevin Iglesias/Human Animations.meta
+code/unity/Assets/Kevin Iglesias/Human Animations/*
+!code/unity/Assets/Kevin Iglesias/Human Animations/Animations/
+!code/unity/Assets/Kevin Iglesias/Human Animations/Animations.meta
+!code/unity/Assets/Kevin Iglesias/Human Animations/Models/
+!code/unity/Assets/Kevin Iglesias/Human Animations/Models.meta
+code/unity/Assets/Kevin Iglesias/Human Animations/Animations/*
+!code/unity/Assets/Kevin Iglesias/Human Animations/Animations/Male/
+!code/unity/Assets/Kevin Iglesias/Human Animations/Animations/Male.meta
+code/unity/Assets/Kevin Iglesias/Human Animations/Animations/Male/*
+!code/unity/Assets/Kevin Iglesias/Human Animations/Animations/Male/Idles/
+!code/unity/Assets/Kevin Iglesias/Human Animations/Animations/Male/Idles.meta
+!code/unity/Assets/Kevin Iglesias/Human Animations/Animations/Male/Movement/
+!code/unity/Assets/Kevin Iglesias/Human Animations/Animations/Male/Movement.meta
+code/unity/Assets/Kevin Iglesias/Human Animations/Animations/Male/Idles/*
+!code/unity/Assets/Kevin Iglesias/Human Animations/Animations/Male/Idles/HumanM@Idle01.fbx
+!code/unity/Assets/Kevin Iglesias/Human Animations/Animations/Male/Idles/HumanM@Idle01.fbx.meta
+code/unity/Assets/Kevin Iglesias/Human Animations/Animations/Male/Movement/*
+!code/unity/Assets/Kevin Iglesias/Human Animations/Animations/Male/Movement/Walk/
+!code/unity/Assets/Kevin Iglesias/Human Animations/Animations/Male/Movement/Walk.meta
+!code/unity/Assets/Kevin Iglesias/Human Animations/Animations/Male/Movement/Run/
+!code/unity/Assets/Kevin Iglesias/Human Animations/Animations/Male/Movement/Run.meta
+!code/unity/Assets/Kevin Iglesias/Human Animations/Animations/Male/Movement/Jump/
+!code/unity/Assets/Kevin Iglesias/Human Animations/Animations/Male/Movement/Jump.meta
+code/unity/Assets/Kevin Iglesias/Human Animations/Animations/Male/Movement/Walk/*
+!code/unity/Assets/Kevin Iglesias/Human Animations/Animations/Male/Movement/Walk/HumanM@Walk01_Forward.fbx
+!code/unity/Assets/Kevin Iglesias/Human Animations/Animations/Male/Movement/Walk/HumanM@Walk01_Forward.fbx.meta
+code/unity/Assets/Kevin Iglesias/Human Animations/Animations/Male/Movement/Run/*
+!code/unity/Assets/Kevin Iglesias/Human Animations/Animations/Male/Movement/Run/HumanM@Run01_Forward.fbx
+!code/unity/Assets/Kevin Iglesias/Human Animations/Animations/Male/Movement/Run/HumanM@Run01_Forward.fbx.meta
+code/unity/Assets/Kevin Iglesias/Human Animations/Animations/Male/Movement/Jump/*
+!code/unity/Assets/Kevin Iglesias/Human Animations/Animations/Male/Movement/Jump/HumanM@Jump01.fbx
+!code/unity/Assets/Kevin Iglesias/Human Animations/Animations/Male/Movement/Jump/HumanM@Jump01.fbx.meta
+code/unity/Assets/Kevin Iglesias/Human Animations/Models/*
+!code/unity/Assets/Kevin Iglesias/Human Animations/Models/HumanM_Model.fbx
+!code/unity/Assets/Kevin Iglesias/Human Animations/Models/HumanM_Model.fbx.meta
+!code/unity/Assets/Kevin Iglesias/Human Animations/Models/Avatar Masks/
+!code/unity/Assets/Kevin Iglesias/Human Animations/Models/Avatar Masks.meta
+code/unity/Assets/Kevin Iglesias/Human Animations/Models/Avatar Masks/*
+!code/unity/Assets/Kevin Iglesias/Human Animations/Models/Avatar Masks/Human Body Full Mask.mask
+!code/unity/Assets/Kevin Iglesias/Human Animations/Models/Avatar Masks/Human Body Full Mask.mask.meta
 
 # Assets/Temp/：站↔坐探针与截图过程物（#137 的核对面），不是工程资产
 code/unity/Assets/Temp/
