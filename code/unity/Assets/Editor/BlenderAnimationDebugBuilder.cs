@@ -4,8 +4,9 @@
 //   X Bot 载体 + 从 Blender 回导的 animation-only clip + `BlenderAnimationDebugger`（播放/暂停/单帧/复位 + 关键骨读数）。
 //
 // 口径权威：design/presentation/Blender动作制作管线.md §六（Unity 回导 lab）
-//   §六·1 探针 FBX 必须是 Humanoid + `CreateFromThisModel`（与既有 17 条受控 FBX 同口径，
-//          由 `code/tools/validate_unity_assets.py` 的 A4 机械守着）。
+//   §六·1 探针 FBX 必须是 Humanoid + `CreateFromThisModel`（与既有 17 条受控 FBX 同口径）。
+//          🔧 2026-09-17：原子句写「由 `code/tools/validate_unity_assets.py` 的 A4 机械守着」——
+//          该门禁已于 2026-09-17 随全部门禁一并撤销（脚本已删），**现在这句口径只能靠人工核**。
 //   §六·2 **产物只落 `Assets/Temp/`**——该目录被 `.gitignore` 的 `[Tt]emp/` 排除，lab 生成物不入库；
 //          入库的只有探针 FBX 与三份源码（#156 验收标准第 6 条）。
 //   §六·3 幂等：每次从零重建 controller 与场景，重复执行得到同一份场景。

@@ -273,9 +273,9 @@ def build():
         '_rules': [
             '每个非法 fixture 与合法版本的差异**恰好一处**（单点变异）——拒绝归因必须确定',
             'expect=accept → 加载器必须成功；expect=reject → 加载器必须抛错',
-            'Python 侧 runner：code/tools/validate_runtime_fixtures.py',
+            'Python 侧 runner：⚠️ 无——原 `code/tools/validate_runtime_fixtures.py` 已于 2026-09-17 随全部门禁删除',
             'C# 侧 runner：code/src/YouAreNotTheFish.Core.Tests/Data/RuntimeFixtureTests.cs',
-            '两侧判定不一致 = 跨语言接受/拒绝集合分叉（owner 方案 §9.3 判据）',
+            '⚠️ 2026-09-17：原跨语言逐条比对（`code/tools/compare_fixture_verdicts.py`）亦已删除——两端判定不再被机械比对，改人工',
         ],
         'count': {'accept': sum(1 for e in index if e['expect'] == 'accept'),
                   'reject': sum(1 for e in index if e['expect'] == 'reject')},

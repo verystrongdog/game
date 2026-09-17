@@ -1,8 +1,11 @@
-# 校验器依赖（P4a 环境锁定）
+# code/tools/ 第三方依赖
 #
-# 13 个 validate_*.py 里只有两个需要第三方库：
-#   · validate_disease.py            → PyYAML（读疾病目录的 YAML frontmatter）
-#   · validate_ceiling_generator.py  → numpy（它要真的跑一次 gen_modulation_ceiling.py，#134）
-# 其余 11 个 + run_all_checks.py + md_utils.py 纯标准库。
-PyYAML==6.0.3
+# 🔧 2026-09-17：门禁撤销后重写。原文按「校验器依赖」写，列出 13 个 validate_*.py
+# 里哪两个需要第三方库——那些校验器已全部删除，本文件随之只剩生成器的依赖。
+#
+# 现在唯一的第三方依赖是 numpy，消费方是三个生成器：
+#   · gen_modulation_ceiling.py / gen_modulation_ceiling_v2.py
+#   · process_hospital_atlas.py
+# PyYAML 原为 validate_disease.py 所需（读疾病目录的 YAML frontmatter），该校验器删除后
+# 全仓已无消费方（`data/` 下也没有 yaml 文件），故一并移出。
 numpy==2.2.6          # 与 code/sim/requirements.txt 同 pin

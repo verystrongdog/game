@@ -36,14 +36,13 @@
       "shipping": false,
       "owner": "工具组（生成链消费方：code/tools 或 code/unity Editor 侧）",
       "consumed_by": [
-        "code/tools/build_data_manifest.py",
-        "code/tools/test_validate_issues.py"
+        "code/tools/build_data_manifest.py"
       ],
       "generators": [],
       "runtime_consumers": [],
       "provenance": "本仓作者维护",
       "refs": {
-        "active_docs": 8,
+        "active_docs": 14,
         "deprecated_docs": 0
       }
     },
@@ -110,8 +109,6 @@
         "code/tools/normalize_region_names.py",
         "code/tools/rebuild_brain_regions.py",
         "code/tools/refine_coords_from_objs.py",
-        "code/tools/validate_runtime_fixtures.py",
-        "code/tools/validate_spatial.py",
         "code/unity/Assets/Editor/BrainViewLabBuilder.cs",
         "code/unity/Assets/Tests/PlayMode/BrainViewSmokeTests.cs"
       ],
@@ -161,8 +158,7 @@
         "code/src/YouAreNotTheFish.Core.Tests/Engine/ThreatJudgeTests.cs",
         "code/src/YouAreNotTheFish.Core/Data/WsensoryMatrix.cs",
         "code/tools/build_data_manifest.py",
-        "code/tools/build_runtime_data_fixtures.py",
-        "code/tools/validate_runtime_fixtures.py"
+        "code/tools/build_runtime_data_fixtures.py"
       ],
       "generators": [],
       "runtime_consumers": [
@@ -187,8 +183,7 @@
         "code/src/YouAreNotTheFish.Core.Tests/Data/RuntimeFixtureTests.cs",
         "code/src/YouAreNotTheFish.Core/Data/AlphaPatterns.cs",
         "code/tools/build_data_manifest.py",
-        "code/tools/build_runtime_data_fixtures.py",
-        "code/tools/validate_runtime_fixtures.py"
+        "code/tools/build_runtime_data_fixtures.py"
       ],
       "generators": [],
       "runtime_consumers": [
@@ -373,8 +368,7 @@
         "code/src/YouAreNotTheFish.Core.Tests/Data/RuntimeFixtureTests.cs",
         "code/src/YouAreNotTheFish.Core/Data/EnvTones.cs",
         "code/tools/build_data_manifest.py",
-        "code/tools/build_runtime_data_fixtures.py",
-        "code/tools/validate_runtime_fixtures.py"
+        "code/tools/build_runtime_data_fixtures.py"
       ],
       "generators": [],
       "runtime_consumers": [
@@ -536,8 +530,7 @@
       "owner": "设计组（design/ 引用方）",
       "consumed_by": [
         "code/tools/build_data_manifest.py",
-        "code/tools/gen_modulation_ceiling.py",
-        "code/tools/validate_ceiling_generator.py"
+        "code/tools/gen_modulation_ceiling.py"
       ],
       "generators": [
         "code/tools/gen_modulation_ceiling.py"
@@ -558,8 +551,7 @@
       "owner": "设计组（design/ 引用方）",
       "consumed_by": [
         "code/tools/build_data_manifest.py",
-        "code/tools/gen_modulation_ceiling_v2.py",
-        "code/tools/validate_ceiling_generator.py"
+        "code/tools/gen_modulation_ceiling_v2.py"
       ],
       "generators": [],
       "runtime_consumers": [],
@@ -622,8 +614,7 @@
         "code/src/YouAreNotTheFish.Core.Tests/Data/RuntimeFixtureTests.cs",
         "code/src/YouAreNotTheFish.Core/Data/MoonlightLanding.cs",
         "code/tools/build_data_manifest.py",
-        "code/tools/build_runtime_data_fixtures.py",
-        "code/tools/validate_runtime_fixtures.py"
+        "code/tools/build_runtime_data_fixtures.py"
       ],
       "generators": [],
       "runtime_consumers": [
@@ -643,9 +634,7 @@
       "role": "reference",
       "shipping": false,
       "owner": "设计组（design/ 引用方）",
-      "consumed_by": [
-        "code/tools/validate_disease.py"
-      ],
+      "consumed_by": [],
       "generators": [],
       "runtime_consumers": [],
       "provenance": "本仓作者维护",
@@ -731,8 +720,7 @@
         "code/tools/build_data_manifest.py",
         "code/tools/build_runtime_data_fixtures.py",
         "code/tools/migrate_zh_to_functional.py",
-        "code/tools/normalize_region_names.py",
-        "code/tools/validate_runtime_fixtures.py"
+        "code/tools/normalize_region_names.py"
       ],
       "generators": [
         "code/tools/migrate_zh_to_functional.py"
@@ -779,8 +767,6 @@
         "code/tools/build_function_labels.py",
         "code/tools/build_runtime_data_fixtures.py",
         "code/tools/build_tripartite_model.py",
-        "code/tools/validate_disease.py",
-        "code/tools/validate_runtime_fixtures.py",
         "code/unity/Assets/Scripts/BrainLinkRenderer.cs",
         "code/unity/Assets/Tests/PlayMode/BrainViewSmokeTests.cs"
       ],
@@ -919,8 +905,7 @@
       "owner": "工具组（生成链消费方：code/tools 或 code/unity Editor 侧）",
       "consumed_by": [
         "code/tools/author_xbot_chair_grab.py",
-        "code/tools/build_data_manifest.py",
-        "code/tools/validate_grip_cards.py"
+        "code/tools/build_data_manifest.py"
       ],
       "generators": [
         "code/tools/author_xbot_chair_grab.py"
@@ -928,7 +913,7 @@
       "runtime_consumers": [],
       "provenance": "本仓作者维护",
       "refs": {
-        "active_docs": 5,
+        "active_docs": 15,
         "deprecated_docs": 0
       }
     },
@@ -946,7 +931,7 @@
       "runtime_consumers": [],
       "provenance": "external（见 data/connectivity/sources.md 或子目录 README）",
       "refs": {
-        "active_docs": 15,
+        "active_docs": 24,
         "deprecated_docs": 2
       },
       "note": "医院建模参考的 provenance 记录（来源 PDF 路径为 Windows 绝对路径，跨机不可复现）。"
@@ -1422,9 +1407,7 @@
       "role": "evidence",
       "shipping": false,
       "owner": "归档（无活跃消费方）",
-      "consumed_by": [
-        "code/tools/validate_runtime_fixtures.py"
-      ],
+      "consumed_by": [],
       "generators": [],
       "runtime_consumers": [],
       "provenance": "本仓作者维护",
@@ -1830,8 +1813,7 @@
         "code/tools/build_data_manifest.py",
         "code/tools/build_function_labels.py",
         "code/tools/build_runtime_data_fixtures.py",
-        "code/tools/build_tripartite_model.py",
-        "code/tools/validate_runtime_fixtures.py"
+        "code/tools/build_tripartite_model.py"
       ],
       "generators": [],
       "runtime_consumers": [
@@ -1875,14 +1857,14 @@
       "consumed_by": [
         "code/tools/build_data_manifest.py",
         "code/tools/list_deprecated_terms.py",
-        "code/tools/validate_issues.py",
-        "code/tools/validate_trash_isolation.py"
+        "code/tools/xbot_balance.py",
+        "code/tools/xbot_contact_phase.py"
       ],
       "generators": [],
       "runtime_consumers": [],
       "provenance": "本仓作者维护",
       "refs": {
-        "active_docs": 20,
+        "active_docs": 27,
         "deprecated_docs": 27
       },
       "note": "设计期参考，非运行时数据。status 字段是术语唯一权威状态。"
