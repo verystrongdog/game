@@ -1,0 +1,548 @@
+@import url("unity-theme://default");
+
+.narrative-shell {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    flex-direction: row;
+    color: rgb(220, 224, 215);
+}
+
+.world-pane {
+    width: 64%;
+    height: 100%;
+    position: relative;
+}
+
+.world-vignette {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 18%;
+    background-color: rgba(6, 12, 16, 0.42);
+}
+
+.world-vignette-top {
+    top: 0;
+}
+
+.world-vignette-bottom {
+    bottom: 0;
+}
+
+.location-card {
+    position: absolute;
+    top: 30px;
+    left: 34px;
+    padding: 12px 17px 11px 17px;
+    background-color: rgba(8, 18, 22, 0.82);
+    border-left-width: 3px;
+    border-left-color: rgb(139, 182, 168);
+}
+
+.location-title {
+    color: rgb(235, 232, 216);
+    font-size: 18px;
+    -unity-font-style: bold;
+    letter-spacing: 2px;
+}
+
+.location-meta {
+    margin-top: 4px;
+    color: rgb(138, 164, 159);
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+
+.world-objective {
+    position: absolute;
+    left: 34px;
+    bottom: 34px;
+    width: 390px;
+    padding: 17px 20px 17px 20px;
+    background-color: rgba(7, 14, 18, 0.88);
+    border-top-width: 1px;
+    border-top-color: rgba(172, 195, 181, 0.46);
+}
+
+.hud-kicker {
+    color: rgb(132, 172, 160);
+    font-size: 10px;
+    -unity-font-style: bold;
+    letter-spacing: 3px;
+}
+
+.objective-text {
+    margin-top: 7px;
+    color: rgb(235, 231, 215);
+    font-size: 17px;
+    white-space: normal;
+}
+
+.status-row {
+    margin-top: 13px;
+    flex-direction: row;
+}
+
+.status-chip {
+    margin-right: 9px;
+    padding: 5px 9px 5px 9px;
+    color: rgb(171, 186, 177);
+    background-color: rgba(31, 46, 48, 0.72);
+    font-size: 10px;
+    letter-spacing: 1px;
+}
+
+.status-mind {
+    color: rgb(154, 202, 186);
+}
+
+.world-controls {
+    position: absolute;
+    right: 24px;
+    bottom: 18px;
+    color: rgba(205, 211, 201, 0.64);
+    font-size: 10px;
+    letter-spacing: 1px;
+}
+
+.story-rail {
+    width: 36%;
+    min-width: 420px;
+    height: 100%;
+    background-color: rgba(11, 18, 21, 0.97);
+    border-left-width: 1px;
+    border-left-color: rgba(151, 179, 169, 0.32);
+}
+
+.rail-header {
+    height: 94px;
+    padding: 22px 24px 17px 24px;
+    flex-direction: row;
+    align-items: center;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(128, 150, 143, 0.19);
+}
+
+.speaker-mark {
+    width: 48px;
+    height: 48px;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(41, 61, 62);
+    border-width: 1px;
+    border-color: rgb(102, 139, 132);
+    border-radius: 24px;
+}
+
+.speaker-glyph {
+    color: rgb(213, 220, 204);
+    font-size: 18px;
+    -unity-font-style: bold;
+}
+
+.speaker-copy {
+    margin-left: 14px;
+    flex-grow: 1;
+}
+
+.speaker-name {
+    color: rgb(239, 234, 217);
+    font-size: 20px;
+    -unity-font-style: bold;
+    letter-spacing: 1px;
+}
+
+.speaker-detail {
+    margin-top: 4px;
+    color: rgb(128, 150, 145);
+    font-size: 11px;
+}
+
+.conversation-state {
+    padding: 5px 8px 5px 8px;
+    color: rgb(148, 193, 177);
+    background-color: rgba(52, 91, 81, 0.38);
+    font-size: 10px;
+    letter-spacing: 1px;
+}
+
+.rail-tabs {
+    height: 48px;
+    padding-left: 20px;
+    padding-right: 20px;
+    flex-direction: row;
+    align-items: stretch;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(128, 150, 143, 0.22);
+}
+
+.rail-tab {
+    height: 48px;
+    margin-right: 4px;
+    padding-left: 15px;
+    padding-right: 15px;
+    color: rgb(116, 137, 133);
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+    border-bottom-width: 2px;
+    border-bottom-color: rgba(0, 0, 0, 0);
+    font-size: 13px;
+    -unity-font-style: bold;
+    letter-spacing: 2px;
+}
+
+.rail-tab:hover,
+.rail-tab:focus {
+    color: rgb(214, 222, 208);
+    background-color: rgba(92, 123, 115, 0.12);
+}
+
+.rail-tab-active {
+    color: rgb(220, 224, 211);
+    border-bottom-color: rgb(158, 190, 176);
+}
+
+.preview-badge {
+    margin-left: auto;
+    align-self: center;
+    color: rgb(123, 111, 87);
+    font-size: 9px;
+    letter-spacing: 1px;
+}
+
+.rail-page {
+    flex-grow: 1;
+    min-height: 0;
+}
+
+.dialogue-page {
+    flex-direction: column;
+}
+
+.story-scroll,
+.notebook-scroll {
+    flex-grow: 1;
+    min-height: 0;
+}
+
+.story-scroll .unity-scroll-view__content-container,
+.notebook-scroll .unity-scroll-view__content-container {
+    padding: 22px 24px 24px 24px;
+}
+
+.story-beat {
+    margin-bottom: 21px;
+}
+
+.beat-meta {
+    margin-bottom: 7px;
+    color: rgb(105, 132, 129);
+    font-size: 10px;
+    -unity-font-style: bold;
+    letter-spacing: 2px;
+}
+
+.beat-speaker {
+    margin-bottom: 7px;
+    color: rgb(153, 192, 177);
+    font-size: 12px;
+    -unity-font-style: bold;
+    letter-spacing: 2px;
+}
+
+.beat-body {
+    color: rgb(207, 207, 194);
+    font-size: 15px;
+    white-space: normal;
+}
+
+.scene-copy {
+    color: rgb(166, 177, 169);
+}
+
+.speech-copy {
+    color: rgb(237, 231, 213);
+    font-size: 18px;
+}
+
+.insight-card {
+    margin-bottom: 14px;
+    padding: 13px 15px 13px 0;
+    flex-direction: row;
+    background-color: rgba(29, 42, 43, 0.65);
+}
+
+.insight-rule {
+    width: 3px;
+    margin-right: 13px;
+    background-color: rgb(99, 153, 145);
+}
+
+.insight-copy {
+    flex-grow: 1;
+}
+
+.insight-title {
+    margin-bottom: 5px;
+    color: rgb(131, 181, 169);
+    font-size: 10px;
+    -unity-font-style: bold;
+    letter-spacing: 2px;
+}
+
+.insight-body {
+    color: rgb(184, 197, 188);
+    font-size: 13px;
+    white-space: normal;
+}
+
+.insight-thought {
+    background-color: rgba(39, 34, 47, 0.72);
+}
+
+.insight-thought .insight-rule {
+    background-color: rgb(142, 112, 151);
+}
+
+.insight-thought .insight-title {
+    color: rgb(176, 144, 184);
+}
+
+.system-echo {
+    margin-top: 6px;
+    margin-bottom: 12px;
+    padding: 11px 13px 11px 13px;
+    flex-direction: row;
+    align-items: center;
+    background-color: rgba(72, 64, 42, 0.36);
+    border-width: 1px;
+    border-color: rgba(172, 153, 101, 0.34);
+}
+
+.echo-icon {
+    margin-right: 11px;
+    color: rgb(199, 174, 112);
+    font-size: 18px;
+}
+
+.echo-title {
+    color: rgb(197, 178, 128);
+    font-size: 9px;
+    -unity-font-style: bold;
+    letter-spacing: 2px;
+}
+
+.echo-body {
+    margin-top: 3px;
+    color: rgb(217, 209, 185);
+    font-size: 12px;
+}
+
+.choice-deck {
+    padding: 16px 20px 17px 20px;
+    background-color: rgb(14, 22, 25);
+    border-top-width: 1px;
+    border-top-color: rgba(148, 174, 165, 0.28);
+}
+
+.choice-heading {
+    margin-bottom: 9px;
+    color: rgb(112, 137, 132);
+    font-size: 10px;
+    -unity-font-style: bold;
+    letter-spacing: 2px;
+}
+
+.choice-button {
+    min-height: 43px;
+    margin-top: 4px;
+    padding: 9px 12px 9px 10px;
+    flex-direction: row;
+    align-items: center;
+    white-space: normal;
+    color: rgb(202, 208, 196);
+    background-color: rgba(31, 44, 45, 0.72);
+    border-width: 1px;
+    border-color: rgba(112, 139, 132, 0.24);
+    border-left-width: 3px;
+    border-left-color: rgba(110, 143, 135, 0.46);
+    -unity-text-align: middle-left;
+}
+
+.choice-button:hover,
+.choice-button:focus {
+    color: rgb(244, 239, 220);
+    background-color: rgb(42, 59, 59);
+    border-color: rgb(117, 155, 145);
+    border-left-color: rgb(175, 205, 188);
+}
+
+.choice-emphasis {
+    background-color: rgba(36, 51, 51, 0.86);
+}
+
+.choice-index {
+    width: 28px;
+    color: rgb(114, 158, 148);
+    font-size: 10px;
+    -unity-font-style: bold;
+}
+
+.choice-copy-wrap,
+.choice-copy {
+    flex-grow: 1;
+}
+
+.choice-copy {
+    color: rgb(218, 219, 204);
+    font-size: 13px;
+    white-space: normal;
+}
+
+.choice-condition {
+    margin-top: 3px;
+    color: rgb(127, 158, 150);
+    font-size: 9px;
+    white-space: normal;
+}
+
+.notebook-page {
+    flex-direction: column;
+}
+
+.notebook-title {
+    color: rgb(232, 226, 207);
+    font-size: 24px;
+    -unity-font-style: bold;
+    letter-spacing: 2px;
+}
+
+.notebook-lead {
+    margin-top: 7px;
+    margin-bottom: 22px;
+    color: rgb(119, 140, 135);
+    font-size: 11px;
+    white-space: normal;
+}
+
+.note-card {
+    margin-bottom: 13px;
+    padding: 15px 16px 16px 16px;
+    background-color: rgba(30, 42, 43, 0.72);
+    border-left-width: 3px;
+    border-left-color: rgb(113, 153, 143);
+}
+
+.note-promise {
+    border-left-color: rgb(164, 135, 86);
+}
+
+.note-question {
+    border-left-color: rgb(137, 105, 148);
+}
+
+.note-type {
+    color: rgb(128, 158, 150);
+    font-size: 9px;
+    -unity-font-style: bold;
+    letter-spacing: 2px;
+}
+
+.note-title {
+    margin-top: 7px;
+    color: rgb(219, 216, 200);
+    font-size: 15px;
+    -unity-font-style: bold;
+    white-space: normal;
+}
+
+.note-body,
+.note-meta {
+    margin-top: 7px;
+    color: rgb(132, 151, 146);
+    font-size: 11px;
+    white-space: normal;
+}
+
+.rail-footer {
+    height: 29px;
+    padding-left: 20px;
+    padding-right: 20px;
+    flex-direction: row;
+    align-items: center;
+    background-color: rgb(8, 14, 17);
+    border-top-width: 1px;
+    border-top-color: rgba(128, 150, 143, 0.15);
+}
+
+.footer-hint,
+.footer-build {
+    color: rgb(84, 107, 104);
+    font-size: 8px;
+    letter-spacing: 1px;
+}
+
+.footer-build {
+    margin-left: auto;
+    color: rgb(105, 91, 69);
+}
+
+.is-hidden {
+    display: none;
+}
+
+.narrative-shell.narrow {
+    flex-direction: column;
+}
+
+.narrative-shell.narrow .world-pane {
+    width: 100%;
+    height: 38%;
+}
+
+.narrative-shell.narrow .story-rail {
+    width: 100%;
+    min-width: 0;
+    height: 62%;
+    border-left-width: 0;
+    border-top-width: 1px;
+    border-top-color: rgba(151, 179, 169, 0.32);
+}
+
+.narrative-shell.narrow .location-card {
+    top: 18px;
+    left: 20px;
+}
+
+.narrative-shell.narrow .world-objective {
+    left: 20px;
+    bottom: 18px;
+    width: 70%;
+}
+
+.narrative-shell.narrow .world-controls {
+    display: none;
+}
+
+.narrative-shell.compact .rail-header {
+    height: 72px;
+    padding: 12px 16px 10px 16px;
+}
+
+.narrative-shell.compact .speaker-mark {
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+}
+
+.narrative-shell.compact .story-scroll .unity-scroll-view__content-container,
+.narrative-shell.compact .notebook-scroll .unity-scroll-view__content-container {
+    padding: 14px 16px 16px 16px;
+}
+
+.narrative-shell.compact .choice-deck {
+    padding: 10px 14px 11px 14px;
+}

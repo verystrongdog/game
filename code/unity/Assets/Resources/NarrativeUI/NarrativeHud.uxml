@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <!-- 非正典展示壳：文案仅用于评审 Unity 布局，不代表正式剧情数据。 -->
+    <ui:VisualElement name="narrative-shell" class="narrative-shell" picking-mode="Ignore">
+        <ui:VisualElement name="world-pane" class="world-pane" picking-mode="Ignore">
+            <ui:VisualElement class="world-vignette world-vignette-top" picking-mode="Ignore" />
+            <ui:VisualElement class="world-vignette world-vignette-bottom" picking-mode="Ignore" />
+
+            <ui:VisualElement class="location-card" picking-mode="Ignore">
+                <ui:Label text="住院楼 · 一层" class="location-title" picking-mode="Ignore" />
+                <ui:Label text="护士站  /  02:17  /  夜班" class="location-meta" picking-mode="Ignore" />
+            </ui:VisualElement>
+
+            <ui:VisualElement class="world-objective" picking-mode="Ignore">
+                <ui:Label text="当前目标" class="hud-kicker" picking-mode="Ignore" />
+                <ui:Label text="弄清楚今夜是谁改过值班记录" class="objective-text" picking-mode="Ignore" />
+                <ui:VisualElement class="status-row" picking-mode="Ignore">
+                    <ui:Label text="◆  意识稳定" class="status-chip status-mind" picking-mode="Ignore" />
+                    <ui:Label text="◇  线索 03" class="status-chip" picking-mode="Ignore" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+            <ui:Label text="WASD  移动     鼠标  观察" class="world-controls" picking-mode="Ignore" />
+        </ui:VisualElement>
+
+        <ui:VisualElement name="story-rail" class="story-rail">
+            <ui:VisualElement class="rail-header">
+                <ui:VisualElement class="speaker-mark">
+                    <ui:Label text="值" class="speaker-glyph" />
+                </ui:VisualElement>
+                <ui:VisualElement class="speaker-copy">
+                    <ui:Label text="值班护士" class="speaker-name" />
+                    <ui:Label text="林晚霞 · 她还没有抬头看你" class="speaker-detail" />
+                </ui:VisualElement>
+                <ui:Label text="交谈中" class="conversation-state" />
+            </ui:VisualElement>
+
+            <ui:VisualElement class="rail-tabs">
+                <ui:Button name="dialogue-tab" text="对话" class="rail-tab rail-tab-active" />
+                <ui:Button name="notebook-tab" text="笔记" class="rail-tab" />
+                <ui:Label text="展示预览" class="preview-badge" />
+            </ui:VisualElement>
+
+            <ui:VisualElement name="dialogue-page" class="rail-page dialogue-page">
+                <ui:ScrollView name="story-scroll" mode="Vertical" class="story-scroll">
+                    <ui:VisualElement class="story-beat story-observation">
+                        <ui:Label text="02:17 · 护士站" class="beat-meta" />
+                        <ui:Label text="走廊的灯每隔一盏熄着。值班记录摊在玻璃台面上，最末一行的墨迹比其余字迹新得多。" class="beat-body scene-copy" />
+                    </ui:VisualElement>
+
+                    <ui:VisualElement class="story-beat story-speech">
+                        <ui:Label text="林晚霞" class="beat-speaker" />
+                        <ui:Label text="“你不该在这个时间下来。回病房去，天亮以后再说。”" class="beat-body speech-copy" />
+                    </ui:VisualElement>
+
+                    <ui:VisualElement class="insight-card insight-perception">
+                        <ui:VisualElement class="insight-rule" />
+                        <ui:VisualElement class="insight-copy">
+                            <ui:Label text="感知 · 观察" class="insight-title" />
+                            <ui:Label text="她的食指压在记录本的页角。不是为了防风——这里没有风。" class="insight-body" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+
+                    <ui:VisualElement class="insight-card insight-thought">
+                        <ui:VisualElement class="insight-rule" />
+                        <ui:VisualElement class="insight-copy">
+                            <ui:Label text="内在反应 · 怀疑" class="insight-title" />
+                            <ui:Label text="她希望你看见那页纸，又希望自己没有留下邀请。" class="insight-body" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+
+                    <ui:VisualElement class="system-echo">
+                        <ui:Label text="✦" class="echo-icon" />
+                        <ui:VisualElement class="echo-copy">
+                            <ui:Label text="笔记更新" class="echo-title" />
+                            <ui:Label text="线索：被改动的夜班记录" class="echo-body" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:ScrollView>
+
+                <ui:VisualElement class="choice-deck">
+                    <ui:Label text="你准备怎么回应？" class="choice-heading" />
+                    <ui:Button name="choice-one" class="choice-button">
+                        <ui:Label text="01" class="choice-index" />
+                        <ui:Label text="“你一直用手按着那一页。”" class="choice-copy" />
+                    </ui:Button>
+                    <ui:Button name="choice-two" class="choice-button choice-emphasis">
+                        <ui:Label text="02" class="choice-index" />
+                        <ui:VisualElement class="choice-copy-wrap">
+                            <ui:Label text="把自己的病历腕带放在台面上。" class="choice-copy" />
+                            <ui:Label text="感知：她正在等一个不必开口的理由" class="choice-condition" />
+                        </ui:VisualElement>
+                    </ui:Button>
+                    <ui:Button name="choice-three" class="choice-button">
+                        <ui:Label text="03" class="choice-index" />
+                        <ui:Label text="先离开。记住记录本的位置。" class="choice-copy" />
+                    </ui:Button>
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+            <ui:VisualElement name="notebook-page" class="rail-page notebook-page is-hidden">
+                <ui:ScrollView mode="Vertical" class="notebook-scroll">
+                    <ui:Label text="夜间记录" class="notebook-title" />
+                    <ui:Label text="这些内容只用于评审信息层级，不是正式存档。" class="notebook-lead" />
+
+                    <ui:VisualElement class="note-card note-promise">
+                        <ui:Label text="承诺  /  PROMISE" class="note-type" />
+                        <ui:Label text="替 307 床确认失踪的蓝色药盒" class="note-title" />
+                        <ui:Label text="尚未兑现 · 最后提及：今晚 01:40" class="note-meta" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="note-card note-clue">
+                        <ui:Label text="线索  /  CLUE" class="note-type" />
+                        <ui:Label text="被改动的夜班记录" class="note-title" />
+                        <ui:Label text="墨迹未干；林晚霞始终按着页角。" class="note-body" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="note-card note-question">
+                        <ui:Label text="自问  /  SELF" class="note-type" />
+                        <ui:Label text="如果记忆会替我撒谎，我靠什么认出真相？" class="note-title" />
+                        <ui:Label text="暂时没有答案" class="note-meta" />
+                    </ui:VisualElement>
+                </ui:ScrollView>
+            </ui:VisualElement>
+
+            <ui:VisualElement class="rail-footer">
+                <ui:Label text="数字键选择" class="footer-hint" />
+                <ui:Label text="UI PREVIEW · 非正典数据" class="footer-build" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
