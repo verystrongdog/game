@@ -214,19 +214,19 @@ Q6 结果做约束/多样性/现实性校验，而不定义"正确人生"
 .gen.json + 叙事视图（同一草稿的两种视图）
     ↓ 登记
 npc-materials-manifest.json
-    ↓ validate_npc_materials.py 内部 Adapter
+    ↓ validate_npc_materials.py 内部 Adapter（⚠️ 2026-09-17 已删）
 {events, memories, declarations}（资格门规范输入）
-    ↓ validate_eligibility.py
+    ↓ validate_eligibility.py（⚠️ 2026-09-17 已删）
 目标病种资格回放
     ↓
-患者生态索引 + 多样性记账表 + docs-integrity
+患者生态索引 + 多样性记账表 + docs-integrity（⚠️ 该 job 2026-09-17 已删）
 ```
 
 边界规则：
 
 - Adapter 只读结构化事件、记忆与精确的 `资格声明（#87 规范化声明）` 块，不从自然语言推测声明。
 - `validated` 只表示目标病种已通过生产链回放，不等于文学稿已终审。
-- 原始 `.gen.json` 不直接交给资格门；完整仓库审计入口为 `python3 code/tools/validate_npc_materials.py`。
+- 原始 `.gen.json` 不直接交给资格门；完整仓库审计的原入口 `python3 code/tools/validate_npc_materials.py` **已于 2026-09-17 随全部门禁删除**——这条生产链现在**没有任何机械审计**，下面那四件事只能人工核。
 - 生产审计同时校验草稿成对、manifest 状态、资格回放与两份人类可读台账；任一输入缺失均须明确失败。
 
 ## 六、与现有系统的关系

@@ -4,6 +4,10 @@
 
 基线: HEAD `bce2ee5` (branch `main`) · 勘察日期 2026-09-12 · 全文数字均为实测
 
+> 🔧 **2026-09-17（owner 裁定）：全部门禁已撤销。**
+> 本文各 Phase 的「验收」行与 §1.2 完成定义里提到的 `code/tools/validate_*.py`、`run_all_checks.py`、`check_clean_checkout.py`、`md_utils.py`、`compare_fixture_verdicts.py` 等校验器，连同 `design/engineering/gates.json` 注册表，**已于 2026-09-17 一并删除**——那些验收行描述的是 2026-09-12 至 09-13 的执行时点，不是今天可以照跑的判据。现在 CI 只做构建与测试。
+> 本文是**执行记录**（绑定基线 `bce2ee5`），不是当前流程；当前流程见 [WORKFLOW.md](WORKFLOW.md) 与 [构建与测试](design/engineering/build-and-test.md)。
+
 ---
 
 ## 目录

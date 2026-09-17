@@ -37,7 +37,7 @@ data/       结构化数据契约
 
 **这些是历史，不是流程。** 新的设计讨论用你顺手的方式（对话、笔记、issue 都行），只要求一件事：**结论要落进 `design/`，并在此处或决策树留一条索引**。
 
-**讨论收敛之后**，需要动手做的部分按 [issue 创建约束与需求分解](design/engineering/issue-process.md) 导入 issue 流程：讨论阶段**不建 issue**（讨论的产物是决策），收敛后过导入门，把结论分解成依赖有序、可逐步实现、带门禁与验收标准的 issue。新建 issue 须先过 `code/tools/validate_issues.py` 的门禁。
+**讨论收敛之后**，需要动手做的部分按 [issue 创建约束与需求分解](design/engineering/issue-process.md) 导入 issue 流程：讨论阶段**不建 issue**（讨论的产物是决策），收敛后过导入门，把结论分解成依赖有序、可逐步实现、带验收判据的 issue。⚠️ 2026-09-17 起新建 issue **不再有机械校验**——原来守住字段完整性的 `code/tools/validate_issues.py` 已随全部门禁一并删除，字段完整性改由人核对。
 
 ## 三、Git 约定
 
@@ -78,17 +78,15 @@ data/       结构化数据契约
 
 ## 四、改动前自检
 
-改设计文档或数据后，跑一遍校验器：
+> 🔧 **2026-09-17（owner 裁定）：全部门禁已撤销。**
+> 本节原列的 4 个校验器（`validate_cross_refs.py` / `validate_trash_isolation.py` / `validate_params.py` / `validate_issues.py`）已随 `code/tools/` 下的 26 个校验器与 `design/engineering/gates.json` 注册表一并删除。
+> **现在没有任何机械校验在跑。** CI 只做构建与测试：
 
 ```bash
-python3 code/tools/validate_cross_refs.py        # 死链 / 段引用
-python3 code/tools/validate_trash_isolation.py   # 归档隔离 + 废弃术语残留
-python3 code/tools/validate_params.py            # 跨文件参数一致性
-python3 code/tools/validate_issues.py --from-github  # issue 契约（新建/改 issue 后）
-dotnet test code/src/YouAreNotTheFish.sln        # 引擎测试（改代码时）
+dotnet test code/src/YouAreNotTheFish.sln        # 引擎测试（CI 里跑的只有这一个）
 ```
 
-`validate_cross_refs.py` 报 0 死链、`dotnet test` 全绿，是提交前的底线。
+改设计文档或数据后**没有命令可跑**：交叉引用死链、归档隔离、跨文件参数一致性、issue 字段完整性都只能靠人核对。引用规范本身未变（见 [写作与引用规范](design/conventions/writing-and-references.md)），只是不再有工具强制。
 
 ## 五、外部贡献与权利
 
@@ -104,5 +102,5 @@ dotnet test code/src/YouAreNotTheFish.sln        # 引擎测试（改代码时�
 仓库所有者可自行决定拒绝、关闭或删除未约定的贡献。任何贡献只有在双方明确接受适用的书面许可或转让安排后才会合并。项目版权边界见 [`LICENSE.md`](LICENSE.md)，第三方材料边界见 [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md)。
 
 ---
-*创建: 2026-09-12（重写自旧版「人类 vs AI + Grilling 工作流」）| 更新: 2026-09-12*
+*创建: 2026-09-12（重写自旧版「人类 vs AI + Grilling 工作流」）| 更新: 2026-09-17（§四 门禁撤销：校验器与 `gates.json` 已删，自检改人工）*
 *关联: [项目规约](design/conventions/README.md), [README](README.md), [设计总览](design/README.md)*

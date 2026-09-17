@@ -5,6 +5,8 @@
 > **维度: 呈现 + 管线** — Issue [#122](https://github.com/verystrongdog/game/issues/122)。
 >
 > 🔧 **2026-09-13（[#155](https://github.com/verystrongdog/game/issues/155)）**：本文档已从 #122 的白盒战斗沙盘扩展成 **Unity 侧总览**；**那套白盒沙盘本身已按 owner 裁定整体退役**（`DemoSolver`/`DemoActor`/`DemoCombatDriver`/`DemoHud`/`DemoTypes`/`DemoBootstrapper`/`CharacterVisual` + `SceneBuilder` + `DemoSmokeTests`）。现行基准场景是 `Assets/Scenes/ActionLab.unity`（[#136](https://github.com/verystrongdog/game/issues/136)）。
+>
+> 🔧 **2026-09-17（owner 裁定）：全部门禁已撤销。** 本文里「门禁 `unity`」「门禁 `unity-assets`」是当时对 Editor 实测读数的叫法——那些**读数本身仍然有效**（各自绑定了当时的 commit 与拷贝），但 `unity` / `unity-assets` 两个 gate id、`design/engineering/gates.json`、`code/tools/validate_unity_assets.py` 与它引用的两份允许清单 JSON、以及 CI 的 `docs-integrity` / `unity` job **已于 2026-09-17 一并删除**。后果：① 文中各「怎么复核」里的 `python3 code/tools/validate_unity_assets.py`（A1–A4）**不再可跑**，那四条规则回到人工按 `git ls-files` 核对；② Unity 侧只剩人工经 WSL interop 直驱 Editor 实跑，CI 上不再有任何 Unity 相关检查。
 
 ## 一、这是什么
 
@@ -170,8 +172,9 @@ P="C:\Users\9527\game\code\unity"
 ### 会话启动清单
 
 1. **确认 Editor 可直驱**：上表的 `unity status`，期望 `state: ready`（Editor 已开则直接连；未开则 `unity open`）。
-2. **认准起点**：先读 [AGENTS.md](../../AGENTS.md)（全仓约束入口，含提交前必跑的校验器）→ 本 README §二·G → [危险点表](../../design/engineering/%E5%8D%B1%E9%99%A9%E7%82%B9%E8%A1%A8.md)（**改 `Assets/**`、或驱动 Editor 前先查你要动的那处**）→ [动作库规格.md §四·乙/§六](../../design/presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md) → [动作系统分解](../../design/engineering/%E5%8A%A8%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%88%86%E8%A7%A3-2026-09-12.md)。
+2. **认准起点**：先读 [AGENTS.md](../../AGENTS.md)（全仓约束入口；⚠️ 2026-09-17 起提交前的底线只剩 `dotnet test`，原「必跑的校验器」已随全部门禁删除）→ 本 README §二·G → [危险点表](../../design/engineering/%E5%8D%B1%E9%99%A9%E7%82%B9%E8%A1%A8.md)（**改 `Assets/**`、或驱动 Editor 前先查你要动的那处**）→ [动作库规格.md §四·乙/§六](../../design/presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md) → [动作系统分解](../../design/engineering/%E5%8A%A8%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%88%86%E8%A7%A3-2026-09-12.md)。
 3. **开工顺序**：**#138 → #139 → #140**（严格串行，工作面相交）。每条的门禁、验收标准、预期差分、明确排除都在 issue 正文里，照做即可。
+   ⚠️ 2026-09-17：这批 issue 正文里的 `门禁:` 填的是**已删除的 gate id**（`unity` / `docs-integrity` 等），不再是可执行的东西——实际判据现在只剩 [build-and-test.md §四](../../design/engineering/build-and-test.md) 的 `dotnet test` 与 Unity 侧人工实测。
    🔧 `#137`（站↔坐探针）已于 2026-09-13 **按 superseded 关闭**——原假设被实测否定、其后续口径在 ActionLab 上落地（见上一节更正块），无剩余工作面。
 4. **本侧对 `code/unity/Assets/**` 可写**（经提权），实现与验证能在同一侧闭环——**不再需要跨机交接**。
 
@@ -185,7 +188,7 @@ P="C:\Users\9527\game\code\unity"
 | 2 | [#139](https://github.com/verystrongdog/game/issues/139) | **五条 clip 到库**：Idle/Walk/Run/Jump/Talk 下载 + Humanoid 导入 + **Play 预览实证归槽**（文件名不作依据），PlayMode 断言转绿 | `blocked`（by #138） |
 | 3 | [#140](https://github.com/verystrongdog/game/issues/140) | **locomotion 迁契约 B**：1D blend tree（`speed01`，采样点 0 / 3.0 / 6.0）取代三态硬切 | `blocked`（by #139） |
 
-> 门禁可用性：`unity` 在**本机可跑**（WSL 经 interop 直驱 Windows Editor），故 [`gates.json`](../../design/engineering/gates.json) 的 `available` 为 `true`。CI（ubuntu，无 Unity）侧仍不可跑，其 `unity` job 继续显式报告 `NOT_AVAILABLE`。
+> ⚠️ **2026-09-17**：原「门禁可用性」一段写的 `unity` 门禁（本机 `available: true`、CI 侧 `NOT_AVAILABLE`）与 `gates.json` 注册表已随全部门禁一并删除。**本机可经 WSL interop 直驱 Windows Editor 这条环境事实不变**，只是现在只能人工实跑，CI 上不再有任何 Unity 相关检查。
 
 ### 两条必须先懂的陷阱
 
@@ -238,7 +241,7 @@ ActionLab 的 `Main Camera` **自带环绕跟随**：`ActionLabBuilder.CreateSce
 
 | 排除项 | 理由 |
 |---|---|
-| `Assets/Kevin Iglesias/`（**68 MB**） | 第三方资产包；来源已整条切 Mixamo（[动作库规格 §五](../../design/presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md)）；[#139](https://github.com/verystrongdog/game/issues/139) 的验收标准明写「干净检出下 `Assets/Kevin Iglesias/` 不存在」。`.gitignore` 已排除 |
+| `Assets/Kevin Iglesias/`（**68 MB**） | 第三方资产包；来源曾整条切 Mixamo（[动作库规格 §五](../../design/presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md)）。🔧 **2026-09-17（owner 裁定）**：整包仍排除，但**放行了 locomotion 的最小依赖闭包 6 件共 3.5 MB**（4 条 clip + Avatar 源 + Avatar Mask），见 `.gitignore` 里的逐级 `!` 规则——理由与实测依据见 §五 修正块。原写的「#139 验收标准要求干净检出下该目录不存在」随 #139 关闭而失效 |
 | `Assets/Temp/` | #137 站↔坐探针的过程物（`SitCheck.controller` + 两张截图），不是工程资产 |
 | `WalkerLab` / `KiWalkerLab` 两个 lab 场景 | 由 builder 菜单重建，随各自 issue 落地。（`DemoSandbox` 已于 2026-09-13 随白盒沙盘整体退役并删除，#155） |
 | `Assets/Settings/Pipeline/EditorPipelineManager.asset` | `com.unity.pipeline` 首次使用的自动产物，可再生 |
@@ -272,14 +275,14 @@ ActionLab 的 `Main Camera` **自带环绕跟随**：`ActionLabBuilder.CreateSce
 
 ### 残留缺口（诚实清单）
 
-1. **4 条 locomotion 态仍引用不入库的 KI 包**：`ActionLab.controller` 的 Idle/Walk/Run/Jump 指向 `Assets/Kevin Iglesias/...`。干净检出下这 4 态是「状态存在 + clip 空（Missing）」——正是 [#139](https://github.com/verystrongdog/game/issues/139) 的工作面（整条切 Mixamo 并落库）。入库的是**工程当前的真实状态**，不是伪造的完整态。
+1. ~~**4 条 locomotion 态仍引用不入库的 KI 包**~~ —— **✅ 2026-09-17 已闭合（owner 裁定放行最小闭包）**。原文：`ActionLab.controller` 的 Idle/Walk/Run/Jump 指向 `Assets/Kevin Iglesias/...`，该包原先整份不入库，故干净检出下这 4 态是「状态存在 + clip 空（Missing）」。现改为**入库最小依赖闭包 6 件共 3.5 MB**（4 条 clip + Avatar 源 `HumanM_Model.fbx` + `Human Body Full Mask.mask`），`.gitignore` 逐级 `!` 放行、整包 68 MB 仍排除——干净检出下这 4 态的 `m_Motion` 现在**可解析**。理由、闭包的实测依据（读 `.meta` 得出，非猜）、以及**仍未解决**的跨族 retarget 与契约 B 问题见 [动作库规格.md §五](../../design/presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md)；许可登记见 [`THIRD_PARTY_NOTICES.md`](../../THIRD_PARTY_NOTICES.md)。
 2. **2 项常红 PlayMode 断言的真因与 #139 的归因不符**（实测见上表）：那两条是 `ActionPlayer` 的纯逻辑缺陷，落 5 条 clip **不会**让它们转绿；而 `ActionPlayer.cs` / 断言文件都不在 #139 的「允许变化」里 → #139 按现文写达不到自己的验收标准。按 [WORKFLOW.md §一](../../WORKFLOW.md) 非阻塞发现进候选队列，**不在 #136 里顺手修**。
    - **🔧 2026-09-12 已修（随坐立三段那一批，非顺手牵羊——两条都在坐立路径上）**：
      - ① `OneShotElapsed`——C# 允许浮点运算使用**高于结果类型的精度**：`elapsed >= clipLength + OneShotTailSeconds` 的右侧可能以 **double 中间值**参与比较，与外部按 float 落回的同一个和**差 1 ulp**，恰好到点被判"未到点"（实测：`a = clipLen + 0.05f` 与函数内的和同为 bits `1065772646`，函数却返回 `False`）。改为显式落回 float 再比。此计时正是 `Sit` 播完切 `SitIdle` 的依据。
      - ② `ResetToIdle` 不清 `CurrentActionId`——重置后仍留旧值，凡靠它做输入守卫的路径被误导（例：7 起身的守卫要求"当前是 `SitIdle`"）。
    - **证据**：PlayMode **23 项 23 过 / 0 红**（此前 21 项中 2 项常红，见 §二·I）。
-3. **干净检出的首次导入 / 编译 / Play 未实测**：Editor 只跑在 Windows 拷贝上（Linux 侧无 Editor，且 WSL 对 `/mnt/c` 只读）。正确性由三条间接证据支撑：① 84/84 逐文件字节一致；② 场景与 controller 的 GUID 引用全部可解析到已跟踪资产（含 X Bot.fbx、5 条 combat clip）〔🔧 2026-09-13 更正：**此句当时写宽了**——`ActionLab.controller` 的 4 条 locomotion 态引用**不可解析**（KI 包未入库），即下方残留缺口 ①；现由 `validate_unity_assets.py` 的 A3 每次报出，并登记在允许清单 `known_dangling`〕；③ 来源工程（就是提交的那批字节）内 Editor 0 错误、16 项测试跑通。
-4. ~~**资产身份还没有常驻机械校验器**~~ → **✅ 2026-09-13 已闭合（#142）**：当时 `.meta` 齐全性、GUID 唯一性、场景/controller 引用可解析性是用一次性脚本核的（294 个 `.meta` → 294 个唯一 GUID，0 冲突），**核完即弃**。现在常驻 **`code/tools/validate_unity_assets.py`**，四条规则（成对性 / GUID 唯一性 / 引用可解析 / FBX Rig）进 `docs-integrity` 循环；它**不需要 Unity Editor**，故在 CI 上也能拦（`unity` 门禁在 CI 上是 `NOT_AVAILABLE`）。已登录在案的例外见 `code/tools/validate_unity_assets_exceptions.json` 的三段允许清单——其中 4 条 KI 悬空引用归属 [#139](https://github.com/verystrongdog/game/issues/139)，**该 issue 关闭时必须删除那 4 条**。
+3. **干净检出的首次导入 / 编译 / Play 未实测**：Editor 只跑在 Windows 拷贝上（Linux 侧无 Editor，且 WSL 对 `/mnt/c` 只读）。正确性由三条间接证据支撑：① 84/84 逐文件字节一致；② 场景与 controller 的 GUID 引用全部可解析到已跟踪资产（含 X Bot.fbx、5 条 combat clip）〔🔧 2026-09-13 更正：**此句当时写宽了**——`ActionLab.controller` 的 4 条 locomotion 态引用**不可解析**（KI 包未入库），即上方残留缺口 ①；~~现由 `validate_unity_assets.py` 的 A3 每次报出，并登记在允许清单 `known_dangling`~~——⚠️ 2026-09-17：该脚本与允许清单已随全部门禁删除；**同日该缺口本身也闭合**（KI 最小闭包入库），4 条引用现已可解析〕；③ 来源工程（就是提交的那批字节）内 Editor 0 错误、16 项测试跑通。
+4. ~~**资产身份还没有常驻机械校验器**~~ → **✅ 2026-09-13 已闭合（#142）** → ⚠️ **2026-09-17 退回未闭合**：当时 `.meta` 齐全性、GUID 唯一性、场景/controller 引用可解析性是用一次性脚本核的（294 个 `.meta` → 294 个唯一 GUID，0 冲突），**核完即弃**；随后常驻 **`code/tools/validate_unity_assets.py`**（四条规则：成对性 / GUID 唯一性 / 引用可解析 / FBX Rig，**不需要 Unity Editor**，故在 CI 上也能拦）——但该脚本、它的三段允许清单 `code/tools/validate_unity_assets_exceptions.json` 与 `docs-integrity` job **已随全部门禁于 2026-09-17 删除**，四条规则现在没有任何东西在跑，包含 4 条 KI 悬空引用（归属 [#139](https://github.com/verystrongdog/game/issues/139)）在内的全部例外**重新变成人工核对的账**。
 
 ### 怎么复核
 
@@ -476,7 +479,7 @@ blender.exe --background --factory-startup \
 | 2 | **FBX 未携带 `functional_ids`**——对象名只带**主** `functional_id`（如 `AccumbensShell`）；`functional_ids` / `lobe` 字符串在 FBX 中零命中（Blender FBX 需 `use_custom_props` 才导出自定义属性） | **owner 裁定：不加进 FBX**。完整映射运行时读 `data/brain_regions.json` 的 `obj_file` 字段（本就受控）——FBX 不背第二份真相源；[#143](https://github.com/verystrongdog/game/issues/143) 的 AC 已据此改写并退回 triage |
 | 3 | **尺度口径矛盾**（本次新发现）——资产是 MNI 毫米（世界包围盒 72.5 × 169.3 × 121.6），而 [Unity接入设计 §五](../presentation/visualization-3d/Unity%E6%8E%A5%E5%85%A5%E8%AE%BE%E8%AE%A1.md) 原写"单位 m" | **owner 裁定：视图内部统一用 MNI 毫米 + 根部单一等比变换（≈1/90）**；`game_xyz`/§14.1 明确为**点位映射**（Z 除以 148.2，非等比），不得当作网格变换——否则网格与节点在 Z 轴差 1.65 倍。已落 [Unity接入设计 §8.5](../presentation/visualization-3d/Unity%E6%8E%A5%E5%85%A5%E8%AE%BE%E8%AE%A1.md) |
 
-> **门禁基线提醒**：本节的 Editor 读数取自 `C:\Users\9527\game`（Editor 实际打开的拷贝）。跑 `unity` 门禁前先读 `projectPath` 与仓库 HEAD 的距离——见[危险点表](../engineering/%E5%8D%B1%E9%99%A9%E7%82%B9%E8%A1%A8.md) §七「`unity status` 的 `projectPath`」行。
+> **门禁基线提醒**：本节的 Editor 读数取自 `C:\Users\9527\game`（Editor 实际打开的拷贝）。跑 Unity 侧验证前先读 `projectPath` 与仓库 HEAD 的距离——见[危险点表](../engineering/%E5%8D%B1%E9%99%A9%E7%82%B9%E8%A1%A8.md) §七「`unity status` 的 `projectPath`」行。（⚠️ 2026-09-17：`unity` 门禁已撤，这里说的是人工实跑的基线纪律。）
 
 ### 怎么复核
 
@@ -630,7 +633,7 @@ owner 反馈"用摄像机调整角度看大脑模型有点费劲"，故观察交
 python3 code/tools/validate_unity_assets.py                                        # A1–A4
 ```
 
-> ⚠️ 跑 `unity` 门禁前先读 `editor_status` 的 `projectPath` 并核对与仓库 HEAD 的距离（危险点表 §七），跑 `run_tests` 前先 `focus.sh`。
+> ⚠️ 跑 Unity 侧验证前先读 `editor_status` 的 `projectPath` 并核对与仓库 HEAD 的距离（危险点表 §七），跑 `run_tests` 前先 `focus.sh`。⚠️ 上面那行 `python3 code/tools/validate_unity_assets.py`（A1–A4）已于 2026-09-17 随全部门禁删除，不再可跑——A1–A4 改人工按 `git ls-files` 核对。
 
 ### 回滚演练（实测）
 
@@ -729,7 +732,7 @@ python3 code/tools/validate_unity_assets.py                                     
 1. **无消费方**：接入点按设计**惰性**（权重恒 0）——真正的约束（副手拉向椅子第二锚点）等持椅线重新设计并形成新决策后再挂。**别把本节的"绿"读成"机制已就绪"**（同 §二·N 的口径）。
 2. **合成搭建的 Rig 不建图**（2026-09-14 实测，代价：4 轮测试）：`RigBuilder` 在 `Awake`/`OnEnable` 里建图，运行时"先 `AddComponent`、后 `Add layer`"那一轮 Awake 看到的 layers 是空的。事后在同一实例上再 `Build()` **返回 true**、层也 `IsValid()=True`、`constraints=1`，但约束**始终不生效**（四组 `animator.speed` × 权重组合读数**逐位相同** = 初始偏移 187.1 mm）；连"建好模板再整体 `Instantiate`"也一样。⇒ 断言因此**只认真场景路径**。已进[危险点表](../engineering/危险点表.md) §六。
 3. **与既有 `OnAnimatorIK` 的求值顺序未验**：`FootGroundingIK` 走内置 IK（`OnAnimatorIK`），Animation Rigging 走独立 `PlayableGraph`（`DirectorUpdateMode.GameTime`）+ `AnimationStreamSource.PreviousInputs` 输出。二者目前改的是**不同骨链**（腿 vs 左臂）故互不干扰，但**同一骨链时会互相覆盖**——标为待实测，接真约束前先验。
-4. **基线**：本节读数取自 Windows 工作拷贝（其 git HEAD 落后仓库 HEAD、dirty 数百条，见[危险点表](../engineering/危险点表.md) §七），**不是仓库 HEAD 的门禁证据**；该拷贝 `Assets/**` 另有与仓库的既有分叉（退役 lab 残留、若干注释级差异）未处置。
+4. **基线**：本节读数取自 Windows 工作拷贝（其 git HEAD 落后仓库 HEAD、dirty 数百条，见[危险点表](../engineering/危险点表.md) §七），**不是仓库 HEAD 的实测证据**；该拷贝 `Assets/**` 另有与仓库的既有分叉（退役 lab 残留、若干注释级差异）未处置。
 
 ### 怎么复核
 

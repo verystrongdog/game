@@ -4,6 +4,13 @@
 
 > **来源**：2026-09-12 建立。借鉴 KEP 的 `kep.yaml` 元数据校验、Rust tracking issue 的步骤化 checklist、GitHub Issue Forms 的结构强制（见 [§八](#八来源与借鉴)），并按本仓**当前实际依赖**适配：四轴能力状态、`design → data → code → unity` 依赖方向、11 个校验器与 4 个 CI job、Unity 门禁本机 `NOT_AVAILABLE`、单线程约束。
 
+> 🔧 **2026-09-17（owner 裁定）：全部门禁已撤销，本文的机械校验部分已失效。**
+> `code/tools/validate_issues.py`（§5.2 的 I1–I14 规则、§4.1 的「机器可判」列、§7.1 的 B/C 两条创建通道）连同 `design/engineering/gates.json` 注册表、`code/tools/` 下的 26 个校验器与 CI 的 `docs-integrity` / `issues-snapshot` / `unity` 三个 job，**已于 2026-09-17 一并删除**。
+> **CI 只做构建与测试**（`dotnet test code/src/YouAreNotTheFish.sln`）。因此：
+> - **issue 的字段、依赖、取值域、反例清单仍然照本文执行，但全部改由人核对**——不再有任何东西会替你判 FAIL；
+> - **`门禁:` 字段不再填 gate id**，改填关闭时实际要跑的命令（如 `dotnet test`）或人工核对项，无机器判据时写 `none`；
+> - §五（依赖与门禁如何被机械判定）、§5.3（覆盖边界）、§4.1.1 例外 1、§7.1 的 B/C 通道**保留为撤销前的记录**，不再构成现行要求；§一～§四、§六、§7.2 的授权规则不受影响。
+
 ## 目录
 
 1. [一、本文管什么，不管什么](#一本文管什么不管什么)
@@ -59,7 +66,7 @@
 | 块 | 内容 | 为什么必需 |
 |---|---|---|
 | **决策表** | 每条决策：结论 · 依据（`文件 §节`）· 状态（已定 / 推迟） | 分解的原料；依据缺失 → 无法核对是否与正典冲突 |
-| **受影响面** | 按 设计 / 数据 / 代码 / 门禁 四类逐条列出 | 决定依赖图的边；漏一类就是隐藏依赖 |
+| **受影响面** | 按 设计 / 数据 / 代码 三类逐条列出（原第四类「门禁」随 2026-09-17 全部门禁撤销一并取消） | 决定依赖图的边；漏一类就是隐藏依赖 |
 | **推迟清单** | 明确不做的、以后做的 | 直接灌进每条 issue 的「明确排除」，防 scope 膨胀 |
 | **未决问题** | 仍未定的问题 | 有未决问题时，**不得导入为 `Implementation`/`Task`**——只能导入为 `Experiment`（可行性未知）或 `RFC`（需 owner 决策） |
 
@@ -71,7 +78,7 @@
 
 #### 判据 1–3 都是**人工门**——不满足时的处置是「写进 issue 正文」，不是「先写一节设计文档」
 
-这三条校验器**看不见**（`validate_issues.py` 的 I1–I14 无一覆盖），所以处置方式由人定，而**只有一种处置符合 [§1.1](#11-本文不得变成仪式)**：
+这三条校验器**看不见**（原 `validate_issues.py` 的 I1–I14 无一覆盖；该脚本已于 2026-09-17 删除——现在**全部**字段都靠人核对），所以处置方式由人定，而**只有一种处置符合 [§1.1](#11-本文不得变成仪式)**：
 
 | 情形 | 处置 |
 |---|---|
@@ -94,7 +101,7 @@
 |---|---|
 | [PLAYABLE.md](../../PLAYABLE.md) | 当前是 `NO_AUTHORIZED_PLAYABLE` 还是 `AUTHORIZED_PLAYABLE: <id>` |
 | `design/slices/<id>/slice.md` | 被消费能力的**四轴状态表**（哪些能力停在 `NONE`/`FAKE`/`ISOLATED`） |
-| [`design/engineering/gates.json`](gates.json) | 哪些门禁**当前可用**、哪些不可用及其阻塞面 |
+| [构建与测试](build-and-test.md) §三/§四 | 当前 CI 与判据：2026-09-17 起只有 `engine`（restore → build → test），原第 3 样「`gates.json` 门禁能力表」已随全部门禁一并删除 |
 | 开放 issue 的 frontier | 已有哪些 `blocked-by` 边、当前 `in-progress` 是谁 |
 
 ### Step 1 — 抽能力增量
@@ -117,7 +124,7 @@
 |---|---|---|
 | **方向边** | `design/ → data/ → code/src/ → code/unity/`；反向边非法。例：数据契约 issue 不得依赖引擎 issue | [ARCHITECTURE.md §二](../../ARCHITECTURE.md) |
 | **轴序边** | 同一能力上，`Design` 未到 `ACCEPTED` 不得声明 `Implementation` 迁移；`Implementation` 未到 `DONE_FOR_SLICE` 不得声明 `Integration: E2E` | [WORKFLOW.md §二](../../WORKFLOW.md) |
-| **门禁边** | 要验收就必须跑门禁；门禁不可用 → 依赖不成立。Unity 门禁本机 `NOT_AVAILABLE`，因此**任何声称"实现并试玩 CP-01"的 issue 在本环境无法闭合**，必须改声明或标阻塞 | [build-and-test.md §三/§五](build-and-test.md) |
+| **门禁边** | 要验收就必须有一条**能给出判据的检查**；该检查跑不了 → 依赖不成立。⚠️ 2026-09-17 起没有机械门禁可查：只剩 `dotnet test` 与人工核对，Unity 侧须人工经 WSL interop 直驱 Editor 验证——原「`unity` 门禁本机 `NOT_AVAILABLE` ⇒ 任何声称"实现并试玩 CP-01"的 issue 在本环境无法闭合」这条判据随门禁一并撤销 | [build-and-test.md §三/§五](build-and-test.md) |
 
 ### Step 3 — 切分到原子
 
@@ -126,7 +133,7 @@
 | 判据 | 含义 | 反例 |
 |---|---|---|
 | **A1 单能力** | 声明的能力增量 ≤ 3 行，轴迁移 ≤ 4 个单元格 | "完成战斗系统" |
-| **A2 独立可验证** | 至少一条门禁能给出**变化**：做之前失败/缺失，做之后通过。不是"顺便把 X 也做了" | "重构目录顺便补测试" |
+| **A2 独立可验证** | 至少一条**可跑的检查或人工判据**能给出**变化**：做之前失败/缺失，做之后通过（⚠️ 2026-09-17 起没有门禁，只剩 `dotnet test` 与人工核对）。不是"顺便把 X 也做了" | "重构目录顺便补测试" |
 | **A3 有具名消费方** | 产物被具名的下游消费：`#NN` / 切片 id / 证据文件；或显式声明 `终态` | "写一份说明文档"（没人消费） |
 | **A4 可回滚** | `git revert` 该提交组能恢复上一状态；**不可回滚**的（数据迁移、大范围改名、删除）必须单独成 issue 并写明回滚方案 | "改数据格式 + 顺手改名" |
 
@@ -150,7 +157,7 @@ frontier = { i ∈ 开放 issue | 所有 blocked-by 已关闭 且 所有 require
 
 每条 issue 必须绑定（对应 [§四](#四一条-issue-的字段) 的必填项）：
 
-1. **门禁**：将跑的 gate id 或脚本命令（必须存在于 [`gates.json`](gates.json)）
+1. **门禁**：关闭时实际要跑的判据——真实命令（如 `dotnet test`）或人工核对项（⚠️ 2026-09-17 起不再有 gate id 可引，`gates.json` 已删除）
 2. **验收标准**：每条独立可判，且写明"做之前是什么样"
 3. **预期差分**：开工前登记允许的变化（[WORKFLOW.md §5.1](../../WORKFLOW.md) 的 `expected_delta`）
 4. **回滚**：方式 + 演练结论
@@ -160,23 +167,24 @@ frontier = { i ∈ 开放 issue | 所有 blocked-by 已关闭 且 所有 require
 
 逐条对照 [§六](#六伪分解反例)。**不与反例中的任何一条重合**才可提交创建。
 
-### Step 7 — 机械校验并创建
+### Step 7 — 检查并创建
 
 ```bash
-python3 code/tools/validate_issues.py --file <临时草稿>   # 必须 exit 0
+# ⚠️ 2026-09-17：创建前的机械校验（原 `validate_issues.py --file <草稿>`，必须 exit 0）已随全部门禁删除。
+# 现在只能按 §四 的字段表与 §六 的反例清单人工逐条核对。
 gh issue create --title "..." --body-file <临时草稿> --label type:task --label state:needs-triage
 
-# 若草稿的 `blocked-by:` 指向已存在的 issue，顺手补上原生投影（UI 可见，I14 会核对两侧一致）
+# 若草稿的 `blocked-by:` 指向已存在的 issue，顺手补上原生投影（UI 可见）
 gh issue edit <新编号> --add-blocked-by <前置编号>
 ```
 
-校验器规则见 [§五](#五依赖与门禁如何被机械判定)。创建通道见 [§七](#七创建通道)。
+字段完整性的判定规则见 [§四](#四一条-issue-的字段) 与 [§5.2](#52-校验器规则表)（该规则表为撤销前的记录）。创建通道见 [§七](#七创建通道)。
 
 ## 四、一条 issue 的字段
 
 字段即 Issue Forms 的必填项，也是校验器的检查对象。**「消费时刻」列是准入条件**：写不出消费时刻的字段，删。
 
-**正文中的顺序**：`类型` 在最前（表单把单选 dropdown 置于 body 首位，使网页通道也渲染出 `### 类型` 章节），其后按本表顺序，类型专属字段追加在最后（[§4.2](#42-按类型追加必填)）。校验器只判存在性、不判顺序，但两条通道的正文必须**逐字一致**。
+**正文中的顺序**：`类型` 在最前（表单把单选 dropdown 置于 body 首位，使网页通道也渲染出 `### 类型` 章节），其后按本表顺序，类型专属字段追加在最后（[§4.2](#42-按类型追加必填)）。原按 `### 标题` 解析的校验器已删，但两条通道的正文仍必须**逐字一致**（结构契约不变，改由人比对）。
 
 ### 4.1 所有类型必填
 
@@ -186,7 +194,7 @@ gh issue edit <新编号> --add-blocked-by <前置编号>
 | **动机** | 这件事解决什么问题、为什么是现在、不做会怎样 | triage 时判断该不该做（没有动机就无法拒绝）；关闭时判断"是否真的解决了那个问题"，而不是只看"代码写完" | ⚠️ 非空可判，质量人工 |
 | **能力增量** | 表格：能力 · 轴 · 从 → 到 | 关闭时据此更新 `slice.md` 的四轴表；下一次分解时据此判断前置是否满足 | ✅ 枚举 + 设计状态 |
 | **依赖** | `key: value` 逐行：`blocked-by` · `consumed-by` · `requires` | 分解时拓扑排序；开工前算 frontier；CI 快照校验。不填 → 单线程约束失效 | ✅ 引用存在性 |
-| **门禁** | 将跑的 gate id 或脚本命令，一行一条；`RFC`/`Experiment` 可写 `none`（它们的判据是决策/结论，不是机器门禁） | 开工前确认本机可跑；关闭时逐条执行并把退出码写进证据 | ✅ 查 `gates.json` |
+| **门禁** | 一行一条：关闭时实际要跑的判据——真实命令（如 `dotnet test`）或人工核对项；`RFC`/`Experiment` 无机器判据时写 `none` | 开工前确认能跑（或写明由谁人工核对）；关闭时逐条执行并把退出码 / 核对结论写进证据 | ❌ 2026-09-17 起无机器可判（原为「查 `gates.json`」） |
 | **预期差分** | 允许发生什么变化，以及**预期不变**的是什么。允许变化的文件必须**逐条写出仓库相对路径**（不写「相关文档」这类指代）——并行就绪时校验器按这份文件集合判相交（I13） | 阶段开始时登记；退出时算 `new_finding = after − mapped(before) − expected_delta`。事后补登 → 该阶段判据失效 | ✅ 文件集合（I13） |
 | **验收标准** | checklist，2–8 条，每条独立可判并写明改动前的状态 | 关闭时逐条对照；[WORKFLOW.md §六](../../WORKFLOW.md) 明令"代码写完/文档写完/CI 表面绿色"都不能单独作为关闭证据 | ⚠️ 条数可判，质量人工 |
 | **明确排除** | 本 issue 不做的事（含推迟清单里相关的条目） | triage 与评审时防 scope 膨胀 | ⚠️ 非空可判 |
@@ -194,13 +202,15 @@ gh issue edit <新编号> --add-blocked-by <前置编号>
 
 ### 4.1.1 三个受控取值域
 
-校验器按这三套取值域判定，**不得自造**。另外两件事由**标签**承载（正文里没有对应字段）：**类型**用 `type:*` 标签（与正文 `### 类型` 交叉比对，不一致即失败），**状态**用 `state:*` 标签（`needs-triage` / `ready-for-agent` / `ready-for-human` / `in-progress` / `blocked` / `wontfix`）——单线程判据（I11）与阻塞判据（I7）都以标签为准。
+校验器按这三套取值域判定，**不得自造**——⚠️ 2026-09-17 起**改人工核对**：原判定者 `code/tools/validate_issues.py` 已随全部门禁删除，取值域本身仍是字段格式约定。另外两件事由**标签**承载（正文里没有对应字段）：**类型**用 `type:*` 标签（与正文 `### 类型` 交叉比对，不一致即失败），**状态**用 `state:*` 标签（`needs-triage` / `ready-for-agent` / `ready-for-human` / `in-progress` / `blocked` / `wontfix`）——单线程判据（I11）与阻塞判据（I7）都以标签为准（I11 / I7 为撤销前的规则号）。
 
 | 域 | 合法取值 |
 |---|---|
 | `依赖:` 的 key | `blocked-by`（必须已关闭的 `#NN`，或 `无`）· `consumed-by` · `requires`（或 `无`） |
-| `consumed-by` 的值 | `#NN`（下游 issue）· `<切片 id>`（切片合同）· `证据:<路径>`（证据文件）· `门禁:<gate id>`（某门禁消费它）· `待建:<描述>`（下游尚未创建）· `终态`（无下游，且写明为何） |
-| `requires` 的值 | `gate:<gate id>` · `PLAYABLE:<状态>` · `能力:<能力名>=<轴>:<状态>` · `owner:<决策项>` |
+| `consumed-by` 的值 | `#NN`（下游 issue）· `<切片 id>`（切片合同）· `证据:<路径>`（证据文件）· `待建:<描述>`（下游尚未创建）· `终态`（无下游，且写明为何） |
+| `requires` 的值 | `PLAYABLE:<状态>` · `能力:<能力名>=<轴>:<状态>` · `owner:<决策项>` |
+
+> 原另有 `门禁:<gate id>`（`consumed-by`）与 `gate:<gate id>`（`requires`）两个取值——**2026-09-17 随门禁撤销删除**，`gates.json` 已不存在。
 
 **能力名的分隔符约束**：能力名逐字取自 `design/slices/<id>/slice.md` §二 的四轴表行名，**不得含 `、` `,` `，` `;` `；`**——那五个字符是多个取值之间的分隔符，出现在名字里会把一个能力切成两段（实测：`能力:含、顿号的名字=Design:ACCEPTED` 报"不符合格式"）。含则**先改切片表的行名**，不要在该格式里塞转义。
 
@@ -208,7 +218,7 @@ gh issue edit <新编号> --add-blocked-by <前置编号>
 
 **四个例外情形**（真实 backlog 逼出来的，不是假想）：
 
-1. **issue 交付的是新门禁本身**——**尚不存在的门禁无法验证交付它的那个 issue**，故其 `门禁:` 必须引用**别的、已存在的**门禁来验证自己：交付 `code/tools/` 下的校验器 → `docs-integrity`（它跑 `run_all_checks.py`，新校验器登记进编排器后即被覆盖）；需 Unity Editor 的 → `unity`。新门禁本身列进「交付物」，验收标准须含"创建后登记进 [`gates.json`](gates.json)"。**不得**把尚不存在的 **gate id 或脚本路径**写进 `门禁:`——两者的判定方式不同，但都是硬判：脚本路径走无条件存在性检查（I6），裸的、`gates.json` 里没有的名字走「不是 gate id、也不含真实脚本路径」判定（I6 的 `unknown` 分支）。2026-09-13 由 #142 触发实测；**#134 曾引用过尚不存在的门禁名而未被判失败**——因该行内含解释文字，解析器从那串文字里误抓到一个已存在的文档路径，见 §5.3 的覆盖边界。
+1. ~~**issue 交付的是新门禁本身**~~——⚠️ **2026-09-17 整条作废**：全部门禁已撤销（`code/tools/` 下的校验器、`gates.json` 与三个门禁 job 均已删除），不再有「交付新门禁」这类 issue，本例外没有适用对象。**以下是当时的规则，保留为记录**：**尚不存在的门禁无法验证交付它的那个 issue**，故其 `门禁:` 必须引用**别的、已存在的**门禁来验证自己：交付 `code/tools/` 下的校验器 → `docs-integrity`（它跑 `run_all_checks.py`，新校验器登记进编排器后即被覆盖）；需 Unity Editor 的 → `unity`。新门禁本身列进「交付物」，验收标准须含"创建后登记进 `gates.json`"。**不得**把尚不存在的 **gate id 或脚本路径**写进 `门禁:`——两者的判定方式不同，但都是硬判：脚本路径走无条件存在性检查（I6），裸的、`gates.json` 里没有的名字走「不是 gate id、也不含真实脚本路径」判定（I6 的 `unknown` 分支）。2026-09-13 由 #142 触发实测；**#134 曾引用过尚不存在的门禁名而未被判失败**——因该行内含解释文字，解析器从那串文字里误抓到一个已存在的文档路径，见 §5.3 的覆盖边界。
 
    > **校正记录（2026-09-13）**：本项此前写作「`门禁:` 可以引用一个尚不存在、由本 issue 交付的脚本」，并由 §5.2 I6 承诺"校验器只要求「交付物」里明列了它"。**该承诺从未在 `validate_issues.py` 中实现**，且**不可能**实现得有意义——见上句理由。故改为上述规则（改文档而非改代码：与 [backlog 分解示范](backlog-decomposition-2026-09-12.md) §八 第五处"把承诺实现出来"的方向不同，因为那次是**规则对、实现漏**，这次是**规则本身错**）。
 2. **`RFC` / `Experiment` 无机器门禁**——写 `门禁: none`，但验收标准必须写明"谁在何处记录该决策/结论"（`design/decisions/` 条目或证据文件）。
@@ -235,22 +245,22 @@ gh issue edit <新编号> --add-blocked-by <前置编号>
 
 | 面 | 允许 | 理由 |
 |---|---|---|
-| **契约面**（稳定） | `design/rules/核心机制.md` §4（段引用）· 能力名 · 类型名 · gate id | 段引用是本仓推荐格式（[写作与引用规范 §一](../conventions/writing-and-references.md)）；且**存在性可被校验** → 引用即读取变成机械判据 |
+| **契约面**（稳定） | `design/rules/核心机制.md` §4（段引用）· 能力名 · 类型名 · ~~gate id~~（2026-09-17 随门禁撤销删除） | 段引用是本仓推荐格式（[写作与引用规范 §一](../conventions/writing-and-references.md)）；原「**存在性可被校验** → 引用即读取变成机械判据」里的校验器已删，存在性改人工核对 |
 | **定位面**（易变） | ❌ 代码行号 `X.cs:42` · ❌ "打开 A 文件改第 N 行"式步骤 · ❌ 临时本地路径 | 行号随编辑漂移；过程化步骤会随实现结构变化而失效 |
 
-**判据**：issue 写的是**行为契约**（系统应当怎样），不是**操作步骤**（你该敲哪个文件）。校验器对正文中的行号式引用出警告（见 [§五](#五依赖与门禁如何被机械判定) I9）。
+**判据**：issue 写的是**行为契约**（系统应当怎样），不是**操作步骤**（你该敲哪个文件）。原校验器对正文中的行号式引用出警告（见 [§五](#五依赖与门禁如何被机械判定) I9）——⚠️ 该校验器已于 2026-09-17 删除，这条改人工看。
 
 ## 五、依赖与门禁如何被机械判定
 
 ### 5.1 门禁能力表
 
-门禁的**机器可读清单**是 [`design/engineering/gates.json`](gates.json)：gate id、命令、CI job、本机可用性、不可用时阻塞什么。它是 issue 里 `门禁:` 字段的引用目标，也是校验器 I6 的判定依据。
-
-散文权威仍在 [build-and-test.md](build-and-test.md)——本表只是它的机器形态。**两侧不一致时以 build-and-test.md 为准**，并修 `gates.json`。
+🔧 **2026-09-17：本节原描述的 `design/engineering/gates.json` 门禁能力表（gate id、命令、CI job、本机可用性、不可用时阻塞什么）已随全部门禁撤销一并删除。** 现在**没有门禁能力表可查**，issue 的 `门禁:` 字段也不再引用 gate id——它改填**关闭时实际要跑的命令或人工核对项**（见 [§四](#四一条-issue-的字段)）。现有判据只剩 [build-and-test.md §四](build-and-test.md) 的引擎测试（`dotnet test`）与人工核对。
 
 ### 5.2 校验器规则表
 
-`code/tools/validate_issues.py` 的规则。两种模式：`--file <草稿>`（创建前门禁）、`--from-github`（CI 快照，校验真相源本身）。
+> 🔧 **2026-09-17：`code/tools/validate_issues.py` 已删除——下表 I1–I14 不再有任何东西在执行。** 保留它的理由：它记录了 issue 契约曾经怎么被机械判定，也是 §4.1 字段与格式约定的来源；现在这些约定**全部改由人核对**。
+
+`code/tools/validate_issues.py` 的规则（**已删**）。两种模式：`--file <草稿>`（创建前门禁）、`--from-github`（CI 快照，校验真相源本身）。
 
 | id | 规则 | 判定方式 | 机器可判 |
 |---|---|---|---|
@@ -272,6 +282,8 @@ gh issue edit <新编号> --add-blocked-by <前置编号>
 **机器判不了的部分老实标出来**（模板只能改变形状，不能改变判断）：验收标准是否**充分**、依赖影响评估是否**诚实**、预期差分是否**真的**覆盖了变化、"单能力"是否切得**合理**。这些由 owner 在 triage 时判断。
 
 ### 5.3 校验器的覆盖边界（诚实清单）
+
+> 🔧 **2026-09-17：本节描述的校验器已删除，本清单随之成为历史记录。** 它当年回答的是"哪些契约条款只靠人工把关"；现在**所有**条款都只靠人工把关。
 
 规则能判不等于判得全。以下边界如实列出，避免把"校验器绿了"误读成"契约被完整执行"：
 
@@ -296,23 +308,23 @@ gh issue edit <新编号> --add-blocked-by <前置编号>
 |---|---|---|---|
 | R1 | **按文件拆**："改 `ActionPlayer.cs`" / "改 `GameDataLoader.cs`" | 文件不是行为，重构一改名 issue 即失效；且无法验收 | 按能力增量拆："Core→Unity 适配层 `FAKE→PARTIAL`" |
 | R2 | **按层横切**："先写全部 schema，再写全部 loader" | 中间态不可验收，第一层做完时系统行为毫无变化（A2 违反） | 纵切：一条 issue 打通一条最小端到端路径（walking skeleton） |
-| R3 | **巨型 issue**："实现 CP-01 切片" | 无门禁能在中间给出判定；失败时无法定位 | 按 must-prove 与阻塞项拆成依赖有序的多条 |
-| R4 | **无门禁 issue**："整理文档" / "调研一下" | 没有变化的门禁，做没做不知道 | 若真是调研 → `Experiment`，必须写判定标准与原型去向 |
+| R3 | **巨型 issue**："实现 CP-01 切片" | 没有任何检查能在中间给出判定；失败时无法定位 | 按 must-prove 与阻塞项拆成依赖有序的多条 |
+| R4 | **无门禁 issue**（2026-09-17 起读作「**没有任何能给出变化的检查**」的 issue）："整理文档" / "调研一下" | 没有变化的判据，做没做不知道 | 若真是调研 → `Experiment`，必须写判定标准与原型去向 |
 | R5 | **依赖倒挂**：`code/` 的 issue 阻塞 `design/` 的 issue | 违反 [ARCHITECTURE.md §二](../../ARCHITECTURE.md) 的依赖方向 | 反转：设计先落 `design/`，代码消费它 |
 | R6 | **隐藏依赖**：正文引用了尚未存在的能力/文件，却没写进 `blocked-by` | 开工才发现等待，单线程约束失效 | 每条前置都写进 `依赖:` 的对应 key |
 | R7 | **前置未准入**：开"实现并试玩 CP-01"的 issue，而 [PLAYABLE.md](../../PLAYABLE.md) 仍是 `NO_AUTHORIZED_PLAYABLE` | 未准入期间不得新增正式玩家行为；该 issue 不可能合法闭合 | 要么先解决准入（owner 决策，`RFC`），要么把 issue 声明为被阻塞 |
-| R8 | **门禁不可用却声称可闭合**：issue 要求 Unity 验证，而本机门禁 `NOT_AVAILABLE` | 产出的 issue 无法验收（[build-and-test.md §三](build-and-test.md)：未运行不是通过） | 改声明为可本机验证的部分，或标阻塞并写明替代验证方式 |
+| R8 | **验证跑不了却声称可闭合**（原题「门禁不可用却声称可闭合」）：issue 要求 Unity 侧验证，而验证环境不具备 | 产出的 issue 无法验收（[build-and-test.md §三](build-and-test.md)：未运行不是通过） | 改声明为可本机验证的部分，或标阻塞并写明替代验证方式。⚠️ 2026-09-17 起 `unity` 门禁已撤——Unity 侧只能人工经 WSL interop 直驱 Editor 验证，**"未运行"仍然不是"通过"** |
 | R9 | **事后补登预期差分**：开工后才写"我打算改这些" | [WORKFLOW.md §5.1](../../WORKFLOW.md) 明令"本阶段产生的新问题不得事后倒填为已知债务" | 创建时即登记 |
 
 ## 七、创建通道
 
-### 7.1 三条通道
+### 7.1 三条通道（A 现役 · B 已无机械校验 · C 已删）
 
 | 通道 | 形态 | 强制力 |
 |---|---|---|
 | **A 网页 Issue Forms** | `.github/ISSUE_TEMPLATE/*.yml`（按六类型各一份） | GitHub 侧强制必填；缺项提交不了 |
-| **B CLI** | `validate_issues.py --file <草稿>` → `gh issue create --body-file <草稿>` | 校验器门禁；草稿是**临时文件，不入库** |
-| **C CI 快照** | `validate_issues.py --from-github` | 校验**真相源本身**：开放 issue 的字段、依赖边与单线程约束 |
+| **B CLI** | `gh issue create --body-file <草稿>` | ⚠️ **2026-09-17 起无机械校验**——原 `validate_issues.py --file <草稿>` 那道创建前门禁已随全部门禁删除，字段完整性改由人按 [§四](#四一条-issue-的字段) 核对；草稿是**临时文件，不入库** |
+| ~~**C CI 快照**~~ | ~~`validate_issues.py --from-github`~~ | ❌ **2026-09-17 已删**——原用于校验**真相源本身**（开放 issue 的字段、依赖边与单线程约束）；现在开放 issue 的契约没有任何东西在核 |
 
 **真相源 = GitHub issue**。仓库内不留 issue 副本：草稿创建后即弃；需要留存的（历史归档、阶段证据）走既有导出与证据机制。
 
@@ -329,7 +341,7 @@ gh issue edit <新编号> --add-blocked-by <前置编号>
 > "代码写完、文档写完、CI 表面绿色都不能单独作为关闭证据"）。
 
 > **常设授权（2026-09-13 起 · 取代上面那条"逐次确认"，无需再逐个问）**：
-> `Task` / `Bug` 类 issue 在**交付物已落库、声明的门禁实跑通过、且该 commit 的真实 CI 已绿**之后，
+> `Task` / `Bug` 类 issue 在**交付物已落库、声明的判据已实跑（`dotnet test` 或写明的人工核对项）、且该 commit 的真实 CI 已绿**之后，
 > agent 可**直接关闭**（置 `closed`，同时清掉 `state:in-progress`——[WORKFLOW.md §一](../../WORKFLOW.md)
 > 规定全仓同时只允许一个 in-progress，闭合的 issue 不得挂着它）。标签沿用既有约定：闭合后只留 `type:*`。
 >
@@ -343,12 +355,12 @@ gh issue edit <新编号> --add-blocked-by <前置编号>
 
 | 限制 | 影响 | 处置 |
 |---|---|---|
-| ~~本机 `gh` 为 2.4.0（2022-03），无 `--blocked-by` / `--parent`~~ → **2026-09-12 已升级到 2.100.0** | 原生依赖边现可用：`gh issue create --blocked-by` · `gh issue edit --add-blocked-by` / `--parent` / `--type` · `gh issue view --json blockedBy,blocking,parent` 可读 | **权威仍是正文 `依赖:` 字段**——创建前门禁在 issue 还不存在时就要判，且 `requires:`（gate / PLAYABLE / 能力 / owner）没有原生对应物。原生边是**投影**（价值在 UI 的阻塞图标与反向可见性），两侧不一致由 **I14** 报出 |
+| ~~本机 `gh` 为 2.4.0（2022-03），无 `--blocked-by` / `--parent`~~ → **2026-09-12 已升级到 2.100.0** | 原生依赖边现可用：`gh issue create --blocked-by` · `gh issue edit --add-blocked-by` / `--parent` / `--type` · `gh issue view --json blockedBy,blocking,parent` 可读 | **权威仍是正文 `依赖:` 字段**——它要人工核对，且 `requires:`（PLAYABLE / 能力 / owner）没有原生对应物。原生边是**投影**（价值在 UI 的阻塞图标与反向可见性）；两侧不一致原由 **I14** 报出，该规则随校验器于 2026-09-17 删除 |
 | GitHub tasklist `- [ ] #123` 已退役（官方文档原文 "Tasklist blocks are retired"，见 [2025-02-18 changelog](https://github.blog/changelog/2025-02-18-github-issues-projects-february-18th-update/)） | 旧式勾选依赖不再有语义保证 | 不用 tasklist 表达依赖 |
 
 ### 7.4 存量异常（不追溯，但已清理）
 
-**规则**：本文只约束新建 issue，**不追溯处置**存量——创建于本约束生效前、且不带 `type:*` 标签的 issue 不进 I1–I14 的判罚（校验器显式打印跳过清单，不算通过、也不静默忽略）。
+**规则**：本文只约束新建 issue，**不追溯处置**存量——创建于本约束生效前、且不带 `type:*` 标签的 issue 不进 I1–I14 的判罚（原校验器会显式打印跳过清单，不算通过、也不静默忽略；该校验器已于 2026-09-17 删除，该豁免随之失去机器载体）。
 
 **已发生的事（2026-09-12，owner 裁定）**：仓库原有 16 个 grilling 时代开放 issue（标签为 `维度:*` / `ready-for-agent`，正文引用已移出仓库的 `.scratch/` 路径），经逐条取证后**全部关闭**：**12 条 `completed` · 2 条 `duplicate` · 2 条 `not planned`**（后者已被替代）。2 条 duplicate 指向的是同一份已完成的交付物，故**交付物实际已完成的共 14 条，需要新工作的 0 条**——其中 7 条还挂着 `ready-for-agent`，指向的是早已实现并有测试覆盖的交付物，这正是"存量不清理"的真实代价。
 
@@ -361,7 +373,7 @@ gh issue edit <新编号> --add-blocked-by <前置编号>
 
 | 借鉴对象 | 借了什么 | 本仓适配 |
 |---|---|---|
-| KEP `kep.yaml` + `verify-kep-metadata.sh`（Kubernetes） | 把提案元数据枚举化，用 CI 脚本卡关（`go test ./test/metadata_test.go` 断言校验错误为空） | 换成 [`gates.json`](gates.json) + `validate_issues.py`，接进既有 11 校验器与 CI 的 `docs-integrity` job |
+| KEP `kep.yaml` + `verify-kep-metadata.sh`（Kubernetes） | 把提案元数据枚举化，用 CI 脚本卡关（`go test ./test/metadata_test.go` 断言校验错误为空） | 换成 `gates.json` + `validate_issues.py`，接进当时既有的 11 个校验器与 CI 的 `docs-integrity` job（⚠️ 2026-09-17：这三样都已删除，这一段是当初的适配记录） |
 | Rust tracking issue 模板 | 步骤化 checklist（每步是一个可交付 PR）+ `Unresolved Questions` | "未决问题"成为导入门的第四块（[§2.2](#22-导入门)）：有未决问题不许导入 `Implementation` |
 | Rust RFC 模板 | `Motivation` / `Guide-level` / `Reference-level` / `Alternatives` / `Future possibilities` | 决策表 + 受影响面（[§2.2](#22-导入门)）；`Future possibilities` → 「明确排除」 |
 | GitHub Issue Forms | 结构强制：必填项、枚举下拉、校验 | 六类型各一份表单；标签名与校验器的章节名逐字对齐（表单渲染出的 `### 标题` 即校验器的解析锚点） |
@@ -378,7 +390,7 @@ gh issue edit <新编号> --add-blocked-by <前置编号>
 
 | 候选字段 | 出处 | 为什么不采纳 |
 |---|---|---|
-| `dependency_impact`（依赖挂掉/降级对本特性的影响） | KEP PRR `### Dependencies` | 本仓的依赖不是常驻服务，"挂掉"对应的是前置 issue 未关闭或门禁不可用——已由 `blocked-by` + 门禁可用性（I6/I7）**机械**表达。再加一段自由文本，没有具名消费时刻 |
+| `dependency_impact`（依赖挂掉/降级对本特性的影响） | KEP PRR `### Dependencies` | 本仓的依赖不是常驻服务，"挂掉"对应的是前置 issue 未关闭或检查跑不了——已由 `blocked-by` + 「检查能否给出判据」表达（原由门禁可用性 I6/I7 **机械**表达，那套门禁与规则已于 2026-09-17 删除）。再加一段自由文本，没有具名消费时刻 |
 | `steps`（一个 issue 内多步 checklist） | Rust tracking issue | 未采纳为**字段**，改为**分解算法**：Rust 把多步放进一个 tracking issue，本仓要求每条 issue 独立闭合、独立证据（[WORKFLOW.md §六](../../WORKFLOW.md)），故步骤**外化**为带 `blocked-by` 边的多条 issue（[§三 Step 3–4](#三分解算法)） |
 | `feature_gates{name,components}` / `disable_supported` / `milestone{alpha,beta,stable}` | `kep.yaml` | 那套是灰度发布与版本火车的产物；本仓无发布路径、无 feature flag、无 N-1 升级。成熟度由四轴状态 + must-prove 表达 |
 | `monitoring_requirements`（metrics / SLI / SLO） | KEP PRR | 无线上服务，无可观测性要求 |
@@ -389,8 +401,8 @@ gh issue edit <新编号> --add-blocked-by <前置编号>
 | `ownership_and_team_asks`（Task / Owner / Notes） | rust-project-goals | 单人仓库，owner 即唯一负责人；需要多人时再加 |
 | `user_stories` / `backwards_compat_policy` / `source·abi_compatibility` | KEP / PEP 387 / swift-evolution | 无外部 API 消费者、无兼容性承诺。`Slice` 类型的「玩家路径」承担了"具体使用场景"那一项 |
 | `Timebox`（spike 的时间盒） | INVEST `Estimable`；Cockburn 的 spike | **暂缓，不是否决**——本仓尚无 `Experiment` 类型的 issue在跑，此刻加字段没有消费时刻。触发条件：**第一条 `Experiment` issue 创建时**，由它决定时间盒是进模板字段、还是留在正文里 |
-| `ready-for-human` 的委派判据（不该交给 agent 的清单） | GitHub Copilot 最佳实践的反向清单 | 暂缓：本仓的"不能交给 agent"已被更硬的机制覆盖——需 owner 决策的走 `RFC`，需 Unity Editor 的按 `gate:unity` 判 `state:blocked`（I6）。人工清单会与这两者重复且更难维护 |
+| `ready-for-human` 的委派判据（不该交给 agent 的清单） | GitHub Copilot 最佳实践的反向清单 | 暂缓：本仓的"不能交给 agent"已被更硬的机制覆盖——需 owner 决策的走 `RFC`，需跑 Unity Editor 的写明"由人在 Windows 侧执行"并标 `state:blocked`（原按 `gate:unity` 由 I6 机械判，两者已于 2026-09-17 删除）。人工清单会与这两者重复且更难维护 |
 
 ---
-*创建: 2026-09-12 | 更新: 2026-09-13（§4.1.1 例外 1 校正——删去「门禁可引用尚不存在的脚本」这条从未实现、且不可能有意义豁免；§5.2 I6 与 §5.3 覆盖边界同步。触发：#142 首次交付新门禁时 I6 FAIL 实测）*
-*关联: [WORKFLOW.md](../../WORKFLOW.md), [ARCHITECTURE.md](../../ARCHITECTURE.md), [构建与测试](build-and-test.md), [门禁能力表](gates.json), [工程文档索引](README.md), [项目规约](../conventions/README.md)*
+*创建: 2026-09-12 | 更新: 2026-09-17（门禁整节撤销：§5.1/§5.2/§5.3 的校验器与 `gates.json`、§4.1.1 例外 1、§7.1 的 B/C 通道、§4.1 的 `门禁:` 字段与取值域全部改标为已删 / 改人工；触发：owner 2026-09-17 裁定撤销全部门禁）*
+*关联: [WORKFLOW.md](../../WORKFLOW.md), [ARCHITECTURE.md](../../ARCHITECTURE.md), [构建与测试](build-and-test.md), [工程文档索引](README.md), [项目规约](../conventions/README.md)*

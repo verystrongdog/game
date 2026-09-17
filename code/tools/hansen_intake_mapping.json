@@ -1,5 +1,5 @@
 {
-  "_comment": "项目脑干核团条目 ↔ hansen2024 数据集标签的对应表（#133，依 #132 裁定 C：只做结构校验，不改数值）。消费者：code/tools/validate_hansen_intake.py（只读）。",
+  "_comment": "项目脑干核团条目 ↔ hansen2024 数据集标签的对应表（#133，依 #132 裁定 C：只做结构校验，不改数值）。原消费者：code/tools/validate_hansen_intake.py（只读）——⚠️ 2026-09-17 该脚本已随全部门禁删除，本表当前没有消费者。",
   "_created": "2026-09-13",
   "_authority": "data/connectivity/external-sources.md §二 缺口 1 的 2026-09-13 裁定（C）",
   "_measured_conventions": {

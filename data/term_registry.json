@@ -1,6 +1,6 @@
 {
   "_description": "术语注册表 — 术语定义 / 旧模型 / 偏离原因集中管理，避免在撰写设计内容时被术语的现实世界默认含义劫持（例：项目内的「态度」不是社会心理学的 attitude）。status 字段区分活跃与已废弃术语，是本表唯一权威状态。",
-  "_maintenance": "入库触发: (a) 新核心术语且项目内有自定义含义 (b) definition/old_model/deviation_reason 被实质修改 (c) 两个术语边界被重新划分。numerical_locations 在入库时填充、定义变更时遍历复查。覆盖范围: 设计文档表格列头与参数名中 ≤4 ASCII 字符短标识符。 修订流程（改定义 / 废弃 / 候补三条短规则）见 design/conventions/README.md §五。 `enforcement` 字段 = 逐术语执法策略（`扫描` / `只登记` / `关闭`；**缺省即 `扫描`**，新增 deprecated 条目不得靠不写字段绕过门禁）：三档定义与判定面见 design/conventions/README.md §五 第 2 条，判定实现见 code/tools/validate_trash_isolation.py（#159，2026-09-15）。",
+  "_maintenance": "入库触发: (a) 新核心术语且项目内有自定义含义 (b) definition/old_model/deviation_reason 被实质修改 (c) 两个术语边界被重新划分。numerical_locations 在入库时填充、定义变更时遍历复查。覆盖范围: 设计文档表格列头与参数名中 ≤4 ASCII 字符短标识符。 修订流程（改定义 / 废弃 / 候补三条短规则）见 design/conventions/README.md §五。 `enforcement` 字段 = 逐术语执法策略（`扫描` / `只登记` / `关闭`；**缺省即 `扫描`**，新增 deprecated 条目不得靠不写字段绕过执法）：三档定义与判定面见 design/conventions/README.md §五 第 2 条，判定实现原为 code/tools/validate_trash_isolation.py（#159，2026-09-15）——⚠️ 2026-09-17 该脚本与 validate_issues.py 的 I10 已随全部门禁删除，三档执法改人工核对。",
   "_created": "2026-08-03",
   "_updated": "2026-09-16",
   "_batch": "grilling-113-disease-eligibility-2026-09-03",

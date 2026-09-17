@@ -2,7 +2,9 @@
 
 > 本仓库的**边界声明**：四层各自的职责、允许的依赖方向、已知的越界点。
 >
-> 这是一份**声明**而非建议——[项目规约](design/conventions/README.md) 与校验器以此为据。
+> 这是一份**声明**而非建议——[项目规约](design/conventions/README.md) 以此为据。
+>
+> 🔧 **2026-09-17（owner 裁定）**：全部门禁已撤销（`code/tools/` 下的 26 个校验器、`design/engineering/gates.json`、CI 的三个门禁 job 已删）。本文声明的**边界不变**，但 §五 里由校验器承担的强制力已经没有了——那些条款现在只靠人守。
 
 ## 目录
 
@@ -29,7 +31,7 @@ code/        实现与验证          证明设计跑得起来，不反向定义
   src/       C# 逻辑引擎（.NET 8）—— 规则结算的唯一实现
   unity/     Unity 呈现沙盘 —— 纯呈现，不含逻辑正典
   sim/       Python 数值验证 —— 一次性研究脚本
-  tools/     校验器与数据生成 —— 服务于 design/ 与 data/
+  tools/     数据生成 / 迁移 / 测量工具 —— 服务于 design/ 与 data/
 
 data/        结构化数据契约      设计参数的机器可读形态
 ```
@@ -83,7 +85,7 @@ code/src/YouAreNotTheFish.Console（harness）/ Tests（计数见 构建与测�
 
 1. **参数只在 `design/` 定义一次**，`data/` 与 `code/` 都是它的下游形态。
 2. **代码里每个常量必须有来源注释**（`来源：<文档> §<节>`），无来源的常量视为缺陷。
-3. **同一参数出现在多处时必须一致**——由 `code/tools/validate_params.py` 跨文件机械核验（`data/term_registry.json` 的 `numerical_locations` 是其索引）。
+3. **同一参数出现在多处时必须一致**——此条**没有机械校验**：原 `code/tools/validate_params.py` 跨文件核验（`data/term_registry.json` 的 `numerical_locations` 是其索引），该脚本已于 2026-09-17 随全部门禁撤销删除，改由人工逐处核对。
 4. **迁移必须一次做完**：数据格式变更（如 `W_sensory` 从 69×6 扩到 69×8）必须同时更新数据、代码、代码注释、设计文档、数据 README——历史上漏做过一次（挂账 T6b，2026-09-12 才补齐）。
 
 ## 四、已知越界点
@@ -122,7 +124,7 @@ code/src/YouAreNotTheFish.Console（harness）/ Tests（计数见 构建与测�
 |---|---|---|
 | 1 | Unity 侧的天花板 | Unity 6000.5.2f1 安装里只有 `Data/NetStandard/ref/**2.1.0**/netstandard.dll` 与 `Data/UnityReferenceAssemblies/unity-4.8-api/`，运行时是 `MonoBleedingEdge`（`unityjit-win32` / `unityaot-*`）→ **net8.0 程序集不可能被 Unity 直接加载** |
 | 2 | B 选项的账（已随代码增长） | Core 里 `ThrowIfNull` **74 处 / 24 文件**（D6 记的 71/22 已过期）· `record` 声明 **56 个** · 集合表达式形态 **66 处**。B 也可做多目标 `net8.0;netstandard2.1`（引擎与 416 项测试不必降级），但**全部源码都要能在 ns2.1 下编译** |
-| 3 | issue 的一条过期前提 | 原文「本机无 Unity Editor，`unity` 门禁 `available: false`」**已不成立**：实测 [gates.json](design/engineering/gates.json) 的 `unity` 门禁 `available: true`（2026-09-12 起 WSL interop 直驱 Windows Editor）。**C 与 B 的 Unity 侧前提本机可验** |
+| 3 | issue 的一条过期前提 | 原文「本机无 Unity Editor，`unity` 门禁 `available: false`」**已不成立**：实测本机可经 WSL interop 直驱 Windows Editor（2026-09-12 实测；该 `unity` 门禁与 `gates.json` 已于 2026-09-17 随全部门禁删除）。**C 与 B 的 Unity 侧前提本机可验** |
 
 **三选项的代价与回滚**（裁定前评估，留档）：
 
@@ -138,9 +140,9 @@ code/src/YouAreNotTheFish.Console（harness）/ Tests（计数见 构建与测�
 
 **后续实施 issue 的准入条件**（供候选队列中的 P4d「Core→Unity 接缝实现」消费）：
 
-1. **前置**：本裁定（§4.1）· `Unity 资产身份` 已闭合（[#136](https://github.com/verystrongdog/game/issues/136) / [#142](https://github.com/verystrongdog/game/issues/142)）· 本机 Unity 门禁可用
+1. **前置**：本裁定（§4.1）· `Unity 资产身份` 已闭合（[#136](https://github.com/verystrongdog/game/issues/136) / [#142](https://github.com/verystrongdog/game/issues/142)）· 本机可经 WSL interop 直驱 Unity Editor（原 `unity` 门禁已于 2026-09-17 删除，前置改为这条实测事实）
 2. **范围**：① 新建 `code/src/YouAreNotTheFish.Core.Unity/`（`netstandard2.1`，链接上表 3 文件 + `IsExternalInit` 垫片）② `DamageCalculator.cs` 的 1 处 API 改写 ③ Unity 侧 `EngineSolver : IDemoSolver`（`CalibrationConfig.Default` + Unity 侧 `IRng` 实现）替换 `DemoCombatDriver.solver` 默认值
-3. **判据**：① 桥接工程 `dotnet build` 退出码 0，且编译进 CI（`engine` job）② 引擎门禁回归 **416/0 不变** ③ Unity 侧编译 0 错误、`run_tests` 退出码 0 ④ **`WhiteboxSolver` 与 `DemoSolver.cs` 的手抄常量被移除或改为引用引擎值**——这是本 issue 存在的理由，不可省 ⑤ 手抄常量与 `CalibrationConfig.Default` 的逐字段一致性由测试钉住（替换前/后数值不变）
+3. **判据**：① 桥接工程 `dotnet build` 退出码 0，且编译进 CI（`engine` job）② 引擎测试回归 **416/0 不变** ③ Unity 侧编译 0 错误、`run_tests` 退出码 0 ④ **`WhiteboxSolver` 与 `DemoSolver.cs` 的手抄常量被移除或改为引用引擎值**——这是本 issue 存在的理由，不可省 ⑤ 手抄常量与 `CalibrationConfig.Default` 的逐字段一致性由测试钉住（替换前/后数值不变）
 4. **不可省的反例**：只新建工程、不换 `DemoSolver` 的手抄常量 → 反向污染点仍在，**不算完成**
 
 ## 五、边界如何被强制
@@ -148,16 +150,13 @@ code/src/YouAreNotTheFish.Console（harness）/ Tests（计数见 构建与测�
 | 机制 | 覆盖什么 |
 |---|---|
 | `code/unity/Assets/Scripts/YANTF.Demo.asmdef` 的 `"references": []` | Unity 不引用 .NET 逻辑库——**结构性保证**逻辑正典只在 `code/src/` |
-| `code/tools/validate_params.py` | 跨文件同名参数一致性（C1）+ 值域（C3）+ 跨系统聚合（C4） |
-| `code/tools/validate_cross_refs.py` | 设计文档间引用完整性（死链 / 段引用） |
-| `code/tools/validate_trash_isolation.py` | 归档隔离——活跃文档不引用垃圾箱 |
-| `code/tools/validate_disease.py` / `validate_eligibility.py` / `validate_situation_fids.py` / `validate_tripartite_annotations.py` | `data/` 与 `design/entities/` 的契约 |
+| ~~`code/tools/validate_params.py`~~ · ~~`validate_cross_refs.py`~~ · ~~`validate_trash_isolation.py`~~ · ~~`validate_disease.py` / `validate_eligibility.py` / `validate_situation_fids.py` / `validate_tripartite_annotations.py`~~ | ⚠️ **2026-09-17 已全部删除**：owner 裁定撤销全部门禁，这些校验器连同 `design/engineering/gates.json` 与 CI 的 `docs-integrity` / `issues-snapshot` / `unity` 三个 job 一并移除。本表前四条边界——跨文件参数一致性、设计文档引用完整性、归档隔离、`data/` 与 `design/entities/` 的契约——**现在只靠人工核对** |
 | `dotnet test code/src/YouAreNotTheFish.sln` | 引擎行为（测试计数见 [构建与测试 §四](design/engineering/build-and-test.md)——本节**不复述数字**，避免第二次漂移） |
 | `data/term_registry.json` | 术语边界——哪些词在本项目里是**已废弃**的旧模型 |
 | **资产区单机所有权**（✏️ 2026-09-12，人工约定，**尚无机械校验**） | `code/unity/Assets/**` 的资产（`.meta` / `.controller` / `.asset` / 场景）**只由这一台机生成与手调**。理由：手调成果入库要求 `.meta` GUID 稳定，多台机器各自手调资产则合并必然 GUID 冲突。**2026-09-12 补充**：原先的两份分叉拷贝已合并为一份（Linux 侧 WSL2 + Windows 侧 Editor 属同一台物理机，unity-cli 经 interop 直驱），该约束现在是"一台机一份拷贝"，不再有跨机面。文本（`design/` `data/` C# 源码与断言）不受此限 |
 
-**提交前的底线**：`validate_cross_refs.py` 报 0 死链 + `dotnet test` 全绿。
+**提交前的底线**：`dotnet test` 全绿——CI 里跑的只有 `engine`（restore + build + test）。⚠️ 2026-09-17 起「`validate_cross_refs.py` 报 0 死链」这条判据随校验器一并删除，不再存在。
 
 ---
-*创建: 2026-09-12 | 更新: 2026-09-13（§4.1 技术部分落地 + 反向污染点随宿主退役 · #155；新增 §4.1：Q6b 桥接范围裁定 A · #135；测试计数改为引用构建与测试 §四 · #130）*
+*创建: 2026-09-12 | 更新: 2026-09-17（门禁撤销：§五 的四个校验器已删，参数一致性 / 引用完整性 / 归档隔离 / `data/` 契约改人工；§4.1 的 `unity` 门禁前提改为实测事实）*
 *关联: [项目规约](design/conventions/README.md), [设计总览](design/README.md), [协作指南](CONTRIBUTING.md), [数据说明](data/README.md)*

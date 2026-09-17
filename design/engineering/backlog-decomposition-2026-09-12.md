@@ -2,6 +2,8 @@
 
 > 按 [issue-process.md](issue-process.md) 的七步算法，对重构后仓库的**当前 backlog** 做的一次实际分解。目的有两个：验证约束体系可执行；产出第一批可按依赖顺序实现的 issue。
 >
+> 🔧 **2026-09-17（owner 裁定）：全部门禁已撤销。** 本文用到的 `gates.json` 门禁能力表、`validate_issues.py`（含 I1–I14 与 --from-github 快照）、`run_all_checks.py` 与 CI 的 `docs-integrity` / `issues-snapshot` job **已一并删除**。本文是 **2026-09-12 的分解记录**（含当时的判定与核对表），其中的 `门禁:` 取值、门禁可用性与校验器读数**只描述那个时点**，不再是可以照跑或照抄的东西；`门禁:` 字段现在改填实际要跑的命令或人工核对项（见 [issue-process.md](issue-process.md) 头部修正块）。
+>
 > **输入的诚实说明**：本次输入**不是一次新的 grilling 讨论**，而是已登记的未闭合项——证据文件与缺口表本身就是一份已收敛的结论，[§2.2 导入门](issue-process.md) 的四块由它们提供（见 §一）。凡导入门要求而现有记录没有的（例如"未决问题"），在本文件中显式补记，不由本文发明。
 
 ## 目录
@@ -34,7 +36,7 @@
 |---|---|
 | [PLAYABLE.md](../../PLAYABLE.md) | `NO_AUTHORIZED_PLAYABLE`——未准入期间**不得新增正式玩家行为** |
 | [slice.md](../slices/CP-01-ward-1f/slice.md) §二 | 结算与资源逻辑 `ACCEPTED`/`DONE_FOR_SLICE`（Console `E2E`）；**Core→Unity 适配层 `FAKE`**、HUD `NONE`、探索接敌与结束条件 `UNRESOLVED`——呈现侧几乎全停在 `ISOLATED` |
-| [gates.json](gates.json) | 可用：`docs-integrity` `clean-checkout` `fixture-index` `engine` `cross-language` `issues`。**不可用：`unity`**（无 Editor）→ 阻塞 P4b / P4d / P5 |
+| `gates.json`（⚠️ 2026-09-17 已删） | 可用：`docs-integrity` `clean-checkout` `fixture-index` `engine` `cross-language` `issues`。**不可用：`unity`**（无 Editor）→ 阻塞 P4b / P4d / P5 |
 | 开放 issue 的 frontier | 16 个存量 issue（grilling 时代），标签为 `维度:*`、正文引用已移出仓库的 `.scratch/` 路径。按 [issue-process.md §7.4](issue-process.md) **不追溯**，故不进本次依赖图 |
 | 实测基线 | `DOTNET_ROLL_FORWARD=Major dotnet test …` → **416 passed / 0 failed**（2026-09-12，本机）；`run_all_checks.py` → 11/11 校验器退出码 0 |
 
@@ -263,4 +265,4 @@ python3 code/tools/validate_issues.py --from-github
 
 ---
 *创建: 2026-09-12 | 更新: 2026-09-12*
-*关联: [issue-process.md](issue-process.md), [gates.json](gates.json), [WORKFLOW.md](../../WORKFLOW.md), [构建与测试](build-and-test.md), [证据](evidence/README.md)*
+*关联: [issue-process.md](issue-process.md), [WORKFLOW.md](../../WORKFLOW.md), [构建与测试](build-and-test.md), [证据](evidence/README.md)*

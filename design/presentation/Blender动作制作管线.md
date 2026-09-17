@@ -1,6 +1,8 @@
 # Blender 人形动作制作管线
 
 > **X Bot → Blender 控制骨母版 → animation-only FBX → Unity Humanoid → 逐帧回导检查** 这条链路的形态、导出预设与回导判据。本文是 Blender 线的**口径正典**；共同样本与共同读数纪律见 [动画处理能力对照实验](%E5%8A%A8%E7%94%BB%E5%A4%84%E7%90%86%E8%83%BD%E5%8A%9B%E5%AF%B9%E7%85%A7%E5%AE%9E%E9%AA%8C.md)。
+>
+> 🔧 **2026-09-17（owner 裁定）：全部门禁已撤销。** 本文引到的 `code/tools/validate_unity_assets.py` / `validate_grip_cards.py`、`run_all_checks.py`、`gates.json` 与 CI 的 `docs-integrity` job **已一并删除**（`xbot_contact_phase.py` / `xbot_balance.py` 两件测量脚本仍在，但不再被任何 CI 或编排器调用）。口径条款、导出预设与已有的实测读数都不变；凡写「进 CI」「机械护栏」的地方现在只是历史陈述——**这条链路现在只剩 Blender / Unity 侧的人工实测与 owner 目视**。
 
 ## 目录
 
@@ -297,7 +299,7 @@ Unity 侧是 `BlenderAnimationDebugger.ReadoutBones`（`HumanBodyBones` 枚举�
 
 | 判据 | 口径 | 实测（2026-09-14） |
 |---|---|---|
-| Humanoid 导入 | `animationType = Human` · `avatarSetup = CreateFromThisModel` | `3` / `1`（与 A4 机械口径一致） |
+| Humanoid 导入 | `animationType = Human` · `avatarSetup = CreateFromThisModel` | `3` / `1`（与 A4 机械口径一致——⚠️ 该口径的原实现 `validate_unity_assets.py` 已于 2026-09-17 随全部门禁删除） |
 | 回导样本是"人形运动" | `clip.humanMotion == true` | `True` |
 | **无导入告警** | `animationImportErrors` / `animationImportWarnings` / `animationRetargetingWarnings` **三串皆空** | 三串皆空（落 `.fbx.meta`，由 builder 自检每次核） |
 | 时长 / 帧率 | 与源一致 | `2.0000 s` / `30` |
@@ -590,9 +592,9 @@ B=<解压目录>/blender-4.5.13-linux-x64/blender
 |---|---|---|
 | `DRAFT` | 宿主里有动作名 + 帧范围 + 自由度表（[口径](动作描述口径.md) §五），尚无读数 | — |
 | `BLENDER_VISUAL_ACCEPTED` | owner 经**活体窗口**目视：口径 §十 **V-c**（0 轮返工，或 ≤1 轮且该轮**能指名某个量**）。⚠️ 走满 **3 轮**才接受者**记通过、但 `动作描述口径` 的 `Health` 仍 `UNKNOWN`**（先例 = [#166](https://github.com/verystrongdog/game/issues/166) 收口记录） | #164 卡 1（第 2 轮「对，通过」）· #163（V-a…V-e 接受，附 3 条已知偏差）· #166（第 3 轮「可以了，现在没问题了」）· #169（3 轮后定稿，"抱头"那一解判不上）· #170（第 2 轮「确实后退了，但是太机械了」——后半句 owner 裁定不在本件范围）· #171（**0 轮返工**）。⚠️ **#169 的目视状态在文档三角里不一致**：以[其证据](../engineering/evidence/panic-posture-2026-09-16.md) §八.1 的**就地更正**（[切片](../slices/CP-01-ward-1f/slice.md) 脚注同）为准 = **3 轮后定稿、owner 已确认通过**；而**证据索引行**与同一份证据的"未做的事"行 / 页脚**仍写着"目视未做"**（见下表第 6 条） |
-| `BLENDER_VALIDATED` | ① 回显卡每一项都有**产物侧读数**（V-a）② `F4a` **持续**型逐帧（松一帧即红）③ 时序**零阈值**（声明帧 == 产物极值帧）④ 接地 / 穿模**沿用**既有容差（`soleMargin = 2.8 mm` · 判据 4 的三个数）⑤ **由独立于生成器的件复算**（#165 / #170 / #171 三件或 `validate_*`），并把该件自述的覆盖边界照抄进证据 | 六件在各自判据面上都落在 ①②③④ 内（口径 §十·V-f 的时序判据 2026-09-15 才入库 ⇒ #163 在其前；#164 是**测量件**，判据面 = 卡 1 的判据 1–5 + 门边独立验证）；⑤ **部分**——#165 的件已被 #166 / #170 / #171 当独立复算消费，而 `V1–V9` 与 `E0–E6` **仍是生成器自判** |
+| `BLENDER_VALIDATED` | ① 回显卡每一项都有**产物侧读数**（V-a）② `F4a` **持续**型逐帧（松一帧即红）③ 时序**零阈值**（声明帧 == 产物极值帧）④ 接地 / 穿模**沿用**既有容差（`soleMargin = 2.8 mm` · 判据 4 的三个数）⑤ **由独立于生成器的件复算**（#165 / #170 / #171 三件或 `validate_*`——⚠️ 2026-09-17 `validate_*` 已随全部门禁删除，只剩三件测量脚本可用），并把该件自述的覆盖边界照抄进证据 | 六件在各自判据面上都落在 ①②③④ 内（口径 §十·V-f 的时序判据 2026-09-15 才入库 ⇒ #163 在其前；#164 是**测量件**，判据面 = 卡 1 的判据 1–5 + 门边独立验证）；⑤ **部分**——#165 的件已被 #166 / #170 / #171 当独立复算消费，而 `V1–V9` 与 `E0–E6` **仍是生成器自判** |
 | `FBX_EXPORTED` | 导出侧 **E0–E6 全绿**（含 E5 首帧中立、bind pose 不取当前帧）+ 产物**落点登记** | 探针 ✅（`RigRoundTripProbe.fbx` 入库）；#166 **跑过 E0–E6 全绿**但产物是过程物、**未入库**；#163 的导出 / 入库**推迟**（口径 §十）；#164 / #169 / #170 / #171 **未做导出**（各自证据"未做的事"逐条登记） |
-| `UNITY_IMPORTED` | `animationType = 3` / `avatarSetup = 1` / `humanMotion = true` + 三条导入告警串空 + `.meta` 入库（`validate_unity_assets.py` A4） | **只有探针**（#156） |
+| `UNITY_IMPORTED` | `animationType = 3` / `avatarSetup = 1` / `humanMotion = true` + 三条导入告警串空 + `.meta` 入库（原 `validate_unity_assets.py` A4 规则——⚠️ 该脚本 2026-09-17 已删，改人工核对） | **只有探针**（#156） |
 | `UNITY_PLAY_VALIDATED` | **只认真场景路径**的 PlayMode 逐帧断言（[危险点表](../engineering/危险点表.md) §六 `RigBuilder` 建图时机行：合成搭建实测**不生效**） | **只有探针的隔离 lab**（`BlenderAnimationDebugBuilder` 生成物落被忽略的 `Assets/Temp/` + 7 条 PlayMode 断言）；⚠️ 它是**调试载体不是行为** |
 | `RUNTIME_CONNECTED` | 被**正式** `ActionLab.controller` / 词条（`data/action_set.json`）消费 | **零**（读数见上表 A 行） |
 
@@ -601,7 +603,7 @@ B=<解压目录>/blender-4.5.13-linux-x64/blender
 1. **不得用一个"完成"覆盖七态**：任何状态声明必须绑 **commit + Blender 版本 + 源资产指纹 + 生成参数**（#173 验收第 4 条）。
    ⚠️ 现状与这一条**对不上**：母版 `sha256` 全仓**只出现一处、且是截断形式**（[#165 证据](../engineering/evidence/xbot-contact-phase-2026-09-15.md) §5.1 的 `eb4b0a69…`；其余 **8 份**证据只写字节数 `5601197`（+ mtime），生成物 FBX 则按 §4.4 声明"不可逐字节复现"），**没有任何一份证据带生成参数指纹** ⇒ 这是**新动作声明状态时**必须补齐的一格。
 2. **live / headless 数值一致只证明"执行路径一致"**，不能单独证明动作语义、几何判据或人体观感正确。实测背离**四次**：#163（旧判据**全绿**却被 owner 否，[证据](../engineering/evidence/action-description-regression-2026-09-14.md) §一）· #166 过程中**两次**（其收口记录自述"本仓第二次与第三次"：第 1 轮三类判据与导出**一项没红**、第 3 轮"多余骨骼"靠新增判据才拦下）· #171（**腿反着跪而两条判据全绿**，膝骨点被标定到地面以下 **70.7 mm**，[证据](../engineering/evidence/body-part-contact-2026-09-16.md) §六.2）。同机制还有 [#165 证据](../engineering/evidence/xbot-contact-phase-2026-09-15.md) §六：宿主回显卡**同帧全绿**而产物里**双脚离地 16–31 cm**。⇒ 对拍（V-e）**保留为一致性证据**，不充当语义正确性证据。
-3. **"独立于生成器的最终验证"是 `BLENDER_VALIDATED` 的必要条件，而现有独立件有明确边界**：`validate_unity_assets.py` / `validate_grip_cards.py` / `xbot_contact_phase.py` / `xbot_balance.py` 四件判的是**证据表 ↔ 算法一致**；`R4` / `B4` / `B5` 逐字写着「**判不了**那条动作的相位 / 支撑域本身对不对」，且都**不重跑 Blender**（CI 上无 Blender）⇒ 正式动作仍须 **owner 目视**兜住"本身对不对"，这一格**不可由机械件代签**。
+3. **"独立于生成器的最终验证"是 `BLENDER_VALIDATED` 的必要条件，而现有独立件有明确边界**：`validate_unity_assets.py` / `validate_grip_cards.py` / `xbot_contact_phase.py` / `xbot_balance.py` 四件判的是**证据表 ↔ 算法一致**——⚠️ **2026-09-17 前两件已随全部门禁删除**（后两件仍在，但已无 CI 调用）；`R4` / `B4` / `B5` 逐字写着「**判不了**那条动作的相位 / 支撑域本身对不对」，且都**不重跑 Blender**（CI 上无 Blender）⇒ 正式动作仍须 **owner 目视**兜住"本身对不对"，这一格**不可由机械件代签**。
 
 **风险审查 10 项**（#173 验收第 2 条逐项覆盖）
 
@@ -713,7 +715,7 @@ owner 将**另开 issue 专门解决语言描述口径**，之后再回来调动
 | 母版与导出物的全部读数（V1–V8 / E0–E6） | `design/engineering/evidence/blender-xbot-pipeline-2026-09-14.md` |
 | 确定性姿势求值路径与三个坑 | [unity-cli README](../../code/tools/unity-cli/README.md) §五 |
 | 资产身份（`.meta` GUID 由 Editor 定、仓库采用同 GUID；lab 场景入库与否的口径） | [code/unity/README.md](../../code/unity/README.md) §二·H / §二·P |
-| X Bot 的 Unity 导入设置口径（`animationType: 3` / `avatarSetup: 1`） | `code/tools/validate_unity_assets.py` A4 规则注释 |
+| X Bot 的 Unity 导入设置口径（`animationType: 3` / `avatarSetup: 1`） | 本文 §5.3「Humanoid 导入」行与 [code/unity/README.md](../../code/unity/README.md)（⚠️ 原指向 `code/tools/validate_unity_assets.py` 的 A4 规则注释，该脚本已于 2026-09-17 随全部门禁删除） |
 
 ---
 *创建: 2026-09-14 | 更新: 2026-09-16（🔧 第八次：**新增 §7.8 成熟度边界与风险门禁（[#173](https://github.com/verystrongdog/game/issues/173)）**——owner **选 C：分层成熟度 + 风险门禁**；定位 = 「X Bot 单机、单写者、人工目视参与的**受控动画研发管线**」，**不是**通用自然语言动画生产系统；A / B 均不采纳（各带实测理由）。含**七态准入阶梯**（`DRAFT → BLENDER_VISUAL_ACCEPTED → BLENDER_VALIDATED → FBX_EXPORTED → UNITY_IMPORTED → UNITY_PLAY_VALIDATED → RUNTIME_CONNECTED`，逐态进入判据**零新阈值**、现状逐态实测）· **分层纪律三条**（状态须绑 commit / Blender 版本 / 指纹 / 参数 · live-headless 一致**只证执行路径**，三次"全绿却被否"实测 · 独立件有边界、不可代签目视）· **风险审查 10 项**（任意 Python · 超时后继续执行 · 母版写回 · 错误会话 · 同源生成/验收 · 自然语言中间契约 · 全帧接触/碰撞 · 载体硬编码 · 证据留存 · 准入分层，逐项带实测来源与门禁要求）· **泛化声明前置** · **六条"与文档不符"**（危险点表母版行的行号失效且 2≠5 · 同一行的 `git status` 判据对 `.scratch/` 母版不成立 · `--force` 零消费 · 卡片 `_meta.template` 固化 Windows 绝对路径 · 桥 README §五 括注不成立 · **#169 目视状态在证据索引 / 同文件两处未回填、以证据 §八.1 为准**；导出侧默认落点 = 母版同目录且无 `out_fbx == tmpl` 护栏，已并入风险 3）。`code/tools/**` 与桥一字未动。🔧 第七次：**新增 §7.7 接口路线决策（[#172](https://github.com/verystrongdog/game/issues/172)）**——owner **选 A：维持现有自建桥、本阶段不接 MCP**；B（整体替换为第三方 Blender MCP）不采纳；**C（桥外加 MCP facade）的启动条件与首批七个工具面预登记**。含两张复核读数表（桥的已验证能力七条 · 标准 MCP 的收益边界四条）与**三条"与文档不符"更正**：危险点表无任何活体桥行 · `unity-cli` 实为**官方 Unity CLI 且自带 `mcp` 子命令**（本机已在用、仓库无记录）·「本桥 120 行」与库内（324 → 444 行）**从未相符**。协议、token 门禁与安全行为**一字未改**。🔧 第六次：**新增 §7·B 动作素材 `BendGripChairBack`**（弯腰双手抓椅背）——脚本化产出 `code/tools/author_xbot_chair_grab.py`（临时 IK 解 + 捕获成控制骨角度），实测抓点残差 **0.0 mm**、肘 133°、逐帧脚漂移 **0.0 mm**、手指自测蜷曲轴 Z/−1；导出与 Unity 导入全绿。**并挖出三个真 bug**：FBX 导出的 bind pose 取当前帧姿势（E5 报 86 m，探针一直裸奔侥幸过）· `pose_position=REST` 是错误修法（压成常量）· `actions.new()` 重名静默建 `.001`。⚠️ 本动作**未登记动作词条**（词表受控，属设计裁定）。🔧 第五次：**新增 §7.5 活体桥 + §7.6 边界与安全**——落库 `code/tools/blender-bridge/`（`blender_ai_bridge.py` + `bb.py` + `bb-launch.sh` + README），实测驱动已开着的窗口：摆 `CTRL_LeftArm` Z+40° → 左手位移 **384.2 mm**，并读回 13 根控制骨与两组集合；含「为什么不用现成 Blender MCP」的四条具体理由。🔧 第四次：**新增 §2.1 GUI 操作手册**（打开方式 · 六步动作序列 · 两条红线）+ **§2.1.1 逐根控制骨的实测轴向语义表**（13 根 × 3 轴，链末标志点位移）+ **§2.1.2 符号规则**（实测：腿左右同轴、臂左右镜像 ⇒ 不能整套取负号）+ §2.1.3 三个自查。测量脚本口径见 §7.4。🔧 第三次：**验证基线由 4.5.13 LTS 切换为 Blender 5.1.2**——入库探针 FBX 由 5.1.2 重建（与 4.5 产物内容等价 **0.000967 mm**）、Unity 侧重跑全量断言转绿；4.5 分支保留在取道层但本机不再保留便携包。🔧 第二次：**移植为 Blender 4.5 / 5.x 双兼容**（新增取道层 `code/tools/blender_action_compat.py`：slotted actions 曲线取道 · `action_slot` 指派 · 姿态骨选择位）+ **母版 GUI 可用性**（骨骼集合 `CTRL`/`MIXAMORIG` + 配色，V9 自检；已复核导出物内容等价 **0.000000 mm**）+ 新增 §4.4「导出物不可逐字节复现」与 §7.1 双版本差异表；E5 判据由矩阵元素改为骨端点坐标）*

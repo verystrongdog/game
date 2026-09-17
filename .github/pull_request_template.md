@@ -37,7 +37,7 @@ Closes #
 - [ ] `design/README.md` 是否需要同步？→ 已检查
 - [ ] `design/framework/six-dimensions.md` 的「维度 → 文档列表」是否需要更新？→ 已检查
 - [ ] 是否 `grep` 了受影响的关键术语，清理了跨文件残留引用？→ 已完成
-- [ ] 所有交叉引用路径是否有效？（`python3 code/tools/validate_cross_refs.py` 报 0 死链）→ 已验证
+- [ ] 所有交叉引用路径是否有效？（**人工核对**——原 `python3 code/tools/validate_cross_refs.py` 已于 2026-09-17 随全部门禁删除，不再有「0 死链」的机器判据）→ 已核对
 
 ## Review Checklist
 

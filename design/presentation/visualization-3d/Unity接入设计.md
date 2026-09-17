@@ -5,6 +5,8 @@
 > **本文只定"接入"这一层**，不定玩法（玩法见[核心机制](../../rules/核心机制.md)），也不重启已废弃的旧模型。
 >
 > **与旧规范的关系**：[3D可视化设计规范](3D可视化设计规范.md) 是 2026-07-11 写的——它的坐标系（态度轴→解剖轴）、节点分类（认知/情绪/行为/终极）、节点数（73）与脑几何（椭球体）**均已离开正典**；其**交互设计**（视角控制/悬停/信息面板/成长动画）与**呈现层**内容仍然有效，本文继承之。资产身份见[脑模型资产登记](脑模型资产登记.md)。
+>
+> 🔧 **2026-09-17（owner 裁定）：全部门禁已撤销。** 本文引到的 `validate_spatial.py`、`validate_unity_assets.py`、`validate_issues.py`、`run_all_checks.py`、`gates.json` 与 CI 的 `docs-integrity` job **已一并删除**。§七 前置表、§十 受影响面与「门禁判据核对 / 创建前的机械门禁」诸节记的是 **2026-09-13 那次导入**的事实，状态不改写；但凡是把它读成「现在有脚本在守」的地方都不再成立——只剩 `dotnet test` 与人工核对。
 
 ---
 
@@ -160,7 +162,7 @@ Unity 侧实测现状（2026-09-13，[code/unity/README.md](../../../code/unity/
 | A2 | 技能节点实例数 == 上下文数 | == `link_contexts_tripartite.json` 的 `contexts`（当前 71） |
 | A3 | 连线数 == 三体边数（按原语分组核对） | == CC 776 + PP 112 + 脑干 114 + CSTC 47 |
 | A4 | **无 per-object 材质** | 脑壳材质数 == 实际用到的脑叶组数（当前 **8**，全集 13）· 节点/连线/状态另外 ≤ 3——直接对冲 v2 世代的 238 个 |
-| A5 | 节点落在自身脑区网格内 | 复用 §14.1 的空间断言（已有 [`validate_spatial.py`](../../../code/tools/validate_spatial.py) 一条先例） |
+| A5 | 节点落在自身脑区网格内 | 复用 §14.1 的空间断言（原以 `validate_spatial.py` 为一条先例——⚠️ 该脚本 2026-09-17 已随全部门禁删除，本判据改人工核对） |
 | A6 | 干净检出可打开且 GUID 不漂移 | 沿用 #136 的 `.meta` 契约（[代码库 README §二·H](../../../code/unity/README.md)） |
 | A7 | 改 `data/` 不改场景即可改变呈现 | 拓扑/染色零硬编码 |
 
@@ -253,8 +255,8 @@ Unity 侧实测现状（2026-09-13，[code/unity/README.md](../../../code/unity/
 | 1 | 在 [脑功能层级模型](../../rules/skill-tree/%E8%84%91%E5%8A%9F%E8%83%BD%E5%B1%82%E7%BA%A7%E6%A8%A1%E5%9E%8B.md) §16.1 就地标注"节点颜色列已由 D23 取代" | §8.1 的裁定推论要落到被改写的那份文档里；本文越界改写会造成两个改写者 |
 | 2 | ~~把烘焙壳导入 Unity 工程（Windows Editor 步骤 + `.meta` GUID 契约）~~ → ✅ **已完成**：[#143](https://github.com/verystrongdog/game/issues/143) 闭合（2026-09-13，提交 `ed44ccd`），动线与判据见 [code/unity/README.md §二·K](../../../code/unity/README.md) | 资产区单机所有权（[ARCHITECTURE.md §五](../../../ARCHITECTURE.md)）；入库前先查[危险点表](../../engineering/%E5%8D%B1%E9%99%A9%E7%82%B9%E8%A1%A8.md)导入期诸条 |
 | 3 | 节点（71 上下文）与连线（1049 三体边）的运行时生成器 | 已按 [#145](https://github.com/verystrongdog/game/issues/145) 的裁定**拆成两层**：<br>· **只读骨架**（脑壳 + 脑区 + 链路 + 观察交互，零玩家行为）→ ✅ **已闭合**：[#146](https://github.com/verystrongdog/game/issues/146)（骨架）· [#147](https://github.com/verystrongdog/game/issues/147)（整脑）· [#148](https://github.com/verystrongdog/game/issues/148)（转模型）；现状 80 区域对象 / 1049 链路 / 相机固定<br>· **玩家可操作面**（构建层聚焦配置 / 技能编排 / 链路操作）→ 随切片准入进入，届时声明 `requires: PLAYABLE:AUTHORIZED_PLAYABLE` |
-| 4 | 空间断言覆盖"3D 节点落在其脑区网格内" | §14.1 的硬要求目前无机械判据（[`validate_spatial.py`](../../../code/tools/validate_spatial.py) 未覆盖视图节点） |
-| 4b | ~~对齐 Windows 拷贝并重跑 `unity` 门禁~~ → ✅ **已完成（2026-09-13）**：`fetch` + `reset --mixed` 使 Editor 侧 HEAD = 仓库 HEAD，强制重编译后**新增错误 0 条**，基线（拷贝 + commit + 脏条目 87）已写进 [#143](https://github.com/verystrongdog/game/issues/143) 的闭合证据 | 危险点表 §七「`unity status` 的 `projectPath`」行：本机有两份拷贝，门禁证据必须写明基线——**每轮跑 `unity` 门禁都要重做这一步**，它不是一个一次性的待办 |
+| 4 | 空间断言覆盖"3D 节点落在其脑区网格内" | §14.1 的硬要求仍**无机械判据**（`validate_spatial.py` 未覆盖视图节点——⚠️ 该脚本本身也已于 2026-09-17 随全部门禁删除） |
+| 4b | ~~对齐 Windows 拷贝并重跑 `unity` 门禁~~ → ✅ **已完成（2026-09-13）**：`fetch` + `reset --mixed` 使 Editor 侧 HEAD = 仓库 HEAD，强制重编译后**新增错误 0 条**，基线（拷贝 + commit + 脏条目 87）已写进 [#143](https://github.com/verystrongdog/game/issues/143) 的闭合证据 | 危险点表 §七「`unity status` 的 `projectPath`」行：本机有两份拷贝，验证证据必须写明基线——**每轮跑 Unity 侧验证都要重做这一步**，它不是一个一次性的待办（⚠️ 2026-09-17：`unity` 门禁已撤，这里说的是人工实跑的纪律） |
 | 5b | ~~**整脑覆盖**~~ → ✅ **已完成（[#147](https://github.com/verystrongdog/game/issues/147)，2026-09-13）**：对侧按命名约定派生真实网格，40 载体 → 80 区域对象（左 40 / 右 40）；**未动数据契约** | 派生规则只依赖既有 `obj_file` 值，故不需要新字段；若将来偏侧化机制要求按半球区分几何/染色，再另立数据契约 issue |
 | 6 | **构建层可操作面的设计对齐正典**（把 [3D可视化设计规范](3D%E5%8F%AF%E8%A7%86%E5%8C%96%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83.md) §四 的交互设计对齐到 71 上下文 / 1049 三边 / 14 网络 × 8 角色 / 节点层口径） | owner 2026-09-13 指示**暂缓**（"先不要设计"）——本条无准入依赖，随时可做；它决定玩法面 issue 开工时的口径准确性 |
 | ~~5~~ | ~~`obj_file` 存在性校验器~~ | ❌ **owner 2026-09-13 决定不做**——不加这条机械校验；缺口如实留在[脑模型资产登记](%E8%84%91%E6%A8%A1%E5%9E%8B%E8%B5%84%E4%BA%A7%E7%99%BB%E8%AE%B0.md) §八 缺陷 5 |
