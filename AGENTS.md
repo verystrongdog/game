@@ -45,19 +45,19 @@ data/        结构化数据契约
 
 活跃文档**不得引用垃圾桶下的路径**——原 `design/archive/trash/` 已于 2026-09-13 整份移出仓库，现本地保留在 `.trash/`（被忽略），**两个位置都不得指向**；也不得使用已废弃的数字/术语（只允许出现在 [决策树](design/decisions/README.md) 历史记录或标注 `⚠️ 已废弃` 的段落中）。详见 [项目规约 §六](design/conventions/README.md)。
 
-## 三、改动前自检（提交底线）
+## 三、改动前自检
+
+> 🔧 **2026-09-17（owner 裁定）：全部门禁已撤销。**
+> 本节原列的 5 条必跑校验器、`design/engineering/gates.json` 注册表、`code/tools/` 下 26 个校验器与 fixture 脚本、以及 CI 里的 `docs-integrity` / `issues-snapshot` / `unity` 三个门禁 job，已一并删除。
+> **现在没有任何机械校验在跑。** CI 只做构建与测试：
 
 ```bash
-python3 code/tools/validate_cross_refs.py        # 跨文件引用：必须 0 死链 / 0 段引用警告
-python3 code/tools/validate_trash_isolation.py   # 归档隔离 + 废弃术语残留
-python3 code/tools/validate_params.py            # 跨文件参数一致性
-python3 code/tools/validate_issues.py --from-github  # issue 契约（字段/依赖/门禁/单线程）
-dotnet test code/src/YouAreNotTheFish.sln        # 引擎测试（改代码时）
+dotnet test code/src/YouAreNotTheFish.sln        # 引擎测试（CI 里跑的只有这一个）
 ```
 
-改设计文档或数据后跑前三条；改代码后跑第四条；**新建或修改 issue 后跑第四条**（issue 是准入载体，其字段与依赖边同样受机械校验）。**报 0 死链 + 测试全绿是底线**，不是"锦上添花"。
+⚠️ **须知（事实，不是劝阻）**：`design/` 下 526 篇文档、`data/` 下 1904 个契约文件之间的交叉引用，以前由 `validate_cross_refs` 守着——撤销前最后一次读数是 **2163 条引用 / 0 死链**。**那条护栏现在没有了**：死链、废弃术语残留、参数漂移、归档隔离违规都只能靠人盯。引用规范本身（[写作与引用规范](design/conventions/writing-and-references.md)）未变，只是不再有工具强制。
 
-**改 `code/unity/Assets/**`、或经 CLI 驱动 Unity Editor 之前**，先查 [危险点表](design/engineering/危险点表.md)（按**位置**检索的排障索引：这个位置反复出什么事、判据是什么、怎么躲）。⚠️ 该表覆盖 Unity 侧的坑，而 **`code/` 与根目录文档不在上述校验器的扫描范围内**——它的死链要人盯。
+**改 `code/unity/Assets/**`、或经 CLI 驱动 Unity Editor 之前**，先查 [危险点表](design/engineering/危险点表.md)（按**位置**检索的排障索引：这个位置反复出什么事、判据是什么、怎么躲）。该表是**人工查阅的文档，不是门禁**；它覆盖 Unity 侧的坑。
 
 ## 四、Git
 
@@ -76,5 +76,5 @@ dotnet test code/src/YouAreNotTheFish.sln        # 引擎测试（改代码时�
 **这些是历史，不是流程。** 新的设计讨论用你顺手的方式，只要求结论落进 `design/`。
 
 ---
-*创建: 2026-09-12 | 更新: 2026-09-12*
+*创建: 2026-09-12 | 更新: 2026-09-17（§三 门禁整节撤销——26 个校验器脚本、`gates.json` 注册表与 CI 三个门禁 job 已删，自检改人工）*
 *关联: [项目规约](design/conventions/README.md), [架构](ARCHITECTURE.md), [可玩状态](PLAYABLE.md), [工作流程](WORKFLOW.md), [协作指南](CONTRIBUTING.md)*
