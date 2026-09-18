@@ -147,7 +147,7 @@
       "definition": "月光 = 场在视觉感知中的表观（⚠️ v2 说法「坍缩表观/零号病人激发」已废弃，2026-08-11 #38）。CGL+AGC 月光场实例化（2026-09-02 #38）：B 族动力学（E_th>0 零态稳定，F(t) 推过阈值自持→收敛能量壳 E_c）；月相 = 确定性慢周期参数调制 E_c(λ)/E_th(λ)，非能量源；月光恒在 = 历史阈值激活的壳上基线（无 F_bg）。「满月 d<0/弦月 d≈0/新月 d>0」= 待校准验证的预期 regime 映射，非公理。详见 时空结构数学框架.md §十一。",
       "source": "决策树.md M1-M5（2026-08-02）; design/events/世界观与叙事.md; grilling #22（2026-08-05，数值校准闭合）; Grilling #38（2026-08-11，CGL+AGC 重建）",
       "old_model": "天体反射太阳光——月球绕地球轨道的天文学周期",
-      "deviation_reason": "项目世界观中不存在独立于场的'月亮'。月光是意识外显效应下场的表观。旧数值模型（1.0-2.0×月光强度倍率）已在 #22 中替换为 η 框架",
+      "deviation_reason": "项目世界观中不存在独立于场的'月亮'。月光是意识外显效应下场的表观。旧数值模型（1.0-2.0×月光强度倍率）已在 #22 中替换为 η 框架（⚠️ 该 v2 框架本身已于 2026-08-11 #38 废止，见 η 条目；现行口径为 `q̂`/`m_field`）",
       "status": "active",
       "numerical_locations": [
         "design/rules/时空结构数学框架.md §十一（月光场实例化）",
@@ -1217,9 +1217,9 @@
       "superseded_by": "Grilling #38 CGL+AGC 观察者理论（建设中）"
     },
     "η": {
-      "definition": "语义维度激活权重（= 坍缩强度）。η = g_0 × c(SAN) × κ。η < η_crit≈0.3 → 经典现实; η ≥ η_crit → 月光现实（语义维度参与环境监控）。典型范围 [0.01, 0.9]。",
+      "definition": "⚠️ 已废弃形式化参数（2026-08-11 #38）。历史定义：语义维度激活权重（= 坍缩强度），η = g_0 × c(SAN) × κ；η < η_crit≈0.3 → 经典现实（环境监控基 = {|x⟩}），η ≥ η_crit → 月光现实（语义维度参与环境监控）。典型范围 [0.01, 0.9]。**活跃文档里这个符号另有两种合法用法**（2026-09-18 收口）：① 作「**月光场强度**」的旧记法——活跃量现由 `q̂` 承载（`时空结构数学框架` §11.4：φ → q_i → q̂_i → m_field；`敌人与事件` §8.1 的列名即「月光场强度」）⇒ **活跃文档应直接写「月光场强度」或 `q̂`，不写 η**；② `η_i` = **个体源强比例**（F_individual = η_i·F_collective，§11.2），与场强公式无关、**未废弃**。",
       "enforcement": "只登记",
-      "enforcement_note": "η 在活跃时空/事件设计里就是月光场强度（空间与关卡设计 / 游戏循环 / 敌人与事件 在用），与废弃的形式化参数 η = g_0 × c(SAN) × κ 同形不同用法",
+      "enforcement_note": "η 在活跃时空/事件设计里就是月光场强度（空间与关卡设计 / 游戏循环 / 敌人与事件 在用），与废弃的形式化参数 η = g_0 × c(SAN) × κ 同形不同用法 ⇒ 逐串匹配分不出新旧义，判了就是假阳性。🔧 2026-09-18 owner 裁定「统一到月光场强度，只清引用废弃模型的写法」：`check_npc_materials.py` 扫出的 16 处命中里 **11 处已改写**（世界观 §拜月教 与 敌人与事件 §6.3 的「增强局部 η」→ 信念聚集计入 `F(t)`；空间 §6.2/§7.1/§7.7 · 游戏循环 §4.2 → 「月光场强度」；角色与面具 §5.1 的 `η ≥ 0.3` 标注为废弃阈值；framework/dimensions/events.md 的旧难度缩放记法标注废弃）。残留面 = `reference/灵感收件箱.md`（η_mood，局部记号）与 `空间与关卡设计` §八 已废弃章（轮回层）",
       "source": "reference/deprecated/moonlight-field/月光场-标量场模型.md §7.1; grilling #22, 2026-08-05",
       "old_model": "希腊字母 η 在物理学中常表效率/粘度——无关。在项目中是全新定义的语义维度激活权重",
       "deviation_reason": "项目独创——不是物理学 η（效率/粘度），是月光场中语义内容对环境监控基的参与权重",
@@ -1227,16 +1227,15 @@
       "numerical_locations": [
         "reference/deprecated/moonlight-field/月光场-标量场模型.md §7.1（η = g_0 × c(SAN) × κ）",
         "reference/deprecated/moonlight-field/月光场-标量场模型.md §7.3（实体类型 η 基线: 0.03-0.86）",
-        "design/rules/核心机制.md §6.3（η 放大情境情绪维度）",
-        "design/entities/敌人与事件.md §8.1（η 全局缩放）",
-        "design/entities/角色与面具.md §5.1（η ≥ 0.3 → 幻影实体）",
-        "design/events/游戏循环.md §4.2-4.3（η 驱动空间复用）"
+        "design/entities/敌人与事件.md §8.1（**月光场强度**行·现行）/ §8.2（月相与场耦合，旧值 0.675/0.792/0.900）",
+        "design/space/空间与关卡设计.md §6.2（场强影响）/ §7.1（前后半夜场强相同）/ §7.7（半生成四参数之一）",
+        "design/rules/时空结构数学框架.md §11.2（`η_i` 个体源强比例）/ §11.4（q̂ 与 m_field 接口）"
       ],
       "added": "2026-08-05",
-      "updated": "2026-08-05",
+      "updated": "2026-09-18",
       "deprecated_date": "2026-08-11",
       "deprecation_reason": "v2 静态标量场 φ(x) + Yukawa + einselection 被 #38 CGL+AGC 连续性破缺框架取代。参数废弃，定义保留为历史参考。",
-      "superseded_by": "Grilling #38 CGL+AGC 观察者理论（建设中）"
+      "superseded_by": "Grilling #38 CGL+AGC 观察者理论 —— 场强接口 `q̂` / `m_field`（时空结构数学框架 §11.4），数值待 #35 校准轨"
     },
     "c(SAN)": {
       "definition": "归一化相干性基线 = C(SAN) / C_max。所有实体类型共享同一条分段线性曲线。锚点: c_min=0.03(SAN≥90), c_60=0.08, c_30=0.50, c_0=1.00(SAN=0)。c = η / (g_0 × κ)，在 κ=1 基线下从实体类型表反推。",
@@ -4615,13 +4614,71 @@
       ],
       "added": "2026-09-17",
       "updated": "2026-09-18"
+    },
+    "敌我同构": {
+      "definition": "本作**不设本质上的「敌人」与「玩家」分种**：所有角色共用同一套底层体系（50 解剖实体 + L0–L5 链路 + 髓鞘化 + SAN/HP），对立来自当前关系/视角/病情影响/回忆与误解，**不是固定阵营**。玩家走技能（链路激活），NPC 走 Affordance Competition 实时 salience 选择行动。⇒ 敌人不是物种，是**当下位置**：因此拜月教徒、医护反噬、思维造物都不新增「敌种」，只改状态与阵营声望（`敌人与事件` §11 三头目 × 三阵营）。",
+      "source": "design/events/世界观与叙事.md §敌我同构；design/entities/敌人与事件.md §6.4 / §11",
+      "old_model": "常规游戏设计的阵营身份：enemy / ally 是角色的**固有属性**，敌人是另一类存在（另一套数值、另一套行为表）",
+      "deviation_reason": "项目把敌对降级为**关系与状态**：同一套脑区链路既跑玩家的技能、也跑 NPC 的行动选择 ⇒ 不需要为敌方单立一套机制；「反噬不是精神疾病发作」与「拜月教是状态字段不是职能类别」都是这条的直接推论",
+      "status": "active",
+      "numerical_locations": [
+        "design/events/世界观与叙事.md §敌我同构（四条原文）",
+        "design/entities/敌人与事件.md §6.4（与敌我同构的关系）",
+        "design/entities/敌人与事件.md §1.1（敌人来源：精神病人 / 医疗人员 / 拜月教徒 / 动物）"
+      ],
+      "added": "2026-09-18",
+      "updated": "2026-09-18"
+    },
+    "六轴": {
+      "definition": "**素材生产的防同质化约束轴**的统称，按侧分两套、同构并列（动机 → 状态 → 功能 → 弧线 → 通道 → 亮度）：**患者侧** = [叙事多样化维度定义] 六轴（轴 1 入院方式 / 轴 2 入院时功能状态 / 轴 3 叙事功能 / 轴 4 弧线结构 / 轴 5 创伤通道 / 轴 6 亮度光谱），坐标原点是**入院**；**非患者侧** = [职能侧多样化轴] 六轴（轴 1 岗位动机 / 轴 2 服役年限×见过什么 / 轴 3 叙事功能 / 轴 4 去留弧线 / 轴 5 底线通道 / 轴 6 亮度光谱），坐标原点是**岗位**。约束强度相同：**新素材至少命中一个尚未占用的缺口格**；两套都只约束素材生产，**不进游戏、不进数值、不参与疾病资格判定**。第三套并列约束是 [正常人侧反模子清单]（管「没病的人」，坐标原点是**没发生什么**）。",
+      "source": "design/spec/material/叙事多样化维度定义.md §二–§四（2026-09-03 定案）；design/spec/material/职能侧多样化轴.md §二–§四（2026-09-18）；design/spec/material/正常人侧反模子清单.md §六",
+      "old_model": "角色设定的「多样性」靠人肉感觉把关（写手自觉换一换职业/病种）；以及「差异化」被理解为**换病种**",
+      "deviation_reason": "项目把「不雷同」拆成**可逐格记账的六轴**：每份素材在台账里登记命中格，缺口格就是下一批的生产指令（`NPC生态台账` / `患者生态索引` 的「轴命中」列即这套账）。⇒ 患者侧一次性诊断出 4 轴 WARNING（入院被动危机/受难者/黯淡/通道集中），且明确「存量达标者不强改，差异靠新增补充」",
+      "status": "active",
+      "numerical_locations": [
+        "design/spec/material/叙事多样化维度定义.md §三（约束清单：至少命中一条缺口）",
+        "design/spec/material/叙事多样化维度定义.md §六（Q6 门禁模拟：四轴 WARNING 的量化基线）",
+        "design/spec/material/职能侧多样化轴.md §三（约束清单 5 条）",
+        "design/spec/material/职能侧多样化轴.md §二 轴 2 补充（压抑计数五型对照）",
+        "design/spec/material/职能侧多样化轴.md §二 轴 4（去留弧线六格）"
+      ],
+      "added": "2026-09-18",
+      "updated": "2026-09-18"
+    },
+    "职能侧多样化轴": {
+      "definition": "非患者 NPC（医护 / 科研 / 警卫 / 后勤行政 / 家属）的**生产约束六轴**，与患者六轴同构（见「六轴」条目）。**不能照抄患者六轴的三个原因**：① 患者轴 1/轴 2 以「入院」为坐标原点，员工没有这个动作；② 患者轴 5 与 24 病分类的资格签名绑定，员工侧跑的是 `敌人与事件` §5.2 的压抑计数 → 反噬；③ 患者六轴没有「**去留**」这一格——员工是唯一能走出医院的人（可辞职/调岗/装作没事继续上班/投向拜月教）。三条硬线：反噬不是精神疾病发作 · 拜月教 = 状态字段不是职能类别 · 上下班离开医院 ≠ 免疫。",
+      "source": "design/spec/material/职能侧多样化轴.md（2026-09-18 owner 接受推荐后落盘）；依据 design/entities/敌人与事件.md §5.1–5.3 · design/events/游戏循环.md §3.4",
+      "old_model": "非患者 NPC 只当功能位（门卫就是门、护士就是补给点），不设人物侧生产约束；差异化只对患者做",
+      "deviation_reason": "项目把「员工」升格为**有弧线的生产对象**：他们在 1F 就有六稿、每人一列轴命中，且各自占住一格不得重复（`NPC生态台账` §三/§八）。⇒ 副产品是机制面的接口（§5.2.1 三条边界路径全部来自员工侧六稿的提案）",
+      "status": "active",
+      "numerical_locations": [
+        "design/spec/material/职能侧多样化轴.md §二（六轴 × 取值 × 落点）",
+        "design/spec/material/职能侧多样化轴.md §五（记账方式：进 manifest 用 patient_pool=false + status=non-patient）",
+        "design/entities/敌人与事件.md §5.2.1（计数不单调的三条边界路径）"
+      ],
+      "added": "2026-09-18",
+      "updated": "2026-09-18"
+    },
+    "患者池": {
+      "definition": "**有素材、且被机器核对承认的患者名单**（与「未用池」相对）。入池四条同时成立：① `.gen.json` 与 `-叙事视图.md` **成对**存在；② `npc-materials-manifest.json` 里 `patient_pool: true`（并计入 `expected_patient_count`）；③ 出现在 `患者生态索引` 的 `<!-- npc-patient-pool -->` 机器核对区内；④ 六轴命中 ≥1 个缺口格。**当前 17 位**（`expected_patient_count: 17`）。池外状态各有专名：`non-patient`（健康对照/员工）、`demonstration`（反模子示范稿）、`rejected`（正式排除，留作反例档案）、`needs-migration`。",
+      "source": "design/spec/material/患者生态索引.md（机器核对区 + manifest 同步规则）；design/spec/material/npc-materials-manifest.json（patient_pool 字段）",
+      "old_model": "把「患者素材」当成一个数量（有几份稿子）——没有池边界、没有入池要件，谁写过谁就算",
+      "deviation_reason": "项目把它做成**有边界、可机械核对的生产槽位集合**：池内 / 未用池 / 非患者 / 已排除四态分立，且池内名单在索引与 manifest 两处必须一致（`check_npc_materials.py` 的 manifest 判据逐条对账）⇒ 「患者池」不是修辞，是一个带 `expected_patient_count` 的契约",
+      "status": "active",
+      "numerical_locations": [
+        "design/spec/material/npc-materials-manifest.json（expected_patient_count: 17 / expected_material_count: 25）",
+        "design/spec/material/患者生态索引.md（机器核对区 npc-patient-pool / npc-non-patient-materials）",
+        "design/spec/material/NPC生态台账.md §六（下一批配额建议 8 位：填未用池）"
+      ],
+      "added": "2026-09-18",
+      "updated": "2026-09-18"
     }
   },
   "_metadata": {
     "last_updated": "2026-09-18",
-    "last_batch": "2026-09-18 第十五批：改写 2 条（`基本属性` · `人生经历`）——经历净值 +2 后将属性封顶定为 10；五档按 m 阶段映射为 0–2/3–4/5–6/7–9/10，只有 10 点为本能；五项属性的每个程度新增玩家可见能力描述。无新增/废弃术语。",
-    "total_terms": 341,
-    "active_terms": 316,
+    "last_batch": "2026-09-18 第十六批：新增 4 条 active（`敌我同构` · `六轴` · `职能侧多样化轴` · `患者池`，均来自台账 §七⑥ 的入库候选，owner 逐条确认）；改写 1 条（`η`——补两种非废弃用法 `月光场强度`/`η_i`、刷新 numerical_locations，旧坐标指向已失效章节）；改写 `月光` 的 deviation_reason（标注所引 v2 框架已废止）。同批把 `剧情主线`/`台账` 记入候补清单「暂不动」档（不够格：工作用语，无项目自定义含义）。",
+    "total_terms": 345,
+    "active_terms": 320,
     "deprecated_terms": 25
   }
 }
