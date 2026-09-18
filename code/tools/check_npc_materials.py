@@ -28,7 +28,7 @@
     crossview   md 与 .gen.json 的关键字段一致（入院年龄/年份/病区）
     city        入院城市白名单（临水/省城）——其余命中按性质分 🔴/🟡
     links       相对链接不死（撤销前最后一次读数：2163 引用 / 0 死链）
-    terms       注册表驱动的废弃术语残留（分档：扫描🔴 / 只登记🟡 / 关闭ℹ️）
+    terms       注册表驱动的废弃术语残留（分档：扫描🔴 列明细 / 只登记🟡 只计数 / 关闭ℹ️ 打印存量）
 """
 
 from __future__ import annotations
@@ -378,10 +378,15 @@ def check_terms(rep: Report) -> None:
                 if pat.search(line) and not any(k in line for k in MARKERS):
                     hits.append(f"{md.relative_to(ROOT)}:{ln}")
         if hits:
-            rep.add(
-                sev, "terms", f"{term}（{mode}）",
-                f"{len(hits)} 处残留，前几处：{hits[:4]}",
+            # 三档语义（design/conventions/README.md §五 第 2 条）：
+            #   扫描 = 判残留（列明细）；只登记 = 不判、**只计数不列明细**（该串另有合法用法，
+            #   逐串匹配分不出新旧义）；关闭 = 不判，但现存量每次打印（欠账在明处）。
+            msg = (
+                f"{len(hits)} 处命中（`只登记` 档：只计数、不列明细——该串在活跃文本里另有合法用法）"
+                if mode == "只登记"
+                else f"{len(hits)} 处残留，前几处：{hits[:4]}"
             )
+            rep.add(sev, "terms", f"{term}（{mode}）", msg)
     rep.add(INFO, "terms", "—", f"deprecated 术语 {len(dep)} 条已扫（分档：扫描=🔴 / 只登记=🟡 / 关闭=ℹ️）")
 
 
