@@ -242,15 +242,26 @@ def check_ages(rep: Report) -> None:
 
 
 def check_bands(rep: Report) -> None:
-    band_of = {"[1.0,2.0)": "轻", "[2.0,3.0)": "中度", "[3.0,∞)": "重"}
+    """档位 × 阈值 必须同档。
+
+    带宽以正典为准（`创伤记忆转化接口` §3.3 逐字：`L_agg < 1.0 → ∅；1.0 ≤ L_agg < 2.0 → 轻；
+    2.0 ≤ L_agg < 3.5 → 中；L_agg ≥ 3.5 → 重`，重档阈值 θ_L3 = 3.5）。⚠️ 原表写的是
+    `[2.0,3.0)`/`[3.0,∞)`——**差 0.5 档宽**（会咬到 L ∈ [3.0,3.5) 的样本），2026-09-18 改正典。
+    中间档的两种写法（`中` / `中度`）是同一档的拼法差异，不是两个档。阈值串里的空格不参与比较。
+    """
+    band_of = {"[1.0,2.0)": {"轻"}, "[2.0,3.5)": {"中", "中度"}, "[3.5,∞)": {"重"}}
 
     def walk(o, rel, path=""):
         if isinstance(o, dict):
             b, t = o.get("档位"), o.get("阈值")
             if isinstance(b, str) and isinstance(t, str) and b != "∅":
-                exp = next((v for k, v in band_of.items() if t.startswith(k)), None)
-                if exp and b != exp:
-                    rep.add(RED, "bands", f"{rel}{path}", f"档位={b} 但阈值={t}（该区间对应 {exp}）")
+                norm = t.replace(" ", "")
+                exp = next((v for k, v in band_of.items() if norm.startswith(k)), None)
+                if exp and b not in exp:
+                    rep.add(
+                        RED, "bands", f"{rel}{path}",
+                        f"档位={b} 但阈值={t}（该区间对应 {'/'.join(sorted(exp))}）",
+                    )
             for k, v in o.items():
                 walk(v, rel, f"{path}.{k}")
         elif isinstance(o, list):
