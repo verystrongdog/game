@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "draft_root": "design/spec/material/drafts",
-  "expected_material_count": 25,
-  "expected_patient_count": 17,
+  "expected_material_count": 26,
+  "expected_patient_count": 18,
   "materials": [
     {
       "name": "顾维扬",
@@ -139,6 +139,15 @@
       "status": "validated",
       "patient_pool": true,
       "target_disease": "BED"
+    },
+    {
+      "name": "张守义",
+      "json_path": "design/spec/material/drafts/张守义.gen.json",
+      "narrative_path": "design/spec/material/drafts/张守义-叙事视图.md",
+      "status": "needs-review",
+      "status_note": "P3 扩编批 #1（台账 §六 · 偏执型精神分裂，池内首个 SZ 谱）——AI 起草 v1.0 待 owner 审阅；与 P2 批的 `validated` 不同：未过验收",
+      "patient_pool": true,
+      "target_disease": "偏执型精神分裂症"
     },
     {
       "name": "刘建军",
