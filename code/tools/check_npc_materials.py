@@ -101,12 +101,17 @@ class Report:
         }
 
 
+_PARSE_FAILED: set[str] = set()  # 同一份坏 JSON 会被多个判据重复加载 ⇒ 只报一次
+
+
 def load_json(path: Path, rep: Report):
     try:
         return json.loads(path.read_text(encoding="utf-8"))
     except Exception as exc:  # noqa: BLE001 — 报告工具，任何解析失败都要报出来而不是崩
         rel = path.relative_to(ROOT)
-        rep.add(RED, "json", str(rel), f"JSON 解析失败：{exc}")
+        if str(rel) not in _PARSE_FAILED:
+            _PARSE_FAILED.add(str(rel))
+            rep.add(RED, "json", str(rel), f"JSON 解析失败：{exc}")
         return None
 
 
