@@ -15,9 +15,9 @@
     "gender": "男",
     "birth_year": 1991,
     "birth_region": "河北沧州县城（华北小城）",
-    "occupation": "互联网公司后端开发（2014 入职，2015 述职崩溃后休病假）",
+    "occupation": "互联网公司后端开发（2014 入职，2015 述职崩溃后休病假）——**工作城市：临水**（大学在北京）",
     "education": "北京某普通一本计算机系（2009-2013）",
-    "入院年龄": 25,
+    "入院年龄": 24,
     "入院年份": 2015
   },
   "lifespan": [
@@ -50,30 +50,51 @@
     {
       "id": "E1",
       "event_type": "公开羞辱/失败",
-      "A": 0.65, "N": 0.55, "F": 0.6, "D_seg": 0.05,
+      "A": 0.65,
+      "N": 0.55,
+      "F": 0.6,
+      "D_seg": 0.05,
       "t_anchor": "2004（初二）",
-      "entities": ["班主任", "全班同学"],
-      "g": 0.85, "k": 0.85,
+      "entities": [
+        "班主任",
+        "全班同学"
+      ],
+      "g": 0.85,
+      "k": 0.85,
       "delta_I": 0.5525,
       "description": "校园演讲比赛忘词——班主任当众'你行不行'羞辱（公开羞辱诱发点）"
     },
     {
       "id": "E2",
       "event_type": "公开羞辱/失败",
-      "A": 0.7, "N": 0.5, "F": 0.65, "D_seg": 0.05,
+      "A": 0.7,
+      "N": 0.5,
+      "F": 0.65,
+      "D_seg": 0.05,
       "t_anchor": "2015（青年期）",
-      "entities": ["技术总监", "同事"],
-      "g": 0.85, "k": 0.85,
+      "entities": [
+        "技术总监",
+        "同事"
+      ],
+      "g": 0.85,
+      "k": 0.85,
       "delta_I": 0.595,
       "description": "公司述职当众惊恐崩溃逃离——职业生涯公开失败（危机触发）"
     },
     {
       "id": "E3",
       "event_type": "社会伤害",
-      "A": 0.45, "N": 0.6, "F": 0.4, "D_seg": 0.05,
+      "A": 0.45,
+      "N": 0.6,
+      "F": 0.4,
+      "D_seg": 0.05,
       "t_anchor": "2010-2013（大学）",
-      "entities": ["室友", "同乡女生"],
-      "g": 0.85, "k": 0.85,
+      "entities": [
+        "室友",
+        "同乡女生"
+      ],
+      "g": 0.85,
+      "k": 0.85,
       "delta_I": 0.3825,
       "description": "口音被笑/自我介绍卡壳/感情'太闷'结束——大学社会伤害累积"
     }
@@ -82,8 +103,11 @@
     "SOCIAL_ANXIETY_PATTERN_HISTORY": 1,
     "判定": "SOCIAL_ANXIETY_PATTERN_HISTORY=1 → 社交焦虑 ELIGIBLE（批次 2 单宽原子，公开羞辱事件召回）",
     "交叉声明": {
-      "DEPRESSIVE_EPISODE_HISTORY": 0, "SUBSTANCE_USE_HISTORY": 0,
-      "MANIA_HISTORY": 0, "HYPOMANIA_HISTORY": 0, "CYCLIC_MOOD_HISTORY": 0,
+      "DEPRESSIVE_EPISODE_HISTORY": 0,
+      "SUBSTANCE_USE_HISTORY": 0,
+      "MANIA_HISTORY": 0,
+      "HYPOMANIA_HISTORY": 0,
+      "CYCLIC_MOOD_HISTORY": 0,
       "note": "无独立心境/物质障碍；无泛化反社会/认知知觉异常（ASPD/分裂型轨区分，声明侧纪律）"
     }
   },
@@ -98,7 +122,13 @@
     "入院方式": "母亲陪同主动就医（家属支持型——与周卫国'拒绝'对照）"
   },
   "transformation": {
-    "params": { "g": 0.85, "k": 0.85, "beta_0": 1.0, "A_trauma_I": 0.7, "A_trauma_L": 1.0 },
+    "params": {
+      "g": 0.85,
+      "k": 0.85,
+      "beta_0": 1.0,
+      "A_trauma_I": 0.7,
+      "A_trauma_L": 1.0
+    },
     "L_total": 1.53,
     "I_max": 0.595,
     "病理化": "✅ L=1.53 ≥ 1.0（累积通道）",

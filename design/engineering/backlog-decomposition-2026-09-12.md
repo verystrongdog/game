@@ -132,7 +132,7 @@ ARCHITECTURE.md                       被 #135 #130 同时声明改动
 #135 Q6b RFC（其 ARCHITECTURE.md §四 更新排在 #130 之后）
 ```
 
-**教训**：单线程约束（[WORKFLOW.md §一](WORKFLOW.md)）本来就要求"同一时刻只推进一个主要成果"，所以这次的错误**没有造成实际损失**——但若把这批 issue 交给多个并行 agent，冲突就是必然的。一个能跑出假并行的 frontier 等于没有 frontier，故 I13 已进规则表。
+**教训**：单线程约束（[WORKFLOW.md §一](../../WORKFLOW.md)）本来就要求"同一时刻只推进一个主要成果"，所以这次的错误**没有造成实际损失**——但若把这批 issue 交给多个并行 agent，冲突就是必然的。一个能跑出假并行的 frontier 等于没有 frontier，故 I13 已进规则表。
 
 ## 五、Step 5–7：绑定、过反例、创建
 
