@@ -41,13 +41,16 @@ export default defineConfig({
     // the same vendored module as the page instead of adding a second copy.
     alias: {
       three: resolve(presentationRoot, 'vendor/three/build/three.module.js'),
+      '/three-addons': resolve(import.meta.dirname, 'node_modules/three/examples/jsm'),
+      '/hospital': resolve(import.meta.dirname, 'src/hospital'),
       '/scene-host': resolve(import.meta.dirname, 'src/scene-host'),
+      '/character-creation': resolve(import.meta.dirname, 'src/character-creation'),
     },
   },
   server: {
-    // Match ev-logistics: the host browser resolves localhost to IPv6 loopback.
-    host: 'localhost',
-    port: 5174,
+    // SSH tunnel contract: client 127.0.0.1:8901 -> server 127.0.0.1:8899.
+    host: '127.0.0.1',
+    port: 8899,
     strictPort: true,
     fs: {
       // Presentation FBX symlinks resolve into code/unity; allow this repository
@@ -64,7 +67,9 @@ export default defineConfig({
     outDir: resolve(import.meta.dirname, 'dist'),
     emptyOutDir: true,
     rolldownOptions: {
-      input: resolve(presentationRoot, prototypeFile),
+      input: {
+        narrative: resolve(presentationRoot, prototypeFile),
+      },
     },
   },
 })

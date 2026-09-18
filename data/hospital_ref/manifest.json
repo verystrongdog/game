@@ -145,35 +145,35 @@
     {
       "page": 25,
       "section": "500床_方案一",
-      "floor_label": "一层平面图",
+      "floor_label": "总平面图",
       "full_res": "data/hospital_ref/full/page-25.png",
       "thumbnail": "data/hospital_ref/thumb/page-25.png"
     },
     {
       "page": 26,
       "section": "500床_方案一",
-      "floor_label": "二层平面图",
+      "floor_label": "一层平面图",
       "full_res": "data/hospital_ref/full/page-26.png",
       "thumbnail": "data/hospital_ref/thumb/page-26.png"
     },
     {
       "page": 27,
       "section": "500床_方案一",
-      "floor_label": "三层平面图",
+      "floor_label": "二层平面图",
       "full_res": "data/hospital_ref/full/page-27.png",
       "thumbnail": "data/hospital_ref/thumb/page-27.png"
     },
     {
       "page": 28,
       "section": "500床_方案一",
-      "floor_label": "四层平面图",
+      "floor_label": "三层平面图",
       "full_res": "data/hospital_ref/full/page-28.png",
       "thumbnail": "data/hospital_ref/thumb/page-28.png"
     },
     {
       "page": 29,
-      "section": "500床_方案二",
-      "floor_label": "总平面图",
+      "section": "500床_方案一",
+      "floor_label": "四至五层平面图",
       "full_res": "data/hospital_ref/full/page-29.png",
       "thumbnail": "data/hospital_ref/thumb/page-29.png"
     },
