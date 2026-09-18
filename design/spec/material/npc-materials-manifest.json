@@ -144,7 +144,8 @@
       "name": "刘建军",
       "json_path": "design/spec/material/drafts/刘建军.gen.json",
       "narrative_path": "design/spec/material/drafts/刘建军-叙事视图.md",
-      "status": "needs-review",
+      "status": "rejected",
+      "status_note": "正式排除（owner 2026-09-18 裁定，首例 rejected）——留作模子反例档案：两文件保留、内容不改，仅头部加状态标注。判定见 患者生态索引 §其他 3 组素材",
       "patient_pool": false,
       "target_disease": null
     },

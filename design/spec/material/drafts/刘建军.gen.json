@@ -2,7 +2,8 @@
   "_metadata": {
     "role": "刘建军",
     "draft": "v0.1-ai-drafted",
-    "status": "草稿待审阅",
+    "status": "⚠️ 已排除 rejected（owner 2026-09-18 裁定）——留作模子反例档案，字段一字不改；不再入患者池、不参与任何生产或数值链",
+    "status_ref": "design/spec/material/患者生态索引.md §其他 3 组素材 + npc-materials-manifest.json（status: rejected）",
     "source_view": "drafts/刘建军-叙事视图.md",
     "derived_from": "AI 起草（#87 A'-Generator：社会演化矩阵 → Soil Sampler → Event Generator → Memory Builder → Transformer）",
     "input_source": "canonical",
