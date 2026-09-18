@@ -14,7 +14,7 @@
     "name": "贺春兰",
     "gender": "女",
     "birth_year": 1975,
-    "birth_region": "长沙（湖南，湘菜馆老板娘）",
+    "birth_region": "长沙（湖南，湘菜馆老板娘）**→ 跨省求医：转入临水省精神卫生中心（进食障碍病房区域专长）**",
     "occupation": "春兰家常菜馆老板（1995 创业，自 20 岁起 BN 20 年）",
     "education": "初中（饮食服务公司白案出身）",
     "入院年龄": 40,
@@ -50,20 +50,32 @@
     {
       "id": "E1",
       "event_type": "公开羞辱/失败",
-      "A": 0.55, "N": 0.7, "F": 0.4, "D_seg": 0.05,
+      "A": 0.55,
+      "N": 0.7,
+      "F": 0.4,
+      "D_seg": 0.05,
       "t_anchor": "1995（20 岁）",
-      "entities": ["前对象"],
-      "g": 0.8, "k": 0.85,
+      "entities": [
+        "前对象"
+      ],
+      "g": 0.8,
+      "k": 0.85,
       "delta_I": 0.44,
       "description": "被嫌胖（'脸圆像包子'）+ 体检 112 斤 → 节食起点（体形自我评价触发）"
     },
     {
       "id": "E2",
       "event_type": "社会伤害",
-      "A": 0.45, "N": 0.7, "F": 0.35, "D_seg": 0.05,
+      "A": 0.45,
+      "N": 0.7,
+      "F": 0.35,
+      "D_seg": 0.05,
       "t_anchor": "1995-2015（长期）",
-      "entities": ["自身"],
-      "g": 0.8, "k": 0.85,
+      "entities": [
+        "自身"
+      ],
+      "g": 0.8,
+      "k": 0.85,
       "delta_I": 0.36,
       "description": "'心宽体胖'人设压力——瘦才被爱的社会价值内化（慢性）"
     }
@@ -74,9 +86,13 @@
     "BODY_IMAGE_DISTURBANCE": 1,
     "判定": "三原子 AND → BN ELIGIBLE（批次 2 签名，公开羞辱事件召回）",
     "交叉声明": {
-      "DEPRESSIVE_EPISODE_HISTORY": 0, "SUBSTANCE_USE_HISTORY": 0,
-      "MANIA_HISTORY": 0, "HYPOMANIA_HISTORY": 0, "CYCLIC_MOOD_HISTORY": 0,
-      "OCD_PATTERN_HISTORY": 0, "LOW_WEIGHT_PATTERN": 0,
+      "DEPRESSIVE_EPISODE_HISTORY": 0,
+      "SUBSTANCE_USE_HISTORY": 0,
+      "MANIA_HISTORY": 0,
+      "HYPOMANIA_HISTORY": 0,
+      "CYCLIC_MOOD_HISTORY": 0,
+      "OCD_PATTERN_HISTORY": 0,
+      "LOW_WEIGHT_PATTERN": 0,
       "note": "无独立心境障碍；催吐为 BN 补偿非独立强迫仪式（声明侧区分）；体重正常（BN vs AN-BP 分流键）"
     }
   },
@@ -92,7 +108,13 @@
     "入院方式": "医学危象 + 丈夫知情支持（'你咋不早说'）"
   },
   "transformation": {
-    "params": { "g": 0.8, "k": 0.85, "beta_0": 1.0, "A_trauma_I": 0.7, "A_trauma_L": 1.0 },
+    "params": {
+      "g": 0.8,
+      "k": 0.85,
+      "beta_0": 1.0,
+      "A_trauma_I": 0.7,
+      "A_trauma_L": 1.0
+    },
     "L_total": 0.8,
     "I_max": 0.44,
     "病理化": "⚠️ L=0.8 < 1.0——BN 走资格声明签名（三原子声明）非 L 快照通道（同 OCD 先例）",
