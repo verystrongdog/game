@@ -8,6 +8,10 @@ name: CI
 #
 # 现在只剩一件事：**代码能编过、测试能通过**。
 # 校验改用人工判断——本 workflow 不通过不代表设计文档或数据契约没有问题。
+#
+# 2026-09-18 增补：加了一个 **只报不拦** 的 npc-materials-report job（owner 裁定选 B）。
+# 它不是门禁的回归——单脚本、只用 stdlib、不建例外表、continue-on-error: true，
+# 永远不改红叉，只产出报告 artifact。理由见该 job 上方注释与 code/tools/check_npc_materials.py 头部。
 
 on:
   push:
@@ -56,3 +60,27 @@ jobs:
           name: engine-test-results
           path: artifacts/engine.trx
           if-no-files-found: error
+
+  # ── NPC 素材一致性报告（只报不拦 · 非门禁）────────────────────────────
+  # 为什么不是门禁（2026-09-17 owner 撤掉 26 个校验器 + 两张 exceptions 表 + 三个门禁 job）：
+  #   ① 那时养不起的是「例外表」与「各文档格式的专用规则」——本 job 两者都没有；
+  #   ② 本 job 的判据全是**跨字段一致性**（同一个事实在两个地方必须对得上），零容差、误报率低；
+  #   ③ 它**永不失败**：continue-on-error + `|| true` 双保险，红叉都不会给。
+  # 判据清单与「为什么旧的被删、为什么这个只报不拦」写在 code/tools/check_npc_materials.py 头部。
+  npc-materials-report:
+    name: npc-materials-report (只报不拦 · 非门禁)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: NPC 素材一致性报告（永不失败）
+        run: |
+          python3 code/tools/check_npc_materials.py --json npc-report.json || true
+          python3 code/tools/check_npc_materials.py --only json,manifest,ages,bands,crossview || true
+      - name: 上传报告
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: npc-materials-report
+          path: npc-report.json
+          if-no-files-found: warn

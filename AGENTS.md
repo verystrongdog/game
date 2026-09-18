@@ -49,7 +49,7 @@ data/        结构化数据契约
 
 > 🔧 **2026-09-17（owner 裁定）：全部门禁已撤销。**
 > 本节原列的 5 条必跑校验器、`design/engineering/gates.json` 注册表、`code/tools/` 下 26 个校验器与 fixture 脚本、以及 CI 里的 `docs-integrity` / `issues-snapshot` / `unity` 三个门禁 job，已一并删除。
-> **现在没有任何机械校验在跑。** CI 只做构建与测试：
+> **现在没有任何机械校验在跑。** 🔧 **2026-09-18 注**：新增了一个**只报不拦**的 CI job（`npc-materials-report` + `code/tools/check_npc_materials.py`）——它**不是门禁**：单脚本、只用 stdlib、不建例外表、`continue-on-error: true`、永远不改红叉，只产出报告 artifact。**门禁的处境不变**（撤销状态维持），上面这句在本节其余部分的含义也不变。CI 只做构建与测试：
 
 ```bash
 dotnet test code/src/YouAreNotTheFish.sln        # 引擎测试（CI 里跑的只有这一个）
