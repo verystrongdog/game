@@ -44,6 +44,9 @@ ROOT = Path(__file__).resolve().parent.parent.parent
 DRAFTS = ROOT / "design" / "spec" / "material" / "drafts"
 MANIFEST = ROOT / "design" / "spec" / "material" / "npc-materials-manifest.json"
 INDEX = ROOT / "design" / "spec" / "material" / "患者生态索引.md"
+# 第二处机器核对区：多样性记账表自称"患者集合与 manifest 机械核对"——
+# 既然同一事实有两个登记处，两处都必须对得上（判据同 index，见 check_manifest）
+DIVERSITY = ROOT / "design" / "spec" / "material" / "多样性记账表.md"
 REGISTRY = ROOT / "data" / "term_registry.json"
 
 # 入院城市白名单：正典见 design/events/世界观与叙事.md §医院与所在城市
@@ -166,6 +169,21 @@ def check_manifest(rep: Report) -> None:
                 INFO, "manifest", "患者生态索引.md ↔ manifest",
                 f"manifest 中不在索引非患者遗留表里的（预期，见台账 §七⑤）：{missing}",
             )
+
+    # 第二处登记处：多样性记账表自称"患者集合与 manifest 机械核对" ⇒ 同一判据
+    if DIVERSITY.exists():
+        text = DIVERSITY.read_text(encoding="utf-8")
+        mm = re.search(r"<!-- npc-patient-pool:start -->(.*?)<!-- npc-patient-pool:end -->", text, re.S)
+        if not mm:
+            rep.add(YELLOW, "manifest", "多样性记账表.md", "找不到 npc-patient-pool 机器核对区（该表自称与 manifest 核对）")
+        else:
+            div = re.findall(r"^-\s*(\S+)", mm.group(1), re.M)
+            man_pool = [m["name"] for m in patients]
+            if set(div) != set(man_pool):
+                rep.add(
+                    RED, "manifest", "多样性记账表.md ↔ manifest",
+                    f"患者池不一致：记账表 {len(div)} 位 {sorted(set(div) ^ set(man_pool)) or ''} vs manifest {len(man_pool)} 位",
+                )
 
 
 def _num(x):
