@@ -1,0 +1,50 @@
+.hospital-editor-toggle {
+  position: absolute;
+  z-index: 14;
+  left: 24px;
+  bottom: 112px;
+  border: 1px solid #78988f;
+  background: rgba(10, 20, 19, .9);
+  color: #dcebe6;
+  padding: 9px 12px;
+  cursor: pointer;
+}
+
+.hospital-editor {
+  position: absolute;
+  z-index: 15;
+  left: 20px;
+  top: 84px;
+  bottom: 154px;
+  width: min(330px, calc(100% - 40px));
+  overflow: auto;
+  border: 1px solid #547068;
+  background: rgba(8, 17, 16, .96);
+  color: #d9e6e1;
+  padding: 14px;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, .45);
+}
+
+.hospital-editor[hidden] { display: none; }
+.scene.template-active .hospital-editor,
+.scene.template-active .hospital-editor-toggle { display: none; }
+.hospital-editor header { display: flex; align-items: center; justify-content: space-between; }
+.hospital-editor header strong { letter-spacing: .16em; }
+.hospital-editor button { border: 1px solid #4d6961; background: #142321; color: #cfe0da; padding: 7px 9px; cursor: pointer; }
+.hospital-editor button:hover { border-color: #8fcbbb; }
+.hospital-editor button:disabled { opacity: .4; cursor: default; }
+.hospital-editor__hint { color: #91a29c; font-size: 12px; line-height: 1.7; }
+.hospital-editor__tools { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+.hospital-editor__snap { display: grid; gap: 6px; margin-top: 9px; color: #82938d; font-size: 11px; }
+.hospital-editor__snap label { display: flex; align-items: center; justify-content: space-between; }
+.hospital-editor__snap select { border: 1px solid #4d6961; background: #101e1c; color: #d5e3de; padding: 4px 7px; }
+.hospital-editor__status { margin: 12px 0; padding: 8px; color: #a9c8be; background: #0d1917; font-size: 12px; }
+.hospital-editor__catalog h3 { margin: 14px 0 7px; color: #d5a172; font-size: 12px; letter-spacing: .18em; }
+.hospital-editor__catalog section > div { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+.scene.hospital-placement-active .world-3d-canvas { cursor: grab; }
+.scene.hospital-placement-dragging .world-3d-canvas { cursor: grabbing; }
+
+@media (max-width: 800px) {
+  .hospital-editor-toggle { left: 12px; bottom: 96px; }
+  .hospital-editor { left: 10px; top: 70px; bottom: 130px; }
+}

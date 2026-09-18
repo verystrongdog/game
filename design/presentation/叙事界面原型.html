@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>子非鱼｜叙事界面原型</title>
+  <link rel="stylesheet" href="/character-creation/character-creation.css">
   <script type="importmap">
     { "imports": { "three": "./vendor/three/build/three.module.js" } }
   </script>
@@ -1002,8 +1003,8 @@
         </div>
       </div>
 
-      <canvas class="world-3d-canvas" id="world3dCanvas" aria-label="可行走探索的三维夜间护士站"></canvas>
-      <div class="world-3d-loading" id="world3dLoading">正在构建三维护士站…</div>
+      <canvas class="world-3d-canvas" id="world3dCanvas" aria-label="可连续行走探索的医院一层"></canvas>
+      <div class="world-3d-loading" id="world3dLoading">正在载入医院一层…</div>
       <div class="world-3d-state" id="world3dState">IDLE · 等距视角 · WASD 移动</div>
       <div class="unity-web-status" id="unityWebStatus" hidden>
         <span id="unityWebStatusText"></span>
@@ -1184,7 +1185,18 @@
           <div class="location-kicker" id="locationKicker">住院楼 · 一层</div>
           <div class="location-title" id="locationTitle">夜间护士站</div>
         </div>
-        <div class="time-readout" id="timeReadout">第 01 日<br>夜晚 · 月光增强</div>
+        <div>
+          <div class="time-readout" id="timeReadout">第 01 日<br>夜晚 · 月光增强</div>
+          <div class="display-tools">
+            <button class="cc-launch" id="characterCreationLaunch" type="button">开局人物</button>
+            <button class="cc-launch" id="displaySettingsLaunch" type="button" aria-expanded="false" aria-controls="displaySettings">显示设置</button>
+            <section class="display-settings" id="displaySettings" aria-label="显示设置" hidden>
+              <label for="brightnessRange"><span>界面明暗</span><output id="brightnessOutput" for="brightnessRange">100%</output></label>
+              <input id="brightnessRange" type="range" min="70" max="140" step="5" value="100">
+              <p>只调整本地浏览器的显示亮度，不改变医院场景的正式灯光参数。</p>
+            </section>
+          </div>
+        </div>
       </header>
 
       <footer class="scene-bottom">
@@ -1270,6 +1282,21 @@
       </footer>
     </aside>
   </main>
+
+  <script type="module">
+    import { createCharacterCreation } from '/character-creation/index.js';
+    import { createDisplaySettings } from '/character-creation/display-settings.js';
+
+    // 来源：design/entities/疾病特长.md §二—§六。未决项在原型中显式保留，不写回正式游戏状态。
+    const characterCreation = createCharacterCreation({ trigger: document.querySelector('#characterCreationLaunch') });
+    createDisplaySettings({
+      trigger: document.querySelector('#displaySettingsLaunch'),
+      panel: document.querySelector('#displaySettings'),
+      input: document.querySelector('#brightnessRange'),
+      output: document.querySelector('#brightnessOutput'),
+    });
+    if (new URLSearchParams(window.location.search).has('character')) characterCreation.open();
+  </script>
 
   <script>
     // 来源：design/presentation/叙事界面布局.md §四—§五；剧情文字只用于呈现原型，不是正典内容。
@@ -2153,9 +2180,11 @@
   <script type="module">
     import * as THREE from 'three';
     import { FBXLoader } from './vendor/three/examples/jsm/loaders/FBXLoader.js';
+    import { ColladaLoader } from '/three-addons/loaders/ColladaLoader.js';
+    import { createHospitalPlacementEditor } from '/hospital/placement-editor.js';
+    import { hospitalFloorConfigs } from '/hospital/floor-config.js';
     import { OrbitControls } from './vendor/three/examples/jsm/controls/OrbitControls.js';
     import { TransformControls } from './vendor/three/examples/jsm/controls/TransformControls.js';
-    import { retargetClip } from './vendor/three/examples/jsm/utils/SkeletonUtils.js';
 
     // new URL(..., import.meta.url) keeps FBX files addressable in both the
     // source-page dev server and Vite's hashed production output.
@@ -2164,7 +2193,6 @@
       idle: new URL('./assets/actionlab/idle.fbx', import.meta.url).href,
       walk: new URL('./assets/actionlab/walk.fbx', import.meta.url).href,
       run: new URL('./assets/actionlab/run.fbx', import.meta.url).href,
-      jump: new URL('./assets/actionlab/jump.fbx', import.meta.url).href,
     };
 
     const canvas = document.querySelector('#xBotCanvas');
@@ -2409,20 +2437,22 @@
       }
     );
 
-    // 三维护士站：移动数值复用 ActionLabDriver / AnimatorWalker；动画原件缺失时由同名骨架状态槽生成预览姿势。
+    // AWS Hospital World 的完整一层建筑：角色移动复用 ActionLabDriver / AnimatorWalker。
     const worldCanvas = document.querySelector('#world3dCanvas');
     const worldLoading = document.querySelector('#world3dLoading');
     const worldState = document.querySelector('#world3dState');
     const worldPrompt = document.querySelector('#world3dPrompt');
     const worldScene = new THREE.Scene();
     worldScene.background = new THREE.Color(0x07100f);
-    worldScene.fog = new THREE.Fog(0x07100f, 8, 24);
+    worldScene.fog = new THREE.Fog(0x07100f, 12, 38);
     const worldRenderer = new THREE.WebGLRenderer({ canvas: worldCanvas, antialias: true });
     worldRenderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     worldRenderer.outputColorSpace = THREE.SRGBColorSpace;
+    worldRenderer.toneMapping = THREE.ACESFilmicToneMapping;
+    worldRenderer.toneMappingExposure = .82;
     worldRenderer.shadowMap.enabled = true;
     worldRenderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    const worldCamera = new THREE.OrthographicCamera(-5, 5, 4, -4, .05, 60);
+    const worldCamera = new THREE.OrthographicCamera(-5, 5, 4, -4, .05, 120);
     const worldClock = new THREE.Clock();
     const worldKeys = new Set();
     const walkSpeed = 3;
@@ -2435,6 +2465,18 @@
     let worldNurse = null;
     let worldNurseHead = null;
     let nurseMask = null;
+    let hospitalReady = false;
+    let hospitalScaleLabel = '';
+    const hospitalFloorGroups = [];
+    const hospitalFloorHeight = 3;
+    let currentHospitalFloor = 0;
+    let hospitalPlacementEditor = null;
+    const worldCollisionWalls = hospitalFloorConfigs.map(() => []);
+    const worldFloorBounds = hospitalFloorConfigs.map(() => new THREE.Box2());
+    const worldWallMeshes = [];
+    const worldOcclusionRaycaster = new THREE.Raycaster();
+    const worldOcclusionTarget = new THREE.Vector3();
+    const worldOcclusionDirection = new THREE.Vector3();
     let verticalSpeed = 0;
     let grounded = true;
     const worldAirVelocity = new THREE.Vector3();
@@ -2442,7 +2484,7 @@
     let locomotionState = 'Idle';
     let locomotionTime = 0;
     let worldMixer = null;
-    let formalLocomotionReady = false;
+    let worldNurseMixer = null;
     let activeWorldAction = null;
     let activeWorldActionName = '';
     const worldActions = new Map();
@@ -2451,6 +2493,11 @@
     const worldBasePose = new Map();
     const worldTarget = new THREE.Vector3();
     const worldCameraWant = new THREE.Vector3();
+    // 来源：design/presentation/叙事界面布局.md §五；保留场景中等距视角的人物可读性。
+    let worldViewHalfHeight = 6.5;
+    const placeholderWorld = new THREE.Group();
+    placeholderWorld.name = 'FallbackNurseStation';
+    worldScene.add(placeholderWorld);
 
     worldScene.add(new THREE.HemisphereLight(0xb8d8cf, 0x111817, 1.45));
     const moonLight = new THREE.DirectionalLight(0xb7d7ce, 2.2);
@@ -2458,7 +2505,7 @@
     moonLight.castShadow = true;
     worldScene.add(moonLight);
     const nurseLight = new THREE.PointLight(0x9ed8ca, 4.2, 9, 1.8);
-    nurseLight.position.set(0, 3, -4.5);
+    nurseLight.position.set(-1.6, 3, -4.2);
     worldScene.add(nurseLight);
 
     function addWorldBox(size, position, color, roughness = .86) {
@@ -2469,7 +2516,7 @@
       mesh.position.set(position[0], position[1], position[2]);
       mesh.receiveShadow = true;
       mesh.castShadow = true;
-      worldScene.add(mesh);
+      placeholderWorld.add(mesh);
       return mesh;
     }
 
@@ -2487,7 +2534,402 @@
       new THREE.MeshBasicMaterial({ color: 0x8fbeb2, transparent: true, opacity: .28 })
     );
     windowGlow.position.set(-1.6, 2.75, -11.86);
-    worldScene.add(windowGlow);
+    placeholderWorld.add(windowGlow);
+
+    const colladaSceneCache = new Map();
+
+    function loadColladaScene(url) {
+      if (!colladaSceneCache.has(url)) {
+        colladaSceneCache.set(url, new Promise((resolve, reject) => new ColladaLoader().load(
+          url,
+          collada => resolve(collada.scene),
+          undefined,
+          error => reject(new Error(`${url}：${error?.message || 'DAE 解析失败'}`, { cause: error }))
+        )));
+      }
+      return colladaSceneCache.get(url).then(scene => scene.clone(true));
+    }
+
+    function createFloorIdentity(config, floorIndex) {
+      const group = new THREE.Group();
+      group.name = `FloorIdentity_${floorIndex + 1}`;
+      const floorY = floorIndex * hospitalFloorHeight;
+      const canvas = document.createElement('canvas');
+      canvas.width = 768;
+      canvas.height = 192;
+      const context = canvas.getContext('2d');
+      context.fillStyle = '#10201f';
+      context.fillRect(0, 0, canvas.width, canvas.height);
+      context.strokeStyle = `#${config.accent.toString(16).padStart(6, '0')}`;
+      context.lineWidth = 12;
+      context.strokeRect(6, 6, canvas.width - 12, canvas.height - 12);
+      context.fillStyle = '#e8f3ef';
+      context.font = '700 62px sans-serif';
+      context.textAlign = 'center';
+      context.textBaseline = 'middle';
+      context.fillText(`${floorIndex + 1}F  ${config.zone}`, canvas.width / 2, canvas.height / 2);
+      const sign = new THREE.Mesh(
+        new THREE.PlaneGeometry(4.8, 1.2),
+        new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(canvas), transparent: true })
+      );
+      sign.position.set(-4.2, floorY + 1.65, -17.8);
+      sign.rotation.y = Math.PI;
+      sign.userData.hospitalRole = 'decoration';
+      sign.userData.hospitalFloor = floorIndex;
+      group.add(sign);
+
+      const stairMaterial = new THREE.MeshStandardMaterial({ color: config.accent, roughness: .72 });
+      for (let step = 0; step < 7; step += 1) {
+        const stair = new THREE.Mesh(new THREE.BoxGeometry(1.9, .12, .38), stairMaterial);
+        stair.position.set(6, floorY + .06 + step * .13, -20 + step * .38);
+        stair.userData.hospitalRole = 'decoration';
+        stair.userData.hospitalFloor = floorIndex;
+        stair.castShadow = true;
+        stair.receiveShadow = true;
+        group.add(stair);
+      }
+      return group;
+    }
+
+    async function loadHospitalFloor() {
+      const hospital = new THREE.Group();
+      hospital.name = 'AwsHospitalThreeFloors';
+      for (let floorIndex = 0; floorIndex < hospitalFloorConfigs.length; floorIndex += 1) {
+        const config = hospitalFloorConfigs[floorIndex];
+        const floor = new THREE.Group();
+        floor.name = `HospitalFloor_${floorIndex + 1}`;
+        floor.visible = floorIndex === 0;
+        const parts = await Promise.all(config.parts
+          .map(async part => ({ ...part, scene: await loadColladaScene(part.url) })));
+        parts.forEach(part => {
+          part.scene.position.fromArray(part.position);
+          part.scene.position.y += floorIndex * hospitalFloorHeight;
+          part.scene.quaternion
+            .setFromAxisAngle(new THREE.Vector3(1, 0, 0), -Math.PI / 2)
+            .multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 0, 1), part.yaw));
+          part.scene.traverse(child => {
+            child.userData.hospitalRole = part.role;
+            child.userData.hospitalFloor = floorIndex;
+          });
+          floor.add(part.scene);
+        });
+        floor.add(createFloorIdentity(config, floorIndex));
+        hospitalFloorGroups.push(floor);
+        hospital.add(floor);
+      }
+      return hospital;
+    }
+
+    function cloneWorldMaterial(material, transparent = false) {
+      const cloned = material.clone();
+      if (transparent) {
+        cloned.transparent = true;
+        cloned.depthWrite = false;
+      }
+      return cloned;
+    }
+
+    function configureSoftWallOcclusion(material) {
+      const state = {
+        center: new THREE.Vector3(),
+        fade: { value: 0 },
+        radius: { value: 2.8 },
+        softness: { value: 1.65 }
+      };
+      material.transparent = true;
+      material.depthWrite = true;
+      material.userData.softOcclusion = state;
+      material.onBeforeCompile = shader => {
+        shader.uniforms.wallOcclusionCenter = { value: state.center };
+        shader.uniforms.wallOcclusionFade = state.fade;
+        shader.uniforms.wallOcclusionRadius = state.radius;
+        shader.uniforms.wallOcclusionSoftness = state.softness;
+        shader.vertexShader = shader.vertexShader
+          .replace('#include <common>', '#include <common>\nvarying vec3 vWallOcclusionWorldPosition;')
+          .replace(
+            '#include <project_vertex>',
+            '#include <project_vertex>\nvWallOcclusionWorldPosition = (modelMatrix * vec4(transformed, 1.0)).xyz;'
+          );
+        shader.fragmentShader = shader.fragmentShader
+          .replace(
+            '#include <common>',
+            '#include <common>\nvarying vec3 vWallOcclusionWorldPosition;\nuniform vec3 wallOcclusionCenter;\nuniform float wallOcclusionFade;\nuniform float wallOcclusionRadius;\nuniform float wallOcclusionSoftness;'
+          )
+          .replace(
+            '#include <opaque_fragment>',
+            `#include <opaque_fragment>
+            float wallDistance = distance(vWallOcclusionWorldPosition.xz, wallOcclusionCenter.xz);
+            float wallWindow = 1.0 - smoothstep(
+              max(0.0, wallOcclusionRadius - wallOcclusionSoftness),
+              wallOcclusionRadius,
+              wallDistance
+            );
+            gl_FragColor.a *= 1.0 - wallOcclusionFade * wallWindow * 0.9;`
+          );
+      };
+      material.customProgramCacheKey = () => 'hospital-soft-wall-occlusion-v1';
+      material.needsUpdate = true;
+      return material;
+    }
+
+    function setWorldWallOcclusion(wall, fade, center) {
+      const materials = Array.isArray(wall.material) ? wall.material : [wall.material];
+      materials.forEach(material => {
+        const state = material.userData.softOcclusion;
+        if (state) {
+          state.fade.value = fade;
+          state.center.copy(center);
+        }
+        const shouldWriteDepth = fade < .015;
+        if (material.depthWrite !== shouldWriteDepth) {
+          material.depthWrite = shouldWriteDepth;
+          material.needsUpdate = true;
+        }
+      });
+    }
+
+    function wallMaterialIndex(geometry, vertexOffset) {
+      const group = geometry.groups.find(candidate => (
+        vertexOffset >= candidate.start && vertexOffset < candidate.start + candidate.count
+      ));
+      return group?.materialIndex || 0;
+    }
+
+    function segmentWallMesh(mesh, segmentLength = 3.25) {
+      const source = mesh.geometry.index ? mesh.geometry.toNonIndexed() : mesh.geometry.clone();
+      const position = source.attributes.position;
+      if (!position || position.count < 3) return [];
+      const buckets = new Map();
+      const a = new THREE.Vector3();
+      const b = new THREE.Vector3();
+      const c = new THREE.Vector3();
+      const center = new THREE.Vector3();
+      const edge1 = new THREE.Vector3();
+      const edge2 = new THREE.Vector3();
+      const normal = new THREE.Vector3();
+
+      for (let offset = 0; offset < position.count; offset += 3) {
+        a.fromBufferAttribute(position, offset).applyMatrix4(mesh.matrixWorld);
+        b.fromBufferAttribute(position, offset + 1).applyMatrix4(mesh.matrixWorld);
+        c.fromBufferAttribute(position, offset + 2).applyMatrix4(mesh.matrixWorld);
+        center.copy(a).add(b).add(c).multiplyScalar(1 / 3);
+        normal.copy(edge1.subVectors(b, a)).cross(edge2.subVectors(c, a)).normalize();
+        const verticalSpan = Math.max(a.y, b.y, c.y) - Math.min(a.y, b.y, c.y);
+        const materialIndex = wallMaterialIndex(source, offset);
+        let key = `fixed:${materialIndex}`;
+        let occlusionCandidate = false;
+        if (verticalSpan > .45 && Math.abs(normal.y) < .45) {
+          const xFacing = Math.abs(normal.x) >= Math.abs(normal.z);
+          const plane = xFacing ? center.x : center.z;
+          const along = xFacing ? center.z : center.x;
+          key = `${xFacing ? 'x' : 'z'}:${Math.round(plane * 4)}:${Math.floor(along / segmentLength)}:${materialIndex}`;
+          occlusionCandidate = true;
+        }
+        const wallKey = occlusionCandidate ? key.split(':').slice(0, 2).join(':') : null;
+        if (!buckets.has(key)) buckets.set(key, { offsets: [], materialIndex, occlusionCandidate, wallKey });
+        buckets.get(key).offsets.push(offset);
+      }
+
+      const chunks = [];
+      for (const [key, bucket] of buckets) {
+        const geometry = new THREE.BufferGeometry();
+        Object.entries(source.attributes).forEach(([attributeName, attribute]) => {
+          const values = [];
+          bucket.offsets.forEach(offset => {
+            for (let vertex = offset; vertex < offset + 3; vertex += 1) {
+              for (let item = 0; item < attribute.itemSize; item += 1) {
+                values.push(attribute.array[vertex * attribute.itemSize + item]);
+              }
+            }
+          });
+          geometry.setAttribute(attributeName, new THREE.BufferAttribute(
+            new attribute.array.constructor(values), attribute.itemSize, attribute.normalized
+          ));
+        });
+        geometry.computeBoundingBox();
+        geometry.computeBoundingSphere();
+        const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+        const chunk = new THREE.Mesh(geometry, materials[bucket.materialIndex] || materials[0]);
+        chunk.name = `${mesh.name || 'hospital-wall'}_${key}`;
+        chunk.position.copy(mesh.position);
+        chunk.quaternion.copy(mesh.quaternion);
+        chunk.scale.copy(mesh.scale);
+        chunk.visible = mesh.visible;
+        chunk.userData = {
+          ...mesh.userData,
+          occlusionCandidate: bucket.occlusionCandidate,
+          occlusionWallKey: bucket.wallKey
+        };
+        chunks.push(chunk);
+      }
+      return chunks;
+    }
+
+    function segmentHospitalWalls(hospital) {
+      hospital.updateMatrixWorld(true);
+      const replacements = [];
+      hospital.traverse(child => {
+        if (!child.isMesh || child.userData.hospitalRole !== 'walls') return;
+        if (!child.name.toLowerCase().includes('_walls_visual')) return;
+        const chunks = segmentWallMesh(child);
+        if (chunks.length > 1) replacements.push({ mesh: child, chunks });
+      });
+      replacements.forEach(({ mesh, chunks }) => {
+        const parent = mesh.parent;
+        parent.remove(mesh);
+        parent.add(...chunks);
+      });
+    }
+
+    function addWallTriangleColliders(mesh, floorIndex) {
+      const position = mesh.geometry?.attributes?.position;
+      if (!position) return;
+      const index = mesh.geometry.index;
+      const triangleCount = index ? index.count / 3 : position.count / 3;
+      const a = new THREE.Vector3();
+      const b = new THREE.Vector3();
+      const c = new THREE.Vector3();
+      const seen = new Set();
+      for (let triangle = 0; triangle < triangleCount; triangle += 1) {
+        const vertexIndex = offset => index ? index.getX(triangle * 3 + offset) : triangle * 3 + offset;
+        a.fromBufferAttribute(position, vertexIndex(0)).applyMatrix4(mesh.matrixWorld);
+        b.fromBufferAttribute(position, vertexIndex(1)).applyMatrix4(mesh.matrixWorld);
+        c.fromBufferAttribute(position, vertexIndex(2)).applyMatrix4(mesh.matrixWorld);
+        const minY = Math.min(a.y, b.y, c.y);
+        const maxY = Math.max(a.y, b.y, c.y);
+        if (maxY - minY < .65 || maxY < .25) continue;
+        const minX = Math.min(a.x, b.x, c.x);
+        const maxX = Math.max(a.x, b.x, c.x);
+        const minZ = Math.min(a.z, b.z, c.z);
+        const maxZ = Math.max(a.z, b.z, c.z);
+        if (Math.min(maxX - minX, maxZ - minZ) > .55) continue;
+        const collider = { minX, maxX, minZ, maxZ };
+        const key = [minX, maxX, minZ, maxZ].map(value => value.toFixed(2)).join(':');
+        if (!seen.has(key)) {
+          seen.add(key);
+          worldCollisionWalls[floorIndex].push(collider);
+        }
+      }
+    }
+
+    function installHospitalScene(hospital) {
+      worldCollisionWalls.forEach(colliders => { colliders.length = 0; });
+      worldWallMeshes.length = 0;
+      segmentHospitalWalls(hospital);
+      hospital.updateMatrixWorld(true);
+      hospitalFloorGroups.forEach((floor, floorIndex) => {
+        const sceneBounds = new THREE.Box3().setFromObject(floor);
+        worldFloorBounds[floorIndex].makeEmpty();
+        worldFloorBounds[floorIndex].expandByPoint(new THREE.Vector2(sceneBounds.min.x, sceneBounds.min.z));
+        worldFloorBounds[floorIndex].expandByPoint(new THREE.Vector2(sceneBounds.max.x, sceneBounds.max.z));
+      });
+
+      let meshCount = 0;
+      hospital.traverse(child => {
+        if (!child.isMesh) return;
+        meshCount += 1;
+        child.castShadow = true;
+        child.receiveShadow = true;
+        child.frustumCulled = false;
+        const role = child.userData.hospitalRole;
+        const floorIndex = child.userData.hospitalFloor ?? 0;
+        const isWall = role === 'walls';
+        const isOcclusionWall = isWall && child.userData.occlusionCandidate;
+        const isFurniture = role === 'furniture';
+        child.material = Array.isArray(child.material)
+          ? child.material.map(material => cloneWorldMaterial(material, isOcclusionWall))
+          : cloneWorldMaterial(child.material, isOcclusionWall);
+        if (isWall) {
+          if (isOcclusionWall) {
+            const materials = Array.isArray(child.material) ? child.material : [child.material];
+            materials.forEach(configureSoftWallOcclusion);
+            worldWallMeshes.push(child);
+            child.userData.occlusionBounds = new THREE.Box3().setFromObject(child);
+            child.userData.occlusionCenter = new THREE.Vector3();
+            child.userData.occlusionAmount = 0;
+            child.userData.targetOcclusionAmount = 0;
+            child.userData.fadeSpeed = 5.5;
+          }
+          addWallTriangleColliders(child, floorIndex);
+        }
+
+        const accent = new THREE.Color(hospitalFloorConfigs[floorIndex].accent);
+        const materials = Array.isArray(child.material) ? child.material : [child.material];
+        materials.forEach(material => {
+          if (material.color && role !== 'floor') material.color.lerp(accent, isFurniture ? .08 : .04);
+        });
+
+        const box = new THREE.Box3().setFromObject(child);
+        const size = box.getSize(new THREE.Vector3());
+        if (isFurniture && size.y > .25 && Math.min(size.x, size.z) > .08) {
+          worldCollisionWalls[floorIndex].push({ minX: box.min.x, maxX: box.max.x, minZ: box.min.z, maxZ: box.max.z });
+        }
+      });
+
+      hospitalScaleLabel = '医院一层 · 1U=1M';
+      worldScene.add(hospital);
+      placeholderWorld.visible = false;
+      hospitalReady = true;
+      return meshCount;
+    }
+
+    function changeHospitalFloor(nextFloor, route) {
+      if (!worldPlayer || nextFloor < 0 || nextFloor >= hospitalFloorGroups.length) return false;
+      hospitalFloorGroups.forEach((floor, index) => { floor.visible = index === nextFloor; });
+      currentHospitalFloor = nextFloor;
+      hospitalPlacementEditor?.setFloor(nextFloor);
+      const floorY = currentHospitalFloor * hospitalFloorHeight;
+      worldPlayer.position.y = floorY;
+      verticalSpeed = 0;
+      grounded = true;
+      const nurseVisible = currentHospitalFloor === 0;
+      if (worldNurse) worldNurse.visible = nurseVisible;
+      if (nurseMask) nurseMask.visible = nurseVisible;
+      nurseLight.visible = nurseVisible;
+      const config = hospitalFloorConfigs[currentHospitalFloor];
+      const floorName = config.name;
+      hospitalScaleLabel = `${floorName} · 1U=1M`;
+      document.querySelector('#locationKicker').textContent = `住院楼 · ${floorName}`;
+      document.querySelector('#locationTitle').textContent = config.zone;
+      document.querySelector('#objectiveText').textContent = config.objective;
+      const arrival = findWorldSpawn(new THREE.Vector3(route === 'stairs' ? 6 : 0, floorY, -17));
+      worldPlayer.position.copy(arrival).setY(floorY);
+      worldPrompt.textContent = `已通过${route === 'stairs' ? '楼梯' : '电梯'}抵达${floorName}`;
+      worldPrompt.classList.add('show');
+      return true;
+    }
+
+    function updateWallOcclusion(delta) {
+      if (!worldPlayer || !hospitalReady) return;
+      worldWallMeshes.forEach(wall => {
+        wall.userData.targetOcclusionAmount = 0;
+      });
+      const activeWalls = worldWallMeshes.filter(wall => wall.userData.hospitalFloor === currentHospitalFloor);
+      worldScene.updateMatrixWorld(true);
+      worldOcclusionTarget.copy(worldPlayer.position).add(new THREE.Vector3(0, .9, 0));
+      worldOcclusionDirection.copy(worldOcclusionTarget).sub(worldCamera.position);
+      const distance = worldOcclusionDirection.length();
+      worldOcclusionRaycaster.set(worldCamera.position, worldOcclusionDirection.normalize());
+      worldOcclusionRaycaster.far = Math.max(0, distance - .35);
+      worldOcclusionRaycaster.intersectObjects(activeWalls, false).forEach(hit => {
+        const wallKey = hit.object.userData.occlusionWallKey;
+        activeWalls.forEach(wall => {
+          if (wall.userData.occlusionWallKey !== wallKey) return;
+          if (wall.userData.occlusionBounds.distanceToPoint(hit.point) > 3.05) return;
+          wall.userData.targetOcclusionAmount = 1;
+          wall.userData.occlusionCenter.copy(hit.point);
+        });
+      });
+      worldWallMeshes.forEach(wall => {
+        const blend = 1 - Math.exp(-wall.userData.fadeSpeed * delta);
+        wall.userData.occlusionAmount = THREE.MathUtils.lerp(
+          wall.userData.occlusionAmount,
+          wall.userData.targetOcclusionAmount,
+          blend
+        );
+        setWorldWallOcclusion(wall, wall.userData.occlusionAmount, wall.userData.occlusionCenter);
+      });
+    }
 
     function loadWorldFbx(url) {
       return new Promise((resolve, reject) => new FBXLoader().load(
@@ -2599,84 +3041,47 @@
       rotateWorldBone('spine2', running ? .14 : .05);
     }
 
-    const retargetBoneNames = {
-      'mixamorig:Hips': 'B-hips',
-      'mixamorig:Spine': 'B-spine',
-      'mixamorig:Spine1': 'B-spineProxy',
-      'mixamorig:Spine2': 'B-chest',
-      'mixamorig:Neck': 'B-neck',
-      'mixamorig:Head': 'B-head',
-      'mixamorig:LeftShoulder': 'B-shoulder.L',
-      'mixamorig:LeftArm': 'B-upperArm.L',
-      'mixamorig:LeftForeArm': 'B-forearm.L',
-      'mixamorig:LeftHand': 'B-hand.L',
-      'mixamorig:RightShoulder': 'B-shoulder.R',
-      'mixamorig:RightArm': 'B-upperArm.R',
-      'mixamorig:RightForeArm': 'B-forearm.R',
-      'mixamorig:RightHand': 'B-hand.R',
-      'mixamorig:LeftUpLeg': 'B-thigh.L',
-      'mixamorig:LeftLeg': 'B-shin.L',
-      'mixamorig:LeftFoot': 'B-foot.L',
-      'mixamorig:LeftToeBase': 'B-toe.L',
-      'mixamorig:RightUpLeg': 'B-thigh.R',
-      'mixamorig:RightLeg': 'B-shin.R',
-      'mixamorig:RightFoot': 'B-foot.R',
-      'mixamorig:RightToeBase': 'B-toe.R'
-    };
-
     function firstSkinnedMesh(object) {
       let result = null;
       object.traverse(child => { if (!result && child.isSkinnedMesh) result = child; });
       return result;
     }
 
-    function retargetNamesFor(targetMesh) {
-      const byNormalizedName = new Map(
-        Object.entries(retargetBoneNames).map(([target, source]) => [normalizeBoneName(target), source])
-      );
-      const names = {};
-      targetMesh.skeleton.bones.forEach(bone => {
-        const sourceName = byNormalizedName.get(normalizeBoneName(bone.name));
-        if (sourceName) names[bone.name] = sourceName;
-      });
-      return names;
-    }
-
-    function buildRetargetedAction(targetMesh, sourceObject, name, loop) {
-      const sourceMesh = firstSkinnedMesh(sourceObject);
+    function buildDirectAction(sourceObject, name, loop) {
       const sourceClip = sourceObject.animations?.[0];
-      if (!sourceMesh || !sourceClip) throw new Error(`${name} 缺少可重定向的骨架或动画轨道`);
-      const clip = retargetClip(targetMesh, sourceMesh.skeleton, sourceClip, {
-        hip: 'B-hips',
-        names: retargetNamesFor(targetMesh),
-        preserveHipPosition: true,
-        preservePosition: true,
-        useFirstFramePosition: true,
-        fps: 30
-      });
+      if (!sourceClip) throw new Error(`${name} 缺少动画轨道`);
+      const clip = sourceClip.clone();
       clip.name = name;
       // 位移由 ActionLab 的角色控制器负责；剥离动画根位移，避免模型在容器内二次前进。
       clip.tracks = clip.tracks.filter(track => !track.name.endsWith('.position'));
-      const action = worldMixer.clipAction(clip, targetMesh);
+      const action = worldMixer.clipAction(clip);
       action.setLoop(loop ? THREE.LoopRepeat : THREE.LoopOnce, loop ? Infinity : 1);
       action.clampWhenFinished = !loop;
       worldActions.set(name, action);
     }
 
     function playWorldAction(name) {
-      if (!worldMixer || activeWorldActionName === name) return;
+      if (!worldMixer) return false;
       const next = worldActions.get(name);
-      if (!next) return;
+      if (!next) {
+        if (activeWorldAction) activeWorldAction.stop();
+        activeWorldAction = null;
+        activeWorldActionName = '';
+        return false;
+      }
+      if (activeWorldActionName === name) return true;
       const fade = name === 'Jump' ? .06 : .12;
       next.reset().setEffectiveTimeScale(1).setEffectiveWeight(1).fadeIn(fade).play();
       if (activeWorldAction) activeWorldAction.fadeOut(fade);
       activeWorldAction = next;
       activeWorldActionName = name;
+      return true;
     }
 
     function worldInputAllowed(event) {
       if (!document.querySelector('#scene').classList.contains('world-3d-active')) return false;
       if (document.querySelector('#scene').classList.contains('template-active')) return false;
+      if (hospitalPlacementEditor?.isActive()) return false;
       return !event.target.matches('input, select, textarea, button');
     }
 
@@ -2687,6 +3092,12 @@
         if (event.code === 'Space') event.preventDefault();
       }
       if (event.code === 'KeyE' && nearbyInteraction) {
+        if (nearbyInteraction === 'elevator' || nearbyInteraction === 'stairs') {
+          const direction = event.shiftKey ? -1 : 1;
+          changeHospitalFloor(currentHospitalFloor + direction, nearbyInteraction);
+          event.preventDefault();
+          return;
+        }
         if (nearbyInteraction === 'door') document.querySelector('#enterTemplateRoom').click();
         if (nearbyInteraction === 'nurse') {
           document.querySelector('[data-view="story"]')?.click();
@@ -2699,7 +3110,67 @@
     window.addEventListener('keyup', event => worldKeys.delete(event.code));
     window.addEventListener('blur', () => worldKeys.clear());
 
+    function worldPositionBlocked(position, radius = .32) {
+      const blockedByStaticScene = worldCollisionWalls[currentHospitalFloor].some(wall => (
+        position.x > wall.minX - radius && position.x < wall.maxX + radius
+        && position.z > wall.minZ - radius && position.z < wall.maxZ + radius
+      ));
+      if (blockedByStaticScene) return true;
+      return (hospitalPlacementEditor?.getCollisionBoxes(currentHospitalFloor) || []).some(box => (
+        position.x > box.min.x - radius && position.x < box.max.x + radius
+        && position.z > box.min.z - radius && position.z < box.max.z + radius
+      ));
+    }
+
+    function findWorldSpawn(preferred) {
+      const margin = .6;
+      const worldBounds = worldFloorBounds[currentHospitalFloor];
+      const insideBounds = position => (
+        position.x > worldBounds.min.x + margin && position.x < worldBounds.max.x - margin
+        && position.z > worldBounds.min.y + margin && position.z < worldBounds.max.y - margin
+      );
+      if (insideBounds(preferred) && !worldPositionBlocked(preferred, .55)) return preferred.clone();
+      for (let distance = .5; distance <= 12; distance += .5) {
+        const samples = Math.max(16, Math.ceil(distance * 10));
+        for (let sample = 0; sample < samples; sample += 1) {
+          const angle = sample / samples * Math.PI * 2;
+          const candidate = preferred.clone().add(new THREE.Vector3(
+            Math.cos(angle) * distance,
+            0,
+            Math.sin(angle) * distance
+          ));
+          if (insideBounds(candidate) && !worldPositionBlocked(candidate, .55)) return candidate;
+        }
+      }
+      return new THREE.Vector3(0, 0, 0);
+    }
+
     function resolveWorldCollision(next) {
+      if (hospitalReady) {
+        // 来源：design/presentation/叙事界面布局.md §五；碰撞盒从当前楼层墙体与固定设施提取。
+        const radius = .32;
+        const blocked = position => worldPositionBlocked(position, radius);
+        if (blocked(worldPlayer.position)) {
+          return findWorldSpawn(worldPlayer.position).setY(next.y);
+        }
+        const margin = .45;
+        const worldBounds = worldFloorBounds[currentHospitalFloor];
+        const resolved = worldPlayer.position.clone();
+        resolved.y = next.y;
+        const tryX = new THREE.Vector3(next.x, next.y, resolved.z);
+        if (!blocked(tryX)) resolved.x = THREE.MathUtils.clamp(
+          tryX.x,
+          worldBounds.min.x + margin,
+          worldBounds.max.x - margin
+        );
+        const tryZ = new THREE.Vector3(resolved.x, next.y, next.z);
+        if (!blocked(tryZ)) resolved.z = THREE.MathUtils.clamp(
+          tryZ.z,
+          worldBounds.min.y + margin,
+          worldBounds.max.y - margin
+        );
+        return resolved;
+      }
       next.x = THREE.MathUtils.clamp(next.x, -5.25, 5.25);
       next.z = THREE.MathUtils.clamp(next.z, -10.8, 6.6);
       const insideDesk = Math.abs(next.x) < 2.95 && next.z < -3.25 && next.z > -5.05;
@@ -2709,11 +3180,28 @@
 
     function updateWorldInteraction() {
       if (!worldPlayer) return;
-      const doorDistance = Math.hypot(worldPlayer.position.x - 4.45, worldPlayer.position.z + 10.8);
-      const nurseDistance = Math.hypot(worldPlayer.position.x, worldPlayer.position.z + 3.2);
-      nearbyInteraction = doorDistance < 1.65 ? 'door' : nurseDistance < 2.2 ? 'nurse' : null;
-      if (nearbyInteraction === 'door') worldPrompt.textContent = 'E · 进入人体模板校准间';
+      if (hospitalPlacementEditor?.isActive()) {
+        nearbyInteraction = null;
+        worldPrompt.textContent = '布置模式：选择单件素材，绿框后可保存';
+        worldPrompt.classList.add('show');
+        return;
+      }
+      const nurseX = -2;
+      const nurseZ = -1.5;
+      const nurseDistance = Math.hypot(worldPlayer.position.x - nurseX, worldPlayer.position.z - nurseZ);
+      const elevatorDistance = Math.hypot(worldPlayer.position.x, worldPlayer.position.z + 19.35);
+      const stairsDistance = Math.hypot(worldPlayer.position.x - 6, worldPlayer.position.z + 19);
+      nearbyInteraction = elevatorDistance < 2.5 ? 'elevator'
+        : stairsDistance < 2.2 ? 'stairs'
+        : currentHospitalFloor === 0 && nurseDistance < 2.2 ? 'nurse' : null;
       if (nearbyInteraction === 'nurse') worldPrompt.textContent = 'E · 与赵岚交谈';
+      if (nearbyInteraction === 'elevator' || nearbyInteraction === 'stairs') {
+        const route = nearbyInteraction === 'stairs' ? '楼梯' : '电梯';
+        const options = [];
+        if (currentHospitalFloor < hospitalFloorGroups.length - 1) options.push(`E · ${route}上楼`);
+        if (currentHospitalFloor > 0) options.push(`Shift+E · ${route}下楼`);
+        worldPrompt.textContent = options.join('　');
+      }
       worldPrompt.classList.toggle('show', Boolean(nearbyInteraction));
     }
 
@@ -2750,8 +3238,9 @@
       const next = worldPlayer.position.clone();
       next.addScaledVector(worldHorizontalVelocity, delta);
       next.y += verticalSpeed * delta;
-      if (next.y <= 0) {
-        next.y = 0;
+      const currentFloorY = currentHospitalFloor * hospitalFloorHeight;
+      if (next.y <= currentFloorY) {
+        next.y = currentFloorY;
         verticalSpeed = 0;
         grounded = true;
       }
@@ -2765,9 +3254,9 @@
       const horizontalSpeed = worldHorizontalVelocity.length();
       locomotionState = !grounded ? 'Jump' : horizontalSpeed < .4 ? 'Idle'
         : horizontalSpeed < (walkSpeed + runSpeed) * .5 ? 'Walk' : 'Run';
-      worldState.textContent = `${locomotionState.toUpperCase()} · ${formalLocomotionReady ? 'ACTIONLAB CLIP' : 'FALLBACK'} · WASD / SHIFT / SPACE / E`;
-      if (worldMixer) {
-        playWorldAction(locomotionState);
+      const usingClip = playWorldAction(locomotionState);
+      worldState.textContent = `${locomotionState.toUpperCase()} · ${usingClip ? 'MIXAMO CLIP' : 'FALLBACK'} · ${hospitalScaleLabel} · WASD / SHIFT / SPACE / E`;
+      if (usingClip) {
         worldMixer.update(delta);
       } else {
         animateWorldPose(delta);
@@ -2778,13 +3267,14 @@
       worldCameraWant.set(worldPlayer.position.x + 7.6, worldPlayer.position.y + 8.6, worldPlayer.position.z + 8.8);
       worldCamera.position.lerp(worldCameraWant, 1 - Math.exp(-4.2 * delta));
       worldCamera.lookAt(worldTarget);
+      updateWallOcclusion(delta);
     }
 
     function resizeWorld() {
       const rect = document.querySelector('#scene').getBoundingClientRect();
       if (rect.width < 2 || rect.height < 2) return;
       worldRenderer.setSize(rect.width, rect.height, false);
-      const halfHeight = 4.25;
+      const halfHeight = worldViewHalfHeight;
       const halfWidth = halfHeight * rect.width / rect.height;
       worldCamera.left = -halfWidth;
       worldCamera.right = halfWidth;
@@ -2793,40 +3283,55 @@
       worldCamera.updateProjectionMatrix();
     }
 
+    worldCanvas.addEventListener('wheel', event => {
+      const active = document.querySelector('#scene').classList.contains('world-3d-active')
+        && !document.querySelector('#scene').classList.contains('template-active');
+      if (!active) return;
+      event.preventDefault();
+      worldViewHalfHeight = THREE.MathUtils.clamp(
+        worldViewHalfHeight * Math.exp(event.deltaY * .0012),
+        2.2,
+        32
+      );
+      resizeWorld();
+    }, { passive: false });
+
     Promise.all([
+      loadHospitalFloor(),
       loadWorldFbx(xBotAssetUrl),
       loadWorldFbx(xBotAssetUrl),
       loadWorldFbx(actionLabAssetUrls.idle),
       loadWorldFbx(actionLabAssetUrls.walk),
-      loadWorldFbx(actionLabAssetUrls.run),
-      loadWorldFbx(actionLabAssetUrls.jump)
-    ]).then(([player, nurse, idleSource, walkSource, runSource, jumpSource]) => {
+      loadWorldFbx(actionLabAssetUrls.run)
+    ]).then(([hospitalScene, player, nurse, idleSource, walkSource, runSource]) => {
+      const hospitalMeshCount = installHospitalScene(hospitalScene);
       worldPlayer = normalizeWorldModel(player, 1.75);
-      worldPlayer.position.set(0, 0, 4.7);
+      // 护士站外侧大厅作为首选出生区；加载碰撞后自动落到最近的安全通行点。
+      worldPlayer.position.copy(findWorldSpawn(new THREE.Vector3(4.5, 0, -1.5)));
+      if (worldPositionBlocked(worldPlayer.position, .32)) {
+        throw new Error('医院一层未找到安全出生点');
+      }
       tintWorldModel(worldPlayer, 0x798983);
       collectWorldBones(worldPlayer);
       worldScene.add(worldPlayer);
       const targetMesh = firstSkinnedMesh(worldPlayer);
       if (!targetMesh) throw new Error('X Bot 缺少 SkinnedMesh，无法接入正式动作');
       try {
-        worldMixer = new THREE.AnimationMixer(targetMesh);
-        buildRetargetedAction(targetMesh, idleSource, 'Idle', true);
-        buildRetargetedAction(targetMesh, walkSource, 'Walk', true);
-        buildRetargetedAction(targetMesh, runSource, 'Run', true);
-        buildRetargetedAction(targetMesh, jumpSource, 'Jump', false);
+        worldMixer = new THREE.AnimationMixer(worldPlayer);
+        buildDirectAction(idleSource, 'Idle', true);
+        buildDirectAction(walkSource, 'Walk', true);
+        buildDirectAction(runSource, 'Run', true);
         targetMesh.skeleton.pose();
         worldPlayer.updateMatrixWorld(true);
-        formalLocomotionReady = true;
-        playWorldAction('Idle');
       } catch (animationError) {
-        console.error('[ActionLab Web] 正式动作重定向失败，退回骨架预览：', animationError);
+        console.error('[ActionLab Web] Mixamo 同骨架动作绑定失败，退回骨架预览：', animationError);
         worldMixer = null;
         worldActions.clear();
         targetMesh.skeleton.pose();
       }
 
       worldNurse = normalizeWorldModel(nurse, 1.7);
-      worldNurse.position.set(0, 0, -5.18);
+      worldNurse.position.set(-2, 0, -1.5);
       worldNurse.rotation.y = 0;
       tintWorldModel(worldNurse, 0xd8e1dc);
       worldScene.add(worldNurse);
@@ -2838,12 +3343,56 @@
         new THREE.MeshStandardMaterial({ color: 0x9fc9c0, roughness: .82 })
       );
       worldScene.add(nurseMask);
+      const nurseIdleClip = idleSource.animations?.[0]?.clone();
+      if (nurseIdleClip) {
+        nurseIdleClip.tracks = nurseIdleClip.tracks.filter(track => !track.name.endsWith('.position'));
+        worldNurseMixer = new THREE.AnimationMixer(worldNurse);
+        worldNurseMixer.clipAction(nurseIdleClip).play();
+      }
 
       document.querySelector('#scene').classList.add('world-3d-active');
       worldLoading.hidden = true;
+      hospitalPlacementEditor = createHospitalPlacementEditor({
+        scene: worldScene,
+        camera: worldCamera,
+        renderer: worldRenderer,
+        host: document.querySelector('#scene'),
+        getFloorContext() {
+          const floorY = currentHospitalFloor * hospitalFloorHeight;
+          return {
+            index: currentHospitalFloor,
+            y: floorY,
+            bounds: worldFloorBounds[currentHospitalFloor],
+            colliders: worldCollisionWalls[currentHospitalFloor].map(collider => new THREE.Box3(
+              new THREE.Vector3(collider.minX, floorY, collider.minZ),
+              new THREE.Vector3(collider.maxX, floorY + 2.7, collider.maxZ)
+            )),
+            reservedColliders: worldPlayer ? [new THREE.Box3(
+              new THREE.Vector3(worldPlayer.position.x - .42, floorY, worldPlayer.position.z - .42),
+              new THREE.Vector3(worldPlayer.position.x + .42, floorY + 1.8, worldPlayer.position.z + .42)
+            )] : []
+          };
+        },
+        getPlacementOrigin() {
+          return worldPlayer.position.clone().add(new THREE.Vector3(1.5, 0, 1.5));
+        },
+        onStateChange({ active }) {
+          worldPrompt.textContent = active ? '布置模式：选择单件素材，绿框后可保存' : '';
+          worldPrompt.classList.toggle('show', active);
+        }
+      });
+      document.querySelector('#locationKicker').textContent = '住院楼 · 一层';
+      document.querySelector('#locationTitle').textContent = hospitalFloorConfigs[0].zone;
+      document.querySelector('#objectiveText').textContent = hospitalFloorConfigs[0].objective;
+      // 仅供直达指定楼层的视觉回归测试；正常游玩仍只能在场景内乘电梯或走楼梯。
+      const requestedFloor = Number.parseInt(new URLSearchParams(location.search).get('floor') || '1', 10) - 1;
+      if (requestedFloor > 0 && requestedFloor < hospitalFloorConfigs.length) {
+        changeHospitalFloor(requestedFloor, 'elevator');
+      }
+      const formalLocomotionReady = ['Idle', 'Walk', 'Run'].every(name => worldActions.has(name));
       worldState.textContent = formalLocomotionReady
-        ? 'IDLE · ActionLab 正式动作 · WASD 移动'
-        : 'IDLE · 动作重定向失败，使用骨架后备';
+        ? `三层医院 · ${hospitalMeshCount} 网格 · ${hospitalScaleLabel} · WASD / 滚轮`
+        : `三层医院 · ${hospitalMeshCount} 网格 · ${hospitalScaleLabel} · 动作后备`;
       resizeWorld();
     }).catch(error => {
       console.error('[World 3D] 场景加载失败', error, error?.cause);
@@ -2854,6 +3403,7 @@
       requestAnimationFrame(animateWorld);
       const delta = Math.min(worldClock.getDelta(), .05);
       updateWorld(delta);
+      worldNurseMixer?.update(delta);
       if (worldNurseHead && nurseMask) {
         worldNurseHead.getWorldPosition(nurseMask.position);
         worldNurseHead.getWorldQuaternion(nurseMask.quaternion);
