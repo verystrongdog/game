@@ -115,8 +115,16 @@ def load_json(path: Path, rep: Report):
         return None
 
 
+def excluded_drafts() -> set[str]:
+    """manifest 里 status == rejected 的稿——**已排除的档案不在判定面内**（同"归档目录不进链接判定"的既有事实：
+    这不是例外表，是"这份稿不是活跃素材、内容冻结为反例档案"这条既有状态）。"""
+    man = json.loads(MANIFEST.read_text(encoding="utf-8")) if MANIFEST.exists() else {}
+    return {m.get("json_path", "") for m in man.get("materials", []) if m.get("status") == "rejected"}
+
+
 def gen_files() -> list[Path]:
-    return sorted(DRAFTS.glob("*.gen.json"))
+    skip = {str(ROOT / p) for p in excluded_drafts() if p}
+    return [f for f in sorted(DRAFTS.glob("*.gen.json")) if str(f) not in skip]
 
 
 # ── 各判据 ────────────────────────────────────────────────────────────────
@@ -150,6 +158,19 @@ def check_manifest(rep: Report) -> None:
             p = ROOT / (m.get(key) or "")
             if not p.exists():
                 rep.add(RED, "manifest", m.get("name", "?"), f"{key} 指向不存在的文件：{m.get(key)}")
+
+    # 患者稿顶层 disease_profile 必须带 临床严重度（2026-09-18 拆字段：档位=负荷档 / 临床严重度=另一回事）
+    for m in patients:
+        p = ROOT / (m.get("json_path") or "")
+        d = load_json(p, rep) if p.exists() else None
+        if not d:
+            continue
+        dp = (d.get("transformation") or {}).get("disease_profile") or {}
+        if "档位" in dp and not (isinstance(dp.get("临床严重度"), str) and dp["临床严重度"].strip()):
+            rep.add(
+                RED, "bands", m.get("name", "?"),
+                "disease_profile 有 `档位` 但缺 `临床严重度`（两义已拆字段：档位=创伤负荷档，临床严重度单列）",
+            )
 
     # target_disease ↔ .gen.json 的同一事实：manifest 说的病种必须能在结构化稿里读到
     # （跨字段一致性判据，零容差：入池条目说 A 病、稿子里写 B 病，两个登记处就已经分家了）
@@ -254,6 +275,12 @@ def check_bands(rep: Report) -> None:
     def walk(o, rel, path=""):
         if isinstance(o, dict):
             b, t = o.get("档位"), o.get("阈值")
+            if isinstance(b, str) and b not in ("∅", "轻", "中度", "重"):
+                rep.add(RED, "bands", f"{rel}{path}",
+                        f"档位={b!r} 不在闭集 {{∅, 轻, 中度, 重}} 内（2026-09-18 起 `档位` 只指创伤负荷档；"
+                        f"临床严重度写同层 `临床严重度` 字段）")
+            if b == "∅" and isinstance(t, str):
+                rep.add(RED, "bands", f"{rel}{path}", f"档位=∅ 却带阈值={t}（负荷档不成立时不得有阈值）")
             if isinstance(b, str) and isinstance(t, str) and b != "∅":
                 norm = t.replace(" ", "")
                 exp = next((v for k, v in band_of.items() if norm.startswith(k)), None)

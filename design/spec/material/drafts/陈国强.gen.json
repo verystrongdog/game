@@ -218,12 +218,15 @@
       },
       "MDD": {
         "L_agg": 1.54,
-        "档位": "被资格门拦截（DEPRESSIVE=0）"
+        "档位": "∅",
+        "档位注": "原写「被资格门拦截（DEPRESSIVE=0）」——该候选 INELIGIBLE，按 §3.3 不参与聚合 ⇒ 档位 ∅"
       }
     },
     "disease_profile": {
       "主病": "SUD 物质使用障碍（酒精）",
       "档位": "轻",
+        "临床严重度": "**物质使用障碍**：CGI-S 范围 **3-7**（来源 `design/entities/diseases/物质使用障碍.md`，是**病种**口径、不是本例取值）。**本例：**住院级判定见 `symptoms_presentation`（住院指征 / 功能形态 / 排除性评估）",
+        "阈值": "[1.0,2.0)",
       "CGI-S": "3-4",
       "m_offset示例": "SUD 病理边轻档（pathology_edges.json）",
       "备注": "[NEW 初值可调]；SUD 三原子延迟项未参与"

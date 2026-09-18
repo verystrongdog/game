@@ -305,6 +305,8 @@
     "disease_profile": {
       "主病": "BD-II",
       "档位": "轻",
+        "临床严重度": "**双相障碍II型**：CGI-S 范围 **3-6**（来源 `design/entities/diseases/双相障碍II型.md`，是**病种**口径、不是本例取值）。**本例：**住院级判定见 `symptoms_presentation`（住院指征 / 功能形态 / 排除性评估）",
+        "阈值": "[1.0,2.0)",
       "CGI-S": "3-4",
       "m_offset示例": "bipolar-II_e01 抑郁相 -0.2",
       "备注": "[NEW 初值可调]"
