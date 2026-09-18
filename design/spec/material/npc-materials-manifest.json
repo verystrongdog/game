@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "draft_root": "design/spec/material/drafts",
-  "expected_material_count": 20,
+  "expected_material_count": 25,
   "expected_patient_count": 17,
   "materials": [
     {
@@ -160,6 +160,46 @@
       "name": "郑晓敏",
       "json_path": "design/spec/material/drafts/郑晓敏.gen.json",
       "narrative_path": "design/spec/material/drafts/郑晓敏-叙事视图.md",
+      "status": "non-patient",
+      "patient_pool": false,
+      "target_disease": null
+    },
+    {
+      "name": "郁宁",
+      "json_path": "design/spec/material/drafts/郁宁.gen.json",
+      "narrative_path": "design/spec/material/drafts/郁宁-叙事视图.md",
+      "status": "non-patient",
+      "patient_pool": false,
+      "target_disease": null
+    },
+    {
+      "name": "老巴",
+      "json_path": "design/spec/material/drafts/老巴.gen.json",
+      "narrative_path": "design/spec/material/drafts/老巴-叙事视图.md",
+      "status": "non-patient",
+      "patient_pool": false,
+      "target_disease": null
+    },
+    {
+      "name": "卢桂香",
+      "json_path": "design/spec/material/drafts/卢桂香.gen.json",
+      "narrative_path": "design/spec/material/drafts/卢桂香-叙事视图.md",
+      "status": "non-patient",
+      "patient_pool": false,
+      "target_disease": null
+    },
+    {
+      "name": "郝大力",
+      "json_path": "design/spec/material/drafts/郝大力.gen.json",
+      "narrative_path": "design/spec/material/drafts/郝大力-叙事视图.md",
+      "status": "non-patient",
+      "patient_pool": false,
+      "target_disease": null
+    },
+    {
+      "name": "谭丽娟",
+      "json_path": "design/spec/material/drafts/谭丽娟.gen.json",
+      "narrative_path": "design/spec/material/drafts/谭丽娟-叙事视图.md",
       "status": "non-patient",
       "patient_pool": false,
       "target_disease": null
