@@ -182,3 +182,8 @@ web/public/unity/
 .claude/settings.local.json
 .claude/scheduled_tasks.lock
 .claude/projects/
+
+# 编辑器/图片工具的临时残渣（Adobe 系列：原文件被删除后留下的同尺寸副本，
+# 2026-09-18 实测：data/hospital_ref/full/page-26.png 被误删，磁盘只剩 ~RF*.TMP）
+~RF*.TMP
+*.TMP
