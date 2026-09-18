@@ -146,6 +146,25 @@ def check_manifest(rep: Report) -> None:
             if not p.exists():
                 rep.add(RED, "manifest", m.get("name", "?"), f"{key} 指向不存在的文件：{m.get(key)}")
 
+    # target_disease ↔ .gen.json 的同一事实：manifest 说的病种必须能在结构化稿里读到
+    # （跨字段一致性判据，零容差：入池条目说 A 病、稿子里写 B 病，两个登记处就已经分家了）
+    for m in patients:
+        td = m.get("target_disease")
+        p = ROOT / (m.get("json_path") or "")
+        d = load_json(p, rep) if p.exists() else None
+        if not d:
+            continue
+        dp = (d.get("transformation") or {}).get("disease_profile") or {}
+        zh = str(dp.get("主病") or "")
+        cur = str((d.get("symptoms_presentation") or {}).get("当前诊断") or "")
+        if not td:
+            rep.add(YELLOW, "manifest", m.get("name", "?"), "patient_pool=true 但 target_disease 为空")
+        elif td not in zh and td not in cur:
+            rep.add(
+                RED, "manifest", m.get("name", "?"),
+                f"target_disease=「{td}」在 gen.json 的主病/当前诊断里找不到（主病「{zh[:24]}」/ 当前诊断「{cur[:24]}」）",
+            )
+
     # 与 患者生态索引 的机器核对区对齐
     if INDEX.exists():
         text = INDEX.read_text(encoding="utf-8")
