@@ -139,325 +139,10 @@
       cursor: pointer;
     }
     .unity-web-status button[hidden] { display: none; }
-    .scene.world-3d-active .hallway,
-    .scene.world-3d-active .scene-hotspot,
-    .scene.world-3d-active .door-entry { display: none; }
     .scene.template-active .world-3d-canvas,
     .scene.template-active .unity-web-canvas,
     .scene.template-active .world-3d-prompt,
     .scene.template-active .world-3d-state { display: none; }
-
-    .hallway {
-      position: absolute;
-      inset: 0;
-      perspective: 900px;
-      transition: filter 900ms ease;
-    }
-
-    .hallway.suspicious { filter: saturate(.7) contrast(1.12) hue-rotate(-8deg); }
-    .hallway.opened { filter: brightness(1.12) saturate(.92); }
-
-    .ceiling {
-      position: absolute;
-      inset: 0 0 52% 0;
-      clip-path: polygon(0 0, 100% 0, 72% 100%, 27% 100%);
-      background:
-        linear-gradient(90deg, transparent 49.8%, rgba(187, 204, 195, .11) 50%, transparent 50.2%),
-        repeating-linear-gradient(90deg, transparent 0 16%, rgba(188, 201, 193, .08) 16.2% 16.45%),
-        linear-gradient(#283537, #121b1c);
-    }
-
-    .floor {
-      position: absolute;
-      inset: 47% 0 0 0;
-      clip-path: polygon(27% 0, 72% 0, 100% 100%, 0 100%);
-      background:
-        linear-gradient(90deg, transparent 49.7%, rgba(206, 232, 220, .16) 50%, transparent 50.3%),
-        repeating-linear-gradient(98deg, transparent 0 13%, rgba(196, 220, 209, .07) 13.2% 13.45%),
-        linear-gradient(#182323, #0a0e0e 72%);
-    }
-
-    .left-wall, .right-wall {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      background: linear-gradient(90deg, #172324, #273436 50%, #121a1b);
-    }
-
-    .left-wall {
-      left: 0;
-      width: 29%;
-      clip-path: polygon(0 0, 100% 48%, 100% 100%, 0 100%);
-    }
-
-    .right-wall {
-      right: 0;
-      width: 30%;
-      clip-path: polygon(0 48%, 100% 0, 100% 100%, 0 100%);
-      background: linear-gradient(90deg, #10191a, #253234);
-    }
-
-    .stripe {
-      position: absolute;
-      top: 56%;
-      left: 0;
-      width: 100%;
-      height: 5.5%;
-      background: #64736c;
-      border-top: 1px solid rgba(210, 228, 218, .25);
-      border-bottom: 1px solid rgba(0, 0, 0, .5);
-      opacity: .48;
-    }
-
-    .door {
-      position: absolute;
-      top: 23%;
-      width: 15%;
-      height: 44%;
-      background: linear-gradient(90deg, #111a1a, #2a3938 55%, #101717);
-      border: 1px solid rgba(193, 215, 205, .13);
-      box-shadow: inset 0 0 22px rgba(0,0,0,.65), 0 18px 30px rgba(0,0,0,.26);
-    }
-
-    .door.left { left: 7%; transform: skewY(17deg); }
-    .door.right { right: 7%; transform: skewY(-17deg); }
-    .door::after {
-      content: "";
-      position: absolute;
-      top: 48%;
-      right: 12%;
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: #9a8d69;
-      box-shadow: 0 0 8px rgba(225, 208, 145, .24);
-    }
-
-    .nurse-station {
-      position: absolute;
-      z-index: 3;
-      left: 35%;
-      top: 44%;
-      width: 30%;
-      height: 25%;
-      transform: perspective(600px) rotateX(2deg);
-      background: linear-gradient(#606d67 0 9%, #26322f 10% 72%, #111816 73%);
-      border: 1px solid rgba(204, 221, 210, .18);
-      box-shadow: 0 18px 38px rgba(0,0,0,.55);
-    }
-
-    .nurse-station::before {
-      content: "护士站  NURSE STATION";
-      position: absolute;
-      left: 10%;
-      top: 17%;
-      color: rgba(210, 224, 215, .48);
-      font: 500 clamp(7px, .75vw, 12px)/1 sans-serif;
-      letter-spacing: .15em;
-    }
-
-    .window {
-      position: absolute;
-      z-index: 2;
-      left: 38%;
-      top: 12%;
-      width: 24%;
-      height: 27%;
-      overflow: hidden;
-      background: linear-gradient(155deg, #b9d8d0 0%, #5d7d79 45%, #142425 100%);
-      border: 8px solid #182222;
-      box-shadow: 0 0 70px rgba(171, 220, 207, .18);
-    }
-
-    .window::before, .window::after {
-      content: "";
-      position: absolute;
-      background: rgba(15, 26, 27, .8);
-    }
-
-    .window::before { inset: 0 auto 0 49%; width: 6px; }
-    .window::after { inset: 48% 0 auto 0; height: 5px; }
-
-    .moon {
-      position: absolute;
-      z-index: 1;
-      top: 8%;
-      left: 52%;
-      width: 8vw;
-      max-width: 112px;
-      min-width: 62px;
-      aspect-ratio: 1;
-      border-radius: 50%;
-      background: radial-gradient(circle at 38% 35%, #eefcf3, #b7d0ca 48%, #76918c 72%);
-      box-shadow: 0 0 35px rgba(201, 239, 228, .25), 0 0 100px rgba(170, 222, 209, .18);
-      opacity: .78;
-      transition: opacity 800ms ease, transform 800ms ease;
-    }
-
-    .moon.alert { opacity: 1; transform: scale(1.08); }
-
-    .moonbeam {
-      position: absolute;
-      z-index: 2;
-      top: 31%;
-      left: 51%;
-      width: 31%;
-      height: 67%;
-      opacity: .12;
-      transform: skewX(-16deg);
-      background: linear-gradient(115deg, rgba(205,243,231,.7), transparent 68%);
-      pointer-events: none;
-    }
-
-    .figure {
-      position: absolute;
-      z-index: 5;
-      left: 45.5%;
-      top: 24%;
-      width: clamp(92px, 11vw, 154px);
-      height: 48%;
-      transform-origin: 50% 86%;
-      filter: drop-shadow(0 18px 14px rgba(0,0,0,.82));
-      transition: transform 850ms cubic-bezier(.2,.72,.2,1), filter 850ms ease;
-    }
-
-    .figure::after {
-      content: "";
-      position: absolute;
-      z-index: -1;
-      left: 19%;
-      right: 8%;
-      bottom: -2%;
-      height: 7%;
-      border-radius: 50%;
-      background: rgba(0,0,0,.65);
-      filter: blur(7px);
-      transform: rotate(-4deg);
-    }
-
-    .figure.turned {
-      transform: translateX(-12%) rotate(-3deg) scale(1.025);
-      filter: drop-shadow(0 18px 14px rgba(0,0,0,.72)) drop-shadow(6px 0 12px rgba(190,224,213,.08));
-    }
-
-    .figure-model {
-      display: block;
-      width: 100%;
-      height: 100%;
-      overflow: visible;
-    }
-
-    .figure .turned-highlight {
-      opacity: 0;
-      transition: opacity 520ms ease 160ms;
-    }
-
-    .figure.turned .turned-highlight { opacity: 1; }
-
-    .figure .mask-face {
-      transform-box: fill-box;
-      transform-origin: center;
-      transition: transform 700ms cubic-bezier(.2,.72,.2,1), filter 600ms ease;
-    }
-
-    .figure.turned .mask-face {
-      transform: translateX(3px) rotate(2deg);
-      filter: drop-shadow(-3px 1px 5px rgba(211,239,230,.16));
-    }
-
-    .figure .back-shadow { transition: opacity 450ms ease; }
-    .figure.turned .back-shadow { opacity: .34; }
-
-    .figure .lanyard-card {
-      transform-box: fill-box;
-      transform-origin: 50% 0;
-      animation: badge-sway 4.2s ease-in-out infinite;
-    }
-
-    @keyframes badge-sway {
-      0%, 100% { transform: rotate(-1.5deg); }
-      50% { transform: rotate(2deg); }
-    }
-
-    .hotspot {
-      position: absolute;
-      z-index: 11;
-      width: 26px;
-      height: 26px;
-      padding: 0;
-      border: 1px solid rgba(207,235,225,.7);
-      border-radius: 50%;
-      background: rgba(18,30,28,.46);
-      color: var(--moon-strong);
-      cursor: pointer;
-      box-shadow: 0 0 0 5px rgba(185,224,212,.06), 0 0 18px rgba(185,224,212,.16);
-      backdrop-filter: blur(3px);
-      transition: transform .18s ease, border-color .18s ease, background .18s ease, opacity .18s ease;
-      animation: hotspot-pulse 2.6s ease-in-out infinite;
-    }
-
-    .hotspot::before {
-      content: "";
-      position: absolute;
-      inset: 8px;
-      border-radius: 50%;
-      background: currentColor;
-    }
-
-    .hotspot span {
-      position: absolute;
-      left: 50%;
-      bottom: calc(100% + 9px);
-      width: max-content;
-      max-width: 150px;
-      padding: 6px 9px;
-      border: 1px solid rgba(218,235,227,.13);
-      background: rgba(7,12,11,.9);
-      color: #dce8e2;
-      font: 10px/1.2 ui-monospace, monospace;
-      letter-spacing: .08em;
-      opacity: 0;
-      pointer-events: none;
-      transform: translate(-50%, 4px);
-      transition: opacity .16s ease, transform .16s ease;
-      white-space: nowrap;
-    }
-
-    .hotspot:hover,
-    .hotspot:focus-visible {
-      outline: none;
-      transform: scale(1.12);
-      border-color: var(--moon-strong);
-      background: rgba(43,73,67,.72);
-    }
-
-    .hotspot:hover span,
-    .hotspot:focus-visible span { opacity: 1; transform: translate(-50%, 0); }
-    .hotspot.visited { opacity: .38; animation: none; }
-    .hotspot.register { left: 52%; top: 52%; }
-    .hotspot.reflection { left: 48%; top: 24%; }
-    .hotspot.unnumbered-door { left: 81%; top: 47%; }
-
-    .door-entry {
-      position: absolute;
-      z-index: 12;
-      right: 7%;
-      top: 54%;
-      padding: 9px 13px;
-      border: 1px solid rgba(197,222,214,.34);
-      background: rgba(8,15,14,.82);
-      color: #dcebe5;
-      cursor: pointer;
-      font: 10px/1.2 ui-monospace, monospace;
-      letter-spacing: .1em;
-      box-shadow: 0 10px 28px rgba(0,0,0,.34);
-    }
-
-    .door-entry:hover, .door-entry:focus-visible {
-      outline: none;
-      border-color: var(--moon);
-      background: rgba(31,57,52,.92);
-    }
 
     /* 来源：design/presentation/动作描述口径.md §十五、Blender动作制作管线.md §二。
        房间内几何仅用于母版评审，不是已接受的正式人体比例参数。 */
@@ -479,9 +164,6 @@
     }
 
     .scene.template-active .template-room { display: grid; }
-    .scene.template-active .hallway,
-    .scene.template-active .scene-hotspot,
-    .scene.template-active .door-entry { display: none; }
 
     .template-card {
       min-width: 0;
@@ -580,11 +262,6 @@
     .pose-status { min-height: 14px; margin: 7px 0 0; color: #bd7355; font: 8px/1.4 ui-monospace, monospace; }
     .pose-warning { margin: 8px 0 0; color: #69756f; font-size: 9px; line-height: 1.4; }
     .room-return { width: 100%; margin-top: 11px; color: #d9e5df; padding: 9px; }
-
-    @keyframes hotspot-pulse {
-      0%, 100% { box-shadow: 0 0 0 4px rgba(185,224,212,.05), 0 0 13px rgba(185,224,212,.12); }
-      50% { box-shadow: 0 0 0 8px rgba(185,224,212,.015), 0 0 22px rgba(185,224,212,.22); }
-    }
 
     .scene-topbar {
       position: absolute;
@@ -887,9 +564,6 @@
       .choices { padding: 11px 12px 14px; }
       .choice { padding: 8px 8px; }
       .toast { left: 14px; right: 14px; bottom: calc(58dvh + 12px); }
-      .figure { width: clamp(64px, 13vw, 92px); top: 22%; }
-      .hotspot { width: 22px; height: 22px; }
-      .hotspot::before { inset: 7px; }
       .template-room { grid-template-columns: 1fr; padding: 70px 14px 70px; }
       .template-card:first-child { display: none; }
       .template-card:last-child { align-self: start; }
@@ -903,105 +577,7 @@
 </head>
 <body>
   <main class="game-shell">
-    <section class="scene" id="scene" aria-label="住院楼一层护士站场景">
-      <div class="hallway" id="hallway" aria-hidden="true">
-        <div class="ceiling"></div>
-        <div class="floor"></div>
-        <div class="left-wall"></div>
-        <div class="right-wall"></div>
-        <div class="stripe"></div>
-        <div class="door left"></div>
-        <div class="door right"></div>
-        <div class="window"></div>
-        <div class="moon" id="moon"></div>
-        <div class="moonbeam"></div>
-        <div class="nurse-station"></div>
-        <div class="figure" id="figure" aria-label="值班护士赵岚背对走廊站在护士站前">
-          <svg class="figure-model" viewBox="0 0 180 460" role="img" aria-hidden="true">
-            <defs>
-              <linearGradient id="uniform" x1="0" x2="1">
-                <stop offset="0" stop-color="#d7ddd2"/>
-                <stop offset=".48" stop-color="#a7b0a7"/>
-                <stop offset="1" stop-color="#59645f"/>
-              </linearGradient>
-              <linearGradient id="uniformShadow" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0" stop-color="#73817a"/>
-                <stop offset="1" stop-color="#303a37"/>
-              </linearGradient>
-              <linearGradient id="skin" x1="0" x2="1">
-                <stop offset="0" stop-color="#958276"/>
-                <stop offset=".55" stop-color="#bba99a"/>
-                <stop offset="1" stop-color="#695d56"/>
-              </linearGradient>
-              <radialGradient id="hair" cx="36%" cy="25%" r="80%">
-                <stop offset="0" stop-color="#454541"/>
-                <stop offset=".7" stop-color="#252824"/>
-                <stop offset="1" stop-color="#111512"/>
-              </radialGradient>
-              <linearGradient id="surgicalMask" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0" stop-color="#c2ddd8"/>
-                <stop offset=".5" stop-color="#87aaa4"/>
-                <stop offset="1" stop-color="#496963"/>
-              </linearGradient>
-              <filter id="softGlow" x="-60%" y="-60%" width="220%" height="220%">
-                <feGaussianBlur stdDeviation="3"/>
-              </filter>
-            </defs>
-
-            <path d="M51 292 L88 292 L84 421 L47 421 Z" fill="#27312e"/>
-            <path d="M91 292 L127 292 L139 421 L99 421 Z" fill="#1b2421"/>
-            <path d="M45 415 Q65 408 87 419 L86 437 L34 437 Q34 422 45 415Z" fill="#111715"/>
-            <path d="M100 416 Q122 407 141 419 L151 437 L99 437Z" fill="#0d1211"/>
-            <path d="M89 300 L92 414" stroke="#87918b" stroke-opacity=".14" stroke-width="3"/>
-
-            <path d="M44 133 Q66 115 87 116 Q113 113 137 136 L150 309 Q116 326 33 307 Z" fill="url(#uniform)"/>
-            <path class="back-shadow" d="M91 119 Q126 118 138 139 L150 309 Q129 318 106 319 L97 151Z" fill="url(#uniformShadow)" opacity=".78"/>
-            <path d="M38 146 Q19 167 17 231 L31 284 L51 276 L47 202Z" fill="url(#uniform)"/>
-            <path d="M136 145 Q157 171 161 231 L151 277 L132 269 L134 199Z" fill="url(#uniformShadow)"/>
-            <path d="M46 176 Q89 191 139 174" fill="none" stroke="#eef3e9" stroke-opacity=".18" stroke-width="2"/>
-            <path d="M91 143 L91 309" fill="none" stroke="#35423e" stroke-opacity=".66" stroke-width="3"/>
-            <g fill="#b9c2b9" opacity=".7">
-              <circle cx="91" cy="185" r="2.2"/><circle cx="91" cy="214" r="2.2"/><circle cx="91" cy="243" r="2.2"/>
-            </g>
-            <path d="M52 301 Q91 310 144 298" fill="none" stroke="#303b37" stroke-opacity=".5" stroke-width="3"/>
-
-            <path d="M72 117 L75 93 L108 93 L111 119 Q91 134 72 117Z" fill="url(#skin)"/>
-            <path d="M70 115 L91 142 L72 159 L55 130Z" fill="#e3e7dd"/>
-            <path d="M111 115 L91 142 L110 159 L130 130Z" fill="#c4ccc3"/>
-            <path d="M58 59 Q59 19 92 14 Q128 17 132 59 L122 105 Q108 122 89 119 Q66 115 56 94Z" fill="url(#hair)"/>
-            <ellipse cx="92" cy="26" rx="25" ry="14" fill="#5b5a53" opacity=".25"/>
-            <path d="M60 66 Q56 104 73 119 L85 98 L86 48 Q70 48 60 66Z" fill="#171b18" opacity=".88"/>
-            <path d="M124 57 Q135 91 113 117 L102 96 L103 43 Q118 45 124 57Z" fill="#121613" opacity=".82"/>
-            <path d="M77 28 Q91 48 123 55" fill="none" stroke="#74736b" stroke-opacity=".24" stroke-width="4"/>
-
-            <g class="mask-face">
-              <path d="M70 48 Q89 33 109 41 Q124 48 123 73 Q122 94 107 108 Q94 116 80 105 Q68 92 67 72 Q67 57 70 48Z" fill="#756b64"/>
-              <path d="M70 48 Q88 32 110 41 Q121 46 124 59 Q104 48 78 57 L68 72 Q66 58 70 48Z" fill="url(#hair)"/>
-              <path d="M76 66 Q85 61 94 66 Q87 71 78 70Z" fill="#171b19" opacity=".82"/>
-              <path d="M101 65 Q111 60 119 66 Q113 71 103 69Z" fill="#131816" opacity=".82"/>
-              <path d="M70 72 Q95 65 123 72 L119 103 Q99 118 77 103Z" fill="url(#surgicalMask)" stroke="#d6ebe6" stroke-opacity=".42" stroke-width="1.2"/>
-              <path d="M72 73 Q96 68 121 73" fill="none" stroke="#dceeea" stroke-opacity=".76" stroke-width="2.2"/>
-              <path d="M76 82 Q97 87 119 81 M77 89 Q97 94 118 88 M79 96 Q98 101 116 95" fill="none" stroke="#d3e7e2" stroke-opacity=".4" stroke-width="1.3"/>
-              <path d="M70 75 Q59 72 57 83 Q58 94 75 98 M123 75 Q132 72 132 83 Q130 94 119 99" fill="none" stroke="#a8c3bd" stroke-width="1.8"/>
-              <path d="M112 43 L106 54 L111 61" fill="none" stroke="#303733" stroke-opacity=".55" stroke-width="1"/>
-            </g>
-            <path class="turned-highlight" d="M74 74 Q96 68 118 73" fill="none" stroke="#e2fff5" stroke-width="3" stroke-linecap="round" opacity=".3" filter="url(#softGlow)"/>
-
-            <g class="lanyard-card">
-              <path d="M78 145 L70 205 M104 145 L108 205" stroke="#46534e" stroke-width="2"/>
-              <rect x="67" y="198" width="44" height="31" rx="2" fill="#d0d8cf" opacity=".83"/>
-              <rect x="72" y="203" width="11" height="13" rx="1" fill="#5f7770"/>
-              <path d="M87 205 H106 M87 210 H103 M72 221 H105" stroke="#485650" stroke-width="1.5" opacity=".7"/>
-            </g>
-            <path d="M120 171 V210" stroke="#465751" stroke-width="4"/>
-            <path d="M126 172 V205" stroke="#7d5545" stroke-width="3"/>
-            <path d="M50 233 Q37 261 43 278 Q50 287 59 273 L70 239Z" fill="url(#skin)"/>
-            <path d="M135 230 L126 267 Q126 283 138 282 Q147 278 148 260Z" fill="url(#skin)"/>
-            <path d="M41 278 Q51 289 65 281" fill="none" stroke="#50463f" stroke-width="2" opacity=".7"/>
-            <path d="M127 278 Q138 287 149 277" fill="none" stroke="#50463f" stroke-width="2" opacity=".7"/>
-          </svg>
-        </div>
-      </div>
+    <section class="scene" id="scene" aria-label="可连续探索的三层医院场景">
 
       <canvas class="world-3d-canvas" id="world3dCanvas" aria-label="可连续行走探索的医院一层"></canvas>
       <div class="world-3d-loading" id="world3dLoading">正在载入医院一层…</div>
@@ -1162,28 +738,17 @@
               <p class="pose-status" id="poseStatus" aria-live="polite">拖动发亮的骨骼节点开始摆姿势。</p>
               <p class="pose-warning">直接复用仓库 X Bot 与 Mixamo 骨架。点击节点后拖动三维旋转环，蒙皮会随骨骼变化；导出的四元数动作可供后续界面复用。</p>
             </div>
-            <button class="room-return" id="returnToHallway" type="button">← 返回夜间护士站</button>
+            <button class="room-return" id="returnToHallway" type="button">← 返回医院</button>
           </div>
         </article>
       </section>
-
-      <button class="hotspot scene-hotspot register" type="button" data-hotspot="register" aria-label="观察护士站上的登记册">
-        <span>观察登记册</span>
-      </button>
-      <button class="hotspot scene-hotspot reflection" type="button" data-hotspot="reflection" aria-label="观察窗户里的倒影">
-        <span>观察窗户倒影</span>
-      </button>
-      <button class="hotspot scene-hotspot unnumbered-door" type="button" data-hotspot="door" aria-label="观察走廊尽头没有编号的门">
-        <span>观察无编号门</span>
-      </button>
-      <button class="door-entry" id="enterTemplateRoom" type="button">进入人体模板校准间 →</button>
 
       <div class="prototype-badge">interactive presentation prototype</div>
 
       <header class="scene-topbar">
         <div>
           <div class="location-kicker" id="locationKicker">住院楼 · 一层</div>
-          <div class="location-title" id="locationTitle">夜间护士站</div>
+          <div class="location-title" id="locationTitle">医院加载中</div>
         </div>
         <div>
           <div class="time-readout" id="timeReadout">第 01 日<br>夜晚 · 月光增强</div>
@@ -1303,9 +868,6 @@
     const story = document.querySelector('#story');
     const storyScroll = document.querySelector('#storyScroll');
     const choices = document.querySelector('#choices');
-    const hallway = document.querySelector('#hallway');
-    const moon = document.querySelector('#moon');
-    const figure = document.querySelector('#figure');
     const toast = document.querySelector('#toast');
     const objectiveText = document.querySelector('#objectiveText');
     const scene = document.querySelector('#scene');
@@ -1855,7 +1417,6 @@
         perception: '纸页在她手肘下轻轻鼓动。第三行的墨迹透过背面，像一根被压住的静脉。',
         system: '线索更新：不存在的第三行。',
         toast: '线索已更新 · 登记册第三行',
-        state: 'suspicious',
         objective: '找到能够证明“第三行”存在的另一位见证者。'
       },
       gentle: {
@@ -1864,7 +1425,6 @@
         perception: '玻璃里确实有两个人。但倒影都没有做出你正在做的动作。',
         system: '自问深化：倒影属于谁？',
         toast: '自问正在深化 · 倒影属于谁',
-        state: 'opened',
         objective: '判断窗户中的倒影是否正在模仿你们。'
       },
       leave: {
@@ -1873,7 +1433,6 @@
         perception: '钥匙齿上沾着一小片蓝色漆皮，和走廊尽头那扇门的颜色相同。',
         system: '线索更新：无编号门的钥匙。',
         toast: '线索已更新 · 无编号门的钥匙',
-        state: 'suspicious',
         objective: '调查走廊尽头那扇没有编号的门。'
       }
     };
@@ -1897,24 +1456,6 @@
     };
 
     const askedChoices = new Set();
-
-    const hotspotObservations = {
-      register: {
-        label: '登记册',
-        text: '封皮边缘留着潮湿的指印。第三行被反复描过，墨迹比这一页上的其他名字都新。',
-        note: '登记册第三行的墨迹异常新。'
-      },
-      reflection: {
-        label: '窗户倒影',
-        text: '倒影里的赵岚戴着口罩，却没有随着她呼吸。你移开视线时，它仍朝着原来的方向。',
-        note: '窗户中的倒影与本人动作不同步。'
-      },
-      door: {
-        label: '无编号门',
-        text: '走廊尽头的门没有编号，门缝下却透出护士站同样的冷光。锁孔周围有新鲜划痕。',
-        note: '无编号门近期曾被人反复开启。'
-      }
-    };
 
     function addBeat(type, label, text) {
       const article = document.createElement('article');
@@ -1979,31 +1520,6 @@
       showToast('交谈已暂停 · 可随时返回');
     }
 
-    function observeHotspot(button) {
-      if (button.classList.contains('visited')) return;
-      const observation = hotspotObservations[button.dataset.hotspot];
-      if (!observation) return;
-
-      if (document.querySelector('#story').hidden) {
-        document.querySelector('[data-view="story"]').click();
-      }
-
-      button.classList.add('visited');
-      button.setAttribute('aria-label', `${button.getAttribute('aria-label')}，已观察`);
-      addBeat('perception', `环境观察 · ${observation.label}`, observation.text);
-
-      const note = document.createElement('div');
-      note.className = 'note-card';
-      note.textContent = observation.note;
-      const source = document.createElement('span');
-      source.textContent = `环境观察 · ${observation.label}`;
-      note.append(source);
-      document.querySelectorAll('.note-section')[1].append(note);
-
-      showToast(`观察已记录 · ${observation.label}`);
-      window.requestAnimationFrame(() => { storyScroll.scrollTop = storyScroll.scrollHeight; });
-    }
-
     function choose(id) {
       const branch = branches[id];
       if (!branch || askedChoices.has(id)) return;
@@ -2012,9 +1528,6 @@
       addBeat('', '赵岚', branch.response);
       addBeat('perception', '感知回声', branch.perception);
       addBeat('system', '笔记本', branch.system);
-      hallway.className = `hallway ${branch.state}`;
-      moon.classList.toggle('alert', id !== 'leave');
-      figure.classList.toggle('turned', id !== 'leave');
       objectiveText.textContent = branch.objective;
       currentNarrativeObjective = branch.objective;
       showToast(branch.toast);
@@ -2028,10 +1541,6 @@
       if (button.dataset.choice) choose(button.dataset.choice);
       if (button.dataset.action === 'end') pauseConversation();
       if (button.dataset.action === 'resume') renderChoices();
-    });
-
-    document.querySelectorAll('.hotspot').forEach(button => {
-      button.addEventListener('click', () => observeHotspot(button));
     });
 
     function enterTemplateRoom() {
@@ -2063,11 +1572,11 @@
     function returnToHallway() {
       inTemplateRoom = false;
       scene.classList.remove('template-active');
-      scene.setAttribute('aria-label', '住院楼一层护士站场景');
+      scene.setAttribute('aria-label', '可连续探索的三层医院场景');
       templateRoom.setAttribute('aria-hidden', 'true');
       locationKicker.textContent = '住院楼 · 一层';
-      locationTitle.textContent = '夜间护士站';
-      timeReadout.innerHTML = '第 01 日<br>夜晚 · 月光增强';
+      locationTitle.textContent = '医院';
+      timeReadout.innerHTML = '第 01 日<br>当前楼层';
       objectiveText.textContent = currentNarrativeObjective;
       speakerMark.textContent = '护';
       speakerRole.textContent = '值班护士';
@@ -2075,7 +1584,7 @@
       speakerDescription.textContent = '她没有看你。她在看玻璃上的倒影。';
       const storyTab = document.querySelector('[data-view="story"]');
       choices.style.visibility = storyTab.classList.contains('active') ? 'visible' : 'hidden';
-      showToast('已返回 · 夜间护士站');
+      showToast('已返回 · 医院');
     }
 
     function inspectSegment(segment) {
@@ -2090,7 +1599,6 @@
       });
     }
 
-    document.querySelector('#enterTemplateRoom').addEventListener('click', enterTemplateRoom);
     document.querySelector('#returnToHallway').addEventListener('click', returnToHallway);
 
     document.querySelectorAll('.template-segment').forEach(segment => {
@@ -3098,7 +2606,7 @@
           event.preventDefault();
           return;
         }
-        if (nearbyInteraction === 'door') document.querySelector('#enterTemplateRoom').click();
+        if (nearbyInteraction === 'door') enterTemplateRoom();
         if (nearbyInteraction === 'nurse') {
           document.querySelector('[data-view="story"]')?.click();
           document.querySelector('.choice:not(:disabled)')?.focus();
