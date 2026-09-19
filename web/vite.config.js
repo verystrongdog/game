@@ -43,8 +43,11 @@ export default defineConfig({
       three: resolve(presentationRoot, 'vendor/three/build/three.module.js'),
       '/three-addons': resolve(import.meta.dirname, 'node_modules/three/examples/jsm'),
       '/hospital': resolve(import.meta.dirname, 'src/hospital'),
+      '/hospital-map-prototype': resolve(import.meta.dirname, 'src/hospital-map-prototype'),
       '/scene-host': resolve(import.meta.dirname, 'src/scene-host'),
       '/character-creation': resolve(import.meta.dirname, 'src/character-creation'),
+      '/dialogue': resolve(import.meta.dirname, 'src/dialogue'),
+      '/prototype-bootstrap': resolve(import.meta.dirname, 'src/prototype-bootstrap'),
     },
   },
   server: {

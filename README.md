@@ -71,7 +71,7 @@ bun install
 bun run dev
 ```
 
-然后访问 <http://localhost:5174/>。该入口只托管呈现原型，不启动或模拟 StoryEngine；端口与电车项目的 `5173` 分开，可以同时运行。
+开发服务器监听远端 `127.0.0.1:8899`。按 [`web/README.md`](web/README.md) 建立 SSH 隧道后，在本机访问 <http://127.0.0.1:8901/>。该入口只托管呈现原型，不启动或模拟 StoryEngine。
 
 - **设计驱动代码**：先有设计文档，再写代码。边界见 [项目规约 §一](design/conventions/README.md)
 - **改动后的底线**：`dotnet test code/src/YouAreNotTheFish.sln` 全绿（CI 里跑的只有这一件）。⚠️ 2026-09-17 全部门禁已撤销——文档与数据的交叉引用、参数一致性不再有机械校验，改完只能靠人核对

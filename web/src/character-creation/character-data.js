@@ -236,3 +236,20 @@ export const diseases = [
 ]
 
 export const developmentalDiseases = new Set(['ASD', 'ADHD'])
+
+// 来源：design/presentation/叙事界面布局.md §五（仅开发服务器使用的非正典快捷夹具）。
+export const developmentDefaultCharacter = Object.freeze({
+  experiences: Object.freeze([
+    'night-shifts',
+    'family-patient',
+    'absent-parents',
+    'good-child-role',
+    'checking-work',
+    'hard-targets',
+    'moving',
+    'two-worlds',
+    'heavy-labor',
+    'chronic-pain',
+  ]),
+  diseases: Object.freeze(['广泛性焦虑障碍']),
+})

@@ -20,6 +20,7 @@ export function createDisplaySettings({ trigger, panel, input, output }) {
     output.value = `${brightness}%`
     output.textContent = `${brightness}%`
     document.documentElement.style.setProperty('--display-brightness', String(brightness / 100))
+    document.documentElement.classList.toggle('display-brightness-adjusted', brightness !== DEFAULT_BRIGHTNESS)
     globalThis.localStorage?.setItem(STORAGE_KEY, String(brightness))
   }
 

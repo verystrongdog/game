@@ -1,0 +1,138 @@
+.hospital-map-prototype { position: absolute; z-index: 10; inset: 0; overflow: hidden; background: #0b1110; cursor: grab; touch-action: none; }
+.map-time-filter { position: absolute; z-index: 10; inset: 0; pointer-events: none; background: linear-gradient(var(--time-wash, transparent), var(--time-wash, transparent)), radial-gradient(ellipse at center, transparent 48%, var(--time-edge, transparent) 125%); transform: translateZ(0); backface-visibility: hidden; transition: background .35s ease; }
+.hospital-map-prototype.dragging { cursor: grabbing; }
+.hospital-map-prototype.snap-wall-mode { cursor: crosshair; }
+.hospital-map-prototype[hidden] { display: none; }
+.scene.map-prototype-active .world-3d-canvas,
+.scene.map-prototype-active .unity-web-canvas,
+.scene.map-prototype-active .world-3d-loading,
+.scene.map-prototype-active .world-3d-state,
+.scene.map-prototype-active .world-3d-prompt,
+.scene.map-prototype-active .unity-web-status { visibility: hidden; pointer-events: none; }
+.scene-view-button.active { color: var(--moon-strong); border-color: rgba(197,222,214,.45); background: rgba(114,159,147,.2); }
+.scene.map-prototype-active .scene-topbar,
+.scene.map-prototype-active .scene-bottom { pointer-events: none; }
+
+.map-variant { position: absolute; inset: 0; padding: 0; min-height: 0; }
+.map-viewport { position: absolute; inset: 0; overflow: hidden; }
+.map-camera { position: absolute; left: 50%; top: 50%; width: 1400px; height: 990px; transform: translate3d(-50%, -50%, 0) translate3d(var(--map-pan-x), var(--map-pan-y), 0) scale3d(var(--map-scale), var(--map-scale), 1); transform-origin: 50% 50%; }
+.hospital-map-prototype.map-zooming .map-camera,
+.hospital-map-prototype.map-panning .map-camera { will-change: transform; }
+.map-plan-stage, .tabletop-board, .route-network { position: relative; width: 100%; height: 100%; overflow: hidden; transform: rotate(var(--map-rotation, 0deg)); transform-origin: 50% 50%; }
+.map-plan-stage img, .tabletop-board img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; filter: none; opacity: 1; user-select: none; pointer-events: none; }
+.map-plan-preview { visibility: hidden; }
+.hospital-map-prototype.map-zooming .map-plan-vector,
+.hospital-map-prototype.map-panning .map-plan-vector { visibility: hidden; }
+.hospital-map-prototype.map-zooming .map-plan-preview,
+.hospital-map-prototype.map-panning .map-plan-preview { visibility: visible; }
+.hospital-map-prototype.map-panning .wall-snap-preview { visibility: hidden; }
+.hospital-map-prototype.map-panning .map-location.reachable i { animation: none; }
+.map-routes { position: absolute; z-index: 1; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.map-routes line { stroke: rgba(169, 218, 202, .38); stroke-width: .32; stroke-dasharray: 1.1 .7; vector-effect: non-scaling-stroke; }
+.map-regions { position: absolute; z-index: 2; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.map-region { fill: transparent; stroke: transparent; stroke-width: .22; vector-effect: non-scaling-stroke; transition: fill .16s ease, stroke .16s ease; }
+.map-region.reachable, .map-region.current { pointer-events: auto; cursor: pointer; }
+.map-region.reachable { fill: rgba(77, 156, 134, .12); stroke: rgba(65, 137, 118, .72); stroke-dasharray: .8 .45; }
+.map-region.reachable:hover, .map-region.reachable:focus { fill: rgba(77, 156, 134, .24); stroke: #3f8f79; outline: none; }
+.map-region.current { fill: rgba(215, 142, 88, .14); stroke: rgba(177, 94, 58, .82); }
+.map-coordinate-system { position: absolute; z-index: 4; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.structural-grid-line { stroke: rgba(30, 112, 151, .48); stroke-width: 1px; stroke-dasharray: 5px 5px; vector-effect: non-scaling-stroke; }
+.snap-grid path { fill: none; }
+.snap-grid-minor { stroke: rgba(32, 91, 111, .18); stroke-width: calc(.3px * var(--map-marker-scale)); }
+.snap-grid-major { stroke: rgba(32, 91, 111, .34); stroke-width: calc(.55px * var(--map-marker-scale)); }
+.coordinate-axis { stroke: rgba(184, 54, 28, .92); stroke-width: 1.5px; stroke-dasharray: 8px 5px; vector-effect: non-scaling-stroke; }
+.coordinate-origin, .grid-intersection, .snap-wall-point { transform-box: fill-box; transform-origin: center; transform: scale(var(--map-marker-scale)); }
+.coordinate-origin { stroke: #bb331e; stroke-width: 1.5px; stroke-linecap: round; vector-effect: non-scaling-stroke; pointer-events: none; }
+.coordinate-label { fill: #8f3426; font: 700 1.35px/1 ui-monospace, monospace; paint-order: stroke; stroke: rgba(255,255,255,.92); stroke-width: .3px; }
+/* 来源：design/presentation/500床一层跑团地图原型.md §一·校图坐标系（墙线仅为开发期拓扑标注）。 */
+.authored-walls { pointer-events: none; }
+.authored-wall-shadow, .authored-wall-line { fill: none; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.authored-wall-shadow { stroke: rgba(7, 12, 11, .84); stroke-width: 2.5px; }
+.authored-wall-line { stroke: #d78b62; stroke-width: 1px; }
+.grid-intersection { outline: none; pointer-events: none; }
+.grid-intersection-hit { fill: rgba(0,0,0,.001); pointer-events: all; cursor: copy; }
+.grid-intersection-dot { pointer-events: none; }
+.grid-intersection-dot { fill: #176f96; stroke: rgba(255,255,255,.95); stroke-width: .75px; vector-effect: non-scaling-stroke; }
+.grid-intersection:hover .grid-intersection-dot,
+.grid-intersection:focus-visible .grid-intersection-dot { fill: #f1b57d; stroke: #5c251b; stroke-width: 1.5px; }
+.grid-intersection.selected .grid-intersection-dot { fill: #c53622; stroke: #fff2e8; stroke-width: 2px; }
+.grid-intersection.wall-anchor .grid-intersection-dot { fill: #ffd69b; stroke: #582718; stroke-width: 3px; }
+.snap-wall-point { pointer-events: none; }
+.snap-wall-point line { stroke: #c53622; stroke-width: 1.25px; vector-effect: non-scaling-stroke; }
+.wall-snap-preview { pointer-events: none; }
+.wall-preview-shadow, .wall-preview-line, .wall-preview-cursor { vector-effect: non-scaling-stroke; }
+.wall-preview-shadow { stroke: rgba(7,12,11,.72); stroke-width: 3px; }
+.wall-preview-line { stroke: #f0a36f; stroke-width: 1.25px; stroke-dasharray: 5px 3px; }
+.wall-preview-cursor { stroke: #ff5d3d; stroke-width: 1px; }
+
+.map-location, .map-person, .map-player { position: absolute; left: var(--x); top: var(--y); transform: translate(-50%, -50%); }
+.map-location { z-index: 3; display: grid; place-items: center; gap: 3px; min-width: 54px; border: 0; background: transparent; color: #65736e; font-size: 8px; cursor: not-allowed; }
+.map-location i { width: 10px; height: 10px; border: 1px solid currentColor; border-radius: 50%; background: #121816; box-shadow: 0 0 0 3px rgba(11,17,16,.7); }
+.map-location.reachable { color: #b9ddd2; cursor: pointer; }
+.map-location.reachable i { animation: map-pulse 1.8s ease-in-out infinite; box-shadow: 0 0 0 4px rgba(127,193,174,.14), 0 0 12px rgba(127,193,174,.35); }
+.map-location.current { color: #f1c18b; }
+.map-location.current i { background: #d68a5f; border-color: #ffe1c4; }
+.map-location:disabled { opacity: .58; }
+
+.map-person { z-index: 5; border: 0; background: transparent; color: #d5d8d1; cursor: pointer; text-align: center; }
+.map-person b, .map-player b { display: grid; place-items: center; margin: auto; border-radius: 50%; border: 1px solid #b16f50; background: #261813; color: #f2c5ad; box-shadow: 0 3px 7px rgba(0,0,0,.5); }
+/* 来源：design/presentation/500床一层跑团地图原型.md §四；NPC 点约为图纸单床占用。 */
+.map-person b { width: 10px; height: 10px; font-size: 6px; }
+.map-player b { width: 25px; height: 25px; font-size: 11px; }
+.map-person span, .map-player span { display: block; margin-top: 2px; padding: 1px 3px; background: rgba(5,9,8,.82); color: #d8dcd5; white-space: nowrap; }
+.map-person span { opacity: 0; visibility: hidden; font-size: 7px; transition: opacity .12s ease; }
+.map-person:hover span,
+.map-person:focus-visible span { opacity: 1; visibility: visible; }
+.map-player span { font-size: 8px; }
+.map-person.co-located b { outline: 1px solid rgba(197,222,214,.55); outline-offset: 1px; }
+.map-player { z-index: 6; pointer-events: none; transform: translate(-50%, 48%); }
+.map-player b { border-radius: 3px; border-color: #9acabe; background: #17312b; color: #e7fff7; }
+.map-player span { color: #a9d9cd; }
+
+.map-inspector { position: absolute; z-index: 8; right: 18px; top: 94px; width: min(245px, 32%); padding: 14px 15px; border: 1px solid rgba(205,229,218,.18); background: rgba(8,13,12,.91); box-shadow: 0 15px 40px rgba(0,0,0,.35); backdrop-filter: blur(8px); }
+.map-inspector-kicker { color: #bc7658; font: 8px/1.2 ui-monospace, monospace; letter-spacing: .15em; }
+.map-inspector h2 { margin: 5px 0 7px; font-size: 17px; font-weight: 500; }
+.map-inspector p { margin: 0 0 10px; color: #a9b1ac; font-size: 10px; line-height: 1.55; }
+.map-inspector dl { margin: 0; font-size: 9px; }
+.map-inspector dl div { display: flex; justify-content: space-between; gap: 8px; padding: 5px 0; border-top: 1px solid rgba(255,255,255,.06); }
+.map-inspector dt { color: #65716b; }.map-inspector dd { margin: 0; color: #cad5d0; }
+.map-primary-action { width: 100%; margin-top: 10px; padding: 8px; border: 1px solid rgba(197,222,214,.32); background: rgba(89,132,120,.18); color: #e2f5ee; cursor: pointer; }
+.map-primary-action:disabled { opacity: .42; cursor: not-allowed; }
+.map-feedback { min-height: 28px; margin-top: 8px; color: #bd8a70; font-size: 9px; line-height: 1.45; }
+
+.map-atlas .map-plan-stage { border: 1px solid rgba(197,222,214,.14); background: #f3f3f0; }
+.map-atlas .map-plan-stage::before { content: 'SOURCE PLAN · 500 BEDS · FLOOR 1'; position: absolute; z-index: 2; left: 12px; top: 10px; color: #64746e; font: 8px/1 ui-monospace,monospace; letter-spacing: .15em; }
+
+.map-tabletop { display: block; background: radial-gradient(circle at center, #243029, #101613 70%); }
+.tabletop-header { align-self: center; padding: 16px; border: 1px solid rgba(225,206,168,.16); background: #171713; box-shadow: 0 16px 35px rgba(0,0,0,.25); transform: rotate(-.7deg); }
+.tabletop-header span { color: #c28c65; font: 8px/1 ui-monospace,monospace; letter-spacing: .14em; }
+.tabletop-header h2 { margin: 8px 0; font-size: 20px; font-weight: 500; }.tabletop-header p { color: #9fa69c; font-size: 10px; line-height: 1.6; }
+.tabletop-board { border: 8px solid #2a241b; background: #f1f0e9; box-shadow: 0 20px 50px rgba(0,0,0,.5); }
+.tabletop-board img { filter: none; opacity: 1; }
+.tabletop-board .map-person.large b { width: 12px; height: 12px; font-size: 7px; }
+.map-tabletop .map-inspector { position: relative; inset: auto; align-self: center; width: auto; }
+
+.map-route { display: block; background: linear-gradient(135deg,#0a0f0e,#111b18); }
+.route-agenda { align-self: center; padding: 16px; border-left: 2px solid #9c5d43; background: rgba(255,255,255,.025); }
+.route-agenda > span { color: #b66d50; font: 8px/1 ui-monospace,monospace; letter-spacing: .14em; }.route-agenda h2 { margin: 8px 0 14px; font-size: 17px; font-weight: 500; }
+.route-agenda ol { margin: 0; padding: 0; list-style: none; counter-reset: route; }.route-agenda li { counter-increment: route; padding: 8px 0 8px 25px; color: #7e8984; border-top: 1px solid rgba(255,255,255,.06); font-size: 10px; }.route-agenda li::before { content: counter(route,decimal-leading-zero); margin-left: -25px; margin-right: 8px; color: #9e654c; font: 8px/1 monospace; }.route-agenda li.done { color: #c4d0ca; }
+.route-network { border: 1px solid rgba(197,222,214,.11); background-image: radial-gradient(rgba(165,198,187,.12) .8px,transparent .8px); background-size: 18px 18px; }
+.route-network .map-routes line { stroke: rgba(143,203,187,.72); stroke-width: .52; stroke-dasharray: none; }
+.route-svg-node circle { fill: #17231f; stroke: #8fcbbb; stroke-width: .22; }.route-svg-node text { fill: #72847d; font-size: 1.55px; text-anchor: middle; }.route-svg-node.current circle { fill: #ad6849; }
+.map-route .map-location span { display: none; }.map-route .map-inspector { position: relative; inset: auto; align-self: center; width: auto; }
+
+.map-coordinate-hud { position: absolute; z-index: 12; left: 50%; top: 88px; display: grid; grid-template-columns: auto minmax(178px, auto); align-items: center; overflow: hidden; transform: translateX(-50%); border: 1px solid rgba(205,229,218,.2); border-radius: 2px; background: rgba(8,13,12,.88); box-shadow: 0 8px 22px rgba(0,0,0,.28); pointer-events: none; font: 9px/1 ui-monospace,monospace; }
+.map-coordinate-hud > span { padding: 8px 9px; border-right: 1px solid rgba(205,229,218,.14); color: #789088; letter-spacing: .12em; }
+.map-coordinate-readout { min-width: 190px; padding: 8px 11px; color: #d6b49e; text-align: left; font-variant-numeric: tabular-nums; }
+
+@keyframes map-pulse { 50% { transform: scale(1.25); } }
+@media (max-width: 1100px) {
+  .map-tabletop, .map-route { display: block; }.map-tabletop .map-inspector, .map-route .map-inspector { display: none; }
+  .map-inspector { width: 220px; }
+}
+@media (max-width: 840px) {
+  .map-variant { padding: 0; }.map-inspector, .tabletop-header, .route-agenda { display: none; }
+  .map-coordinate-hud { top: 56px; max-width: calc(100% - 18px); }
+  .map-coordinate-hud > span { display: none; }
+  .map-tabletop, .map-route { display: block; }
+}

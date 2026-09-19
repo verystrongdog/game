@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>子非鱼｜叙事界面原型</title>
   <link rel="stylesheet" href="/character-creation/character-creation.css">
+  <link rel="stylesheet" href="/dialogue/dialogue.css">
+  <link rel="stylesheet" href="/hospital-map-prototype/hospital-map-prototype.css">
   <script type="importmap">
     { "imports": { "three": "./vendor/three/build/three.module.js" } }
   </script>
@@ -54,7 +56,12 @@
       background:
         radial-gradient(circle at 68% 25%, rgba(165, 202, 192, .15), transparent 24%),
         linear-gradient(148deg, #152325 0%, #091011 54%, #111614 100%);
+      --time-wash: rgba(174, 207, 197, .045);
+      --time-edge: rgba(8, 18, 17, .12);
     }
+
+    .scene[data-time="afternoon"] { --time-wash: rgba(198, 137, 83, .105); --time-edge: rgba(49, 29, 16, .18); }
+    .scene[data-time="night"] { --time-wash: rgba(24, 69, 80, .20); --time-edge: rgba(0, 8, 14, .44); }
 
     .scene::before {
       content: "";
@@ -63,8 +70,9 @@
       z-index: 8;
       pointer-events: none;
       background:
+        linear-gradient(var(--time-wash), var(--time-wash)),
         linear-gradient(90deg, rgba(0,0,0,.28), transparent 18%, transparent 72%, rgba(0,0,0,.34)),
-        radial-gradient(ellipse at center, transparent 42%, rgba(0,0,0,.62) 118%);
+        radial-gradient(ellipse at center, transparent 42%, var(--time-edge) 118%);
       mix-blend-mode: multiply;
     }
 
@@ -329,7 +337,7 @@
       height: 100dvh;
       overflow: hidden;
       display: grid;
-      grid-template-rows: auto minmax(0, 1fr) auto;
+      grid-template-rows: auto auto minmax(0, 1fr) auto;
       border-left: 1px solid rgba(226, 237, 224, .15);
       background:
         linear-gradient(90deg, rgba(255,255,255,.018), transparent 24%),
@@ -408,8 +416,17 @@
       background: #829089;
     }
 
-    .story, .notebook { padding: 19px clamp(22px, 2.4vw, 36px) 28px; }
-    .notebook[hidden], .story[hidden] { display: none; }
+    .story, .notebook, .developer-options { padding: 19px clamp(22px, 2.4vw, 36px) 28px; }
+    .notebook[hidden], .story[hidden], .developer-options[hidden] { display: none; }
+
+    .developer-options { display: grid; gap: 14px; }
+    .developer-intro { margin: 0 0 4px; color: #7e8a84; font-size: 11px; line-height: 1.6; }
+    .developer-group { padding: 14px; border: 1px solid rgba(226,237,224,.09); background: rgba(255,255,255,.018); }
+    .developer-group h2 { margin: 0 0 10px; color: var(--rust); font: 700 10px/1.2 ui-monospace, monospace; letter-spacing: .15em; }
+    .developer-actions { display: flex; flex-wrap: wrap; gap: 7px; }
+    .developer-actions button { min-height: 34px; padding: 7px 10px; border: 1px solid rgba(197,222,214,.18); background: #15201d; color: #b9c8c2; cursor: pointer; font-size: 11px; }
+    .developer-actions button:hover, .developer-actions button.active { border-color: rgba(197,222,214,.48); color: #eff9f4; background: rgba(70,105,95,.32); }
+    .developer-status { display: block; margin-top: 10px; color: #7f918a; font: 9px/1.5 ui-monospace, monospace; }
 
     .beat { margin: 0 0 16px; animation: rise .45s ease both; }
     .beat .label {
@@ -540,6 +557,33 @@
 
     .toast.show { opacity: 1; transform: translateY(0); }
 
+    /* 来源：design/presentation/叙事界面布局.md §五；开始界面只表达原型入口，不虚构存档能力。 */
+    .start-screen {
+      position: fixed;
+      z-index: 900;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      background:
+        linear-gradient(90deg, rgba(3,8,8,.96), rgba(5,12,12,.72) 54%, rgba(3,7,7,.94)),
+        radial-gradient(circle at 66% 38%, rgba(151,197,183,.22), transparent 28%),
+        #07100f;
+    }
+    .start-screen[hidden] { display: none; }
+    .start-screen::before { content: ''; position: absolute; inset: 9% 7%; border: 1px solid rgba(197,222,214,.08); background: repeating-linear-gradient(90deg, transparent 0 13%, rgba(197,222,214,.025) 13.1% 13.25%), repeating-linear-gradient(0deg, transparent 0 18%, rgba(197,222,214,.022) 18.1% 18.3%); transform: perspective(700px) rotateX(4deg); }
+    .start-screen::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse at center, transparent 36%, rgba(0,0,0,.72) 110%); }
+    .start-card { position: relative; z-index: 1; width: min(620px, calc(100% - 42px)); padding: clamp(38px, 7vw, 82px); border-left: 1px solid rgba(197,222,214,.24); background: linear-gradient(90deg, rgba(8,16,15,.78), rgba(8,16,15,.18)); }
+    .start-kicker { color: #84a99e; font: 9px/1.4 ui-monospace, monospace; letter-spacing: .28em; text-transform: uppercase; }
+    .start-title { margin: 17px 0 9px; font-size: clamp(58px, 10vw, 104px); font-weight: 400; line-height: .95; letter-spacing: .08em; text-shadow: 0 12px 40px rgba(0,0,0,.65); }
+    .start-subtitle { max-width: 420px; margin: 0; color: #8e9e98; font-size: 14px; line-height: 1.8; }
+    .start-action { display: inline-flex; align-items: center; gap: 22px; min-width: 260px; margin-top: 52px; padding: 15px 18px; border: 1px solid rgba(197,222,214,.32); border-left: 3px solid var(--rust); background: rgba(18,31,28,.74); color: #e5eee9; cursor: pointer; text-align: left; }
+    .start-action b { font-weight: 500; letter-spacing: .12em; }
+    .start-action span { margin-left: auto; color: var(--rust); font: 16px/1 ui-monospace, monospace; transition: transform .16s ease; }
+    .start-action:hover, .start-action:focus-visible { outline: none; border-color: rgba(197,222,214,.64); background: rgba(37,61,54,.78); }
+    .start-action:hover span, .start-action:focus-visible span { transform: translateX(4px); }
+    .start-note { display: block; margin-top: 13px; color: #56645f; font: 9px/1.5 ui-monospace, monospace; }
+
     @keyframes rise {
       from { opacity: 0; transform: translateY(8px); }
       to { opacity: 1; transform: translateY(0); }
@@ -558,7 +602,7 @@
       .speaker-heading { padding-inline: 14px 8px; }
       .speaker-heading p { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
       .tab { min-width: 44px; padding: 0 10px; }
-      .story, .notebook { padding: 22px 22px 36px; }
+      .story, .notebook, .developer-options { padding: 22px 22px 36px; }
       .beat { margin-bottom: 21px; }
       .beat p { font-size: 13px; line-height: 1.65; }
       .choices { padding: 11px 12px 14px; }
@@ -576,8 +620,19 @@
   </style>
 </head>
 <body>
+  <section class="start-screen" id="startScreen" role="dialog" aria-modal="true" aria-labelledby="startTitle">
+    <div class="start-card">
+      <span class="start-kicker">YOU ARE NOT THE FISH · WEB PROTOTYPE</span>
+      <h1 class="start-title" id="startTitle">子非鱼</h1>
+      <p class="start-subtitle">一场发生在医院中的回合制心理对抗游戏。先决定你带着怎样的过去醒来。</p>
+      <button class="start-action" id="startGameButton" type="button"><b>开始新游戏</b><span>→</span></button>
+      <small class="start-note">当前原型不读取存档；开始后进入开局人物选择。</small>
+    </div>
+  </section>
   <main class="game-shell">
     <section class="scene" id="scene" aria-label="可连续探索的三层医院场景">
+
+      <section class="hospital-map-prototype" id="hospitalMapHost" aria-label="500床方案一一层互动地图"></section>
 
       <canvas class="world-3d-canvas" id="world3dCanvas" aria-label="可连续行走探索的医院一层"></canvas>
       <div class="world-3d-loading" id="world3dLoading">正在载入医院一层…</div>
@@ -751,23 +806,14 @@
           <div class="location-title" id="locationTitle">医院加载中</div>
         </div>
         <div>
-          <div class="time-readout" id="timeReadout">第 01 日<br>夜晚 · 月光增强</div>
-          <div class="display-tools">
-            <button class="cc-launch" id="characterCreationLaunch" type="button">开局人物</button>
-            <button class="cc-launch" id="displaySettingsLaunch" type="button" aria-expanded="false" aria-controls="displaySettings">显示设置</button>
-            <section class="display-settings" id="displaySettings" aria-label="显示设置" hidden>
-              <label for="brightnessRange"><span>界面明暗</span><output id="brightnessOutput" for="brightnessRange">100%</output></label>
-              <input id="brightnessRange" type="range" min="70" max="140" step="5" value="100">
-              <p>只调整本地浏览器的显示亮度，不改变医院场景的正式灯光参数。</p>
-            </section>
-          </div>
+          <div class="time-readout" id="timeReadout">第 01 日<br>上午 · 刚刚醒来</div>
         </div>
       </header>
 
       <footer class="scene-bottom">
         <div class="objective">
           <div class="eyebrow">当前承诺</div>
-          <p id="objectiveText">弄清楚护士站为什么提前锁上。</p>
+          <p id="objectiveText">选择一名人物开始交谈。</p>
         </div>
         <div class="player-vitals" aria-label="玩家状态">
           <span>HP</span><span>42 / 50</span>
@@ -782,86 +828,119 @@
 
     <aside class="narrative-panel" aria-label="叙事面板">
       <header class="panel-header">
-        <div class="speaker-mark" id="speakerMark" aria-hidden="true">护</div>
+        <div class="speaker-mark" id="speakerMark" aria-hidden="true">人</div>
         <div class="speaker-heading">
-          <div class="eyebrow" id="speakerRole">值班护士</div>
-          <h1 id="speakerName">赵岚</h1>
-          <p id="speakerDescription">她没有看你。她在看玻璃上的倒影。</p>
+          <div class="eyebrow" id="speakerRole">住院楼 · 等待接近人物</div>
+          <h1 id="speakerName">附近没有正在交谈的人</h1>
+          <p id="speakerDescription">足够近时，地图或三维场景才会给出交谈入口。</p>
         </div>
         <nav class="tabs" aria-label="侧栏视图">
           <button class="tab active" data-view="story" aria-pressed="true">对话</button>
           <button class="tab" data-view="notebook" aria-pressed="false">笔记</button>
+          <button class="tab" data-view="developer" aria-pressed="false">开发</button>
         </nav>
       </header>
+
+      <section class="dialogue-toolbar" aria-label="经历与疾病试玩视角">
+        <div class="dialogue-profile-heading"><span>经历 / 疾病试玩视角</span><b id="dialogueProfileSummary">普通视角</b></div>
+        <div class="dialogue-profile-list" id="dialogueProfiles"></div>
+      </section>
 
       <div class="story-scroll" id="storyScroll">
         <div class="story" id="story">
           <article class="beat scene-text">
-            <div class="label">场景</div>
-            <p>玻璃后的灯只亮了一半。赵护士背对着你，把一串钥匙压在登记册下面。月光从她肩头越过去，在地面铺出一条苍白的路。</p>
-          </article>
-
-          <article class="beat">
-            <div class="label">赵岚</div>
-            <p>“回病房去。今晚不发药，也不接待任何人。”</p>
-          </article>
-
-          <article class="beat perception">
-            <div class="label">显著性网络 · 被动</div>
-            <p>她说“任何人”时，食指压住了登记册的第三行。不是钥匙让她紧张。是那个名字。</p>
+            <div class="label">载入</div>
+            <p>正在整理住院楼人物对话……</p>
           </article>
         </div>
 
         <div class="notebook" id="notebook" hidden>
           <section class="note-section">
             <h2>承诺</h2>
-            <div class="note-card">弄清楚护士站为什么提前锁上。<span>未完成 · 来自环境障碍</span></div>
+            <div class="note-card" id="dialoguePromise">认识住院楼里的人。<span>选择人物后更新</span></div>
           </section>
-          <section class="note-section">
+          <section class="note-section" id="dialogueNotes">
             <h2>线索</h2>
-            <div class="note-card">赵护士把钥匙压在登记册下。<span>夜间护士站</span></div>
-            <div class="note-card" id="dynamicClue">登记册第三行似乎让她紧张。<span>感知所得 · 尚未核实</span></div>
+            <div class="note-card">尚未记录线索。<span>对话结果会留在这里</span></div>
           </section>
           <section class="note-section">
             <h2>自问</h2>
-            <div class="note-card">如果所有人看见的都不一样，隐瞒还算是说谎吗？<span>正在深化</span></div>
+            <div class="note-card" id="dialogueQuestion">谁愿意把自己的话留给你？<span>随对话推进变化</span></div>
           </section>
         </div>
+
+        <section class="developer-options" id="developerOptions" aria-label="开发者选项" hidden>
+          <p class="developer-intro">这些入口只用于校图、呈现评审和原型切换，不属于玩家在医院中的行动。</p>
+          <section class="developer-group">
+            <h2>场景视图</h2>
+            <div class="developer-actions">
+              <button class="scene-view-button active" id="mapViewButton" type="button" aria-pressed="true">二维地图</button>
+              <button class="scene-view-button" id="threeViewButton" type="button" aria-pressed="false">3D 实验</button>
+              <button id="characterCreationLaunch" type="button">重新查看开局人物</button>
+              <button id="hospitalPlacementLaunch" type="button" disabled>布置医院 · 3D 加载中</button>
+            </div>
+          </section>
+          <section class="developer-group">
+            <h2>地图视图</h2>
+            <div class="developer-actions">
+              <button type="button" data-dev-map="rotate-left">左转 90°</button>
+              <button type="button" data-dev-map="zoom-out">缩小</button>
+              <button type="button" data-dev-map="zoom-in">放大</button>
+              <button type="button" data-dev-map="rotate-right">右转 90°</button>
+              <button type="button" data-dev-map="reset">复位</button>
+            </div>
+            <output class="developer-status" id="developerMapStatus">等待地图载入</output>
+          </section>
+          <section class="developer-group">
+            <h2>墙线采集</h2>
+            <div class="developer-actions">
+              <button type="button" data-dev-wall-mode="pan" aria-pressed="true">拖动画布</button>
+              <button type="button" data-dev-wall-mode="snap" aria-pressed="false">吸附描墙</button>
+              <button type="button" data-dev-wall-constraint="free" aria-pressed="true">自由方向</button>
+              <button type="button" data-dev-wall-constraint="horizontal" aria-pressed="false">水平墙</button>
+              <button type="button" data-dev-wall-constraint="vertical" aria-pressed="false">垂直墙</button>
+              <button type="button" data-dev-wall="undo">撤销末段</button>
+              <button type="button" data-dev-wall="finish">结束描墙</button>
+              <button type="button" data-dev-wall="copy">复制墙线 JSON</button>
+              <button type="button" data-dev-wall="clear">清空墙线</button>
+            </div>
+          </section>
+          <section class="developer-group">
+            <h2>呈现变体</h2>
+            <div class="developer-actions">
+              <button type="button" data-dev-variant="atlas">图纸图集</button>
+              <button type="button" data-dev-variant="tabletop">跑团桌面</button>
+              <button type="button" data-dev-variant="route">路线关系</button>
+            </div>
+          </section>
+          <section class="developer-group">
+            <h2>时段滤镜预览</h2>
+            <div class="developer-actions">
+              <button type="button" data-dev-time="morning">上午</button>
+              <button type="button" data-dev-time="afternoon">下午</button>
+              <button type="button" data-dev-time="night">夜晚</button>
+            </div>
+          </section>
+          <section class="developer-group">
+            <h2>显示设置</h2>
+            <div class="developer-actions"><button id="displaySettingsLaunch" type="button" aria-expanded="true" aria-controls="displaySettings">界面明暗</button></div>
+            <section class="display-settings" id="displaySettings" aria-label="显示设置">
+              <label for="brightnessRange"><span>界面明暗</span><output id="brightnessOutput" for="brightnessRange">100%</output></label>
+              <input id="brightnessRange" type="range" min="70" max="140" step="5" value="100">
+              <p>只调整本地浏览器的显示亮度，不改变医院场景的正式灯光参数。</p>
+            </section>
+          </section>
+        </section>
 
       </div>
 
       <footer class="choices" id="choices">
-        <div class="choices-header"><span>选择回应</span><span>数字键 1—3</span></div>
-        <button class="choice" data-choice="observe">
-          <span class="choice-index">01</span>
-          <span>“登记册第三行是谁？”<small class="choice-meta">直接指出她正在回避的东西</small></span>
-        </button>
-        <button class="choice" data-choice="gentle">
-          <span class="choice-index">02</span>
-          <span>“我不是来拿药的。你看起来需要有人陪一会儿。”<small class="choice-meta">尝试降低她的戒备</small></span>
-        </button>
-        <button class="choice" data-choice="leave">
-          <span class="choice-index">03</span>
-          <span>“你压住的钥匙，是开哪扇门的？”<small class="choice-meta">追问钥匙与无编号门的关系</small></span>
-        </button>
+        <div class="choices-header"><span>等待交谈</span><span>选择上方人物</span></div>
       </footer>
     </aside>
   </main>
 
-  <script type="module">
-    import { createCharacterCreation } from '/character-creation/index.js';
-    import { createDisplaySettings } from '/character-creation/display-settings.js';
-
-    // 来源：design/entities/疾病特长.md §二—§六。未决项在原型中显式保留，不写回正式游戏状态。
-    const characterCreation = createCharacterCreation({ trigger: document.querySelector('#characterCreationLaunch') });
-    createDisplaySettings({
-      trigger: document.querySelector('#displaySettingsLaunch'),
-      panel: document.querySelector('#displaySettings'),
-      input: document.querySelector('#brightnessRange'),
-      output: document.querySelector('#brightnessOutput'),
-    });
-    if (new URLSearchParams(window.location.search).has('character')) characterCreation.open();
-  </script>
+  <script type="module" src="/prototype-bootstrap/index.js"></script>
 
   <script>
     // 来源：design/presentation/叙事界面布局.md §四—§五；剧情文字只用于呈现原型，不是正典内容。
@@ -884,7 +963,6 @@
     const speakerDescription = document.querySelector('#speakerDescription');
     let inTemplateRoom = false;
     let templateVisitRecorded = false;
-    let currentNarrativeObjective = objectiveText.textContent;
     let currentPoseView = 'front';
 
     // 来源：design/presentation/动作描述口径.md §十五。关节名称沿用身体侧与部位口径；
@@ -1410,53 +1488,6 @@
     human3dCanvas.addEventListener('pointercancel', endHuman3dDrag);
     window.addEventListener('resize', () => { if (inTemplateRoom) renderHuman3d(); });
 
-    const branches = {
-      observe: {
-        player: '“登记册第三行是谁？”',
-        response: '她终于转过身来。不是看你，而是确认你身后的走廊里有没有别人。\n\n“你看错了。今天的登记册没有第三行。”',
-        perception: '纸页在她手肘下轻轻鼓动。第三行的墨迹透过背面，像一根被压住的静脉。',
-        system: '线索更新：不存在的第三行。',
-        toast: '线索已更新 · 登记册第三行',
-        objective: '找到能够证明“第三行”存在的另一位见证者。'
-      },
-      gentle: {
-        player: '“我不是来拿药的。你看起来需要有人陪一会儿。”',
-        response: '她的手从登记册上移开了一点。\n\n“陪我？”她短促地笑了一声，“那你先告诉我——窗户里站着的，是你，还是我？”',
-        perception: '玻璃里确实有两个人。但倒影都没有做出你正在做的动作。',
-        system: '自问深化：倒影属于谁？',
-        toast: '自问正在深化 · 倒影属于谁',
-        objective: '判断窗户中的倒影是否正在模仿你们。'
-      },
-      leave: {
-        player: '“你压住的钥匙，是开哪扇门的？”',
-        response: '她的拇指摩挲着最短的那把钥匙。\n\n“病房的门都有编号。没有编号的门，不该有人想打开。”',
-        perception: '钥匙齿上沾着一小片蓝色漆皮，和走廊尽头那扇门的颜色相同。',
-        system: '线索更新：无编号门的钥匙。',
-        toast: '线索已更新 · 无编号门的钥匙',
-        objective: '调查走廊尽头那扇没有编号的门。'
-      }
-    };
-
-    const choicePrompts = {
-      observe: {
-        index: '01',
-        text: '“登记册第三行是谁？”',
-        meta: '直接指出她正在回避的东西'
-      },
-      gentle: {
-        index: '02',
-        text: '“我不是来拿药的。你看起来需要有人陪一会儿。”',
-        meta: '尝试降低她的戒备'
-      },
-      leave: {
-        index: '03',
-        text: '“你压住的钥匙，是开哪扇门的？”',
-        meta: '追问钥匙与无编号门的关系'
-      }
-    };
-
-    const askedChoices = new Set();
-
     function addBeat(type, label, text) {
       const article = document.createElement('article');
       article.className = `beat ${type}`;
@@ -1474,74 +1505,6 @@
       toast.classList.add('show');
       window.setTimeout(() => toast.classList.remove('show'), 2400);
     }
-
-    function choiceButton(id, prompt) {
-      const button = document.createElement('button');
-      button.className = 'choice';
-      button.dataset.choice = id;
-      button.disabled = askedChoices.has(id);
-
-      const index = document.createElement('span');
-      index.className = 'choice-index';
-      index.textContent = askedChoices.has(id) ? '✓' : prompt.index;
-
-      const content = document.createElement('span');
-      content.textContent = prompt.text;
-      const meta = document.createElement('small');
-      meta.className = 'choice-meta';
-      meta.textContent = askedChoices.has(id) ? '已经询问' : prompt.meta;
-      content.append(meta);
-      button.append(index, content);
-      return button;
-    }
-
-    function renderChoices() {
-      choices.replaceChildren();
-
-      const header = document.createElement('div');
-      header.className = 'choices-header';
-      const remaining = Object.keys(choicePrompts).length - askedChoices.size;
-      header.innerHTML = `<span>${askedChoices.size ? '继续询问' : '选择回应'}</span><span>剩余话题 ${remaining}</span>`;
-      choices.append(header);
-
-      Object.entries(choicePrompts).forEach(([id, prompt]) => {
-        choices.append(choiceButton(id, prompt));
-      });
-
-      const end = document.createElement('button');
-      end.className = 'choice utility';
-      end.dataset.action = 'end';
-      end.innerHTML = '<span class="choice-index">×</span><span>结束这次交谈<small class="choice-meta">之后仍可重新与赵岚交谈</small></span>';
-      choices.append(end);
-    }
-
-    function pauseConversation() {
-      choices.innerHTML = '<div class="choices-header"><span>交谈已暂停</span><span>赵岚仍在护士站</span></div><button class="choice utility" data-action="resume"><span class="choice-index">↩</span><span>重新与赵岚交谈<small class="choice-meta">返回尚未询问的话题</small></span></button>';
-      showToast('交谈已暂停 · 可随时返回');
-    }
-
-    function choose(id) {
-      const branch = branches[id];
-      if (!branch || askedChoices.has(id)) return;
-      askedChoices.add(id);
-      addBeat('player', '你', branch.player);
-      addBeat('', '赵岚', branch.response);
-      addBeat('perception', '感知回声', branch.perception);
-      addBeat('system', '笔记本', branch.system);
-      objectiveText.textContent = branch.objective;
-      currentNarrativeObjective = branch.objective;
-      showToast(branch.toast);
-      renderChoices();
-      window.requestAnimationFrame(() => { storyScroll.scrollTop = storyScroll.scrollHeight; });
-    }
-
-    choices.addEventListener('click', event => {
-      const button = event.target.closest('.choice');
-      if (!button) return;
-      if (button.dataset.choice) choose(button.dataset.choice);
-      if (button.dataset.action === 'end') pauseConversation();
-      if (button.dataset.action === 'resume') renderChoices();
-    });
 
     function enterTemplateRoom() {
       if (inTemplateRoom) return;
@@ -1576,12 +1539,7 @@
       templateRoom.setAttribute('aria-hidden', 'true');
       locationKicker.textContent = '住院楼 · 一层';
       locationTitle.textContent = '医院';
-      timeReadout.innerHTML = '第 01 日<br>当前楼层';
-      objectiveText.textContent = currentNarrativeObjective;
-      speakerMark.textContent = '护';
-      speakerRole.textContent = '值班护士';
-      speakerName.textContent = '赵岚';
-      speakerDescription.textContent = '她没有看你。她在看玻璃上的倒影。';
+      window.dialoguePrototype?.restore();
       const storyTab = document.querySelector('[data-view="story"]');
       choices.style.visibility = storyTab.classList.contains('active') ? 'visible' : 'hidden';
       showToast('已返回 · 医院');
@@ -1661,8 +1619,6 @@
 
     refreshPoseLibrary();
 
-    renderChoices();
-
     document.addEventListener('keydown', event => {
       if (!inTemplateRoom && !event.target.matches('input, select, textarea') && event.key >= '1' && event.key <= '3') {
         const button = document.querySelectorAll('.choice')[Number(event.key) - 1];
@@ -1680,6 +1636,8 @@
         });
         document.querySelector('#story').hidden = view !== 'story';
         document.querySelector('#notebook').hidden = view !== 'notebook';
+        document.querySelector('#developerOptions').hidden = view !== 'developer';
+        document.querySelector('.dialogue-toolbar').hidden = view === 'developer';
         choices.style.visibility = view === 'story' && !inTemplateRoom ? 'visible' : 'hidden';
         storyScroll.scrollTop = 0;
       });
@@ -2609,8 +2567,9 @@
         if (nearbyInteraction === 'door') enterTemplateRoom();
         if (nearbyInteraction === 'nurse') {
           document.querySelector('[data-view="story"]')?.click();
+          window.dialoguePrototype?.selectNpc('zheng_xiaomin', { nearby: true });
           document.querySelector('.choice:not(:disabled)')?.focus();
-          worldPrompt.textContent = '已与赵岚交谈 · 在右侧选择问题';
+          worldPrompt.textContent = `已与${document.querySelector('#speakerName').textContent}交谈 · 在右侧选择行动`;
           worldPrompt.classList.add('show');
         }
       }
@@ -2702,7 +2661,7 @@
       nearbyInteraction = elevatorDistance < 2.5 ? 'elevator'
         : stairsDistance < 2.2 ? 'stairs'
         : currentHospitalFloor === 0 && nurseDistance < 2.2 ? 'nurse' : null;
-      if (nearbyInteraction === 'nurse') worldPrompt.textContent = 'E · 与赵岚交谈';
+      if (nearbyInteraction === 'nurse') worldPrompt.textContent = `E · 与${document.querySelector('#speakerName').textContent}交谈`;
       if (nearbyInteraction === 'elevator' || nearbyInteraction === 'stairs') {
         const route = nearbyInteraction === 'stairs' ? '楼梯' : '电梯';
         const options = [];
@@ -2865,6 +2824,7 @@
         camera: worldCamera,
         renderer: worldRenderer,
         host: document.querySelector('#scene'),
+        toggleButton: document.querySelector('#hospitalPlacementLaunch'),
         getFloorContext() {
           const floorY = currentHospitalFloor * hospitalFloorHeight;
           return {

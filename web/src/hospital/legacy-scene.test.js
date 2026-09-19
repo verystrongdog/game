@@ -13,4 +13,13 @@ describe('hospital prototype startup', () => {
     expect(prototypeHtml).not.toContain('class="figure"')
     expect(prototypeHtml).not.toContain('scene-hotspot')
   })
+
+  test('keeps NPC dialogue out of the page container', () => {
+    expect(prototypeHtml).not.toContain('id="dialogueRoster"')
+    expect(prototypeHtml).toContain('src="/prototype-bootstrap/index.js"')
+    expect(prototypeHtml).not.toContain('data-choice="good_days"')
+    expect(prototypeHtml).not.toContain('感知回声')
+    expect(prototypeHtml).not.toContain('赵岚')
+    expect(prototypeHtml).not.toContain('登记册第三行')
+  })
 })
