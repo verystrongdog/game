@@ -8,7 +8,7 @@ const STORAGE_VERSION = 1
 
 export function createHospitalPlacementEditor({
   scene, camera, renderer, host, getFloorContext, getPlacementOrigin,
-  storageKey = 'ziyufei.hospital-layout.v1', onStateChange = () => {}
+  toggleButton = null, storageKey = 'ziyufei.hospital-layout.v1', onStateChange = () => {}
 }) {
   const roots = []
   const raycaster = new THREE.Raycaster()
@@ -71,11 +71,12 @@ export function createHospitalPlacementEditor({
     <div class="hospital-editor__catalog" data-catalog></div>`
   host.append(panel)
 
-  const toggle = document.createElement('button')
+  const toggle = toggleButton || document.createElement('button')
   toggle.type = 'button'
-  toggle.className = 'hospital-editor-toggle'
+  if (!toggleButton) toggle.className = 'hospital-editor-toggle'
   toggle.textContent = '布置医院'
-  host.append(toggle)
+  toggle.disabled = false
+  if (!toggleButton) host.append(toggle)
 
   const status = panel.querySelector('[data-status]')
   const catalogRoot = panel.querySelector('[data-catalog]')

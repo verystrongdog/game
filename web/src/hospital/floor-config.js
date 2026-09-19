@@ -34,7 +34,7 @@ const floor02 = [
 export const hospitalFloorConfigs = [
   {
     name: '一层', zone: '门诊与接待大厅', accent: 0x8fcbbb,
-    objective: '在挂号大厅和护士站调查封锁当晚的接诊记录。', parts: floor01
+    objective: '比对好日子本与交接本，弄清昨夜发生了什么。', parts: floor01
   },
   {
     name: '二层', zone: '住院病区', accent: 0x9cc9a4,

@@ -3,6 +3,7 @@ import {
   attributeDescriptions,
   attributeLevels,
   attributeNames,
+  developmentDefaultCharacter,
   developmentalDiseases,
   experienceCategories,
 } from './character-data.js'
@@ -12,6 +13,7 @@ import {
   calculateAttributes,
   getDiseaseCandidates,
   getUnresolvedDiseaseCandidates,
+  isDiseaseAvailable,
   selectionBlockReason,
 } from './character-model.js'
 
@@ -79,5 +81,17 @@ describe('character creation design mirror', () => {
   test('surfaces authored mappings that have no card in the 26-disease table', () => {
     expect(getUnresolvedDiseaseCandidates(['heavy-labor'])).toEqual(['慢性疼痛'])
     expect(getUnresolvedDiseaseCandidates(['volatile-home'])).toEqual([])
+  })
+
+  test('keeps the development default character legal and fully selected', () => {
+    const selected = []
+    for (const id of developmentDefaultCharacter.experiences) {
+      expect(selectionBlockReason(selected, id)).toBeNull()
+      selected.push(id)
+    }
+    expect(selected).toHaveLength(10)
+    for (const disease of developmentDefaultCharacter.diseases) {
+      expect(isDiseaseAvailable(disease, selected)).toBe(true)
+    }
   })
 })

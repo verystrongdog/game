@@ -91,6 +91,7 @@ md 文档（设计层）          JSON 文件（数据层）          C# 引擎 
 | `connectivity/kroell14_networks.json` | Kroell 14 网络集合 | 14 | 技能生成/上下文判定 |
 | `connectivity/link_modulation_ceiling_v2.json` | 链路调制天花板 | — | 参考（旧链路体系） |
 | `term_registry.json` | 术语注册表 | 311 条 | 设计期参考，非运行时数据 |
+| `hospital_ref/floor-one-exterior-walls.json` | 500 床方案一一层整体外墙拓扑 | 152 段 | Web 校图原型的外墙基线；来源与口径见 `design/presentation/500床一层跑团地图原型.md` §一 |
 
 ### 参考数据（⚠️ 已废弃系统，保留为参数参考）
 

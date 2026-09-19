@@ -1,6 +1,7 @@
 import {
   attributeDescriptions,
   attributeNames,
+  developmentDefaultCharacter,
   developmentalDiseases,
   diseases,
   experienceCategories,
@@ -46,7 +47,8 @@ function diseaseCard(disease, { selectable = false, selected = false, developmen
     </${selectable ? 'button' : 'article'}>`
 }
 
-export function createCharacterCreation({ trigger }) {
+export function createCharacterCreation({ trigger, required = false }) {
+  const profileListeners = new Set()
   const state = {
     open: false,
     step: 0,
@@ -54,6 +56,7 @@ export function createCharacterCreation({ trigger }) {
     selectedExperiences: new Set(),
     selectedDiseases: new Set(),
     message: '',
+    completed: false,
   }
 
   const root = document.createElement('div')
@@ -71,6 +74,20 @@ export function createCharacterCreation({ trigger }) {
     for (const name of state.selectedDiseases) {
       if (!isDiseaseAvailable(name, state.selectedExperiences)) state.selectedDiseases.delete(name)
     }
+  }
+
+  function profile() {
+    return {
+      id: 'character_creation',
+      label: '开局人物',
+      experiences: [...state.selectedExperiences],
+      diseases: [...state.selectedDiseases],
+    }
+  }
+
+  function notifyProfile() {
+    const value = profile()
+    profileListeners.forEach(listener => listener(value))
   }
 
   function renderExperienceStep() {
@@ -201,8 +218,8 @@ export function createCharacterCreation({ trigger }) {
           </div>
           ${remaining > 0
             ? `<button type="button" class="cc-enter incomplete" data-step="0">还有 ${remaining} 段经历未使用 · 返回选择</button>`
-            : '<button type="button" class="cc-enter" data-close>确认预览并返回医院</button>'}
-          <small>此页面只验证开局交互；不会写入 StoryEngine 或游戏存档。疾病挂件、花纹与裂隙的整理编辑器为低优先级，暂未实现。</small>
+            : '<button type="button" class="cc-enter" data-confirm>确认开局并进入医院</button>'}
+          <small>确认后，经历与疾病会交给本页对话原型；刷新页面仍会重新开局，不写入正式游戏存档。疾病挂件、花纹与裂隙的整理编辑器为低优先级，暂未实现。</small>
         </div>
       </section>`
   }
@@ -217,7 +234,9 @@ export function createCharacterCreation({ trigger }) {
       <header class="cc-header">
         <div><span class="cc-kicker">CHARACTER ORIGIN · INTERACTION PROTOTYPE</span><h1 id="ccTitle">开局人物</h1></div>
         <ol>${steps.map((step, index) => `<li class="${index === state.step ? 'active' : ''}${index < state.step ? 'done' : ''}"><button type="button" data-step="${index}" aria-label="查看${step}"><i>${String(index + 1).padStart(2, '0')}</i><span>${step}</span></button></li>`).join('')}</ol>
-        <button type="button" class="cc-close" data-close aria-label="关闭开局人物界面">×</button>
+        ${required && !state.completed
+          ? '<span class="cc-required">完成开局后进入医院</span>'
+          : '<button type="button" class="cc-close" data-close aria-label="关闭开局人物界面">×</button>'}
       </header>
       <main class="cc-body">
         ${remaining > 0 && state.step > 0 ? `<div class="cc-unused-warning">预览模式 · 还有 <b>${remaining}</b> 段经历未使用，候选与属性会继续变化。</div>` : ''}
@@ -226,6 +245,7 @@ export function createCharacterCreation({ trigger }) {
       <footer class="cc-footer">
         <div class="cc-status" role="status" aria-live="polite">${escapeHtml(state.message || (remaining > 0 ? `还有 ${remaining} 段经历未使用 · 可以先查看后续` : '经历已选满 · 可以确认预览'))}</div>
         <div>
+          ${import.meta.env.DEV && required && !state.completed ? '<button type="button" class="cc-dev-default" data-dev-default>开发默认人物 · 直接进入</button>' : ''}
           ${state.step > 0 ? '<button type="button" class="cc-secondary" data-back>上一步</button>' : '<button type="button" class="cc-secondary" data-reset>清空</button>'}
           ${state.step < steps.length - 1 ? '<button type="button" class="cc-primary" data-next>继续预览</button>' : ''}
         </div>
@@ -237,19 +257,49 @@ export function createCharacterCreation({ trigger }) {
     root.hidden = false
     document.documentElement.classList.add('cc-open')
     render()
-    shell.querySelector('.cc-close')?.focus()
+    ;(shell.querySelector('.cc-close') || shell.querySelector('[data-step]'))?.focus()
   }
 
   function close() {
+    if (required && !state.completed) {
+      state.message = '需要完成开局人物选择后才能进入医院。'
+      render()
+      return false
+    }
     state.open = false
     root.hidden = true
     document.documentElement.classList.remove('cc-open')
     trigger?.focus()
+    return true
   }
 
   root.addEventListener('click', event => {
     const closeButton = event.target.closest('[data-close]')
     if (closeButton) return close()
+
+    if (event.target.closest('[data-confirm]')) {
+      if (state.selectedExperiences.size < EXPERIENCE_LIMIT) {
+        state.message = `还有 ${EXPERIENCE_LIMIT - state.selectedExperiences.size} 段经历未使用。`
+        state.step = 0
+        return render()
+      }
+      state.completed = true
+      state.message = '开局人物已确认。'
+      notifyProfile()
+      render()
+      return close()
+    }
+
+    if (event.target.closest('[data-dev-default]')) {
+      state.selectedExperiences = new Set(developmentDefaultCharacter.experiences)
+      state.selectedDiseases = new Set(developmentDefaultCharacter.diseases)
+      state.completed = true
+      state.step = steps.length - 1
+      state.message = '已使用开发默认人物。'
+      notifyProfile()
+      render()
+      return close()
+    }
 
     const categoryButton = event.target.closest('[data-category]')
     if (categoryButton) {
@@ -328,5 +378,14 @@ export function createCharacterCreation({ trigger }) {
   }, true)
   trigger?.addEventListener('click', open)
 
-  return { open, close }
+  return {
+    open,
+    close,
+    getProfile: profile,
+    get completed() { return state.completed },
+    subscribe(listener) {
+      profileListeners.add(listener)
+      return () => profileListeners.delete(listener)
+    },
+  }
 }

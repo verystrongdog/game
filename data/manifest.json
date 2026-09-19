@@ -13,7 +13,7 @@
     "`--check` 校验文件集与属性合法性，**不重新推导属性**（refs 计数会随任意新增 .md 漂移）；属性更新是人工动作 `--refresh`"
   ],
   "_stats": {
-    "total": 102,
+    "total": 103,
     "runtime": 8,
     "generator_input": 2,
     "shipping_true": 8,
@@ -22,7 +22,7 @@
     "by_lifecycle_role": {
       "active/evidence": 54,
       "active/generator-input": 2,
-      "active/reference": 21,
+      "active/reference": 22,
       "active/runtime": 8,
       "deprecated/reference": 17
     }
@@ -914,6 +914,22 @@
       "provenance": "本仓作者维护",
       "refs": {
         "active_docs": 15,
+        "deprecated_docs": 0
+      }
+    },
+    "data/hospital_ref/floor-one-exterior-walls.json": {
+      "logical_id": "floor-one-exterior-walls",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 2,
         "deprecated_docs": 0
       }
     },
