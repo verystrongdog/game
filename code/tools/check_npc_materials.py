@@ -28,7 +28,7 @@
     crossview   md 与 .gen.json 的关键字段一致（入院年龄/年份/病区）
     city        入院城市白名单（临水/省城）——其余命中按性质分 🔴/🟡
     links       相对链接不死（撤销前最后一次读数：2163 引用 / 0 死链）
-    terms       注册表驱动的废弃术语残留（分档：扫描🔴 / 只登记🟡 / 关闭ℹ️）
+    terms       注册表驱动的废弃术语残留（分档：扫描🔴 列明细 / 只登记🟡 只计数 / 关闭ℹ️ 打印存量）
 """
 
 from __future__ import annotations
@@ -44,6 +44,9 @@ ROOT = Path(__file__).resolve().parent.parent.parent
 DRAFTS = ROOT / "design" / "spec" / "material" / "drafts"
 MANIFEST = ROOT / "design" / "spec" / "material" / "npc-materials-manifest.json"
 INDEX = ROOT / "design" / "spec" / "material" / "患者生态索引.md"
+# 第二处机器核对区：多样性记账表自称"患者集合与 manifest 机械核对"——
+# 既然同一事实有两个登记处，两处都必须对得上（判据同 index，见 check_manifest）
+DIVERSITY = ROOT / "design" / "spec" / "material" / "多样性记账表.md"
 REGISTRY = ROOT / "data" / "term_registry.json"
 
 # 入院城市白名单：正典见 design/events/世界观与叙事.md §医院与所在城市
@@ -98,17 +101,30 @@ class Report:
         }
 
 
+_PARSE_FAILED: set[str] = set()  # 同一份坏 JSON 会被多个判据重复加载 ⇒ 只报一次
+
+
 def load_json(path: Path, rep: Report):
     try:
         return json.loads(path.read_text(encoding="utf-8"))
     except Exception as exc:  # noqa: BLE001 — 报告工具，任何解析失败都要报出来而不是崩
         rel = path.relative_to(ROOT)
-        rep.add(RED, "json", str(rel), f"JSON 解析失败：{exc}")
+        if str(rel) not in _PARSE_FAILED:
+            _PARSE_FAILED.add(str(rel))
+            rep.add(RED, "json", str(rel), f"JSON 解析失败：{exc}")
         return None
 
 
+def excluded_drafts() -> set[str]:
+    """manifest 里 status == rejected 的稿——**已排除的档案不在判定面内**（同"归档目录不进链接判定"的既有事实：
+    这不是例外表，是"这份稿不是活跃素材、内容冻结为反例档案"这条既有状态）。"""
+    man = json.loads(MANIFEST.read_text(encoding="utf-8")) if MANIFEST.exists() else {}
+    return {m.get("json_path", "") for m in man.get("materials", []) if m.get("status") == "rejected"}
+
+
 def gen_files() -> list[Path]:
-    return sorted(DRAFTS.glob("*.gen.json"))
+    skip = {str(ROOT / p) for p in excluded_drafts() if p}
+    return [f for f in sorted(DRAFTS.glob("*.gen.json")) if str(f) not in skip]
 
 
 # ── 各判据 ────────────────────────────────────────────────────────────────
@@ -143,6 +159,38 @@ def check_manifest(rep: Report) -> None:
             if not p.exists():
                 rep.add(RED, "manifest", m.get("name", "?"), f"{key} 指向不存在的文件：{m.get(key)}")
 
+    # 患者稿顶层 disease_profile 必须带 临床严重度（2026-09-18 拆字段：档位=负荷档 / 临床严重度=另一回事）
+    for m in patients:
+        p = ROOT / (m.get("json_path") or "")
+        d = load_json(p, rep) if p.exists() else None
+        if not d:
+            continue
+        dp = (d.get("transformation") or {}).get("disease_profile") or {}
+        if "档位" in dp and not (isinstance(dp.get("临床严重度"), str) and dp["临床严重度"].strip()):
+            rep.add(
+                RED, "bands", m.get("name", "?"),
+                "disease_profile 有 `档位` 但缺 `临床严重度`（两义已拆字段：档位=创伤负荷档，临床严重度单列）",
+            )
+
+    # target_disease ↔ .gen.json 的同一事实：manifest 说的病种必须能在结构化稿里读到
+    # （跨字段一致性判据，零容差：入池条目说 A 病、稿子里写 B 病，两个登记处就已经分家了）
+    for m in patients:
+        td = m.get("target_disease")
+        p = ROOT / (m.get("json_path") or "")
+        d = load_json(p, rep) if p.exists() else None
+        if not d:
+            continue
+        dp = (d.get("transformation") or {}).get("disease_profile") or {}
+        zh = str(dp.get("主病") or "")
+        cur = str((d.get("symptoms_presentation") or {}).get("当前诊断") or "")
+        if not td:
+            rep.add(YELLOW, "manifest", m.get("name", "?"), "patient_pool=true 但 target_disease 为空")
+        elif td not in zh and td not in cur:
+            rep.add(
+                RED, "manifest", m.get("name", "?"),
+                f"target_disease=「{td}」在 gen.json 的主病/当前诊断里找不到（主病「{zh[:24]}」/ 当前诊断「{cur[:24]}」）",
+            )
+
     # 与 患者生态索引 的机器核对区对齐
     if INDEX.exists():
         text = INDEX.read_text(encoding="utf-8")
@@ -166,6 +214,21 @@ def check_manifest(rep: Report) -> None:
                 INFO, "manifest", "患者生态索引.md ↔ manifest",
                 f"manifest 中不在索引非患者遗留表里的（预期，见台账 §七⑤）：{missing}",
             )
+
+    # 第二处登记处：多样性记账表自称"患者集合与 manifest 机械核对" ⇒ 同一判据
+    if DIVERSITY.exists():
+        text = DIVERSITY.read_text(encoding="utf-8")
+        mm = re.search(r"<!-- npc-patient-pool:start -->(.*?)<!-- npc-patient-pool:end -->", text, re.S)
+        if not mm:
+            rep.add(YELLOW, "manifest", "多样性记账表.md", "找不到 npc-patient-pool 机器核对区（该表自称与 manifest 核对）")
+        else:
+            div = re.findall(r"^-\s*(\S+)", mm.group(1), re.M)
+            man_pool = [m["name"] for m in patients]
+            if set(div) != set(man_pool):
+                rep.add(
+                    RED, "manifest", "多样性记账表.md ↔ manifest",
+                    f"患者池不一致：记账表 {len(div)} 位 {sorted(set(div) ^ set(man_pool)) or ''} vs manifest {len(man_pool)} 位",
+                )
 
 
 def _num(x):
@@ -200,15 +263,32 @@ def check_ages(rep: Report) -> None:
 
 
 def check_bands(rep: Report) -> None:
-    band_of = {"[1.0,2.0)": "轻", "[2.0,3.0)": "中度", "[3.0,∞)": "重"}
+    """档位 × 阈值 必须同档。
+
+    带宽以正典为准（`创伤记忆转化接口` §3.3 逐字：`L_agg < 1.0 → ∅；1.0 ≤ L_agg < 2.0 → 轻；
+    2.0 ≤ L_agg < 3.5 → 中；L_agg ≥ 3.5 → 重`，重档阈值 θ_L3 = 3.5）。⚠️ 原表写的是
+    `[2.0,3.0)`/`[3.0,∞)`——**差 0.5 档宽**（会咬到 L ∈ [3.0,3.5) 的样本），2026-09-18 改正典。
+    中间档的两种写法（`中` / `中度`）是同一档的拼法差异，不是两个档。阈值串里的空格不参与比较。
+    """
+    band_of = {"[1.0,2.0)": {"轻"}, "[2.0,3.5)": {"中", "中度"}, "[3.5,∞)": {"重"}}
 
     def walk(o, rel, path=""):
         if isinstance(o, dict):
             b, t = o.get("档位"), o.get("阈值")
+            if isinstance(b, str) and b not in ("∅", "轻", "中度", "重"):
+                rep.add(RED, "bands", f"{rel}{path}",
+                        f"档位={b!r} 不在闭集 {{∅, 轻, 中度, 重}} 内（2026-09-18 起 `档位` 只指创伤负荷档；"
+                        f"临床严重度写同层 `临床严重度` 字段）")
+            if b == "∅" and isinstance(t, str):
+                rep.add(RED, "bands", f"{rel}{path}", f"档位=∅ 却带阈值={t}（负荷档不成立时不得有阈值）")
             if isinstance(b, str) and isinstance(t, str) and b != "∅":
-                exp = next((v for k, v in band_of.items() if t.startswith(k)), None)
-                if exp and b != exp:
-                    rep.add(RED, "bands", f"{rel}{path}", f"档位={b} 但阈值={t}（该区间对应 {exp}）")
+                norm = t.replace(" ", "")
+                exp = next((v for k, v in band_of.items() if norm.startswith(k)), None)
+                if exp and b not in exp:
+                    rep.add(
+                        RED, "bands", f"{rel}{path}",
+                        f"档位={b} 但阈值={t}（该区间对应 {'/'.join(sorted(exp))}）",
+                    )
             for k, v in o.items():
                 walk(v, rel, f"{path}.{k}")
         elif isinstance(o, list):
@@ -378,10 +458,15 @@ def check_terms(rep: Report) -> None:
                 if pat.search(line) and not any(k in line for k in MARKERS):
                     hits.append(f"{md.relative_to(ROOT)}:{ln}")
         if hits:
-            rep.add(
-                sev, "terms", f"{term}（{mode}）",
-                f"{len(hits)} 处残留，前几处：{hits[:4]}",
+            # 三档语义（design/conventions/README.md §五 第 2 条）：
+            #   扫描 = 判残留（列明细）；只登记 = 不判、**只计数不列明细**（该串另有合法用法，
+            #   逐串匹配分不出新旧义）；关闭 = 不判，但现存量每次打印（欠账在明处）。
+            msg = (
+                f"{len(hits)} 处命中（`只登记` 档：只计数、不列明细——该串在活跃文本里另有合法用法）"
+                if mode == "只登记"
+                else f"{len(hits)} 处残留，前几处：{hits[:4]}"
             )
+            rep.add(sev, "terms", f"{term}（{mode}）", msg)
     rep.add(INFO, "terms", "—", f"deprecated 术语 {len(dep)} 条已扫（分档：扫描=🔴 / 只登记=🟡 / 关闭=ℹ️）")
 
 
