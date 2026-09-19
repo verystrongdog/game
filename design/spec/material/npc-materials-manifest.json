@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "draft_root": "design/spec/material/drafts",
-  "expected_material_count": 33,
-  "expected_patient_count": 25,
+  "expected_material_count": 35,
+  "expected_patient_count": 27,
   "materials": [
     {
       "name": "顾维扬",
@@ -276,6 +276,24 @@
       "status": "non-patient",
       "patient_pool": false,
       "target_disease": null
+    },
+    {
+      "name": "关长林",
+      "json_path": "design/spec/material/drafts/关长林.gen.json",
+      "narrative_path": "design/spec/material/drafts/关长林-叙事视图.md",
+      "status": "needs-review",
+      "status_note": "P4 扩编批 #1（台账 §六之二 · 未分化型精神分裂症 F20.3，池内首个未分化 SZ）——AI 起草 v1.0 待 owner 审阅（与 P2 批的 `validated` 不同：未过验收）",
+      "patient_pool": true,
+      "target_disease": "未分化型精神分裂症"
+    },
+    {
+      "name": "任秀荣",
+      "json_path": "design/spec/material/drafts/任秀荣.gen.json",
+      "narrative_path": "design/spec/material/drafts/任秀荣-叙事视图.md",
+      "status": "needs-review",
+      "status_note": "P4 扩编批 #2（台账 §六之二 · 分裂情感性障碍 F25，池内首个分裂情感）——AI 起草 v1.0 待 owner 审阅（与 P2 批的 `validated` 不同：未过验收）；①「心境占多数」的分母口径经主代理验收发现并修正（分母 = 活动期 + 残留期 = 36.5 个月，分子 = 29.3 个月 ⇒ 80.2%，见台账 §七㉝）",
+      "patient_pool": true,
+      "target_disease": "分裂情感性障碍"
     }
   ]
 }

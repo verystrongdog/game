@@ -4660,15 +4660,15 @@
       "updated": "2026-09-18"
     },
     "患者池": {
-      "definition": "**有素材、且被机器核对承认的患者名单**（与「未用池」相对）。入池四条同时成立：① `.gen.json` 与 `-叙事视图.md` **成对**存在；② `npc-materials-manifest.json` 里 `patient_pool: true`（并计入 `expected_patient_count`）；③ 出现在 `患者生态索引` 的 `<!-- npc-patient-pool -->` 机器核对区内；④ 六轴命中 ≥1 个缺口格。**当前 17 位**（`expected_patient_count: 17`）。池外状态各有专名：`non-patient`（健康对照/员工）、`demonstration`（反模子示范稿）、`rejected`（正式排除，留作反例档案）、`needs-migration`。",
+      "definition": "**有素材、且被机器核对承认的患者名单**（与「未用池」相对）。入池四条同时成立：① `.gen.json` 与 `-叙事视图.md` **成对**存在；② `npc-materials-manifest.json` 里 `patient_pool: true`（并计入 `expected_patient_count`）；③ 出现在 `患者生态索引` 的 `<!-- npc-patient-pool -->` 机器核对区内；④ 六轴命中 ≥1 个缺口格。**当前 27 位**（`expected_patient_count: 27`：11 `validated` / 6 `needs-migration` / 10 `needs-review`）。池外状态各有专名：`non-patient`（健康对照/员工）、`demonstration`（反模子示范稿）、`rejected`（正式排除，留作反例档案）。池内两种未完成态另有专名：`needs-migration`（有素材、在池，但**未过资格回放**）· `needs-review`（AI 起草 v1.0、待 owner 审阅）。",
       "source": "design/spec/material/患者生态索引.md（机器核对区 + manifest 同步规则）；design/spec/material/npc-materials-manifest.json（patient_pool 字段）",
       "old_model": "把「患者素材」当成一个数量（有几份稿子）——没有池边界、没有入池要件，谁写过谁就算",
       "deviation_reason": "项目把它做成**有边界、可机械核对的生产槽位集合**：池内 / 未用池 / 非患者 / 已排除四态分立，且池内名单在索引与 manifest 两处必须一致（`check_npc_materials.py` 的 manifest 判据逐条对账）⇒ 「患者池」不是修辞，是一个带 `expected_patient_count` 的契约",
       "status": "active",
       "numerical_locations": [
-        "design/spec/material/npc-materials-manifest.json（expected_patient_count: 17 / expected_material_count: 25）",
+        "design/spec/material/npc-materials-manifest.json（expected_patient_count: 27 / expected_material_count: 35）",
         "design/spec/material/患者生态索引.md（机器核对区 npc-patient-pool / npc-non-patient-materials）",
-        "design/spec/material/NPC生态台账.md §六（下一批配额建议 8 位：填未用池）"
+        "design/spec/material/NPC生态台账.md §六（P3 配额建议 8 位）· §六之二（P4 配额表 2 位——填完即 24 经历型全覆盖、机制池清空）"
       ],
       "added": "2026-09-18",
       "updated": "2026-09-18"
