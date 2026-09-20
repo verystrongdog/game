@@ -63,6 +63,9 @@ dotnet test code/src/YouAreNotTheFish.sln        # 引擎测试（CI 里跑的�
 
 - **小步提交**，按主题分批，不混 commit
 - 提交信息用中文，格式 `类型: 描述`（`feat` / `docs` / `fix` / `sim` / `refactor` / `chore`）
+- **一个远程可写分支同时只能由一个主机 / Agent 会话拥有**；多主机并行必须使用独立分支，见 [WORKFLOW.md §1.1.1](WORKFLOW.md)
+- **PR 合并后原分支立即退役，不得继续提交或再开 PR**；后续工作必须从最新 `origin/main` 创建新分支，对 squash merge 也无例外，见 [WORKFLOW.md §1.1.3](WORKFLOW.md)
+- 开工前必须 `fetch` 并确认：当前分支所属任务、PR 状态、工作树、与 `origin/main` 的差异、以及本会话的分支所有权
 - 大规模结构改动先开分支；`git reset --hard` / `rebase` / `push --force` **执行前必须确认**
 - 过程物（会话存档、书籍全文、运行日志、模拟结果）由 `.gitignore` 排除，磁盘保留
 
@@ -76,5 +79,5 @@ dotnet test code/src/YouAreNotTheFish.sln        # 引擎测试（CI 里跑的�
 **这些是历史，不是流程。** 新的设计讨论用你顺手的方式，只要求结论落进 `design/`。
 
 ---
-*创建: 2026-09-12 | 更新: 2026-09-17（§三 门禁整节撤销——26 个校验器脚本、`gates.json` 注册表与 CI 三个门禁 job 已删，自检改人工）*
+*创建: 2026-09-12 | 更新: 2026-09-20（§四新增多主机分支所有权与合并后强制退役约束）*
 *关联: [项目规约](design/conventions/README.md), [架构](ARCHITECTURE.md), [可玩状态](PLAYABLE.md), [工作流程](WORKFLOW.md), [协作指南](CONTRIBUTING.md)*

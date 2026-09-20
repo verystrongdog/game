@@ -4,6 +4,18 @@
      issue 的创建与分解约束见 design/engineering/issue-process.md -->
 Closes #
 
+## 分支生命周期
+
+<!-- 多主机 / 多 Agent 约束见 WORKFLOW.md §1.1 与 CONTRIBUTING.md §三 -->
+
+- 分支所有者（主机 / Agent 稳定短标识）：
+- 开工 base SHA：
+- [ ] 已确认该分支未对应任何已合并 PR
+- [ ] 当前没有其他主机 / Agent 写入该分支
+- [ ] 已 fetch 最新目标分支并检查 mergeability
+
+> PR 合并后，该 head 分支自动进入只读退役状态；后续工作从最新 `origin/main` 新建分支。
+
 ## 变更类型
 
 <!-- 勾选适用的类型 -->
