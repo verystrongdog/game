@@ -29,6 +29,9 @@
 
 .dialogue-block.experience,
 .dialogue-block.disease { border-left: 3px solid currentColor; padding-left: 16px; }
+/* 来源：design/events/剧情系统设计.md §3.8.2。 */
+.dialogue-block.player { margin-left: 28px; border-right: 2px solid rgba(181, 202, 195, .42); padding-right: 14px; }
+.dialogue-block.player .label { text-align: right; }
 .dialogue-block.experience { color: #e1b96f; background: linear-gradient(90deg, rgba(168, 119, 42, .14), transparent 65%); }
 .dialogue-block.disease { color: #c28bb7; background: linear-gradient(90deg, rgba(137, 71, 119, .15), transparent 65%); }
 .dialogue-block.disease.intrusion { color: #db8e6c; }
