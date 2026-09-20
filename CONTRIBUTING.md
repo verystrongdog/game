@@ -88,14 +88,14 @@ git rev-list --left-right --count origin/main...HEAD
 查已知分支的 PR 历史（示例）：
 
 ```bash
-gh pr list --head feat/204-npc-dialogue-host-a --state all
+gh pr list --head feat/321-npc-dialogue-host-a --state all
 ```
 
 从最新主分支开始新任务：
 
 ```bash
 git fetch origin
-git switch -c feat/204-npc-dialogue-host-a origin/main
+git switch -c feat/321-npc-dialogue-host-a origin/main
 ```
 
 #### 分支所有权
@@ -112,7 +112,7 @@ PR 合并后，原分支**立即只读**。如果还有后续工作，从最新 
 
 ```bash
 git fetch origin
-git switch -c feat/205-opening-followup-host-a origin/main
+git switch -c feat/322-opening-followup-host-a origin/main
 ```
 
 不得：
@@ -130,7 +130,7 @@ worktree 用于同一主机上的目录与分支隔离：
 
 ```bash
 git fetch origin
-git worktree add ../game-204-host-a -b feat/204-npc-dialogue-host-a origin/main
+git worktree add ../game-321-host-a -b feat/321-npc-dialogue-host-a origin/main
 ```
 
 规则：
