@@ -164,8 +164,10 @@ function peopleTokens(view, getNpcDossier, large = false) {
     const dossier = getNpcDossier?.(person.id)
     const displayName = dossier?.displayName || '陌生人'
     const displayMark = dossier?.displayMark || '·'
-    const offset = person.id === 'tan_lijuan' ? .7 : person.id === 'zheng_xiaomin' ? -.7 : 0
-    return `<button type="button" class="map-person${person.coLocated ? ' co-located' : ''}${large ? ' large' : ''}" style="--x:${location.x + offset}%;--y:${location.y - 1}%" data-person="${person.id}" aria-label="${escapeHtml(displayName)}，位于${escapeHtml(location.name)}">
+    const peers = view.actors.filter(actor => actor.location === person.location)
+    // 来源：design/presentation/开局剧情逻辑原型.md §3.4；同地点人物标记以 0.9 个地图百分比展开。
+    const offset = (peers.findIndex(actor => actor.id === person.id) - (peers.length - 1) / 2) * .9
+    return `<button type="button" class="map-person${person.coLocated ? ' co-located' : ''}${large ? ' large' : ''}" style="--x:${location.x + offset}%;--y:${location.y - 1}%" data-person="${person.id}" aria-label="${escapeHtml(displayName)}，位于${escapeHtml(location.name)}，正在${escapeHtml(person.activity)}">
       <b>${escapeHtml(displayMark)}</b><span>${escapeHtml(displayName)}</span>
     </button>`
   }).join('')
@@ -207,13 +209,14 @@ function currentVariant() {
   return variants.includes(requested) ? requested : 'tabletop'
 }
 
-export function createHospitalMapPrototype({ host, scene, getNpcDossier, onNpcInspect, onNpcSelect, onMapContext }) {
+export function createHospitalMapPrototype({ host, scene, getNpcDossier, getTime = () => 'morning', onNpcInspect, onNpcSelect, onMapContext }) {
   const runtime = createFloorMapRuntime(floorOneMap)
   const wallTrace = createWallTrace(exteriorWallTopology)
   const state = { selectedLocation: floorOneMap.initialLocation, selectedPerson: null, selectedGridPoint: null, selectedPointKind: null, interactionMode: 'pan', wallConstraint: 'free', variant: currentVariant(), zoom: 1.35, snapGridStep: snapGridStepForZoom(1.35), rotation: 0, panX: 0, panY: 0 }
   const mapButton = document.querySelector('#mapViewButton')
   const threeButton = document.querySelector('#threeViewButton')
   let mapActive = new URLSearchParams(location.search).get('scene') !== '3d'
+  const currentMapView = () => runtime.view(getTime())
 
   function setMapActive(active) {
     if (!active) {
@@ -230,17 +233,20 @@ export function createHospitalMapPrototype({ host, scene, getNpcDossier, onNpcIn
   }
 
   function render() {
-    const view = runtime.view()
+    const view = currentMapView()
     const topology = wallTrace.snapshot()
     host.dataset.variant = state.variant
     host.innerHTML = state.variant === 'atlas' ? VariantAtlas(state, view, getNpcDossier, topology) : state.variant === 'route' ? VariantRoute(state, view, getNpcDossier, topology) : VariantTabletop(state, view, getNpcDossier, topology)
   }
 
   function showLocationContext(mapLocation, moved = false) {
+    const atmosphere = mapLocation.atmosphere?.[getTime()]
+    const sensory = atmosphere ? ` ${atmosphere.sight} ${atmosphere.sound} ${atmosphere.smell}` : ''
     onMapContext({
+      locationId: mapLocation.id,
       title: mapLocation.name,
       description: moved ? `你已到达${mapLocation.name}。` : '医院一层活动区域',
-      detail: `${mapLocation.summary} 粗校坐标：${coordinateLabel(mapLocation.x, mapLocation.y)}。地图操作：滚轮缩放；按住空白处拖动；旋转与复位位于右侧开发者选项。`,
+      detail: `${mapLocation.summary}${sensory} 粗校坐标：${coordinateLabel(mapLocation.x, mapLocation.y)}。`,
       objective: moved ? `在${mapLocation.name}寻找人物或下一个相邻区域。` : `前往${mapLocation.name}。`,
     })
   }
@@ -514,7 +520,7 @@ export function createHospitalMapPrototype({ host, scene, getNpcDossier, onNpcIn
   }
 
   function selectLocation(destination) {
-    const result = runtime.move(destination)
+    const result = runtime.move(destination, getTime())
     state.selectedLocation = destination
     state.selectedPerson = null
     render()
@@ -542,10 +548,11 @@ export function createHospitalMapPrototype({ host, scene, getNpcDossier, onNpcIn
     const personButton = event.target.closest('[data-person]')
     if (!personButton) return
     state.selectedPerson = personButton.dataset.person
-    const view = runtime.view()
+    const view = currentMapView()
     const person = view.actors.find(item => item.id === state.selectedPerson)
-    if (onNpcInspect) onNpcInspect(person.id, { coLocated: person.coLocated, locationName: byId(person.location).name })
-    else if (person.coLocated) onNpcSelect(person.id)
+    const context = { coLocated: person.coLocated, locationId: person.location, locationName: byId(person.location).name, activity: person.activity }
+    if (onNpcInspect) onNpcInspect(person.id, context)
+    else if (person.coLocated) onNpcSelect(person.id, context)
     render()
   })
 
@@ -632,7 +639,7 @@ export function createHospitalMapPrototype({ host, scene, getNpcDossier, onNpcIn
   threeButton.addEventListener('click', () => setMapActive(false))
   render()
   setMapActive(mapActive)
-  showLocationContext(runtime.view().currentLocation, true)
+  showLocationContext(currentMapView().currentLocation, true)
   function resetView() {
     stopWheelZoom()
     state.zoom = 1.35
@@ -646,7 +653,7 @@ export function createHospitalMapPrototype({ host, scene, getNpcDossier, onNpcIn
 
   return {
     render,
-    state: () => ({ ...state, playerLocation: runtime.view().currentLocation.id, wallTopology: wallTrace.snapshot() }),
+    state: () => ({ ...state, playerLocation: currentMapView().currentLocation.id, wallTopology: wallTrace.snapshot() }),
     show: () => setMapActive(true),
     setMapActive,
     setVariant(next) {

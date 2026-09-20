@@ -13,7 +13,15 @@ export function createFloorMapRuntime(map, start = map.initialLocation) {
 
   let currentLocationId = start
 
-  function view() {
+  function actorsAt(time) {
+    return map.actors.flatMap(actor => {
+      if (!actor.schedule) return [{ ...actor }]
+      const situation = actor.schedule[time]
+      return situation ? [{ ...actor, ...situation }] : []
+    })
+  }
+
+  function view(time = 'morning') {
     const reachable = neighbours.get(currentLocationId)
     return {
       currentLocation: locations.get(currentLocationId),
@@ -22,17 +30,17 @@ export function createFloorMapRuntime(map, start = map.initialLocation) {
         current: location.id === currentLocationId,
         reachable: reachable.has(location.id),
       })),
-      actors: map.actors.map(actor => ({ ...actor, coLocated: actor.location === currentLocationId })),
+      actors: actorsAt(time).map(actor => ({ ...actor, coLocated: actor.location === currentLocationId })),
       connections: map.connections,
     }
   }
 
-  function move(destinationId) {
-    if (!locations.has(destinationId)) return { moved: false, reason: 'unknown-location', ...view() }
-    if (destinationId === currentLocationId) return { moved: false, reason: 'already-there', ...view() }
-    if (!neighbours.get(currentLocationId).has(destinationId)) return { moved: false, reason: 'not-adjacent', ...view() }
+  function move(destinationId, time = 'morning') {
+    if (!locations.has(destinationId)) return { moved: false, reason: 'unknown-location', ...view(time) }
+    if (destinationId === currentLocationId) return { moved: false, reason: 'already-there', ...view(time) }
+    if (!neighbours.get(currentLocationId).has(destinationId)) return { moved: false, reason: 'not-adjacent', ...view(time) }
     currentLocationId = destinationId
-    return { moved: true, reason: null, ...view() }
+    return { moved: true, reason: null, ...view(time) }
   }
 
   return { move, view }

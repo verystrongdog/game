@@ -21,6 +21,17 @@ const timeLabels = {
   night: '第 01 日<br>夜晚 · 人物交谈',
 }
 
+// 来源：design/events/游戏循环.md §2.2；design/presentation/开局剧情逻辑原型.md §3.3。
+const restLabels = {
+  morning: '休息至下午',
+  afternoon: '休息至夜晚',
+  night: '休息至次日上午',
+}
+
+function restChoiceHtml(time) {
+  return `<button class="choice" type="button" data-dialogue-rest><span class="choice-index">休</span><span>${restLabels[time]}<small class="choice-meta">推进时段，人物与环境会重新变化</small></span></button>`
+}
+
 function blockHtml(block) {
   const label = block.source || block.speaker || blockLabels[block.kind] || '叙述'
   const form = block.form ? ` ${block.form}` : ''
@@ -33,6 +44,7 @@ function blockHtml(block) {
 export function createDialogueUi() {
   const runtime = createDialogueRuntime({ npcDefinitions: npcDialogues })
   const subscribers = new Set()
+  let pendingNpcContext = null
   const elements = {
     profiles: document.querySelector('#dialogueProfiles'),
     profileSummary: document.querySelector('#dialogueProfileSummary'),
@@ -68,7 +80,7 @@ export function createDialogueUi() {
       <div class="label">距离限制</div>
       <p>对话不能从侧栏远程发起。二维地图需要与你处在同一地点；三维场景需要走进人物的近距离交互范围。</p>
     </article>`
-    elements.choices.innerHTML = '<div class="choices-header"><span>等待交谈</span><span>先靠近人物</span></div>'
+    elements.choices.innerHTML = `<div class="choices-header"><span>等待交谈</span><span>先靠近人物</span></div>${restChoiceHtml(view.time)}`
   }
 
   function renderSession(view) {
@@ -76,9 +88,9 @@ export function createDialogueUi() {
     elements.speakerMark.textContent = session.npc.mark
     elements.speakerRole.textContent = `${session.npc.role} · ${session.depthLabel}`
     elements.speakerName.textContent = session.npc.name
-    elements.speakerDescription.textContent = session.npc.description
+    elements.speakerDescription.textContent = `${session.npc.description}${view.context.activity ? ` 此刻正在${view.context.activity}。` : ''}`
     elements.objective.textContent = session.objective
-    elements.story.innerHTML = session.blocks.map(blockHtml).join('')
+    elements.story.innerHTML = session.transcript.map(blockHtml).join('')
     elements.choices.innerHTML = `
       <div class="choices-header"><span>${escapeHtml(session.depthLabel)}对话</span><span>${session.options.length} 个回应</span></div>
       ${session.options.map((option, index) => `<button class="choice" type="button" data-dialogue-choice="${option.id}">
@@ -102,12 +114,15 @@ export function createDialogueUi() {
     elements.time.innerHTML = timeLabels[view.time] || escapeHtml(view.time)
     if (view.session) renderSession(view)
     else renderEmpty(view)
-    window.requestAnimationFrame(() => { elements.scroll.scrollTop = 0 })
+    window.requestAnimationFrame(() => {
+      elements.scroll.scrollTop = view.session ? elements.scroll.scrollHeight : 0
+    })
     subscribers.forEach(listener => listener(view))
     return view
   }
 
-  function showDossier(npcId, { coLocated = false, locationName = '医院一层' } = {}) {
+  function showDossier(npcId, { coLocated = false, locationName = '医院一层', locationId = null, activity = null } = {}) {
+    pendingNpcContext = { locationId, activity }
     const view = runtime.view()
     const npc = view.roster.find(item => item.id === npcId)
     if (!npc) return view
@@ -116,7 +131,9 @@ export function createDialogueUi() {
     elements.speakerMark.textContent = npc.displayMark
     elements.speakerRole.textContent = `人物档案 · ${locationName}`
     elements.speakerName.textContent = npc.displayName
-    elements.speakerDescription.textContent = npc.identityKnown ? npc.displayRole : '你尚未从交谈或院内记录中得知这个人的身份。'
+    elements.speakerDescription.textContent = npc.identityKnown
+      ? `${npc.displayRole}${activity ? `；正在${activity}` : ''}`
+      : `你尚未从交谈或院内记录中得知这个人的身份。${activity ? `此人正在${activity}。` : ''}`
     elements.objective.textContent = coLocated ? `决定是否与${npc.displayName}交谈。` : `前往${locationName}后才能与此人交谈。`
     elements.story.innerHTML = npc.dossier.length
       ? npc.dossier.map(fact => `<article class="beat dossier-fact"><div class="label">${escapeHtml(fact.label)}</div><p>${escapeHtml(fact.text)}</p><small>${escapeHtml(fact.source)}</small></article>`).join('')
@@ -135,9 +152,14 @@ export function createDialogueUi() {
     render()
   })
   elements.choices.addEventListener('click', event => {
+    if (event.target.closest('[data-dialogue-rest]')) {
+      runtime.dispatch({ type: 'rest' })
+      render()
+      return
+    }
     const dossierChat = event.target.closest('[data-dossier-chat]')
     if (dossierChat) {
-      runtime.dispatch({ type: 'select_npc', npcId: dossierChat.dataset.dossierChat })
+      runtime.dispatch({ type: 'select_npc', npcId: dossierChat.dataset.dossierChat, context: pendingNpcContext })
       render()
       return
     }
@@ -159,19 +181,21 @@ export function createDialogueUi() {
       subscribers.add(listener)
       return () => subscribers.delete(listener)
     },
-    showMapContext({ title, role = '一层地图 · 地点', mark = '图', description, detail, objective }) {
+    showMapContext({ locationId = null, title, role = '一层地图 · 地点', mark = '图', description, detail, objective }) {
+      pendingNpcContext = null
+      runtime.dispatch({ type: 'set_context', context: { locationId } })
       elements.speakerMark.textContent = mark
       elements.speakerRole.textContent = role
       elements.speakerName.textContent = title
       elements.speakerDescription.textContent = description
       elements.objective.textContent = objective || `查看${title}。`
       elements.story.innerHTML = `<article class="beat scene-text"><div class="label">地点</div><p>${escapeHtml(detail || description)}</p></article>`
-      elements.choices.innerHTML = '<div class="choices-header"><span>地图移动</span><span>选择左侧相邻活动点</span></div>'
+      elements.choices.innerHTML = `<div class="choices-header"><span>地图移动</span><span>选择左侧相邻活动点</span></div>${restChoiceHtml(runtime.view().time)}`
       window.requestAnimationFrame(() => { elements.scroll.scrollTop = 0 })
     },
-    selectNpc(npcId, { nearby = false } = {}) {
+    selectNpc(npcId, { nearby = false, locationId = null, activity = null } = {}) {
       if (!nearby) return runtime.view()
-      runtime.dispatch({ type: 'select_npc', npcId })
+      runtime.dispatch({ type: 'select_npc', npcId, context: { locationId, activity } })
       return render()
     },
     setProfile(profile) {

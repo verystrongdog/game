@@ -146,8 +146,8 @@ describe('map coordinate overlay', () => {
     for (const id of ['north_ward', 'south_ward', 'basketball_court', 'south_courtyard']) expect(ids).toContain(id)
     for (const id of ['east_ward', 'west_ward', 'courtyard', 'garden']) expect(ids).not.toContain(id)
     expect(floorOneMap.locations.find(location => location.id === 'basketball_court')).toMatchObject({ name: '中央篮球活动场', x: 46.4 })
-    expect(floorOneMap.actors.find(actor => actor.id === 'wu_tong').location).toBe('north_ward')
-    expect(floorOneMap.actors.find(actor => actor.id === 'zhou_weiguo').location).toBe('south_ward')
+    expect(floorOneMap.actors.find(actor => actor.id === 'wu_tong').schedule.morning.location).toBe('north_ward')
+    expect(floorOneMap.actors.find(actor => actor.id === 'zhou_weiguo').schedule.morning.location).toBe('south_ward')
   })
 
   test('uses a raster interaction cache and restores the vector plan when zoom settles', () => {
