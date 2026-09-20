@@ -7,6 +7,10 @@ const source = readFileSync(new URL('./hospital-map-prototype.js', import.meta.u
 const zoomMotionSource = readFileSync(new URL('./zoom-motion.js', import.meta.url), 'utf8')
 const prototypeHtml = readFileSync(new URL('../../../design/presentation/叙事界面原型.html', import.meta.url), 'utf8')
 const planPreviewPng = readFileSync(new URL('../../../data/hospital_ref/cache/page-26-web.png', import.meta.url))
+const enclosureTopology = JSON.parse(readFileSync(new URL('../../../data/hospital_ref/floor-one-enclosures.json', import.meta.url), 'utf8'))
+const topologyRepairs = JSON.parse(readFileSync(new URL('../../../data/hospital_ref/floor-one-wall-topology-repairs.json', import.meta.url), 'utf8'))
+const openingCatalog = JSON.parse(readFileSync(new URL('../../../data/hospital_ref/floor-one-opening-catalog.json', import.meta.url), 'utf8'))
+const baselineOpenings = JSON.parse(readFileSync(new URL('../../../data/hospital_ref/floor-one-openings.json', import.meta.url), 'utf8'))
 
 describe('map coordinate overlay', () => {
   test('renders the structural grid and keeps non-scaling strokes visibly wide', () => {
@@ -24,7 +28,7 @@ describe('map coordinate overlay', () => {
 
   test('maps percentage coordinates across the full non-square floor plan', () => {
     const overlayCount = source.match(/preserveAspectRatio="none"/g)?.length ?? 0
-    expect(overlayCount).toBeGreaterThanOrEqual(3)
+    expect(overlayCount).toBe(3)
   })
 
   test('makes every grid intersection addressable and copyable', () => {
@@ -42,6 +46,16 @@ describe('map coordinate overlay', () => {
     expect(css).toContain('transform: scale(var(--map-marker-scale))')
     expect(css).toContain('.grid-intersection:focus-visible .grid-intersection-dot')
     expect(css).not.toContain('.grid-intersection:focus .grid-intersection-dot')
+  })
+
+  test('never uses the browser native SVG focus outline for selectable rooms', () => {
+    // 来源：design/presentation/叙事界面布局.md §四、500床一层跑团地图原型.md §2.1。
+    const enclosureRule = css.match(/\.enclosure-shape\s*\{[^}]*\}/)?.[0] || ''
+    const selectedRule = css.match(/\.enclosure-shape\.selected\s*\{[^}]*\}/)?.[0] || ''
+    expect(enclosureRule).toMatch(/outline:\s*none/)
+    expect(enclosureRule).toMatch(/vector-effect:\s*non-scaling-stroke/)
+    expect(selectedRule).not.toMatch(/stroke:\s*(?:black|#000(?:000)?)/)
+    expect(css).toContain('.enclosure-shape:focus-visible')
   })
 
   test('renders reusable millimetre wall topology from successive grid clicks', () => {
@@ -93,6 +107,18 @@ describe('map coordinate overlay', () => {
     expect(source).toContain("host.addEventListener('pointerleave'")
   })
 
+  test('does not capture a coordinate click until pointer movement becomes a drag', () => {
+    // 来源：design/presentation/500床一层跑团地图原型.md §一·校图坐标系。
+    const pointerDownStart = source.indexOf("host.addEventListener('pointerdown'")
+    const pointerMoveStart = source.indexOf("host.addEventListener('pointermove'", pointerDownStart)
+    const pointerUpStart = source.indexOf("host.addEventListener('pointerup'", pointerMoveStart)
+    const pointerDownHandler = source.slice(pointerDownStart, pointerMoveStart)
+    const dragPointerMoveHandler = source.slice(pointerMoveStart, pointerUpStart)
+    expect(pointerDownHandler).not.toContain('setPointerCapture')
+    expect(dragPointerMoveHandler).toContain('MAP_DRAG_START_DISTANCE_CSS_PIXELS')
+    expect(dragPointerMoveHandler).toContain('setPointerCapture')
+  })
+
   test('uses authored ruler distances instead of page-scale interpolation', () => {
     const { structuralGrid, origin } = floorOneMap.coordinateSystem
     expect(structuralGrid.x.every(axis => Number.isInteger(axis.millimetres))).toBe(true)
@@ -132,22 +158,71 @@ describe('map coordinate overlay', () => {
     expect(source).toContain('x2="${seam.position}"')
   })
 
-  test('places calibrated activities inside the nearby authored rooms, not on the search anchors', () => {
-    const visitingPhone = floorOneMap.locations.find(location => location.id === 'phone_bay')
-    const nurseStation = floorOneMap.locations.find(location => location.id === 'nurse_station')
-    expect(visitingPhone).toMatchObject({ name: '探视房电话', x: 76, y: 61.9 })
-    expect(nurseStation).toMatchObject({ name: '南病房护士站', x: 58, y: 60.8 })
-    expect(visitingPhone.region).not.toContain('73.7659')
-    expect(nurseStation.region).not.toContain('55.3194')
+  test('does not invent semantic rooms, routes, or actor positions before interior walls are traced', () => {
+    expect(floorOneMap.initialLocation).toBeNull()
+    expect(floorOneMap.locations).toEqual([])
+    expect(floorOneMap.connections).toEqual([])
+    expect(floorOneMap.actors).toEqual([])
   })
 
-  test('uses corrected cardinal regions and removes the old screen-relative locations', () => {
-    const ids = floorOneMap.locations.map(location => location.id)
-    for (const id of ['north_ward', 'south_ward', 'basketball_court', 'south_courtyard']) expect(ids).toContain(id)
-    for (const id of ['east_ward', 'west_ward', 'courtyard', 'garden']) expect(ids).not.toContain(id)
-    expect(floorOneMap.locations.find(location => location.id === 'basketball_court')).toMatchObject({ name: '中央篮球活动场', x: 46.4 })
-    expect(floorOneMap.actors.find(actor => actor.id === 'wu_tong').schedule.morning.location).toBe('north_ward')
-    expect(floorOneMap.actors.find(actor => actor.id === 'zhou_weiguo').schedule.morning.location).toBe('south_ward')
+  test('keeps assessed degree-one endpoints in diagnostics without rendering legacy coloured points', () => {
+    expect(enclosureTopology.enclosures).toHaveLength(189)
+    expect(enclosureTopology.diagnostics.degreeOneEndpoints).toHaveLength(9)
+    expect(enclosureTopology.diagnostics.degreeOneEndpointAssessments).toHaveLength(9)
+    const classificationCounts = enclosureTopology.diagnostics.degreeOneEndpointAssessments.reduce((counts, item) => ({
+      ...counts,
+      [item.classification]: (counts[item.classification] || 0) + 1,
+    }), {})
+    expect(classificationCounts).toEqual({
+      'open-boundary-edge': 4,
+      'door-opening-edge': 3,
+      'partition-termination': 2,
+    })
+    expect(source).toContain('class="enclosure-shape')
+    expect(source).not.toContain('degree-one-endpoint')
+    expect(source).not.toContain('data-degree-one-classification')
+    expect(source).toContain('setInspectionLayer(layer, visible)')
+    expect(prototypeHtml).toContain('data-dev-inspection="enclosures"')
+    expect(prototypeHtml).not.toContain('data-dev-inspection="degree-one"')
+    expect(prototypeHtml).not.toContain('显示一度端点复核')
+    expect(css).toMatch(/\.enclosure-shape\s*\{[^}]*stroke-width:\s*1px;[^}]*vector-effect:\s*non-scaling-stroke/)
+    expect(css).not.toContain('.degree-one-endpoint')
+  })
+
+  test('renders componentised doors and windows on the planar wall seam', () => {
+    expect(openingCatalog.components).toHaveLength(9)
+    expect(enclosureTopology.planarWalls).toHaveLength(enclosureTopology.planarEdgeCount)
+    expect(enclosureTopology.planarWalls).toHaveLength(617)
+    expect(source).toContain("import { createOpeningEditor } from './opening-editor.js'")
+    expect(source).toContain('walls: enclosureTopology.planarWalls')
+    expect(source).toContain('class="map-opening-system"')
+    expect(source).toContain('class="opening-component ${placement.kind}${selectedClass}"')
+    expect(source).toContain("['pan', 'snap', 'opening']")
+    expect(prototypeHtml).toContain('data-dev-wall-mode="opening"')
+    expect(prototypeHtml).toContain('data-dev-opening-component="door-double-large"')
+    expect(prototypeHtml).toContain('data-dev-opening-component="window-interior-observation"')
+    expect(prototypeHtml).toContain('data-dev-opening="copy"')
+    expect(css).toContain('.hospital-map-prototype.opening-placement-mode .grid-intersection-hit')
+  })
+
+  test('loads the uploaded supply-centre openings as the confirmed baseline', () => {
+    expect(baselineOpenings.schema).toBe('hospital-opening-layout/v1')
+    expect(baselineOpenings._source).toEqual(['reference/供应中心门窗.json'])
+    expect(baselineOpenings.placements).toHaveLength(86)
+    expect(baselineOpenings.placements.filter(placement => placement.kind === 'door')).toHaveLength(51)
+    expect(baselineOpenings.placements.filter(placement => placement.kind === 'window')).toHaveLength(35)
+    expect(source).toContain("import baselineOpeningLayout from '../../../data/hospital_ref/floor-one-openings.json'")
+    expect(source).toContain('openingEditor = createEditor(baselineOpeningLayout)')
+    expect(prototypeHtml).toContain('恢复已上传基线')
+  })
+
+  test('keeps the two owner-confirmed large-double-door boundaries in the repaired topology', () => {
+    expect(topologyRepairs.supplementalWalls).toEqual([
+      { from: { x: -57700, y: 0 }, to: { x: -57700, y: -3000 }, futureOpening: 'large-double-door' },
+      { from: { x: 82125, y: 0 }, to: { x: 84000, y: 0 }, futureOpening: 'large-double-door' },
+    ])
+    expect(enclosureTopology.sourceWallCount).toBe(364)
+    expect(enclosureTopology.enclosures).toHaveLength(189)
   })
 
   test('uses a raster interaction cache and restores the vector plan when zoom settles', () => {
@@ -197,15 +272,4 @@ describe('map coordinate overlay', () => {
     expect(css).toMatch(/\.map-coordinate-hud\s*\{[^}]*left:\s*50%;[^}]*grid-template-columns:/)
   })
 
-  test('rotates the plan, NPC points, and their names as one map layer', () => {
-    expect(css).toMatch(/\.map-plan-stage, \.tabletop-board, \.route-network\s*\{[^}]*transform:\s*rotate\(var\(--map-rotation/)
-    expect(css).toMatch(/\.map-person b\s*\{[^}]*width:\s*10px;[^}]*height:\s*10px/)
-    expect(source).toContain("location.y - 1")
-  })
-
-  test('shows the current known NPC name only on hover or keyboard focus', () => {
-    expect(css).toMatch(/\.map-person span\s*\{[^}]*opacity:\s*0;[^}]*visibility:\s*hidden/)
-    expect(css).toMatch(/\.map-person:hover span,[\s\S]*\.map-person:focus-visible span\s*\{[^}]*opacity:\s*1;[^}]*visibility:\s*visible/)
-    expect(source).toContain('getNpcDossier')
-  })
 })

@@ -6,6 +6,7 @@
   <title>子非鱼｜叙事界面原型</title>
   <link rel="stylesheet" href="/character-creation/character-creation.css">
   <link rel="stylesheet" href="/dialogue/dialogue.css">
+  <link rel="stylesheet" href="/opening-exploration/opening.css">
   <link rel="stylesheet" href="/hospital-map-prototype/hospital-map-prototype.css">
   <script type="importmap">
     { "imports": { "three": "./vendor/three/build/three.module.js" } }
@@ -896,6 +897,7 @@
             <div class="developer-actions">
               <button type="button" data-dev-wall-mode="pan" aria-pressed="true">拖动画布</button>
               <button type="button" data-dev-wall-mode="snap" aria-pressed="false">吸附描墙</button>
+              <button type="button" data-dev-wall-mode="opening" aria-pressed="false">放置门窗</button>
               <button type="button" data-dev-wall-constraint="free" aria-pressed="true">自由方向</button>
               <button type="button" data-dev-wall-constraint="horizontal" aria-pressed="false">水平墙</button>
               <button type="button" data-dev-wall-constraint="vertical" aria-pressed="false">垂直墙</button>
@@ -906,11 +908,28 @@
             </div>
           </section>
           <section class="developer-group">
-            <h2>呈现变体</h2>
+            <h2>门窗组件</h2>
             <div class="developer-actions">
-              <button type="button" data-dev-variant="atlas">图纸图集</button>
-              <button type="button" data-dev-variant="tabletop">跑团桌面</button>
-              <button type="button" data-dev-variant="route">路线关系</button>
+              <button type="button" class="active" data-dev-opening-component="door-single" aria-pressed="true">普通单开门</button>
+              <button type="button" data-dev-opening-component="door-ward" aria-pressed="false">病房单开门</button>
+              <button type="button" data-dev-opening-component="door-double-small" aria-pressed="false">小双开／子母门</button>
+              <button type="button" data-dev-opening-component="door-double-large" aria-pressed="false">大双开门</button>
+              <button type="button" data-dev-opening-component="door-bed-transfer" aria-pressed="false">抢救／推床宽门</button>
+              <button type="button" data-dev-opening-component="window-exterior-narrow" aria-pressed="false">窄外窗</button>
+              <button type="button" data-dev-opening-component="window-exterior-standard" aria-pressed="false">标准外窗</button>
+              <button type="button" data-dev-opening-component="window-exterior-wide" aria-pressed="false">宽外窗</button>
+              <button type="button" data-dev-opening-component="window-interior-observation" aria-pressed="false">室内观察窗</button>
+              <button type="button" data-dev-opening="flip">翻转门扇</button>
+              <button type="button" data-dev-opening="remove">删除所选</button>
+              <button type="button" data-dev-opening="copy">复制门窗 JSON</button>
+              <button type="button" data-dev-opening="clear">恢复已上传基线</button>
+            </div>
+            <output class="developer-status" id="developerOpeningStatus">0 个门窗 · 普通单开门</output>
+          </section>
+          <section class="developer-group">
+            <h2>闭环目视检查</h2>
+            <div class="developer-actions">
+              <button type="button" class="active" data-dev-inspection="enclosures" aria-pressed="true">显示几何闭环</button>
             </div>
           </section>
           <section class="developer-group">

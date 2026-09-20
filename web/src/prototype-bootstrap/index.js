@@ -2,6 +2,7 @@ import { createCharacterCreation } from '/character-creation/index.js'
 import { createDisplaySettings } from '/character-creation/display-settings.js'
 import { createDialogueUi } from '/dialogue/dialogue-ui.js'
 import { createHospitalMapPrototype } from '/hospital-map-prototype/hospital-map-prototype.js'
+import { createOpeningExploration } from '/opening-exploration/opening-ui.js'
 
 // 来源：design/entities/疾病特长.md §二—§六。未决项在原型中显式保留，不写回正式游戏状态。
 const characterCreation = createCharacterCreation({
@@ -9,9 +10,16 @@ const characterCreation = createCharacterCreation({
   required: true,
 })
 const dialoguePrototype = createDialogueUi()
-characterCreation.subscribe(profile => dialoguePrototype.setProfile(profile))
+const openingExploration = createOpeningExploration({
+  onComplete: () => dialoguePrototype.restore(),
+})
+characterCreation.subscribe(profile => {
+  dialoguePrototype.setProfile(profile)
+  openingExploration.open(profile)
+})
 
 window.dialoguePrototype = dialoguePrototype
+window.openingExploration = openingExploration
 const hospitalMapController = createHospitalMapPrototype({
   host: document.querySelector('#hospitalMapHost'),
   scene: document.querySelector('#scene'),
@@ -33,6 +41,7 @@ createDisplaySettings({
 const scene = document.querySelector('#scene')
 const developerOptions = document.querySelector('#developerOptions')
 const developerMapStatus = document.querySelector('#developerMapStatus')
+const developerOpeningStatus = document.querySelector('#developerOpeningStatus')
 
 function refreshDeveloperOptions(view = dialoguePrototype.view()) {
   const mapState = hospitalMapController.state()
@@ -53,9 +62,22 @@ function refreshDeveloperOptions(view = dialoguePrototype.view()) {
     button.classList.toggle('active', active)
     button.setAttribute('aria-pressed', String(active))
   })
+  developerOptions.querySelectorAll('[data-dev-inspection]').forEach(button => {
+    const active = mapState.showEnclosures
+    button.classList.toggle('active', active)
+    button.setAttribute('aria-pressed', String(active))
+  })
+  developerOptions.querySelectorAll('[data-dev-opening-component]').forEach(button => {
+    const active = button.dataset.devOpeningComponent === mapState.openingLayout.selectedComponentId
+    button.classList.toggle('active', active)
+    button.setAttribute('aria-pressed', String(active))
+  })
+  const selectedOpeningButton = developerOptions.querySelector(`[data-dev-opening-component="${mapState.openingLayout.selectedComponentId}"]`)
+  developerOpeningStatus.textContent = `${mapState.openingLayout.placements.length} 个门窗 · ${selectedOpeningButton?.textContent || mapState.openingLayout.selectedComponentId}`
 }
 
 document.querySelector('#hospitalMapHost').addEventListener('walltracechange', () => refreshDeveloperOptions())
+document.querySelector('#hospitalMapHost').addEventListener('openinglayoutchange', () => refreshDeveloperOptions())
 
 dialoguePrototype.subscribe(view => {
   hospitalMapController.render()
@@ -80,6 +102,23 @@ developerOptions.addEventListener('click', event => {
   if (wallAction === 'finish') hospitalMapController.finishWallTrace()
   if (wallAction === 'copy') hospitalMapController.copyWallTopology()
   if (wallAction === 'clear' && window.confirm('清空本次新增墙线？整体外墙会保留。')) hospitalMapController.clearWalls()
+
+  const openingComponent = event.target.closest('[data-dev-opening-component]')?.dataset.devOpeningComponent
+  if (openingComponent) {
+    hospitalMapController.setOpeningComponent(openingComponent)
+    hospitalMapController.setInteractionMode('opening')
+  }
+  const openingAction = event.target.closest('[data-dev-opening]')?.dataset.devOpening
+  if (openingAction === 'flip') hospitalMapController.flipOpening()
+  if (openingAction === 'remove') hospitalMapController.removeOpening()
+  if (openingAction === 'copy') hospitalMapController.copyOpeningLayout()
+  if (openingAction === 'clear' && window.confirm('放弃本地门窗修改并恢复已上传基线？')) hospitalMapController.clearOpenings()
+
+  const inspectionLayer = event.target.closest('[data-dev-inspection]')?.dataset.devInspection
+  if (inspectionLayer) {
+    const mapState = hospitalMapController.state()
+    hospitalMapController.setInspectionLayer(inspectionLayer, !mapState.showEnclosures)
+  }
 
   const variant = event.target.closest('[data-dev-variant]')?.dataset.devVariant
   if (variant) hospitalMapController.setVariant(variant)

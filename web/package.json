@@ -4,6 +4,8 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
+    "build:floor-enclosures": "node scripts/build-floor-one-enclosures.mjs",
+    "build:floor-openings": "node scripts/build-floor-one-openings.mjs",
     "dev": "vite",
     "build": "vite build",
     "test": "bun test",

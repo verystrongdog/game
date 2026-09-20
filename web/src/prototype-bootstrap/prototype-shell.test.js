@@ -6,6 +6,7 @@ const bootstrap = readFileSync(new URL('./index.js', import.meta.url), 'utf8')
 const characterCreation = readFileSync(new URL('../character-creation/index.js', import.meta.url), 'utf8')
 const dialogueUi = readFileSync(new URL('../dialogue/dialogue-ui.js', import.meta.url), 'utf8')
 const placementEditor = readFileSync(new URL('../hospital/placement-editor.js', import.meta.url), 'utf8')
+const openingCss = readFileSync(new URL('../opening-exploration/opening.css', import.meta.url), 'utf8')
 
 describe('narrative prototype shell', () => {
   test('gates mandatory character creation behind the new-game screen', () => {
@@ -29,6 +30,9 @@ describe('narrative prototype shell', () => {
     expect(developerPanel).toContain('id="characterCreationLaunch"')
     expect(developerPanel).toContain('data-dev-map="rotate-left"')
     expect(developerPanel).toContain('data-dev-wall="copy"')
+    expect(developerPanel).toContain('data-dev-wall-mode="opening"')
+    expect(developerPanel).toContain('data-dev-opening-component="door-single"')
+    expect(developerPanel).toContain('data-dev-opening="copy"')
     expect(developerPanel).toContain('data-dev-time="afternoon"')
   })
 
@@ -54,5 +58,11 @@ describe('narrative prototype shell', () => {
     expect(html).toContain('id="hospitalPlacementLaunch"')
     expect(html).toContain("toggleButton: document.querySelector('#hospitalPlacementLaunch')")
     expect(placementEditor).toContain('const toggle = toggleButton || document.createElement')
+  })
+
+  test('keeps overflowing opening dialogue inside a bounded scroll region', () => {
+    // 来源：design/presentation/主角开场场景示范.md §2.2；连续叙事记录必须可回滚。
+    expect(openingCss).toMatch(/\.oe-narrative\s*\{[^}]*min-height:\s*0/)
+    expect(openingCss).toMatch(/\.oe-transcript\s*\{[^}]*overflow-y:\s*auto/)
   })
 })

@@ -218,7 +218,7 @@ export function createCharacterCreation({ trigger, required = false }) {
           </div>
           ${remaining > 0
             ? `<button type="button" class="cc-enter incomplete" data-step="0">还有 ${remaining} 段经历未使用 · 返回选择</button>`
-            : '<button type="button" class="cc-enter" data-confirm>确认开局并进入医院</button>'}
+            : '<button type="button" class="cc-enter" data-confirm>确认人物并进入序章</button>'}
           <small>确认后，经历与疾病会交给本页对话原型；刷新页面仍会重新开局，不写入正式游戏存档。疾病挂件、花纹与裂隙的整理编辑器为低优先级，暂未实现。</small>
         </div>
       </section>`
@@ -235,7 +235,7 @@ export function createCharacterCreation({ trigger, required = false }) {
         <div><span class="cc-kicker">CHARACTER ORIGIN · INTERACTION PROTOTYPE</span><h1 id="ccTitle">开局人物</h1></div>
         <ol>${steps.map((step, index) => `<li class="${index === state.step ? 'active' : ''}${index < state.step ? 'done' : ''}"><button type="button" data-step="${index}" aria-label="查看${step}"><i>${String(index + 1).padStart(2, '0')}</i><span>${step}</span></button></li>`).join('')}</ol>
         ${required && !state.completed
-          ? '<span class="cc-required">完成开局后进入医院</span>'
+          ? '<span class="cc-required">完成人物选择后进入序章</span>'
           : '<button type="button" class="cc-close" data-close aria-label="关闭开局人物界面">×</button>'}
       </header>
       <main class="cc-body">
