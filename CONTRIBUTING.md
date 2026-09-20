@@ -61,10 +61,84 @@ data/       结构化数据契约
 | 分支 | 用途 |
 |---|---|
 | `main` | 唯一真相源，永远可发布 |
-| `feat/<功能名>` | 新子系统或大规模重构 |
-| `exp/<实验名>` | 不确定方向的实验 |
+| `feat/<issue>-<功能名>-<所有者>` | 新子系统或大规模重构；多主机并行时使用所有者后缀 |
+| `exp/<issue>-<实验名>-<所有者>` | 不确定方向的实验 |
+| `docs/<主题>-<所有者>` | 不依附实现 Issue 的纯文档或仓库治理变更 |
+| `integration/<issue>-<主题>` | 同一 Issue 有多个独立子分支时的唯一汇总分支 |
 
-工作完成后合并回 `main`。
+分支名中的“所有者”可以是 Agent 或主机的稳定短标识，例如 `feat/203-opening-story-host-a`。单主机工作可省略后缀。
+
+工作完成后合并回 `main`。分支的状态与退役判据以 [WORKFLOW.md §1.1](WORKFLOW.md) 为准。
+
+### 多主机 / 多 Agent 协作
+
+#### 开工前
+
+每个主机或 Agent 在改文件前先运行：
+
+```bash
+git fetch origin
+git status --short --branch
+git branch --show-current
+git rev-list --left-right --count origin/main...HEAD
+```
+
+如果当前分支已经对应某个 PR，还必须查该 PR 是 `OPEN`、`MERGED` 还是 `CLOSED`。无法访问 GitHub 时，不得假定旧分支仍可写；可以先做只读工作，或从已确认的最新 `origin/main` 创建新分支。
+
+查已知分支的 PR 历史（示例）：
+
+```bash
+gh pr list --head feat/321-npc-dialogue-host-a --state all
+```
+
+从最新主分支开始新任务：
+
+```bash
+git fetch origin
+git switch -c feat/321-npc-dialogue-host-a origin/main
+```
+
+#### 分支所有权
+
+- 同一个远程分支不能被两个主机同时写入。
+- “我只改另一个文件”也不构成例外：两台主机同时 push 仍会产生远程分支竞争。
+- PR 开启后，PR 模板中的“分支所有者”字段是该分支当前写入权的协作记录；发生交接时同步更新。
+- 交接时使用“分支名 + 完整 HEAD SHA + 工作树状态”作为交接凭据。
+- 新所有者必须 `fetch` 并确认本地 HEAD 与远程 SHA 相同，不得在“差不多是最新”的状态下继续。
+
+#### PR 合并后
+
+PR 合并后，原分支**立即只读**。如果还有后续工作，从最新 `origin/main` 新建分支：
+
+```bash
+git fetch origin
+git switch -c feat/322-opening-followup-host-a origin/main
+```
+
+不得：
+
+- 在已合并分支上再提交；
+- 用已合并分支再开一个 PR；
+- 因为“文件内容看起来一样”就认为 squash 后的历史仍然连续；
+- 用 `push --force` 把旧分支强行改造成新分支。
+
+应先核对合并提交与 CI，再删除已干净的本地 worktree。远程分支可在确认没有未合并提交后删除；删除不是“退役”的前提，**不再写入**才是。
+
+### worktree
+
+worktree 用于同一主机上的目录与分支隔离：
+
+```bash
+git fetch origin
+git worktree add ../game-321-host-a -b feat/321-npc-dialogue-host-a origin/main
+```
+
+规则：
+
+- 一个 worktree 对应一个任务分支；
+- 不在两个 worktree 之间手工复制未提交文件；
+- PR 合并后，确认 worktree 干净再移除；
+- 不同主机之间仍依靠远程分支所有权协调，worktree 不提供跨主机锁。
 
 ### 危险操作
 
@@ -102,5 +176,5 @@ dotnet test code/src/YouAreNotTheFish.sln        # 引擎测试（CI 里跑的�
 仓库所有者可自行决定拒绝、关闭或删除未约定的贡献。任何贡献只有在双方明确接受适用的书面许可或转让安排后才会合并。项目版权边界见 [`LICENSE.md`](LICENSE.md)，第三方材料边界见 [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md)。
 
 ---
-*创建: 2026-09-12（重写自旧版「人类 vs AI + Grilling 工作流」）| 更新: 2026-09-17（§四 门禁撤销：校验器与 `gates.json` 已删，自检改人工）*
+*创建: 2026-09-12（重写自旧版「人类 vs AI + Grilling 工作流」）| 更新: 2026-09-20（新增多主机分支所有权、worktree 隔离与 PR 合并后退役流程）*
 *关联: [项目规约](design/conventions/README.md), [README](README.md), [设计总览](design/README.md)*
