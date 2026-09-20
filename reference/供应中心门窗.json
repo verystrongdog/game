@@ -1,0 +1,2809 @@
+{
+  "schema": "hospital-opening-layout/v1",
+  "coordinateUnit": "millimetre",
+  "placements": [
+    {
+      "id": "opening-008",
+      "componentId": "window-exterior-wide",
+      "kind": "window",
+      "wall": {
+        "from": {
+          "x": -87700,
+          "y": 12000
+        },
+        "to": {
+          "x": -87700,
+          "y": 19500
+        }
+      },
+      "wallKey": "-87700,12000|-87700,19500",
+      "orientation": "vertical",
+      "center": {
+        "x": -87700,
+        "y": 16525
+      },
+      "spanMillimetres": 2400,
+      "heightMillimetres": 1500,
+      "sillHeightMillimetres": 900,
+      "openingType": "casement-window",
+      "interiorExterior": "exterior",
+      "openable": true,
+      "accessible": false,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-009",
+      "componentId": "window-exterior-wide",
+      "kind": "window",
+      "wall": {
+        "from": {
+          "x": -80200,
+          "y": 12000
+        },
+        "to": {
+          "x": -80200,
+          "y": 19500
+        }
+      },
+      "wallKey": "-80200,12000|-80200,19500",
+      "orientation": "vertical",
+      "center": {
+        "x": -80200,
+        "y": 16485
+      },
+      "spanMillimetres": 2400,
+      "heightMillimetres": 1500,
+      "sillHeightMillimetres": 900,
+      "openingType": "casement-window",
+      "interiorExterior": "exterior",
+      "openable": true,
+      "accessible": false,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-010",
+      "componentId": "window-exterior-narrow",
+      "kind": "window",
+      "wall": {
+        "from": {
+          "x": -95200,
+          "y": 12000
+        },
+        "to": {
+          "x": -95200,
+          "y": 19500
+        }
+      },
+      "wallKey": "-95200,12000|-95200,19500",
+      "orientation": "vertical",
+      "center": {
+        "x": -95200,
+        "y": 17012
+      },
+      "spanMillimetres": 1200,
+      "heightMillimetres": 1500,
+      "sillHeightMillimetres": 900,
+      "openingType": "casement-window",
+      "interiorExterior": "exterior",
+      "openable": true,
+      "accessible": false,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-011",
+      "componentId": "window-exterior-narrow",
+      "kind": "window",
+      "wall": {
+        "from": {
+          "x": -95200,
+          "y": 12000
+        },
+        "to": {
+          "x": -95200,
+          "y": 19500
+        }
+      },
+      "wallKey": "-95200,12000|-95200,19500",
+      "orientation": "vertical",
+      "center": {
+        "x": -95200,
+        "y": 14699
+      },
+      "spanMillimetres": 1200,
+      "heightMillimetres": 1500,
+      "sillHeightMillimetres": 900,
+      "openingType": "casement-window",
+      "interiorExterior": "exterior",
+      "openable": true,
+      "accessible": false,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-015",
+      "componentId": "door-single",
+      "kind": "door",
+      "leaf": "single",
+      "wall": {
+        "from": {
+          "x": -87700,
+          "y": 12000
+        },
+        "to": {
+          "x": -87700,
+          "y": 19500
+        }
+      },
+      "wallKey": "-87700,12000|-87700,19500",
+      "orientation": "vertical",
+      "center": {
+        "x": -87700,
+        "y": 12942
+      },
+      "spanMillimetres": 900,
+      "clearWidthMillimetres": 900,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "single-swing",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": -1
+    },
+    {
+      "id": "opening-016",
+      "componentId": "door-single",
+      "kind": "door",
+      "leaf": "single",
+      "wall": {
+        "from": {
+          "x": -80200,
+          "y": 12000
+        },
+        "to": {
+          "x": -80200,
+          "y": 19500
+        }
+      },
+      "wallKey": "-80200,12000|-80200,19500",
+      "orientation": "vertical",
+      "center": {
+        "x": -80200,
+        "y": 12770
+      },
+      "spanMillimetres": 900,
+      "clearWidthMillimetres": 900,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "single-swing",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-017",
+      "componentId": "door-single",
+      "kind": "door",
+      "leaf": "single",
+      "wall": {
+        "from": {
+          "x": -87700,
+          "y": 4500
+        },
+        "to": {
+          "x": -87700,
+          "y": 12000
+        }
+      },
+      "wallKey": "-87700,12000|-87700,4500",
+      "orientation": "vertical",
+      "center": {
+        "x": -87700,
+        "y": 8330
+      },
+      "spanMillimetres": 900,
+      "clearWidthMillimetres": 900,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "single-swing",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-018",
+      "componentId": "door-single",
+      "kind": "door",
+      "leaf": "single",
+      "wall": {
+        "from": {
+          "x": -95200,
+          "y": 12000
+        },
+        "to": {
+          "x": -87700,
+          "y": 12000
+        }
+      },
+      "wallKey": "-87700,12000|-95200,12000",
+      "orientation": "horizontal",
+      "center": {
+        "x": -93882,
+        "y": 12000
+      },
+      "spanMillimetres": 900,
+      "clearWidthMillimetres": 900,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "single-swing",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-019",
+      "componentId": "door-single",
+      "kind": "door",
+      "leaf": "single",
+      "wall": {
+        "from": {
+          "x": -72700,
+          "y": 6900
+        },
+        "to": {
+          "x": -72700,
+          "y": 19500
+        }
+      },
+      "wallKey": "-72700,19500|-72700,6900",
+      "orientation": "vertical",
+      "center": {
+        "x": -72700,
+        "y": 7836
+      },
+      "spanMillimetres": 900,
+      "clearWidthMillimetres": 900,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "single-swing",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-020",
+      "componentId": "door-single",
+      "kind": "door",
+      "leaf": "single",
+      "wall": {
+        "from": {
+          "x": -65200,
+          "y": 6900
+        },
+        "to": {
+          "x": -65200,
+          "y": 11800
+        }
+      },
+      "wallKey": "-65200,11800|-65200,6900",
+      "orientation": "vertical",
+      "center": {
+        "x": -65200,
+        "y": 10990
+      },
+      "spanMillimetres": 900,
+      "clearWidthMillimetres": 900,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "single-swing",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-021",
+      "componentId": "door-single",
+      "kind": "door",
+      "leaf": "single",
+      "wall": {
+        "from": {
+          "x": -62450,
+          "y": 6900
+        },
+        "to": {
+          "x": -62450,
+          "y": 11800
+        }
+      },
+      "wallKey": "-62450,11800|-62450,6900",
+      "orientation": "vertical",
+      "center": {
+        "x": -62450,
+        "y": 10999
+      },
+      "spanMillimetres": 900,
+      "clearWidthMillimetres": 900,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "single-swing",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": -1
+    },
+    {
+      "id": "opening-023",
+      "componentId": "door-single",
+      "kind": "door",
+      "leaf": "single",
+      "wall": {
+        "from": {
+          "x": -62450,
+          "y": 6900
+        },
+        "to": {
+          "x": -57700,
+          "y": 6900
+        }
+      },
+      "wallKey": "-57700,6900|-62450,6900",
+      "orientation": "horizontal",
+      "center": {
+        "x": -61697,
+        "y": 6900
+      },
+      "spanMillimetres": 900,
+      "clearWidthMillimetres": 900,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "single-swing",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": -1
+    },
+    {
+      "id": "opening-024",
+      "componentId": "door-single",
+      "kind": "door",
+      "leaf": "single",
+      "wall": {
+        "from": {
+          "x": -65200,
+          "y": 6900
+        },
+        "to": {
+          "x": -62450,
+          "y": 6900
+        }
+      },
+      "wallKey": "-62450,6900|-65200,6900",
+      "orientation": "horizontal",
+      "center": {
+        "x": -63358,
+        "y": 6900
+      },
+      "spanMillimetres": 900,
+      "clearWidthMillimetres": 900,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "single-swing",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-025",
+      "componentId": "door-single",
+      "kind": "door",
+      "leaf": "single",
+      "wall": {
+        "from": {
+          "x": -62450,
+          "y": 0
+        },
+        "to": {
+          "x": -57700,
+          "y": 0
+        }
+      },
+      "wallKey": "-57700,0|-62450,0",
+      "orientation": "horizontal",
+      "center": {
+        "x": -61698,
+        "y": 0
+      },
+      "spanMillimetres": 900,
+      "clearWidthMillimetres": 900,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "single-swing",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-026",
+      "componentId": "door-single",
+      "kind": "door",
+      "leaf": "single",
+      "wall": {
+        "from": {
+          "x": -68900,
+          "y": 0
+        },
+        "to": {
+          "x": -65200,
+          "y": 0
+        }
+      },
+      "wallKey": "-65200,0|-68900,0",
+      "orientation": "horizontal",
+      "center": {
+        "x": -65816,
+        "y": 0
+      },
+      "spanMillimetres": 900,
+      "clearWidthMillimetres": 900,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "single-swing",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-027",
+      "componentId": "door-single",
+      "kind": "door",
+      "leaf": "single",
+      "wall": {
+        "from": {
+          "x": -72700,
+          "y": 0
+        },
+        "to": {
+          "x": -68900,
+          "y": 0
+        }
+      },
+      "wallKey": "-68900,0|-72700,0",
+      "orientation": "horizontal",
+      "center": {
+        "x": -72208,
+        "y": 0
+      },
+      "spanMillimetres": 900,
+      "clearWidthMillimetres": 900,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "single-swing",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-028",
+      "componentId": "door-single",
+      "kind": "door",
+      "leaf": "single",
+      "wall": {
+        "from": {
+          "x": -72700,
+          "y": 0
+        },
+        "to": {
+          "x": -68900,
+          "y": 0
+        }
+      },
+      "wallKey": "-68900,0|-72700,0",
+      "orientation": "horizontal",
+      "center": {
+        "x": -69645,
+        "y": 0
+      },
+      "spanMillimetres": 900,
+      "clearWidthMillimetres": 900,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "single-swing",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-029",
+      "componentId": "door-single",
+      "kind": "door",
+      "leaf": "single",
+      "wall": {
+        "from": {
+          "x": -68900,
+          "y": 0
+        },
+        "to": {
+          "x": -65200,
+          "y": 0
+        }
+      },
+      "wallKey": "-65200,0|-68900,0",
+      "orientation": "horizontal",
+      "center": {
+        "x": -67966,
+        "y": 0
+      },
+      "spanMillimetres": 900,
+      "clearWidthMillimetres": 900,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "single-swing",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-030",
+      "componentId": "door-single",
+      "kind": "door",
+      "leaf": "single",
+      "wall": {
+        "from": {
+          "x": -76400,
+          "y": 0
+        },
+        "to": {
+          "x": -72700,
+          "y": 0
+        }
+      },
+      "wallKey": "-72700,0|-76400,0",
+      "orientation": "horizontal",
+      "center": {
+        "x": -73507,
+        "y": 0
+      },
+      "spanMillimetres": 900,
+      "clearWidthMillimetres": 900,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "single-swing",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-031",
+      "componentId": "door-single",
+      "kind": "door",
+      "leaf": "single",
+      "wall": {
+        "from": {
+          "x": -80200,
+          "y": 0
+        },
+        "to": {
+          "x": -76400,
+          "y": 0
+        }
+      },
+      "wallKey": "-76400,0|-80200,0",
+      "orientation": "horizontal",
+      "center": {
+        "x": -77231,
+        "y": 0
+      },
+      "spanMillimetres": 900,
+      "clearWidthMillimetres": 900,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "single-swing",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-032",
+      "componentId": "door-single",
+      "kind": "door",
+      "leaf": "single",
+      "wall": {
+        "from": {
+          "x": -83200,
+          "y": 0
+        },
+        "to": {
+          "x": -80200,
+          "y": 0
+        }
+      },
+      "wallKey": "-80200,0|-83200,0",
+      "orientation": "horizontal",
+      "center": {
+        "x": -81732,
+        "y": 0
+      },
+      "spanMillimetres": 900,
+      "clearWidthMillimetres": 900,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "single-swing",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-033",
+      "componentId": "door-single",
+      "kind": "door",
+      "leaf": "single",
+      "wall": {
+        "from": {
+          "x": -95200,
+          "y": -3000
+        },
+        "to": {
+          "x": -87700,
+          "y": -3000
+        }
+      },
+      "wallKey": "-87700,-3000|-95200,-3000",
+      "orientation": "horizontal",
+      "center": {
+        "x": -88437,
+        "y": -3000
+      },
+      "spanMillimetres": 900,
+      "clearWidthMillimetres": 900,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "single-swing",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-034",
+      "componentId": "door-single",
+      "kind": "door",
+      "leaf": "single",
+      "wall": {
+        "from": {
+          "x": -87700,
+          "y": -3000
+        },
+        "to": {
+          "x": -83200,
+          "y": -3000
+        }
+      },
+      "wallKey": "-83200,-3000|-87700,-3000",
+      "orientation": "horizontal",
+      "center": {
+        "x": -86695,
+        "y": -3000
+      },
+      "spanMillimetres": 900,
+      "clearWidthMillimetres": 900,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "single-swing",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-039",
+      "componentId": "window-exterior-standard",
+      "kind": "window",
+      "wall": {
+        "from": {
+          "x": -95200,
+          "y": 4500
+        },
+        "to": {
+          "x": -95200,
+          "y": 12000
+        }
+      },
+      "wallKey": "-95200,12000|-95200,4500",
+      "orientation": "vertical",
+      "center": {
+        "x": -95200,
+        "y": 9146
+      },
+      "spanMillimetres": 1800,
+      "heightMillimetres": 1500,
+      "sillHeightMillimetres": 900,
+      "openingType": "casement-window",
+      "interiorExterior": "exterior",
+      "openable": true,
+      "accessible": false,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-040",
+      "componentId": "window-exterior-standard",
+      "kind": "window",
+      "wall": {
+        "from": {
+          "x": -95200,
+          "y": 4500
+        },
+        "to": {
+          "x": -95200,
+          "y": 12000
+        }
+      },
+      "wallKey": "-95200,12000|-95200,4500",
+      "orientation": "vertical",
+      "center": {
+        "x": -95200,
+        "y": 6744
+      },
+      "spanMillimetres": 1800,
+      "heightMillimetres": 1500,
+      "sillHeightMillimetres": 900,
+      "openingType": "casement-window",
+      "interiorExterior": "exterior",
+      "openable": true,
+      "accessible": false,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-041",
+      "componentId": "window-exterior-standard",
+      "kind": "window",
+      "wall": {
+        "from": {
+          "x": -95200,
+          "y": -3000
+        },
+        "to": {
+          "x": -95200,
+          "y": 4500
+        }
+      },
+      "wallKey": "-95200,-3000|-95200,4500",
+      "orientation": "vertical",
+      "center": {
+        "x": -95200,
+        "y": 1533
+      },
+      "spanMillimetres": 1800,
+      "heightMillimetres": 1500,
+      "sillHeightMillimetres": 900,
+      "openingType": "casement-window",
+      "interiorExterior": "exterior",
+      "openable": true,
+      "accessible": false,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-042",
+      "componentId": "window-exterior-standard",
+      "kind": "window",
+      "wall": {
+        "from": {
+          "x": -95200,
+          "y": -3000
+        },
+        "to": {
+          "x": -95200,
+          "y": 4500
+        }
+      },
+      "wallKey": "-95200,-3000|-95200,4500",
+      "orientation": "vertical",
+      "center": {
+        "x": -95200,
+        "y": -910
+      },
+      "spanMillimetres": 1800,
+      "heightMillimetres": 1500,
+      "sillHeightMillimetres": 900,
+      "openingType": "casement-window",
+      "interiorExterior": "exterior",
+      "openable": true,
+      "accessible": false,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-043",
+      "componentId": "window-exterior-standard",
+      "kind": "window",
+      "wall": {
+        "from": {
+          "x": -95200,
+          "y": -10500
+        },
+        "to": {
+          "x": -95200,
+          "y": -3000
+        }
+      },
+      "wallKey": "-95200,-10500|-95200,-3000",
+      "orientation": "vertical",
+      "center": {
+        "x": -95200,
+        "y": -5806
+      },
+      "spanMillimetres": 1800,
+      "heightMillimetres": 1500,
+      "sillHeightMillimetres": 900,
+      "openingType": "casement-window",
+      "interiorExterior": "exterior",
+      "openable": true,
+      "accessible": false,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-044",
+      "componentId": "window-exterior-standard",
+      "kind": "window",
+      "wall": {
+        "from": {
+          "x": -95200,
+          "y": -10500
+        },
+        "to": {
+          "x": -95200,
+          "y": -3000
+        }
+      },
+      "wallKey": "-95200,-10500|-95200,-3000",
+      "orientation": "vertical",
+      "center": {
+        "x": -95200,
+        "y": -7987
+      },
+      "spanMillimetres": 1800,
+      "heightMillimetres": 1500,
+      "sillHeightMillimetres": 900,
+      "openingType": "casement-window",
+      "interiorExterior": "exterior",
+      "openable": true,
+      "accessible": false,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-052",
+      "componentId": "door-double-large",
+      "kind": "door",
+      "leaf": "double",
+      "wall": {
+        "from": {
+          "x": -95200,
+          "y": -21900
+        },
+        "to": {
+          "x": -95200,
+          "y": -10500
+        }
+      },
+      "wallKey": "-95200,-10500|-95200,-21900",
+      "orientation": "vertical",
+      "center": {
+        "x": -95200,
+        "y": -11667
+      },
+      "spanMillimetres": 1800,
+      "clearWidthMillimetres": 1800,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "equal-double",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": -1
+    },
+    {
+      "id": "opening-053",
+      "componentId": "door-double-large",
+      "kind": "door",
+      "leaf": "double",
+      "wall": {
+        "from": {
+          "x": -95200,
+          "y": -21900
+        },
+        "to": {
+          "x": -95200,
+          "y": -10500
+        }
+      },
+      "wallKey": "-95200,-10500|-95200,-21900",
+      "orientation": "vertical",
+      "center": {
+        "x": -95200,
+        "y": -20638
+      },
+      "spanMillimetres": 1800,
+      "clearWidthMillimetres": 1800,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "equal-double",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": -1
+    },
+    {
+      "id": "opening-054",
+      "componentId": "door-double-large",
+      "kind": "door",
+      "leaf": "double",
+      "wall": {
+        "from": {
+          "x": -95200,
+          "y": -25500
+        },
+        "to": {
+          "x": -95200,
+          "y": -21900
+        }
+      },
+      "wallKey": "-95200,-21900|-95200,-25500",
+      "orientation": "vertical",
+      "center": {
+        "x": -95200,
+        "y": -23273
+      },
+      "spanMillimetres": 1800,
+      "clearWidthMillimetres": 1800,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "equal-double",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": -1
+    },
+    {
+      "id": "opening-055",
+      "componentId": "door-double-large",
+      "kind": "door",
+      "leaf": "double",
+      "wall": {
+        "from": {
+          "x": -95200,
+          "y": -33000
+        },
+        "to": {
+          "x": -95200,
+          "y": -25500
+        }
+      },
+      "wallKey": "-95200,-25500|-95200,-33000",
+      "orientation": "vertical",
+      "center": {
+        "x": -95200,
+        "y": -31831
+      },
+      "spanMillimetres": 1800,
+      "clearWidthMillimetres": 1800,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "equal-double",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": -1
+    },
+    {
+      "id": "opening-056",
+      "componentId": "door-double-large",
+      "kind": "door",
+      "leaf": "double",
+      "wall": {
+        "from": {
+          "x": -95200,
+          "y": -40500
+        },
+        "to": {
+          "x": -95200,
+          "y": -33000
+        }
+      },
+      "wallKey": "-95200,-33000|-95200,-40500",
+      "orientation": "vertical",
+      "center": {
+        "x": -95200,
+        "y": -36774
+      },
+      "spanMillimetres": 1800,
+      "clearWidthMillimetres": 1800,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "equal-double",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": -1
+    },
+    {
+      "id": "opening-057",
+      "componentId": "door-double-large",
+      "kind": "door",
+      "leaf": "double",
+      "wall": {
+        "from": {
+          "x": -83200,
+          "y": -21900
+        },
+        "to": {
+          "x": -80200,
+          "y": -21900
+        }
+      },
+      "wallKey": "-80200,-21900|-83200,-21900",
+      "orientation": "horizontal",
+      "center": {
+        "x": -81692,
+        "y": -21900
+      },
+      "spanMillimetres": 1800,
+      "clearWidthMillimetres": 1800,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "equal-double",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-058",
+      "componentId": "window-exterior-standard",
+      "kind": "window",
+      "wall": {
+        "from": {
+          "x": -87700,
+          "y": -40500
+        },
+        "to": {
+          "x": -80200,
+          "y": -40500
+        }
+      },
+      "wallKey": "-80200,-40500|-87700,-40500",
+      "orientation": "horizontal",
+      "center": {
+        "x": -85005,
+        "y": -40500
+      },
+      "spanMillimetres": 1800,
+      "heightMillimetres": 1500,
+      "sillHeightMillimetres": 900,
+      "openingType": "casement-window",
+      "interiorExterior": "exterior",
+      "openable": true,
+      "accessible": false,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-059",
+      "componentId": "door-double-large",
+      "kind": "door",
+      "leaf": "double",
+      "wall": {
+        "from": {
+          "x": -80200,
+          "y": -40500
+        },
+        "to": {
+          "x": -72700,
+          "y": -40500
+        }
+      },
+      "wallKey": "-72700,-40500|-80200,-40500",
+      "orientation": "horizontal",
+      "center": {
+        "x": -76317,
+        "y": -40500
+      },
+      "spanMillimetres": 1800,
+      "clearWidthMillimetres": 1800,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "equal-double",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": -1
+    },
+    {
+      "id": "opening-060",
+      "componentId": "door-single",
+      "kind": "door",
+      "leaf": "single",
+      "wall": {
+        "from": {
+          "x": -78150,
+          "y": -33000
+        },
+        "to": {
+          "x": -75500,
+          "y": -33000
+        }
+      },
+      "wallKey": "-75500,-33000|-78150,-33000",
+      "orientation": "horizontal",
+      "center": {
+        "x": -76485,
+        "y": -33000
+      },
+      "spanMillimetres": 900,
+      "clearWidthMillimetres": 900,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "single-swing",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-062",
+      "componentId": "door-single",
+      "kind": "door",
+      "leaf": "single",
+      "wall": {
+        "from": {
+          "x": -75500,
+          "y": -33000
+        },
+        "to": {
+          "x": -72700,
+          "y": -33000
+        }
+      },
+      "wallKey": "-72700,-33000|-75500,-33000",
+      "orientation": "horizontal",
+      "center": {
+        "x": -74816,
+        "y": -33000
+      },
+      "spanMillimetres": 900,
+      "clearWidthMillimetres": 900,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "single-swing",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-063",
+      "componentId": "door-single",
+      "kind": "door",
+      "leaf": "single",
+      "wall": {
+        "from": {
+          "x": -87700,
+          "y": -35475
+        },
+        "to": {
+          "x": -80200,
+          "y": -35475
+        }
+      },
+      "wallKey": "-80200,-35475|-87700,-35475",
+      "orientation": "horizontal",
+      "center": {
+        "x": -81171,
+        "y": -35475
+      },
+      "spanMillimetres": 900,
+      "clearWidthMillimetres": 900,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "single-swing",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-064",
+      "componentId": "door-single",
+      "kind": "door",
+      "leaf": "single",
+      "wall": {
+        "from": {
+          "x": -80200,
+          "y": -40500
+        },
+        "to": {
+          "x": -80200,
+          "y": -35475
+        }
+      },
+      "wallKey": "-80200,-35475|-80200,-40500",
+      "orientation": "vertical",
+      "center": {
+        "x": -80200,
+        "y": -39615
+      },
+      "spanMillimetres": 900,
+      "clearWidthMillimetres": 900,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "single-swing",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": -1
+    },
+    {
+      "id": "opening-065",
+      "componentId": "door-single",
+      "kind": "door",
+      "leaf": "single",
+      "wall": {
+        "from": {
+          "x": -87700,
+          "y": -29200
+        },
+        "to": {
+          "x": -80200,
+          "y": -29200
+        }
+      },
+      "wallKey": "-80200,-29200|-87700,-29200",
+      "orientation": "horizontal",
+      "center": {
+        "x": -81130,
+        "y": -29200
+      },
+      "spanMillimetres": 900,
+      "clearWidthMillimetres": 900,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "single-swing",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-066",
+      "componentId": "door-single",
+      "kind": "door",
+      "leaf": "single",
+      "wall": {
+        "from": {
+          "x": -80200,
+          "y": -29200
+        },
+        "to": {
+          "x": -78150,
+          "y": -29200
+        }
+      },
+      "wallKey": "-78150,-29200|-80200,-29200",
+      "orientation": "horizontal",
+      "center": {
+        "x": -79380,
+        "y": -29200
+      },
+      "spanMillimetres": 900,
+      "clearWidthMillimetres": 900,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "single-swing",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-067",
+      "componentId": "door-single",
+      "kind": "door",
+      "leaf": "single",
+      "wall": {
+        "from": {
+          "x": -87700,
+          "y": -25500
+        },
+        "to": {
+          "x": -80200,
+          "y": -25500
+        }
+      },
+      "wallKey": "-80200,-25500|-87700,-25500",
+      "orientation": "horizontal",
+      "center": {
+        "x": -81089,
+        "y": -25500
+      },
+      "spanMillimetres": 900,
+      "clearWidthMillimetres": 900,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "single-swing",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-068",
+      "componentId": "door-single",
+      "kind": "door",
+      "leaf": "single",
+      "wall": {
+        "from": {
+          "x": -72700,
+          "y": -33000
+        },
+        "to": {
+          "x": -63250,
+          "y": -33000
+        }
+      },
+      "wallKey": "-63250,-33000|-72700,-33000",
+      "orientation": "horizontal",
+      "center": {
+        "x": -71852,
+        "y": -33000
+      },
+      "spanMillimetres": 900,
+      "clearWidthMillimetres": 900,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "single-swing",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-069",
+      "componentId": "door-single",
+      "kind": "door",
+      "leaf": "single",
+      "wall": {
+        "from": {
+          "x": -72700,
+          "y": -35500
+        },
+        "to": {
+          "x": -67950,
+          "y": -35500
+        }
+      },
+      "wallKey": "-67950,-35500|-72700,-35500",
+      "orientation": "horizontal",
+      "center": {
+        "x": -71933,
+        "y": -35500
+      },
+      "spanMillimetres": 900,
+      "clearWidthMillimetres": 900,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "single-swing",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": -1
+    },
+    {
+      "id": "opening-070",
+      "componentId": "door-single",
+      "kind": "door",
+      "leaf": "single",
+      "wall": {
+        "from": {
+          "x": -67950,
+          "y": -35500
+        },
+        "to": {
+          "x": -63225,
+          "y": -35500
+        }
+      },
+      "wallKey": "-63225,-35500|-67950,-35500",
+      "orientation": "horizontal",
+      "center": {
+        "x": -67228,
+        "y": -35500
+      },
+      "spanMillimetres": 900,
+      "clearWidthMillimetres": 900,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "single-swing",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": -1
+    },
+    {
+      "id": "opening-071",
+      "componentId": "door-single",
+      "kind": "door",
+      "leaf": "single",
+      "wall": {
+        "from": {
+          "x": -72700,
+          "y": -33000
+        },
+        "to": {
+          "x": -63250,
+          "y": -33000
+        }
+      },
+      "wallKey": "-63250,-33000|-72700,-33000",
+      "orientation": "horizontal",
+      "center": {
+        "x": -64015,
+        "y": -33000
+      },
+      "spanMillimetres": 900,
+      "clearWidthMillimetres": 900,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "single-swing",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-072",
+      "componentId": "door-single",
+      "kind": "door",
+      "leaf": "single",
+      "wall": {
+        "from": {
+          "x": -63250,
+          "y": -29775
+        },
+        "to": {
+          "x": -61200,
+          "y": -29775
+        }
+      },
+      "wallKey": "-61200,-29775|-63250,-29775",
+      "orientation": "horizontal",
+      "center": {
+        "x": -62128,
+        "y": -29775
+      },
+      "spanMillimetres": 900,
+      "clearWidthMillimetres": 900,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "single-swing",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-073",
+      "componentId": "door-single",
+      "kind": "door",
+      "leaf": "single",
+      "wall": {
+        "from": {
+          "x": -61200,
+          "y": -35500
+        },
+        "to": {
+          "x": -61200,
+          "y": -29775
+        }
+      },
+      "wallKey": "-61200,-29775|-61200,-35500",
+      "orientation": "vertical",
+      "center": {
+        "x": -61200,
+        "y": -34688
+      },
+      "spanMillimetres": 900,
+      "clearWidthMillimetres": 900,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "single-swing",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-074",
+      "componentId": "door-single",
+      "kind": "door",
+      "leaf": "single",
+      "wall": {
+        "from": {
+          "x": -63225,
+          "y": -35500
+        },
+        "to": {
+          "x": -61200,
+          "y": -35500
+        }
+      },
+      "wallKey": "-61200,-35500|-63225,-35500",
+      "orientation": "horizontal",
+      "center": {
+        "x": -62537,
+        "y": -35500
+      },
+      "spanMillimetres": 900,
+      "clearWidthMillimetres": 900,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "single-swing",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": -1
+    },
+    {
+      "id": "opening-075",
+      "componentId": "door-double-large",
+      "kind": "door",
+      "leaf": "double",
+      "wall": {
+        "from": {
+          "x": -57700,
+          "y": -3000
+        },
+        "to": {
+          "x": -57700,
+          "y": 0
+        }
+      },
+      "wallKey": "-57700,-3000|-57700,0",
+      "orientation": "vertical",
+      "center": {
+        "x": -57700,
+        "y": -1506
+      },
+      "spanMillimetres": 1800,
+      "clearWidthMillimetres": 1800,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "equal-double",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": -1
+    },
+    {
+      "id": "opening-076",
+      "componentId": "door-double-large",
+      "kind": "door",
+      "leaf": "double",
+      "wall": {
+        "from": {
+          "x": -72700,
+          "y": -3000
+        },
+        "to": {
+          "x": -57700,
+          "y": -3000
+        }
+      },
+      "wallKey": "-57700,-3000|-72700,-3000",
+      "orientation": "horizontal",
+      "center": {
+        "x": -59079,
+        "y": -3000
+      },
+      "spanMillimetres": 1800,
+      "clearWidthMillimetres": 1800,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "equal-double",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": -1
+    },
+    {
+      "id": "opening-078",
+      "componentId": "door-double-large",
+      "kind": "door",
+      "leaf": "double",
+      "wall": {
+        "from": {
+          "x": -72700,
+          "y": -21750
+        },
+        "to": {
+          "x": -72700,
+          "y": -3000
+        }
+      },
+      "wallKey": "-72700,-21750|-72700,-3000",
+      "orientation": "vertical",
+      "center": {
+        "x": -72700,
+        "y": -4340
+      },
+      "spanMillimetres": 1800,
+      "clearWidthMillimetres": 1800,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "equal-double",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": -1
+    },
+    {
+      "id": "opening-079",
+      "componentId": "door-double-large",
+      "kind": "door",
+      "leaf": "double",
+      "wall": {
+        "from": {
+          "x": -72700,
+          "y": -3000
+        },
+        "to": {
+          "x": -57700,
+          "y": -3000
+        }
+      },
+      "wallKey": "-57700,-3000|-72700,-3000",
+      "orientation": "horizontal",
+      "center": {
+        "x": -70275,
+        "y": -3000
+      },
+      "spanMillimetres": 1800,
+      "clearWidthMillimetres": 1800,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "equal-double",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": -1
+    },
+    {
+      "id": "opening-080",
+      "componentId": "door-single",
+      "kind": "door",
+      "leaf": "single",
+      "wall": {
+        "from": {
+          "x": -72700,
+          "y": -21750
+        },
+        "to": {
+          "x": -63250,
+          "y": -21750
+        }
+      },
+      "wallKey": "-63250,-21750|-72700,-21750",
+      "orientation": "horizontal",
+      "center": {
+        "x": -64050,
+        "y": -21750
+      },
+      "spanMillimetres": 900,
+      "clearWidthMillimetres": 900,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "single-swing",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": -1
+    },
+    {
+      "id": "opening-081",
+      "componentId": "door-single",
+      "kind": "door",
+      "leaf": "single",
+      "wall": {
+        "from": {
+          "x": -63250,
+          "y": -21750
+        },
+        "to": {
+          "x": -61200,
+          "y": -21750
+        }
+      },
+      "wallKey": "-61200,-21750|-63250,-21750",
+      "orientation": "horizontal",
+      "center": {
+        "x": -62063,
+        "y": -21750
+      },
+      "spanMillimetres": 900,
+      "clearWidthMillimetres": 900,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "single-swing",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": -1
+    },
+    {
+      "id": "opening-082",
+      "componentId": "door-single",
+      "kind": "door",
+      "leaf": "single",
+      "wall": {
+        "from": {
+          "x": -61200,
+          "y": -25500
+        },
+        "to": {
+          "x": -61200,
+          "y": -21750
+        }
+      },
+      "wallKey": "-61200,-21750|-61200,-25500",
+      "orientation": "vertical",
+      "center": {
+        "x": -61200,
+        "y": -24820
+      },
+      "spanMillimetres": 900,
+      "clearWidthMillimetres": 900,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "single-swing",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-083",
+      "componentId": "door-single",
+      "kind": "door",
+      "leaf": "single",
+      "wall": {
+        "from": {
+          "x": -61200,
+          "y": -29775
+        },
+        "to": {
+          "x": -61200,
+          "y": -25500
+        }
+      },
+      "wallKey": "-61200,-25500|-61200,-29775",
+      "orientation": "vertical",
+      "center": {
+        "x": -61200,
+        "y": -26472
+      },
+      "spanMillimetres": 900,
+      "clearWidthMillimetres": 900,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "single-swing",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-084",
+      "componentId": "door-single",
+      "kind": "door",
+      "leaf": "single",
+      "wall": {
+        "from": {
+          "x": -65200,
+          "y": -25500
+        },
+        "to": {
+          "x": -63250,
+          "y": -25500
+        }
+      },
+      "wallKey": "-63250,-25500|-65200,-25500",
+      "orientation": "horizontal",
+      "center": {
+        "x": -64080,
+        "y": -25500
+      },
+      "spanMillimetres": 900,
+      "clearWidthMillimetres": 900,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "single-swing",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": -1
+    },
+    {
+      "id": "opening-085",
+      "componentId": "door-single",
+      "kind": "door",
+      "leaf": "single",
+      "wall": {
+        "from": {
+          "x": -65200,
+          "y": -29775
+        },
+        "to": {
+          "x": -65200,
+          "y": -25500
+        }
+      },
+      "wallKey": "-65200,-25500|-65200,-29775",
+      "orientation": "vertical",
+      "center": {
+        "x": -65200,
+        "y": -28918
+      },
+      "spanMillimetres": 900,
+      "clearWidthMillimetres": 900,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "single-swing",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-087",
+      "componentId": "window-exterior-wide",
+      "kind": "window",
+      "wall": {
+        "from": {
+          "x": -87700,
+          "y": -25500
+        },
+        "to": {
+          "x": -80200,
+          "y": -25500
+        }
+      },
+      "wallKey": "-80200,-25500|-87700,-25500",
+      "orientation": "horizontal",
+      "center": {
+        "x": -84462,
+        "y": -25500
+      },
+      "spanMillimetres": 2400,
+      "heightMillimetres": 1500,
+      "sillHeightMillimetres": 900,
+      "openingType": "casement-window",
+      "interiorExterior": "exterior",
+      "openable": true,
+      "accessible": false,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-088",
+      "componentId": "window-exterior-wide",
+      "kind": "window",
+      "wall": {
+        "from": {
+          "x": -80200,
+          "y": -25500
+        },
+        "to": {
+          "x": -72700,
+          "y": -25500
+        }
+      },
+      "wallKey": "-72700,-25500|-80200,-25500",
+      "orientation": "horizontal",
+      "center": {
+        "x": -76395,
+        "y": -25500
+      },
+      "spanMillimetres": 2400,
+      "heightMillimetres": 1500,
+      "sillHeightMillimetres": 900,
+      "openingType": "casement-window",
+      "interiorExterior": "exterior",
+      "openable": true,
+      "accessible": false,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-089",
+      "componentId": "window-exterior-standard",
+      "kind": "window",
+      "wall": {
+        "from": {
+          "x": -80200,
+          "y": -21900
+        },
+        "to": {
+          "x": -80200,
+          "y": -3000
+        }
+      },
+      "wallKey": "-80200,-21900|-80200,-3000",
+      "orientation": "vertical",
+      "center": {
+        "x": -80200,
+        "y": -20486
+      },
+      "spanMillimetres": 1800,
+      "heightMillimetres": 1500,
+      "sillHeightMillimetres": 900,
+      "openingType": "casement-window",
+      "interiorExterior": "exterior",
+      "openable": true,
+      "accessible": false,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-090",
+      "componentId": "window-exterior-standard",
+      "kind": "window",
+      "wall": {
+        "from": {
+          "x": -80200,
+          "y": -21900
+        },
+        "to": {
+          "x": -80200,
+          "y": -3000
+        }
+      },
+      "wallKey": "-80200,-21900|-80200,-3000",
+      "orientation": "vertical",
+      "center": {
+        "x": -80200,
+        "y": -15216
+      },
+      "spanMillimetres": 1800,
+      "heightMillimetres": 1500,
+      "sillHeightMillimetres": 900,
+      "openingType": "casement-window",
+      "interiorExterior": "exterior",
+      "openable": true,
+      "accessible": false,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-091",
+      "componentId": "window-exterior-standard",
+      "kind": "window",
+      "wall": {
+        "from": {
+          "x": -80200,
+          "y": -21900
+        },
+        "to": {
+          "x": -80200,
+          "y": -3000
+        }
+      },
+      "wallKey": "-80200,-21900|-80200,-3000",
+      "orientation": "vertical",
+      "center": {
+        "x": -80200,
+        "y": -12973
+      },
+      "spanMillimetres": 1800,
+      "heightMillimetres": 1500,
+      "sillHeightMillimetres": 900,
+      "openingType": "casement-window",
+      "interiorExterior": "exterior",
+      "openable": true,
+      "accessible": false,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-092",
+      "componentId": "window-exterior-standard",
+      "kind": "window",
+      "wall": {
+        "from": {
+          "x": -72700,
+          "y": -21750
+        },
+        "to": {
+          "x": -72700,
+          "y": -3000
+        }
+      },
+      "wallKey": "-72700,-21750|-72700,-3000",
+      "orientation": "vertical",
+      "center": {
+        "x": -72700,
+        "y": -15496
+      },
+      "spanMillimetres": 1800,
+      "heightMillimetres": 1500,
+      "sillHeightMillimetres": 900,
+      "openingType": "casement-window",
+      "interiorExterior": "exterior",
+      "openable": true,
+      "accessible": false,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-093",
+      "componentId": "window-exterior-standard",
+      "kind": "window",
+      "wall": {
+        "from": {
+          "x": -72700,
+          "y": -21750
+        },
+        "to": {
+          "x": -72700,
+          "y": -3000
+        }
+      },
+      "wallKey": "-72700,-21750|-72700,-3000",
+      "orientation": "vertical",
+      "center": {
+        "x": -72700,
+        "y": -13197
+      },
+      "spanMillimetres": 1800,
+      "heightMillimetres": 1500,
+      "sillHeightMillimetres": 900,
+      "openingType": "casement-window",
+      "interiorExterior": "exterior",
+      "openable": true,
+      "accessible": false,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-094",
+      "componentId": "window-exterior-standard",
+      "kind": "window",
+      "wall": {
+        "from": {
+          "x": -72700,
+          "y": -21750
+        },
+        "to": {
+          "x": -72700,
+          "y": -3000
+        }
+      },
+      "wallKey": "-72700,-21750|-72700,-3000",
+      "orientation": "vertical",
+      "center": {
+        "x": -72700,
+        "y": -20486
+      },
+      "spanMillimetres": 1800,
+      "heightMillimetres": 1500,
+      "sillHeightMillimetres": 900,
+      "openingType": "casement-window",
+      "interiorExterior": "exterior",
+      "openable": true,
+      "accessible": false,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-095",
+      "componentId": "window-exterior-standard",
+      "kind": "window",
+      "wall": {
+        "from": {
+          "x": -80200,
+          "y": -21900
+        },
+        "to": {
+          "x": -80200,
+          "y": -3000
+        }
+      },
+      "wallKey": "-80200,-21900|-80200,-3000",
+      "orientation": "vertical",
+      "center": {
+        "x": -80200,
+        "y": -5680
+      },
+      "spanMillimetres": 1800,
+      "heightMillimetres": 1500,
+      "sillHeightMillimetres": 900,
+      "openingType": "casement-window",
+      "interiorExterior": "exterior",
+      "openable": true,
+      "accessible": false,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-096",
+      "componentId": "window-exterior-standard",
+      "kind": "window",
+      "wall": {
+        "from": {
+          "x": -80200,
+          "y": -21900
+        },
+        "to": {
+          "x": -80200,
+          "y": -3000
+        }
+      },
+      "wallKey": "-80200,-21900|-80200,-3000",
+      "orientation": "vertical",
+      "center": {
+        "x": -80200,
+        "y": -7790
+      },
+      "spanMillimetres": 1800,
+      "heightMillimetres": 1500,
+      "sillHeightMillimetres": 900,
+      "openingType": "casement-window",
+      "interiorExterior": "exterior",
+      "openable": true,
+      "accessible": false,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-097",
+      "componentId": "window-exterior-standard",
+      "kind": "window",
+      "wall": {
+        "from": {
+          "x": -72700,
+          "y": -21750
+        },
+        "to": {
+          "x": -72700,
+          "y": -3000
+        }
+      },
+      "wallKey": "-72700,-21750|-72700,-3000",
+      "orientation": "vertical",
+      "center": {
+        "x": -72700,
+        "y": -7912
+      },
+      "spanMillimetres": 1800,
+      "heightMillimetres": 1500,
+      "sillHeightMillimetres": 900,
+      "openingType": "casement-window",
+      "interiorExterior": "exterior",
+      "openable": true,
+      "accessible": false,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-098",
+      "componentId": "window-exterior-standard",
+      "kind": "window",
+      "wall": {
+        "from": {
+          "x": -80200,
+          "y": -3000
+        },
+        "to": {
+          "x": -72700,
+          "y": -3000
+        }
+      },
+      "wallKey": "-72700,-3000|-80200,-3000",
+      "orientation": "horizontal",
+      "center": {
+        "x": -77956,
+        "y": -3000
+      },
+      "spanMillimetres": 1800,
+      "heightMillimetres": 1500,
+      "sillHeightMillimetres": 900,
+      "openingType": "casement-window",
+      "interiorExterior": "exterior",
+      "openable": true,
+      "accessible": false,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-099",
+      "componentId": "window-exterior-standard",
+      "kind": "window",
+      "wall": {
+        "from": {
+          "x": -80200,
+          "y": -3000
+        },
+        "to": {
+          "x": -72700,
+          "y": -3000
+        }
+      },
+      "wallKey": "-72700,-3000|-80200,-3000",
+      "orientation": "horizontal",
+      "center": {
+        "x": -75473,
+        "y": -3000
+      },
+      "spanMillimetres": 1800,
+      "heightMillimetres": 1500,
+      "sillHeightMillimetres": 900,
+      "openingType": "casement-window",
+      "interiorExterior": "exterior",
+      "openable": true,
+      "accessible": false,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-100",
+      "componentId": "window-exterior-narrow",
+      "kind": "window",
+      "wall": {
+        "from": {
+          "x": -72700,
+          "y": -40500
+        },
+        "to": {
+          "x": -67950,
+          "y": -40500
+        }
+      },
+      "wallKey": "-67950,-40500|-72700,-40500",
+      "orientation": "horizontal",
+      "center": {
+        "x": -70173,
+        "y": -40500
+      },
+      "spanMillimetres": 1200,
+      "heightMillimetres": 1500,
+      "sillHeightMillimetres": 900,
+      "openingType": "casement-window",
+      "interiorExterior": "exterior",
+      "openable": true,
+      "accessible": false,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-101",
+      "componentId": "window-exterior-narrow",
+      "kind": "window",
+      "wall": {
+        "from": {
+          "x": -67950,
+          "y": -40500
+        },
+        "to": {
+          "x": -63225,
+          "y": -40500
+        }
+      },
+      "wallKey": "-63225,-40500|-67950,-40500",
+      "orientation": "horizontal",
+      "center": {
+        "x": -65468,
+        "y": -40500
+      },
+      "spanMillimetres": 1200,
+      "heightMillimetres": 1500,
+      "sillHeightMillimetres": 900,
+      "openingType": "casement-window",
+      "interiorExterior": "exterior",
+      "openable": true,
+      "accessible": false,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-102",
+      "componentId": "window-exterior-narrow",
+      "kind": "window",
+      "wall": {
+        "from": {
+          "x": -63225,
+          "y": -40500
+        },
+        "to": {
+          "x": -57700,
+          "y": -40500
+        }
+      },
+      "wallKey": "-57700,-40500|-63225,-40500",
+      "orientation": "horizontal",
+      "center": {
+        "x": -60194,
+        "y": -40500
+      },
+      "spanMillimetres": 1200,
+      "heightMillimetres": 1500,
+      "sillHeightMillimetres": 900,
+      "openingType": "casement-window",
+      "interiorExterior": "exterior",
+      "openable": true,
+      "accessible": false,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-103",
+      "componentId": "door-double-large",
+      "kind": "door",
+      "leaf": "double",
+      "wall": {
+        "from": {
+          "x": -87700,
+          "y": 19500
+        },
+        "to": {
+          "x": -80200,
+          "y": 19500
+        }
+      },
+      "wallKey": "-80200,19500|-87700,19500",
+      "orientation": "horizontal",
+      "center": {
+        "x": -83902,
+        "y": 19500
+      },
+      "spanMillimetres": 1800,
+      "clearWidthMillimetres": 1800,
+      "heightMillimetres": 2100,
+      "sillHeightMillimetres": 0,
+      "openingType": "equal-double",
+      "activeLeafWidthMillimetres": 900,
+      "accessible": true,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-104",
+      "componentId": "window-exterior-standard",
+      "kind": "window",
+      "wall": {
+        "from": {
+          "x": -80200,
+          "y": 19500
+        },
+        "to": {
+          "x": -72700,
+          "y": 19500
+        }
+      },
+      "wallKey": "-72700,19500|-80200,19500",
+      "orientation": "horizontal",
+      "center": {
+        "x": -76446,
+        "y": 19500
+      },
+      "spanMillimetres": 1800,
+      "heightMillimetres": 1500,
+      "sillHeightMillimetres": 900,
+      "openingType": "casement-window",
+      "interiorExterior": "exterior",
+      "openable": true,
+      "accessible": false,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-105",
+      "componentId": "window-exterior-standard",
+      "kind": "window",
+      "wall": {
+        "from": {
+          "x": -72700,
+          "y": 19500
+        },
+        "to": {
+          "x": -65200,
+          "y": 19500
+        }
+      },
+      "wallKey": "-65200,19500|-72700,19500",
+      "orientation": "horizontal",
+      "center": {
+        "x": -69004,
+        "y": 19500
+      },
+      "spanMillimetres": 1800,
+      "heightMillimetres": 1500,
+      "sillHeightMillimetres": 900,
+      "openingType": "casement-window",
+      "interiorExterior": "exterior",
+      "openable": true,
+      "accessible": false,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-106",
+      "componentId": "window-exterior-wide",
+      "kind": "window",
+      "wall": {
+        "from": {
+          "x": -65200,
+          "y": 19500
+        },
+        "to": {
+          "x": -57700,
+          "y": 19500
+        }
+      },
+      "wallKey": "-57700,19500|-65200,19500",
+      "orientation": "horizontal",
+      "center": {
+        "x": -61358,
+        "y": 19500
+      },
+      "spanMillimetres": 2400,
+      "heightMillimetres": 1500,
+      "sillHeightMillimetres": 900,
+      "openingType": "casement-window",
+      "interiorExterior": "exterior",
+      "openable": true,
+      "accessible": false,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-107",
+      "componentId": "window-exterior-wide",
+      "kind": "window",
+      "wall": {
+        "from": {
+          "x": -57700,
+          "y": 12000
+        },
+        "to": {
+          "x": -57700,
+          "y": 19500
+        }
+      },
+      "wallKey": "-57700,12000|-57700,19500",
+      "orientation": "vertical",
+      "center": {
+        "x": -57700,
+        "y": 17017
+      },
+      "spanMillimetres": 2400,
+      "heightMillimetres": 1500,
+      "sillHeightMillimetres": 900,
+      "openingType": "casement-window",
+      "interiorExterior": "exterior",
+      "openable": true,
+      "accessible": false,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-108",
+      "componentId": "window-exterior-narrow",
+      "kind": "window",
+      "wall": {
+        "from": {
+          "x": -57700,
+          "y": 0
+        },
+        "to": {
+          "x": -57700,
+          "y": 4275
+        }
+      },
+      "wallKey": "-57700,0|-57700,4275",
+      "orientation": "vertical",
+      "center": {
+        "x": -57700,
+        "y": 3241
+      },
+      "spanMillimetres": 1200,
+      "heightMillimetres": 1500,
+      "sillHeightMillimetres": 900,
+      "openingType": "casement-window",
+      "interiorExterior": "exterior",
+      "openable": true,
+      "accessible": false,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-109",
+      "componentId": "window-exterior-wide",
+      "kind": "window",
+      "wall": {
+        "from": {
+          "x": -57700,
+          "y": -21750
+        },
+        "to": {
+          "x": -57700,
+          "y": -3000
+        }
+      },
+      "wallKey": "-57700,-21750|-57700,-3000",
+      "orientation": "vertical",
+      "center": {
+        "x": -57700,
+        "y": -6444
+      },
+      "spanMillimetres": 2400,
+      "heightMillimetres": 1500,
+      "sillHeightMillimetres": 900,
+      "openingType": "casement-window",
+      "interiorExterior": "exterior",
+      "openable": true,
+      "accessible": false,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-110",
+      "componentId": "window-exterior-wide",
+      "kind": "window",
+      "wall": {
+        "from": {
+          "x": -57700,
+          "y": -21750
+        },
+        "to": {
+          "x": -57700,
+          "y": -3000
+        }
+      },
+      "wallKey": "-57700,-21750|-57700,-3000",
+      "orientation": "vertical",
+      "center": {
+        "x": -57700,
+        "y": -11154
+      },
+      "spanMillimetres": 2400,
+      "heightMillimetres": 1500,
+      "sillHeightMillimetres": 900,
+      "openingType": "casement-window",
+      "interiorExterior": "exterior",
+      "openable": true,
+      "accessible": false,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    },
+    {
+      "id": "opening-111",
+      "componentId": "window-exterior-wide",
+      "kind": "window",
+      "wall": {
+        "from": {
+          "x": -57700,
+          "y": -21750
+        },
+        "to": {
+          "x": -57700,
+          "y": -3000
+        }
+      },
+      "wallKey": "-57700,-21750|-57700,-3000",
+      "orientation": "vertical",
+      "center": {
+        "x": -57700,
+        "y": -15684
+      },
+      "spanMillimetres": 2400,
+      "heightMillimetres": 1500,
+      "sillHeightMillimetres": 900,
+      "openingType": "casement-window",
+      "interiorExterior": "exterior",
+      "openable": true,
+      "accessible": false,
+      "fireRated": null,
+      "observationPanel": false,
+      "source": "project-preset",
+      "side": 1
+    }
+  ]
+}

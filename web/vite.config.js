@@ -46,6 +46,7 @@ export default defineConfig({
       '/hospital-map-prototype': resolve(import.meta.dirname, 'src/hospital-map-prototype'),
       '/scene-host': resolve(import.meta.dirname, 'src/scene-host'),
       '/character-creation': resolve(import.meta.dirname, 'src/character-creation'),
+      '/opening-exploration': resolve(import.meta.dirname, 'src/opening-exploration'),
       '/dialogue': resolve(import.meta.dirname, 'src/dialogue'),
       '/prototype-bootstrap': resolve(import.meta.dirname, 'src/prototype-bootstrap'),
     },

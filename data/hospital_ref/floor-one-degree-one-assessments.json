@@ -1,0 +1,22 @@
+{
+  "schema": "hospital-degree-one-assessments/v1",
+  "coordinateUnit": "millimetre",
+  "sourcePlan": "data/hospital_ref/full/page-26.png",
+  "status": "owner-reviewable-plan-assessment",
+  "classifications": {
+    "door-opening-edge": "端点位于图纸可见门洞的一侧。",
+    "open-boundary-edge": "端点是大厅或走廊开放边界的正常收头，不应跨越开放空间补墙。",
+    "partition-termination": "端点是一段独立隔断墙的正常收头。"
+  },
+  "assessments": [
+    { "point": { "x": 84000, "y": 20700 }, "classification": "open-boundary-edge", "pairedPoint": { "x": 84000, "y": 27600 }, "openingSpanMillimetres": 6900, "planEvidence": "门诊大厅与南北通道连续开放，图纸没有跨越该轴跨的墙或门。" },
+    { "point": { "x": 84000, "y": 27600 }, "classification": "open-boundary-edge", "pairedPoint": { "x": 84000, "y": 20700 }, "openingSpanMillimetres": 6900, "planEvidence": "门诊大厅与南北通道连续开放，图纸没有跨越该轴跨的墙或门。" },
+    { "point": { "x": 89600, "y": 37900 }, "classification": "door-opening-edge", "openingSpanMillimetres": 1300, "planEvidence": "端点与东侧墙之间有清晰单开门扇及开启弧。" },
+    { "point": { "x": 90900, "y": 20700 }, "classification": "open-boundary-edge", "pairedPoint": { "x": 90900, "y": 27600 }, "openingSpanMillimetres": 6900, "planEvidence": "门诊大厅与南北通道连续开放，图纸没有跨越该轴跨的墙或门。" },
+    { "point": { "x": 90900, "y": 27600 }, "classification": "open-boundary-edge", "pairedPoint": { "x": 90900, "y": 20700 }, "openingSpanMillimetres": 6900, "planEvidence": "门诊大厅与南北通道连续开放，图纸没有跨越该轴跨的墙或门。" },
+    { "point": { "x": 93900, "y": 48300 }, "classification": "partition-termination", "pairedPoint": { "x": 93900, "y": 55200 }, "planEvidence": "两端属于同一段独立隔断墙，均为正常收头。" },
+    { "point": { "x": 93900, "y": 55200 }, "classification": "partition-termination", "pairedPoint": { "x": 93900, "y": 48300 }, "planEvidence": "两端属于同一段独立隔断墙，均为正常收头。" },
+    { "point": { "x": 96950, "y": 19400 }, "classification": "door-opening-edge", "openingSpanMillimetres": 1300, "planEvidence": "端点与北侧横墙之间有清晰单开门扇及开启弧。" },
+    { "point": { "x": 99950, "y": 19425 }, "classification": "door-opening-edge", "openingSpanMillimetres": 1275, "planEvidence": "端点与北侧横墙之间有清晰单开门扇及开启弧。" }
+  ]
+}

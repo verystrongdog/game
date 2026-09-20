@@ -190,6 +190,8 @@
 ### 呈现
 - [战斗界面布局](presentation/%E6%88%98%E6%96%97%E7%95%8C%E9%9D%A2%E5%B8%83%E5%B1%80.md) — 37项决策：整体布局/操作流/脑区面板/HUD/信息展示/过渡/键盘快捷键
 - [叙事界面布局](presentation/%E5%8F%99%E4%BA%8B%E7%95%8C%E9%9D%A2%E5%B8%83%E5%B1%80.md) — 左侧游戏世界 + 右侧叙事流/回应/笔记的布局与交互；含[浏览器交互原型](presentation/%E5%8F%99%E4%BA%8B%E7%95%8C%E9%9D%A2%E5%8E%9F%E5%9E%8B.html)
+- [场景化对话与任务写作方法](presentation/%E5%9C%BA%E6%99%AF%E5%8C%96%E5%AF%B9%E8%AF%9D%E4%B8%8E%E4%BB%BB%E5%8A%A1%E5%86%99%E4%BD%9C%E6%96%B9%E6%B3%95.md) — 从人物素材到环境、行动、微反应、失败继续与回访节点的创作工序
+- [主角开场场景示范](presentation/%E4%B8%BB%E8%A7%92%E5%BC%80%E5%9C%BA%E5%9C%BA%E6%99%AF%E7%A4%BA%E8%8C%83.md) — 用苟智空入院原稿演示环境、行动、经历影响与《无法离开医院》的首次呈现
 - [3D可视化](presentation/visualization-3d) — 可视化规范/Blender管线/HTML原型（目录在规则/下）
 - [Unity 呈现沙盘工程](../code/unity/README.md) — 白盒回合沙盘/KiWalkerLab 真人动画演示（2026-09-06 grilling #122）
 - [Unity 沙盘动作集规格](presentation/%E5%8A%A8%E4%BD%9C%E5%BA%93%E8%A7%84%E6%A0%BC.md) — 动作受控词表/引用契约/来源矩阵/扩展协议（2026-09-07 grilling #123）

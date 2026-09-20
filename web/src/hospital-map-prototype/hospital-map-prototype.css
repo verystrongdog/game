@@ -2,6 +2,7 @@
 .map-time-filter { position: absolute; z-index: 10; inset: 0; pointer-events: none; background: linear-gradient(var(--time-wash, transparent), var(--time-wash, transparent)), radial-gradient(ellipse at center, transparent 48%, var(--time-edge, transparent) 125%); transform: translateZ(0); backface-visibility: hidden; transition: background .35s ease; }
 .hospital-map-prototype.dragging { cursor: grabbing; }
 .hospital-map-prototype.snap-wall-mode { cursor: crosshair; }
+.hospital-map-prototype.opening-placement-mode { cursor: cell; }
 .hospital-map-prototype[hidden] { display: none; }
 .scene.map-prototype-active .world-3d-canvas,
 .scene.map-prototype-active .unity-web-canvas,
@@ -27,6 +28,33 @@
 .hospital-map-prototype.map-panning .map-plan-preview { visibility: visible; }
 .hospital-map-prototype.map-panning .wall-snap-preview { visibility: hidden; }
 .hospital-map-prototype.map-panning .map-location.reachable i { animation: none; }
+.map-inspection-system { position: absolute; z-index: 3; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.enclosure-shape { stroke-width: 1px; vector-effect: non-scaling-stroke; pointer-events: all; cursor: pointer; outline: none; transition: fill .12s ease, stroke .12s ease; }
+.enclosure-shape.small { fill: rgba(214, 158, 71, .16); stroke: rgba(172, 104, 31, .72); }
+.enclosure-shape.medium { fill: rgba(45, 151, 129, .105); stroke: rgba(25, 113, 96, .62); }
+.enclosure-shape.large { fill: rgba(94, 91, 180, .09); stroke: rgba(72, 65, 151, .58); }
+.enclosure-shape:hover, .enclosure-shape:focus-visible { fill: rgba(242, 177, 84, .28); stroke: #a44225; }
+.enclosure-shape.selected { fill: rgba(224, 92, 50, .32); stroke: #8f2718; stroke-width: 2px; }
+.hospital-map-prototype.snap-wall-mode .enclosure-shape { pointer-events: none; }
+.map-opening-system { position: absolute; z-index: 5; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.opening-component { outline: none; pointer-events: none; }
+.opening-component line { vector-effect: non-scaling-stroke; pointer-events: none; }
+.opening-mask { stroke: rgba(245, 245, 241, .96); stroke-width: 5px; }
+.opening-span { stroke-width: 2px; }
+.opening-component.door .opening-span, .opening-door-leaf { stroke: #bb5e32; }
+.opening-component.window .opening-span, .opening-window-pane { stroke: #147c91; }
+.opening-window-pane { stroke-width: 1.5px; }
+.opening-door-leaf { stroke-width: 1.5px; }
+.opening-hit { stroke: rgba(255,255,255,.001); stroke-width: 12px; }
+.opening-component.selected .opening-span,
+.opening-component.selected .opening-door-leaf,
+.opening-component.selected .opening-window-pane,
+.opening-component:focus-visible .opening-span,
+.opening-component:focus-visible .opening-door-leaf,
+.opening-component:focus-visible .opening-window-pane { stroke: #ffdc73; stroke-width: 3px; }
+.hospital-map-prototype.opening-placement-mode .opening-hit { pointer-events: stroke; cursor: pointer; }
+.hospital-map-prototype.opening-placement-mode .enclosure-shape,
+.hospital-map-prototype.opening-placement-mode .grid-intersection-hit { pointer-events: none; }
 .map-routes { position: absolute; z-index: 1; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
 .map-routes line { stroke: rgba(169, 218, 202, .38); stroke-width: .32; stroke-dasharray: 1.1 .7; vector-effect: non-scaling-stroke; }
 .map-regions { position: absolute; z-index: 2; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }

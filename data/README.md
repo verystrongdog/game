@@ -92,6 +92,11 @@ md 文档（设计层）          JSON 文件（数据层）          C# 引擎 
 | `connectivity/link_modulation_ceiling_v2.json` | 链路调制天花板 | — | 参考（旧链路体系） |
 | `term_registry.json` | 术语注册表 | 311 条 | 设计期参考，非运行时数据 |
 | `hospital_ref/floor-one-exterior-walls.json` | 500 床方案一一层整体外墙拓扑 | 152 段 | Web 校图原型的外墙基线；来源与口径见 `design/presentation/500床一层跑团地图原型.md` §一 |
+| `hospital_ref/floor-one-enclosures.json` | 一层墙线推导的有界几何闭环 | 189 个闭环 / 9 个已分类一度端点 | 由 364 段修正后有效墙线生成；尚未分类为房间；来源与口径见 `design/presentation/500床一层跑团地图原型.md` §2.1 |
+| `hospital_ref/floor-one-wall-topology-repairs.json` | 原始描线的显式拓扑修正与补充 | 19 个端点替换 + 2 段承接大双开门的边界墙 | 不改动 `reference/` 原文件；生成闭环前应用并验证命中或重复；来源与口径见 `design/presentation/500床一层跑团地图原型.md` §2.1 |
+| `hospital_ref/floor-one-degree-one-assessments.json` | 修正后一度端点的逐点图纸复核 | 3 门洞 / 4 开放边界 / 2 隔断墙收头 | 9 个端点全部具有建筑语义，无未判定遗留点；来源与口径见 `design/presentation/500床一层跑团地图原型.md` §2.1 |
+| `hospital_ref/floor-one-opening-catalog.json` | 一层二维门窗组件目录 | 5 种门 / 4 种窗 | 洞口跨度与通行净宽分字段；规范下限和项目预设来源见 `design/presentation/二维门窗布置工具.md` §二 |
+| `hospital_ref/floor-one-openings.json` | 一层已确认门窗布置基线 | 86 个（供应中心：51 门 / 35 窗） | 由各建筑上传 JSON 校验生成；当前来源为 `reference/供应中心门窗.json` |
 
 ### 参考数据（⚠️ 已废弃系统，保留为参数参考）
 

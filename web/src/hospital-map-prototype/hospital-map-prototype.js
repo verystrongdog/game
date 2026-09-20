@@ -1,11 +1,13 @@
-// PROTOTYPE — three presentations over one semantic map, switchable with ?variant=.
-// 来源：design/presentation/500床一层跑团地图原型.md §一—§五。
+// PROTOTYPE — measured floor-plan and wall-tracing presentation.
+// 来源：design/presentation/500床一层跑团地图原型.md §一—§三。
 import planUrl from '../../../data/hospital_ref/vector/page-26.svg?url'
 import planPreviewUrl from '../../../data/hospital_ref/cache/page-26-web.png?url'
 import exteriorWallTopology from '../../../data/hospital_ref/floor-one-exterior-walls.json'
+import enclosureTopology from '../../../data/hospital_ref/floor-one-enclosures.json'
+import openingCatalog from '../../../data/hospital_ref/floor-one-opening-catalog.json'
+import baselineOpeningLayout from '../../../data/hospital_ref/floor-one-openings.json'
 import { EDGE_PAN_MAX_FRAME_SECONDS, edgePanVelocity } from './edge-pan.js'
 import { floorOneMap } from './floor-one-map.js'
-import { createFloorMapRuntime } from './floor-map-runtime.js'
 import {
   axisPosition,
   constrainWallPoint,
@@ -17,11 +19,18 @@ import {
   yAxesForX,
 } from './map-coordinate.js'
 import { createWallTrace, serialiseWallTopology } from './wall-trace.js'
+import { createOpeningEditor } from './opening-editor.js'
 import { clampZoom, nextWheelZoom, wheelZoomTarget } from './zoom-motion.js'
 
-const variants = ['atlas', 'tabletop', 'route']
-const byId = id => floorOneMap.locations.find(location => location.id === id)
-const escapeHtml = value => String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;')
+const variants = ['atlas']
+// 来源：design/presentation/500床一层跑团地图原型.md §一·校图坐标系。
+const MAP_DRAG_START_DISTANCE_CSS_PIXELS = 3
+// 来源：design/presentation/二维门窗布置工具.md §三。
+const OPENING_SNAP_DISTANCE_MILLIMETRES = 750
+// 来源：design/presentation/二维门窗布置工具.md §三（二维符号偏移，不代表实体构造厚度）。
+const WINDOW_SYMBOL_OFFSET_MILLIMETRES = 80
+const OPENING_DRAFT_STORAGE_KEY = 'yantf:floor-one-opening-layout:v1'
+const openingComponentsById = new Map(openingCatalog.components.map(component => [component.id, component]))
 
 function mapCoordinate(x, y) {
   const point = mapPointToMillimetres(floorOneMap.coordinateSystem, { x, y })
@@ -50,26 +59,6 @@ function copyMillimetreCoordinateLabel(point, kind = '交点') {
   return `地图${kind} X ${signed(point.x)} m, Y ${signed(point.y)} m`
 }
 
-function routeSvg(view, { labels = false } = {}) {
-  const lines = view.connections.map(([a, b]) => {
-    const from = byId(a); const to = byId(b)
-    return `<line x1="${from.x}" y1="${from.y}" x2="${to.x}" y2="${to.y}" />`
-  }).join('')
-  const nodes = labels ? view.locations.map(location => `<g class="route-svg-node ${location.current ? 'current' : ''}">
-    <circle cx="${location.x}" cy="${location.y}" r="1.35"/><text x="${location.x}" y="${location.y - 2.2}">${escapeHtml(location.name)}</text>
-  </g>`).join('') : ''
-  return `<svg class="map-routes" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><g>${lines}</g>${nodes}</svg>`
-}
-
-function regionSvg(view) {
-  const polygons = view.locations.map(location => {
-    const stateClass = location.current ? 'current' : location.reachable ? 'reachable' : 'locked'
-    const enabled = location.current || location.reachable
-    return `<polygon class="map-region ${stateClass}" points="${location.region}" ${enabled ? `data-location="${location.id}" tabindex="0" role="button"` : ''} aria-label="${escapeHtml(location.name)}"><title>${escapeHtml(location.name)}</title></polygon>`
-  }).join('')
-  return `<svg class="map-regions" viewBox="0 0 100 100" preserveAspectRatio="none" aria-label="可移动区域">${polygons}</svg>`
-}
-
 function wallEndpointPosition(point) {
   return millimetrePointToMap(floorOneMap.coordinateSystem, point)
 }
@@ -82,6 +71,74 @@ function authoredWallLines(topology) {
     const geometry = `x1="${from.x}" y1="${from.y}" x2="${to.x}" y2="${to.y}"`
     return `<line class="authored-wall-shadow" ${geometry}/><line class="authored-wall-line" ${geometry}/>`
   }).join('')
+}
+
+function inspectionSvg(state) {
+  const enclosures = state.showEnclosures ? enclosureTopology.enclosures.map(enclosure => {
+    const points = enclosure.boundary.map(wallEndpointPosition).filter(Boolean)
+    if (points.length !== enclosure.boundary.length) return ''
+    const areaSquareMetres = enclosure.areaSquareMillimetres / 1_000_000
+    const sizeClass = areaSquareMetres < 15 ? 'small' : areaSquareMetres < 60 ? 'medium' : 'large'
+    const selected = state.selectedEnclosure === enclosure.id ? ' selected' : ''
+    const pointList = points.map(point => `${point.x},${point.y}`).join(' ')
+    return `<polygon class="enclosure-shape ${sizeClass}${selected}" points="${pointList}" data-enclosure="${enclosure.id}" tabindex="0" role="button" aria-label="几何闭环 ${enclosure.id}，${areaSquareMetres.toFixed(3)} 平方米"><title>${enclosure.id} · ${areaSquareMetres.toFixed(3)} m² · ${enclosure.boundary.length} 个顶点</title></polygon>`
+  }).join('') : ''
+  return `<svg class="map-inspection-system" viewBox="0 0 100 100" preserveAspectRatio="none" aria-label="几何闭环目视检查图层">
+    <g class="enclosure-layer">${enclosures}</g>
+  </svg>`
+}
+
+function openingSpanEndpoints(placement, perpendicularOffsetMillimetres = 0) {
+  const half = placement.spanMillimetres / 2
+  if (placement.orientation === 'horizontal') {
+    return [
+      { x: placement.center.x - half, y: placement.center.y + perpendicularOffsetMillimetres },
+      { x: placement.center.x + half, y: placement.center.y + perpendicularOffsetMillimetres },
+    ]
+  }
+  return [
+    { x: placement.center.x + perpendicularOffsetMillimetres, y: placement.center.y - half },
+    { x: placement.center.x + perpendicularOffsetMillimetres, y: placement.center.y + half },
+  ]
+}
+
+function svgLine(className, fromMillimetres, toMillimetres) {
+  const from = wallEndpointPosition(fromMillimetres)
+  const to = wallEndpointPosition(toMillimetres)
+  return `<line class="${className}" x1="${from.x}" y1="${from.y}" x2="${to.x}" y2="${to.y}" />`
+}
+
+function openingSymbol(placement, selected) {
+  const [from, to] = openingSpanEndpoints(placement)
+  const label = openingComponentsById.get(placement.componentId)?.label || placement.componentId
+  const selectedClass = selected ? ' selected' : ''
+  let symbol = svgLine('opening-mask', from, to) + svgLine('opening-span', from, to)
+  if (placement.kind === 'door') {
+    const firstLeafLength = placement.leaf === 'double'
+      ? placement.activeLeafWidthMillimetres || placement.spanMillimetres / 2
+      : placement.spanMillimetres
+    const secondLeafLength = placement.spanMillimetres - firstLeafLength
+    if (placement.orientation === 'horizontal') {
+      symbol += svgLine('opening-door-leaf', from, { x: from.x, y: from.y + placement.side * firstLeafLength })
+      if (placement.leaf === 'double') symbol += svgLine('opening-door-leaf', to, { x: to.x, y: to.y + placement.side * secondLeafLength })
+    } else {
+      symbol += svgLine('opening-door-leaf', from, { x: from.x + placement.side * firstLeafLength, y: from.y })
+      if (placement.leaf === 'double') symbol += svgLine('opening-door-leaf', to, { x: to.x + placement.side * secondLeafLength, y: to.y })
+    }
+  } else {
+    const [parallelFrom, parallelTo] = openingSpanEndpoints(placement, WINDOW_SYMBOL_OFFSET_MILLIMETRES)
+    symbol += svgLine('opening-window-pane', parallelFrom, parallelTo)
+  }
+  return `<g class="opening-component ${placement.kind}${selectedClass}" data-opening-id="${placement.id}" tabindex="0" role="button" aria-label="${label}，${placement.spanMillimetres} 毫米">
+    ${symbol}
+    ${svgLine('opening-hit', from, to)}
+    <title>${label} · ${placement.spanMillimetres}×${placement.heightMillimetres} mm</title>
+  </g>`
+}
+
+function openingSvg(openingState) {
+  const symbols = openingState.placements.map(placement => openingSymbol(placement, placement.id === openingState.selectedPlacementId)).join('')
+  return `<svg class="map-opening-system" viewBox="0 0 100 100" preserveAspectRatio="none" aria-label="已放置门窗">${symbols}</svg>`
 }
 
 function gridPath(values, axes, segment) {
@@ -152,32 +209,6 @@ function coordinateSvg(topology, selectedGridPoint, selectedPointKind, interacti
   </svg>`
 }
 
-function locationButtons(view, compact = false) {
-  return view.locations.map(location => `<button type="button" class="map-location${location.current ? ' current' : ''}${location.reachable ? ' reachable' : ''}" style="--x:${location.x}%;--y:${location.y}%" data-location="${location.id}" title="${escapeHtml(location.name)} · ${coordinateLabel(location.x, location.y)}" ${location.current || location.reachable ? '' : 'disabled'}>
-    <i></i><span>${compact ? escapeHtml(location.name.replace('一层', '')) : escapeHtml(location.name)}</span>
-  </button>`).join('')
-}
-
-function peopleTokens(view, getNpcDossier, large = false) {
-  return view.actors.map(person => {
-    const location = byId(person.location)
-    const dossier = getNpcDossier?.(person.id)
-    const displayName = dossier?.displayName || '陌生人'
-    const displayMark = dossier?.displayMark || '·'
-    const peers = view.actors.filter(actor => actor.location === person.location)
-    // 来源：design/presentation/开局剧情逻辑原型.md §3.4；同地点人物标记以 0.9 个地图百分比展开。
-    const offset = (peers.findIndex(actor => actor.id === person.id) - (peers.length - 1) / 2) * .9
-    return `<button type="button" class="map-person${person.coLocated ? ' co-located' : ''}${large ? ' large' : ''}" style="--x:${location.x + offset}%;--y:${location.y - 1}%" data-person="${person.id}" aria-label="${escapeHtml(displayName)}，位于${escapeHtml(location.name)}，正在${escapeHtml(person.activity)}">
-      <b>${escapeHtml(displayMark)}</b><span>${escapeHtml(displayName)}</span>
-    </button>`
-  }).join('')
-}
-
-function playerToken(view) {
-  const location = view.currentLocation
-  return `<div class="map-player" style="--x:${location.x}%;--y:${location.y}%"><b>你</b><span>当前位置</span></div>`
-}
-
 function coordinateReadout() {
   return `<div class="map-coordinate-hud" aria-label="地图坐标">
     <span>图纸坐标</span><output class="map-coordinate-readout" aria-live="polite">拖动画布 · 当前不会生成墙点</output>
@@ -188,35 +219,47 @@ function camera(state, content) {
   return `<div class="map-viewport"><div class="map-camera" style="--map-scale:${state.zoom};--map-marker-scale:${1 / state.zoom};--map-rotation:${state.rotation}deg;--map-pan-x:${state.panX}px;--map-pan-y:${state.panY}px">${content}</div></div><div class="map-time-filter" aria-hidden="true"></div>${coordinateReadout()}`
 }
 
-function planStage(state, view, getNpcDossier, topology, className, alt, compact = false) {
-  return camera(state, `<div class="${className}"><img class="map-plan-vector" src="${planUrl}" alt="${alt}" draggable="false"><img class="map-plan-preview" src="${planPreviewUrl}" alt="" aria-hidden="true" draggable="false">${routeSvg(view)}${coordinateSvg(topology, state.selectedGridPoint, state.selectedPointKind, state.interactionMode, state.zoom, state.snapGridStep)}${regionSvg(view)}${locationButtons(view, compact)}${peopleTokens(view, getNpcDossier, compact)}${playerToken(view)}</div>`)
+function planStage(state, topology, openingState, className, alt) {
+  return camera(state, `<div class="${className}"><img class="map-plan-vector" src="${planUrl}" alt="${alt}" draggable="false"><img class="map-plan-preview" src="${planPreviewUrl}" alt="" aria-hidden="true" draggable="false">${inspectionSvg(state)}${coordinateSvg(topology, state.selectedGridPoint, state.selectedPointKind, state.interactionMode, state.zoom, state.snapGridStep)}${openingSvg(openingState)}</div>`)
 }
 
-function VariantAtlas(state, view, getNpcDossier, topology) {
-  return `<div class="map-variant map-atlas">${planStage(state, view, getNpcDossier, topology, 'map-plan-stage', '500床精神专科医院方案一一层矢量平面图')}</div>`
-}
-
-function VariantTabletop(state, view, getNpcDossier, topology) {
-  return `<div class="map-variant map-tabletop">${planStage(state, view, getNpcDossier, topology, 'tabletop-board', '500床一层矢量平面图桌面底图', true)}</div>`
-}
-
-function VariantRoute(state, view, getNpcDossier, topology) {
-  return `<div class="map-variant map-route">${camera(state, `<div class="route-network">${routeSvg(view, { labels: true })}${coordinateSvg(topology, state.selectedGridPoint, state.selectedPointKind, state.interactionMode, state.zoom, state.snapGridStep)}${regionSvg(view)}${locationButtons(view, true)}${peopleTokens(view, getNpcDossier, true)}${playerToken(view)}</div>`)}</div>`
+function VariantAtlas(state, topology, openingState) {
+  return `<div class="map-variant map-atlas">${planStage(state, topology, openingState, 'map-plan-stage', '500床精神专科医院方案一一层矢量平面图')}</div>`
 }
 
 function currentVariant() {
   const requested = new URLSearchParams(location.search).get('variant')
-  return variants.includes(requested) ? requested : 'tabletop'
+  return variants.includes(requested) ? requested : 'atlas'
 }
 
-export function createHospitalMapPrototype({ host, scene, getNpcDossier, getTime = () => 'morning', onNpcInspect, onNpcSelect, onMapContext }) {
-  const runtime = createFloorMapRuntime(floorOneMap)
+export function createHospitalMapPrototype({ host, scene }) {
   const wallTrace = createWallTrace(exteriorWallTopology)
-  const state = { selectedLocation: floorOneMap.initialLocation, selectedPerson: null, selectedGridPoint: null, selectedPointKind: null, interactionMode: 'pan', wallConstraint: 'free', variant: currentVariant(), zoom: 1.35, snapGridStep: snapGridStepForZoom(1.35), rotation: 0, panX: 0, panY: 0 }
+  let initialOpeningLayout = null
+  try {
+    initialOpeningLayout = JSON.parse(localStorage.getItem(OPENING_DRAFT_STORAGE_KEY))
+  } catch {
+    localStorage.removeItem(OPENING_DRAFT_STORAGE_KEY)
+  }
+  if (!initialOpeningLayout?.placements?.length || initialOpeningLayout.placements.length < baselineOpeningLayout.placements.length) {
+    initialOpeningLayout = baselineOpeningLayout
+  }
+  const createEditor = initialLayout => createOpeningEditor({
+    catalog: openingCatalog.components,
+    walls: enclosureTopology.planarWalls,
+    snapDistanceMillimetres: OPENING_SNAP_DISTANCE_MILLIMETRES,
+    initialLayout,
+  })
+  let openingEditor
+  try {
+    openingEditor = createEditor(initialOpeningLayout)
+  } catch {
+    localStorage.removeItem(OPENING_DRAFT_STORAGE_KEY)
+    openingEditor = createEditor(baselineOpeningLayout)
+  }
+  const state = { selectedGridPoint: null, selectedPointKind: null, selectedEnclosure: null, showEnclosures: true, interactionMode: 'pan', wallConstraint: 'free', variant: currentVariant(), zoom: 1.35, snapGridStep: snapGridStepForZoom(1.35), rotation: 0, panX: 0, panY: 0 }
   const mapButton = document.querySelector('#mapViewButton')
   const threeButton = document.querySelector('#threeViewButton')
   let mapActive = new URLSearchParams(location.search).get('scene') !== '3d'
-  const currentMapView = () => runtime.view(getTime())
 
   function setMapActive(active) {
     if (!active) {
@@ -233,22 +276,36 @@ export function createHospitalMapPrototype({ host, scene, getNpcDossier, getTime
   }
 
   function render() {
-    const view = currentMapView()
     const topology = wallTrace.snapshot()
     host.dataset.variant = state.variant
-    host.innerHTML = state.variant === 'atlas' ? VariantAtlas(state, view, getNpcDossier, topology) : state.variant === 'route' ? VariantRoute(state, view, getNpcDossier, topology) : VariantTabletop(state, view, getNpcDossier, topology)
+    host.innerHTML = VariantAtlas(state, topology, openingEditor.snapshot())
   }
 
-  function showLocationContext(mapLocation, moved = false) {
-    const atmosphere = mapLocation.atmosphere?.[getTime()]
-    const sensory = atmosphere ? ` ${atmosphere.sight} ${atmosphere.sound} ${atmosphere.smell}` : ''
-    onMapContext({
-      locationId: mapLocation.id,
-      title: mapLocation.name,
-      description: moved ? `你已到达${mapLocation.name}。` : '医院一层活动区域',
-      detail: `${mapLocation.summary}${sensory} 粗校坐标：${coordinateLabel(mapLocation.x, mapLocation.y)}。`,
-      objective: moved ? `在${mapLocation.name}寻找人物或下一个相邻区域。` : `前往${mapLocation.name}。`,
-    })
+  function persistOpeningDraft() {
+    localStorage.setItem(OPENING_DRAFT_STORAGE_KEY, openingEditor.serialise())
+    host.dispatchEvent(new CustomEvent('openinglayoutchange', { detail: openingEditor.snapshot() }))
+  }
+
+  function openingChangeMessage(result) {
+    const selectedComponent = openingComponentsById.get(openingEditor.snapshot().selectedComponentId)
+    if (result.change === 'placed') return `已放置${selectedComponent.label} · ${result.placement.spanMillimetres} mm`
+    if (result.change === 'selected') return `已选择${openingComponentsById.get(result.placement.componentId)?.label || result.placement.componentId}`
+    if (result.change === 'flipped') return '已翻转门扇开启侧'
+    if (result.change === 'removed') return '已删除所选门窗'
+    if (result.change === 'cleared') return '已清空本地门窗草稿'
+    if (result.change === 'restored') return `已恢复上传基线 · ${baselineOpeningLayout.placements.length} 个门窗`
+    if (result.change === 'too-far') return `请在墙线 ${OPENING_SNAP_DISTANCE_MILLIMETRES} mm 范围内点击`
+    if (result.change === 'no-fit') return `${selectedComponent.label}无法完整放入该墙段`
+    if (result.change === 'overlap') return '该位置与已有门窗重叠'
+    return '门窗未变化'
+  }
+
+  function refreshOpeningPresentation(result, persist = false) {
+    if (persist) persistOpeningDraft()
+    render()
+    const readout = host.querySelector('.map-coordinate-readout')
+    if (readout) readout.textContent = openingChangeMessage(result)
+    return result
   }
 
   function applyCamera() {
@@ -519,22 +576,28 @@ export function createHospitalMapPrototype({ host, scene, getNpcDossier, getTime
     render()
   }
 
-  function selectLocation(destination) {
-    const result = runtime.move(destination, getTime())
-    state.selectedLocation = destination
-    state.selectedPerson = null
-    render()
-    showLocationContext(byId(destination), result.moved || result.reason === 'already-there')
-  }
-
   host.addEventListener('click', event => {
     if (suppressNextClick) {
       suppressNextClick = false
       return
     }
+    const openingTarget = event.target.closest('[data-opening-id]')
+    if (openingTarget && state.interactionMode === 'opening') {
+      refreshOpeningPresentation(openingEditor.select(openingTarget.dataset.openingId))
+      return
+    }
     const gridCoordinate = event.target.closest('[data-grid-coordinate]')
-    if (gridCoordinate) {
+    if (gridCoordinate && state.interactionMode !== 'opening') {
       copyGridCoordinate(gridCoordinate, state.interactionMode === 'snap')
+      return
+    }
+    const enclosureTarget = event.target.closest('[data-enclosure]')
+    if (enclosureTarget && state.interactionMode === 'pan') {
+      const enclosure = enclosureTopology.enclosures.find(item => item.id === enclosureTarget.dataset.enclosure)
+      state.selectedEnclosure = enclosure.id
+      render()
+      const readout = host.querySelector('.map-coordinate-readout')
+      if (readout) readout.textContent = `${enclosure.id} · ${(enclosure.areaSquareMillimetres / 1_000_000).toFixed(3)} m² · ${enclosure.boundary.length} 个顶点`
       return
     }
     if (state.interactionMode === 'snap') {
@@ -542,18 +605,14 @@ export function createHospitalMapPrototype({ host, scene, getNpcDossier, getTime
       if (point) selectSnappedPoint(point)
       return
     }
-    const locationTarget = event.target.closest('[data-location]')
-    if (locationTarget) return selectLocation(locationTarget.dataset.location)
-
-    const personButton = event.target.closest('[data-person]')
-    if (!personButton) return
-    state.selectedPerson = personButton.dataset.person
-    const view = currentMapView()
-    const person = view.actors.find(item => item.id === state.selectedPerson)
-    const context = { coLocated: person.coLocated, locationId: person.location, locationName: byId(person.location).name, activity: person.activity }
-    if (onNpcInspect) onNpcInspect(person.id, context)
-    else if (person.coLocated) onNpcSelect(person.id, context)
-    render()
+    if (state.interactionMode === 'opening') {
+      const mapPoint = pointOnMap(event)
+      if (!mapPoint) return
+      const point = mapPointToMillimetres(floorOneMap.coordinateSystem, mapPoint)
+      const result = openingEditor.place(point)
+      refreshOpeningPresentation(result, result.change === 'placed')
+      return
+    }
   })
 
   host.addEventListener('keydown', event => {
@@ -573,10 +632,15 @@ export function createHospitalMapPrototype({ host, scene, getNpcDossier, getTime
       copyGridCoordinate(gridCoordinate, state.interactionMode === 'snap')
       return
     }
-    const target = event.target.closest('[data-location]')
-    if (target && (event.key === 'Enter' || event.key === ' ')) {
+    const openingTarget = event.target.closest('[data-opening-id]')
+    if (openingTarget && state.interactionMode === 'opening' && (event.key === 'Enter' || event.key === ' ')) {
       event.preventDefault()
-      selectLocation(target.dataset.location)
+      refreshOpeningPresentation(openingEditor.select(openingTarget.dataset.openingId))
+      return
+    }
+    if (state.interactionMode === 'opening' && (event.key === 'Delete' || event.key === 'Backspace')) {
+      event.preventDefault()
+      refreshOpeningPresentation(openingEditor.removeSelected(), true)
     }
   })
   host.addEventListener('wheel', event => {
@@ -608,16 +672,20 @@ export function createHospitalMapPrototype({ host, scene, getNpcDossier, getTime
   let drag = null
   let suppressNextClick = false
   host.addEventListener('pointerdown', event => {
-    if (state.interactionMode !== 'pan' || event.target.closest('button, [data-location]')) return
+    if (state.interactionMode !== 'pan' || event.target.closest('button')) return
     stopWheelZoom()
     drag = { x: event.clientX, y: event.clientY, panX: state.panX, panY: state.panY, id: event.pointerId, moved: false, camera: host.querySelector('.map-camera') }
-    host.setPointerCapture(event.pointerId)
-    host.classList.add('dragging')
-    host.classList.add('map-panning')
   })
   host.addEventListener('pointermove', event => {
     if (!drag || drag.id !== event.pointerId) return
-    if (event.clientX !== drag.x || event.clientY !== drag.y) drag.moved = true
+    if (!drag.moved) {
+      const distance = Math.hypot(event.clientX - drag.x, event.clientY - drag.y)
+      if (distance < MAP_DRAG_START_DISTANCE_CSS_PIXELS) return
+      drag.moved = true
+      host.setPointerCapture(event.pointerId)
+      host.classList.add('dragging')
+      host.classList.add('map-panning')
+    }
     state.panX = drag.panX + event.clientX - drag.x
     state.panY = drag.panY + event.clientY - drag.y
     applyPan(drag.camera)
@@ -639,7 +707,6 @@ export function createHospitalMapPrototype({ host, scene, getNpcDossier, getTime
   threeButton.addEventListener('click', () => setMapActive(false))
   render()
   setMapActive(mapActive)
-  showLocationContext(currentMapView().currentLocation, true)
   function resetView() {
     stopWheelZoom()
     state.zoom = 1.35
@@ -653,7 +720,7 @@ export function createHospitalMapPrototype({ host, scene, getNpcDossier, getTime
 
   return {
     render,
-    state: () => ({ ...state, playerLocation: currentMapView().currentLocation.id, wallTopology: wallTrace.snapshot() }),
+    state: () => ({ ...state, playerLocation: null, wallTopology: wallTrace.snapshot(), openingLayout: openingEditor.snapshot() }),
     show: () => setMapActive(true),
     setMapActive,
     setVariant(next) {
@@ -667,14 +734,19 @@ export function createHospitalMapPrototype({ host, scene, getNpcDossier, getTime
     undoWall() { refreshWallPresentation(wallTrace.undo()) },
     clearWalls() { refreshWallPresentation(wallTrace.clear()) },
     setInteractionMode(mode) {
-      if (!['pan', 'snap'].includes(mode)) return state.interactionMode
-      if (mode === 'pan') stopEdgePan()
-      const finishing = mode === 'pan' ? wallTrace.finish() : null
+      if (!['pan', 'snap', 'opening'].includes(mode)) return state.interactionMode
+      if (mode !== 'snap') stopEdgePan()
+      const finishing = state.interactionMode === 'snap' && mode !== 'snap' ? wallTrace.finish() : null
       state.interactionMode = mode
       host.classList.toggle('snap-wall-mode', mode === 'snap')
+      host.classList.toggle('opening-placement-mode', mode === 'opening')
       render()
       const readout = host.querySelector('.map-coordinate-readout')
-      if (readout) readout.textContent = mode === 'snap' ? `吸附描墙 · ${state.snapGridStep} mm 网格 · ${state.wallConstraint === 'free' ? '自由方向' : state.wallConstraint === 'horizontal' ? '水平约束' : '垂直约束'}` : '拖动画布 · 当前不会生成墙点'
+      if (readout) readout.textContent = mode === 'snap'
+        ? `吸附描墙 · ${state.snapGridStep} mm 网格 · ${state.wallConstraint === 'free' ? '自由方向' : state.wallConstraint === 'horizontal' ? '水平约束' : '垂直约束'}`
+        : mode === 'opening'
+          ? `放置门窗 · ${openingComponentsById.get(openingEditor.snapshot().selectedComponentId).label}`
+          : '拖动画布 · 当前不会生成墙点'
       if (finishing?.change === 'finished') host.dispatchEvent(new CustomEvent('walltracechange', { detail: finishing.topology }))
       return state.interactionMode
     },
@@ -685,6 +757,39 @@ export function createHospitalMapPrototype({ host, scene, getNpcDossier, getTime
       const readout = host.querySelector('.map-coordinate-readout')
       if (readout) readout.textContent = `描墙方向：${constraint === 'free' ? '自由' : constraint === 'horizontal' ? '水平' : '垂直'}`
       return state.wallConstraint
+    },
+    setInspectionLayer(layer, visible) {
+      if (layer === 'enclosures') state.showEnclosures = Boolean(visible)
+      else return null
+      render()
+      return state.showEnclosures
+    },
+    setOpeningComponent(componentId) {
+      openingEditor.selectComponent(componentId)
+      const component = openingComponentsById.get(componentId)
+      const readout = host.querySelector('.map-coordinate-readout')
+      if (readout) readout.textContent = `门窗组件：${component.label} · ${component.spanMillimetres}×${component.heightMillimetres} mm`
+      host.dispatchEvent(new CustomEvent('openinglayoutchange', { detail: openingEditor.snapshot() }))
+      return componentId
+    },
+    flipOpening() { return refreshOpeningPresentation(openingEditor.flipSelected(), true) },
+    removeOpening() { return refreshOpeningPresentation(openingEditor.removeSelected(), true) },
+    clearOpenings() {
+      localStorage.removeItem(OPENING_DRAFT_STORAGE_KEY)
+      openingEditor = createEditor(baselineOpeningLayout)
+      const result = { change: 'restored', snapshot: openingEditor.snapshot() }
+      render()
+      const readout = host.querySelector('.map-coordinate-readout')
+      if (readout) readout.textContent = openingChangeMessage(result)
+      host.dispatchEvent(new CustomEvent('openinglayoutchange', { detail: result.snapshot }))
+      return result
+    },
+    copyOpeningLayout() {
+      const text = openingEditor.serialise()
+      writeClipboard(text)
+      const readout = host.querySelector('.map-coordinate-readout')
+      if (readout) readout.textContent = `已复制 ${openingEditor.snapshot().placements.length} 个门窗组件 JSON`
+      return text
     },
     copyWallTopology() {
       const text = serialiseWallTopology(wallTrace.snapshot())
