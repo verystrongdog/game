@@ -7,6 +7,8 @@ function matches(requirements = {}, state, npcId) {
   if (requirements.met && !state.metNpcs.has(npcId)) return false
   if (requirements.metOrFlags && !state.metNpcs.has(npcId) && !hasAny(state.flags, requirements.metOrFlags)) return false
   if (requirements.times && !requirements.times.includes(state.time)) return false
+  if (requirements.locations && !requirements.locations.includes(state.context.locationId)) return false
+  if (requirements.activities && !requirements.activities.includes(state.context.activity)) return false
   if (requirements.allFlags?.some(flag => !state.flags.has(flag))) return false
   if (requirements.anyFlags && !hasAny(state.flags, requirements.anyFlags)) return false
   if (requirements.minRelation != null && relation < requirements.minRelation) return false
@@ -23,6 +25,10 @@ function entryFor(level, state, npcId) {
   return level.entries?.find(entry => matches(entry.requires, state, npcId))?.node || level.entry
 }
 
+function visibleBlocks(node, state, npcId) {
+  return (node?.blocks || []).filter(block => matches(block.requires, state, npcId))
+}
+
 function applyEffects(state, effects = {}, npcId) {
   effects.flagsAdd?.forEach(flag => state.flags.add(flag))
   effects.flagsRemove?.forEach(flag => state.flags.delete(flag))
@@ -36,6 +42,8 @@ function applyEffects(state, effects = {}, npcId) {
 }
 
 const validTimes = new Set(['morning', 'afternoon', 'night'])
+// 来源：design/events/游戏循环.md §2.2。
+const nextRestTime = { morning: 'afternoon', afternoon: 'night', night: 'morning' }
 
 export function createDialogueRuntime({ npcDefinitions, initialTime = 'morning' }) {
   const npcs = new Map(npcDefinitions.map(npc => [npc.id, npc]))
@@ -45,18 +53,25 @@ export function createDialogueRuntime({ npcDefinitions, initialTime = 'morning' 
     relations: {},
     metNpcs: new Set(),
     profile: { id: 'normal', label: '普通视角', experiences: new Set(), diseases: new Set() },
+    context: { locationId: null, activity: null },
     session: null,
     notes: [],
   }
 
-  function selectNpc(npcId) {
+  function selectNpc(npcId, context = {}) {
     const npc = npcs.get(npcId)
     if (!npc) return
+    state.context = { locationId: context.locationId || null, activity: context.activity || null }
     const levels = unlockedLevels(npc, state)
     const level = levels.at(-1)
     if (!level) return
     state.metNpcs.add(npcId)
-    state.session = { npcId, nodeId: entryFor(level, state, npcId), depth: level.id }
+    const situation = npc.situations?.find(entry => {
+      const depths = entry.depths || ['surface']
+      return depths.includes(level.id) && matches(entry.requires, state, npcId)
+    })
+    // 来源：design/events/剧情系统设计.md §3.8.2。
+    state.session = { npcId, nodeId: situation?.node || entryFor(level, state, npcId), depth: level.id, history: [] }
   }
 
   function choose(optionId) {
@@ -65,6 +80,10 @@ export function createDialogueRuntime({ npcDefinitions, initialTime = 'morning' 
     const node = npc?.nodes[state.session.nodeId]
     const option = node?.options?.find(item => item.id === optionId && matches(item.requires, state, npc.id))
     if (!option) return
+    state.session.history.push(
+      ...visibleBlocks(node, state, npc.id),
+      { kind: 'player', speaker: '你', text: option.text },
+    )
     applyEffects(state, option.effects, npc.id)
     if (option.end) state.session = null
     else if (option.next) state.session.nodeId = option.next
@@ -86,11 +105,23 @@ export function createDialogueRuntime({ npcDefinitions, initialTime = 'morning' 
     state.session = null
   }
 
+  function setContext(context = {}) {
+    state.context = { locationId: context.locationId || null, activity: context.activity || null }
+    state.session = null
+  }
+
+  function rest() {
+    state.time = nextRestTime[state.time]
+    state.session = null
+  }
+
   function dispatch(action) {
-    if (action.type === 'select_npc') selectNpc(action.npcId)
+    if (action.type === 'select_npc') selectNpc(action.npcId, action.context)
     if (action.type === 'choose') choose(action.optionId)
     if (action.type === 'set_profile') setProfile(action.profile)
     if (action.type === 'set_time') setTime(action.time)
+    if (action.type === 'set_context') setContext(action.context)
+    if (action.type === 'rest') rest()
     if (action.type === 'leave') state.session = null
     return view()
   }
@@ -123,15 +154,16 @@ export function createDialogueRuntime({ npcDefinitions, initialTime = 'morning' 
     })
 
     if (!state.session) {
-      return { time: state.time, profile: state.profile, roster, session: null, notes: [...state.notes] }
+      return { time: state.time, context: { ...state.context }, profile: state.profile, roster, session: null, notes: [...state.notes] }
     }
 
     const npc = npcs.get(state.session.npcId)
     const node = npc.nodes[state.session.nodeId]
-    const blocks = (node.blocks || []).filter(block => matches(block.requires, state, npc.id))
+    const blocks = visibleBlocks(node, state, npc.id)
     const options = (node.options || []).filter(option => matches(option.requires, state, npc.id))
     return {
       time: state.time,
+      context: { ...state.context },
       profile: state.profile,
       roster,
       notes: [...state.notes],
@@ -142,6 +174,7 @@ export function createDialogueRuntime({ npcDefinitions, initialTime = 'morning' 
         nodeId: node.id,
         objective: node.objective || npc.objective,
         blocks,
+        transcript: [...state.session.history, ...blocks],
         options,
       },
     }
