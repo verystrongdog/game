@@ -38,6 +38,12 @@ describe('narrative prototype shell', () => {
     expect(html).toContain('.scene[data-time="night"]')
   })
 
+  test('exposes canonical rest outside the developer-only time controls', () => {
+    // 来源：design/events/游戏循环.md §2.2；design/presentation/开局剧情逻辑原型.md §3.3。
+    expect(dialogueUi).toContain('data-dialogue-rest')
+    expect(dialogueUi).toContain("runtime.dispatch({ type: 'rest' })")
+  })
+
   test('does not expose remote NPC conversation cards', () => {
     expect(html).not.toContain('id="dialogueRoster"')
     expect(dialogueUi).not.toContain('data-dialogue-npc')

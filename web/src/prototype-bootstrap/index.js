@@ -15,9 +15,10 @@ window.dialoguePrototype = dialoguePrototype
 const hospitalMapController = createHospitalMapPrototype({
   host: document.querySelector('#hospitalMapHost'),
   scene: document.querySelector('#scene'),
+  getTime: () => dialoguePrototype.view().time,
   getNpcDossier: npcId => dialoguePrototype.dossier(npcId),
   onNpcInspect: (npcId, context) => dialoguePrototype.showDossier(npcId, context),
-  onNpcSelect: npcId => dialoguePrototype.selectNpc(npcId, { nearby: true }),
+  onNpcSelect: (npcId, context) => dialoguePrototype.selectNpc(npcId, { nearby: true, ...context }),
   onMapContext: context => dialoguePrototype.showMapContext(context),
 })
 window.hospitalMapController = hospitalMapController
