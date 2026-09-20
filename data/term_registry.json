@@ -969,6 +969,16 @@
       "added": "2026-08-03",
       "updated": "2026-08-03"
     },
+    "无法离开医院": {
+      "definition": "玩家的固有疾病，不是现实临床诊断。核心症状是无法完成从医院到外面的连续过渡；入院时表现为边界回环、院方身份‘苟笙 / 0527’与自我身份‘苟智空’的冲突。玩法接口包括保留夜晚记忆与白天辨识物证残留。",
+      "source": "design/entities/疾病特长.md §4.6; design/events/游戏循环.md §9.3",
+      "old_model": "将玩家固有疾病复用为‘分裂型人格障碍’病卡",
+      "deviation_reason": "固有疾病是主角与医院边界的叙事关系，不应借用真实诊断解释空间、身份与记录异常。",
+      "status": "active",
+      "numerical_locations": [],
+      "added": "2026-09-20",
+      "updated": "2026-09-20"
+    },
     "正常人模板": {
       "definition": "NPC 7参数默认值——NE_baseline=0.3/DA_VTA_baseline=0.4/DA_SNc_baseline=0.5/5HT_baseline=0.5（运行时状态模型 §5.4），bias_somatic/cognitive/limbic=0（NPC AI 行为模型.md §4.1）。默认节点m=0.3（大部分连接日常使用非专精），个性差异连接±0.2（正常性格差异非疾病），极端浮现技能连接m≈0。精神疾病=正常参数+标签偏移。旧定义（髓鞘化m基线——基于旧link_NNN IDs）已于2026-08-09废弃。",
       "source": "design/rules/skill-tree/NPC AI 行为模型.md §4.1（2026-08-09 重写）; design/rules/skill-tree/运行时状态模型.md §5.4",
