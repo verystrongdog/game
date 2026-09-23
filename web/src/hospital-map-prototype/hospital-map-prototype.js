@@ -18,6 +18,8 @@ import {
   snapGridStepForZoom,
   yAxesForX,
 } from './map-coordinate.js'
+import { locationLabels, placementsAtTime } from './npc-placements.js'
+import { createRoomDescriptionIndex } from './room-description.js'
 import { createWallTrace, serialiseWallTopology } from './wall-trace.js'
 import { createOpeningEditor } from './opening-editor.js'
 import { clampZoom, nextWheelZoom, wheelZoomTarget } from './zoom-motion.js'
@@ -31,6 +33,8 @@ const OPENING_SNAP_DISTANCE_MILLIMETRES = 750
 const WINDOW_SYMBOL_OFFSET_MILLIMETRES = 80
 const OPENING_DRAFT_STORAGE_KEY = 'yantf:floor-one-opening-layout:v1'
 const openingComponentsById = new Map(openingCatalog.components.map(component => [component.id, component]))
+// 来源：design/presentation/500床一层跑团地图原型.md §2.2（几何推导的房间描述，不是房间名称）。
+const roomDescriptions = createRoomDescriptionIndex(enclosureTopology.enclosures)
 
 function mapCoordinate(x, y) {
   const point = mapPointToMillimetres(floorOneMap.coordinateSystem, { x, y })
@@ -77,15 +81,42 @@ function inspectionSvg(state) {
   const enclosures = state.showEnclosures ? enclosureTopology.enclosures.map(enclosure => {
     const points = enclosure.boundary.map(wallEndpointPosition).filter(Boolean)
     if (points.length !== enclosure.boundary.length) return ''
+    const described = roomDescriptions.get(enclosure.id)
     const areaSquareMetres = enclosure.areaSquareMillimetres / 1_000_000
     const sizeClass = areaSquareMetres < 15 ? 'small' : areaSquareMetres < 60 ? 'medium' : 'large'
     const selected = state.selectedEnclosure === enclosure.id ? ' selected' : ''
     const pointList = points.map(point => `${point.x},${point.y}`).join(' ')
-    return `<polygon class="enclosure-shape ${sizeClass}${selected}" points="${pointList}" data-enclosure="${enclosure.id}" tabindex="0" role="button" aria-label="几何闭环 ${enclosure.id}，${areaSquareMetres.toFixed(3)} 平方米"><title>${enclosure.id} · ${areaSquareMetres.toFixed(3)} m² · ${enclosure.boundary.length} 个顶点</title></polygon>`
+    // 描述是几何推导占位，不是房间名称；aria 与 title 都不得把它说成用途。
+    const label = `几何闭环 ${enclosure.id}，${areaSquareMetres.toFixed(3)} 平方米，${described?.categoryLabel || '未分类'}（房间尚未命名）`
+    return `<polygon class="enclosure-shape ${sizeClass}${selected}" points="${pointList}" data-enclosure="${enclosure.id}" tabindex="0" role="button" aria-label="${label}"><title>${enclosure.id} · ${areaSquareMetres.toFixed(3)} m² · ${described?.categoryLabel || '未分类'} · ${enclosure.boundary.length} 个顶点</title></polygon>`
   }).join('') : ''
   return `<svg class="map-inspection-system" viewBox="0 0 100 100" preserveAspectRatio="none" aria-label="几何闭环目视检查图层">
     <g class="enclosure-layer">${enclosures}</g>
   </svg>`
+}
+
+// 来源：design/presentation/500床一层跑团地图原型.md §2.3（人物落位是原型占位）。
+// 标记用 HTML 层而不是 SVG：文字不随非等比 viewBox 变形，且按钮天然可聚焦、可读屏。
+function npcLayer(time, getNpcState) {
+  if (!getNpcState) return ''
+  const markers = placementsAtTime(time).map(placement => {
+    const npc = getNpcState(placement.npcId)
+    const described = roomDescriptions.get(placement.enclosureId)
+    if (!npc || !described) return ''
+    const offset = placement.offset || { x: 0, y: 0 }
+    const point = wallEndpointPosition({ x: described.centroid.x + offset.x, y: described.centroid.y + offset.y })
+    if (!point) return ''
+    const locationLabel = locationLabels[placement.locationId] || placement.locationId
+    const activity = placement.activity ? `，正在${placement.activity}` : ''
+    const classes = ['map-person', 'map-npc']
+    if (!npc.available) classes.push('locked')
+    if (!npc.identityKnown) classes.push('unknown-identity')
+    return `<button class="${classes.join(' ')}" type="button" style="--x:${point.x}%;--y:${point.y}%" data-npc-id="${placement.npcId}" data-npc-location="${placement.locationId}" aria-label="${npc.name}，${locationLabel}${activity}">
+      <b>${npc.mark || npc.name.slice(0, 1)}</b>
+      <span>${npc.name}<small>${locationLabel}${npc.identityKnown ? '' : ' · 未识'}</small></span>
+    </button>`
+  }).join('')
+  return `<div class="map-npc-layer" aria-label="当前时段在一层的人物">${markers}</div>`
 }
 
 function openingSpanEndpoints(placement, perpendicularOffsetMillimetres = 0) {
@@ -220,7 +251,7 @@ function camera(state, content) {
 }
 
 function planStage(state, topology, openingState, className, alt) {
-  return camera(state, `<div class="${className}"><img class="map-plan-vector" src="${planUrl}" alt="${alt}" draggable="false"><img class="map-plan-preview" src="${planPreviewUrl}" alt="" aria-hidden="true" draggable="false">${inspectionSvg(state)}${coordinateSvg(topology, state.selectedGridPoint, state.selectedPointKind, state.interactionMode, state.zoom, state.snapGridStep)}${openingSvg(openingState)}</div>`)
+  return camera(state, `<div class="${className}"><img class="map-plan-vector" src="${planUrl}" alt="${alt}" draggable="false"><img class="map-plan-preview" src="${planPreviewUrl}" alt="" aria-hidden="true" draggable="false">${inspectionSvg(state)}${coordinateSvg(topology, state.selectedGridPoint, state.selectedPointKind, state.interactionMode, state.zoom, state.snapGridStep)}${openingSvg(openingState)}${npcLayer(state.time, state.getNpcState)}</div>`)
 }
 
 function VariantAtlas(state, topology, openingState) {
@@ -232,7 +263,7 @@ function currentVariant() {
   return variants.includes(requested) ? requested : 'atlas'
 }
 
-export function createHospitalMapPrototype({ host, scene }) {
+export function createHospitalMapPrototype({ host, scene, getTime, getNpcState, onNpcSelect, onMapContext } = {}) {
   const wallTrace = createWallTrace(exteriorWallTopology)
   let initialOpeningLayout = null
   try {
@@ -256,7 +287,7 @@ export function createHospitalMapPrototype({ host, scene }) {
     localStorage.removeItem(OPENING_DRAFT_STORAGE_KEY)
     openingEditor = createEditor(baselineOpeningLayout)
   }
-  const state = { selectedGridPoint: null, selectedPointKind: null, selectedEnclosure: null, showEnclosures: true, interactionMode: 'pan', wallConstraint: 'free', variant: currentVariant(), zoom: 1.35, snapGridStep: snapGridStepForZoom(1.35), rotation: 0, panX: 0, panY: 0 }
+  const state = { selectedGridPoint: null, selectedPointKind: null, selectedEnclosure: null, showEnclosures: true, interactionMode: 'pan', wallConstraint: 'free', variant: currentVariant(), zoom: 1.35, snapGridStep: snapGridStepForZoom(1.35), rotation: 0, panX: 0, panY: 0, time: getTime?.() || 'morning', getNpcState }
   const mapButton = document.querySelector('#mapViewButton')
   const threeButton = document.querySelector('#threeViewButton')
   let mapActive = new URLSearchParams(location.search).get('scene') !== '3d'
@@ -277,6 +308,7 @@ export function createHospitalMapPrototype({ host, scene }) {
 
   function render() {
     const topology = wallTrace.snapshot()
+    state.time = getTime?.() || state.time
     host.dataset.variant = state.variant
     host.innerHTML = VariantAtlas(state, topology, openingEditor.snapshot())
   }
@@ -576,9 +608,44 @@ export function createHospitalMapPrototype({ host, scene }) {
     render()
   }
 
+  // 房间描述是几何推导占位，只能按"这是一处尚未命名的房间"来汇报。
+  function roomContext(enclosure) {
+    const described = roomDescriptions.get(enclosure.id)
+    if (!described) return null
+    return {
+      locationId: enclosure.id,
+      title: `${described.categoryLabel} · ${described.areaText}`,
+      role: `一层几何闭环 · ${described.district}`,
+      mark: '图',
+      description: described.description,
+      detail: described.description,
+      facts: described.facts,
+      basis: described.basis,
+      unknown: described.unknown,
+      objective: '这是一处尚未命名的房间；它的名称与用途都还没有依据。',
+    }
+  }
+
+  function npcContext(placement, npc) {
+    return {
+      locationId: placement.locationId,
+      locationLabel: locationLabels[placement.locationId] || placement.locationId,
+      activity: placement.activity || null,
+      time: placement.time,
+      basis: `${placement.basis}（${npc.name} 的地图落位是原型占位，不是已确认的位置。）`,
+    }
+  }
+
   host.addEventListener('click', event => {
     if (suppressNextClick) {
       suppressNextClick = false
+      return
+    }
+    const npcTarget = event.target.closest('[data-npc-id]')
+    if (npcTarget && state.interactionMode === 'pan') {
+      const placement = placementsAtTime(state.time).find(item => item.npcId === npcTarget.dataset.npcId)
+      const npc = getNpcState?.(npcTarget.dataset.npcId)
+      if (placement && npc) onNpcSelect?.(placement.npcId, npcContext(placement, npc))
       return
     }
     const openingTarget = event.target.closest('[data-opening-id]')
@@ -596,8 +663,11 @@ export function createHospitalMapPrototype({ host, scene }) {
       const enclosure = enclosureTopology.enclosures.find(item => item.id === enclosureTarget.dataset.enclosure)
       state.selectedEnclosure = enclosure.id
       render()
+      const described = roomDescriptions.get(enclosure.id)
       const readout = host.querySelector('.map-coordinate-readout')
-      if (readout) readout.textContent = `${enclosure.id} · ${(enclosure.areaSquareMillimetres / 1_000_000).toFixed(3)} m² · ${enclosure.boundary.length} 个顶点`
+      if (readout) readout.textContent = `${described?.categoryLabel || '几何闭环'} · ${(enclosure.areaSquareMillimetres / 1_000_000).toFixed(3)} m² · ${described?.district || enclosure.id}`
+      // 点击闭环把几何推导的描述送进右侧对话框；描述与依据分栏显示，避免读成房间名称。
+      onMapContext?.(roomContext(enclosure))
       return
     }
     if (state.interactionMode === 'snap') {
@@ -720,7 +790,13 @@ export function createHospitalMapPrototype({ host, scene }) {
 
   return {
     render,
-    state: () => ({ ...state, playerLocation: null, wallTopology: wallTrace.snapshot(), openingLayout: openingEditor.snapshot() }),
+    state: () => ({
+      ...state,
+      playerLocation: null,
+      wallTopology: wallTrace.snapshot(),
+      openingLayout: openingEditor.snapshot(),
+      npcPlacements: placementsAtTime(state.time).map(placement => placement.npcId),
+    }),
     show: () => setMapActive(true),
     setMapActive,
     setVariant(next) {

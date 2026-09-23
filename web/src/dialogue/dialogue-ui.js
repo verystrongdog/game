@@ -181,7 +181,7 @@ export function createDialogueUi() {
       subscribers.add(listener)
       return () => subscribers.delete(listener)
     },
-    showMapContext({ locationId = null, title, role = '一层地图 · 地点', mark = '图', description, detail, objective }) {
+    showMapContext({ locationId = null, title, role = '一层地图 · 地点', mark = '图', description, detail, facts = [], basis = null, unknown = null, objective }) {
       pendingNpcContext = null
       runtime.dispatch({ type: 'set_context', context: { locationId } })
       elements.speakerMark.textContent = mark
@@ -189,7 +189,12 @@ export function createDialogueUi() {
       elements.speakerName.textContent = title
       elements.speakerDescription.textContent = description
       elements.objective.textContent = objective || `查看${title}。`
-      elements.story.innerHTML = `<article class="beat scene-text"><div class="label">地点</div><p>${escapeHtml(detail || description)}</p></article>`
+      // 地图地点的描述由地图侧按几何推导生成，这里只负责显示，并在同一屏里把"依据"
+      // 和"尚未确定"分开列出——避免把占位文案读成设计结论。
+      elements.story.innerHTML = `<article class="beat scene-text"><div class="label">地点</div><p>${escapeHtml(detail || description)}</p></article>${
+        facts.length ? `<article class="beat"><div class="label">几何事实</div><ul class="map-location-facts">${facts.map(fact => `<li>${escapeHtml(fact)}</li>`).join('')}</ul></article>` : ''
+      }${basis ? `<article class="beat"><div class="label">依据</div><p class="map-location-basis">${escapeHtml(basis)}</p></article>` : ''
+      }${unknown ? `<article class="beat"><div class="label">尚未确定</div><p class="map-location-unknown">${escapeHtml(unknown)}</p></article>` : ''}`
       elements.choices.innerHTML = `<div class="choices-header"><span>地图移动</span><span>选择左侧相邻活动点</span></div>${restChoiceHtml(runtime.view().time)}`
       window.requestAnimationFrame(() => { elements.scroll.scrollTop = 0 })
     },
@@ -197,6 +202,19 @@ export function createDialogueUi() {
       if (!nearby) return runtime.view()
       runtime.dispatch({ type: 'select_npc', npcId, context: { locationId, activity } })
       return render()
+    },
+    // 地图人物浮层（web/src/map-dialogue/）与右侧叙事面板共用同一个运行时：
+    // 浮层只调用这三个入口，保证同一段对话不会出现两套状态。
+    choose(optionId) {
+      runtime.dispatch({ type: 'choose', optionId })
+      return render()
+    },
+    leave() {
+      runtime.dispatch({ type: 'leave' })
+      return render()
+    },
+    session() {
+      return runtime.view().session
     },
     setProfile(profile) {
       runtime.dispatch({ type: 'set_profile', profile })

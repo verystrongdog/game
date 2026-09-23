@@ -1,0 +1,68 @@
+/* 来源：design/presentation/500床一层跑团地图原型.md §2.4。
+   与 opening-exploration/opening.css 同一套视觉语言；这里的尺寸与颜色都只是 Web 呈现原型常量。 */
+.md-open { overflow: hidden !important; }
+.md-overlay[hidden] { display: none; }
+.md-overlay { position: fixed; z-index: 990; inset: 0; background: #050808; color: #e8e2d2; }
+.md-shell { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(400px, .95fr); height: 100%; }
+
+.md-scene { position: relative; display: grid; align-content: start; min-width: 0; overflow: hidden; padding: 26px 28px 30px; background: linear-gradient(#0a1214 0 52%, #131a18 52%); }
+.md-scene::after { content: ''; position: absolute; z-index: 6; inset: 0; pointer-events: none; background: radial-gradient(ellipse at 42% 34%, transparent 34%, rgba(0,0,0,.7) 112%), url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.1'/%3E%3C/svg%3E"); }
+.md-backdrop { position: absolute; z-index: 1; inset: 30% 0 0; opacity: .5; background: repeating-linear-gradient(90deg, #16201e 0 12%, transparent 12% 24%), repeating-linear-gradient(0deg, transparent 0 34%, #1b2523 34% 36%); }
+.md-figure { position: absolute; z-index: 4; right: 12%; bottom: 8%; display: grid; justify-items: center; }
+.md-figure i { display: block; width: 54px; height: 190px; border-radius: 45% 45% 12% 12%; background: #020404; box-shadow: 0 44px 0 -14px #020404; }
+.md-figure i::before { content: ''; position: absolute; width: 34px; height: 42px; margin: -34px 0 0 10px; border-radius: 50%; background: #020404; }
+.md-figure b { position: absolute; z-index: 2; bottom: 78px; color: #c3d2cb; font: 26px/1 ui-monospace, monospace; letter-spacing: .06em; }
+
+.md-scene > header { position: relative; z-index: 8; }
+.md-scene > header span { color: #87a69c; font: 9px/1.4 ui-monospace, monospace; letter-spacing: .18em; }
+.md-scene > header h1 { margin: 8px 0 0; font-size: clamp(24px, 3vw, 40px); font-weight: 400; }
+.md-scene > header p { margin: 7px 0 0; color: #7d8b85; font-size: 12px; }
+
+.md-facts { position: relative; z-index: 8; display: grid; gap: 4px; align-self: end; margin-top: 26px; max-width: 320px; }
+.md-fact { display: grid; grid-template-columns: 68px 1fr; gap: 10px; padding: 8px 10px; border-left: 1px solid rgba(197,222,214,.22); background: rgba(4,9,8,.66); }
+.md-fact span { color: #7b8a84; font: 9px/1.5 ui-monospace, monospace; letter-spacing: .08em; }
+.md-fact b { color: #dde6e2; font-size: 12px; font-weight: 500; }
+
+.md-description { position: relative; z-index: 8; max-width: 430px; margin: 22px 0 0; color: #c8ccc3; font-size: 13px; line-height: 1.8; }
+.md-basis { position: relative; z-index: 8; max-width: 430px; margin: 14px 0 0; padding-left: 12px; border-left: 2px solid #3d5a52; color: #6f7d78; font: 9px/1.6 ui-monospace, monospace; }
+.md-identity-note { position: relative; z-index: 8; max-width: 430px; margin: 14px 0 0; color: #8d9a94; font-size: 11px; }
+.md-prototype-note { position: relative; z-index: 8; max-width: 430px; margin: 10px 0 0; padding: 7px 10px; border: 1px dashed rgba(197,222,214,.2); color: #b08a6a; font: 9px/1.6 ui-monospace, monospace; }
+
+.md-narrative { display: grid; grid-template-rows: auto minmax(0,1fr) auto; min-width: 0; min-height: 0; overflow: hidden; border-left: 1px solid rgba(225,235,229,.13); background: #0c1110; }
+.md-narrative > header { padding: 24px 26px 20px; border-bottom: 1px solid rgba(225,235,229,.1); }
+.md-narrative > header span { color: #87a69c; font: 9px/1.4 ui-monospace, monospace; letter-spacing: .18em; }
+.md-narrative h2 { margin: 8px 0 4px; font-size: 19px; font-weight: 500; }
+.md-narrative > header p { margin: 0; color: #606c67; font: 9px/1.4 ui-monospace, monospace; }
+.md-transcript { min-height: 0; overflow-y: auto; padding: 26px 28px 44px; scrollbar-color: #384640 #0c1110; }
+.md-beat { margin-bottom: 22px; animation: md-rise .2s ease both; }
+.md-label { margin-bottom: 7px; color: #72817b; font: 8px/1.4 ui-monospace, monospace; letter-spacing: .12em; }
+.md-beat p { margin: 0; color: #d5d4ca; font-size: 13px; line-height: 1.8; }
+.md-beat.npc .md-label { color: #9fb3ab; }
+.md-beat.experience { padding-left: 14px; border-left: 3px solid #bd8c47; background: linear-gradient(90deg, rgba(166,112,40,.12), transparent 70%); }
+.md-beat.experience .md-label, .md-beat.experience p { color: #d6ae6c; }
+.md-beat.disease { padding: 12px 14px; border-left: 3px solid #a76d9b; background: linear-gradient(90deg, rgba(142,75,125,.14), transparent 70%); }
+.md-beat.disease .md-label, .md-beat.disease p { color: #c995bd; }
+.md-beat.player { margin-left: 32px; padding-right: 12px; border-right: 2px solid #65756f; text-align: right; }
+.md-beat.evidence { padding: 17px; border: 1px solid #2e7897; background: #cfe6e8; }
+.md-beat.evidence .md-label, .md-beat.evidence p { color: #123849; font-family: ui-monospace, monospace; }
+.md-beat.dossier-fact { padding: 11px 13px; border-left: 2px solid #3f4f4a; background: rgba(255,255,255,.014); }
+.md-beat.dossier-fact p { color: #b8beb6; font-size: 12px; }
+.md-beat.md-note { padding: 12px 14px; border: 1px dashed rgba(197,222,214,.22); background: rgba(255,255,255,.02); }
+.md-beat.md-note p { color: #9aa7a1; font-size: 12px; }
+.md-narrative > footer { min-height: 76px; padding: 13px 15px 15px; border-top: 1px solid rgba(225,235,229,.1); background: #080c0b; }
+.md-actions { display: grid; gap: 5px; }
+.md-actions button { display: grid; grid-template-columns: 28px 1fr; gap: 9px; width: 100%; padding: 10px; border: 1px solid rgba(225,235,229,.1); background: rgba(255,255,255,.018); color: #d7dbd4; cursor: pointer; text-align: left; font: inherit; }
+.md-actions button:hover, .md-actions button:focus-visible { outline: none; border-color: #738d83; background: rgba(115,145,133,.08); }
+.md-actions button > i { color: #b36d51; font: 9px/1.5 ui-monospace, monospace; }
+.md-actions button > span { font-size: 12px; }
+.md-actions small { display: block; margin-top: 4px; color: #66726d; font: 8px/1.4 ui-monospace, monospace; }
+
+@keyframes md-rise { from { opacity: 0; transform: translateY(5px); } }
+@media (max-width: 900px) {
+  .md-shell { grid-template-columns: 1fr; grid-template-rows: 44% 56%; }
+  .md-narrative { border-left: 0; border-top: 1px solid rgba(225,235,229,.13); }
+  .md-figure { display: none; }
+  .md-facts { max-width: none; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .md-description, .md-basis, .md-identity-note { max-width: none; }
+  .md-scene { padding: 18px 18px 20px; }
+}

@@ -2,6 +2,7 @@ import { createCharacterCreation } from '/character-creation/index.js'
 import { createDisplaySettings } from '/character-creation/display-settings.js'
 import { createDialogueUi } from '/dialogue/dialogue-ui.js'
 import { createHospitalMapPrototype } from '/hospital-map-prototype/hospital-map-prototype.js'
+import { createDialogueOverlay } from '/map-dialogue/dialogue-overlay.js'
 import { createOpeningExploration } from '/opening-exploration/opening-ui.js'
 
 // 来源：design/entities/疾病特长.md §二—§六。未决项在原型中显式保留，不写回正式游戏状态。
@@ -10,6 +11,8 @@ const characterCreation = createCharacterCreation({
   required: true,
 })
 const dialoguePrototype = createDialogueUi()
+// 地图人物浮层与右侧叙事面板共用同一个对话运行时，不各自持有状态。
+const dialogueOverlay = createDialogueOverlay({ dialogue: dialoguePrototype })
 const openingExploration = createOpeningExploration({
   onComplete: () => dialoguePrototype.restore(),
 })
@@ -19,15 +22,19 @@ characterCreation.subscribe(profile => {
 })
 
 window.dialoguePrototype = dialoguePrototype
+window.dialogueOverlay = dialogueOverlay
 window.openingExploration = openingExploration
 const hospitalMapController = createHospitalMapPrototype({
   host: document.querySelector('#hospitalMapHost'),
   scene: document.querySelector('#scene'),
   getTime: () => dialoguePrototype.view().time,
-  getNpcDossier: npcId => dialoguePrototype.dossier(npcId),
-  onNpcInspect: (npcId, context) => dialoguePrototype.showDossier(npcId, context),
-  onNpcSelect: (npcId, context) => dialoguePrototype.selectNpc(npcId, { nearby: true, ...context }),
-  onMapContext: context => dialoguePrototype.showMapContext(context),
+  // 人物标记的名字、身份是否已知、当前有没有可用的对话层，都取自同一份运行时花名册。
+  getNpcState: npcId => dialoguePrototype.dossier(npcId),
+  onNpcSelect: (npcId, context) => dialogueOverlay.open(npcId, context),
+  onMapContext: context => {
+    dialogueOverlay.close()
+    dialoguePrototype.showMapContext(context)
+  },
 })
 window.hospitalMapController = hospitalMapController
 
@@ -49,7 +56,7 @@ function refreshDeveloperOptions(view = dialoguePrototype.view()) {
   const tracing = mapState.wallTopology.activeAnchor ? ' · 描墙中' : ''
   const constraint = mapState.wallConstraint === 'horizontal' ? '水平' : mapState.wallConstraint === 'vertical' ? '垂直' : '自由'
   const interaction = mapState.interactionMode === 'snap' ? `吸附描墙 ${mapState.snapGridStep}mm/${constraint}` : '拖动画布'
-  developerMapStatus.textContent = `${Math.round(mapState.zoom * 100)}% · 旋转 ${mapState.rotation}° · ${mapState.variant} · ${interaction} · ${mapState.wallTopology.walls.length} 段墙${tracing}`
+  developerMapStatus.textContent = `${Math.round(mapState.zoom * 100)}% · 旋转 ${mapState.rotation}° · ${mapState.variant} · ${interaction} · ${mapState.wallTopology.walls.length} 段墙${tracing} · ${mapState.npcPlacements.length} 个人物`
   developerOptions.querySelectorAll('[data-dev-variant]').forEach(button => button.classList.toggle('active', button.dataset.devVariant === mapState.variant))
   developerOptions.querySelectorAll('[data-dev-time]').forEach(button => button.classList.toggle('active', button.dataset.devTime === view.time))
   developerOptions.querySelectorAll('[data-dev-wall-mode]').forEach(button => {

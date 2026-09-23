@@ -43,6 +43,13 @@
 .dossier-fact small { display: block; margin-top: 10px; color: var(--quiet); font: 9px/1.4 ui-monospace, monospace; }
 .dossier-empty { color: var(--muted); }
 
+/* 地图地点卡：几何推导的房间描述。来源：design/presentation/500床一层跑团地图原型.md §2.2。
+   事实、依据与"尚未确定"三段分开显示，避免把原型占位文案读成设计结论。 */
+.map-location-facts { display: grid; gap: 4px; margin: 0; padding: 0; list-style: none; }
+.map-location-facts li { color: #a9b2ab; font: 10px/1.55 ui-monospace, monospace; }
+.map-location-basis { color: var(--quiet) !important; font: 10px/1.6 ui-monospace, monospace !important; }
+.map-location-unknown { color: #c08a6a !important; font-size: 12px !important; }
+
 @media (max-width: 840px) {
   .dialogue-toolbar { padding: 8px 10px; }
 }

@@ -117,6 +117,22 @@
 .map-player b { border-radius: 3px; border-color: #9acabe; background: #17312b; color: #e7fff7; }
 .map-player span { color: #a9d9cd; }
 
+/* 一层人物标记。来源：design/presentation/500床一层跑团地图原型.md §2.3。
+   落位是原型占位；标记用 HTML 而不是 SVG，文字才不会被非等比 viewBox 拉变形。
+   倍率反向补偿让标记在 0.65×–64× 全程保持固定屏幕尺寸。 */
+.map-npc-layer { position: absolute; z-index: 6; inset: 0; pointer-events: none; }
+.map-npc { transform: translate(-50%, -50%) scale(var(--map-marker-scale)); pointer-events: auto; outline: none; }
+.map-npc b { border-color: #7fb3a2; background: #16241f; color: #dff2ea; }
+.map-npc span { opacity: 1; visibility: visible; color: #dbe7e2; }
+.map-npc small { display: block; color: #8ba49b; font-size: 6px; }
+.map-npc:hover b, .map-npc:focus-visible b { border-color: #ffe1c4; background: #2c2019; color: #ffe6cf; }
+.map-npc:hover span, .map-npc:focus-visible span { background: rgba(10,16,14,.94); color: #fff; }
+.map-npc.locked b { border-style: dashed; border-color: #6f7b76; background: #141a19; color: #9aa6a1; }
+.map-npc.locked span { color: #98a29d; }
+.map-npc.unknown-identity small { font-style: italic; }
+.hospital-map-prototype.snap-wall-mode .map-npc-layer,
+.hospital-map-prototype.opening-placement-mode .map-npc-layer { display: none; }
+
 .map-inspector { position: absolute; z-index: 8; right: 18px; top: 94px; width: min(245px, 32%); padding: 14px 15px; border: 1px solid rgba(205,229,218,.18); background: rgba(8,13,12,.91); box-shadow: 0 15px 40px rgba(0,0,0,.35); backdrop-filter: blur(8px); }
 .map-inspector-kicker { color: #bc7658; font: 8px/1.2 ui-monospace, monospace; letter-spacing: .15em; }
 .map-inspector h2 { margin: 5px 0 7px; font-size: 17px; font-weight: 500; }

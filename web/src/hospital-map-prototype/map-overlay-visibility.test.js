@@ -4,6 +4,9 @@ import { floorOneMap } from './floor-one-map.js'
 
 const css = readFileSync(new URL('./hospital-map-prototype.css', import.meta.url), 'utf8')
 const source = readFileSync(new URL('./hospital-map-prototype.js', import.meta.url), 'utf8')
+const placementSource = readFileSync(new URL('./npc-placements.js', import.meta.url), 'utf8')
+const roomDescriptionSource = readFileSync(new URL('./room-description.js', import.meta.url), 'utf8')
+const dialogueUiSource = readFileSync(new URL('../dialogue/dialogue-ui.js', import.meta.url), 'utf8')
 const zoomMotionSource = readFileSync(new URL('./zoom-motion.js', import.meta.url), 'utf8')
 const prototypeHtml = readFileSync(new URL('../../../design/presentation/叙事界面原型.html', import.meta.url), 'utf8')
 const planPreviewPng = readFileSync(new URL('../../../data/hospital_ref/cache/page-26-web.png', import.meta.url))
@@ -163,6 +166,37 @@ describe('map coordinate overlay', () => {
     expect(floorOneMap.locations).toEqual([])
     expect(floorOneMap.connections).toEqual([])
     expect(floorOneMap.actors).toEqual([])
+    // 2026-09-23 新增的人物落位与房间描述都不得回到 floorOneMap：它们只能是独立模块里的
+    // 原型占位，并自己声明这一状态。来源：design/presentation/500床一层跑团地图原型.md §2.2—§2.3。
+    expect(placementSource).toContain("NPC_PLACEMENT_STATUS = 'prototype-placeholder-not-canon'")
+    expect(roomDescriptionSource).toContain("ROOM_DESCRIPTION_STATUS = 'geometry-derived-placeholder-not-canon'")
+    expect(placementSource).toContain('原型占位')
+    expect(roomDescriptionSource).toContain('不含房间名称与用途')
+  })
+
+  test('answers a room click with a geometry-derived description in the dialogue box', () => {
+    expect(source).toContain("import { createRoomDescriptionIndex } from './room-description.js'")
+    expect(source).toContain('createRoomDescriptionIndex(enclosureTopology.enclosures)')
+    expect(source).toContain('onMapContext?.(roomContext(enclosure))')
+    expect(source).toContain('房间尚未命名')
+    // 事实、依据、未确定三段由右侧对话框分区显示，避免被读成房间名称。
+    expect(dialogueUiSource).toContain('map-location-facts')
+    expect(dialogueUiSource).toContain('map-location-basis')
+    expect(dialogueUiSource).toContain('map-location-unknown')
+  })
+
+  test('renders one placeholder marker per person and time slot', () => {
+    // 来源：design/presentation/500床一层跑团地图原型.md §2.3。
+    expect(source).toContain("import { locationLabels, placementsAtTime } from './npc-placements.js'")
+    expect(source).toContain('placementsAtTime(state.time)')
+    expect(source).toContain('data-npc-id')
+    expect(source).toContain('data-npc-location')
+    expect(source).toContain('class="map-npc-layer"')
+    expect(source).toContain("onNpcSelect?.(placement.npcId, npcContext(placement, npc))")
+    expect(css).toContain('.map-npc-layer')
+    // 标记要保持固定屏幕尺寸，并在描墙 / 放门窗时收起。
+    expect(css).toMatch(/\.map-npc\s*\{[^}]*scale\(var\(--map-marker-scale\)\)/)
+    expect(css).toMatch(/\.snap-wall-mode \.map-npc-layer[\s\S]{0,80}display:\s*none/)
   })
 
   test('keeps assessed degree-one endpoints in diagnostics without rendering legacy coloured points', () => {
