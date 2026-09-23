@@ -31,6 +31,10 @@ function narrativePrototypeEntry() {
 }
 
 export default defineConfig({
+  // 子路径托管（GitHub Pages 项目站点是 /<repo>/ 而不是 /）时由 PAGES_BASE 注入 base，
+  // 否则打包出的 /assets/* 会指到域名根、整页 404。本地 dev/build 不设该变量，
+  // base 仍为 '/'，行为与加这个字段之前完全一致。见 web/README.md「公网预览」。
+  base: process.env.PAGES_BASE || '/',
   root: presentationRoot,
   cacheDir: resolve(import.meta.dirname, 'node_modules/.vite'),
   publicDir: resolve(import.meta.dirname, 'public'),
