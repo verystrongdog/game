@@ -12,6 +12,11 @@ name: CI
 # 2026-09-18 增补：加了一个 **只报不拦** 的 npc-materials-report job（owner 裁定选 B）。
 # 它不是门禁的回归——单脚本、只用 stdlib、不建例外表、continue-on-error: true，
 # 永远不改红叉，只产出报告 artifact。理由见该 job 上方注释与 code/tools/check_npc_materials.py 头部。
+#
+# 2026-09-23 增补：action 版本升到跑在 node24 上的 major（checkout v7 / setup-dotnet v6 /
+# upload-artifact v7）。此前每次运行都会为 node20 运行时打弃用警告（annotation 里逐条点名），
+# 而 runner 已按 node24 执行它们。**只动 major 版本，不动用法**：本 workflow 用到的输入名
+# （dotnet-version / name / path / if-no-files-found）在各新 tag 的 action.yml 里均已确认存在。
 
 on:
   push:
@@ -28,8 +33,8 @@ jobs:
     name: engine (build + test)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '10.0.400'
           # 工程目标框架是 net8.0；只装 SDK 即可（SDK 10 能编译 net8.0）
@@ -73,7 +78,7 @@ jobs:
             --logger "trx;LogFileName=engine.trx" --results-directory artifacts
       - name: 上传测试报告
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: engine-test-results
           path: artifacts/engine.trx
@@ -90,14 +95,14 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: NPC 素材一致性报告（永不失败）
         run: |
           python3 code/tools/check_npc_materials.py --json npc-report.json || true
           python3 code/tools/check_npc_materials.py --only json,manifest,ages,bands,crossview || true
       - name: 上传报告
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: npc-materials-report
           path: npc-report.json
