@@ -52,6 +52,16 @@ PAGES_BASE=/game/ npx vite preview        # 在 http://localhost:4173/game/ 下�
 
 同一区域的“显示设置”可把本地显示亮度调到 70%–140%，选择保存在浏览器本地；它不改变 Three/Unity 场景灯光参数。
 
+## 一层地图：房间描述与开局人物
+
+来源：[一层跑团地图原型 §2.2—§2.4](../design/presentation/500%E5%BA%8A%E4%B8%80%E5%B1%82%E8%B7%91%E5%9B%A2%E5%9C%B0%E5%9B%BE%E5%8E%9F%E5%9E%8B.md)。这三层都是**原型占位，不是正典**：
+
+- **点击闭环 → 右侧对话框显示描述**。描述由 `src/hospital-map-prototype/room-description.js` 按几何自动生成（面积、包围盒长短边、长宽比、顶点数），分类为长走道 / 大跨空间 / 短通道 / 标准房间模块 / 常规房间 / 小房间 / 极小围合。**不含房间名称与用途**，对话框把“几何事实 / 依据 / 尚未确定”分开列出。189 个闭环的几何读数见设计文档 §2.2。
+- **开局人物在对应位置**。`src/hospital-map-prototype/npc-placements.js` 把有对话数据的五位（郑晓敏 · 谭丽娟 · 吴桐 · 周卫国 · 唐念安）按 [NPC 生态台账](../design/spec/material/NPC%E7%94%9F%E6%80%81%E5%8F%B0%E8%B4%A6.md) 的驻地落到闭环上，并按上午 / 下午 / 夜晚分别落位；标记随右侧时段切换而移动。落位是占位，`basketball_court` 没有几何候选，已登记在 `unmappedLocations`。
+- **点人物 → 开局那套对话浮层**。`src/map-dialogue/dialogue-overlay.js` 只调用对话运行时的 `selectNpc` / `choose` / `leave` / `subscribe`，与右侧叙事面板共用同一份状态，不自己判断条件。⚠️ 一层还没有玩家坐标，因此原型不做“同地点才能交谈”的距离判定，这条也写在浮层界面上。
+
+验证：`bun test` 覆盖分类判据、活动文案与人物数据的逐字一致、落位与闭环/人物的引用完整性。
+
 ## Unity Web 阶段 A
 
 Unity 生成物写入 `web/public/unity/`，该目录不入库。Vite 会把它以 `/unity/` 暴露，并在生产构建时复制到 `web/dist/unity/`。Unity Editor 中执行菜单 `YANTF → Web → 构建阶段 A 到 web/public/unity` 后，网页宿主从 `/unity/manifest.json` 读取带哈希或压缩后缀的实际文件名。

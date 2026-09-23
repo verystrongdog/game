@@ -51,6 +51,7 @@ export default defineConfig({
       '/scene-host': resolve(import.meta.dirname, 'src/scene-host'),
       '/character-creation': resolve(import.meta.dirname, 'src/character-creation'),
       '/opening-exploration': resolve(import.meta.dirname, 'src/opening-exploration'),
+      '/map-dialogue': resolve(import.meta.dirname, 'src/map-dialogue'),
       '/dialogue': resolve(import.meta.dirname, 'src/dialogue'),
       '/prototype-bootstrap': resolve(import.meta.dirname, 'src/prototype-bootstrap'),
     },
