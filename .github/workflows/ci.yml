@@ -33,13 +33,31 @@ jobs:
         with:
           dotnet-version: '10.0.400'
           # 工程目标框架是 net8.0；只装 SDK 即可（SDK 10 能编译 net8.0）
-      - name: 确认 SDK 版本与 global.json 一致
+      # 判据是 **global.json 自己声明的策略**，不是那个版本号的字面值：
+      # global.json 为 {"version":"10.0.400","rollForward":"latestFeature"}，而
+      # latestFeature 允许同一 major.minor 下更高的 feature band / patch。原先这里写
+      # `test "$(dotnet --version)" = "10.0.400"`，比它自称要守的策略更严 —— runner 镜像
+      # 预装了 10.0.401 时 dotnet 按 latestFeature 选中 10.0.401，本步却报红。
+      # 2026-09-23 实测：同一个 SHA，push run 拿到 10.0.400（绿）、PR run 拿到 10.0.401（红），
+      # 而 "engine (build + test)" 是 main 的必需检查（enforce_admins: true），红叉直接卡住合并。
+      - name: 确认 SDK 版本满足 global.json（10.0.400 · latestFeature）
         run: |
-          dotnet --version
-          test "$(dotnet --version)" = "10.0.400" || {
-            echo "::error::SDK 版本与 global.json 不符"
-            exit 1
-          }
+          version="$(dotnet --version)"
+          echo "dotnet --version = $version"
+          case "$version" in
+            10.0.[0-9]*)
+              # 取到 feature band（10.0.401 → 401），并剥掉预览后缀（10.0.401-rc.1 → 401）
+              band="${version#10.0.}"
+              band="${band%%.*}"
+              band="${band%%-*}"
+              if [ "$band" -ge 400 ] 2>/dev/null; then
+                echo "OK：$version 满足 global.json 的下限 10.0.400"
+                exit 0
+              fi
+              ;;
+          esac
+          echo "::error::SDK $version 不满足 global.json：需要 10.0.x 且 feature band >= 400"
+          exit 1
       - name: restore（验证锁文件可用，不依赖开发机缓存）
         run: dotnet restore code/src/YouAreNotTheFish.sln
       - name: build
