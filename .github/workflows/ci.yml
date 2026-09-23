@@ -12,6 +12,11 @@ name: CI
 # 2026-09-18 增补：加了一个 **只报不拦** 的 npc-materials-report job（owner 裁定选 B）。
 # 它不是门禁的回归——单脚本、只用 stdlib、不建例外表、continue-on-error: true，
 # 永远不改红叉，只产出报告 artifact。理由见该 job 上方注释与 code/tools/check_npc_materials.py 头部。
+#
+# 2026-09-23 增补：action 版本升到跑在 node24 上的 major（checkout v7 / setup-dotnet v6 /
+# upload-artifact v7）。此前每次运行都会为 node20 运行时打弃用警告（annotation 里逐条点名），
+# 而 runner 已按 node24 执行它们。**只动 major 版本，不动用法**：本 workflow 用到的输入名
+# （dotnet-version / name / path / if-no-files-found）在各新 tag 的 action.yml 里均已确认存在。
 
 on:
   push:
@@ -28,18 +33,36 @@ jobs:
     name: engine (build + test)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '10.0.400'
           # 工程目标框架是 net8.0；只装 SDK 即可（SDK 10 能编译 net8.0）
-      - name: 确认 SDK 版本与 global.json 一致
+      # 判据是 **global.json 自己声明的策略**，不是那个版本号的字面值：
+      # global.json 为 {"version":"10.0.400","rollForward":"latestFeature"}，而
+      # latestFeature 允许同一 major.minor 下更高的 feature band / patch。原先这里写
+      # `test "$(dotnet --version)" = "10.0.400"`，比它自称要守的策略更严 —— runner 镜像
+      # 预装了 10.0.401 时 dotnet 按 latestFeature 选中 10.0.401，本步却报红。
+      # 2026-09-23 实测：同一个 SHA，push run 拿到 10.0.400（绿）、PR run 拿到 10.0.401（红），
+      # 而 "engine (build + test)" 是 main 的必需检查（enforce_admins: true），红叉直接卡住合并。
+      - name: 确认 SDK 版本满足 global.json（10.0.400 · latestFeature）
         run: |
-          dotnet --version
-          test "$(dotnet --version)" = "10.0.400" || {
-            echo "::error::SDK 版本与 global.json 不符"
-            exit 1
-          }
+          version="$(dotnet --version)"
+          echo "dotnet --version = $version"
+          case "$version" in
+            10.0.[0-9]*)
+              # 取到 feature band（10.0.401 → 401），并剥掉预览后缀（10.0.401-rc.1 → 401）
+              band="${version#10.0.}"
+              band="${band%%.*}"
+              band="${band%%-*}"
+              if [ "$band" -ge 400 ] 2>/dev/null; then
+                echo "OK：$version 满足 global.json 的下限 10.0.400"
+                exit 0
+              fi
+              ;;
+          esac
+          echo "::error::SDK $version 不满足 global.json：需要 10.0.x 且 feature band >= 400"
+          exit 1
       - name: restore（验证锁文件可用，不依赖开发机缓存）
         run: dotnet restore code/src/YouAreNotTheFish.sln
       - name: build
@@ -55,7 +78,7 @@ jobs:
             --logger "trx;LogFileName=engine.trx" --results-directory artifacts
       - name: 上传测试报告
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: engine-test-results
           path: artifacts/engine.trx
@@ -72,14 +95,14 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: NPC 素材一致性报告（永不失败）
         run: |
           python3 code/tools/check_npc_materials.py --json npc-report.json || true
           python3 code/tools/check_npc_materials.py --only json,manifest,ages,bands,crossview || true
       - name: 上传报告
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: npc-materials-report
           path: npc-report.json
