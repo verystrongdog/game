@@ -239,8 +239,9 @@ public class MoonlightLandingContractTests
     public void Moonlight_Loads_12LandingPoints_PLACEHOLDER()
     {
         var ml = GameDataLoader.LoadMoonlightLanding(MoonlightJson(), Brain(), Tri());
-        Assert.Equal(1, ml.Semantics.Count);
-        var sem = ml.Semantics[0];
+        // Assert.Single 同时表达「恰好一条」并返回那一条，省掉下标访问；
+        // 原先写成 Assert.Equal(1, ml.Semantics.Count)（xUnit2013 警告）。
+        var sem = Assert.Single(ml.Semantics);
         Assert.Equal(4, sem.Primary.Length);
         Assert.Equal(8, sem.Secondary.Length);
         Assert.Equal("PLACEHOLDER", sem.R);
