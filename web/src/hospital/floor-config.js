@@ -1,4 +1,7 @@
-const ROOT = '/hospital-floor/models'
+// 模型来自 web/public/hospital-floor/（构建时原样复制到 dist 根）。托管子路径不一定是
+// /（GitHub Pages 项目站点是 /<repo>/），所以跟随 Vite 的 base：dev 为 '/'，
+// Pages 构建为 '/<repo>/'，否则点开「3D 实验」会 404。
+const ROOT = `${import.meta.env.BASE_URL}hospital-floor/models`
 
 function part(model, file, x, z, y, yaw, role) {
   return { url: `${ROOT}/${model}/meshes/${file}`, position: [x, y, -z], yaw, role }

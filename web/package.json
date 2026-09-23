@@ -8,6 +8,7 @@
     "build:floor-openings": "node scripts/build-floor-one-openings.mjs",
     "dev": "vite",
     "build": "vite build",
+    "build:pages": "vite build && node scripts/make-pages-index.mjs",
     "test": "bun test",
     "prototype:opening-story": "bun src/story-prototype/opening-story-cli.js",
     "preview": "vite preview"

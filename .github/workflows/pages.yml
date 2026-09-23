@@ -1,0 +1,70 @@
+name: Deploy Web · GitHub Pages
+
+# 把叙事 Web 原型发布成一个**可以直接点开的公网页面**：
+#   https://verystrongdog.github.io/game/
+#
+# 只发布 web/ 的静态构建产物（web/dist），design/ 与 data/ 的源文档不进站点。
+#
+# 这不是门禁：它只在 main 上跑（外加手动触发），失败也不会拦住任何 PR；CI 里
+# 那个「构建能过、测试能过」的 job 仍然只有 .github/workflows/ci.yml 里的 engine。
+#
+# 为什么需要 PAGES_BASE：项目站点挂在 /game/ 子路径下，Vite 默认 base='/' 会让
+# 打包出的 /assets/* 指到域名根而整页 404。构建时用仓库名拼出真实 base。
+# 页面本身没有 /game/ 前缀的运行时资源（模型路径跟随 import.meta.env.BASE_URL，
+# 见 web/src/hospital/floor-config.js）。
+#
+# 首次还需要在仓库 Settings → Pages 把 Source 设为 "GitHub Actions"。
+
+on:
+  push:
+    branches: ['main']
+  # PR 上只跑构建（验证 workflow 与 base 注入本身没坏），部署 job 有 if 挡着。
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 同一个 ref 上只跑一个部署；排队而不是取消，避免把 main 上较新的提交丢掉。
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: build (web/dist)
+    runs-on: ubuntu-latest
+    env:
+      PAGES_BASE: /${{ github.event.repository.name }}/
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          # vite 8 要求 Node 20.19+ / 22.12+。
+          node-version: '22'
+      - uses: oven-sh/setup-bun@v2
+      - name: 安装依赖（按 bun.lock 锁定）
+        working-directory: web
+        run: bun install --frozen-lockfile
+      - name: 构建（base=${{ env.PAGES_BASE }} + 生成 index.html）
+        working-directory: web
+        run: npm run build:pages
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: web/dist
+
+  deploy:
+    name: deploy
+    needs: build
+    # PR 只验证构建；只有 main 的 push 与手动触发才真发布。
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
