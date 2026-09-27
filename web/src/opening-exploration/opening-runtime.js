@@ -1,4 +1,5 @@
-import { calculateAttributes } from '../character-creation/character-model.js'
+import db from '../../../data/opening.json'
+import { settleAttributes } from '../character-creation/opening.js'
 
 // 来源：design/presentation/主角开场场景示范.md §2.1。
 // 原型只使用已有属性档位边界：3=协调，5=精通，7=娴熟；不新建掷骰规则。
@@ -65,7 +66,13 @@ export function createOpeningState(rawProfile = {}) {
     experiences: new Set(rawProfile.experiences || []),
     diseases: new Set(rawProfile.diseases || []),
   }
-  const attributes = calculateAttributes(profile.experiences)
+  // 属性只来自 data/opening.json 的 effects 与配置块；这里把 id 键换成卡面标签，
+  // 好让下面的阈值比较继续读得懂人话（观察 / 巧手 / 体格）。
+  const settlement = settleAttributes(db, [...profile.experiences])
+  const attributes = Object.fromEntries(db.attributes.ids.map((id) => [
+    db.attributes.labels[id],
+    { points: settlement.clamped[id], level: settlement.band[id].label },
+  ]))
   return {
     phase: 'moon',
     profile,
@@ -91,8 +98,8 @@ function inspectMoon(state) {
       '今晚的月亮不只是大。它太完整了，完整得与你记得的日期互相抵触。',
       '你看得出月亮很大。疲惫暂时不允许你说出更多。'),
     ...experienceBlocks(state.profile, [
-      ['night-shifts', '长期上夜班、三班倒', '你会弄错星期，不会弄错下班时的天。'],
-      ['checking-work', '长期做核对类工作', '日期、月相。两个字段对不上。先别给它找解释。'],
+      ['exp_0406', '轮着上的夜班', '你会弄错星期，不会弄错下班时的天。'],
+      ['exp_0550', '对不上的账', '日期、月相。两个字段对不上。先别给它找解释。'],
     ]),
   ])
 }
@@ -119,8 +126,8 @@ function inspectPhone(state) {
       '飞行模式关着，卡槽没有松，导航程序也在工作。手机没坏；它只是没有任何东西可以连接。',
       '你在几个菜单之间来回切换。每一页都用不同的图标告诉你同一件事：没有信号。'),
     ...experienceBlocks(state.profile, [
-      ['alone-city', '一个人在陌生城市', '导航曾经是你在陌生地方最便宜的担保人。现在它也不知道你在哪里。'],
-      ['checking-work', '长期做核对类工作', '你已经排除了能排除的用户错误。'],
+      ['exp_0565', '开了又停的工地', '导航曾经是你在陌生地方最便宜的担保人。现在它也不知道你在哪里。'],
+      ['exp_0550', '对不上的账', '你已经排除了能排除的用户错误。'],
     ]),
   ])
 }
@@ -133,8 +140,8 @@ function inspectDarkness(state) {
       '路灯的光并没有逐渐变暗。它在道路边缘结束得很干净，像是外面根本没有一个地方可供光线继续。',
       '你盯得太久，视野里开始出现眼球自己制造的颜色。它们不能告诉你对面有什么。'),
     ...experienceBlocks(state.profile, [
-      ['guard-work', '做过保安或门卫', '边界应该把人分成里外。这道边界只留下了里面。'],
-      ['stalked', '被跟踪过、被威胁过', '你的身体已经开始计算逃跑路线。它一条也没有找到。'],
+      ['exp_0549', '门口的值班室', '边界应该把人分成里外。这道边界只留下了里面。'],
+      ['exp_0007', '巷口的第二个人', '你的身体已经开始计算逃跑路线。它一条也没有找到。'],
     ]),
   ])
 }

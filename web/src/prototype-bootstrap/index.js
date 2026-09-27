@@ -1,12 +1,18 @@
-import { createCharacterCreation } from '/character-creation/index.js'
+// 🔧 2026-09-27 阶段 5：开局入口切到「精神卫生门诊初诊」模块（`/opening-clinic/`）。
+// 旧模块 `web/src/character-creation/**` 原样保留（阶段 4 及以前的八问与池子，待接回），
+// 本阶段不再被调用。见 design/presentation/开局门诊问诊.md §八。
+import { createOpeningClinic } from '/opening-clinic/index.js'
 import { createDisplaySettings } from '/character-creation/display-settings.js'
 import { createDialogueUi } from '/dialogue/dialogue-ui.js'
 import { createHospitalMapPrototype } from '/hospital-map-prototype/hospital-map-prototype.js'
 import { createDialogueOverlay } from '/map-dialogue/dialogue-overlay.js'
 import { createOpeningExploration } from '/opening-exploration/opening-ui.js'
 
-// 来源：design/entities/疾病特长.md §二—§六。未决项在原型中显式保留，不写回正式游戏状态。
-const characterCreation = createCharacterCreation({
+// 来源：design/presentation/开局门诊问诊.md（阶段 5 的口径文档）与
+// design/entities/疾病特长.md §二—§六（本阶段不结算经历与疾病，未决项在原型中显式保留）。
+// ⚠️ 变量名沿用 `characterCreation`：它仍然是「开始新游戏」之后那道阻断式开局的入口，
+//    只是实现换成了门诊初诊问诊（`prototype-shell.test.js` 按这个名字断言按钮接线）。
+const characterCreation = createOpeningClinic({
   trigger: document.querySelector('#characterCreationLaunch'),
   required: true,
 })
