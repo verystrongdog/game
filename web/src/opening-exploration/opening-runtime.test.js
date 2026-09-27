@@ -2,7 +2,7 @@ import { describe, expect, test } from 'bun:test'
 import { createOpeningState, dispatchOpening, openingActions, openingHotspots } from './opening-runtime.js'
 
 const profile = {
-  experiences: ['night-shifts', 'checking-work', 'heavy-labor', 'chronic-pain'],
+  experiences: ['exp_0406', 'exp_0550', 'exp_0549', 'exp_0565', 'exp_0007'],
   diseases: [],
 }
 

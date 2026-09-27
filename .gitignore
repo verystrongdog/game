@@ -182,3 +182,5 @@ web/public/unity/
 .claude/settings.local.json
 .claude/scheduled_tasks.lock
 .claude/projects/
+
+.content-batch/

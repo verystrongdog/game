@@ -1,0 +1,6828 @@
+{
+  "meta": {
+    "id": "opening_clinic",
+    "title": "开局门诊病历（精神卫生门诊 · 初诊）",
+    "stage": "阶段 6（2026-09-27）：这一屏换成游戏里的那一屏（左世界含那张纸 · 右叙事流）· 病史整合成句（compose 模板 + 每一档的 clause）· 言语即病（四套语言指纹，61 档打标）；预设的 288 段经历与 26 张病仍然不接",
+    "authority": "自阶段 5 起，开局问诊的题库 · 答案闭集 · 分支规则 · 病历栏目与每一笔 · 全部上屏文案的唯一权威 = 本文件。自阶段 6 起，**本文件同时是「怎么说话」（`voices` 与逐档的 `voice` / `label`）与「纸上怎么写」（`compose` 与逐档的 `clause`）的唯一权威**。旧权威 data/opening.json（阶段 4 及以前的八问与池子）与 data/diseases.json（26 张病）自阶段 5 起开局流程不再接入，原样保留待接回，互相指认见 design/presentation/开局门诊问诊.md §八。",
+    "source_record": "design/spec/material/ref/精神科门诊病历-书写规范-检索记录.md（门诊侧一手来源，2026-09-27）",
+    "source_record_inpatient": "design/spec/material/ref/精神科入院病历-书写规范-检索记录.md（住院侧一手来源，2026-09-27；本文件凡写「入院检索 §x」均指它）",
+    "design_doc": "design/presentation/开局门诊问诊.md",
+    "owner_reference": ".scratch/owner-ref/精神卫生门诊问诊-分享对话.md（AI 生成的整理稿：只作问题的覆盖面与先后顺序之用，不作任何引用依据）",
+    "owner_reference_total": 113,
+    "discipline": [
+      "没有自由文本输入：玩家只有三种笔（答 · 认不了 · 签），问诊的每一问每一档取值都是闭集。",
+      "答案里不许出现诊断名；量表只在病历里作为检查项目名出现，不显示分数、不做结论。",
+      "风险模块的问题一律可以拒答，拒答不会让开局走不下去。",
+      "查不到出处的栏目一律标 ⏳ 或从纸上拿掉，不许自造规范用语。"
+    ],
+    "supersedes": "data/opening.json 的 interview / record_shell / 288 段经历，与 data/diseases.json 的 26 张病卡 —— 自阶段 5 起开局流程不再接入；两份文件均在 meta.stage5_not_wired 里互相指认，原样保留待接回。",
+    "design_doc_stage6": "design/presentation/开局门诊问诊.md §十四（阶段 6：这一屏就是游戏里的一屏 · 病史整合成句 · 言语即病）"
+  },
+  "record": {
+    "title": "精神卫生门诊 · 初诊病历",
+    "kicker": "精神卫生门诊 · 初诊",
+    "paper_note": "本栏目的名字与顺序照《病历书写基本规范》（卫医政发〔2010〕11 号）第二章第十三条的初诊病历记录清单写；个人史与家族史两项另据《福建省病历书写规范（2024 年版）》。",
+    "ink": {
+      "patient": {
+        "id": "patient",
+        "label": "患者陈述",
+        "class": "oc-ink-patient"
+      },
+      "hospital": {
+        "id": "hospital",
+        "label": "院方记录",
+        "class": "oc-ink-hospital"
+      }
+    },
+    "blank": "（尚未写）",
+    "columns": [
+      {
+        "id": "outpatient_no",
+        "group": "homepage",
+        "label": "门诊号",
+        "basis": "《病历书写基本规范》第二章第十二条（门（急）诊病历首页内容）；河南《病历书写基本规范实施细则》第三十三条（首页含门诊号）",
+        "who": "hospital",
+        "fill": "hospital",
+        "value": "0527",
+        "blank": "待填",
+        "source": "院方记录；原型固定值"
+      },
+      {
+        "id": "name_patient",
+        "group": "homepage",
+        "label": "姓名（患者自报）",
+        "basis": "《病历书写基本规范》第二章第十二条:首页内容包括患者姓名",
+        "who": "patient",
+        "fill": "patient_input",
+        "value_from_source": "character.name",
+        "blank": "未报",
+        "source": "data/opening.json 的 character_source.name_pool（姓 × 名，闭集）；正典人物回落到 character_source 的默认姓名"
+      },
+      {
+        "id": "name_hospital",
+        "group": "homepage",
+        "label": "姓名（院方记录）",
+        "basis": "《病历书写基本规范》第二章第十二条；身份黏着的设定依据见 design/entities/疾病特长.md §4.6.4（蓝手环）",
+        "who": "hospital",
+        "fill": "hospital",
+        "value_from_source": "character.hospital_name",
+        "blank": "待填",
+        "source": "data/opening.json 的 character_source.identity.hospital_name；玩家改不了"
+      },
+      {
+        "id": "gender",
+        "group": "homepage",
+        "label": "性别",
+        "basis": "《病历书写基本规范》第二章第十二条（首页内容包括性别）",
+        "who": "patient",
+        "fill": "patient_input",
+        "value_from_source": "character.gender",
+        "blank": "未填",
+        "source": "data/opening.json 的 character_vocab.gender（闭集）"
+      },
+      {
+        "id": "marital",
+        "group": "homepage",
+        "label": "婚姻状况",
+        "basis": "《病历书写基本规范》第二章第十二条（首页内容包括婚姻状况）",
+        "who": "patient",
+        "fill": "patient_input",
+        "value_from_question": "q089",
+        "blank": "未填",
+        "source": "由问诊 q089 的答案落笔（闭集 marital）"
+      },
+      {
+        "id": "allergy",
+        "group": "homepage",
+        "label": "药物过敏史",
+        "basis": "《病历书写基本规范》第二章第十二条（首页内容包括药物过敏史）；另见第十三条「既往史」",
+        "who": "patient",
+        "fill": "patient_input",
+        "value_from_question": "q064",
+        "blank": "未填",
+        "source": "由问诊 q064 的答案落笔（闭集 allergy）"
+      },
+      {
+        "id": "historian",
+        "group": "homepage",
+        "label": "病史陈述者",
+        "basis": "国家规范把「病史陈述者」列为入院记录一般情况法定字段（入院检索 §1.1）；门诊侧见《福建省病历书写规范（2024 年版）》第一章 二（对精神病患者需记录陪伴者的姓名及与患者的关系）",
+        "who": "hospital",
+        "fill": "hospital",
+        "value": "患者本人",
+        "blank": "待填",
+        "source": "院方记录；本作开局由患者本人供史"
+      },
+      {
+        "id": "visit_time",
+        "group": "body",
+        "label": "就诊时间",
+        "basis": "《病历书写基本规范》第二章第十三条（初诊病历记录书写内容含就诊时间）",
+        "who": "hospital",
+        "fill": "hospital",
+        "value": "记于当日门诊",
+        "blank": "待填",
+        "source": "院方记录；原型不引入具体年月日（本作开局没有年龄与日期数据）"
+      },
+      {
+        "id": "department",
+        "group": "body",
+        "label": "科别",
+        "basis": "《病历书写基本规范》第二章第十三条（初诊病历记录书写内容含科别）",
+        "who": "hospital",
+        "fill": "hospital",
+        "value": "精神卫生门诊",
+        "blank": "待填",
+        "source": "院方记录；原型固定值"
+      },
+      {
+        "id": "chief_complaint",
+        "group": "body",
+        "label": "主诉",
+        "basis": "《病历书写基本规范》第二章第十三条；格式「主要症状（或体征）及持续时间」逐字取自第十三条与第十八条（二）",
+        "who": "hospital",
+        "fill": "derived",
+        "derive_from": [
+          "q003",
+          "q005"
+        ],
+        "blank": "（待患者自述）",
+        "source": "由问诊 q003（最困扰的是什么）与 q005（从什么时候开始）拼出；字数上限见 text_limits.chief_complaint_max_chars"
+      },
+      {
+        "id": "present_illness",
+        "group": "body",
+        "label": "现病史",
+        "basis": "《病历书写基本规范》第二章第十三条；写法（起病缓急 / 主要症状特点 / 伴随症状 / 一般情况变化）见第十八条（三）1–5 与入院检索 §5.1–§5.7",
+        "who": "patient",
+        "fill": "patient_input",
+        "blank": "（尚未问）",
+        "source": "由问诊答案逐行落笔；每行指出是哪一问"
+      },
+      {
+        "id": "past_history",
+        "group": "body",
+        "label": "既往史",
+        "basis": "《病历书写基本规范》第二章第十三条（初诊病历记录书写内容含既往史）；内容项见第十八条（四）",
+        "who": "patient",
+        "fill": "patient_input",
+        "blank": "（尚未问）",
+        "source": "由问诊答案逐行落笔；每行指出是哪一问"
+      },
+      {
+        "id": "personal_history",
+        "group": "body",
+        "label": "个人史",
+        "basis": "★《福建省病历书写规范（2024 年版）》第二章第二节 二（三）:「根据诊疗需要，应简述或详细描述与本病有关的既往史、个人史及家族史等」（省级规范把个人史写进门诊初诊的病史条）；内容项见国家规范第十八条（五）1，精神科展开见入院检索 §六",
+        "who": "patient",
+        "fill": "patient_input",
+        "blank": "（尚未问）",
+        "source": "由问诊答案逐行落笔；每行指出是哪一问"
+      },
+      {
+        "id": "family_history",
+        "group": "body",
+        "label": "家族史",
+        "basis": "★同 personal_history（福建省级规范门诊章二（三））；内容项见国家规范第十八条（五）3，精神科展开见入院检索 §七",
+        "who": "patient",
+        "fill": "patient_input",
+        "blank": "（尚未问）",
+        "source": "由问诊答案逐行落笔"
+      },
+      {
+        "id": "signs",
+        "group": "body",
+        "label": "阳性体征、必要的阴性体征",
+        "basis": "★栏目名逐字取自《病历书写基本规范》第二章第十三条（初诊病历记录书写内容含「阳性体征、必要的阴性体征和辅助检查结果」）；六行观察的条目依人卫《精神病学》第 7 版第三章第四节「精神状况检查」六项（入院检索 §8.1）",
+        "who": "hospital",
+        "fill": "hospital",
+        "value_from": "observations",
+        "blank": "（尚未检查）",
+        "source": "院方在问诊过程中的观察，患者只读；不由任何玩家答案现算"
+      },
+      {
+        "id": "auxiliary",
+        "group": "body",
+        "label": "辅助检查结果",
+        "basis": "《病历书写基本规范》第二章第十三条（含辅助检查结果）；「暂缺」这一写法取自《福建省病历书写规范（2024 年版）》第二章第二节的门（急）诊初诊病历范例（「辅助检查：暂缺」）",
+        "who": "hospital",
+        "fill": "hospital",
+        "value": "暂缺",
+        "blank": "待填",
+        "source": "院方记录；本作开局没有化验与影像资料"
+      },
+      {
+        "id": "diagnosis",
+        "group": "body",
+        "label": "诊断",
+        "basis": "《病历书写基本规范》第二章第十三条（初诊病历记录书写内容含诊断及治疗意见）。门诊侧这一栏在省级规范里又叫「初步印象」（河南细则第二十三条），见 design/spec/material/ref/精神科门诊病历-书写规范-检索记录.md §2.4。",
+        "who": "hospital",
+        "fill": "derived",
+        "value_from": "confirmed_disease",
+        "blank": "（接诊医师尚未书写）",
+        "source": "由本局**认**下的那张病落笔。候选 = 那件事激活的病（data/opening.json 的 events[].activates 减去已答扩展位声明排除的），玩家在对话里认下其中一张（owner 待裁 4 的默认 (a)：一枚回应，不新开屏），**医师**把它写成初步诊断。规则与依据见本文件 event_wiring.diagnosis。",
+        "screen_note": "这一栏由接诊医师落笔：你在对话里从候选里认下其中一张。",
+        "note": "🔧 阶段 7 起**不再留白**（owner 第 6 条裁定：「填『初步诊断』：经历并集算出候选（≤4 张），玩家认下其中之一，写进诊断栏」——第 5 条把「经历并集」换成「那件事」，其余不动）。⚠️ 写上去的是**文书上的初步诊断**，不是给玩家看的标签；不写医嘱、不写量表分、不写护理等级。判据 diagnosis_pen_not_hospital 钉着 who 必须是 hospital、fill 必须是 derived。"
+      },
+      {
+        "id": "treatment",
+        "group": "body",
+        "label": "治疗意见",
+        "basis": "《病历书写基本规范》第二章第十三条（初诊病历记录书写内容含诊断及治疗意见）",
+        "who": "hospital",
+        "fill": "blank",
+        "blank": "（接诊医师尚未书写）",
+        "source": "无",
+        "screen_note": "这一栏也不由你写，本阶段仍留白。",
+        "note": "🔧 阶段 7：**仍留白**（owner 待裁 3 的默认 (a)：留白 + 说明）。诊断栏已经由医师落笔了（见 diagnosis），但医嘱尚无口径——不写医嘱、不写量表分、不写护理等级。这一条与阶段 5/6 的裁定一致，没有被第 6 条裁定推翻。"
+      },
+      {
+        "id": "doctor_sign",
+        "group": "body",
+        "label": "医师签名",
+        "basis": "《病历书写基本规范》第二章第十三条（初诊病历记录书写内容含医师签名）与第十四条（由接诊医师在患者就诊时及时完成）",
+        "who": "hospital",
+        "fill": "hospital",
+        "value": "（接诊医师已签）",
+        "blank": "未签",
+        "source": "院方法定必签"
+      },
+      {
+        "id": "historian_sign",
+        "group": "body",
+        "label": "病史陈述者（签名）",
+        "basis": "⏳ 国家规范第二章第十三条的签名项只写「医师签名」；要求「陈述者签名」的条款见于机构/省级层级文件且对象是住院病史记录（入院检索 §3.3、§10.1 第 5 条）。本栏在门诊侧无一手出处，作为原型的落款位保留并标 ⏳。",
+        "who": "patient",
+        "fill": "patient_sign",
+        "blank": "待签",
+        "source": "玩家唯一的一笔「签」"
+      }
+    ],
+    "not_open": [
+      {
+        "label": "民族",
+        "basis": "《病历书写基本规范》第二章第十二条",
+        "why": "本作不引入民族枚举（无一手闭集），首页不渲染这一笔。"
+      },
+      {
+        "label": "出生年月日 / 年龄",
+        "basis": "《病历书写基本规范》第二章第十二条",
+        "why": "开局没有出生日期数据，也不引入行政区划式的时间枚举；不渲染。"
+      },
+      {
+        "label": "职业",
+        "basis": "《病历书写基本规范》第二章第十二条",
+        "why": "需《职业分类大典》一类闭集，本阶段不引入；不渲染。"
+      },
+      {
+        "label": "工作单位 / 住址",
+        "basis": "《病历书写基本规范》第二章第十二条",
+        "why": "同上；不渲染。"
+      }
+    ],
+    "observations": [
+      {
+        "label": "一般表现",
+        "text": "由本人独立步入诊室，衣饰整洁，接触合作，对答切题，注意力可维持，无怪异动作。",
+        "basis": "人卫《精神病学》第 7 版第三章第四节一（一）外表与行为（入院检索 §8.1）",
+        "derive": {
+          "from": "voice",
+          "table": {
+            "depressive": "由本人步入诊室，衣饰整洁，接触被动，多数时间低头，答话前停顿较久，无怪异动作。",
+            "manic": "步入诊室后坐不住，手势多，主动与医师攀谈，谈话中两次起身走动，无怪异动作。",
+            "paranoid": "入座后先打量诊室的门窗与四角，之后才答话；接触戒备，对走廊声响回头查看，无怪异动作。",
+            "compulsive": "入座后把随身物品摆正，答话前先整理措辞，并多次主动更正前一句；无怪异动作。"
+          }
+        },
+        "derive_note": "这一行按这一趟问出来的东西现算（来源见 derive）；取不到时回落到 text，并在设计文档里标 ⏳。"
+      },
+      {
+        "label": "言谈与思维",
+        "text": "语速与音量适中，言语连贯，未引出思维松弛、思维中断或病理性赘述。",
+        "basis": "同上一—（二）言谈与思维",
+        "derive": {
+          "from": "voice",
+          "table": {
+            "depressive": "语量少，语速慢，句间停顿明显，多以短句作答，不主动展开；未引出思维破裂。",
+            "manic": "语量明显增多，语速快，话题不时离开提问内容，须医师打断才能回到原题；内容带夸大色彩。",
+            "paranoid": "交谈中多次反问提问的用意，回答常不落在问题上；内容涉及被针对、被议论，自成一套说法。",
+            "compulsive": "叙述细致，多次重复并更正措辞，反复确认是否表达准确；内容含难以摆脱的念头与动作。"
+          }
+        },
+        "derive_note": "这一行按这一趟问出来的东西现算（来源见 derive）；取不到时回落到 text，并在设计文档里标 ⏳。"
+      },
+      {
+        "label": "情绪状态",
+        "text": "交谈中情绪与所述内容大致协调，未见情感倒错；提及来诊经过时略显不安。",
+        "basis": "同上一—（三）情绪状态",
+        "derive": {
+          "from": "voice",
+          "table": {
+            "depressive": "情绪低落，面部表情少，谈及近况时眼眶发红；情绪与所述内容协调。",
+            "manic": "情绪高涨，面露笑意，语声洪亮；谈及被家人送来时明显易激惹。",
+            "paranoid": "情绪紧张、戒备，谈及被针对时语声提高，愤怒与不安交织。",
+            "compulsive": "情绪焦虑，谈及无法摆脱的念头时明显不安，反复寻求医师确认。"
+          }
+        },
+        "derive_note": "这一行按这一趟问出来的东西现算（来源见 derive）；取不到时回落到 text，并在设计文档里标 ⏳。"
+      },
+      {
+        "label": "感知",
+        "text": "未引出错觉、幻觉及感知综合障碍。",
+        "basis": "同上一—（四）感知",
+        "derive": {
+          "from": "answer",
+          "q": "q046",
+          "table": {
+            "no": "未引出错觉、幻觉及感知综合障碍。",
+            "name_only": "诉及夜间听见有人呼唤其姓名，为其熟人的声音；未引出错觉及感知综合障碍。",
+            "talk": "诉及言语性幻听，内容以议论为主；未引出错觉及感知综合障碍。",
+            "command": "诉及言语性幻听，含令其做事的内容；未引出错觉及感知综合障碍。"
+          }
+        },
+        "derive_note": "这一行按这一趟问出来的东西现算（来源见 derive）；取不到时回落到 text，并在设计文档里标 ⏳。"
+      },
+      {
+        "label": "认知功能",
+        "text": "定向力完整；注意力、近记忆与远记忆未见明显缺损；一般常识与计算力与受教育水平相称。",
+        "basis": "同上一—（五）认知功能",
+        "derive": {
+          "from": "answer",
+          "q": "q032",
+          "table": {
+            "ok": "定向力完整；注意力可维持，未诉决断困难；近记忆与远记忆未见明显缺损。",
+            "hard": "定向力完整；诉注意力难以集中，须反复才能听清提问；近记忆与远记忆未见明显缺损。",
+            "decide_slow": "定向力完整；注意力可维持，但诉做决定需反复权衡；近记忆与远记忆未见明显缺损。",
+            "cant": "定向力完整；诉注意力几乎无法集中，交谈中多次走神；近记忆与远记忆未见明显缺损。",
+            "both_hard": "定向力完整；诉注意力难集中且决断困难，交谈中多次停顿；近记忆与远记忆未见明显缺损。"
+          }
+        },
+        "derive_note": "这一行按这一趟问出来的东西现算（来源见 derive）；取不到时回落到 text，并在设计文档里标 ⏳。"
+      },
+      {
+        "label": "自知力",
+        "text": "承认近期状态与以往不同，但对是否需要就诊态度犹豫，自知力不完整。",
+        "basis": "同上一—（六）自知力；「自知力不完整」这一描述还须有分析（入院检索 §8.4.1）",
+        "derive": {
+          "from": "answer",
+          "q": "q053",
+          "table": {
+            "real": "不认为这些体验属于异常，对来诊持保留态度，自知力缺失。",
+            "unsure": "对是否为异常态度含糊，夜间与白天的判断不一致，自知力不完整。",
+            "illness": "承认近期状态与以往不同、愿意就诊，自知力部分存在。",
+            "others_right": "承认他人意见有可取之处，愿意配合诊疗，自知力部分存在。"
+          }
+        },
+        "derive_note": "这一行按这一趟问出来的东西现算（来源见 derive）；取不到时回落到 text，并在设计文档里标 ⏳。"
+      }
+    ],
+    "sign": {
+      "action": "签字",
+      "note": "法定的签名主体是接诊医师（第十三条）；病史陈述者的签名在门诊侧无一手出处（见 historian_sign 的 basis）。",
+      "rows": [
+        "doctor_sign",
+        "historian_sign"
+      ]
+    },
+    "observations_note": "六行观察里，「一般表现 · 言谈与思维 · 情绪状态」按这一局**说话的调子**（语言指纹累积）落笔，「感知 · 认知功能 · 自知力」按对应那一问的答案落笔；没问到或拒答时回落到各自的 text。行仍由院方写、玩家只读。依据：人卫《精神病学》第 7 版第三章第四节（入院检索 §8.1）。 🔧 阶段 6：六行里三行按语言指纹累积现算、三行按对应那一问现算，见 §十四.4。"
+  },
+  "refuse": {
+    "id": "refuse",
+    "label": "不愿说",
+    "record": "未答",
+    "basis": "⏳ 未查到任何规范、省级文件、教材或机构文件给出「患者拒答」在病历上的写法。可以确证的只有它的法律位置：《中华人民共和国精神卫生法》第二十七条规定不得违背本人意志进行确定其是否患有精神障碍的医学检查，第二十六条要求尊重患者人格尊严。此处落笔用纯描述性的「未答」，不自造规范用语，待 owner 裁定。",
+    "policy": {
+      "sensitive": "required",
+      "plain": "optional"
+    },
+    "hint": "不想说也可以。照实记下来的是你说了什么，也包括你没说。",
+    "aliases": [
+      "decline"
+    ],
+    "aliases_note": "有些闭集里「不愿说」这一档与题目自己的分支选项同名（例如 q001 的主诉选择器），为了避免撞号，它们在各自的闭集里用 decline 这个 id；语义与全局的 refuse 完全一致。"
+  },
+  "sensitivity_levels": {
+    "self_harm": {
+      "label": "自伤风险",
+      "content_note": "接下来这一问与伤害自己有关。你可以不回答。"
+    },
+    "harm_other": {
+      "label": "伤人风险",
+      "content_note": "接下来这一问与伤害别人有关。你可以不回答。"
+    },
+    "trauma": {
+      "label": "创伤经历",
+      "content_note": "接下来这一问与过去发生过的伤害有关。你可以不回答。"
+    },
+    "psychosis": {
+      "label": "精神病性体验",
+      "content_note": "接下来这一问与别人不容易理解的体验有关。你可以不回答。"
+    },
+    "substance": {
+      "label": "物质使用",
+      "content_note": "接下来这一问与喝酒、用药、违禁物质有关。你可以不回答。"
+    },
+    "sexuality": {
+      "label": "性与身体",
+      "content_note": "接下来这一问与身体和亲密关系有关。你可以不回答。"
+    },
+    "family": {
+      "label": "家族情况",
+      "content_note": "接下来这一问与家里人的情况有关。你可以不回答。"
+    }
+  },
+  "probes": {
+    "note": "可复用的追问层：医生在症状类问题上会用的通用追问，收在这里一份，不在每条问题里各写一遍（提示词 §五.1 第 3 条）。它只作为问诊条上的提示显示，不单独计一个问题。",
+    "list": [
+      {
+        "id": "probe_concrete",
+        "ask": "能具体说说吗？"
+      },
+      {
+        "id": "probe_freq",
+        "ask": "一周大概几次？"
+      },
+      {
+        "id": "probe_span",
+        "ask": "每次持续多久？"
+      },
+      {
+        "id": "probe_worst",
+        "ask": "最严重的时候是什么样？"
+      },
+      {
+        "id": "probe_thought",
+        "ask": "当时你怎么想、怎么做？"
+      },
+      {
+        "id": "probe_since",
+        "ask": "从什么时候开始的？"
+      }
+    ]
+  },
+  "text_limits": {
+    "chief_complaint_max_chars": 20,
+    "chief_complaint_basis": "河南省《病历书写基本规范实施细则》主诉「字数不应超过 20 个，能导出第一诊断」「原则上不能用诊断名称代替主诉」。⚠️ 该条本次未直读源文件（原 URL 已失效），系转引入院检索 §5.6，口径文档已标注。",
+    "forbid_digits": true,
+    "internal_words": [
+      "facet",
+      "锚点",
+      "字段",
+      "维度",
+      "池子",
+      "配额",
+      "selector",
+      "interview",
+      "合并",
+      "取值"
+    ],
+    "diagnosis_prefix": "答案取值不得包含 data/diseases.json 的任何病名"
+  },
+  "character_source_ref": {
+    "file": "data/opening.json",
+    "block": "character_source",
+    "read_only": true,
+    "why": "人物来源（姓名闭集 / 院方记录的名字 / 蓝手环身份黏着 / 性别闭集）沿用阶段 2 的存量契约，本阶段不复制第二份，只按路径引用。data/opening.json 本阶段一个字节都不改。",
+    "fields": {
+      "custom_name": "character_source.name_pool",
+      "gender": "character_vocab.gender",
+      "hospital_name": "character_source.identity.hospital_name",
+      "hospital_number": "character_source.identity.hospital_number",
+      "labels": "character_source.characters"
+    }
+  },
+  "ui": {
+    "kicker": "精神卫生门诊 · 初诊",
+    "paper_title": "精神卫生门诊 · 初诊病历",
+    "launch": "开始新游戏",
+    "doctor_tag": "医师",
+    "patient_tag": "患者",
+    "refuse_tag": "未答",
+    "followup_tag": "追问",
+    "required_tag": "必问",
+    "bar_title": "问诊",
+    "progress": "第 {index} 问 · 本局共 {total} 问",
+    "back": "上一问",
+    "reanswer": "改一改",
+    "probes_label": "医师会继续追问",
+    "content_note_label": "说在前面",
+    "refuse_note": "「不愿说」也是一档答案。选它，这一栏写「未答」。",
+    "status_answering": "你说完这一句，医师就把它写进纸上。",
+    "multi_hint": "这一问可以多选，最少 {min} 档、最多 {max} 档。",
+    "status_reanswering": "这一句改了，跟着它写下的字会一起退回去。",
+    "status_ready_sign": "问完了。落款之前，纸上写的每一句都还能回去改。",
+    "status_signed": "签过字，这份病历就成立。",
+    "sign_title": "落款",
+    "sign_note": "签名只落两处：接诊医师与病史陈述者。诊断与治疗意见两栏留给院方。",
+    "continue": "继续问",
+    "finish": "问完了",
+    "signed": "已签",
+    "unsigned": "待签",
+    "diagnosis_note": "这两栏不由你写。",
+    "empty_branch_note": "你说不愿意说。医师没有再问下去。",
+    "column_open_tag": "正在填",
+    "homepage_label": "一般情况",
+    "body_label": "病历记录",
+    "ink_legend": "两种笔迹：患者陈述 / 院方记录",
+    "character_label": "这一份记录写给谁",
+    "character_note": "院方记录那一半的名字不由你写。你能决定的只有自己报上去的那一个。",
+    "name_label": "姓名",
+    "surname_label": "姓",
+    "given_label": "名",
+    "gender_label": "性别",
+    "unfilled": "未填",
+    "followup_hint": "这一问是因为你先前的回答才问的",
+    "sensitive_label": "敏感问题",
+    "question_of": "第 {index} 问",
+    "total_of": "本局共 {total} 问",
+    "sign_action": "签字",
+    "sign_done": "已签",
+    "signed_note": "落款栏：接诊医师已签，病史陈述者已签。",
+    "restart_hint": "改一改：回到那一问重答，跟着它写下的字会一起退回去。",
+    "no_more": "问完了。",
+    "close": "关闭",
+    "place": "精神卫生门诊 · 三诊室",
+    "when": "周一上午",
+    "world_note": "桌上摊着的那张纸，就是这一趟问出来的东西：你说一句，医师写一句。",
+    "doctor_mark": "医",
+    "speaker_doctor": "接诊医师",
+    "speaker_doctor_done": "接诊医师 · 已问完",
+    "speaker_signed": "接诊医师 · 已落款",
+    "speaker_patient_note": "病史陈述者 {name}",
+    "speaker_patient_unknown": "病史陈述者 · 姓名尚未自报",
+    "note_tag": "落笔",
+    "write_note": "医师落笔：{text}",
+    "responses_label": "你怎么说",
+    "response_hint": "（点一下，或按数字键）",
+    "voice_legend": "他说话的样子",
+    "voice_unknown": "还听不出调子",
+    "unanswered_label": "未答："
+  },
+  "questions": [
+    {
+      "id": "q001",
+      "ref": 1,
+      "module": "opening",
+      "ask": "今天怎么想到来精神卫生门诊？先说最让你难受的是什么；如果是家里人、老师或单位让你来的，也可以直接说。",
+      "ask_mode": "player",
+      "required": true,
+      "answers": "complaint",
+      "column": "present_illness",
+      "lead": "来诊原因：",
+      "probes": [
+        "probe_since",
+        "probe_worst"
+      ],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "国家规范第二章第十三条（初诊病历记录法定栏目）；门诊采集顺序见教材第三章第三节（二）3（门诊检索 §5.1）；机构级文件「门诊医师根据患者主诉，重点询问病史」（门诊检索 §4.7）",
+      "note": "主诉分支选择器：这一答决定进哪个症状群。参照第 1 问（今天怎么想到来）与第 2 问（谁让你来的）合并成一问，所以闭集里既有症状群、也有「家里人 / 单位或学校让我来的」——问法必须同时容得下这两类答案，否则玩家会被问「谁让你来的」却只能从症状里选（2026-09-27 复核改）。",
+      "observed_note": null
+    },
+    {
+      "id": "q002",
+      "ref": 2,
+      "module": "opening",
+      "ask": "是你自己想来，还是家里人、老师、单位建议你来？",
+      "ask_mode": "merged",
+      "required": false,
+      "answers": null,
+      "column": null,
+      "lead": null,
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "就诊方式（自愿就诊 / 近亲属送诊）对应《精神卫生法》第二十八条；★⏳ 规范未列此栏：本条出自 owner 参照的覆盖面（参照第 2 问），仅作临床常规问诊用语，本文件不主张它有规范出处",
+      "note": "并入 q001：q001 的闭集里已经有「自己想来 / 家里人让我来的 / 单位或学校让我来的」这几档，就诊方式与求诊原因在同一次询问里问完。同一件事不问两遍。",
+      "observed_note": null
+    },
+    {
+      "id": "q003",
+      "ref": 3,
+      "module": "opening",
+      "ask": "最近最困扰你的是什么？先说最要紧的那一两件。",
+      "ask_mode": "player",
+      "required": true,
+      "answers": "chief_complaints",
+      "column": "chief_complaint",
+      "lead": "",
+      "probes": [
+        "probe_concrete",
+        "probe_worst"
+      ],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "国家规范第十三条主诉格式「主要症状（或体征）及持续时间」里的症状那一半；教材「患者和家属最关心的是现病史」",
+      "note": "这一答与 q005 拼成主诉栏。最多三件。",
+      "observed_note": null
+    },
+    {
+      "id": "q004",
+      "ref": 4,
+      "module": "opening",
+      "ask": "你最希望我先帮你解决哪个问题？",
+      "ask_mode": "merged",
+      "required": false,
+      "answers": null,
+      "column": null,
+      "lead": null,
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "★⏳ 规范未列此栏：本条出自 owner 参照的覆盖面（参照第 4 问），仅作临床常规问诊用语，本文件不主张它有规范出处",
+      "note": "并入 q107（你现在最想得到什么帮助）。同一件事不问两遍。",
+      "observed_note": null
+    },
+    {
+      "id": "q005",
+      "ref": 5,
+      "module": "opening",
+      "ask": "这种情况从什么时候开始？",
+      "ask_mode": "player",
+      "required": true,
+      "answers": "duration",
+      "column": "chief_complaint",
+      "lead": "",
+      "probes": [
+        "probe_since"
+      ],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "国家规范第十三条主诉格式的持续时间那一半；第十八条（三）1「记录发病的时间」",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q006",
+      "ref": 6,
+      "module": "opening",
+      "ask": "是突然发生的，还是慢慢变严重的？",
+      "ask_mode": "player",
+      "required": true,
+      "answers": "onset_mode",
+      "column": "present_illness",
+      "lead": "起病缓急：",
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "国家规范第十八条（三）1「起病缓急」；量化界限见入院检索 §5.2（2 周内急性 / 2 周–3 月亚急性 / 3 月以上慢性）",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q007",
+      "ref": 7,
+      "module": "opening",
+      "ask": "之前有过类似的情况吗？",
+      "ask_mode": "player",
+      "required": true,
+      "answers": "prior_episode",
+      "column": "present_illness",
+      "lead": "病程：",
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "教材「病程特点，为进行性、发作性还是迁延性」（入院检索 §5.3、§5.5）",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q008",
+      "ref": 8,
+      "module": "opening",
+      "ask": "最近一次加重是什么时候？",
+      "ask_mode": "merged",
+      "required": false,
+      "answers": null,
+      "column": null,
+      "lead": null,
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "教材第三章第三节（一）3（3）病程纵向描述（入院检索 §5.3）；★⏳ 规范未列此栏：本条出自 owner 参照的覆盖面（参照第 8 问），仅作临床常规问诊用语，本文件不主张它有规范出处",
+      "note": "并入 q007：「以前有过，最近又发了」这一档已经写进 q007 的闭集，加重的时点直接落成 q007 那一行的记录，不再单独问一次。",
+      "observed_note": null
+    },
+    {
+      "id": "q009",
+      "ref": 9,
+      "module": "opening",
+      "ask": "有没有明显的原因？什么情况下会好一点，什么情况下会更差？",
+      "ask_mode": "player",
+      "required": true,
+      "answers": "aggravator",
+      "column": "present_illness",
+      "lead": "诱因与缓解加重：",
+      "probes": [
+        "probe_concrete"
+      ],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "国家规范第十八条（三）1「可能的原因或诱因」与（三）2「缓解或加剧因素」",
+      "note": "参照 9 与参照 10 合成一问：法定现病史要素里的「可能的原因或诱因」与「缓解或加剧因素」本属同一段叙述，最多选两档。",
+      "observed_note": null
+    },
+    {
+      "id": "q010",
+      "ref": 10,
+      "module": "opening",
+      "ask": "什么情况下会好一点？什么情况下会更差？",
+      "ask_mode": "merged",
+      "required": false,
+      "answers": null,
+      "column": null,
+      "lead": null,
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "国家规范第十八条（三）2「缓解或加剧因素」",
+      "note": "并入 q009（缓解与加重那一半已经写进 q009 的闭集）。",
+      "observed_note": null
+    },
+    {
+      "id": "q011",
+      "ref": 11,
+      "module": "opening",
+      "ask": "它对你上班上学、日常生活、跟人相处影响有多大？有没有因此请假、休学、辞职？",
+      "ask_mode": "player",
+      "required": true,
+      "answers": "impact",
+      "column": "present_illness",
+      "lead": "社会功能：",
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "教材「与既往社会功能比较所发生的功能变化」（入院检索 §5.3）；精神科评分表要求写「发病后社会功能障碍情况」（入院检索 §4.3.1）",
+      "note": "参照 11 与参照 12 合成一问：社会功能影响与它的后果在同一档取值里。",
+      "observed_note": null
+    },
+    {
+      "id": "q012",
+      "ref": 12,
+      "module": "opening",
+      "ask": "有没有因此请假、休学、辞职，或者躲开熟人？",
+      "ask_mode": "merged",
+      "required": false,
+      "answers": null,
+      "column": null,
+      "lead": null,
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "★⏳ 规范未列此栏：本条出自 owner 参照的覆盖面（参照第 12 问），仅作临床常规问诊用语，本文件不主张它有规范出处",
+      "note": "并入 q011（「请过假、休过学 / 辞了或退了」已经是 q011 的取值）。",
+      "observed_note": null
+    },
+    {
+      "id": "q013",
+      "ref": 13,
+      "module": "mood",
+      "ask": "最近两个星期，你大部分时间心情怎么样？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "mood_two_weeks",
+      "column": "present_illness",
+      "lead": "心境：",
+      "probes": [
+        "probe_since",
+        "probe_freq",
+        "probe_worst"
+      ],
+      "sensitive": null,
+      "trigger": {
+        "q": "q001",
+        "in": [
+          "mood",
+          "brought",
+          "work"
+        ],
+        "label": "因为你说提不起劲、心里难受 / 因为不是你自己想来的"
+      },
+      "followup": null,
+      "basis": "国家规范第十八条（三）2–3（主要症状特点与伴随症状）；教材同节",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q014",
+      "ref": 14,
+      "module": "mood",
+      "ask": "有没有情绪低落、想哭、心里空得慌？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "depressive_features",
+      "column": "present_illness",
+      "lead": "情绪：",
+      "probes": [
+        "probe_concrete",
+        "probe_freq",
+        "probe_span",
+        "probe_worst"
+      ],
+      "sensitive": null,
+      "trigger": {
+        "q": "q001",
+        "in": [
+          "mood"
+        ],
+        "label": "因为你说提不起劲、心里难受"
+      },
+      "followup": null,
+      "basis": "国家规范第十八条（三）2–3（主要症状特点与伴随症状）；教材同节",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q015",
+      "ref": 15,
+      "module": "mood",
+      "ask": "对以前喜欢的事情还有兴趣吗？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "interest",
+      "column": "present_illness",
+      "lead": "兴趣：",
+      "probes": [],
+      "sensitive": null,
+      "trigger": {
+        "q": "q001",
+        "in": [
+          "mood",
+          "brought",
+          "work"
+        ],
+        "label": "因为你说提不起劲、心里难受 / 因为不是你自己想来的"
+      },
+      "followup": null,
+      "basis": "国家规范第十八条（三）2–3（主要症状特点与伴随症状）；教材同节",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q016",
+      "ref": 16,
+      "module": "mood",
+      "ask": "有没有觉得自己没用、对不起别人？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "worthiness",
+      "column": "present_illness",
+      "lead": "自我评价：",
+      "probes": [],
+      "sensitive": null,
+      "trigger": {
+        "q": "q001",
+        "in": [
+          "mood"
+        ],
+        "label": "因为你说提不起劲、心里难受"
+      },
+      "followup": null,
+      "basis": "国家规范第十八条（三）2–3（主要症状特点与伴随症状）；教材同节",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q017",
+      "ref": 17,
+      "module": "mood",
+      "ask": "有没有觉得活着没意思？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "life_meaningless",
+      "column": "present_illness",
+      "lead": "消极观念：",
+      "probes": [],
+      "sensitive": "self_harm",
+      "trigger": {
+        "q": "q001",
+        "in": [
+          "mood"
+        ],
+        "label": "因为你说提不起劲、心里难受"
+      },
+      "followup": null,
+      "basis": "★教材第三章第四节一（三）：「如果发现患者存在抑郁情绪，一定要询问患者是否有自杀观念，以便进行紧急风险干预」；与 q067 一起构成风险两问",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q018",
+      "ref": 18,
+      "module": "manic",
+      "ask": "有没有一段时间特别兴奋、话多、精力旺盛得不用睡？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "elevated_episode",
+      "column": "present_illness",
+      "lead": "情绪高涨：",
+      "probes": [
+        "probe_concrete",
+        "probe_freq",
+        "probe_span",
+        "probe_worst"
+      ],
+      "sensitive": null,
+      "trigger": {
+        "q": "q001",
+        "in": [
+          "manic"
+        ],
+        "label": "因为你说一阵一阵特别兴奋，停不下来"
+      },
+      "followup": null,
+      "basis": "国家规范第十八条（三）2–3（主要症状特点与伴随症状）；教材同节",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q019",
+      "ref": 19,
+      "module": "manic",
+      "ask": "有没有特别容易发脾气、跟人吵起来、做事冲动？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "irritable",
+      "column": "present_illness",
+      "lead": "易激惹：",
+      "probes": [],
+      "sensitive": null,
+      "trigger": {
+        "q": "q001",
+        "in": [
+          "manic"
+        ],
+        "label": "因为你说一阵一阵特别兴奋，停不下来"
+      },
+      "followup": null,
+      "basis": "国家规范第十八条（三）2–3（主要症状特点与伴随症状）；教材同节",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q020",
+      "ref": 20,
+      "module": "mood",
+      "ask": "情绪会不会在一天里剧烈变动？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "mood_swing",
+      "column": "present_illness",
+      "lead": "情绪波动：",
+      "probes": [],
+      "sensitive": null,
+      "trigger": {
+        "q": "q001",
+        "in": [
+          "mood"
+        ],
+        "label": "因为你说提不起劲、心里难受"
+      },
+      "followup": null,
+      "basis": "国家规范第十八条（三）2–3（主要症状特点与伴随症状）；教材同节",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q021",
+      "ref": 21,
+      "module": "anxiety",
+      "ask": "有没有突然害怕、紧张，觉得要出事？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "panic_fear",
+      "column": "present_illness",
+      "lead": "害怕：",
+      "probes": [],
+      "sensitive": null,
+      "trigger": {
+        "q": "q001",
+        "in": [
+          "brought",
+          "work"
+        ],
+        "label": "因为不是你自己想来的"
+      },
+      "followup": null,
+      "basis": "国家规范第十八条（三）2–3（主要症状特点与伴随症状）；教材同节",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q022",
+      "ref": 22,
+      "module": "mood",
+      "ask": "会不会觉得自己像在旁边看着自己，或者感觉不到情绪？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "spectator_feeling",
+      "column": "present_illness",
+      "lead": "疏离感：",
+      "probes": [],
+      "sensitive": null,
+      "trigger": {
+        "q": "q001",
+        "in": [
+          "somatic"
+        ],
+        "label": "因为你说身上不舒服，查不出毛病"
+      },
+      "followup": null,
+      "basis": "国家规范第十八条（三）2–3（主要症状特点与伴随症状）；教材同节",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q023",
+      "ref": 23,
+      "module": "sleep",
+      "ask": "最近睡眠怎么样？躺下要多久才睡得着？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "sleep_onset",
+      "column": "present_illness",
+      "lead": "入睡：",
+      "probes": [
+        "probe_since",
+        "probe_freq",
+        "probe_worst"
+      ],
+      "sensitive": null,
+      "trigger": {
+        "q": "q001",
+        "in": [
+          "sleep",
+          "brought",
+          "work"
+        ],
+        "label": "因为你说睡不好 / 因为不是你自己想来的"
+      },
+      "followup": null,
+      "basis": "国家规范第十八条（三）5 发病以来一般情况（精神状态、睡眠、食欲）",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q024",
+      "ref": 24,
+      "module": "sleep",
+      "ask": "夜里会醒吗？醒几次？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "night_waking",
+      "column": "present_illness",
+      "lead": "夜醒：",
+      "probes": [],
+      "sensitive": null,
+      "trigger": {
+        "q": "q001",
+        "in": [
+          "sleep",
+          "brought",
+          "work"
+        ],
+        "label": "因为你说睡不好 / 因为不是你自己想来的"
+      },
+      "followup": null,
+      "basis": "国家规范第十八条（三）5 发病以来一般情况（精神状态、睡眠、食欲）",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q024b",
+      "ref": 24.5,
+      "module": "sleep",
+      "ask": "醒了以后还能再睡着吗？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "back_to_sleep",
+      "column": "present_illness",
+      "lead": "醒后：",
+      "probes": [],
+      "sensitive": null,
+      "trigger": {
+        "q": "q024",
+        "in": [
+          "many",
+          "cant_back"
+        ],
+        "label": "因为你说夜里总醒"
+      },
+      "followup": true,
+      "basis": "★同一模块内部按已答的答案追问（提示词 §5.4）；国家规范第十八条（三）2「按发生的先后顺序描述」",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q025",
+      "ref": 25,
+      "module": "sleep",
+      "ask": "早上会早醒吗？比平时早很多吗？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "early_waking",
+      "column": "present_illness",
+      "lead": "早醒：",
+      "probes": [],
+      "sensitive": null,
+      "trigger": {
+        "q": "q001",
+        "in": [
+          "sleep"
+        ],
+        "label": "因为你说睡不好"
+      },
+      "followup": null,
+      "basis": "国家规范第十八条（三）5 发病以来一般情况（精神状态、睡眠、食欲）",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q026",
+      "ref": 26,
+      "module": "sleep",
+      "ask": "每天总共大概能睡多久？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "total_sleep",
+      "column": "present_illness",
+      "lead": "总睡眠：",
+      "probes": [],
+      "sensitive": null,
+      "trigger": {
+        "q": "q001",
+        "in": [
+          "sleep"
+        ],
+        "label": "因为你说睡不好"
+      },
+      "followup": null,
+      "basis": "国家规范第十八条（三）5 发病以来一般情况（精神状态、睡眠、食欲）;⚠️ 本作只给粗档，不落任何具体小时数（避免伪造数值）",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q027",
+      "ref": 27,
+      "module": "sleep",
+      "ask": "白天困不困？有没有耽误事？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "daytime_sleepy",
+      "column": "present_illness",
+      "lead": "日间：",
+      "probes": [],
+      "sensitive": null,
+      "trigger": {
+        "q": "q001",
+        "in": [
+          "sleep"
+        ],
+        "label": "因为你说睡不好"
+      },
+      "followup": null,
+      "basis": "国家规范第十八条（三）5 发病以来一般情况（精神状态、睡眠、食欲）",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q028",
+      "ref": 28,
+      "module": "sleep",
+      "ask": "会做噩梦吗？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "nightmare",
+      "column": "present_illness",
+      "lead": "噩梦：",
+      "probes": [],
+      "sensitive": null,
+      "trigger": {
+        "q": "q001",
+        "in": [
+          "sleep",
+          "brought",
+          "work"
+        ],
+        "label": "因为你说睡不好 / 因为不是你自己想来的"
+      },
+      "followup": null,
+      "basis": "国家规范第十八条（三）5 发病以来一般情况（精神状态、睡眠、食欲）;⚠️ 原参照问「梦的内容」，本作改为闭集，不问内容（没有自由文本）",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q029",
+      "ref": 29,
+      "module": "sleep",
+      "ask": "胃口怎么样？最近体重有变化吗？有没有吃下去又后悔，或者不敢吃东西？",
+      "ask_mode": "player",
+      "required": true,
+      "answers": "appetite",
+      "column": "present_illness",
+      "lead": "食欲体重：",
+      "probes": [
+        "probe_concrete"
+      ],
+      "sensitive": "sexuality",
+      "trigger": null,
+      "followup": null,
+      "basis": "国家规范第十八条（三）5「睡眠、食欲、大小便、体重等情况」；★⏳ 规范未列此栏：本条出自 owner 参照的覆盖面（参照第 30 问），仅作临床常规问诊用语，本文件不主张它有规范出处;本作不给任何数量口径",
+      "note": "参照 29 与参照 30 合成一问：食欲、体重、进食行为在一次询问里问完，最多选两档。",
+      "observed_note": null
+    },
+    {
+      "id": "q030",
+      "ref": 30,
+      "module": "sleep",
+      "ask": "有没有吃下去又后悔、想办法吐出来，或者不敢吃东西？",
+      "ask_mode": "merged",
+      "required": false,
+      "answers": null,
+      "column": null,
+      "lead": null,
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "★⏳ 规范未列此栏：本条出自 owner 参照的覆盖面（参照第 30 问），仅作临床常规问诊用语，本文件不主张它有规范出处;本作不给任何数量口径",
+      "note": "并入 q029（进食行为已经写进 q029 的闭集）。",
+      "observed_note": null
+    },
+    {
+      "id": "q031",
+      "ref": 31,
+      "module": "sleep",
+      "ask": "精力怎么样？歇一歇能缓过来吗？",
+      "ask_mode": "player",
+      "required": true,
+      "answers": "energy",
+      "column": "present_illness",
+      "lead": "精力：",
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "国家规范第十八条（三）5 发病以来一般情况（精神状态、睡眠、食欲）",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q032",
+      "ref": 32,
+      "module": "sleep",
+      "ask": "注意力能集中吗？做决定困难吗？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "concentration",
+      "column": "present_illness",
+      "lead": "注意力：",
+      "probes": [],
+      "sensitive": null,
+      "trigger": {
+        "q": "q031",
+        "in": [
+          "tired_rest",
+          "tired_always",
+          "none_left"
+        ],
+        "label": "因为你说容易累"
+      },
+      "followup": true,
+      "basis": "国家规范第十八条（三）2–3（主要症状特点与伴随症状）；教材同节",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q033",
+      "ref": 33,
+      "module": "sleep",
+      "ask": "记性怎么样？会不会丢东西、忘事？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "memory",
+      "column": "present_illness",
+      "lead": "记忆：",
+      "probes": [],
+      "sensitive": null,
+      "trigger": {
+        "q": "q032",
+        "in": [
+          "hard",
+          "both_hard",
+          "cant"
+        ],
+        "label": "因为你说很难集中"
+      },
+      "followup": true,
+      "basis": "教材精神检查「认识活动」含记忆（入院检索 §8.4.1）",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q034",
+      "ref": 34,
+      "module": "sleep",
+      "ask": "做决定困难吗？",
+      "ask_mode": "merged",
+      "required": false,
+      "answers": null,
+      "column": null,
+      "lead": null,
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "国家规范第十八条（三）2–3（主要症状特点与伴随症状）；教材同节",
+      "note": "并入 q032（注意力与决策合成一问：认知症状在一次询问里问完）。",
+      "observed_note": null
+    },
+    {
+      "id": "q035",
+      "ref": 35,
+      "module": "sleep",
+      "ask": "说话、动作有没有变慢？或者坐不住、来回走？",
+      "ask_mode": "observed",
+      "required": false,
+      "answers": null,
+      "column": null,
+      "lead": null,
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "教材精神检查「意志行为」（入院检索 §8.4.1）。改判为**医方观察**：精神运动属于检查所见，不由玩家作答",
+      "note": null,
+      "observed_note": "精神运动（医师观察）：语速与动作未见明显迟缓，也未见坐立不安或来回走动。"
+    },
+    {
+      "id": "q036",
+      "ref": 36,
+      "module": "anxiety",
+      "ask": "会不会经常紧张、担心，而且停不下来？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "worry_control",
+      "column": "present_illness",
+      "lead": "担心：",
+      "probes": [
+        "probe_since",
+        "probe_freq",
+        "probe_worst"
+      ],
+      "sensitive": null,
+      "trigger": {
+        "q": "q001",
+        "in": [
+          "anxiety"
+        ],
+        "label": "因为你说心里发慌、静不下来"
+      },
+      "followup": null,
+      "basis": "国家规范第十八条（三）2–3（主要症状特点与伴随症状）；教材同节",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q037",
+      "ref": 37,
+      "module": "anxiety",
+      "ask": "主要担心什么？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "worry_content",
+      "column": "present_illness",
+      "lead": "担心的事：",
+      "probes": [],
+      "sensitive": null,
+      "trigger": {
+        "q": "q001",
+        "in": [
+          "anxiety"
+        ],
+        "label": "因为你说心里发慌、静不下来"
+      },
+      "followup": null,
+      "basis": "国家规范第十八条（三）2–3（主要症状特点与伴随症状）；教材同节;⚠️ 原参照是开放式，本作改为闭集",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q038",
+      "ref": 38,
+      "module": "anxiety",
+      "ask": "有没有心慌、胸口发闷、喘不上气、出汗、手抖、头晕、胃里不舒服？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "somatic_symptoms",
+      "column": "present_illness",
+      "lead": "躯体伴随：",
+      "probes": [
+        "probe_concrete",
+        "probe_freq",
+        "probe_span",
+        "probe_worst"
+      ],
+      "sensitive": null,
+      "trigger": {
+        "q": "q001",
+        "in": [
+          "somatic"
+        ],
+        "label": "因为你说身上不舒服，查不出毛病"
+      },
+      "followup": null,
+      "basis": "国家规范第十八条（三）2–3（主要症状特点与伴随症状）；教材同节;国家规范第十八条（三）3 伴随症状",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q039",
+      "ref": 39,
+      "module": "anxiety",
+      "ask": "有没有躲开某些场合、某些人、某些事？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "avoidance",
+      "column": "present_illness",
+      "lead": "回避：",
+      "probes": [],
+      "sensitive": null,
+      "trigger": {
+        "q": "q001",
+        "in": [
+          "anxiety"
+        ],
+        "label": "因为你说心里发慌、静不下来"
+      },
+      "followup": null,
+      "basis": "国家规范第十八条（三）2–3（主要症状特点与伴随症状）；教材同节",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q040",
+      "ref": 40,
+      "module": "anxiety",
+      "ask": "有没有突然发作的强烈恐惧？每次持续多久？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "panic_attack",
+      "column": "present_illness",
+      "lead": "发作：",
+      "probes": [],
+      "sensitive": null,
+      "trigger": {
+        "q": "q001",
+        "in": [
+          "anxiety"
+        ],
+        "label": "因为你说心里发慌、静不下来"
+      },
+      "followup": null,
+      "basis": "国家规范第十八条（三）2–3（主要症状特点与伴随症状）；教材同节;⚠️ 本作不使用「濒死感」这类术语原话",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q041",
+      "ref": 41,
+      "module": "anxiety",
+      "ask": "有没有反复出现、甩不掉的想法或画面？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "obsession",
+      "column": "present_illness",
+      "lead": "反复想法：",
+      "probes": [],
+      "sensitive": null,
+      "trigger": {
+        "q": "q001",
+        "in": [
+          "anxiety"
+        ],
+        "label": "因为你说心里发慌、静不下来"
+      },
+      "followup": null,
+      "basis": "国家规范第十八条（三）2–3（主要症状特点与伴随症状）；教材同节",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q042",
+      "ref": 42,
+      "module": "anxiety",
+      "ask": "有没有反复做某些动作，比如洗手、检查、数、摆？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "compulsion",
+      "column": "present_illness",
+      "lead": "反复动作：",
+      "probes": [],
+      "sensitive": null,
+      "trigger": {
+        "q": "q001",
+        "in": [
+          "anxiety"
+        ],
+        "label": "因为你说心里发慌、静不下来"
+      },
+      "followup": null,
+      "basis": "国家规范第十八条（三）2–3（主要症状特点与伴随症状）；教材同节",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q043",
+      "ref": 43,
+      "module": "anxiety",
+      "ask": "有没有经历过很难过去的事？会闪回、做噩梦、一直提着心吗？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "trauma",
+      "column": "present_illness",
+      "lead": "创伤：",
+      "probes": [],
+      "sensitive": "trauma",
+      "trigger": {
+        "q": "q001",
+        "in": [
+          "somatic"
+        ],
+        "label": "因为你说身上不舒服，查不出毛病"
+      },
+      "followup": null,
+      "basis": "国家规范第十八条（三）2–3（主要症状特点与伴随症状）；教材同节",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q044",
+      "ref": 44,
+      "module": "anxiety",
+      "ask": "会不会突然失神，或者觉得周围不真实？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "dissociation",
+      "column": "present_illness",
+      "lead": "失神：",
+      "probes": [],
+      "sensitive": null,
+      "trigger": {
+        "q": "q001",
+        "in": [
+          "somatic"
+        ],
+        "label": "因为你说身上不舒服，查不出毛病"
+      },
+      "followup": null,
+      "basis": "国家规范第十八条（三）2–3（主要症状特点与伴随症状）；教材同节",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q045",
+      "ref": 45,
+      "module": "mood",
+      "ask": "有没有觉得自己和身体分开，像在演自己？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "depersonalization",
+      "column": "present_illness",
+      "lead": "解离：",
+      "probes": [],
+      "sensitive": null,
+      "trigger": {
+        "q": "q001",
+        "in": [
+          "somatic"
+        ],
+        "label": "因为你说身上不舒服，查不出毛病"
+      },
+      "followup": null,
+      "basis": "国家规范第十八条（三）2–3（主要症状特点与伴随症状）；教材同节",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q046",
+      "ref": 46,
+      "module": "psychotic",
+      "ask": "有没有听到别人听不到的声音？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "hallucination_auditory",
+      "column": "present_illness",
+      "lead": "幻听：",
+      "probes": [
+        "probe_concrete",
+        "probe_freq",
+        "probe_span",
+        "probe_worst"
+      ],
+      "sensitive": "psychosis",
+      "trigger": {
+        "q": "q001",
+        "in": [
+          "psychotic"
+        ],
+        "label": "因为你说听见或看见别人没有的东西"
+      },
+      "followup": null,
+      "basis": "国家规范第十八条（三）2–3（主要症状特点与伴随症状）；教材同节;⚠️ 原参照问「声音说什么、会命令你吗」，本作只保留「是不是命令」这一档，不问内容",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q047",
+      "ref": 47,
+      "module": "psychotic",
+      "ask": "有没有看到、闻到、感觉到别人没有的东西？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "hallucination_other",
+      "column": "present_illness",
+      "lead": "其他幻觉：",
+      "probes": [],
+      "sensitive": "psychosis",
+      "trigger": {
+        "q": "q001",
+        "in": [
+          "psychotic"
+        ],
+        "label": "因为你说听见或看见别人没有的东西"
+      },
+      "followup": null,
+      "basis": "国家规范第十八条（三）2–3（主要症状特点与伴随症状）；教材同节",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q048",
+      "ref": 48,
+      "module": "psychotic",
+      "ask": "有没有觉得别人针对你、盯着你、议论你？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "persecutory",
+      "column": "present_illness",
+      "lead": "被害观念：",
+      "probes": [],
+      "sensitive": "psychosis",
+      "trigger": {
+        "q": "q001",
+        "in": [
+          "psychotic"
+        ],
+        "label": "因为你说听见或看见别人没有的东西"
+      },
+      "followup": null,
+      "basis": "国家规范第十八条（三）2–3（主要症状特点与伴随症状）；教材同节",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q049",
+      "ref": 49,
+      "module": "psychotic",
+      "ask": "有没有觉得一些信息是特别给你的？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "reference_ideas",
+      "column": "present_illness",
+      "lead": "关系观念：",
+      "probes": [],
+      "sensitive": "psychosis",
+      "trigger": {
+        "q": "q001",
+        "in": [
+          "psychotic"
+        ],
+        "label": "因为你说听见或看见别人没有的东西"
+      },
+      "followup": null,
+      "basis": "国家规范第十八条（三）2–3（主要症状特点与伴随症状）；教材同节",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q050",
+      "ref": 50,
+      "module": "psychotic",
+      "ask": "有没有觉得自己能力特殊、有使命、身份不一般？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "grandiose",
+      "column": "present_illness",
+      "lead": "夸大观念：",
+      "probes": [],
+      "sensitive": "psychosis",
+      "trigger": {
+        "q": "q048",
+        "in": [
+          "sometimes",
+          "always"
+        ],
+        "label": "因为你说了别人针对你"
+      },
+      "followup": true,
+      "basis": "国家规范第十八条（三）2–3（主要症状特点与伴随症状）；教材同节",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q051",
+      "ref": 51,
+      "module": "psychotic",
+      "ask": "有没有觉得想法被拿走过、被别人知道了，或者有外力在控制你？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "thought_control",
+      "column": "present_illness",
+      "lead": "思维被控：",
+      "probes": [],
+      "sensitive": "psychosis",
+      "trigger": {
+        "q": "q001",
+        "in": [
+          "psychotic"
+        ],
+        "label": "因为你说听见或看见别人没有的东西"
+      },
+      "followup": null,
+      "basis": "国家规范第十八条（三）2–3（主要症状特点与伴随症状）；教材同节;ICD-10 F20 特征性症状（入院检索 §4.5）",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q052",
+      "ref": 52,
+      "module": "psychotic",
+      "ask": "有没有觉得自己不是自己了，或者世界不真实？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "not_self",
+      "column": "present_illness",
+      "lead": "自我不真实：",
+      "probes": [],
+      "sensitive": "psychosis",
+      "trigger": {
+        "q": "q001",
+        "in": [
+          "somatic"
+        ],
+        "label": "因为你说身上不舒服，查不出毛病"
+      },
+      "followup": null,
+      "basis": "国家规范第十八条（三）2–3（主要症状特点与伴随症状）；教材同节",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q053",
+      "ref": 53,
+      "module": "psychotic",
+      "ask": "这些体验，你自己觉得是真的吗？别人不信，你怎么看？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "insight",
+      "column": "present_illness",
+      "lead": "自知力（患者自述）：",
+      "probes": [],
+      "sensitive": "psychosis",
+      "trigger": {
+        "q": "q001",
+        "in": [
+          "psychotic"
+        ],
+        "label": "因为你说听见或看见别人没有的东西"
+      },
+      "followup": null,
+      "basis": "教材第三章第四节一（六）自知力；★注意：这一答落的是**患者自述**，精神检查栏里的自知力是医师的观察，两者不互相推导",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q054",
+      "ref": 54,
+      "module": "manic",
+      "ask": "有没有一段时间睡得很少，但精力特别充沛？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "manic_mood",
+      "column": "present_illness",
+      "lead": "睡眠需求减少：",
+      "probes": [
+        "probe_concrete",
+        "probe_freq",
+        "probe_span",
+        "probe_worst"
+      ],
+      "sensitive": null,
+      "trigger": {
+        "q": "q001",
+        "in": [
+          "manic"
+        ],
+        "label": "因为你说一阵一阵特别兴奋，停不下来"
+      },
+      "followup": null,
+      "basis": "国家规范第十八条（三）2–3（主要症状特点与伴随症状）；教材同节",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q055",
+      "ref": 55,
+      "module": "manic",
+      "ask": "有没有话多、想法一个接一个、计划特别多？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "talkative",
+      "column": "present_illness",
+      "lead": "话多：",
+      "probes": [],
+      "sensitive": null,
+      "trigger": {
+        "q": "q001",
+        "in": [
+          "manic"
+        ],
+        "label": "因为你说一阵一阵特别兴奋，停不下来"
+      },
+      "followup": null,
+      "basis": "国家规范第十八条（三）2–3（主要症状特点与伴随症状）；教材同节",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q056",
+      "ref": 56,
+      "module": "manic",
+      "ask": "有没有花钱变多、做冒险的事，或者别的跟平常很不一样的举动？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "risky_behavior",
+      "column": "present_illness",
+      "lead": "冲动行为：",
+      "probes": [],
+      "sensitive": "sexuality",
+      "trigger": {
+        "q": "q001",
+        "in": [
+          "manic"
+        ],
+        "label": "因为你说一阵一阵特别兴奋，停不下来"
+      },
+      "followup": null,
+      "basis": "国家规范第十八条（三）2–3（主要症状特点与伴随症状）；教材同节;⚠️ 本作只问行为大类，不问细节",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q057",
+      "ref": 57,
+      "module": "manic",
+      "ask": "这种状态持续了多久？对生活影响大吗？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "manic_duration",
+      "column": "present_illness",
+      "lead": "持续：",
+      "probes": [],
+      "sensitive": null,
+      "trigger": {
+        "q": "q001",
+        "in": [
+          "manic"
+        ],
+        "label": "因为你说一阵一阵特别兴奋，停不下来"
+      },
+      "followup": null,
+      "basis": "国家规范第十八条（三）2–3（主要症状特点与伴随症状）；教材同节;入院检索 §5.5 病程轴",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q058",
+      "ref": 58,
+      "module": "substance",
+      "ask": "抽烟吗？喝酒吗？大概什么频率？",
+      "ask_mode": "player",
+      "required": true,
+      "answers": "tobacco_alcohol",
+      "column": "past_history",
+      "lead": "烟酒：",
+      "probes": [
+        "probe_freq"
+      ],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "国家规范第十八条（五）1 个人史「有无烟、酒、药物等嗜好」",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q059",
+      "ref": 59,
+      "module": "substance",
+      "ask": "咖啡、提神的饮料喝得多吗？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "caffeine",
+      "column": "past_history",
+      "lead": "咖啡因：",
+      "probes": [],
+      "sensitive": null,
+      "trigger": {
+        "q": "q001",
+        "in": [
+          "substance"
+        ],
+        "label": "因为你说是喝酒吃药的事"
+      },
+      "followup": true,
+      "basis": "★⏳ 规范未列此栏：本条出自 owner 参照的覆盖面（参照第 59 问），仅作临床常规问诊用语，本文件不主张它有规范出处",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q060",
+      "ref": 60,
+      "module": "substance",
+      "ask": "有没有用过不该用的东西，或者不该那样用的药？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "illicit_drug",
+      "column": "past_history",
+      "lead": "其他物质：",
+      "probes": [],
+      "sensitive": "substance",
+      "trigger": {
+        "q": "q001",
+        "in": [
+          "substance"
+        ],
+        "label": "因为你说是喝酒吃药的事"
+      },
+      "followup": true,
+      "basis": "国家规范第十八条（五）1 个人史「药物等嗜好」；⚠️ 本作不列任何具体物质名",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q061",
+      "ref": 61,
+      "module": "substance",
+      "ask": "有没有停过药？停了以后会不会更难受？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "withdrawal",
+      "column": "past_history",
+      "lead": "停药与戒断：",
+      "probes": [],
+      "sensitive": null,
+      "trigger": {
+        "q": "q001",
+        "in": [
+          "substance"
+        ],
+        "label": "因为你说是喝酒吃药的事"
+      },
+      "followup": true,
+      "basis": "国家规范第十八条（三）4 发病以来诊治经过",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q062",
+      "ref": 62,
+      "module": "substance",
+      "ask": "有没有得过别的病？甲状腺、抽风、头部受伤、血糖、心脏这些。",
+      "ask_mode": "player",
+      "required": true,
+      "answers": "physical_disease",
+      "column": "past_history",
+      "lead": "躯体疾病史：",
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "国家规范第十八条（四）既往史「疾病史」；教材「有无中枢神经系统疾病如脑炎、脑外伤」（入院检索 §五.5.1 前一段）",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q063",
+      "ref": 63,
+      "module": "substance",
+      "ask": "现在在吃什么药？中药、保健品也算。",
+      "ask_mode": "player",
+      "required": true,
+      "answers": "current_medication",
+      "column": "past_history",
+      "lead": "用药：",
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "国家规范第十八条（三）4「对患者提供的药名、诊断和手术名称需加引号以示区别」；本作不问剂量",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q064",
+      "ref": 64,
+      "module": "substance",
+      "ask": "有没有对什么药过敏？",
+      "ask_mode": "player",
+      "required": true,
+      "answers": "allergy",
+      "column": "allergy",
+      "lead": "",
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "国家规范第二章第十二条（首页法定项「药物过敏史」）与第十八条（四）（食物或药物过敏史）",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q065",
+      "ref": 65,
+      "module": "substance",
+      "ask": "月经还规律吗？有没有怀孕、避孕、更年期的情况？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "menstrual",
+      "column": "personal_history",
+      "lead": "月经与生育：",
+      "probes": [],
+      "sensitive": "sexuality",
+      "trigger": {
+        "q": "q001",
+        "in": [
+          "substance"
+        ],
+        "label": "因为你说是喝酒吃药的事"
+      },
+      "followup": true,
+      "basis": "国家规范第十八条（五）2 婚育史、月经史；⚠️ 本作不给任何日期口径，也含一档「这一项不适用」",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q066",
+      "ref": 66,
+      "module": "substance",
+      "ask": "最近做过体检或化验吗？结果怎么样？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "recent_checkup",
+      "column": "past_history",
+      "lead": "既往检查：",
+      "probes": [],
+      "sensitive": null,
+      "trigger": {
+        "q": "q001",
+        "in": [
+          "substance"
+        ],
+        "label": "因为你说是喝酒吃药的事"
+      },
+      "followup": true,
+      "basis": "国家规范第二章第十三条「辅助检查结果」；第十八条（三）4 诊治经过",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q067",
+      "ref": 67,
+      "module": "risk",
+      "ask": "有没有想过结束自己的生命，或者伤害自己？",
+      "ask_mode": "player",
+      "required": true,
+      "answers": "self_harm_thought",
+      "column": "present_illness",
+      "lead": "自伤风险（患者自述）：",
+      "probes": [
+        "probe_freq",
+        "probe_worst"
+      ],
+      "sensitive": "self_harm",
+      "trigger": null,
+      "followup": null,
+      "basis": "★教材第三章第四节二（三）风险评估（入院检索 §8.3）；机构级《门诊诊疗规范及诊查指导意见》首诊必查项目「安全风险评估：自杀自伤风险、攻击冲动风险评估」（门诊检索 §4.4）",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q068",
+      "ref": 68,
+      "module": "risk",
+      "ask": "这种想法多久出现一次？最近一次是什么时候？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "self_harm_freq",
+      "column": "present_illness",
+      "lead": "自伤念头频度：",
+      "probes": [],
+      "sensitive": "self_harm",
+      "trigger": {
+        "q": "q067",
+        "not_in": [
+          "no"
+        ],
+        "label": "因为你说有过这样的念头"
+      },
+      "followup": true,
+      "basis": "★教材第三章第四节二（三）风险评估（入院检索 §8.3）；机构级《门诊诊疗规范及诊查指导意见》首诊必查项目「安全风险评估：自杀自伤风险、攻击冲动风险评估」（门诊检索 §4.4）",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q069",
+      "ref": 69,
+      "module": "risk",
+      "ask": "有没有具体计划？",
+      "ask_mode": "withheld",
+      "required": false,
+      "answers": null,
+      "column": null,
+      "lead": null,
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "★教材第三章第四节二（三）风险评估（入院检索 §8.3）；机构级《门诊诊疗规范及诊查指导意见》首诊必查项目「安全风险评估：自杀自伤风险、攻击冲动风险评估」（门诊检索 §4.4）",
+      "note": "本作不问这一条。理由：问「计划」必然要落到方式与准备上，与提示词 §一 第 8 条「界面上不出现任何具体自伤方式，不写方法、不写剂量、不写工具清单」冲突。临床上的计划评估留在院方侧（本作不实现）。",
+      "observed_note": null
+    },
+    {
+      "id": "q070",
+      "ref": 70,
+      "module": "risk",
+      "ask": "有没有做准备？比如准备工具、写东西、安排后事？",
+      "ask_mode": "withheld",
+      "required": false,
+      "answers": null,
+      "column": null,
+      "lead": null,
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "★教材第三章第四节二（三）风险评估（入院检索 §8.3）；机构级《门诊诊疗规范及诊查指导意见》首诊必查项目「安全风险评估：自杀自伤风险、攻击冲动风险评估」（门诊检索 §4.4）",
+      "note": "本作不问这一条。理由同上：这一问逐字要求列工具与准备行为，触犯安全底线。",
+      "observed_note": null
+    },
+    {
+      "id": "q071",
+      "ref": 71,
+      "module": "risk",
+      "ask": "以前有过伤害自己的时候吗？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "self_harm_attempt",
+      "column": "present_illness",
+      "lead": "既往自伤：",
+      "probes": [],
+      "sensitive": "self_harm",
+      "trigger": {
+        "q": "q067",
+        "not_in": [
+          "no"
+        ],
+        "label": "因为你说有过这样的念头"
+      },
+      "followup": true,
+      "basis": "★教材第三章第四节二（三）风险评估（入院检索 §8.3）；机构级《门诊诊疗规范及诊查指导意见》首诊必查项目「安全风险评估：自杀自伤风险、攻击冲动风险评估」（门诊检索 §4.4）;⚠️ 本作不问方式、不问次数细节",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q072",
+      "ref": 72,
+      "module": "risk",
+      "ask": "是什么让你没有去做？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "protective",
+      "column": "present_illness",
+      "lead": "保护因素：",
+      "probes": [],
+      "sensitive": "self_harm",
+      "trigger": {
+        "q": "q067",
+        "not_in": [
+          "no"
+        ],
+        "label": "因为你说有过这样的念头"
+      },
+      "followup": true,
+      "basis": "教材风险评估目的第③项「确定可能会阻止患者出现危险行为的因素」（入院检索 §8.3）",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q073",
+      "ref": 73,
+      "module": "risk",
+      "ask": "有没有想过伤害别人？",
+      "ask_mode": "player",
+      "required": true,
+      "answers": "harm_others",
+      "column": "present_illness",
+      "lead": "伤人风险（患者自述）：",
+      "probes": [],
+      "sensitive": "harm_other",
+      "trigger": null,
+      "followup": null,
+      "basis": "★教材第三章第四节二（三）风险评估（入院检索 §8.3）；机构级《门诊诊疗规范及诊查指导意见》首诊必查项目「安全风险评估：自杀自伤风险、攻击冲动风险评估」（门诊检索 §4.4）",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q074",
+      "ref": 74,
+      "module": "risk",
+      "ask": "有没有人打过你、欺负过你、威胁过你？你现在安全吗？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "abuse",
+      "column": "present_illness",
+      "lead": "安全：",
+      "probes": [],
+      "sensitive": "harm_other",
+      "trigger": {
+        "q": "q073",
+        "not_in": [
+          "no"
+        ],
+        "label": "因为你说想过伤害别人"
+      },
+      "followup": true,
+      "basis": "★教材第三章第四节二（三）风险评估（入院检索 §8.3）；机构级《门诊诊疗规范及诊查指导意见》首诊必查项目「安全风险评估：自杀自伤风险、攻击冲动风险评估」（门诊检索 §4.4）",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q075",
+      "ref": 75,
+      "module": "risk",
+      "ask": "有没有人威胁过你？",
+      "ask_mode": "merged",
+      "required": false,
+      "answers": null,
+      "column": null,
+      "lead": null,
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "★教材第三章第四节二（三）风险评估（入院检索 §8.3）；机构级《门诊诊疗规范及诊查指导意见》首诊必查项目「安全风险评估：自杀自伤风险、攻击冲动风险评估」（门诊检索 §4.4）",
+      "note": "并入 q074（被打、被欺负、被威胁合在一问，闭集里已有「有人威胁过我」这一档）。",
+      "observed_note": null
+    },
+    {
+      "id": "q076",
+      "ref": 76,
+      "module": "risk",
+      "ask": "家里有没有刀、药、枪等危险物品？",
+      "ask_mode": "withheld",
+      "required": false,
+      "answers": null,
+      "column": null,
+      "lead": null,
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "★教材第三章第四节二（三）风险评估（入院检索 §8.3）；机构级《门诊诊疗规范及诊查指导意见》首诊必查项目「安全风险评估：自杀自伤风险、攻击冲动风险评估」（门诊检索 §4.4）",
+      "note": "本作不问这一条。理由：逐字要求清点工具清单，触犯提示词 §一 第 8 条的安全底线。",
+      "observed_note": null
+    },
+    {
+      "id": "q077",
+      "ref": 77,
+      "module": "risk",
+      "ask": "需要我联系家人，或者建议住院吗？",
+      "ask_mode": "merged",
+      "required": false,
+      "answers": null,
+      "column": null,
+      "lead": null,
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "国家规范第二章第十三条「诊断及治疗意见」",
+      "note": "并入 q107（最想得到什么帮助）与 q108（愿意接受什么样的帮助）。理由：这一问在规范里落在「治疗处理意见」（第十三条），而本阶段诊断与治疗意见两栏留白、不做疾病候选，因此不由玩家落笔。",
+      "observed_note": null
+    },
+    {
+      "id": "q078",
+      "ref": 78,
+      "module": "history",
+      "ask": "以前看过精神科或者心理医生吗？住过院吗？",
+      "ask_mode": "player",
+      "required": true,
+      "answers": "psych_history",
+      "column": "past_history",
+      "lead": "既往精神科史：",
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "国家规范第十八条（四）既往史；第十八条（三）4（发病以来诊治经过）",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q079",
+      "ref": 79,
+      "module": "history",
+      "ask": "住过院吗？做过心理治疗吗？",
+      "ask_mode": "merged",
+      "required": false,
+      "answers": null,
+      "column": null,
+      "lead": null,
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "国家规范第十八条（四）既往史；第十八条（三）4（发病以来诊治经过）;⚠️ 原参照问「电休克、经颅磁等治疗」，本作不出现任何治疗方式的细节",
+      "note": "并入 q078（住院与心理治疗已经写进 q078 的闭集）；原参照问到的「电休克、经颅磁等治疗」本作不出现任何治疗方式的细节，故不单独问。",
+      "observed_note": null
+    },
+    {
+      "id": "q080",
+      "ref": 80,
+      "module": "history",
+      "ask": "做过心理治疗吗？",
+      "ask_mode": "merged",
+      "required": false,
+      "answers": null,
+      "column": null,
+      "lead": null,
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "★⏳ 规范未列此栏：本条出自 owner 参照的覆盖面（参照第 80 问），仅作临床常规问诊用语，本文件不主张它有规范出处",
+      "note": "并入 q079（住院与心理治疗合成一问：既往治疗经过一次问完）。",
+      "observed_note": null
+    },
+    {
+      "id": "q081",
+      "ref": 81,
+      "module": "history",
+      "ask": "吃过精神科的药吗？有没有自己停过？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "psych_med_history",
+      "column": "past_history",
+      "lead": "既往精神科用药：",
+      "probes": [],
+      "sensitive": null,
+      "trigger": {
+        "q": "q078",
+        "in": [
+          "diagnosed",
+          "inpatient",
+          "therapy"
+        ],
+        "label": "因为你说以前看过、也吃过药"
+      },
+      "followup": true,
+      "basis": "国家规范第十八条（四）既往史；第十八条（三）4（发病以来诊治经过）;⚠️ 本作不问剂量与副作用细节",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q082",
+      "ref": 82,
+      "module": "history",
+      "ask": "有没有自己把药停了？",
+      "ask_mode": "merged",
+      "required": false,
+      "answers": null,
+      "column": null,
+      "lead": null,
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "国家规范第十八条（四）既往史；第十八条（三）4（发病以来诊治经过）",
+      "note": "并入 q081（停药与依从性已经写进 q081 的取值）。",
+      "observed_note": null
+    },
+    {
+      "id": "q083",
+      "ref": 83,
+      "module": "history",
+      "ask": "家里有没有人有过类似的情况，或者精神方面的病？",
+      "ask_mode": "player",
+      "required": true,
+      "answers": "family_history",
+      "column": "family_history",
+      "lead": "",
+      "probes": [],
+      "sensitive": "family",
+      "trigger": null,
+      "followup": null,
+      "basis": "国家规范第十八条（五）3 家族史；教材第三章第三节（一）6（入院检索 §7.2）;⚠️ 本作不使用「两系三代」这一措辞——它在国家规范、精神卫生法、豫闽两份省级规范与人卫教材中均未见（入院检索 §7.3 / §10.1）",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q084",
+      "ref": 84,
+      "module": "history",
+      "ask": "家里有没有遗传病？",
+      "ask_mode": "merged",
+      "required": false,
+      "answers": null,
+      "column": null,
+      "lead": null,
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "国家规范第十八条（五）3 家族史；教材第三章第三节（一）6（入院检索 §7.2）",
+      "note": "并入 q083（家族史一栏一次问完，避免同一栏问两遍）。",
+      "observed_note": null
+    },
+    {
+      "id": "q085",
+      "ref": 85,
+      "module": "personal",
+      "ask": "怀孕、出生、小时候发育的情况怎么样？",
+      "ask_mode": "reserved",
+      "required": false,
+      "answers": null,
+      "column": null,
+      "lead": null,
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "国家规范第十八条（五）1 个人史；教材第三章第三节（一）5（入院检索 §六）",
+      "note": "本阶段不问。理由：教材说这一条要**根据患者发病年龄或病种**重点询问，本作开局不设年龄分支，且成年患者口头也答不准（入院检索 §六.2）。保留待接回。",
+      "observed_note": null
+    },
+    {
+      "id": "q086",
+      "ref": 86,
+      "module": "personal",
+      "ask": "小时候家里是什么样？管得严，还是没人管？",
+      "ask_mode": "player",
+      "required": true,
+      "answers": "childhood",
+      "column": "personal_history",
+      "lead": "童年与家庭：",
+      "probes": [
+        "probe_concrete"
+      ],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "国家规范第十八条（五）1 个人史；教材第三章第三节（一）5（入院检索 §六）",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q087",
+      "ref": 87,
+      "module": "personal",
+      "ask": "上学、工作一直顺利吗？中间停过吗？",
+      "ask_mode": "player",
+      "required": true,
+      "answers": "school_work",
+      "column": "personal_history",
+      "lead": "学习与工作：",
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "国家规范第十八条（五）1 个人史；教材第三章第三节（一）5（入院检索 §六）",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q088",
+      "ref": 88,
+      "module": "personal",
+      "ask": "工作顺利吗？有没有换工作、失业？",
+      "ask_mode": "merged",
+      "required": false,
+      "answers": null,
+      "column": null,
+      "lead": null,
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "国家规范第十八条（五）1 个人史；教材第三章第三节（一）5（入院检索 §六）",
+      "note": "并入 q087（学习与工作一题问完）。",
+      "observed_note": null
+    },
+    {
+      "id": "q089",
+      "ref": 89,
+      "module": "personal",
+      "ask": "现在是一个人过，还是有伴？有孩子吗？",
+      "ask_mode": "player",
+      "required": true,
+      "answers": "marriage",
+      "column": "marital",
+      "lead": "",
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "国家规范第二章第十二条（首页法定项「婚姻状况」）与第十八条（五）2（婚育史）",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q090",
+      "ref": 90,
+      "module": "personal",
+      "ask": "在性取向、性别认同方面有没有困扰？",
+      "ask_mode": "reserved",
+      "required": false,
+      "answers": null,
+      "column": null,
+      "lead": null,
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "★⏳ 规范未列此栏：本条出自 owner 参照的覆盖面（参照第 90 问），仅作临床常规问诊用语，本文件不主张它有规范出处",
+      "note": "本阶段不问。理由：本作给不出有出处的闭集，且这一问的内容提示与安全底线需要单独设计；保留待接回，不拿一个自造的闭集顶上。",
+      "observed_note": null
+    },
+    {
+      "id": "q091",
+      "ref": 91,
+      "module": "personal",
+      "ask": "有孩子吗？跟家里人关系怎么样？",
+      "ask_mode": "merged",
+      "required": false,
+      "answers": null,
+      "column": null,
+      "lead": null,
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "国家规范第十八条（五）2「有无子女」；教材「家庭结构、家庭成员之间的关系」（入院检索 §7.2）",
+      "note": "并入 q089（婚姻与子女合成一问：婚育史一次问完）。家庭关系那半在 q086（童年与家庭）里已经问过。",
+      "observed_note": null
+    },
+    {
+      "id": "q092",
+      "ref": 92,
+      "module": "personal",
+      "ask": "你自己觉得你是怎么样的人？身边有人能说话吗？",
+      "ask_mode": "player",
+      "required": true,
+      "answers": "personality_support",
+      "column": "personal_history",
+      "lead": "病前性格与人际：",
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "教材第三章第三节（二）2 人格特点六问（入院检索 §6.3）；精神科评分表把「无个性倾向记录」单列扣分项",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q093",
+      "ref": 93,
+      "module": "personal",
+      "ask": "有没有经历过亲人去世、分开、丢工作这一类的事？钱、住房、跟人的纠纷上有压力吗？",
+      "ask_mode": "player",
+      "required": true,
+      "answers": "major_loss",
+      "column": "personal_history",
+      "lead": "重大生活事件：",
+      "probes": [],
+      "sensitive": "trauma",
+      "trigger": null,
+      "followup": null,
+      "basis": "教材「症状的演变及其与生活事件、心理冲突之间的关系」（入院检索 §5.3）",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q094",
+      "ref": 94,
+      "module": "personal",
+      "ask": "钱、住房、跟人的纠纷这些方面有压力吗？",
+      "ask_mode": "merged",
+      "required": false,
+      "answers": null,
+      "column": null,
+      "lead": null,
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "★⏳ 规范未列此栏：本条出自 owner 参照的覆盖面（参照第 94 问），仅作临床常规问诊用语，本文件不主张它有规范出处",
+      "note": "并入 q093（重大生活事件与社会压力合成一问）。",
+      "observed_note": null
+    },
+    {
+      "id": "q095",
+      "ref": 95,
+      "module": "personal",
+      "ask": "手机、游戏、网络、打牌这些用得多吗？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "screen_gambling",
+      "column": "personal_history",
+      "lead": "日常嗜好：",
+      "probes": [],
+      "sensitive": null,
+      "trigger": {
+        "q": "q001",
+        "in": [
+          "substance"
+        ],
+        "label": "因为你说是喝酒吃药的事"
+      },
+      "followup": true,
+      "basis": "国家规范第十八条（五）1 个人史「生活习惯」；★⏳ 规范未列此栏：本条出自 owner 参照的覆盖面（参照第 95 问），仅作临床常规问诊用语，本文件不主张它有规范出处",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q096",
+      "ref": 96,
+      "module": "personal",
+      "ask": "最近有什么压力？照顾人的负担重吗？",
+      "ask_mode": "merged",
+      "required": false,
+      "answers": null,
+      "column": null,
+      "lead": null,
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "★⏳ 规范未列此栏：本条出自 owner 参照的覆盖面（参照第 96 问），仅作临床常规问诊用语，本文件不主张它有规范出处",
+      "note": "并入 q093（重大生活事件）与 q094（社会压力）。",
+      "observed_note": null
+    },
+    {
+      "id": "q097",
+      "ref": 97,
+      "module": "mse",
+      "ask": "你知道今天为什么来这里吗？",
+      "ask_mode": "observed",
+      "required": false,
+      "answers": null,
+      "column": null,
+      "lead": null,
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "教材第三章第四节一 精神状况检查六项（入院检索 §8.1、§8.4.1）",
+      "note": null,
+      "observed_note": "自知力（医师观察）：患者能说出是家里人或自己觉得不对劲才来的，但对「算不算病」态度犹豫。"
+    },
+    {
+      "id": "q098",
+      "ref": 98,
+      "module": "mse",
+      "ask": "你觉得自己是什么问题？",
+      "ask_mode": "observed",
+      "required": false,
+      "answers": null,
+      "column": null,
+      "lead": null,
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "教材第三章第四节一 精神状况检查六项（入院检索 §8.1、§8.4.1）",
+      "note": null,
+      "observed_note": "自知力（医师观察）：患者把自己的状况归为「最近累」「想太多」，不认为需要长期治疗。"
+    },
+    {
+      "id": "q099",
+      "ref": 99,
+      "module": "mse",
+      "ask": "今天几号？这是什么地方？我是谁？",
+      "ask_mode": "observed",
+      "required": false,
+      "answers": null,
+      "column": null,
+      "lead": null,
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "教材第三章第四节一 精神状况检查六项（入院检索 §8.1、§8.4.1）",
+      "note": null,
+      "observed_note": "定向力：时间、地点、人物定向完整。"
+    },
+    {
+      "id": "q100",
+      "ref": 100,
+      "module": "mse",
+      "ask": "一百减七等于多少？再减七呢？",
+      "ask_mode": "observed",
+      "required": false,
+      "answers": null,
+      "column": null,
+      "lead": null,
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "教材第三章第四节一 精神状况检查六项（入院检索 §8.1、§8.4.1）;⚠️ 本作不显示分数、不做结论",
+      "note": null,
+      "observed_note": "计算力：连续减七可完成（医师记录，本作不落任何分值）。"
+    },
+    {
+      "id": "q101",
+      "ref": 101,
+      "module": "mse",
+      "ask": "倒着背几个数字。",
+      "ask_mode": "observed",
+      "required": false,
+      "answers": null,
+      "column": null,
+      "lead": null,
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "教材第三章第四节一 精神状况检查六项（入院检索 §8.1、§8.4.1）;⚠️ 本作不显示分数、不做结论",
+      "note": null,
+      "observed_note": "注意力：数字倒背完成，无随境转移。"
+    },
+    {
+      "id": "q102",
+      "ref": 102,
+      "module": "mse",
+      "ask": "记住三样东西，等会儿我再问你。",
+      "ask_mode": "observed",
+      "required": false,
+      "answers": null,
+      "column": null,
+      "lead": null,
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "教材第三章第四节一 精神状况检查六项（入院检索 §8.1、§8.4.1）;⚠️ 本作不显示分数、不做结论",
+      "note": null,
+      "observed_note": "近记忆：三样东西延迟回忆完整。"
+    },
+    {
+      "id": "q103",
+      "ref": 103,
+      "module": "mse",
+      "ask": "苹果和香蕉有什么共同点？",
+      "ask_mode": "observed",
+      "required": false,
+      "answers": null,
+      "column": null,
+      "lead": null,
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "教材第三章第四节一 精神状况检查六项（入院检索 §8.1、§8.4.1）;⚠️ 本作不显示分数、不做结论",
+      "note": null,
+      "observed_note": "抽象概括：能说出同属水果，理解力与受教育水平相称。"
+    },
+    {
+      "id": "q104",
+      "ref": 104,
+      "module": "mse",
+      "ask": "如果在路上捡到一封信，你会怎么做？",
+      "ask_mode": "observed",
+      "required": false,
+      "answers": null,
+      "column": null,
+      "lead": null,
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "教材第三章第四节一 精神状况检查六项（入院检索 §8.1、§8.4.1）;⚠️ 本作不显示分数、不做结论",
+      "note": null,
+      "observed_note": "判断力：知道应交给邮局或按地址送还。"
+    },
+    {
+      "id": "q105",
+      "ref": 105,
+      "module": "mse",
+      "ask": "如果别人说你的想法不真实，你怎么看？",
+      "ask_mode": "observed",
+      "required": false,
+      "answers": null,
+      "column": null,
+      "lead": null,
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "教材第三章第四节一 精神状况检查六项（入院检索 §8.1、§8.4.1）;精神科评分表要求自知力「有详细分析，不能简单记录有、无或不全」（入院检索 §8.4.1）",
+      "note": null,
+      "observed_note": "自知力（医师观察）：患者表示「也许是我多想了」，但随即补充「可那确实是发生的」。"
+    },
+    {
+      "id": "q106",
+      "ref": 106,
+      "module": "mse",
+      "ask": "医生会观察：外表、卫生、目光接触、坐姿、动作、语速、音量、连贯性、情绪表达、合作程度、敌对、掩饰。",
+      "ask_mode": "observed",
+      "required": false,
+      "answers": null,
+      "column": null,
+      "lead": null,
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "教材第三章第四节一 精神状况检查六项（入院检索 §8.1、§8.4.1）;本条原参照本身即「医生观察、不问出口」，故全部落进检查所见栏",
+      "note": null,
+      "observed_note": "一般表现（医师观察）：衣饰整洁，目光接触可，坐姿自然，语速音量适中，言语连贯，合作，无明显掩饰。"
+    },
+    {
+      "id": "q107",
+      "ref": 107,
+      "module": "closing",
+      "ask": "你现在最想得到什么帮助？",
+      "ask_mode": "player",
+      "required": true,
+      "answers": "help_wanted",
+      "column": "present_illness",
+      "lead": "求诊期望：",
+      "probes": [
+        "probe_concrete"
+      ],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "★⏳ 规范未列此栏：本条出自 owner 参照的覆盖面（参照第 107 问），仅作临床常规问诊用语，本文件不主张它有规范出处",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q108",
+      "ref": 108,
+      "module": "closing",
+      "ask": "愿意吃药吗？愿意找人聊聊吗？",
+      "ask_mode": "player",
+      "required": true,
+      "answers": "treatment_willing",
+      "column": "present_illness",
+      "lead": "治疗意愿：",
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "★⏳ 规范未列此栏：本条出自 owner 参照的覆盖面（参照第 108 问），仅作临床常规问诊用语，本文件不主张它有规范出处;⚠️ 本作不写医嘱、不给诊疗计划",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q109",
+      "ref": 109,
+      "module": "closing",
+      "ask": "对住院、请假、休学这些，或者费用、时间、路远，你有什么担心的吗？",
+      "ask_mode": "player",
+      "required": false,
+      "answers": "hospital_worry",
+      "column": "present_illness",
+      "lead": "顾虑：",
+      "probes": [],
+      "sensitive": null,
+      "trigger": {
+        "q": "q001",
+        "in": [
+          "brought",
+          "work"
+        ],
+        "label": "因为不是你自己想来的"
+      },
+      "followup": true,
+      "basis": "★⏳ 规范未列此栏：本条出自 owner 参照的覆盖面（参照第 109 问），仅作临床常规问诊用语，本文件不主张它有规范出处",
+      "note": null,
+      "observed_note": null
+    },
+    {
+      "id": "q110",
+      "ref": 110,
+      "module": "closing",
+      "ask": "费用、时间、路远这些方面有问题吗？",
+      "ask_mode": "merged",
+      "required": false,
+      "answers": null,
+      "column": null,
+      "lead": null,
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "★⏳ 规范未列此栏：本条出自 owner 参照的覆盖面（参照第 110 问），仅作临床常规问诊用语，本文件不主张它有规范出处",
+      "note": "并入 q109（顾虑与就诊条件合成一问）。",
+      "observed_note": null
+    },
+    {
+      "id": "q111",
+      "ref": 111,
+      "module": "closing",
+      "ask": "要不要我把情况告诉家里人？",
+      "ask_mode": "merged",
+      "required": false,
+      "answers": null,
+      "column": null,
+      "lead": null,
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "《中华人民共和国精神卫生法》第四条：对病历资料以及其他可能推断出其身份的信息予以保密；但是，依法履行职责需要公开的除外（门诊检索 §5.4）",
+      "note": "并入 q107：求诊期望的闭集里加了「想请你跟家里人说」这一档，告知范围与求诊期望在同一次询问里问完。",
+      "observed_note": null
+    },
+    {
+      "id": "q112",
+      "ref": 112,
+      "module": "closing",
+      "ask": "你知道保密例外吗？涉及自伤、伤人、虐待时可能需要通知。",
+      "ask_mode": "withheld",
+      "required": false,
+      "answers": null,
+      "column": null,
+      "lead": null,
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "⏳",
+      "note": "本作不问这一条。理由：这句「涉及自伤、伤人、虐待时可能需要通知」的枚举**未从法律原文核到**——《精神卫生法》第四条只有概括句「依法履行职责需要公开的除外」（门诊检索 §7.1 第 4 条）。照原样上屏等于自造规范用语，故撤下。",
+      "observed_note": null
+    },
+    {
+      "id": "q113",
+      "ref": 113,
+      "module": "closing",
+      "ask": "还有什么我没问到，但你想说的？",
+      "ask_mode": "player",
+      "required": true,
+      "answers": "anything_else",
+      "column": "present_illness",
+      "lead": "补充：",
+      "probes": [],
+      "sensitive": null,
+      "trigger": null,
+      "followup": null,
+      "basis": "★⏳ 规范未列此栏：本条出自 owner 参照的覆盖面（参照第 113 问），仅作临床常规问诊用语，本文件不主张它有规范出处;⚠️ 原问法是开放式，本作改为闭集——本作没有自由文本输入",
+      "note": null,
+      "observed_note": null
+    }
+  ],
+  "answers": {
+    "complaint": {
+      "multi": false,
+      "source": "主诉分支选择器：按这一答决定进哪个症状群（教材：门诊采集病史先从现病史问起，门诊检索 §5.1）",
+      "values": [
+        {
+          "id": "sleep",
+          "label": "睡不好。已经很久了。",
+          "record": "睡不好",
+          "clause": "睡眠差"
+        },
+        {
+          "id": "mood",
+          "label": "……提不起劲。什么都提不起劲。",
+          "record": "提不起劲、心里难受",
+          "voice": "depressive",
+          "clause": "情绪低落、提不起劲"
+        },
+        {
+          "id": "anxiety",
+          "label": "心里发慌，静不下来。坐着也慌。",
+          "record": "心里发慌、静不下来",
+          "clause": "阵发性心慌"
+        },
+        {
+          "id": "psychotic",
+          "label": "有人在门口叫我名字——叫了好几晚。我来看看你们这儿是怎么回事。",
+          "record": "听见或看见别人没有的东西",
+          "voice": "paranoid",
+          "clause": "夜间听见有人呼唤其姓名"
+        },
+        {
+          "id": "manic",
+          "label": "我不用来！是我妈非拉我来的——我现在状态特别好，比过去三年都好。",
+          "record": "一阵一阵特别兴奋，停不下来",
+          "voice": "manic",
+          "clause": "情绪高涨、言语增多"
+        },
+        {
+          "id": "substance",
+          "label": "喝酒的事。家里人说我喝得太多，我觉得没那么多。",
+          "record": "喝酒、吃药的事",
+          "clause": "饮酒问题"
+        },
+        {
+          "id": "somatic",
+          "label": "身上到处不舒服，查了半年查不出毛病。",
+          "record": "身上不舒服，查不出毛病",
+          "clause": "多处躯体不适"
+        },
+        {
+          "id": "brought",
+          "label": "我妈让我来的。我自己不觉得有什么。",
+          "record": "家里人让我来的",
+          "clause": "家属认为其状态异常，陪同"
+        },
+        {
+          "id": "work",
+          "label": "单位让我来的。领导说我最近不对劲。",
+          "record": "单位或学校让我来的",
+          "clause": "单位认为其状态异常，建议"
+        },
+        {
+          "id": "decline",
+          "label": "不愿意说",
+          "record": "不愿意说"
+        }
+      ]
+    },
+    "chief_complaints": {
+      "multi": true,
+      "min_items": 1,
+      "max_items": 3,
+      "source": "主诉的症状那一半（国家规范第十三条：主要症状（或体征）及持续时间）",
+      "values": [
+        {
+          "id": "insomnia",
+          "label": "睡不着。……躺着，等天亮。",
+          "record": "睡不着",
+          "voice": "depressive"
+        },
+        {
+          "id": "low",
+          "label": "高兴不起来。……也不想高兴。",
+          "record": "情绪低落",
+          "voice": "depressive"
+        },
+        {
+          "id": "no_interest",
+          "label": "以前喜欢的事，现在碰都不想碰。",
+          "record": "提不起兴趣",
+          "voice": "depressive"
+        },
+        {
+          "id": "worry",
+          "label": "心里发慌，坐不住。",
+          "record": "心里发慌"
+        },
+        {
+          "id": "anger",
+          "label": "一点就着。昨天差点跟人吵起来——以前我不这样。",
+          "record": "容易发火",
+          "voice": "manic"
+        },
+        {
+          "id": "hearing",
+          "label": "听见别人听不见的声音。他们在我耳朵边上说我。",
+          "record": "听见别人听不见的声音",
+          "voice": "paranoid"
+        },
+        {
+          "id": "excited",
+          "label": "一阵一阵特别兴奋，停不下来。好几天不睡也不困。",
+          "record": "一阵一阵兴奋",
+          "voice": "manic"
+        },
+        {
+          "id": "drink",
+          "label": "喝酒。喝多了就什么都想不起来。",
+          "record": "喝酒的事"
+        },
+        {
+          "id": "body",
+          "label": "身上不舒服，查不出毛病。",
+          "record": "身上不舒服"
+        },
+        {
+          "id": "memory",
+          "label": "记不住事。刚说的话，转身就忘。",
+          "record": "记不住事",
+          "voice": "depressive"
+        },
+        {
+          "id": "numb",
+          "label": "什么都感觉不到。像隔着一层玻璃。",
+          "record": "什么都感觉不到",
+          "voice": "depressive"
+        }
+      ]
+    },
+    "duration": {
+      "multi": false,
+      "source": "持续时间（国家规范第十三条主诉格式的后半）",
+      "values": [
+        {
+          "id": "w2",
+          "label": "不到两个星期",
+          "record": "不到两个星期",
+          "clause": "不到两个星期前"
+        },
+        {
+          "id": "w2_12",
+          "label": "两三个星期",
+          "record": "两三个星期",
+          "clause": "两三个星期前"
+        },
+        {
+          "id": "m1_3",
+          "label": "一两个月",
+          "record": "一两个月",
+          "clause": "一两个月前"
+        },
+        {
+          "id": "m3_6",
+          "label": "三四个月",
+          "record": "三四个月",
+          "clause": "三四个月前"
+        },
+        {
+          "id": "m6_12",
+          "label": "半年多",
+          "record": "半年多",
+          "clause": "半年多前"
+        },
+        {
+          "id": "y1",
+          "label": "一年以上",
+          "record": "一年以上",
+          "clause": "一年以上前"
+        }
+      ]
+    },
+    "onset_mode": {
+      "multi": false,
+      "source": "起病缓急（国家规范第十八条（三）1；量化界限见入院检索 §5.2：<2 周急性 / 2 周–3 月亚急性 / >3 月慢性）",
+      "values": [
+        {
+          "id": "sudden",
+          "label": "是突然的",
+          "record": "是突然的",
+          "clause": "突然起病"
+        },
+        {
+          "id": "gradual",
+          "label": "是慢慢变严重的",
+          "record": "是慢慢变严重的",
+          "clause": "缓慢起病"
+        },
+        {
+          "id": "unsure",
+          "label": "说不清",
+          "record": "说不清",
+          "clause": "起病缓急难以确定"
+        }
+      ]
+    },
+    "prior_episode": {
+      "multi": false,
+      "source": "病程形式 / 首次还是反复（教材「病程特点」；入院检索 §5.3、§5.5）",
+      "values": [
+        {
+          "id": "first",
+          "label": "这是第一次",
+          "record": "这是第一次",
+          "clause": "无类似发作"
+        },
+        {
+          "id": "before",
+          "label": "以前也有过",
+          "record": "以前也有过",
+          "clause": "有类似发作"
+        },
+        {
+          "id": "before_treated",
+          "label": "以前有过，也看过",
+          "record": "以前有过，也看过",
+          "clause": "有类似发作，曾因此就诊"
+        },
+        {
+          "id": "before_recent",
+          "label": "以前有过，最近又发了",
+          "record": "以前有过，最近又发了",
+          "clause": "有类似发作，本次为再次发作"
+        },
+        {
+          "id": "always",
+          "label": "好像一直都这样",
+          "record": "好像一直都这样",
+          "clause": "长期如此，无明显发作间歇"
+        }
+      ]
+    },
+    "aggravator": {
+      "multi": true,
+      "min_items": 1,
+      "max_items": 2,
+      "source": "诱因（国家规范第十八条（三）1）与缓解/加剧因素（第十八条（三）2）合在一问里",
+      "values": [
+        {
+          "id": "event",
+          "label": "有，是某件事之后",
+          "record": "有，是某件事之后",
+          "clause": "病前有具体生活事件为诱因"
+        },
+        {
+          "id": "relation",
+          "label": "有，是跟人的关系",
+          "record": "有，是跟人的关系",
+          "clause": "病前人际关系紧张"
+        },
+        {
+          "id": "work_p",
+          "label": "有，是工作或学习",
+          "record": "有，是工作或学习",
+          "clause": "病前工作或学习压力增大"
+        },
+        {
+          "id": "body",
+          "label": "有，是身体上的事",
+          "record": "有，是身体上的事",
+          "clause": "病前有躯体不适"
+        },
+        {
+          "id": "none",
+          "label": "没有明显的原因",
+          "record": "没有明显的原因",
+          "clause": "病前无明显诱因"
+        },
+        {
+          "id": "unsure",
+          "label": "说不上来",
+          "record": "说不上来",
+          "clause": "诱因难以确定"
+        },
+        {
+          "id": "better_people",
+          "label": "跟人说说会好一点",
+          "record": "跟人说说会好一点",
+          "clause": "与人交谈时略感好转"
+        },
+        {
+          "id": "better_alone",
+          "label": "一个人待着会好一点",
+          "record": "一个人待着会好一点",
+          "clause": "独处时略感好转"
+        },
+        {
+          "id": "better_busy",
+          "label": "忙起来会好一点",
+          "record": "忙起来会好一点",
+          "clause": "忙碌时略感好转"
+        },
+        {
+          "id": "worse_alone",
+          "label": "一个人待着更差",
+          "record": "一个人待着更差",
+          "clause": "独处时明显加重"
+        },
+        {
+          "id": "worse_night",
+          "label": "到了晚上更差",
+          "record": "到了晚上更差",
+          "clause": "入夜后明显加重"
+        }
+      ]
+    },
+    "impact": {
+      "multi": false,
+      "source": "社会功能影响（教材「与既往社会功能比较所发生的功能变化」；入院检索 §5.3）与它的后果（参照第 12 问）合在一问里",
+      "values": [
+        {
+          "id": "none",
+          "label": "基本没影响",
+          "record": "基本没影响",
+          "clause": "发病后工作与生活基本如常"
+        },
+        {
+          "id": "some",
+          "label": "有一点影响",
+          "record": "有一点影响",
+          "clause": "发病后对工作与学习有一定影响"
+        },
+        {
+          "id": "work_hurt",
+          "label": "影响了上班或上学",
+          "record": "影响了上班或上学",
+          "clause": "发病后工作或学习受到明显影响"
+        },
+        {
+          "id": "leave",
+          "label": "请过假、休过学",
+          "record": "请过假、休过学",
+          "clause": "发病后曾请假或休学"
+        },
+        {
+          "id": "quit",
+          "label": "辞了或退了",
+          "record": "辞了或退了",
+          "clause": "发病后已辞职或退学"
+        },
+        {
+          "id": "stopped",
+          "label": "已经不能上班上学",
+          "record": "已经不能上班上学",
+          "clause": "发病后已不能上班上学"
+        },
+        {
+          "id": "mess",
+          "label": "生活都乱了",
+          "record": "生活都乱了",
+          "clause": "发病后日常生活秩序紊乱"
+        }
+      ]
+    },
+    "appetite": {
+      "multi": true,
+      "min_items": 1,
+      "max_items": 2,
+      "source": "发病以来一般情况（国家规范第十八条（三）5「睡眠、食欲、体重」）与进食行为（参照第 30 问）合在一问里；本作不含任何数量口径",
+      "values": [
+        {
+          "id": "normal",
+          "label": "跟平常一样",
+          "record": "跟平常一样",
+          "clause": "食欲与体重无明显变化"
+        },
+        {
+          "id": "less",
+          "label": "吃得比以前少",
+          "record": "吃得比以前少",
+          "clause": "食欲较以往减退"
+        },
+        {
+          "id": "much_less",
+          "label": "几乎吃不下",
+          "record": "几乎吃不下",
+          "clause": "几乎不能进食"
+        },
+        {
+          "id": "more",
+          "label": "吃得比以前多",
+          "record": "吃得比以前多",
+          "clause": "食欲较以往增加"
+        },
+        {
+          "id": "weight_down",
+          "label": "体重掉了不少",
+          "record": "体重掉了不少",
+          "clause": "体重明显下降"
+        },
+        {
+          "id": "weight_up",
+          "label": "体重涨了不少",
+          "record": "体重涨了不少",
+          "clause": "体重明显增加"
+        },
+        {
+          "id": "binge",
+          "label": "吃下去又后悔",
+          "record": "吃下去又后悔",
+          "clause": "有进食后后悔的情况"
+        },
+        {
+          "id": "vomit",
+          "label": "吃完想办法吐出来",
+          "record": "吃完想办法吐出来",
+          "clause": "有进食后设法吐出的情况"
+        },
+        {
+          "id": "restrict",
+          "label": "不敢吃",
+          "record": "不敢吃",
+          "clause": "对进食有明显顾忌"
+        }
+      ]
+    },
+    "energy": {
+      "multi": false,
+      "source": "发病以来一般情况（同上「精神状态」）",
+      "values": [
+        {
+          "id": "ok",
+          "label": "还撑得住。",
+          "record": "还撑得住",
+          "clause": "精力尚可"
+        },
+        {
+          "id": "tired_rest",
+          "label": "容易累，歇一歇能缓过来。",
+          "record": "容易累，歇一歇能缓过来",
+          "clause": "容易疲乏，休息后可缓解"
+        },
+        {
+          "id": "tired_always",
+          "label": "一直累。歇了也一样，像背着一袋水泥。",
+          "record": "一直很累，歇也缓不过来",
+          "voice": "depressive",
+          "clause": "持续疲乏，休息后不缓解"
+        },
+        {
+          "id": "none_left",
+          "label": "连起床都费劲。……今天来这儿，我在门口坐了十分钟才进来。",
+          "record": "连起床都费劲",
+          "voice": "depressive",
+          "clause": "疲乏明显，起床亦感费力"
+        }
+      ]
+    },
+    "concentration": {
+      "multi": false,
+      "source": "认知症状：注意力与决策合在一问（教材现病史「工作、学习」一般情况；参照第 32、34 问）",
+      "values": [
+        {
+          "id": "ok",
+          "label": "都能",
+          "record": "都能",
+          "clause": "注意力与决断力尚可"
+        },
+        {
+          "id": "hard",
+          "label": "很难集中",
+          "record": "很难集中",
+          "clause": "注意力难以集中"
+        },
+        {
+          "id": "decide_slow",
+          "label": "做决定要想很久",
+          "record": "做决定要想很久",
+          "clause": "做决定需反复权衡"
+        },
+        {
+          "id": "cant",
+          "label": "几乎没法集中",
+          "record": "几乎没法集中",
+          "clause": "注意力几乎无法集中"
+        },
+        {
+          "id": "both_hard",
+          "label": "两样都很难",
+          "record": "两样都很难",
+          "clause": "注意力难以集中且决断困难"
+        }
+      ]
+    },
+    "memory": {
+      "multi": false,
+      "source": "认知症状（同上；精神检查「认识活动」含记忆）",
+      "values": [
+        {
+          "id": "ok",
+          "label": "没觉得",
+          "record": "没觉得",
+          "clause": "记忆无明显减退"
+        },
+        {
+          "id": "small",
+          "label": "偶尔丢三落四",
+          "record": "偶尔丢三落四",
+          "clause": "偶有丢三落四"
+        },
+        {
+          "id": "big",
+          "label": "经常忘事，别人提醒才想起来",
+          "record": "经常忘事，别人提醒才想起来",
+          "clause": "经常忘事，需他人提醒"
+        }
+      ]
+    },
+    "mood_two_weeks": {
+      "multi": false,
+      "source": "情绪（教材现病史主要症状；两周是常规询问窗口）",
+      "values": [
+        {
+          "id": "low",
+          "label": "大部分时间都难受。说不清在难受什么。",
+          "record": "大部分时间都低落",
+          "voice": "depressive",
+          "clause": "大部分时间心境低落"
+        },
+        {
+          "id": "up",
+          "label": "高！特别高——这两个星期我一天都没低过，走路都想唱歌。",
+          "record": "大部分时间特别高",
+          "voice": "manic",
+          "clause": "大部分时间心境高涨"
+        },
+        {
+          "id": "swing",
+          "label": "一天里忽高忽低。早上还行，到下午就塌下去。",
+          "record": "一天里忽高忽低",
+          "clause": "一日之内心境忽高忽低"
+        },
+        {
+          "id": "flat",
+          "label": "没什么起伏。什么感觉都没有。",
+          "record": "没什么起伏",
+          "voice": "depressive",
+          "clause": "自觉心境无明显起伏"
+        },
+        {
+          "id": "ok",
+          "label": "还好。说不上好，也说不上坏。",
+          "record": "还好",
+          "clause": "心境大致如常"
+        }
+      ]
+    },
+    "depressive_features": {
+      "multi": true,
+      "min_items": 1,
+      "max_items": 4,
+      "source": "抑郁相关体验（教材现病史症状学；闭集不含诊断名）",
+      "values": [
+        {
+          "id": "cry",
+          "label": "想哭。走在路上也会突然想哭。",
+          "record": "想哭",
+          "voice": "depressive",
+          "clause": "常想哭泣"
+        },
+        {
+          "id": "empty",
+          "label": "心里空的。像被人掏走了一块。",
+          "record": "心里空的",
+          "voice": "depressive",
+          "clause": "自觉内心空虚"
+        },
+        {
+          "id": "numb",
+          "label": "什么都感觉不到。",
+          "record": "什么都感觉不到",
+          "voice": "depressive",
+          "clause": "对周围事物缺乏感受"
+        },
+        {
+          "id": "guilt",
+          "label": "觉得自己没用。对不起家里人。",
+          "record": "觉得自己没用",
+          "voice": "depressive",
+          "clause": "自觉无用、自责"
+        },
+        {
+          "id": "tired",
+          "label": "没力气。起床都要攒半天的劲。",
+          "record": "没力气",
+          "voice": "depressive",
+          "clause": "自觉疲乏无力"
+        },
+        {
+          "id": "nothing",
+          "label": "都没有。",
+          "record": "都没有",
+          "clause": "无明显情绪改变"
+        }
+      ]
+    },
+    "interest": {
+      "multi": false,
+      "source": "兴趣（教材现病史主要症状）",
+      "values": [
+        {
+          "id": "lost_all",
+          "label": "以前喜欢的事，现在一件都不想碰。",
+          "record": "以前喜欢的事，现在一件都不想碰",
+          "voice": "depressive",
+          "clause": "病前喜好的活动一概不愿参与"
+        },
+        {
+          "id": "lost_some",
+          "label": "还有一两件愿意做，剩下的就算了。",
+          "record": "还有一两件愿意做",
+          "clause": "仅余一两项活动仍愿参与"
+        },
+        {
+          "id": "same",
+          "label": "跟以前一样。",
+          "record": "跟以前一样",
+          "clause": "兴趣与以往相当"
+        }
+      ]
+    },
+    "worthiness": {
+      "multi": false,
+      "source": "自我评价（教材现病史症状学）",
+      "values": [
+        {
+          "id": "no",
+          "label": "没有。",
+          "record": "没有",
+          "clause": "无自我评价过低"
+        },
+        {
+          "id": "sometimes",
+          "label": "有时候会这么想。……尤其晚上。",
+          "record": "有时候会这么想",
+          "voice": "depressive",
+          "clause": "偶有自我评价过低"
+        },
+        {
+          "id": "often",
+          "label": "经常。做什么都觉得自己是多余的。",
+          "record": "经常这么想",
+          "voice": "depressive",
+          "clause": "常有自我评价过低"
+        },
+        {
+          "id": "all_time",
+          "label": "一直都在想。我这个人本来就不该占着地方。",
+          "record": "一直都在这么想",
+          "voice": "depressive",
+          "clause": "持续存在自我评价过低"
+        }
+      ]
+    },
+    "life_meaningless": {
+      "multi": false,
+      "source": "消极观念（教材第三章第四节一（三）：发现抑郁情绪须询问自杀观念，入院检索 §4.4）",
+      "values": [
+        {
+          "id": "no",
+          "label": "没有。",
+          "record": "没有",
+          "clause": "无消极观念"
+        },
+        {
+          "id": "passing",
+          "label": "有过一闪而过的念头。……就那么一下。",
+          "record": "有过一闪而过的念头",
+          "voice": "depressive",
+          "clause": "曾一闪而过地出现消极念头"
+        },
+        {
+          "id": "often",
+          "label": "经常冒出来。……觉得我不在，大家会轻松一点。",
+          "record": "经常冒出来",
+          "voice": "depressive",
+          "clause": "消极念头反复出现"
+        },
+        {
+          "id": "plan_thought",
+          "label": "想过。但没细想，也没做什么。",
+          "record": "想过，但没细想",
+          "voice": "depressive",
+          "clause": "曾出现消极念头，未作进一步打算"
+        }
+      ]
+    },
+    "mood_swing": {
+      "multi": false,
+      "source": "情绪波动（教材现病史）",
+      "values": [
+        {
+          "id": "no",
+          "label": "不会",
+          "record": "不会",
+          "clause": "情绪在一日内无明显波动"
+        },
+        {
+          "id": "day",
+          "label": "一天里会变好几次",
+          "record": "一天里会变好几次",
+          "clause": "一日之内情绪多次变动"
+        },
+        {
+          "id": "days",
+          "label": "几天好几天坏",
+          "record": "几天好几天坏",
+          "clause": "情绪数日较好、数日较差"
+        }
+      ]
+    },
+    "panic_fear": {
+      "multi": false,
+      "source": "焦虑（教材现病史；参照第 21 问）",
+      "values": [
+        {
+          "id": "no",
+          "label": "没有",
+          "record": "没有",
+          "clause": "无突发的害怕或将要出事的预感"
+        },
+        {
+          "id": "sometimes",
+          "label": "偶尔会",
+          "record": "偶尔会",
+          "clause": "偶尔出现突发的害怕"
+        },
+        {
+          "id": "often",
+          "label": "经常觉得要出事",
+          "record": "经常觉得要出事",
+          "clause": "经常觉得将要出事"
+        }
+      ]
+    },
+    "spectator_feeling": {
+      "multi": false,
+      "source": "解离体验（教材精神检查；参照第 22 问）",
+      "values": [
+        {
+          "id": "no",
+          "label": "没有",
+          "record": "没有",
+          "clause": "无自身疏离的体验"
+        },
+        {
+          "id": "sometimes",
+          "label": "偶尔有过",
+          "record": "偶尔有过",
+          "clause": "偶有像在旁观看自己的体验"
+        },
+        {
+          "id": "often",
+          "label": "经常这样",
+          "record": "经常这样",
+          "clause": "常有像在旁观看自己、感觉不到情绪的体验"
+        }
+      ]
+    },
+    "sleep_onset": {
+      "multi": false,
+      "source": "睡眠（国家规范第十八条（三）5「睡眠」；教材现病史展开）",
+      "values": [
+        {
+          "id": "fast",
+          "label": "躺下就睡着。",
+          "record": "躺下就睡着",
+          "clause": "入睡尚可"
+        },
+        {
+          "id": "slow",
+          "label": "要躺很久。……躺着，等。",
+          "record": "要躺很久才睡着",
+          "voice": "depressive",
+          "clause": "入睡需较长时间"
+        },
+        {
+          "id": "very_slow",
+          "label": "一两个小时。我数过——昨天是一小时四十分钟，前天更长。",
+          "record": "一两个小时都睡不着",
+          "voice": "compulsive",
+          "clause": "入睡困难，常需一两个小时以上"
+        },
+        {
+          "id": "not_sleep",
+          "label": "睡？我不用睡。三天没合眼了，脑子比谁都清楚。",
+          "record": "整夜几乎没睡",
+          "voice": "manic",
+          "clause": "夜间几乎不能入睡"
+        }
+      ]
+    },
+    "night_waking": {
+      "multi": false,
+      "source": "睡眠（同上）",
+      "values": [
+        {
+          "id": "no",
+          "label": "夜里不醒。",
+          "record": "夜里不醒",
+          "clause": "夜间不醒"
+        },
+        {
+          "id": "once",
+          "label": "醒一两次。",
+          "record": "醒一两次",
+          "clause": "夜间易醒一两次"
+        },
+        {
+          "id": "many",
+          "label": "夜里总醒。三点多，四点多，一次一次。",
+          "record": "夜里总醒",
+          "voice": "depressive",
+          "clause": "夜间频繁觉醒"
+        },
+        {
+          "id": "cant_back",
+          "label": "醒了就再也睡不着。就躺着看窗户变白。",
+          "record": "醒了就再也睡不着",
+          "voice": "depressive",
+          "clause": "夜间觉醒后难以再入睡"
+        }
+      ]
+    },
+    "back_to_sleep": {
+      "multi": false,
+      "source": "睡眠追问（同上）",
+      "values": [
+        {
+          "id": "easy",
+          "label": "能很快再睡着",
+          "record": "能很快再睡着",
+          "clause": "醒后能较快再入睡"
+        },
+        {
+          "id": "hard",
+          "label": "要躺很久",
+          "record": "要躺很久",
+          "clause": "醒后需较长时间方能再入睡"
+        },
+        {
+          "id": "cant",
+          "label": "就再也睡不着了",
+          "record": "就再也睡不着了",
+          "clause": "醒后即不能再入睡"
+        }
+      ]
+    },
+    "early_waking": {
+      "multi": false,
+      "source": "睡眠（同上）",
+      "values": [
+        {
+          "id": "no",
+          "label": "不会早醒",
+          "record": "不会早醒",
+          "clause": "无早醒"
+        },
+        {
+          "id": "sometimes",
+          "label": "有时候早醒",
+          "record": "有时候早醒",
+          "clause": "时有早醒"
+        },
+        {
+          "id": "always",
+          "label": "每天都比平时早醒很多",
+          "record": "每天都比平时早醒很多",
+          "clause": "每日明显早醒"
+        }
+      ]
+    },
+    "total_sleep": {
+      "multi": false,
+      "source": "睡眠（同上；本作不给具体小时数，只给粗档，避免伪造数值）",
+      "values": [
+        {
+          "id": "enough",
+          "label": "跟平常差不多",
+          "record": "跟平常差不多",
+          "clause": "总睡眠时间与以往相当"
+        },
+        {
+          "id": "less",
+          "label": "比以前少一些",
+          "record": "比以前少一些",
+          "clause": "总睡眠时间较以往减少"
+        },
+        {
+          "id": "much_less",
+          "label": "比以前少很多",
+          "record": "比以前少很多",
+          "clause": "总睡眠时间明显减少"
+        },
+        {
+          "id": "almost_none",
+          "label": "几乎睡不成",
+          "record": "几乎睡不成",
+          "clause": "几乎彻夜不眠"
+        }
+      ]
+    },
+    "daytime_sleepy": {
+      "multi": false,
+      "source": "睡眠（同上）",
+      "values": [
+        {
+          "id": "no",
+          "label": "不困",
+          "record": "不困",
+          "clause": "日间不困"
+        },
+        {
+          "id": "sometimes",
+          "label": "白天有点困",
+          "record": "白天有点困",
+          "clause": "日间时有困倦"
+        },
+        {
+          "id": "always",
+          "label": "白天一直困，撑不住",
+          "record": "白天一直困，撑不住",
+          "clause": "日间困倦难支"
+        }
+      ]
+    },
+    "nightmare": {
+      "multi": false,
+      "source": "睡眠（同上）；「梦的内容」不给自由文本，改问记不记得住",
+      "values": [
+        {
+          "id": "no",
+          "label": "不做噩梦",
+          "record": "不做噩梦",
+          "clause": "无噩梦"
+        },
+        {
+          "id": "rare",
+          "label": "偶尔做",
+          "record": "偶尔做",
+          "clause": "偶有噩梦"
+        },
+        {
+          "id": "often_remember",
+          "label": "经常做，醒来还记得",
+          "record": "经常做，醒来还记得",
+          "clause": "经常做噩梦，醒后记得内容"
+        },
+        {
+          "id": "often_forget",
+          "label": "经常做，醒来记不清",
+          "record": "经常做，醒来记不清",
+          "clause": "经常做噩梦，醒后记不清内容"
+        }
+      ]
+    },
+    "worry_control": {
+      "multi": false,
+      "source": "焦虑（教材现病史；本作把「无法控制」并入同一个闭集）",
+      "values": [
+        {
+          "id": "no",
+          "label": "不会。",
+          "record": "不会",
+          "clause": "无明显紧张担心"
+        },
+        {
+          "id": "sometimes",
+          "label": "有时候担心，停不下来。明知道没事，还是一遍一遍想。",
+          "record": "有时候担心，停不下来",
+          "voice": "compulsive",
+          "clause": "时有难以自控的紧张担心"
+        },
+        {
+          "id": "always",
+          "label": "几乎一直在担心。脑子里同时开着七八件事，一件都关不掉。",
+          "record": "几乎一直在担心",
+          "voice": "compulsive",
+          "clause": "几乎持续处于紧张担心之中"
+        }
+      ]
+    },
+    "worry_content": {
+      "multi": true,
+      "min_items": 1,
+      "max_items": 3,
+      "source": "担心的内容（参照第 37 问；本作给闭集，不给自由文本）",
+      "values": [
+        {
+          "id": "work",
+          "label": "工作或学习",
+          "record": "工作或学习",
+          "clause": "工作或学习"
+        },
+        {
+          "id": "family",
+          "label": "家里的事",
+          "record": "家里的事",
+          "clause": "家里的事"
+        },
+        {
+          "id": "health",
+          "label": "身体",
+          "record": "身体",
+          "clause": "身体健康"
+        },
+        {
+          "id": "money",
+          "label": "钱",
+          "record": "钱",
+          "clause": "经济"
+        },
+        {
+          "id": "people",
+          "label": "跟人打交道",
+          "record": "跟人打交道",
+          "clause": "与人交往"
+        },
+        {
+          "id": "nothing",
+          "label": "说不上具体是什么",
+          "record": "说不上具体是什么",
+          "clause": "自述担心无具体对象"
+        }
+      ]
+    },
+    "somatic_symptoms": {
+      "multi": true,
+      "min_items": 1,
+      "max_items": 5,
+      "source": "躯体症状（教材现病史伴随症状；本作只列常见主诉，不列体征名）",
+      "values": [
+        {
+          "id": "heart",
+          "label": "心慌",
+          "record": "心慌",
+          "clause": "心慌"
+        },
+        {
+          "id": "chest",
+          "label": "胸口发闷",
+          "record": "胸口发闷",
+          "clause": "胸口发闷"
+        },
+        {
+          "id": "breath",
+          "label": "喘不上气",
+          "record": "喘不上气",
+          "clause": "喘不上气"
+        },
+        {
+          "id": "sweat",
+          "label": "出汗",
+          "record": "出汗",
+          "clause": "出汗"
+        },
+        {
+          "id": "tremor",
+          "label": "手抖",
+          "record": "手抖",
+          "clause": "手抖"
+        },
+        {
+          "id": "dizzy",
+          "label": "头晕",
+          "record": "头晕",
+          "clause": "头晕"
+        },
+        {
+          "id": "stomach",
+          "label": "胃里不舒服",
+          "record": "胃里不舒服",
+          "clause": "胃部不适"
+        },
+        {
+          "id": "none",
+          "label": "都没有",
+          "record": "都没有",
+          "clause": "无上述躯体不适"
+        }
+      ]
+    },
+    "avoidance": {
+      "multi": false,
+      "source": "回避（教材现病史）",
+      "values": [
+        {
+          "id": "no",
+          "label": "没有",
+          "record": "没有",
+          "clause": "无回避行为"
+        },
+        {
+          "id": "some",
+          "label": "有些场合会躲开",
+          "record": "有些场合会躲开",
+          "clause": "对某些场合主动回避"
+        },
+        {
+          "id": "much",
+          "label": "很多场合都躲",
+          "record": "很多场合都躲",
+          "clause": "对多数社交场合回避"
+        }
+      ]
+    },
+    "panic_attack": {
+      "multi": false,
+      "source": "惊恐发作（教材现病史；本作不问「濒死感」这类术语的原话，用患者口吻）",
+      "values": [
+        {
+          "id": "no",
+          "label": "没有过",
+          "record": "没有过",
+          "clause": "无突发强烈恐惧发作"
+        },
+        {
+          "id": "once",
+          "label": "有过一两次",
+          "record": "有过一两次",
+          "clause": "曾有一两次突发强烈恐惧"
+        },
+        {
+          "id": "repeat",
+          "label": "反复发作",
+          "record": "反复发作",
+          "clause": "反复出现突发强烈恐惧"
+        },
+        {
+          "id": "repeat_short",
+          "label": "反复发作，每次十几分钟就过去",
+          "record": "反复发作，每次十几分钟就过去",
+          "clause": "反复出现突发强烈恐惧，每次持续十余分钟"
+        }
+      ]
+    },
+    "obsession": {
+      "multi": false,
+      "source": "强迫观念（教材现病史；参照第 41 问）",
+      "values": [
+        {
+          "id": "no",
+          "label": "没有。",
+          "record": "没有",
+          "clause": "无反复出现的念头"
+        },
+        {
+          "id": "thought",
+          "label": "有些念头甩不掉。越不想让它来，它越来。",
+          "record": "有些念头甩不掉",
+          "voice": "compulsive",
+          "clause": "有反复出现且难以摆脱的念头"
+        },
+        {
+          "id": "urge",
+          "label": "有些冲动甩不掉。我不说是什么——说出来好像会更真。",
+          "record": "有些冲动甩不掉",
+          "voice": "compulsive",
+          "clause": "有反复出现且难以摆脱的冲动"
+        },
+        {
+          "id": "image",
+          "label": "有些画面甩不掉。一闭上眼就是那个画面。",
+          "record": "有些画面甩不掉",
+          "voice": "compulsive",
+          "clause": "有反复出现且难以摆脱的画面"
+        }
+      ]
+    },
+    "compulsion": {
+      "multi": false,
+      "source": "强迫行为（参照第 42 问；本作只给行为大类，不给具体仪式清单）",
+      "values": [
+        {
+          "id": "no",
+          "label": "没有。",
+          "record": "没有",
+          "clause": "无反复动作"
+        },
+        {
+          "id": "wash",
+          "label": "反复洗手。……手背都洗裂了。我知道没必要，可停不下来。",
+          "record": "反复洗手或清洁",
+          "voice": "compulsive",
+          "clause": "反复清洗，明知不必而无法停止"
+        },
+        {
+          "id": "check",
+          "label": "反复检查。门锁、煤气、插头，出门要回去看三遍。",
+          "record": "反复检查",
+          "voice": "compulsive",
+          "clause": "反复检查，明知不必而无法停止"
+        },
+        {
+          "id": "count",
+          "label": "反复数、反复摆。桌上的东西必须摆齐，差一点点我就坐不住。",
+          "record": "反复数、反复摆",
+          "voice": "compulsive",
+          "clause": "反复计数或摆放，明知不必而无法停止"
+        }
+      ]
+    },
+    "trauma": {
+      "multi": false,
+      "source": "创伤经历（参照第 43 问；教材「与生活事件、心理冲突之间的关系」）",
+      "values": [
+        {
+          "id": "no",
+          "label": "没有",
+          "record": "没有",
+          "clause": "无重大创伤性经历"
+        },
+        {
+          "id": "past",
+          "label": "有过，已经过去很久",
+          "record": "有过，已经过去很久",
+          "clause": "病前有重大生活事件，现已时隔较久"
+        },
+        {
+          "id": "recent",
+          "label": "有过，时间不算久",
+          "record": "有过，时间不算久",
+          "clause": "病前有重大生活事件，距今不久"
+        },
+        {
+          "id": "now",
+          "label": "现在还在里面",
+          "record": "现在还在里面",
+          "clause": "病前有重大生活事件，至今仍受影响"
+        }
+      ]
+    },
+    "dissociation": {
+      "multi": false,
+      "source": "解离（参照第 44 问；教材精神检查）",
+      "values": [
+        {
+          "id": "no",
+          "label": "没有",
+          "record": "没有",
+          "clause": "无失神或环境不真实感"
+        },
+        {
+          "id": "sometimes",
+          "label": "偶尔有过",
+          "record": "偶尔有过",
+          "clause": "偶有短暂失神或环境不真实感"
+        },
+        {
+          "id": "often",
+          "label": "经常有",
+          "record": "经常有",
+          "clause": "常有短暂失神或环境不真实感"
+        }
+      ]
+    },
+    "depersonalization": {
+      "multi": false,
+      "source": "解离（参照第 45 问）",
+      "values": [
+        {
+          "id": "no",
+          "label": "没有",
+          "record": "没有",
+          "clause": "无自身与身体分离的体验"
+        },
+        {
+          "id": "sometimes",
+          "label": "偶尔有过",
+          "record": "偶尔有过",
+          "clause": "偶有自身与身体分离的体验"
+        },
+        {
+          "id": "often",
+          "label": "经常有",
+          "record": "经常有",
+          "clause": "常有自身与身体分离的体验"
+        }
+      ]
+    },
+    "hallucination_auditory": {
+      "multi": false,
+      "source": "幻听（教材精神检查「感知」；参照第 46 问。不问「声音说什么」的自由文本，改问有没有被命令）",
+      "values": [
+        {
+          "id": "no",
+          "label": "没有。",
+          "record": "没有",
+          "clause": "未诉及听见他人听不到的声音"
+        },
+        {
+          "id": "name_only",
+          "label": "有人叫我的名字。……半夜，很清楚，是熟人的声音。",
+          "record": "有人叫我的名字",
+          "voice": "paranoid",
+          "clause": "诉及夜间听见有人呼唤其姓名"
+        },
+        {
+          "id": "talk",
+          "label": "有说话的声音。他们在议论我，说我做过的事。",
+          "record": "有说话的声音",
+          "voice": "paranoid",
+          "clause": "诉及听见议论自己的言语声"
+        },
+        {
+          "id": "command",
+          "label": "有声音让我做事情。……我不做，它们就一直说。",
+          "record": "有声音命令我做事情",
+          "voice": "paranoid",
+          "clause": "诉及听见令其做事的言语声"
+        }
+      ]
+    },
+    "hallucination_other": {
+      "multi": false,
+      "source": "其他幻觉（教材精神检查「感知」；参照第 47 问）",
+      "values": [
+        {
+          "id": "no",
+          "label": "没有",
+          "record": "没有",
+          "clause": "未诉及视、嗅、触方面的异常感知"
+        },
+        {
+          "id": "see",
+          "label": "看到过别人没看到的",
+          "record": "看到过别人没看到的",
+          "clause": "诉及看见他人看不到的事物"
+        },
+        {
+          "id": "smell",
+          "label": "闻到过别人没闻到的",
+          "record": "闻到过别人没闻到的",
+          "clause": "诉及闻到他人闻不到的气味"
+        },
+        {
+          "id": "feel",
+          "label": "身上有别人感觉不到的东西",
+          "record": "身上有别人感觉不到的东西",
+          "clause": "诉及身体有他人感觉不到的异常"
+        }
+      ]
+    },
+    "persecutory": {
+      "multi": false,
+      "source": "被害 / 关系观念（教材精神检查「言谈内容」；参照第 48 问）",
+      "values": [
+        {
+          "id": "no",
+          "label": "没有。",
+          "record": "没有",
+          "clause": "未诉及被针对或被议论"
+        },
+        {
+          "id": "sometimes",
+          "label": "有时候觉得。走在路上后面的人笑一声，我就得回头看一眼。",
+          "record": "有时候觉得",
+          "voice": "paranoid",
+          "clause": "有时觉得被人注意或议论"
+        },
+        {
+          "id": "always",
+          "label": "一直觉得被人盯着。你们这屋里的摄像头，我也数过。",
+          "record": "一直觉得被人盯着",
+          "voice": "paranoid",
+          "clause": "持续觉得被人盯着或针对"
+        }
+      ]
+    },
+    "reference_ideas": {
+      "multi": false,
+      "source": "关系观念（参照第 49 问）",
+      "values": [
+        {
+          "id": "no",
+          "label": "没有",
+          "record": "没有",
+          "clause": "无外界信息针对自己的体验"
+        },
+        {
+          "id": "sometimes",
+          "label": "有时候觉得",
+          "record": "有时候觉得",
+          "clause": "有时觉得周围信息与自己有关"
+        },
+        {
+          "id": "always",
+          "label": "经常觉得",
+          "record": "经常觉得",
+          "clause": "经常觉得周围信息与自己有关"
+        }
+      ]
+    },
+    "grandiose": {
+      "multi": false,
+      "source": "夸大观念（参照第 50 问）",
+      "values": [
+        {
+          "id": "no",
+          "label": "没有",
+          "record": "没有",
+          "clause": "无自我评价过高"
+        },
+        {
+          "id": "sometimes",
+          "label": "有时候觉得",
+          "record": "有时候觉得",
+          "clause": "有时觉得自己能力特殊"
+        },
+        {
+          "id": "always",
+          "label": "一直这么觉得",
+          "record": "一直这么觉得",
+          "clause": "持续觉得自己身份或能力特殊"
+        }
+      ]
+    },
+    "thought_control": {
+      "multi": false,
+      "source": "思维被控制 / 被拿走 / 被广播（参照第 51 问；ICD-10 F20 特征性症状，入院检索 §4.5）",
+      "values": [
+        {
+          "id": "no",
+          "label": "没有",
+          "record": "没有",
+          "clause": "无想法被夺、被知或被控制的体验"
+        },
+        {
+          "id": "taken",
+          "label": "觉得想法被拿走过",
+          "record": "觉得想法被拿走过",
+          "clause": "觉得自己的想法曾被取走"
+        },
+        {
+          "id": "broadcast",
+          "label": "觉得想法被别人知道了",
+          "record": "觉得想法被别人知道了",
+          "clause": "觉得自己的想法已被他人知晓"
+        },
+        {
+          "id": "controlled",
+          "label": "觉得有外力在控制我",
+          "record": "觉得有外力在控制我",
+          "clause": "觉得有外力在支配自己"
+        }
+      ]
+    },
+    "not_self": {
+      "multi": false,
+      "source": "自我与现实的疏离（参照第 52 问）",
+      "values": [
+        {
+          "id": "no",
+          "label": "没有",
+          "record": "没有",
+          "clause": "无自身或环境不真实的体验"
+        },
+        {
+          "id": "sometimes",
+          "label": "有时候觉得",
+          "record": "有时候觉得",
+          "clause": "偶觉自身或周围环境不真实"
+        },
+        {
+          "id": "often",
+          "label": "经常觉得",
+          "record": "经常觉得",
+          "clause": "经常觉得自身或周围环境不真实"
+        }
+      ]
+    },
+    "insight": {
+      "multi": false,
+      "source": "自知力（教材第三章第四节一（六）；参照第 53 问）",
+      "values": [
+        {
+          "id": "real",
+          "label": "都是真的。你们不信，是因为你们没听见。",
+          "record": "觉得都是真的",
+          "voice": "paranoid",
+          "clause": "均认为属实，不接受他人看法"
+        },
+        {
+          "id": "unsure",
+          "label": "说不准。……半夜觉得是真的，白天又不确定。",
+          "record": "说不准",
+          "clause": "是否属实难以判断"
+        },
+        {
+          "id": "illness",
+          "label": "可能是我出了状况。……我知道自己不对劲。",
+          "record": "觉得是自己出了状况",
+          "voice": "depressive",
+          "clause": "承认自身状态异常"
+        },
+        {
+          "id": "others_right",
+          "label": "别人说的可能有道理。我听你们的。",
+          "record": "别人说的可能有道理",
+          "clause": "认为他人意见有一定道理"
+        }
+      ]
+    },
+    "manic_mood": {
+      "multi": false,
+      "source": "躁狂症状（教材现病史；参照第 54 问）",
+      "values": [
+        {
+          "id": "no",
+          "label": "没有。",
+          "record": "没有",
+          "clause": "无睡眠需求减少的时期"
+        },
+        {
+          "id": "days",
+          "label": "有过几天。睡三个小时起来还能干活，一点都不困。",
+          "record": "有过几天",
+          "voice": "manic",
+          "clause": "有数日睡眠需求减少而精力充沛"
+        },
+        {
+          "id": "week",
+          "label": "持续了一星期左右。那一星期我做了三个月的活。",
+          "record": "持续了一星期左右",
+          "voice": "manic",
+          "clause": "有一周左右睡眠需求减少而精力充沛"
+        },
+        {
+          "id": "long",
+          "label": "持续了很久——差不多一个月。那阵子我觉得以前的自己都是睡过去的。",
+          "record": "持续了很久",
+          "voice": "manic",
+          "clause": "有较长一段时间睡眠需求减少而精力充沛"
+        }
+      ]
+    },
+    "talkative": {
+      "multi": false,
+      "source": "躁狂症状（参照第 55 问）",
+      "values": [
+        {
+          "id": "no",
+          "label": "没有",
+          "record": "没有",
+          "clause": "言语未见增多"
+        },
+        {
+          "id": "some",
+          "label": "话是多了些",
+          "record": "话是多了些",
+          "clause": "言语较以往增多"
+        },
+        {
+          "id": "much",
+          "label": "话多到自己都停不下来，想法一个接一个",
+          "record": "话多到自己都停不下来，想法一个接一个",
+          "clause": "言语明显增多，念头接连不断"
+        }
+      ]
+    },
+    "risky_behavior": {
+      "multi": false,
+      "source": "躁狂症状（参照第 56 问；本作给行为大类，不给细节）",
+      "values": [
+        {
+          "id": "no",
+          "label": "没有",
+          "record": "没有",
+          "clause": "无冲动或冒险行为"
+        },
+        {
+          "id": "money",
+          "label": "花钱比以前多得多",
+          "record": "花钱比以前多得多",
+          "clause": "花钱较以往明显增多"
+        },
+        {
+          "id": "risk",
+          "label": "做过一些冒险的事",
+          "record": "做过一些冒险的事",
+          "clause": "有冒险举动"
+        },
+        {
+          "id": "several",
+          "label": "上面几种都有",
+          "record": "上面几种都有",
+          "clause": "有花钱增多与冒险举动"
+        }
+      ]
+    },
+    "manic_duration": {
+      "multi": false,
+      "source": "躁狂症状的病程（教材；入院检索 §5.5 病程轴）",
+      "values": [
+        {
+          "id": "days",
+          "label": "几天",
+          "record": "几天",
+          "clause": "该状态持续数日"
+        },
+        {
+          "id": "week",
+          "label": "一两星期",
+          "record": "一两星期",
+          "clause": "该状态持续一两周"
+        },
+        {
+          "id": "month",
+          "label": "一个月上下",
+          "record": "一个月上下",
+          "clause": "该状态持续一个月上下"
+        },
+        {
+          "id": "longer",
+          "label": "更久",
+          "record": "更久",
+          "clause": "该状态持续更久"
+        }
+      ]
+    },
+    "elevated_episode": {
+      "multi": false,
+      "source": "躁狂症状（参照第 18 问）",
+      "values": [
+        {
+          "id": "no",
+          "label": "没有。",
+          "record": "没有",
+          "clause": "无持续数日的情绪特别高涨"
+        },
+        {
+          "id": "once",
+          "label": "有过一次。前年冬天，连着四五天没怎么睡，把家里重新刷了一遍。",
+          "record": "有过一次",
+          "voice": "manic",
+          "clause": "曾有一段时间情绪特别高涨、话多"
+        },
+        {
+          "id": "several",
+          "label": "有过好几次——一年里总有两三回，那阵子我谁都不需要。",
+          "record": "有过好几次",
+          "voice": "manic",
+          "clause": "多次出现情绪特别高涨、话多的时期"
+        }
+      ]
+    },
+    "irritable": {
+      "multi": false,
+      "source": "易激惹（参照第 19 问）",
+      "values": [
+        {
+          "id": "no",
+          "label": "不会。",
+          "record": "不会",
+          "clause": "无明显易激惹"
+        },
+        {
+          "id": "sometimes",
+          "label": "比以前容易发火。上礼拜为一件小事把杯子摔了。",
+          "record": "比以前容易发火",
+          "voice": "manic",
+          "clause": "较以往容易发火"
+        },
+        {
+          "id": "often",
+          "label": "经常跟人吵起来。……是他们太慢了，你懂吗？",
+          "record": "经常跟人吵起来",
+          "voice": "manic",
+          "clause": "经常与人争执"
+        }
+      ]
+    },
+    "tobacco_alcohol": {
+      "multi": true,
+      "min_items": 1,
+      "max_items": 3,
+      "source": "物质使用（教材现病史「既往与之有关的诊断、治疗」与个人史吸烟饮酒；国家规范第十八条（五）1「烟、酒」）",
+      "values": [
+        {
+          "id": "none",
+          "label": "都不沾",
+          "record": "都不沾",
+          "clause": "烟酒均不沾"
+        },
+        {
+          "id": "tobacco",
+          "label": "抽烟",
+          "record": "抽烟",
+          "clause": "有吸烟习惯"
+        },
+        {
+          "id": "alcohol",
+          "label": "喝酒",
+          "record": "喝酒",
+          "clause": "有饮酒习惯"
+        },
+        {
+          "id": "alcohol_daily",
+          "label": "几乎天天喝",
+          "record": "几乎天天喝",
+          "clause": "几乎每日饮酒"
+        },
+        {
+          "id": "coffee",
+          "label": "咖啡或提神的饮料",
+          "record": "咖啡或提神的饮料",
+          "clause": "常饮咖啡或提神饮料"
+        }
+      ]
+    },
+    "caffeine": {
+      "multi": false,
+      "source": "物质使用（参照第 59 问）",
+      "values": [
+        {
+          "id": "little",
+          "label": "很少",
+          "record": "很少",
+          "clause": "很少饮用咖啡或提神饮料"
+        },
+        {
+          "id": "some",
+          "label": "一天一两杯",
+          "record": "一天一两杯",
+          "clause": "常饮咖啡或提神饮料"
+        },
+        {
+          "id": "much",
+          "label": "一天好几杯",
+          "record": "一天好几杯",
+          "clause": "每日多次饮用咖啡或提神饮料"
+        },
+        {
+          "id": "none",
+          "label": "不喝",
+          "record": "不喝",
+          "clause": "不饮咖啡或提神饮料"
+        }
+      ]
+    },
+    "illicit_drug": {
+      "multi": false,
+      "source": "物质使用（参照第 60 问；本作只问有没有、给不给闭集，不列任何具体物质名）",
+      "values": [
+        {
+          "id": "no",
+          "label": "没有",
+          "record": "没有",
+          "clause": "未使用过其他物质"
+        },
+        {
+          "id": "past",
+          "label": "以前有过，现在没有",
+          "record": "以前有过，现在没有",
+          "clause": "既往使用过其他物质，现已停用"
+        },
+        {
+          "id": "now",
+          "label": "现在还有",
+          "record": "现在还有",
+          "clause": "目前仍在使用其他物质"
+        },
+        {
+          "id": "decline",
+          "label": "不愿说",
+          "record": "不愿说"
+        }
+      ]
+    },
+    "withdrawal": {
+      "multi": false,
+      "source": "停药 / 戒断（参照第 61 问）",
+      "values": [
+        {
+          "id": "no",
+          "label": "没有",
+          "record": "没有",
+          "clause": "无停药经历"
+        },
+        {
+          "id": "stopped",
+          "label": "停过药",
+          "record": "停过药",
+          "clause": "曾自行停药"
+        },
+        {
+          "id": "stopped_bad",
+          "label": "停过药，停了以后更难受",
+          "record": "停过药，停了以后更难受",
+          "clause": "曾自行停药，停药后症状加重"
+        },
+        {
+          "id": "not_applicable",
+          "label": "本来就没在吃药",
+          "record": "本来就没在吃药",
+          "clause": "此前未用药"
+        }
+      ]
+    },
+    "physical_disease": {
+      "multi": true,
+      "min_items": 1,
+      "max_items": 4,
+      "source": "躯体疾病（国家规范第十八条（四）既往史「疾病史」；参照第 62 问）",
+      "values": [
+        {
+          "id": "none",
+          "label": "没有",
+          "record": "没有",
+          "clause": "无其他躯体疾病史"
+        },
+        {
+          "id": "thyroid",
+          "label": "甲状腺",
+          "record": "甲状腺",
+          "clause": "有甲状腺疾病史"
+        },
+        {
+          "id": "seizure",
+          "label": "抽过风",
+          "record": "抽过风",
+          "clause": "有抽搐发作史"
+        },
+        {
+          "id": "head_injury",
+          "label": "头部受过伤",
+          "record": "头部受过伤",
+          "clause": "有头部外伤史"
+        },
+        {
+          "id": "diabetes",
+          "label": "血糖",
+          "record": "血糖",
+          "clause": "有血糖异常史"
+        },
+        {
+          "id": "heart",
+          "label": "心脏",
+          "record": "心脏",
+          "clause": "有心脏疾病史"
+        },
+        {
+          "id": "other",
+          "label": "还有别的",
+          "record": "还有别的",
+          "clause": "另有其他躯体疾病史"
+        }
+      ]
+    },
+    "current_medication": {
+      "multi": false,
+      "source": "用药（国家规范第十八条（三）4 药名需加引号以示区别；参照第 63 问。本作不问剂量）",
+      "values": [
+        {
+          "id": "none",
+          "label": "什么药都没吃",
+          "record": "什么药都没吃",
+          "clause": "未服用任何药物"
+        },
+        {
+          "id": "sleep_med",
+          "label": "在吃帮助睡眠的药",
+          "record": "在吃帮助睡眠的药",
+          "clause": "在服用助眠药物"
+        },
+        {
+          "id": "psych_med",
+          "label": "在吃精神科的药",
+          "record": "在吃精神科的药",
+          "clause": "在服用精神科药物"
+        },
+        {
+          "id": "body_med",
+          "label": "在吃治身体病的药",
+          "record": "在吃治身体病的药",
+          "clause": "在服用治疗躯体疾病的药物"
+        },
+        {
+          "id": "herbal",
+          "label": "在吃中药或保健品",
+          "record": "在吃中药或保健品",
+          "clause": "在服用中药或保健品"
+        }
+      ]
+    },
+    "allergy": {
+      "multi": false,
+      "source": "药物过敏史（国家规范第二章第十二条首页法定项；参照第 64 问）",
+      "values": [
+        {
+          "id": "none",
+          "label": "没有",
+          "record": "没有",
+          "clause": "无已知药物过敏"
+        },
+        {
+          "id": "one",
+          "label": "有一种",
+          "record": "有一种",
+          "clause": "对一种药物过敏"
+        },
+        {
+          "id": "several",
+          "label": "有好几种",
+          "record": "有好几种",
+          "clause": "对多种药物过敏"
+        },
+        {
+          "id": "unsure",
+          "label": "记不清",
+          "record": "记不清",
+          "clause": "药物过敏史记不清"
+        }
+      ]
+    },
+    "menstrual": {
+      "multi": false,
+      "source": "月经 / 生育（国家规范第十八条（五）2；参照第 65 问。本作不给任何日期口径）",
+      "values": [
+        {
+          "id": "regular",
+          "label": "正常",
+          "record": "正常",
+          "clause": "月经规律"
+        },
+        {
+          "id": "irregular",
+          "label": "不太规律",
+          "record": "不太规律",
+          "clause": "月经不规律"
+        },
+        {
+          "id": "stopped",
+          "label": "已经停了",
+          "record": "已经停了",
+          "clause": "月经已停止"
+        },
+        {
+          "id": "pregnant",
+          "label": "有了身孕",
+          "record": "有了身孕",
+          "clause": "目前处于妊娠期"
+        },
+        {
+          "id": "not_applicable",
+          "label": "这一项不适用",
+          "record": "这一项不适用",
+          "clause": "该项不适用"
+        }
+      ]
+    },
+    "recent_checkup": {
+      "multi": false,
+      "source": "辅助检查（国家规范第二章第十三条「辅助检查结果」；参照第 66 问）",
+      "values": [
+        {
+          "id": "none",
+          "label": "没做过",
+          "record": "没做过",
+          "clause": "近期未做过体检或化验"
+        },
+        {
+          "id": "normal",
+          "label": "做过，说是正常",
+          "record": "做过，说是正常",
+          "clause": "近期体检或化验结果未见异常"
+        },
+        {
+          "id": "abnormal",
+          "label": "做过，有几项不正常",
+          "record": "做过，有几项不正常",
+          "clause": "近期体检或化验有项目异常"
+        },
+        {
+          "id": "unsure",
+          "label": "做过，结果记不清",
+          "record": "做过，结果记不清",
+          "clause": "近期做过检查，结果记不清"
+        }
+      ]
+    },
+    "self_harm_thought": {
+      "multi": false,
+      "source": "★风险评估（教材第三章第四节二（三）风险评估：自伤危险；机构级《门诊诊疗规范及诊查指导意见》首诊必查「自杀自伤风险、攻击冲动风险评估」，门诊检索 §4.4）",
+      "values": [
+        {
+          "id": "no",
+          "label": "没有",
+          "record": "没有",
+          "clause": "无结束生命或伤害自己的想法"
+        },
+        {
+          "id": "passing",
+          "label": "偶尔闪过这样的念头",
+          "record": "偶尔闪过这样的念头",
+          "clause": "曾一闪而过地出现结束生命的念头"
+        },
+        {
+          "id": "often",
+          "label": "经常想",
+          "record": "经常想",
+          "clause": "结束生命的念头反复出现"
+        },
+        {
+          "id": "now",
+          "label": "现在就想",
+          "record": "现在就想",
+          "clause": "目前仍有结束生命的念头"
+        }
+      ]
+    },
+    "self_harm_freq": {
+      "multi": false,
+      "source": "风险追问（同上；参照第 68 问）",
+      "values": [
+        {
+          "id": "rare",
+          "label": "只有过一两次",
+          "record": "只有过一两次",
+          "clause": "该念头仅出现过一两次"
+        },
+        {
+          "id": "month",
+          "label": "一个月里会有几次",
+          "record": "一个月里会有几次",
+          "clause": "该念头每月出现数次"
+        },
+        {
+          "id": "week",
+          "label": "一个星期里会有几次",
+          "record": "一个星期里会有几次",
+          "clause": "该念头每周出现数次"
+        },
+        {
+          "id": "daily",
+          "label": "几乎每天",
+          "record": "几乎每天",
+          "clause": "该念头几乎每日出现"
+        }
+      ]
+    },
+    "self_harm_attempt": {
+      "multi": false,
+      "source": "风险追问（同上；参照第 71 问。本作不问方式、不问次数细节）",
+      "values": [
+        {
+          "id": "no",
+          "label": "没有过",
+          "record": "没有过",
+          "clause": "无既往自我伤害行为"
+        },
+        {
+          "id": "once",
+          "label": "有过一次，很久以前",
+          "record": "有过一次，很久以前",
+          "clause": "既往有过一次自我伤害行为，距今已久"
+        },
+        {
+          "id": "recent",
+          "label": "有过，时间不算久",
+          "record": "有过，时间不算久",
+          "clause": "既往有过自我伤害行为，距今不久"
+        },
+        {
+          "id": "several",
+          "label": "有过不止一次",
+          "record": "有过不止一次",
+          "clause": "既往有过不止一次自我伤害行为"
+        }
+      ]
+    },
+    "protective": {
+      "multi": false,
+      "source": "保护因素（教材风险评估第③项「可能会阻止患者出现危险行为的因素」；参照第 72 问）",
+      "values": [
+        {
+          "id": "family",
+          "label": "想到家里人",
+          "record": "想到家里人",
+          "clause": "因顾虑家人而未付诸行动"
+        },
+        {
+          "id": "child",
+          "label": "想到孩子",
+          "record": "想到孩子",
+          "clause": "因顾虑孩子而未付诸行动"
+        },
+        {
+          "id": "belief",
+          "label": "自己心里的一道线",
+          "record": "自己心里的一道线",
+          "clause": "因自身的原则而未付诸行动"
+        },
+        {
+          "id": "future",
+          "label": "还有想做的事",
+          "record": "还有想做的事",
+          "clause": "因尚有想做的事而未付诸行动"
+        },
+        {
+          "id": "nothing",
+          "label": "说不上来",
+          "record": "说不上来",
+          "clause": "自述没有明确的理由"
+        }
+      ]
+    },
+    "harm_others": {
+      "multi": false,
+      "source": "★风险评估（教材第三章第四节二（三）：伤人行为；机构级首诊必查「攻击冲动风险评估」）",
+      "values": [
+        {
+          "id": "no",
+          "label": "没有",
+          "record": "没有",
+          "clause": "无伤害他人的念头"
+        },
+        {
+          "id": "passing",
+          "label": "偶尔闪过",
+          "record": "偶尔闪过",
+          "clause": "曾一闪而过地出现伤害他人的念头"
+        },
+        {
+          "id": "often",
+          "label": "经常想",
+          "record": "经常想",
+          "clause": "伤害他人的念头反复出现"
+        },
+        {
+          "id": "now",
+          "label": "现在就想",
+          "record": "现在就想",
+          "clause": "目前仍有伤害他人的念头"
+        }
+      ]
+    },
+    "abuse": {
+      "multi": false,
+      "source": "安全：被打、被欺负、被威胁合在一问（参照第 74、75 问；教材风险评估「其他来源的信息」）",
+      "values": [
+        {
+          "id": "no",
+          "label": "没有",
+          "record": "没有",
+          "clause": "无被他人侵害的经历"
+        },
+        {
+          "id": "past",
+          "label": "有过，早就结束了",
+          "record": "有过，早就结束了",
+          "clause": "既往曾被人侵害，现已结束"
+        },
+        {
+          "id": "recent",
+          "label": "有过，时间不算久",
+          "record": "有过，时间不算久",
+          "clause": "既往曾被人侵害，距今不久"
+        },
+        {
+          "id": "threat",
+          "label": "有人威胁过我",
+          "record": "有人威胁过我",
+          "clause": "曾受到他人威胁"
+        },
+        {
+          "id": "unsafe_now",
+          "label": "现在还不安全",
+          "record": "现在还不安全",
+          "clause": "自述目前仍不安全"
+        }
+      ]
+    },
+    "psych_history": {
+      "multi": false,
+      "source": "既往精神科史与治疗经过合在一问（国家规范第十八条（四）既往史；参照第 78、79 问）",
+      "values": [
+        {
+          "id": "never",
+          "label": "没看过",
+          "record": "没看过",
+          "clause": "此前未就诊过"
+        },
+        {
+          "id": "saw",
+          "label": "看过，只是聊了聊",
+          "record": "看过，只是聊了聊",
+          "clause": "此前曾就诊，仅接受会谈"
+        },
+        {
+          "id": "diagnosed",
+          "label": "看过，也吃过药",
+          "record": "看过，也吃过药",
+          "clause": "此前曾就诊并服药"
+        },
+        {
+          "id": "inpatient",
+          "label": "住过院",
+          "record": "住过院",
+          "clause": "此前曾住院"
+        },
+        {
+          "id": "therapy",
+          "label": "做过心理治疗",
+          "record": "做过心理治疗",
+          "clause": "此前曾接受心理治疗"
+        }
+      ]
+    },
+    "psych_inpatient": {
+      "multi": false,
+      "source": "既往治疗经过：住院与心理治疗合在一问（参照第 79、80 问；本作不出现任何治疗方式的细节）",
+      "values": [
+        {
+          "id": "no",
+          "label": "都没做过",
+          "record": "都没做过"
+        },
+        {
+          "id": "once",
+          "label": "住过一次",
+          "record": "住过一次"
+        },
+        {
+          "id": "several",
+          "label": "住过不止一次",
+          "record": "住过不止一次"
+        },
+        {
+          "id": "talk_help",
+          "label": "做过心理治疗，有帮助",
+          "record": "做过心理治疗，有帮助"
+        },
+        {
+          "id": "talk_no_help",
+          "label": "做过心理治疗，没什么用",
+          "record": "做过心理治疗，没什么用"
+        },
+        {
+          "id": "memory",
+          "label": "记不太清",
+          "record": "记不太清"
+        }
+      ]
+    },
+    "psych_med_history": {
+      "multi": false,
+      "source": "既往用药与依从性合在一问（参照第 81、82 问；本作不问剂量与副作用细节）",
+      "values": [
+        {
+          "id": "none",
+          "label": "没吃过",
+          "record": "没吃过",
+          "clause": "未服用过精神科药物"
+        },
+        {
+          "id": "now",
+          "label": "现在还在吃",
+          "record": "现在还在吃",
+          "clause": "目前仍在服用精神科药物"
+        },
+        {
+          "id": "stopped",
+          "label": "吃过，后来停了",
+          "record": "吃过，后来停了",
+          "clause": "曾服用精神科药物，后停用"
+        },
+        {
+          "id": "side_effect",
+          "label": "吃过，因为不舒服停了",
+          "record": "吃过，因为不舒服停了",
+          "clause": "曾服用精神科药物，因不适停用"
+        },
+        {
+          "id": "felt_better",
+          "label": "吃过，觉得好了就停了",
+          "record": "吃过，觉得好了就停了",
+          "clause": "曾服用精神科药物，自觉好转后停用"
+        },
+        {
+          "id": "forget",
+          "label": "吃过，常常忘了吃",
+          "record": "吃过，常常忘了吃",
+          "clause": "曾服用精神科药物，常漏服"
+        }
+      ]
+    },
+    "family_history": {
+      "multi": false,
+      "source": "★家族史（国家规范第十八条（五）3「父母、兄弟、姐妹健康状况，有无与患者类似疾病」；精神科展开见入院检索 §7.2。本作不使用「两系三代」这一未经证实的措辞，见入院检索 §7.3/§10.1）",
+      "values": [
+        {
+          "id": "no",
+          "label": "没有",
+          "record": "没有",
+          "clause": "无类似情况或精神方面疾病"
+        },
+        {
+          "id": "similar",
+          "label": "有跟我类似的",
+          "record": "有跟我类似的",
+          "clause": "有类似情况的亲属"
+        },
+        {
+          "id": "other",
+          "label": "有别的精神方面的",
+          "record": "有别的精神方面的",
+          "clause": "有其他精神方面疾病的亲属"
+        },
+        {
+          "id": "suicide",
+          "label": "有自杀去世的",
+          "record": "有自杀去世的",
+          "clause": "有自杀去世的亲属"
+        },
+        {
+          "id": "drink",
+          "label": "有长期喝酒的",
+          "record": "有长期喝酒的",
+          "clause": "有长期饮酒的亲属"
+        },
+        {
+          "id": "unsure",
+          "label": "不清楚",
+          "record": "不清楚",
+          "clause": "家族情况不清楚"
+        }
+      ]
+    },
+    "childhood": {
+      "multi": false,
+      "source": "个人史（国家规范第十八条（五）1；教材把个人史扩为「从母亲妊娠到发病前的整个生活经历」，入院检索 §六）",
+      "values": [
+        {
+          "id": "warm",
+          "label": "家里还算和睦",
+          "record": "家里还算和睦",
+          "clause": "家庭关系尚和睦"
+        },
+        {
+          "id": "strict",
+          "label": "管得很严",
+          "record": "管得很严",
+          "clause": "家庭管教严格"
+        },
+        {
+          "id": "cold",
+          "label": "没人管",
+          "record": "没人管",
+          "clause": "家中少有人照管"
+        },
+        {
+          "id": "often_quarrel",
+          "label": "经常吵",
+          "record": "经常吵",
+          "clause": "家中经常争吵"
+        },
+        {
+          "id": "loss",
+          "label": "小时候有过亲人去世",
+          "record": "小时候有过亲人去世",
+          "clause": "幼年有亲人去世"
+        }
+      ]
+    },
+    "school_work": {
+      "multi": false,
+      "source": "个人史（国家规范第十八条（五）1「职业与工作条件」；参照第 87 问）",
+      "values": [
+        {
+          "id": "smooth",
+          "label": "一直挺顺",
+          "record": "一直挺顺",
+          "clause": "一直较为顺利"
+        },
+        {
+          "id": "change",
+          "label": "换过好几次",
+          "record": "换过好几次",
+          "clause": "多次变动"
+        },
+        {
+          "id": "stop",
+          "label": "中间停过一段时间",
+          "record": "中间停过一段时间",
+          "clause": "曾中断一段时间"
+        },
+        {
+          "id": "now_stop",
+          "label": "现在没有在做",
+          "record": "现在没有在做",
+          "clause": "目前中断"
+        }
+      ]
+    },
+    "marriage": {
+      "multi": false,
+      "source": "婚姻状况与子女合在一问（国家规范第二章第十二条首页法定项「婚姻状况」+ 第十八条（五）2 婚育史「有无子女」；参照第 89、91 问）",
+      "values": [
+        {
+          "id": "alone",
+          "label": "一个人，没孩子",
+          "record": "一个人，没孩子",
+          "clause": "目前独居，无子女"
+        },
+        {
+          "id": "alone_kid",
+          "label": "一个人，带着孩子",
+          "record": "一个人，带着孩子",
+          "clause": "目前独自抚养子女"
+        },
+        {
+          "id": "partner",
+          "label": "有伴，没孩子",
+          "record": "有伴，没孩子",
+          "clause": "目前与伴侣同住，无子女"
+        },
+        {
+          "id": "partner_kid",
+          "label": "有伴，有孩子",
+          "record": "有伴，有孩子",
+          "clause": "目前与伴侣及子女同住"
+        },
+        {
+          "id": "divorced",
+          "label": "离了",
+          "record": "离了",
+          "clause": "目前已离异"
+        },
+        {
+          "id": "widowed",
+          "label": "老伴走了",
+          "record": "老伴走了",
+          "clause": "伴侣已去世"
+        }
+      ]
+    },
+    "personality_support": {
+      "multi": false,
+      "source": "个人史·病前性格与人际（教材「采集病史时如何收集有关人格特点的资料」六问，入院检索 §6.3；参照第 92 问）",
+      "values": [
+        {
+          "id": "quiet",
+          "label": "话不多，朋友少",
+          "record": "话不多，朋友少",
+          "clause": "话不多，朋友较少"
+        },
+        {
+          "id": "outgoing",
+          "label": "朋友还算多",
+          "record": "朋友还算多",
+          "clause": "朋友较多，交往主动"
+        },
+        {
+          "id": "alone",
+          "label": "没什么人能说话",
+          "record": "没什么人能说话",
+          "clause": "少有人可以交谈"
+        },
+        {
+          "id": "family_only",
+          "label": "只有家里人",
+          "record": "只有家里人",
+          "clause": "仅与家人交谈"
+        }
+      ]
+    },
+    "major_loss": {
+      "multi": false,
+      "source": "重大生活事件与社会压力合在一问（教材「与生活事件、心理冲突之间的关系」；参照第 93、94 问）",
+      "values": [
+        {
+          "id": "no",
+          "label": "没有",
+          "record": "没有",
+          "clause": "无明显重大生活事件"
+        },
+        {
+          "id": "death",
+          "label": "有亲人走了",
+          "record": "有亲人走了",
+          "clause": "有亲人去世"
+        },
+        {
+          "id": "split",
+          "label": "有过分开",
+          "record": "有过分开",
+          "clause": "有与亲近的人分开"
+        },
+        {
+          "id": "job",
+          "label": "丢了工作",
+          "record": "丢了工作",
+          "clause": "有失去工作"
+        },
+        {
+          "id": "disaster",
+          "label": "出过大事",
+          "record": "出过大事",
+          "clause": "有重大变故"
+        },
+        {
+          "id": "money",
+          "label": "钱或住的地方有压力",
+          "record": "钱或住的地方有压力",
+          "clause": "在经济或住房方面有压力"
+        },
+        {
+          "id": "legal",
+          "label": "跟人有纠纷",
+          "record": "跟人有纠纷",
+          "clause": "与他人有纠纷"
+        },
+        {
+          "id": "care",
+          "label": "要照顾人",
+          "record": "要照顾人",
+          "clause": "需长期照顾他人"
+        },
+        {
+          "id": "more",
+          "label": "不止一件",
+          "record": "不止一件",
+          "clause": "有不止一件重大生活事件"
+        }
+      ]
+    },
+    "screen_gambling": {
+      "multi": false,
+      "source": "社会心理背景（参照第 95 问）",
+      "values": [
+        {
+          "id": "little",
+          "label": "不多",
+          "record": "不多",
+          "clause": "手机与网络使用不多"
+        },
+        {
+          "id": "much",
+          "label": "挺多的",
+          "record": "挺多的",
+          "clause": "手机与网络使用较多"
+        },
+        {
+          "id": "gamble",
+          "label": "沾过赌",
+          "record": "沾过赌",
+          "clause": "有参与赌博"
+        },
+        {
+          "id": "none",
+          "label": "基本不碰",
+          "record": "基本不碰",
+          "clause": "基本不接触"
+        }
+      ]
+    },
+    "help_wanted": {
+      "multi": true,
+      "min_items": 1,
+      "max_items": 3,
+      "source": "求诊期望（参照第 107 问；规范无此栏，标 ⏳）",
+      "values": [
+        {
+          "id": "sleep",
+          "label": "先让我能睡着。",
+          "record": "先让我能睡着",
+          "voice": "depressive",
+          "clause": "希望先改善睡眠"
+        },
+        {
+          "id": "mood",
+          "label": "先让我心里好受一点。……随便一点都行。",
+          "record": "先让我心里好受一点",
+          "voice": "depressive",
+          "clause": "希望先缓解情绪痛苦"
+        },
+        {
+          "id": "talk",
+          "label": "想找个人说说。……家里人不听。",
+          "record": "想找个人说说",
+          "clause": "希望有人可以交谈"
+        },
+        {
+          "id": "med",
+          "label": "想要点药。",
+          "record": "想要点药",
+          "clause": "希望获得药物治疗"
+        },
+        {
+          "id": "paper",
+          "label": "想要一张证明。单位要的——他们不信我说的话。",
+          "record": "想要一张证明",
+          "voice": "paranoid",
+          "clause": "希望取得病情证明"
+        },
+        {
+          "id": "know",
+          "label": "想知道自己到底怎么了。我查了很多资料，越查越乱。",
+          "record": "想知道自己怎么了",
+          "voice": "compulsive",
+          "clause": "希望明确自身状况"
+        },
+        {
+          "id": "tell_family",
+          "label": "想请你跟家里人说。我自己说不清楚。",
+          "record": "想请你跟家里人说",
+          "clause": "希望由医师告知家人"
+        }
+      ]
+    },
+    "treatment_willing": {
+      "multi": false,
+      "source": "求诊期望（参照第 108 问；规范无此栏，标 ⏳）",
+      "values": [
+        {
+          "id": "med_ok",
+          "label": "愿意吃药",
+          "record": "愿意吃药",
+          "clause": "愿意接受药物治疗"
+        },
+        {
+          "id": "therapy_ok",
+          "label": "愿意聊，不想吃药",
+          "record": "愿意聊，不想吃药",
+          "clause": "愿意接受心理治疗，对药物有顾虑"
+        },
+        {
+          "id": "both",
+          "label": "都愿意",
+          "record": "都愿意",
+          "clause": "药物治疗与心理治疗均愿意接受"
+        },
+        {
+          "id": "unsure",
+          "label": "再想想",
+          "record": "再想想",
+          "clause": "对治疗方式尚在考虑"
+        },
+        {
+          "id": "no",
+          "label": "都不想",
+          "record": "都不想",
+          "clause": "目前不愿接受治疗"
+        }
+      ]
+    },
+    "hospital_worry": {
+      "multi": false,
+      "source": "求诊期望与就诊条件合在一问（参照第 109、110 问；规范无此栏，标 ⏳）",
+      "values": [
+        {
+          "id": "work",
+          "label": "耽误上班上学",
+          "record": "耽误上班上学",
+          "clause": "担心耽误工作或学业"
+        },
+        {
+          "id": "family",
+          "label": "家里人知道",
+          "record": "家里人知道",
+          "clause": "担心家人知情"
+        },
+        {
+          "id": "record",
+          "label": "被记下来",
+          "record": "被记下来",
+          "clause": "担心就诊被记录"
+        },
+        {
+          "id": "money",
+          "label": "钱",
+          "record": "钱",
+          "clause": "担心费用"
+        },
+        {
+          "id": "time",
+          "label": "时间",
+          "record": "时间",
+          "clause": "担心时间安排"
+        },
+        {
+          "id": "distance",
+          "label": "路太远",
+          "record": "路太远",
+          "clause": "担心路途较远"
+        },
+        {
+          "id": "nothing",
+          "label": "没什么担心的",
+          "record": "没什么担心的",
+          "clause": "无明显顾虑"
+        }
+      ]
+    },
+    "tell_family": {
+      "multi": false,
+      "source": "求诊期望与保密（《精神卫生法》第四条：病历资料等应保密，依法履行职责需要公开的除外；参照第 111 问）",
+      "values": [
+        {
+          "id": "yes",
+          "label": "可以告诉他们",
+          "record": "可以告诉他们"
+        },
+        {
+          "id": "part",
+          "label": "可以说一部分",
+          "record": "可以说一部分"
+        },
+        {
+          "id": "no",
+          "label": "先别说",
+          "record": "先别说"
+        },
+        {
+          "id": "nobody",
+          "label": "没有人可以告诉",
+          "record": "没有人可以告诉"
+        }
+      ]
+    },
+    "anything_else": {
+      "multi": false,
+      "source": "结束（参照第 113 问。原问法是开放式，本作改为闭集，没有自由文本）",
+      "values": [
+        {
+          "id": "no",
+          "label": "没有了。",
+          "record": "没有了",
+          "clause": "无补充"
+        },
+        {
+          "id": "something",
+          "label": "有一件事想说。……今天先不说。",
+          "record": "有一件事想说，但今天先不说",
+          "voice": "paranoid",
+          "clause": "另有一件事表示暂不愿说明"
+        },
+        {
+          "id": "question",
+          "label": "有个问题想问你——我刚才说的那些，你都记下来了吗？写的是我原话吗？",
+          "record": "有个问题想问你",
+          "voice": "compulsive",
+          "clause": "另有一个问题要向医师提出"
+        }
+      ]
+    },
+    "observed_record": {
+      "multi": false,
+      "source": "医方检查与观察的记录（教材第三章第四节精神状况检查六项；入院检索 §8.1、§8.4.1）。这些条目由院方在检查后落笔，不由玩家作答。",
+      "values": [
+        {
+          "id": "recorded",
+          "label": "已检查并记录",
+          "record": "已检查并记录"
+        }
+      ]
+    }
+  },
+  "module_labels": {
+    "opening": "开场与主诉",
+    "mood": "情绪",
+    "sleep": "睡眠、食欲、精力、认知",
+    "anxiety": "焦虑、惊恐、强迫、创伤、解离",
+    "psychotic": "精神病性症状",
+    "manic": "躁狂症状",
+    "substance": "物质使用、躯体疾病、用药",
+    "risk": "风险评估",
+    "history": "既往精神科史与家族史",
+    "personal": "个人史与社会心理背景",
+    "mse": "精神状态检查与认知筛查",
+    "closing": "结束与求诊期望"
+  },
+  "reference_coverage": {
+    "note": "owner 参照的 113 问一条都不丢：每一问在本文件里都有对应记录，去向由 ask_mode 标明。",
+    "modes": {
+      "player": "上问诊条（必问或按触发条件追问）",
+      "observed": "医方检查与观察，玩家只读，落进「阳性体征、必要的阴性体征」",
+      "merged": "并入另一问（note 写明并入哪一条）",
+      "withheld": "本作不问（note 写明理由：安全底线 / 无一手出处）",
+      "reserved": "本阶段不问（note 写明理由，保留待接回）"
+    }
+  },
+  "voices": {
+    "what": "四套言语风格（本仓库的行话叫「语言指纹」）：患者怎么说话，就是他的病在哪儿现形。第一版做四套，逐问逐档在 values[].voice 上打标；打了标的那一档，患者说出来的话就带这一套的特征。",
+    "stage7_disease_binding": "🔧 阶段 7 起**语言指纹挂在病上**（owner 第 6、7 条裁定：调子不再是「不等于诊断」——它就是诊断的一半）。每一套的 `disease` 是**主病**（owner 待裁 5 指定的四张），`covers` 是它同时代言的其他病。一局结束时玩家认下的病必须与调子收敛到的病一致（判据 `voice_disease_conflict`）；凡出现在任何事件 `activates` 里的病**必须被恰好一套指纹覆盖**（判据 `candidate_without_voice`）——否则会出现「候选里有它、但这一局没有台词特征」的病。⚠️「四套各对 1 张主病」（owner 待裁 5）与「样板批 ≥6 张病」（owner 待裁 2 的默认 (a)）两条要并存，唯一的出路就是这个「主病 + covers」形状——这不是自造概念，是两条既定约束的必然结果。",
+    "shared_basis": "《精神病学》第 7 版 第三章第四节「精神状况检查」的条目名与二级条目（入院检索 §8.1：「（二）言谈与思维　1. 言谈的速度和量　2. 言谈的形式与逻辑　3. 言谈内容」）；病史措辞纪律见同书 第三章第三节（二）4（入院检索 §5.7：「记录病史应如实描述，但应进行整理加工使其条理清楚、简明扼要……对一些重要的症状可记录患者原话。记录时要避免用医学术语」）。",
+    "discipline": [
+      "台词只改「嘴上怎么说」，不改「说的是什么」：语义取值与纸上写的字（clause）不受影响。",
+      "任何台词里不出现病名、不出现诊断口吻的词、不出现自伤或伤人的方式与工具。",
+      "不做漫画化：偏执那一套写成「有理由地在防备的人」，强迫那一套写成「想把话说准的人」。",
+      "没有打 voice 标的档 = 普通人语气（不定病）：一局里不该句句有病味。"
+    ],
+    "tally": "一局里打标档的计数决定「这一局他说话的调子」（`voiceTally`）；精神检查里可现算的那几行按它落笔（§十一.4）。",
+    "items": [
+      {
+        "id": "depressive",
+        "screen_name": "沉下去",
+        "screen_note": "话少、句短、越说越低",
+        "disease": "dis_0009",
+        "covers": ["dis_0010", "dis_0015", "dis_0019", "dis_0008", "dis_0016", "dis_0023"],
+        "covers_basis": "主病 dis_0009 重度抑郁症 = owner 待裁 5 指定的「沉下去 → 重度抑郁」。覆盖同轴的 6 张：dis_0010 持续性抑郁障碍（同一轴的慢性形式——「抑郁常持续 2 年以上，期间无长时间的完全缓解」psy7.txt:5454-5455）· dis_0019 持续性心境障碍（环性）· dis_0008 解离性身份障碍（情感麻木、像在演自己）· dis_0016 拖延症（什么都不想动）· dis_0015 神经性厌食症 / dis_0023 神经性贪食症（进食与体重成了唯一的落点）。",
+        "speech": [
+          "语量减少，多以短句作答",
+          "语速慢，句间停顿长",
+          "常以省略号收尾，不主动展开话题",
+          "把自己说得很轻，把病说成「没用」「没意思」",
+          "不使用夸张比喻，不举反例"
+        ],
+        "basis": [
+          "来源：《精神病学》第 7 版 第三章第四节（入院检索 §8.1）——（二）言谈与思维把「1. 言谈的速度和量」列为第一项观察面：语量减少、语速慢、句间停顿长落在这里。",
+          "来源：design/spec/material/drafts/任秀荣-叙事视图.md（本仓库既有的克制写法先例：先报相位、再报数字、最后才说人）。",
+          "⏳ 未逐字核到教材对「抑郁相该怎么说话」的成段描述：上面这份条目名 + 二级条目的映射是原型口径，不是引文。"
+        ]
+      },
+      {
+        "id": "manic",
+        "screen_name": "往上冲",
+        "screen_note": "话多、往外跑、越说越快",
+        "disease": "dis_0017",
+        "covers": ["dis_0018", "dis_0020", "dis_0026", "dis_0014", "dis_0013"],
+        "covers_basis": "主病 dis_0017 双相障碍I型 = owner 待裁 5 指定的「往上冲 → 双相I型躁狂相」。覆盖同轴的 5 张：dis_0018 双相障碍II型（同一病谱的轻躁狂一极）· dis_0020 边缘型人格障碍（情感不稳与冲动）· dis_0026 ADHD（坐不住、话多、事情一件接一件）· dis_0014 物质使用障碍（以酒或药把自己推上去）· dis_0013 反社会型人格障碍（冲动控制削弱、易激惹）。",
+        "speech": [
+          "语量明显增多，一口气说好几句",
+          "语速快，用破折号把话题接出去",
+          "答一句就带出自己的计划与成绩",
+          "把「不好」说成「好得很」",
+          "打断提问、替医师把话说完"
+        ],
+        "basis": [
+          "来源：《精神病学》第 7 版 第三章第四节（入院检索 §8.1）——（二）言谈与思维「1. 言谈的速度和量」「2. 言谈的形式与逻辑」「3. 言谈内容」：语量增多、话题跳出提问、夸大落在这三条上。",
+          "来源：design/spec/material/drafts/孙嘉禾-叙事视图.md §言语（语速快得让甲方插不进话）；design/spec/material/drafts/高远-叙事视图.md §症状层（躁狂期言语增多）。",
+          "⏳ 未逐字核到教材对「躁狂相该怎么说话」的成段描述：上面这份映射是原型口径，不是引文。"
+        ]
+      },
+      {
+        "id": "paranoid",
+        "screen_name": "有人在盯",
+        "screen_note": "先怀疑问题，再回答问题",
+        "disease": "dis_0005",
+        "covers": ["dis_0007", "dis_0006", "dis_0022", "dis_0001", "dis_0021"],
+        "covers_basis": "主病 dis_0005 偏执型精神分裂症 = owner 待裁 5 指定的「有人在盯 → 偏执型精神分裂」。覆盖同轴的 5 张：dis_0007 未分化型精神分裂症 · dis_0006 分裂型人格障碍（同谱系的猜疑与关系观念）· dis_0022 分裂情感性障碍 · dis_0001 PTSD（教材诊断要点第 3 条「持续的警觉性增高……过分地担惊受怕」psy7.txt:7490-7491）· dis_0021 社交焦虑障碍（被注视、被评价的核心恐惧）。",
+        "speech": [
+          "先反问问话的用意，再给答案",
+          "把不相干的事串成针对自己的线索",
+          "给结论、不给细节",
+          "回答里夹着对「你们」的不信任",
+          "被追问时重复同一句"
+        ],
+        "basis": [
+          "来源：《精神病学》第 7 版 第三章第四节（入院检索 §8.1）——（四）感知（幻觉、错觉）与（二）3. 言谈内容：被议论、被针对、幻听落在这两条上。",
+          "来源：design/spec/material/drafts/关长林-叙事视图.md §A3 紊乱的言语（「被问时必答，答的不是那一问」——本仓库既有的写法先例）。",
+          "⏳ 未逐字核到教材对「偏执型该怎么说话」的成段描述：上面这份映射是原型口径，不是引文。"
+        ]
+      },
+      {
+        "id": "compulsive",
+        "screen_name": "要数清楚",
+        "screen_note": "想把话说准，说准了才安心",
+        "disease": "dis_0012",
+        "covers": ["dis_0011", "dis_0025", "dis_0002", "dis_0024", "dis_0003", "dis_0004"],
+        "covers_basis": "主病 dis_0012 强迫症 = owner 待裁 5 指定的「要数清楚 → 强迫症」。覆盖同轴的 6 张：dis_0011 广泛性焦虑障碍（反复的、停不下来的担心）· dis_0025 ASD（对一成不变的秩序与细节的执拗）· dis_0002 惊恐障碍（对身体感觉的反复确认与回避）· dis_0024 暴食障碍（以固定动作压住不安）· dis_0003 特定恐惧症（绕开某一个具体的场合）· dis_0004 躯体症状障碍（反复检查身体）。",
+        "speech": [
+          "给数字、给次数，主动更正措辞",
+          "句中停下来补充限定条件",
+          "说完要确认对方听清了没有",
+          "明知道没必要，还是停不下来",
+          "把不确定的地方标出来"
+        ],
+        "basis": [
+          "来源：《精神病学》第 7 版 第三章第四节（入院检索 §8.1）——（二）言谈与思维「2. 言谈的形式与逻辑」与（五）认知功能（注意力、记忆）：反复、更正、要把话说准落在这两条上。",
+          "来源：design/spec/material/drafts/唐念安-叙事视图.md（强迫观念与中和动作的写法先例）。",
+          "⏳ 未逐字核到教材对「强迫相该怎么说话」的成段描述：上面这份映射是原型口径，不是引文。"
+        ]
+      }
+    ],
+    "min_tagged": 3,
+    "min_tagged_note": "打标的档不足三档时不算数（这一局还听不出调子）：`voiceTally` 的阈值，改它不改代码。"
+  },
+  "event_wiring": {
+    "what": "阶段 7 的接线：一局的经历不再是十段散点，而是**那件事**——问诊答案定位出它，它直接激活它的病，玩家认下一张，医师把「初步诊断」写上纸。本块只写**规则与指针**，一切取值都在权威数据里：事件与素材在 data/opening.json 的 events / experiences，病卡在 data/diseases.json 的 items，上屏文案与逐档答案在本文件。",
+    "authority": {
+      "events": "data/opening.json `events` + `event_rule`（那件事、扩展位、激活的病、属性效果）",
+      "materials": "data/opening.json `experiences`（288 段素材库；事件的 `source_experiences` 指回它）",
+      "diseases": "data/diseases.json `items`（26 张名册 + 1 条固有项 dis_0027）与 `candidate_rule`",
+      "voices": "本文件 `voices`（语言指纹挂病）· `record.columns` 的 diagnosis 栏（落笔方与笔迹）",
+      "note": "**同一事实只有一个权威。** 本块不含任何取值副本；事件的 expansions 里那份 label / clause / column 是逐档答案的重述，由 validateClinic 现场比对（expansion_label_mismatch / expansion_clause_mismatch / expansion_column_mismatch）。"
+    },
+    "locate": {
+      "what": "一局恰一件那件事（owner 第 3 条裁定：疾病诱因围绕着一件事展开）。",
+      "rule": "按 `rules` 顺序判：一条规则的 when 条件（该问的答案落在 `in` 里）全部成立即胜出；一条都不成立时取 `fallback_event`。**规则表的末条是无条件兜底，所以「一局恰一件」是结构保证**——不是抽样统计出来的结论（机器判据 one_event_per_run 仍然枚举全部已答前缀再核一遍）。",
+      "fallback_event": "evt_0009",
+      "fallback_basis": "兜底件 evt_0009「说不上哪天起」承载「诱因不明确」这一类真实情形。它**不是**为了凑数：教材自己承认这一情形存在——强迫障碍「常在无明显诱因下缓慢起病」（psy7.txt:6253）、惊恐障碍「多数患者不能找到相关的创伤性事件」（psy7.txt:5871-5872）、心境障碍「复发之前却常常找不到这种『诱因』」（psy7.txt:5463）。⇒ 问卷里的 q009 `none`（没有明显的原因）/ `unsure`（说不上来）与 q093 `no` / `more` 两档**必须留着**，它们是这个兜底的入口，不是冗余选项。",
+      "why_these_questions": "现行 114 问里能问「病前发生过什么」的只有这几问，逐条给对应关系：**q093 重大生活事件**（法定的「可能的原因或诱因」最近似的一问，值域含 death/split/job/disaster/money/legal/care/more）· **q009 诱因与加重缓解因素**（教材「发病条件及发病的相关因素……应估计是发病原因还是诱因」psy7.txt:2241-2243 的直译问法）· **q086 幼年家庭环境**（教材个人史「一般指从母亲妊娠到发病前的整个生活经历」psy7.txt:2259）· **q043 重大创伤性经历**（教材 PTSD「异乎寻常的威胁性、灾难性心理创伤」psy7.txt:7408）· **q074 被侵害**（教材创伤前变量「受虐待、被遗弃」psy7.txt:7290-7291）。**没有用任何症状问**——侦察报告 §12 点名过这条误接（症状闭集不能拿来筛事件）。q087/q089/q092/q011 不作定位用，它们只在事件内部当扩展位（那是「这件事留下的痕迹」，不是「这是哪件事」）。",
+      "question_rule": "规则表的 `q` 只能在 `experience_questions` 里取。这几问的共同点是**问「发生过什么」**（事件 / 处境 / 生活条件），不是问「你现在什么症状」。这条不是文风要求，是判据：症状闭集与经历事件轴**措辞可能相同、语义不同轴**（见 symptom_traps），拿症状去定位那件事就是把因果方向反过来。",
+      "experience_questions": [
+        {
+          "q": "q093",
+          "asks_about": "病前有没有重大生活事件（亲人走了 / 分开 / 丢了工作 / 出过大事 / 钱或住的地方 / 与人纠纷 / 要照顾人 / 不止一件）",
+          "basis": "《病历书写基本规范》第十八条（三）1「发病情况：记录发病的时间、地点、起病缓急、前驱症状、**可能的原因或诱因**」（nhc.txt:49）；教材第十二章第一节 应激源三分类（家庭 / 工作或学习 / 社会，psy7.txt:7270-7280）。"
+        },
+        {
+          "q": "q009",
+          "asks_about": "发病前后有没有明显的原因、什么情况下好一点 / 更差",
+          "basis": "教材第三章第三节（一）3.(1)「**发病条件及发病的相关因素**：询问患者发病的环境背景……应估计是发病原因还是诱因」（psy7.txt:2241-2243）。"
+        },
+        {
+          "q": "q086",
+          "asks_about": "幼年家里的情况（和睦 / 管得很严 / 没人管 / 经常吵 / 小时候有亲人去世）",
+          "basis": "教材第三章第三节（一）5「**个人史**一般指从母亲妊娠到发病前的整个生活经历」（psy7.txt:2259）；第十二章第一节 易感因素之创伤前变量「既往创伤史如童年期受歧视、受虐待、被遗弃、性创伤等」（psy7.txt:7290-7291）。"
+        },
+        {
+          "q": "q074",
+          "asks_about": "有没有被人打过 / 欺负过 / 威胁过，现在是否安全",
+          "basis": "教材 7290-7291 创伤前变量「受虐待、被遗弃」；《病历书写基本规范》现行病史采集含「可能的原因或诱因」（nhc.txt:49）。⚠️ 本问本身是**风险栏**的问，用它的 `threat` / `unsafe_now` 两档定位那件事，靠的是「被侵害是一件发生过的事」这一句判断，不是「风险 = 事件」。"
+        },
+        {
+          "q": "q043",
+          "asks_about": "有没有经历过很难过去的事（闪回 / 噩梦 / 一直提着心）",
+          "basis": "教材第十二章第三节 PTSD「受到**异乎寻常**的威胁性、灾难性心理创伤」（psy7.txt:7408-7409）；诊断要点「遭受异乎寻常的创伤性事件或处境（如天灾人祸）」（psy7.txt:7487）。⚠️ 这一问的措辞里带症状（闪回 / 噩梦），但**它问的主干是「有没有经历过很难过去的事」**——`in` 只取 `past` / `recent` / `now` 三档（都是「有过」的时间态），不取任何症状档。"
+        }
+      ],
+      "symptom_traps": [
+        {
+          "severity": "forbid",
+          "answer_set": "chief_complaints",
+          "value_id": "anger",
+          "looks_like": "event.conflict",
+          "why": "「差点跟人吵起来」是**症状**（主诉栏），`event.conflict` 是**经历**（冲突）。措辞相同、语义不同轴——全表最易误接的一处。"
+        },
+        {
+          "severity": "forbid",
+          "answer_set": "irritable",
+          "value_id": "often",
+          "looks_like": "event.conflict",
+          "why": "「经常跟人吵起来」同样是症状（易激惹），不是经历过的事。"
+        },
+        {
+          "severity": "forbid",
+          "answer_set": "family_history",
+          "value_id": "suicide",
+          "looks_like": "event.loss",
+          "why": "家族史栏的「有自杀去世的」是**家族史**，不是患者本人的经历。本批没有任何规则或扩展位引用它。"
+        },
+        {
+          "severity": "forbid",
+          "answer_set": "trauma",
+          "value_id": "no",
+          "looks_like": "event.threat",
+          "why": "「没有」不能推出「没有事件」——问事件的地方是 q009 / q093。"
+        },
+        {
+          "severity": "forbid",
+          "answer_set": "aggravator",
+          "value_id": "body",
+          "looks_like": "event.threat",
+          "why": "「有，是身体上的事」是诱因的**类别**（躯体），不是被威胁。"
+        },
+        {
+          "severity": "forbid",
+          "answer_set": "marriage",
+          "value_id": "widowed",
+          "looks_like": "event.loss",
+          "why": "「老伴走了」是**当下婚姻状况**（婚姻栏），不等于患者经历过的一次丧失事件。本批把它**显式映射**到 `relation.partner`（「曾经有伴侣」）并带 same_id_note，但**没有**拿它当定位档。"
+        },
+        {
+          "severity": "note",
+          "answer_set": "childhood",
+          "value_id": "loss",
+          "looks_like": "event.loss",
+          "why": "「小时候有过亲人去世」是**成长环境里的一件事**（个人史栏），不是「那件事」。本批用规则 loc_04 拿它定位 evt_0001——这是**弱判别档**：它说的是成长里的一次丧失，不是病前那一次。owner 若认为不合格，删 loc_04 即可（evt_0001 仍有 loc_02 兜着）。"
+        },
+        {
+          "severity": "note",
+          "answer_set": "childhood",
+          "value_id": "often_quarrel",
+          "looks_like": "event.conflict",
+          "why": "「家里经常吵」是**长期家庭气氛**，不是某一件冲突事件。本批用规则 loc_11 拿它定位 evt_0002——同样是**弱判别档**（长期处境当「那件事」）。"
+        }
+      ],
+      "no_new_questions": "**本阶段一问都不新增**，所以一局问数上限 40 的约束（design/presentation/开局门诊问诊.md §11.1 第 4 条）不受影响：现状 31–39 问（中位 35），逐分支数字见 `bun web/scripts/render-clinic.mjs --check`。若将来要补 `agency`（那时你能决定多少），必须先在门诊初诊口径里找到问法的一手出处，否则只能标 ⏳，不得自造（提示词 §一 第 6 条）。",
+      "questions_used": [
+        "q009",
+        "q043",
+        "q074",
+        "q086",
+        "q093"
+      ],
+      "rules": [
+        {
+          "id": "loc_01",
+          "event": "evt_0005",
+          "q": "q093",
+          "in": [
+            "disaster"
+          ],
+          "basis": "「出过大事」→ 灾难一级的事件。教材：PTSD「受到异乎寻常的威胁性、灾难性心理创伤」（psy7.txt:7408-7409）、诊断要点「遭受异乎寻常的创伤性事件或处境（如天灾人祸）」（psy7.txt:7487）。⚠️ 按此条，指向 PTSD 的诱因不得是日常压力事件，故本规则排在所有日常事件规则之前。"
+        },
+        {
+          "id": "loc_02",
+          "event": "evt_0001",
+          "q": "q093",
+          "in": [
+            "death"
+          ],
+          "basis": "「有亲人走了」→ 家庭因素的丧失。教材：应激源三分类之家庭因素「配偶患病、配偶死亡」（psy7.txt:7272-7274）；心境障碍章「常见负性生活事件，如丧偶、离婚……均可导致抑郁发作」（psy7.txt:5289-5290）。"
+        },
+        {
+          "id": "loc_03",
+          "event": "evt_0008",
+          "q": "q093",
+          "in": [
+            "care"
+          ],
+          "basis": "「要照顾人」→ 长期照护负担。教材：应激源三分类之家庭因素（家庭成员之间的矛盾与分歧）（psy7.txt:7272-7274）；同书 7283-7284「应激源只有其强度和主观体验超出个体的耐受能力时，才能成为应激相关障碍的致病因素」。经历侧 facet `role_care.care_giver` 与此同轴。"
+        },
+        {
+          "id": "loc_04",
+          "event": "evt_0001",
+          "q": "q086",
+          "in": [
+            "loss"
+          ],
+          "basis": "「小时候有过亲人去世」→ 同一类丧失，但落在**创伤前变量**上。教材：「创伤前变量……既往创伤史如童年期受歧视、受虐待、被遗弃、性创伤等」（psy7.txt:7290-7291）。"
+        },
+        {
+          "id": "loc_05",
+          "event": "evt_0006",
+          "q": "q093",
+          "in": [
+            "job"
+          ],
+          "basis": "「丢了工作」→ 工作或学习因素。教材：应激源三分类之工作或学习因素（psy7.txt:7275-7278）；心境障碍章明列「失业」（psy7.txt:5289-5290）；适应障碍「典型的生活事件包括居丧、离婚、失业或变换岗位……经济危机」（psy7.txt:7546-7547）。"
+        },
+        {
+          "id": "loc_06",
+          "event": "evt_0006",
+          "q": "q093",
+          "in": [
+            "money"
+          ],
+          "basis": "「钱或住的地方有压力」→ 经济压力。教材：心境障碍章「经济状况差、社会阶屋〔OCR:层〕低下者易患本病」（psy7.txt:5290-5291）；适应障碍「经济危机」（psy7.txt:7547）。"
+        },
+        {
+          "id": "loc_07",
+          "event": "evt_0007",
+          "q": "q093",
+          "in": [
+            "legal"
+          ],
+          "basis": "「跟人有纠纷」→ 社会因素。教材：应激源三分类之社会因素（psy7.txt:7279-7280）；同书 6632-6633「遭遇对个体有重大意义的生活事件」。"
+        },
+        {
+          "id": "loc_08",
+          "event": "evt_0002",
+          "q": "q074",
+          "in": [
+            "threat",
+            "unsafe_now"
+          ],
+          "basis": "「有人威胁过我」/「现在还不安全」→ 被他人侵害且**仍在持续**。教材：创伤前变量「既往创伤史如童年期受歧视、受虐待、被遗弃」（psy7.txt:7290-7291）。⚠️ q074 是分支问（q073 答了「想过伤害别人」才问），没答时本规则不成立，正好后退到下一条。"
+        },
+        {
+          "id": "loc_09",
+          "event": "evt_0005",
+          "q": "q043",
+          "in": [
+            "recent",
+            "now"
+          ],
+          "basis": "「有过，时间不算久」/「现在还在里面」→ 重大创伤性经历尚未过去。教材：PTSD 诊断要点「遭受异乎寻常的创伤性事件或处境」（psy7.txt:7487）；同书 7416-7419「创伤性体验……第一，对未来的情绪体验具有创伤性影响」。⚠️ 同样是分支问（躯体型主诉才问）；`past`（已经过去很久）刻意**不**收进来——教材把「异乎寻常」与「仍在影响」并列，久已结束的创伤交给生活质量那一侧。"
+        },
+        {
+          "id": "loc_10",
+          "event": "evt_0002",
+          "q": "q009",
+          "in": [
+            "relation"
+          ],
+          "basis": "「有，是跟人的关系」→ 人际冲突作为诱因。教材：应激源（工作或学习因素：缺乏人际交流、缺乏被接纳和被认可感、工作伙伴之间竞争激烈）（psy7.txt:7276-7278）。"
+        },
+        {
+          "id": "loc_11",
+          "event": "evt_0002",
+          "q": "q086",
+          "in": [
+            "often_quarrel"
+          ],
+          "basis": "「经常吵」→ 长期的家庭冲突环境。教材：应激源之家庭因素「家庭矛盾如家庭几代成员之间的矛盾……以及家庭成员间……的重大分歧也可以成为应激的来源」（psy7.txt:7273-7274）。"
+        },
+        {
+          "id": "loc_12",
+          "event": "evt_0003",
+          "q": "q086",
+          "in": [
+            "strict"
+          ],
+          "basis": "「管得很严」→ 成长环境里的规矩。教材：应激源之家庭因素「教育子女的方式或目标等方面的重大分歧」（psy7.txt:7274）。⚠️ 强迫障碍「常在无明显诱因下缓慢起病」（psy7.txt:6253）——本事件正是「诱因不显」的那一类，所以它的定位靠成长环境而不是靠某一件大事。"
+        },
+        {
+          "id": "loc_13",
+          "event": "evt_0007",
+          "q": "q086",
+          "in": [
+            "cold"
+          ],
+          "basis": "「没人管」→ 被忽视。教材：创伤前变量「既往创伤史如童年期受歧视、受虐待、**被遗弃**」（psy7.txt:7290-7291）。"
+        },
+        {
+          "id": "loc_14",
+          "event": "evt_0004",
+          "q": "q009",
+          "in": [
+            "work_p"
+          ],
+          "basis": "「有，是工作或学习」→ 工作或学习压力。教材：应激源之工作或学习因素「对工作（学业）不满但无法改变」「缺乏被接纳和被认可感」（psy7.txt:7275-7278）。⚠️ 本事件是唯一一件事里带「向上冲」那一段的，教材不给「睡眠剥夺 → 躁狂发作」的因果条目（本次未检索到），所以这一条只能标 ⏳。"
+        },
+        {
+          "id": "loc_15",
+          "event": "evt_0009",
+          "q": "q093",
+          "in": [
+            "no",
+            "more"
+          ],
+          "basis": "「没有」/「不止一件」→ 兜底事件。教材自己承认这两种情形都存在：强迫障碍「常在无明显诱因下缓慢起病」（psy7.txt:6253）；惊恐障碍「多数患者不能找到相关的创伤性事件」（psy7.txt:5871-5872）；心境障碍「复发之前却常常找不到这种『诱因』」（psy7.txt:5463）。"
+        }
+      ]
+    },
+    "expand": {
+      "what": "那件事的扩展位：围着它问下去，答完既写纸、又收敛病。",
+      "rule": "每个事件自带 `expansions`（在 data/opening.json 的 events[] 上），每一档写明它落在 11 facet 里的哪一个坐标、由哪一问的哪一档答出来、以及这一档患者嘴上说什么（label）与纸上写什么（clause / column）。已答的扩展位**必须出现在纸上**（expand_not_on_paper）。",
+      "questions": [
+        "q007",
+        "q009",
+        "q011",
+        "q043",
+        "q074",
+        "q086",
+        "q087",
+        "q089",
+        "q092",
+        "q093"
+      ],
+      "questions_note": "这几个问**全部是现行题库里的原问**，没有新增一问。它们是每一局的必问骨架或答过才算的分支问：q009 · q011 · q043 · q074 · q086 · q087 · q089 · q092 · q093 · q007。",
+      "why_these_four": "owner 第 4 条裁定列了六位（什么时候 / 在哪儿 / 身边有谁 / 那时你能决定多少 / 后来怎样 / 留下了什么）。在现行 114 问里能对上的是四位：**在哪儿** ← q086 / q087 · **身边有谁** ← q089 / q092 · **后来怎样** ← q007 · **留下了什么** ← q011 / q093(money)。另外两位没有问可问，见 axes_flagged。",
+      "axes_flagged": {
+        "onset": "⏳ 「什么时候」：现行题库里没有一问在问「这件事从什么时候开始」（q005 问病程长度、q006 问起病缓急，都不是 facet onset 的童年/少年/成年）。本批由事件的 `spine.onset` 承载。",
+        "agency": "⏳ 「那时你能决定多少」：**一问都没有**（侦察实测：114 问全部答案闭集对 11 facet 做过对照，`agency` 命中 0）。本批由事件的 `spine.agency` 承载。⚠️ 这是本阶段的硬缺口——凡要补这一问，必须先在门诊初诊口径里找到问法的一手出处，否则只能标 ⏳（提示词 §一 第 6 条：查不到出处的一律标 ⏳，不许自造）。"
+      },
+      "paper_rule": "扩展位的字**不另写一套拼句引擎**：`clause` 就是该问该档在本文件 `compose` 模板里已经用到的那一段（与逐档 `clause` 同一个字符串），`column` 就是那一问答问时落笔的栏目。答一句 → 纸上多一句，由现有的 `composeColumn` 完成。",
+      "off_paper": "凡被事件选作扩展位的问，都必须出现在某个 `compose.<栏目>.sentences[].parts[].q` 里——否则就会出现「对话里说了、纸上没写」。这条由生成脚本在生成期拦一次、由 validateClinic 的 expand_not_on_paper 在运行期再拦一次。"
+    },
+    "candidate": {
+      "rule": "候选 = 那件事的 `activates`（data/opening.json 的 events[].activates）减去已答扩展位声明排除的病；**一局说话的调子定下来之后，再收窄到该调子代言的那一张病**（「怎么说话就是在说哪张病」）；候选上界 = data/opening.json 的 event_rule.candidate_max，两边同值。",
+      "narrowing_by_voice": "收窄规则的权威在 data/opening.json 的 `event_rule.candidate_and_voice`（那里写了它为什么必须是这么收的）。本块只记一句：**每件事 activates 4 张、一套指纹一张**，所以「调子定下来」至多把候选收到 1 张；调子还没显出来（打标档 < voices.min_tagged）时 4 张全摆出来由玩家挑。⚠️ 实测（800 局随机采样）：显调子 589 局，候选数 1；没显调子 211 局，候选数 4；候选 > 4 的 0 局；「调子与候选一个都对不上」的 0 局。",
+      "candidate_max": 4,
+      "candidate_max_basis": "上界与 data/opening.json 的 event_rule.candidate_max 同值（同一件事的两侧口径）。顶到 4 时患者意见栏只剩「认哪一张」这一个动作；本批每件事恰激活 2 张，候选恒为 2，余量留给内容批。",
+      "exclusion": "扩展位可以带 `exclude: string[]`（病 id）；玩家把这一档答出来，这些病就从候选里去掉。**本批没有声明任何排除规则**（events[].expansions 上无 exclude），理由见 data/diseases.json 的 candidate_rule.exclusion.why_none。槽位与判据（candidate_empty / candidate_over_limit）从本批起就生效。",
+      "narrowing_basis": "收缩候选这件事本身有教材依据：同一件事落在不同人身上结局不同——教材「遭遇应激源……是否出现应激相关障碍以及障碍的表现形式和严重程度，除了与应激源的性质、强度和持续时间有关外，更重要地是与个体对事件的认知评价、主观体验和应对方式有关。同一事件对不同的个体会有不同的反应」（psy7.txt:7281-7284）。⚠️ 教材**不给**「哪一类事件 → 哪一张病」的逐病映射（见 design/spec/material/ref/诱因事件与生活事件-检索记录.md §七 7.1 第 1 条），所以 activates 与 exclude 都是设计选择，不得援引教材。"
+    },
+    "voice": {
+      "rule": "语言指纹现在**挂在病上**（owner 第 6、7 条裁定：怎么说话就是在说哪张病）。`voices.items[].disease` 是这一套指纹的**主病**；`voices.items[].covers` 是它同时代言的其他病 id。由病反查指纹用 `voiceOfDisease()`。",
+      "conflict_rule": "一局结束时玩家认下的那张病，必须与「他怎么说话」收敛到的病一致：`voice_disease_conflict`。一致性由 tally 的 dominant（沿用 `min_tagged` 阈值与「并列取最后出现」的规则）→ 该指纹的 `disease` / `covers` 判定。",
+      "coverage_rule": "凡出现在任何事件 `activates` 里的病，**必须被恰好一套指纹覆盖**（candidate_without_voice）——否则会出现「候选里有它、但这一局没有台词特征」的病，那条冲突判据就会形同虚设。这也正是 ≥6 张病（owner 待裁 2 的默认）与「四套指纹对 4 张病」（owner 待裁 5）必须并存时唯一的出路：**四套指纹各自有一个主病，另外用 `covers` 兜住其余候选病**。",
+      "stage6_superseded": "🔧 阶段 6 的「调子不等于诊断」自阶段 7 起由提示词 §二 第 6 条取代：**调子就是诊断的一半**——它必须与玩家认下的病一致。被取代的那句在 design/presentation/开局门诊问诊.md §14.3 就地标了 🔧。"
+    },
+    "diagnosis": {
+      "rule": "诊断栏由**医师**落笔写「初步诊断」：`record.columns` 里 `diagnosis` 的 `fill` 是 `derived`、`who` 是 `hospital`，取值来源是本局认下的病（`value_from: confirmed_disease`）。玩家只做「认」这一个动作——候选以回应形式钉在底部（数字键），**不新开一屏**（owner 待裁 4 的默认 (a)）。",
+      "not_a_label": "⚠️ 写上去的是**文书上的初步诊断**，不是给玩家看的标签。门诊侧法规把这一栏叫「初步印象」或「诊断」（《病历书写基本规范》第十三条；河南细则第二十三条门诊写「初步印象」）。**不会**在诊断栏里写任何治疗、量表分、护理等级。",
+      "treatment_stays_blank": "`treatment`（治疗意见）**仍留白**（owner 待裁 3 的默认 (a)）：医嘱尚无口径，阶段 5/6 的裁定不动。",
+      "basis": "《病历书写基本规范》第二章第十三条：初诊病历记录书写内容应当包括……诊断及治疗意见和医师签名等。逐字原文见 design/spec/material/ref/精神科门诊病历-书写规范-检索记录.md §2.1。"
+    },
+    "ui": {
+      "what": "阶段 7 新增的上屏文案。⚠️ **界面代码里不许出现中文文案字面量**（提示词 §一 第 5 条），所以这一屏要说的话全在这儿；`{...}` 是占位符，由界面替换。本块与 `db.ui` 一样受文案 lint（漏内部词即报错）。",
+      "event_ask": "那件事之前，你过得是什么样的？先说那件事本身——「{title}」。",
+      "event_note": "院方在病历上记下了这件事。",
+      "candidate_basis": "因为你说的那件事——「{title}」——我们把它写在这儿：{label}。",
+      "candidate_basis_fallback": "你说的那件事——「{title}」——我们把它写在这儿。",
+      "candidate_prompt": "这几种，你看哪一个像你自己？",
+      "candidate_narrowed": "你说话的样子，已经把你带到「{label}」这一张上了。",
+      "candidate_none": "还没听出你说话的调子，先都摆在这儿。",
+      "confirm_action": "认下这一张",
+      "confirmed_note": "接诊医师把「{label}」写进了诊断栏。",
+      "voice_of_disease": "这张病在他嘴里：{voice}",
+      "voice_unknown_still": "还没听出你说话的调子。"
+    },
+    "sources": [
+      "design/spec/material/ref/诱因事件与生活事件-检索记录.md（阶段 7 新检索：生活事件与精神障碍的因果口径 · 首发与复发之别 · 多件事累积的反面 · 病历里诱因与前驱症状的写法）",
+      "design/presentation/开局经历疾病接回.md（阶段 7 口径文档：链条五步 · 每步判据 · 退役/保留清单）",
+      "design/entities/经历结构.md（存量口径；§十 的池子与并集口径自阶段 7 起退役，文件已就地标 🔧）",
+      "design/entities/疾病结构.md（存量口径；§五 的并集诱發口径自阶段 7 起退役，文件已就地标 🔧）"
+    ],
+    "retired_here": "🔧 自阶段 7 起，本文件里**不再**有「经历池 → 病并集 → 候选」这条链的任何环节：候选只由那件事的 activates 来。与它同批退役的存量口径在 data/opening.json 的 interview / interview.pool / quota 与 data/diseases.json 的 pool_rule 上就地标了退役说明（**键都不删**，存量测试仍在读）。"
+  },
+  "compose": {
+    "present_illness": {
+      "sentences": [
+        {
+          "id": "complaint",
+          "open": "患者因",
+          "close": "来诊。",
+          "basis": "《病历书写基本规范》第十八条（三）1（发病情况）；门诊先问现病史，教材第三章第三节（二）3（门诊检索 §5.1）",
+          "parts": [
+            {
+              "q": "q001",
+              "pre": "",
+              "post": ""
+            }
+          ]
+        },
+        {
+          "id": "onset",
+          "open": "患者",
+          "close": "。",
+          "basis": "第十八条（三）1「记录发病的时间」；起病缓急的量化界限见入院检索 §5.2",
+          "parts": [
+            {
+              "q": "q005",
+              "pre": "于",
+              "post": ""
+            },
+            {
+              "q": "q006",
+              "pre": "，",
+              "post": ""
+            }
+          ]
+        },
+        {
+          "id": "course",
+          "open": "既往",
+          "close": "。",
+          "basis": "第十八条（三）病程特点；教材第三章第三节（一）3（3）（入院检索 §5.3）",
+          "parts": [
+            {
+              "q": "q007",
+              "pre": "",
+              "post": ""
+            }
+          ]
+        },
+        {
+          "id": "trigger",
+          "open": "",
+          "close": "。",
+          "basis": "第十八条（三）1「可能的原因或诱因」与（三）2「缓解或加剧因素」",
+          "parts": [
+            {
+              "q": "q009",
+              "pre": "",
+              "post": ""
+            }
+          ]
+        },
+        {
+          "id": "mood",
+          "open": "起病以来",
+          "close": "。",
+          "basis": "第十八条（三）2–3（主要症状特点与伴随症状）",
+          "parts": [
+            {
+              "q": "q013",
+              "pre": "，",
+              "post": ""
+            },
+            {
+              "q": "q014",
+              "pre": "，",
+              "post": ""
+            },
+            {
+              "q": "q015",
+              "pre": "，",
+              "post": ""
+            },
+            {
+              "q": "q016",
+              "pre": "，",
+              "post": ""
+            },
+            {
+              "q": "q017",
+              "pre": "，",
+              "post": ""
+            },
+            {
+              "q": "q020",
+              "pre": "，",
+              "post": ""
+            }
+          ]
+        },
+        {
+          "id": "manic",
+          "open": "",
+          "close": "。",
+          "basis": "第十八条（三）2–3；病程特点见入院检索 §5.3",
+          "parts": [
+            {
+              "q": "q018",
+              "pre": "",
+              "post": ""
+            },
+            {
+              "q": "q019",
+              "pre": "，",
+              "post": ""
+            },
+            {
+              "q": "q054",
+              "pre": "，",
+              "post": ""
+            },
+            {
+              "q": "q055",
+              "pre": "，",
+              "post": ""
+            },
+            {
+              "q": "q056",
+              "pre": "，",
+              "post": ""
+            },
+            {
+              "q": "q057",
+              "pre": "，",
+              "post": ""
+            }
+          ]
+        },
+        {
+          "id": "general",
+          "open": "发病以来",
+          "close": "。",
+          "basis": "第十八条（三）5「发病以来一般情况（睡眠、食欲、体重、大小便等）」",
+          "parts": [
+            {
+              "q": "q023",
+              "pre": "，",
+              "post": ""
+            },
+            {
+              "q": "q024",
+              "pre": "，",
+              "post": ""
+            },
+            {
+              "q": "q024b",
+              "pre": "，",
+              "post": ""
+            },
+            {
+              "q": "q025",
+              "pre": "，",
+              "post": ""
+            },
+            {
+              "q": "q026",
+              "pre": "，",
+              "post": ""
+            },
+            {
+              "q": "q027",
+              "pre": "，",
+              "post": ""
+            },
+            {
+              "q": "q028",
+              "pre": "，",
+              "post": ""
+            }
+          ]
+        },
+        {
+          "id": "appetite",
+          "open": "",
+          "close": "。",
+          "basis": "第十八条（三）5（食欲、体重）与教材对发病以来一般情况的展开（入院检索 §5.4）",
+          "parts": [
+            {
+              "q": "q029",
+              "pre": "",
+              "post": ""
+            },
+            {
+              "q": "q031",
+              "pre": "，",
+              "post": ""
+            },
+            {
+              "q": "q032",
+              "pre": "，",
+              "post": ""
+            },
+            {
+              "q": "q033",
+              "pre": "，",
+              "post": ""
+            }
+          ]
+        },
+        {
+          "id": "anxiety",
+          "open": "病中",
+          "close": "。",
+          "basis": "第十八条（三）2–3（主要症状特点、伴随症状）",
+          "parts": [
+            {
+              "q": "q036",
+              "pre": "",
+              "post": ""
+            },
+            {
+              "q": "q021",
+              "pre": "，",
+              "post": ""
+            },
+            {
+              "q": "q037",
+              "pre": "，主要担心",
+              "post": ""
+            },
+            {
+              "q": "q038",
+              "pre": "，伴",
+              "post": ""
+            },
+            {
+              "q": "q039",
+              "pre": "，",
+              "post": ""
+            },
+            {
+              "q": "q040",
+              "pre": "，",
+              "post": ""
+            }
+          ]
+        },
+        {
+          "id": "other_symptoms",
+          "open": "",
+          "close": "。",
+          "basis": "第十八条（三）2（按发生的先后顺序描述主要症状特点）",
+          "parts": [
+            {
+              "q": "q041",
+              "pre": "",
+              "post": ""
+            },
+            {
+              "q": "q042",
+              "pre": "，",
+              "post": ""
+            },
+            {
+              "q": "q043",
+              "pre": "，",
+              "post": ""
+            },
+            {
+              "q": "q044",
+              "pre": "，",
+              "post": ""
+            },
+            {
+              "q": "q045",
+              "pre": "，",
+              "post": ""
+            },
+            {
+              "q": "q022",
+              "pre": "，",
+              "post": ""
+            }
+          ]
+        },
+        {
+          "id": "psychotic",
+          "open": "",
+          "close": "。",
+          "basis": "第十八条（三）2–3；精神检查「感知」条目（入院检索 §8.1）",
+          "parts": [
+            {
+              "q": "q046",
+              "pre": "",
+              "post": ""
+            },
+            {
+              "q": "q047",
+              "pre": "，",
+              "post": ""
+            },
+            {
+              "q": "q048",
+              "pre": "，",
+              "post": ""
+            },
+            {
+              "q": "q049",
+              "pre": "，",
+              "post": ""
+            },
+            {
+              "q": "q050",
+              "pre": "，",
+              "post": ""
+            },
+            {
+              "q": "q051",
+              "pre": "，",
+              "post": ""
+            },
+            {
+              "q": "q052",
+              "pre": "，",
+              "post": ""
+            }
+          ]
+        },
+        {
+          "id": "insight",
+          "open": "对上述体验",
+          "close": "。",
+          "basis": "精神检查「自知力」条目（入院检索 §8.1）；「自知力」须有分析（§8.4.1）",
+          "parts": [
+            {
+              "q": "q053",
+              "pre": "，",
+              "post": ""
+            }
+          ]
+        },
+        {
+          "id": "risk",
+          "open": "",
+          "close": "。",
+          "basis": "第十八条（三）3（伴随症状与风险）；教材「风险评估」列为精神状况检查下的条目（入院检索 §8.3）",
+          "parts": [
+            {
+              "q": "q067",
+              "pre": "",
+              "post": ""
+            },
+            {
+              "q": "q068",
+              "pre": "，",
+              "post": ""
+            },
+            {
+              "q": "q071",
+              "pre": "，",
+              "post": ""
+            },
+            {
+              "q": "q072",
+              "pre": "，",
+              "post": ""
+            },
+            {
+              "q": "q073",
+              "pre": "，",
+              "post": ""
+            },
+            {
+              "q": "q074",
+              "pre": "，",
+              "post": ""
+            }
+          ]
+        },
+        {
+          "id": "function",
+          "open": "",
+          "close": "。",
+          "basis": "教材「与既往社会功能比较所发生的功能变化」（入院检索 §5.3）；精神科评分表要求写社会功能障碍（§4.3.1）",
+          "parts": [
+            {
+              "q": "q011",
+              "pre": "",
+              "post": ""
+            }
+          ]
+        },
+        {
+          "id": "closing",
+          "open": "本次来诊",
+          "close": "。",
+          "basis": "第十八条（三）4（发病以来诊治经过及效果）；门诊侧写作要求见《福建省病历书写规范（2024 年版）》第二章第二节（门诊检索 §4.2）",
+          "parts": [
+            {
+              "q": "q107",
+              "pre": "，",
+              "post": ""
+            },
+            {
+              "q": "q108",
+              "pre": "，",
+              "post": ""
+            },
+            {
+              "q": "q109",
+              "pre": "，",
+              "post": ""
+            },
+            {
+              "q": "q113",
+              "pre": "，",
+              "post": ""
+            }
+          ]
+        }
+      ]
+    },
+    "past_history": {
+      "sentences": [
+        {
+          "id": "body",
+          "open": "既往",
+          "close": "。",
+          "basis": "第十八条（四）既往史（含躯体疾病史、用药、过敏史）；门诊侧见第十三条「既往史」",
+          "parts": [
+            {
+              "q": "q062",
+              "pre": "",
+              "post": ""
+            },
+            {
+              "q": "q063",
+              "pre": "，目前",
+              "post": ""
+            },
+            {
+              "q": "q064",
+              "pre": "，药物过敏方面",
+              "post": ""
+            }
+          ]
+        },
+        {
+          "id": "psych",
+          "open": "精神科方面",
+          "close": "。",
+          "basis": "第十八条（四）；精神科既往诊疗经过见教材第三章第三节（一）3（4）（入院检索 §5.4）",
+          "parts": [
+            {
+              "q": "q078",
+              "pre": "，",
+              "post": ""
+            },
+            {
+              "q": "q081",
+              "pre": "，",
+              "post": ""
+            }
+          ]
+        },
+        {
+          "id": "substance",
+          "open": "",
+          "close": "。",
+          "basis": "第十八条（五）1 个人史里的烟酒嗜好与物质使用；精神科展开见入院检索 §六",
+          "parts": [
+            {
+              "q": "q058",
+              "pre": "",
+              "post": ""
+            },
+            {
+              "q": "q059",
+              "pre": "，",
+              "post": ""
+            },
+            {
+              "q": "q060",
+              "pre": "，",
+              "post": ""
+            },
+            {
+              "q": "q061",
+              "pre": "，",
+              "post": ""
+            }
+          ]
+        },
+        {
+          "id": "checkup",
+          "open": "",
+          "close": "。",
+          "basis": "第十八条（三）4 发病以来诊治经过与检查结果；门诊侧辅助检查栏见第十三条",
+          "parts": [
+            {
+              "q": "q066",
+              "pre": "",
+              "post": ""
+            }
+          ]
+        }
+      ]
+    },
+    "personal_history": {
+      "sentences": [
+        {
+          "id": "childhood",
+          "open": "幼年",
+          "close": "。",
+          "basis": "第十八条（五）1 个人史（含家庭环境与成长经历）；精神科展开见入院检索 §六",
+          "parts": [
+            {
+              "q": "q086",
+              "pre": "",
+              "post": ""
+            }
+          ]
+        },
+        {
+          "id": "school_work",
+          "open": "学习与工作",
+          "close": "。",
+          "basis": "第十八条（五）1 个人史；教材把个人史扩成「从母亲妊娠到发病前的整个生活经历」（入院检索 §6.2）",
+          "parts": [
+            {
+              "q": "q087",
+              "pre": "",
+              "post": ""
+            }
+          ]
+        },
+        {
+          "id": "marriage",
+          "open": "婚姻与生育方面",
+          "close": "。",
+          "basis": "第十八条（五）2 婚育史；门诊侧首页含婚姻状况（第十二条）",
+          "parts": [
+            {
+              "q": "q089",
+              "pre": "，",
+              "post": ""
+            },
+            {
+              "q": "q065",
+              "pre": "，",
+              "post": ""
+            }
+          ]
+        },
+        {
+          "id": "personality",
+          "open": "病前性格",
+          "close": "。",
+          "basis": "教材给出的病前人格特点提问（入院检索 §6.3）",
+          "parts": [
+            {
+              "q": "q092",
+              "pre": "",
+              "post": ""
+            }
+          ]
+        },
+        {
+          "id": "events",
+          "open": "病前",
+          "close": "。",
+          "basis": "第十八条（五）1 个人史里的重大生活事件；精神科展开见入院检索 §六",
+          "parts": [
+            {
+              "q": "q093",
+              "pre": "",
+              "post": ""
+            }
+          ]
+        },
+        {
+          "id": "habits",
+          "open": "日常嗜好",
+          "close": "。",
+          "basis": "第十八条（五）1 个人史（嗜好）；精神科展开见入院检索 §六",
+          "parts": [
+            {
+              "q": "q095",
+              "pre": "",
+              "post": ""
+            }
+          ]
+        }
+      ]
+    },
+    "family_history": {
+      "sentences": [
+        {
+          "id": "family",
+          "open": "家族中",
+          "close": "。",
+          "basis": "第十八条（五）3 家族史；精神科把家族史扩成「家庭 + 精神病家族史」两半（入院检索 §7.2）",
+          "parts": [
+            {
+              "q": "q083",
+              "pre": "",
+              "post": ""
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "compose_note": "拼句：一个栏目 = 若干句，一句 = open + 各 part（每 part 取那一问那一档的 clause，前后各加 pre/post）+ close；没答与拒答的 part 整段跳过。依据：《精神病学》第 7 版 第三章第三节（二）4（入院检索 §5.7）——「记录病史应如实描述，但应进行整理加工使其条理清楚、简明扼要……记录时要避免用医学术语」。"
+}

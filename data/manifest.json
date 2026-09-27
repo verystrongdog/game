@@ -10,10 +10,11 @@
     "shipping=true 仅限 role=runtime（进入运行时路径者）",
     "origin=generated 只认生成器**写出**证据（json.dump / write_text / np.save 等）",
     "lifecycle=archived 的判据是**三条引用面全空**（活跃文档 / 活跃代码 / 活跃工具链），不是\"零设计文档引用\"——后者会把活着的生成链输入误判为孤儿（2026-09-12 实测）",
-    "`--check` 校验文件集与属性合法性，**不重新推导属性**（refs 计数会随任意新增 .md 漂移）；属性更新是人工动作 `--refresh`"
+    "`--check` 校验文件集与属性合法性，**不重新推导属性**（refs 计数会随任意新增 .md 漂移）；属性更新是人工动作 `--refresh`",
+    "2026-09-27 阶段 7：登记 data/opening_clinic.json（自阶段 5 起是开局侧唯一权威，原先漏登记）；data/opening.json 与 data/diseases.json 补上改动说明与消费方。_stats 由 `--refresh` 之外的这次手工登记同步更新。"
   ],
   "_stats": {
-    "total": 103,
+    "total": 111,
     "runtime": 8,
     "generator_input": 2,
     "shipping_true": 8,
@@ -22,7 +23,7 @@
     "by_lifecycle_role": {
       "active/evidence": 54,
       "active/generator-input": 2,
-      "active/reference": 22,
+      "active/reference": 30,
       "active/runtime": 8,
       "deprecated/reference": 17
     }
@@ -839,6 +840,26 @@
         "deprecated_docs": 0
       }
     },
+    "data/diseases.json": {
+      "logical_id": "diseases",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "consumed_by": [
+        "web/src/character-creation/diseases.js",
+        "web/src/opening-clinic/opening-clinic.js",
+        "web/scripts/build-opening-events.mjs"
+      ],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护。2026-09-27 阶段 7 改动：新增 `candidate_rule`（候选口径 + 排除规则槽位 + 名册 27/26 的说明）；`pool_rule` 就地标退役、**键不删**（opening.js 的 fillPool / poolFloors 与 diseases.js 的结构校验仍在读）；`meta` 新增 `stage7`。26 张病卡一个字未改，`dis_0027` 仍是固有项。",
+      "refs": {
+        "active_docs": 2,
+        "deprecated_docs": 0
+      }
+    },
     "data/drives.json": {
       "logical_id": "drives",
       "origin": "authored",
@@ -917,8 +938,88 @@
         "deprecated_docs": 0
       }
     },
+    "data/hospital_ref/floor-one-degree-one-assessments.json": {
+      "logical_id": "floor-one-degree-one-assessments",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 2,
+        "deprecated_docs": 0
+      }
+    },
+    "data/hospital_ref/floor-one-enclosures.json": {
+      "logical_id": "floor-one-enclosures",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 3,
+        "deprecated_docs": 0
+      }
+    },
     "data/hospital_ref/floor-one-exterior-walls.json": {
       "logical_id": "floor-one-exterior-walls",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 2,
+        "deprecated_docs": 0
+      }
+    },
+    "data/hospital_ref/floor-one-opening-catalog.json": {
+      "logical_id": "floor-one-opening-catalog",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 2,
+        "deprecated_docs": 0
+      }
+    },
+    "data/hospital_ref/floor-one-openings.json": {
+      "logical_id": "floor-one-openings",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "consumed_by": [],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护",
+      "refs": {
+        "active_docs": 2,
+        "deprecated_docs": 0
+      }
+    },
+    "data/hospital_ref/floor-one-wall-topology-repairs.json": {
+      "logical_id": "floor-one-wall-topology-repairs",
       "origin": "authored",
       "lifecycle": "active",
       "role": "reference",
@@ -947,10 +1048,34 @@
       "runtime_consumers": [],
       "provenance": "external（见 data/connectivity/sources.md 或子目录 README）",
       "refs": {
-        "active_docs": 24,
+        "active_docs": 32,
         "deprecated_docs": 2
       },
       "note": "医院建模参考的 provenance 记录（来源 PDF 路径为 Windows 绝对路径，跨机不可复现）。"
+    },
+    "data/opening.json": {
+      "logical_id": "opening",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "consumed_by": [
+        "web/src/character-creation/opening.js",
+        "web/src/opening-exploration/opening-runtime.js",
+        "web/src/opening-clinic/opening-clinic.js",
+        "web/scripts/build-opening-events.mjs",
+        "web/scripts/pool-census.mjs"
+      ],
+      "generators": [
+        "web/scripts/build-opening-events.mjs（只写 `event_rule` 与 `events` 两块；288 段 experiences 与其他块由作者手写，生成器不碰）"
+      ],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护。2026-09-27 阶段 7 改动：新增 `event_rule` 与 `events`（一局恰一件诱因事件，9 件）；`quota` / `interview` / `interview.pool` 就地标退役、**键不删**（存量契约与 web/src/character-creation/ 的测试仍在读）；`meta` 新增 `stage7_retired`。288 段 `experiences` 内容一字未改，降级为素材库。",
+      "refs": {
+        "active_docs": 4,
+        "deprecated_docs": 0
+      }
     },
     "data/runtime-fixtures/W_sensory/valid.json": {
       "logical_id": "valid",
@@ -1880,10 +2005,30 @@
       "runtime_consumers": [],
       "provenance": "本仓作者维护",
       "refs": {
-        "active_docs": 27,
+        "active_docs": 32,
         "deprecated_docs": 27
       },
       "note": "设计期参考，非运行时数据。status 字段是术语唯一权威状态。"
+    },
+    "data/opening_clinic.json": {
+      "logical_id": "opening_clinic",
+      "origin": "authored",
+      "lifecycle": "active",
+      "role": "reference",
+      "shipping": false,
+      "owner": "设计组（design/ 引用方）",
+      "consumed_by": [
+        "web/src/opening-clinic/opening-clinic.js",
+        "web/scripts/render-clinic.mjs",
+        "web/scripts/clinic-tables.mjs"
+      ],
+      "generators": [],
+      "runtime_consumers": [],
+      "provenance": "本仓作者维护。2026-09-27 阶段 7 登记：本文件自阶段 5 起就是开局问诊与门诊病历的**唯一权威**（题库 · 答案闭集 · 分支 · 病历栏目与落笔 · 上屏文案），阶段 6 加 `voices` / `compose`，阶段 7 加 `event_wiring`（那件事 → 病 → 诊断栏的接线口径）。原先一直不在清单里，本轮补登记。",
+      "refs": {
+        "active_docs": 3,
+        "deprecated_docs": 0
+      }
     }
   }
 }

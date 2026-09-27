@@ -50,6 +50,7 @@ export default defineConfig({
       '/hospital-map-prototype': resolve(import.meta.dirname, 'src/hospital-map-prototype'),
       '/scene-host': resolve(import.meta.dirname, 'src/scene-host'),
       '/character-creation': resolve(import.meta.dirname, 'src/character-creation'),
+      '/opening-clinic': resolve(import.meta.dirname, 'src/opening-clinic'),
       '/opening-exploration': resolve(import.meta.dirname, 'src/opening-exploration'),
       '/map-dialogue': resolve(import.meta.dirname, 'src/map-dialogue'),
       '/dialogue': resolve(import.meta.dirname, 'src/dialogue'),

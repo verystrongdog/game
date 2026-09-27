@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>子非鱼｜叙事界面原型</title>
   <link rel="stylesheet" href="/character-creation/character-creation.css">
+  <link rel="stylesheet" href="/opening-clinic/opening-clinic.css">
   <link rel="stylesheet" href="/dialogue/dialogue.css">
   <link rel="stylesheet" href="/opening-exploration/opening.css">
   <link rel="stylesheet" href="/map-dialogue/dialogue-overlay.css">
@@ -23,6 +24,15 @@
       --moon-strong: #e3fff5;
       --rust: #ba6c4b;
       --rust-soft: #80513d;
+      /* 四套言语指纹的分组色（开局门诊病历 · 阶段 7）：只画在选项上，是**冗余**信息
+         （调子名一直写着）。⚠️ 不是被否决的「颜色表示情绪 / 态度」那套体系
+         ——design/conventions/README.md §二 第 46 行禁的是后者。
+         四色相对亮度 0.266 / 0.381 / 0.524 / 0.635（明度差 ≥ 0.11，色盲可分辨）；
+         在选项底 #171c1a 上的对比度 5.19–11.25:1，都过 4.5:1。 */
+      --voice-depressive: #86abc2;
+      --voice-manic: #e6b877;
+      --voice-paranoid: #c9738c;
+      --voice-compulsive: #b0dcae;
       --line: rgba(226, 237, 224, .13);
       --paper: #111614;
       --paper-2: #171c19;
