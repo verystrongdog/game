@@ -575,26 +575,125 @@
       z-index: 900;
       inset: 0;
       display: grid;
-      place-items: center;
+      align-items: center;
+      justify-items: start;
+      padding: 48px clamp(24px, 11vw, 240px);
       overflow: hidden;
       background:
-        linear-gradient(90deg, rgba(3,8,8,.96), rgba(5,12,12,.72) 54%, rgba(3,7,7,.94)),
-        radial-gradient(circle at 66% 38%, rgba(151,197,183,.22), transparent 28%),
-        #07100f;
+        radial-gradient(ellipse 58% 72% at 80% 28%, rgba(151,197,183,.12), transparent 68%),
+        radial-gradient(ellipse 70% 50% at 8% 108%, rgba(151,197,183,.05), transparent 70%),
+        linear-gradient(180deg, #081111 0%, #060b0b 62%, #040707 100%);
     }
     .start-screen[hidden] { display: none; }
-    .start-screen::before { content: ''; position: absolute; inset: 9% 7%; border: 1px solid rgba(197,222,214,.08); background: repeating-linear-gradient(90deg, transparent 0 13%, rgba(197,222,214,.025) 13.1% 13.25%), repeating-linear-gradient(0deg, transparent 0 18%, rgba(197,222,214,.022) 18.1% 18.3%); transform: perspective(700px) rotateX(4deg); }
-    .start-screen::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse at center, transparent 36%, rgba(0,0,0,.72) 110%); }
-    .start-card { position: relative; z-index: 1; width: min(620px, calc(100% - 42px)); padding: clamp(38px, 7vw, 82px); border-left: 1px solid rgba(197,222,214,.24); background: linear-gradient(90deg, rgba(8,16,15,.78), rgba(8,16,15,.18)); }
-    .start-kicker { color: #84a99e; font: 9px/1.4 ui-monospace, monospace; letter-spacing: .28em; text-transform: uppercase; }
-    .start-title { margin: 17px 0 9px; font-size: clamp(58px, 10vw, 104px); font-weight: 400; line-height: .95; letter-spacing: .08em; text-shadow: 0 12px 40px rgba(0,0,0,.65); }
-    .start-subtitle { max-width: 420px; margin: 0; color: #8e9e98; font-size: 14px; line-height: 1.8; }
-    .start-action { display: inline-flex; align-items: center; gap: 22px; min-width: 260px; margin-top: 52px; padding: 15px 18px; border: 1px solid rgba(197,222,214,.32); border-left: 3px solid var(--rust); background: rgba(18,31,28,.74); color: #e5eee9; cursor: pointer; text-align: left; }
-    .start-action b { font-weight: 500; letter-spacing: .12em; }
-    .start-action span { margin-left: auto; color: var(--rust); font: 16px/1 ui-monospace, monospace; transition: transform .16s ease; }
-    .start-action:hover, .start-action:focus-visible { outline: none; border-color: rgba(197,222,214,.64); background: rgba(37,61,54,.78); }
-    .start-action:hover span, .start-action:focus-visible span { transform: translateX(4px); }
-    .start-note { display: block; margin-top: 13px; color: #56645f; font: 9px/1.5 ui-monospace, monospace; }
+    /* 百叶窗投在墙上的冷光：只做氛围，不承载信息。 */
+    .start-screen::before {
+      content: '';
+      position: absolute;
+      inset: -10% -6% -10% 42%;
+      pointer-events: none;
+      background: repeating-linear-gradient(180deg, rgba(211,234,226,.042) 0 2px, transparent 3px 19px);
+      transform: skewY(-9deg);
+      -webkit-mask-image: radial-gradient(ellipse 62% 58% at 62% 34%, #000 18%, transparent 74%);
+      mask-image: radial-gradient(ellipse 62% 58% at 62% 34%, #000 18%, transparent 74%);
+      animation: start-light 14s ease-in-out infinite alternate;
+    }
+    .start-screen::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse 120% 95% at 50% 45%, transparent 48%, rgba(0,0,0,.66) 100%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: .5;
+      mix-blend-mode: soft-light;
+    }
+    .start-card {
+      position: relative;
+      z-index: 1;
+      width: min(600px, 100%);
+      padding: 6px 0 6px clamp(22px, 3vw, 40px);
+      border-left: 1px solid rgba(197,222,214,.16);
+    }
+    .start-card > * { animation: start-in .9s cubic-bezier(.2,.7,.2,1) both; }
+    .start-kicker { display: flex; align-items: center; gap: 14px; color: #7f9f95; font: 10px/1.4 ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; letter-spacing: .34em; text-transform: uppercase; animation-delay: .1s; }
+    .start-kicker::before { content: ''; flex: none; width: 26px; height: 1px; background: var(--rust); }
+    .start-title {
+      margin: clamp(18px, 2.6vh, 28px) 0 0 -.04em;
+      color: #ece6d6;
+      font-size: clamp(64px, 8.6vw, 136px);
+      font-weight: 400;
+      line-height: 1.02;
+      letter-spacing: .16em;
+      text-shadow: 0 0 42px rgba(197,222,214,.08), 0 14px 44px rgba(0,0,0,.7);
+      animation-name: start-title-in;
+      animation-duration: 1.4s;
+      animation-delay: .2s;
+    }
+    .start-subtitle { max-width: 30em; margin: clamp(22px, 3.4vh, 34px) 0 0; padding-top: clamp(20px, 3vh, 28px); border-top: 1px solid rgba(197,222,214,.12); color: #8a9892; font-size: clamp(14px, 1.05vw, 16px); line-height: 1.95; letter-spacing: .04em; animation-delay: .5s; }
+    .start-subtitle span { display: block; }
+    .start-subtitle span + span { color: #c3c7bc; }
+    .start-action {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 28px;
+      min-width: min(288px, 100%);
+      margin-top: clamp(40px, 6.4vh, 64px);
+      padding: 17px 22px 17px 24px;
+      border: 1px solid rgba(197,222,214,.22);
+      background: linear-gradient(90deg, rgba(20,34,31,.82), rgba(12,21,19,.55));
+      color: #e5eee9;
+      cursor: pointer;
+      text-align: left;
+      transition: border-color .2s ease, background-color .2s ease, box-shadow .2s ease, transform .12s ease;
+      animation-delay: .7s;
+    }
+    .start-action::before { content: ''; position: absolute; left: -1px; top: -1px; bottom: -1px; width: 2px; background: var(--rust); transition: width .2s ease; }
+    .start-action b { font-size: 15px; font-weight: 500; letter-spacing: .24em; }
+    .start-action span { margin-left: auto; color: var(--rust); font: 16px/1 ui-monospace, monospace; transition: transform .2s ease, color .2s ease; }
+    .start-action:hover, .start-action:focus-visible { outline: none; border-color: rgba(197,222,214,.48); box-shadow: 0 10px 34px rgba(0,0,0,.42), inset 0 0 0 1px rgba(197,222,214,.04); background-color: rgba(30,50,45,.6); }
+    .start-action:focus-visible { box-shadow: 0 0 0 3px rgba(197,222,214,.14), 0 10px 34px rgba(0,0,0,.42); }
+    .start-action:hover::before, .start-action:focus-visible::before { width: 4px; }
+    .start-action:hover span, .start-action:focus-visible span { color: #d88a67; transform: translateX(5px); }
+    .start-action:active { transform: translateY(1px); }
+    .start-note { display: block; margin-top: 16px; color: #5d6b66; font-size: 12px; line-height: 1.6; letter-spacing: .06em; animation-delay: .85s; }
+
+    @keyframes start-in {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: none; }
+    }
+    @keyframes start-title-in {
+      from { opacity: 0; letter-spacing: .3em; filter: blur(3px); }
+      to { opacity: 1; letter-spacing: .16em; filter: none; }
+    }
+    @keyframes start-light {
+      from { opacity: .75; }
+      to { opacity: 1; }
+    }
+
+    @media (min-width: 1600px) {
+      .start-card { width: 720px; }
+      .start-kicker { font-size: 11px; }
+      .start-title { font-size: clamp(136px, 8.2vw, 168px); }
+      .start-subtitle { font-size: 18px; }
+      .start-action { min-width: 340px; padding: 20px 26px 20px 28px; }
+      .start-action b { font-size: 17px; }
+      .start-note { font-size: 13px; }
+    }
+
+    @media (max-width: 560px) {
+      .start-screen { align-items: center; padding: 40px 22px; }
+      .start-card { padding-left: 18px; }
+      .start-kicker { gap: 10px; font-size: 9px; letter-spacing: .24em; }
+      .start-kicker::before { width: 16px; }
+      .start-title { letter-spacing: .12em; animation-name: start-in; }
+      .start-action { width: 100%; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .start-screen::before, .start-card > * { animation: none; }
+    }
 
     @keyframes rise {
       from { opacity: 0; transform: translateY(8px); }
@@ -636,7 +735,7 @@
     <div class="start-card">
       <span class="start-kicker">YOU ARE NOT THE FISH · WEB PROTOTYPE</span>
       <h1 class="start-title" id="startTitle">子非鱼</h1>
-      <p class="start-subtitle">一场发生在医院中的回合制心理对抗游戏。先决定你带着怎样的过去醒来。</p>
+      <p class="start-subtitle"><span>一场发生在医院中的回合制心理对抗游戏。</span><span>先决定你带着怎样的过去醒来。</span></p>
       <button class="start-action" id="startGameButton" type="button"><b>开始新游戏</b><span>→</span></button>
       <small class="start-note">当前原型不读取存档；开始后进入开局人物选择。</small>
     </div>
