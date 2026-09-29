@@ -113,6 +113,9 @@ export function createOpeningClinic({ trigger = null, required = false } = {}) {
   let lastPaperColumn = null
   // 叙事流滚动时给回应块上方留的空白（owner 2026-09-27 追加裁定里写死的 24px）。
   const STORY_GAP = 24
+  // 叙事流上一次渲出来几行：多出来的那几行才算「新的一行」，淡入一次。
+  let seenTurns = 0
+  let storyShown = false
 
   const root = document.createElement('div')
   root.className = 'oc-overlay'
@@ -273,37 +276,41 @@ export function createOpeningClinic({ trigger = null, required = false } = {}) {
 
   // ── 右边：叙事面板（说话者条 · 调子条 · **一个**滚动区：叙事流 + 末尾那一块回应） ────
 
-  /** 一条叙事：医师问 / 患者答 / 落笔。都按「标签 + 正文」摊在同一个流里（叙事界面布局 §三）。 */
-  function beat(turn) {
+  /**
+   * 叙事流里的一行：`说话者 [标签] — 正文`，说话者名字与正文在同一行里连着读；
+   * 医师那几枚「必问 / 追问 / 模块」小签不抢正文，落在正文下面一行（`.oc-beat-meta`）。
+   */
+  const tagOf = (className, text) => `<span class="${className}">${escapeHtml(text)}</span>`
+  const beatLine = (speaker, tags, text) => `<p class="oc-beat-text"><b class="oc-beat-speaker">${escapeHtml(speaker)}</b>${tags}<span class="oc-beat-dash" aria-hidden="true"> — </span>${escapeHtml(text)}</p>`
+  function doctorMeta(required, followup, moduleLabel, triggerLabel) {
+    const chips = [required ? ui.required_tag : '', followup ? ui.followup_tag : '', moduleLabel ?? '']
+      .filter(Boolean).map((t) => tagOf('oc-beat-chip', t)).join('')
+    const why = followup && triggerLabel ? tagOf('oc-beat-why', triggerLabel) : ''
+    return chips || why ? `<p class="oc-beat-meta">${chips}${why}</p>` : ''
+  }
+
+  /** 一条叙事：医师问 / 患者答 / 落笔。都按「说话者 — 正文」摊在同一个流里（叙事界面布局 §三）。 */
+  function beat(turn, fresh = '') {
     if (turn.kind === 'system') {
-      return `<article class="oc-beat oc-beat-system" data-turn="system">
-        <span class="oc-beat-label">${escapeHtml(ui.content_note_label)} · ${escapeHtml(turn.label)}</span>
-        <p class="oc-beat-text">${escapeHtml(turn.text)}</p>
+      return `<article class="oc-beat oc-beat-system" data-turn="system"${fresh}>
+        ${beatLine(ui.content_note_label, tagOf('oc-beat-tag', turn.label), turn.text)}
       </article>`
     }
     if (turn.kind === 'patient') {
-      const voice = turn.voiceLabel ? `<span class="oc-beat-voice">${escapeHtml(turn.voiceLabel)}</span>` : ''
-      const refusal = turn.refuse ? `<span class="oc-beat-refuse">${escapeHtml(ui.refuse_tag)}</span>` : ''
-      return `<article class="oc-beat oc-beat-patient oc-ink-patient" data-turn="patient" data-turn-q="${escapeHtml(turn.id)}">
-        <span class="oc-beat-label">${escapeHtml(ui.patient_tag)}${voice}${refusal}</span>
-        <p class="oc-beat-text">${escapeHtml(turn.text)}</p>
+      const voice = turn.voiceLabel ? tagOf('oc-beat-voice', turn.voiceLabel) : ''
+      const refusal = turn.refuse ? tagOf('oc-beat-refuse', ui.refuse_tag) : ''
+      return `<article class="oc-beat oc-beat-patient" data-turn="patient" data-turn-q="${escapeHtml(turn.id)}"${fresh}>
+        ${beatLine(ui.patient_tag, `${voice}${refusal}`, turn.text)}
       </article>`
     }
     if (turn.kind === 'note') {
-      return `<article class="oc-beat oc-beat-note" data-turn="note" data-turn-q="${escapeHtml(turn.id)}">
-        <span class="oc-beat-label">${escapeHtml(ui.note_tag)}</span>
-        <p class="oc-beat-text">${escapeHtml(turn.text)}</p>
+      return `<article class="oc-beat oc-beat-note" data-turn="note" data-turn-q="${escapeHtml(turn.id)}"${fresh}>
+        ${beatLine(ui.note_tag, '', turn.text)}
       </article>`
     }
-    const chips = [
-      turn.required ? ui.required_tag : '',
-      turn.followup ? ui.followup_tag : '',
-      turn.moduleLabel ?? '',
-    ].filter(Boolean).map((t) => `<span class="oc-beat-chip">${escapeHtml(t)}</span>`).join('')
-    const why = turn.followup && turn.triggerLabel ? `<span class="oc-beat-why">${escapeHtml(turn.triggerLabel)}</span>` : ''
-    return `<article class="oc-beat oc-beat-doctor" data-turn="doctor" data-turn-q="${escapeHtml(turn.id)}">
-      <span class="oc-beat-label">${escapeHtml(ui.doctor_tag)}${chips}${why}</span>
-      <p class="oc-beat-text">${escapeHtml(turn.text)}</p>
+    return `<article class="oc-beat oc-beat-doctor" data-turn="doctor" data-turn-q="${escapeHtml(turn.id)}"${fresh}>
+      ${beatLine(ui.doctor_tag, '', turn.text)}
+      ${doctorMeta(turn.required, turn.followup, turn.moduleLabel, turn.triggerLabel)}
     </article>`
   }
 
@@ -338,11 +345,19 @@ export function createOpeningClinic({ trigger = null, required = false } = {}) {
    */
   function story() {
     const turns = [...dialogueTurns(clinic, state), ...eventTurns()]
-    return `<div class="oc-story" data-log="1">${turns.map(beat).join('')}${now()}</div>`
+    // 只有这一次新追加的那几行才淡入（`data-fresh` + 先后次序）；同一局里重渲（多选勾一下、
+    // 点人物名字、改一改退回去）不重放动画，老的那几行原地不动。
+    const firstNew = turns.length > seenTurns ? seenTurns : turns.length
+    const grew = turns.length > seenTurns || !storyShown
+    seenTurns = turns.length
+    storyShown = true
+    const freshAt = (order) => ` data-fresh="1" style="--beat-order: ${order}"`
+    const lines = turns.map((turn, index) => beat(turn, index >= firstNew ? freshAt(index - firstNew) : '')).join('')
+    return `<div class="oc-story" data-log="1">${lines}${now(grew ? freshAt(turns.length - firstNew) : '')}</div>`
   }
 
   /** 叙事流末尾那一块：当前那一问 + 玩家挑的那一句（点或按数字键）。 */
-  function now() {
+  function now(fresh = '') {
     const question = current()
     if (question) {
       const multi = isMulti(clinic, question)
@@ -350,17 +365,12 @@ export function createOpeningClinic({ trigger = null, required = false } = {}) {
       const chosen = state.answers[question.id]
       const level = question.sensitive ? clinic.sensitivity_levels[question.sensitive] : null
       const probes = probesOf(clinic, question)
-      const chips = [
-        question.required ? ui.required_tag : '',
-        question.followup ? ui.followup_tag : '',
-        question.module ? (clinic.module_labels?.[question.module] ?? '') : '',
-      ].filter(Boolean).map((t) => `<span class="oc-beat-chip">${escapeHtml(t)}</span>`).join('')
-      const why = question.followup && question.trigger?.label ? `<span class="oc-beat-why">${escapeHtml(question.trigger.label)}</span>` : ''
-      return `<section class="oc-now" data-now="1" data-responses="1">
+      const moduleLabel = question.module ? (clinic.module_labels?.[question.module] ?? '') : ''
+      return `<section class="oc-now" data-now="1" data-responses="1"${fresh}>
         ${level ? `<p class="oc-content-note"><b>${escapeHtml(ui.content_note_label)} · ${escapeHtml(level.label)}</b>${escapeHtml(level.content_note)}</p>` : ''}
         <article class="oc-beat oc-beat-doctor oc-beat-current" data-turn="doctor" data-turn-q="${escapeHtml(question.id)}">
-          <span class="oc-beat-label">${escapeHtml(ui.doctor_tag)}${chips}${why}</span>
-          <p class="oc-beat-text">${escapeHtml(question.ask)}</p>
+          ${beatLine(ui.doctor_tag, '', question.ask)}
+          ${doctorMeta(question.required, question.followup, moduleLabel, question.trigger?.label)}
         </article>
         ${probes.length ? `<p class="oc-probes"><span class="oc-probes-label">${escapeHtml(ui.probes_label)}</span>${probes.map((p) => `<span class="oc-probe">${escapeHtml(p.ask)}</span>`).join('')}</p>` : ''}
         <p class="oc-responses-label">${escapeHtml(ui.responses_label)}<span>${escapeHtml(ui.response_hint)}</span></p>
@@ -368,15 +378,15 @@ export function createOpeningClinic({ trigger = null, required = false } = {}) {
       </section>`
     }
     if (!state.signed) {
-      return `<section class="oc-now" data-now="1" data-responses="1">
-        <article class="oc-beat oc-beat-doctor oc-beat-current"><span class="oc-beat-label">${escapeHtml(ui.doctor_tag)}</span><p class="oc-beat-text">${escapeHtml(ui.no_more)}</p></article>
+      return `<section class="oc-now" data-now="1" data-responses="1"${fresh}>
+        <article class="oc-beat oc-beat-doctor oc-beat-current">${beatLine(ui.doctor_tag, '', ui.no_more)}</article>
         ${diagnosis()}
         <p class="oc-content-note">${escapeHtml(ui.sign_note)}</p>
         <div class="oc-choices"><button class="oc-choice oc-choice-primary" data-sign="1"${canSign(clinic, state) ? '' : ' disabled'}>${escapeHtml(ui.sign_action)}</button></div>
       </section>`
     }
-    return `<section class="oc-now" data-now="1" data-responses="1">
-      <article class="oc-beat oc-beat-doctor oc-beat-current"><span class="oc-beat-label">${escapeHtml(ui.doctor_tag)}</span><p class="oc-beat-text">${escapeHtml(ui.signed_note)}</p></article>
+    return `<section class="oc-now" data-now="1" data-responses="1"${fresh}>
+      <article class="oc-beat oc-beat-doctor oc-beat-current">${beatLine(ui.doctor_tag, '', ui.signed_note)}</article>
       <div class="oc-choices"><button class="oc-choice oc-choice-primary" data-confirm="1">${escapeHtml(ui.launch)}</button></div>
     </section>`
   }
@@ -392,7 +402,7 @@ export function createOpeningClinic({ trigger = null, required = false } = {}) {
       const voiceTone = profile ? ` oc-voice-${profile.id}` : ''
       return `<button class="oc-choice${on ? ' on' : ''}${isRefuse(clinic, option.id) ? ' oc-choice-refuse' : ''}${voiceTone}"
         data-answer-value="${escapeHtml(option.id)}" data-choice-index="${index + 1}">
-        <b class="oc-choice-no">${index + 1}</b>${voice}<span class="oc-choice-text">${escapeHtml(option.label)}</span>
+        <b class="oc-choice-no">${index + 1}.</b><span class="oc-choice-body"><span class="oc-choice-dash" aria-hidden="true">— </span>${voice}<span class="oc-choice-text">${escapeHtml(option.label)}</span></span>
       </button>`
     }).join('')
     return `<div class="oc-choices">${buttons}</div>
@@ -419,8 +429,7 @@ export function createOpeningClinic({ trigger = null, required = false } = {}) {
     if (!candidates.length) return ''
     const only = narrowed.length === 1 ? candidates[0] : null
     const head = `<article class="oc-beat oc-beat-doctor" data-turn="doctor" data-turn-q="candidate">
-      <span class="oc-beat-label">${escapeHtml(ui.doctor_tag)}</span>
-      <p class="oc-beat-text">${escapeHtml(only ? copy(wiring.candidate_narrowed, { label: only.label }) : copy(wiring.candidate_prompt))}</p>
+      ${beatLine(ui.doctor_tag, '', only ? copy(wiring.candidate_narrowed, { label: only.label }) : copy(wiring.candidate_prompt))}
     </article>`
     const rows = candidates.map((candidate, index) => {
       const on = confirmedId() === candidate.id
@@ -719,6 +728,9 @@ export function createOpeningClinic({ trigger = null, required = false } = {}) {
   /** 数字键 = 挑选那一句（叙事界面布局 §四 第 2 条：当前选项支持数字键选择）。 */
   function onKeydown(event) {
     if (!state.open || event.metaKey || event.ctrlKey || event.altKey) return
+    // 这一屏开着时快捷输入归它：`open()` 一 notify，开局探索浮层就在底下打开了，
+    // 它的捕获阶段监听会吞掉所有按键——所以这里也挂在捕获阶段、且先注册，先拿到键再截住。
+    event.stopImmediatePropagation?.()
     if (event.key === 'Backspace') { event.preventDefault(); return onBack() }
     if (!/^[1-9]$/.test(event.key)) return
     const button = shell.querySelector ? shell.querySelector(`[data-choice-index="${event.key}"]`) : null
@@ -730,7 +742,7 @@ export function createOpeningClinic({ trigger = null, required = false } = {}) {
   }
 
   root.addEventListener('click', onClick)
-  document.addEventListener('keydown', onKeydown)
+  document.addEventListener('keydown', onKeydown, true)
 
   function open() {
     state.open = true

@@ -2,7 +2,7 @@
    来源：design/presentation/叙事界面布局.md §二（左侧世界承担空间与可交互物 · 右侧叙事流：
    说话者 / 客观描述 / 玩家回应）与 design/presentation/开局门诊问诊.md §十一。
 
-   两种底：世界与右栏沿用三维场景与叙事面板的夜色基调（--paper #111614 / --ink #e8e2d2）；
+   两种底：世界沿用三维场景的夜色基调（--paper #111614 / --ink #e8e2d2），右栏再暗一档（#0d0f0e，见「右边」那一节）；
    桌面上那张病历纸是**正白纸 + 深墨字**（正文 #241f19 在 #fffdf7 上 ≈ 16:1；
    患者笔迹 #0e5a55 ≈ 7.9:1；院方笔迹 #8a3a1c ≈ 7.6:1；空白态 #6b6353 ≈ 5.8:1）。正文一律 ≥ 4.5:1。
 
@@ -252,49 +252,74 @@
 .oc-world-foot .oc-status { color: var(--quiet, #69716d); font: 11px/1.6 ui-monospace, monospace; }
 
 /* ── 右边：叙事面板 ─────────────────────────────────────────────────────── */
+/* 读法借调查型 CRPG 的对话栏（叙事界面布局 §一：借阅读节奏，不借素材与字体）：
+   一根高而暗的竖栏压在世界右侧；流里每一行是「说话者 — 正文」，说话者名字粗体、字距拉开、
+   各自一种**身份色**（谁在说话，不是他此刻的情绪）；正文统一一种暖白衬线字。
+   老的那几行退暗一档，新追加的那几行依次淡入；回应是编号列表「1. — …」。
+   身份色在夜底（#0d0f0e）上的对比度：医师 8.0:1 · 患者 11.8:1 · 落笔 8.8:1 · 说在前面 8.2:1；
+   正文 #e4dccb 14.1:1、次一档 #b9b09f 9.0:1、小签 #878e89 5.7:1；老行退暗（×.72）后最暗的一种仍 ≥ 4.6:1。 */
 .oc-panel {
+  --log-bg: #0d0f0e;
+  --log-ink: #e4dccb;
+  --log-ink-soft: #b9b09f;
+  --log-quiet: #878e89;
+  --log-rule: rgba(228, 220, 203, .09);
+  --speaker-doctor: #d99a6c;
+  --speaker-patient: #a9d3c9;
+  --speaker-note: #bcae93;
+  --speaker-system: #a3aba6;
+  position: relative;
   display: grid;
-  /* 三行：说话者条 · 调子条 · **唯一的滚动区**（叙事流 + 末尾的回应，裁定 ②）。
-     以前是四行——第四行那个「钉在底部的回应区」已经并进第三行里了。 */
+  /* 三行：说话者条 · 调子条 · **唯一的滚动区**（叙事流 + 末尾的回应，裁定 ②）。 */
   grid-template-rows: auto auto minmax(0, 1fr);
   min-width: 0;
   min-height: 0;
   overflow: hidden;
-  border-left: 1px solid var(--line, rgba(226, 237, 224, .13));
+  border-left: 1px solid rgba(0, 0, 0, .7);
   background:
-    linear-gradient(90deg, rgba(255, 255, 255, .018), transparent 24%),
-    var(--paper, #111614);
-  box-shadow: -24px 0 60px rgba(0, 0, 0, .28);
+    linear-gradient(90deg, rgba(0, 0, 0, .55), transparent 18%),
+    radial-gradient(ellipse at 70% 0%, rgba(228, 220, 203, .045), transparent 60%),
+    var(--log-bg);
+  box-shadow: -30px 0 70px rgba(0, 0, 0, .55);
+  color: var(--log-ink);
 }
+/* 纸面似的细颗粒：与世界那一侧同一张噪点，只是更淡 */
+.oc-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: .09;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+}
+.oc-panel > * { position: relative; z-index: 1; }
 
 .oc-panel-header {
   display: flex;
   align-items: stretch;
-  min-height: 68px;
-  border-bottom: 1px solid var(--line, rgba(226, 237, 224, .13));
+  min-height: 60px;
+  border-bottom: 1px solid var(--log-rule);
 }
 .oc-speaker-mark {
   display: grid;
   place-items: center;
-  width: 70px;
-  border-right: 1px solid var(--line, rgba(226, 237, 224, .13));
-  color: var(--moon, #c5ded6);
-  font: 28px/1 Georgia, serif;
-  background:
-    radial-gradient(circle, rgba(169, 211, 199, .11), transparent 64%),
-    repeating-linear-gradient(135deg, transparent 0 6px, rgba(255, 255, 255, .014) 7px);
+  width: 60px;
+  border-right: 1px solid var(--log-rule);
+  color: var(--speaker-doctor);
+  font: 24px/1 "Noto Serif SC", "Songti SC", Georgia, serif;
 }
-.oc-speaker-heading { flex: 1; min-width: 0; padding: 10px 14px 9px; }
-.oc-speaker-heading h1 { margin: 3px 0 2px; color: var(--ink, #e8e2d2); font-size: 16px; font-weight: 500; }
-.oc-speaker-heading p { margin: 0; color: var(--quiet, #69716d); font-size: 11px; }
+.oc-speaker-heading { flex: 1; min-width: 0; padding: 10px 16px 9px; }
+.oc-speaker-heading h1 { margin: 2px 0 2px; color: var(--speaker-doctor); font-size: 15px; font-weight: 700; letter-spacing: .18em; }
+.oc-speaker-heading p { margin: 0; color: var(--log-quiet); font-size: 11px; }
 .oc-eyebrow { color: var(--muted, #9da49f) !important; letter-spacing: .14em; }
 .oc-tab {
   display: grid;
   place-items: center;
-  min-width: 46px;
-  padding: 0 12px;
-  border-left: 1px solid var(--line, rgba(226, 237, 224, .13));
-  color: var(--ink, #e8e2d2);
+  min-width: 42px;
+  padding: 0 10px;
+  border-left: 1px solid var(--log-rule);
+  color: var(--log-ink-soft);
   font-size: 12px;
   letter-spacing: .25em;
   writing-mode: vertical-rl;
@@ -307,15 +332,14 @@
   align-items: baseline;
   gap: 6px 10px;
   margin: 0;
-  padding: 7px 14px;
-  border-bottom: 1px solid var(--line, rgba(226, 237, 224, .13));
-  background: rgba(255, 255, 255, .012);
+  padding: 7px 16px;
+  border-bottom: 1px solid var(--log-rule);
   font: 11px/1.6 ui-monospace, monospace;
 }
-.oc-voice-line b { color: var(--moon, #c5ded6); font-weight: 500; letter-spacing: .08em; }
-.oc-voice-counts { display: flex; flex-wrap: wrap; gap: 4px 8px; margin-left: auto; color: var(--quiet, #69716d); }
+.oc-voice-line b { color: var(--log-ink-soft); font-weight: 500; letter-spacing: .08em; }
+.oc-voice-counts { display: flex; flex-wrap: wrap; gap: 4px 8px; margin-left: auto; color: var(--log-quiet); }
 .oc-voice-counts i { font-style: normal; }
-.oc-voice-counts i.on { color: var(--rust, #ba6c4b); }
+.oc-voice-counts i.on { color: var(--log-ink); text-decoration: underline; text-underline-offset: 3px; }
 
 /* 叙事流：新内容追加到底部，旧内容留着可以回读。
    ⚠️ `position: relative` 是给滚动算的：`.oc-now` 的 `offsetTop` 只有以这张流为参照，
@@ -326,55 +350,71 @@
   min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 16px 16px 20px;
+  padding: 28px clamp(20px, 2.4vw, 36px) 32px;
   scroll-behavior: smooth;
-  scrollbar-color: rgba(197, 222, 214, .22) transparent;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(228, 220, 203, .2) transparent;
 }
+.oc-story::-webkit-scrollbar { width: 8px; }
+.oc-story::-webkit-scrollbar-track { background: transparent; }
+.oc-story::-webkit-scrollbar-thumb { border: 2px solid transparent; border-radius: 4px; background: rgba(228, 220, 203, .2) padding-box; }
+.oc-story::-webkit-scrollbar-thumb:hover { background-color: rgba(228, 220, 203, .34); }
 
-.oc-beat { margin: 0 0 15px; }
-.oc-beat-label {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: 4px;
-  color: var(--muted, #9da49f);
-  font: 11px/1.5 ui-monospace, monospace;
-  letter-spacing: .12em;
+/* 一行 = 「说话者 [标签] — 正文」 */
+.oc-beat { max-width: 36em; margin: 0 0 18px; transition: opacity .3s ease; }
+.oc-beat-text { margin: 0; color: var(--log-ink); font-size: 15.5px; line-height: 1.9; }
+.oc-beat-speaker {
+  color: var(--speaker, var(--log-ink));
+  font-weight: 700;
+  font-variant: small-caps;
+  letter-spacing: .16em;
+  text-transform: uppercase;
 }
-.oc-beat-text { margin: 0; color: var(--ink, #e8e2d2); font-size: 14px; line-height: 1.85; }
-.oc-beat-chip {
-  padding: 0 6px;
-  border: 1px solid var(--line, rgba(226, 237, 224, .13));
-  color: var(--quiet, #69716d);
-  font-size: 10px;
-  letter-spacing: .1em;
-}
-.oc-beat-why { color: var(--rust, #ba6c4b); letter-spacing: 0; }
+.oc-beat-dash { color: var(--log-ink-soft); }
+.oc-beat-doctor { --speaker: var(--speaker-doctor); }
+.oc-beat-patient { --speaker: var(--speaker-patient); }
+.oc-beat-note { --speaker: var(--speaker-note); }
+.oc-beat-system { --speaker: var(--speaker-system); }
+.oc-beat-note .oc-beat-text { color: var(--log-ink-soft); }
+.oc-beat-system .oc-beat-text { color: var(--log-ink-soft); font-size: 13.5px; line-height: 1.8; }
 
-/* 患者说的那一句：纸的另一种墨色 + 左边一条线；带语言指纹的还挂一枚调子标签 */
-.oc-beat-patient { padding-left: 11px; border-left: 2px solid rgba(14, 90, 85, .85); }
-.oc-beat-patient .oc-beat-text { color: #dfeee9; font-size: 15px; }
-.oc-beat-patient .oc-beat-label { color: #7fb3aa; }
+/* 说话者名字后面的方括号小签：调子 · 未答 · 敏感级别——**不上色**（调子色只画在选项上，裁定 ③） */
 .oc-beat-voice,
-.oc-beat-refuse {
-  padding: 0 7px;
-  border: 1px solid currentColor;
-  font-size: 10px;
-  letter-spacing: .08em;
+.oc-beat-refuse,
+.oc-beat-tag {
+  margin-left: .45em;
+  color: var(--speaker-system);
+  font-size: 12px;
+  letter-spacing: .06em;
 }
-.oc-beat-voice { color: var(--rust, #ba6c4b); }
-.oc-beat-refuse { color: var(--quiet, #69716d); }
+.oc-beat-voice::before,
+.oc-beat-refuse::before,
+.oc-beat-tag::before { content: "["; }
+.oc-beat-voice::after,
+.oc-beat-refuse::after,
+.oc-beat-tag::after { content: "]"; }
 
-/* 医师落笔那一句：写在纸上的字，比对话低半格 */
-.oc-beat-note { padding-left: 11px; border-left: 2px dashed rgba(226, 237, 224, .16); }
-.oc-beat-note .oc-beat-text { color: #9fc0b6; font-size: 13px; line-height: 1.75; }
-.oc-beat-note .oc-beat-label { color: #5f7a72; }
+/* 医师那几枚小签落在正文下面一行，比正文低两档 */
+.oc-beat-meta { display: flex; flex-wrap: wrap; gap: 4px 10px; margin: 2px 0 0; }
+.oc-beat-chip,
+.oc-beat-why { color: var(--log-quiet); font: 11px/1.6 ui-monospace, monospace; letter-spacing: .08em; }
+.oc-beat-why { font-style: italic; }
 
-/* 敏感问题前摆一句「说在前面」 */
-.oc-beat-system { padding: 8px 10px; border: 1px solid rgba(186, 108, 75, .35); background: rgba(186, 108, 75, .07); }
-.oc-beat-system .oc-beat-label { color: var(--rust, #ba6c4b); }
-.oc-beat-system .oc-beat-text { color: #d8c3b7; font-size: 12.5px; line-height: 1.7; }
+/* 老的那几行退暗一档；最近一轮（末尾三行 + 回应块）保持全亮 */
+.oc-story > .oc-beat { opacity: .72; }
+.oc-story > .oc-beat:nth-last-child(-n+4) { opacity: 1; }
+.oc-story > .oc-beat:hover { opacity: 1; }
+
+/* 新追加的那几行：依次淡入、往上浮一点（像一句一句打出来）。
+   节奏：每行错开 .14s、最多错开 6 行，免得一次追加很多行时最后那一块等太久。 */
+@keyframes oc-line-in {
+  from { opacity: 0; transform: translateY(6px); }
+}
+.oc-beat[data-fresh],
+.oc-now[data-fresh] {
+  animation: oc-line-in .42s ease-out both;
+  animation-delay: calc(min(var(--beat-order, 0), 6) * .14s);
+}
 
 /* ── 叙事流末尾那一块：现在该你说了 ─────────────────────────────────────────
    裁定 ②：它不再是「钉在底部的第二个滚动区」，而是**叙事流里的最后一块**——和医师 / 患者 /
@@ -382,58 +422,77 @@
    所以这一块**不许有 `overflow` / `max-height`**（`--check` 会钉这条）。 */
 .oc-now {
   display: grid;
-  gap: 9px;
-  margin-top: 4px;
-  padding-top: 13px;
-  border-top: 1px solid var(--line, rgba(226, 237, 224, .13));
+  gap: 10px;
+  margin-top: 6px;
+  padding-top: 18px;
+  border-top: 1px solid var(--log-rule);
 }
-.oc-beat-current .oc-beat-text { font-size: 15px; }
+.oc-story > .oc-now:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+.oc-now .oc-beat { margin-bottom: 4px; }
 .oc-responses-label {
   display: flex;
   align-items: baseline;
   gap: 8px;
-  margin: 2px 0 0;
-  color: var(--moon, #c5ded6);
+  margin: 4px 0 0;
+  color: var(--log-quiet);
   font: 11px/1.5 ui-monospace, monospace;
   letter-spacing: .14em;
 }
-.oc-responses-label span { color: var(--quiet, #69716d); letter-spacing: 0; }
+.oc-responses-label span { letter-spacing: 0; }
 
-.oc-choices { display: grid; gap: 7px; }
+/* 回应：编号列表「1. — …」。悬停 / 键盘焦点：正文提亮 + 往右挪一格 + 左边出一道竖线
+   （叙事界面布局 §四 第 2 条：焦点不能只靠颜色）。 */
+.oc-choices { display: grid; gap: 2px; }
 .oc-choice {
   display: grid;
-  grid-template-columns: 18px auto minmax(0, 1fr);
+  grid-template-columns: 1.8em minmax(0, 1fr);
   align-items: baseline;
-  gap: 8px;
-  padding: 9px 12px;
-  border: 1px solid rgba(226, 237, 224, .16);
-  border-radius: 2px;
-  background: rgba(255, 255, 255, .022);
-  color: var(--ink, #e8e2d2);
+  max-width: 36em;
+  padding: 6px 10px 6px 8px;
+  border: 0;
+  border-left: 3px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  color: #d8c6a4;
   cursor: pointer;
   text-align: left;
-  font: 14px/1.6 inherit;
+  font: inherit;
+  font-size: 15.5px;
+  line-height: 1.75;
+  transition: color .15s ease, transform .15s ease, border-color .15s ease, background .15s ease;
 }
-.oc-choice:hover { border-color: var(--rust, #ba6c4b); background: rgba(186, 108, 75, .1); }
-.oc-choice.on { border-color: var(--moon, #c5ded6); background: rgba(197, 222, 214, .1); }
-.oc-choice-no { color: var(--quiet, #69716d); font: 11px/1.6 ui-monospace, monospace; }
+.oc-choice-no { color: var(--log-ink-soft); font-weight: 700; font-variant-numeric: tabular-nums; }
+.oc-choice-body { min-width: 0; }
+.oc-choice-dash { color: var(--log-ink-soft); }
+.oc-choice-text { color: inherit; }
+.oc-choice:hover,
+.oc-choice:focus-visible {
+  outline: none;
+  border-left-color: var(--log-ink);
+  background: rgba(228, 220, 203, .05);
+  color: #fff8e8;
+  transform: translateX(4px);
+}
+.oc-choice:focus-visible { box-shadow: inset 0 0 0 1px rgba(228, 220, 203, .35); }
+/* 多选里已经勾上的那几档：左边实线 + 正文加粗 */
+.oc-choice.on { border-left-color: var(--log-ink-soft); color: var(--log-ink); font-weight: 700; }
 .oc-choice-voice {
-  padding: 0 6px;
-  border: 1px solid var(--rust, #ba6c4b);
+  margin-right: .5em;
+  padding: 0 5px;
+  border: 1px solid var(--log-ink-soft);
   border-radius: 2px;
-  color: var(--rust, #ba6c4b);
-  font: 10px/1.7 ui-monospace, monospace;
+  color: var(--log-ink-soft);
+  font: 11px/1.6 ui-monospace, monospace;
   letter-spacing: .08em;
   white-space: nowrap;
 }
-.oc-choice-text { color: inherit; }
 
 /* 四套言语指纹的分组色——**只画在选项上**（左边一条细边 + 调子名那一小块），不铺整块底色。
    ⚠️ 这是**言语指纹的分组色**，不是被否决的「颜色表示情绪 / 态度」那套体系：
    `design/conventions/README.md` §二 第 46 行禁的是后者（颜色系统已废弃、情绪用 PAD 向量）。
    颜色是**冗余**信息——调子名一直写在 `.oc-choice-voice` 里；四色之间**明度差 ≥ 0.11**
    （相对亮度 0.266 / 0.381 / 0.524 / 0.635），不只靠色相分辨，色盲也分得开。
-   在选项底（#171c1a）上的对比度：沉下去 7.08:1 · 往上冲 9.44:1 · 有人在盯 5.19:1 · 要数清楚 11.25:1。
+   在夜底（#0d0f0e）上的对比度：沉下去 7.9:1 · 往上冲 10.5:1 · 有人在盯 5.8:1 · 要数清楚 12.5:1。
    变量与夜色 / 浅底那一批同一个 `:root`（design/presentation/叙事界面原型.html）。 */
 .oc-voice-depressive { --voice-tone: var(--voice-depressive, #86abc2); }
 .oc-voice-manic { --voice-tone: var(--voice-manic, #e6b877); }
@@ -447,65 +506,86 @@
 .oc-voice-manic .oc-choice-voice,
 .oc-voice-paranoid .oc-choice-voice,
 .oc-voice-compulsive .oc-choice-voice { border-color: var(--voice-tone); color: var(--voice-tone); }
-.oc-choice-refuse { border-style: dashed; color: var(--muted, #9da49f); }
-.oc-choice-refuse:hover { border-style: solid; }
+/* 「不愿说」是一档照常可选的回应：同一种排法，只是正文淡一档 */
+.oc-choice-refuse { color: var(--log-ink-soft); }
+
+/* 落款 / 继续 / 认下这类「动作」仍然是按钮的样子，和编号回应分得开 */
 .oc-choice-primary {
   grid-template-columns: minmax(0, 1fr);
   justify-self: end;
   min-width: 132px;
-  border-color: var(--moon, #c5ded6);
-  background: rgba(197, 222, 214, .14);
-  color: var(--moon-strong, #e3fff5);
+  padding: 7px 16px;
+  border: 1px solid rgba(228, 220, 203, .45);
+  background: rgba(228, 220, 203, .06);
+  color: var(--log-ink);
   text-align: center;
+  font-size: 14px;
+  letter-spacing: .12em;
 }
-.oc-choice-primary:disabled { opacity: .4; cursor: not-allowed; }
-.oc-choices-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 8px; }
+.oc-choice-primary:hover,
+.oc-choice-primary:focus-visible { border-color: var(--log-ink); border-left-color: var(--log-ink); transform: translateY(-1px); }
+.oc-choice-primary:disabled { opacity: .4; cursor: not-allowed; transform: none; }
+.oc-choices-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 8px; margin-top: 6px; }
 .oc-choice-back {
   margin-right: auto;
-  padding: 4px 11px;
-  border: 1px solid rgba(226, 237, 224, .16);
+  padding: 3px 10px;
+  border: 1px solid var(--log-rule);
   border-radius: 2px;
   background: transparent;
-  color: var(--muted, #9da49f);
+  color: var(--log-quiet);
   cursor: pointer;
   font: 11px/1.5 ui-monospace, monospace;
 }
-.oc-choice-back:hover { border-color: var(--rust, #ba6c4b); color: var(--rust, #ba6c4b); }
+.oc-choice-back:hover,
+.oc-choice-back:focus-visible { outline: none; border-color: var(--log-ink-soft); color: var(--log-ink); }
 
 /* ── 认下诊断（阶段 7）：候选 ≤4 摆在叙事流末尾，认下即由医师落笔 ─────────────
    它跟「答」用同一套按钮与同一套数字键（`data-choice-index`），只是这一拍玩家出的是
    「认」那支笔：纸上的诊断栏由医师写，玩家只从这几张里认一张。 */
 .oc-candidates { display: grid; gap: 8px; }
-.oc-candidate-list { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.oc-candidate-list { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; counter-reset: oc-candidate; }
 .oc-candidate {
   display: grid;
   gap: 3px;
-  padding: 9px 11px;
-  border: 1px solid rgba(226, 237, 224, .16);
-  border-left: 3px solid rgba(197, 222, 214, .3);
-  background: rgba(226, 237, 224, .03);
+  max-width: 36em;
+  padding: 8px 10px 10px 12px;
+  border-left: 3px solid var(--log-rule);
+  counter-increment: oc-candidate;
 }
-/* 已经认下的那一张：左边一条实线 + 按钮变成「已认下」的样子 */
-.oc-candidate.on { border-left-color: var(--moon, #c5ded6); background: rgba(197, 222, 214, .08); }
-.oc-candidate-label { color: var(--moon-strong, #e3fff5); font-size: 14px; letter-spacing: .04em; }
-.oc-candidate-plain { color: #9fc0b6; font-size: 12.5px; line-height: 1.65; }
-.oc-candidate-basis { color: var(--quiet, #69716d); font: 11px/1.6 ui-monospace, monospace; }
-.oc-candidate .oc-choice { justify-self: stretch; min-width: 0; }
+.oc-candidate.on { border-left-color: var(--log-ink); background: rgba(228, 220, 203, .05); }
+.oc-candidate-label { color: var(--log-ink); font-size: 15.5px; font-weight: 700; letter-spacing: .06em; }
+.oc-candidate-label::before { content: counter(oc-candidate) ". — "; color: var(--log-ink-soft); font-weight: 700; }
+.oc-candidate-plain { color: var(--log-ink-soft); font-size: 13.5px; line-height: 1.75; }
+.oc-candidate-basis { color: var(--log-quiet); font: 11px/1.6 ui-monospace, monospace; }
+.oc-candidate .oc-choice { justify-self: start; min-width: 0; margin-top: 4px; }
 
 .oc-content-note {
+  max-width: 36em;
   margin: 0;
-  padding: 8px 10px;
-  border: 1px solid rgba(186, 108, 75, .38);
-  border-left: 3px solid var(--rust, #ba6c4b);
-  background: rgba(186, 108, 75, .09);
-  color: #e0cdc2;
-  font: 12px/1.7 inherit;
+  padding: 2px 0 2px 12px;
+  border-left: 2px solid var(--speaker-system);
+  color: var(--log-ink-soft);
+  font-size: 13px;
+  line-height: 1.75;
 }
-.oc-content-note b { display: block; margin-bottom: 2px; color: var(--rust, #ba6c4b); font: 700 10px/1.6 ui-monospace, monospace; letter-spacing: .12em; }
+.oc-content-note b { display: block; margin-bottom: 2px; color: var(--speaker-system); font-size: 11px; font-weight: 700; line-height: 1.6; letter-spacing: .16em; }
 .oc-probes { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; margin: 0; }
-.oc-probes-label { color: var(--quiet, #69716d); font: 10px/1.5 ui-monospace, monospace; letter-spacing: .1em; }
-.oc-probe { padding: 2px 8px; border: 1px dashed rgba(226, 237, 224, .2); border-radius: 10px; color: var(--muted, #9da49f); font: 11px/1.5 ui-monospace, monospace; }
-.oc-status { margin: 0; color: var(--quiet, #69716d); font: 11px/1.45 ui-monospace, monospace; }
+.oc-probes-label { color: var(--log-quiet); font: 10px/1.5 ui-monospace, monospace; letter-spacing: .1em; }
+.oc-probe { color: var(--log-quiet); font-size: 12px; font-style: italic; line-height: 1.5; }
+.oc-probe::before { content: "· "; }
+.oc-status { margin: 0; color: var(--log-quiet); font: 11px/1.45 ui-monospace, monospace; }
+
+@media (prefers-reduced-motion: reduce) {
+  .oc-story { scroll-behavior: auto; }
+  .oc-beat[data-fresh],
+  .oc-now[data-fresh] { animation: none; }
+  .oc-beat,
+  .oc-choice { transition: none; }
+  .oc-choice:hover,
+  .oc-choice:focus-visible,
+  .oc-choice-primary:hover,
+  .oc-choice-primary:focus-visible { transform: none; }
+}
 
 /* ── 窄屏：改成上下布局（世界在上 · 叙事在下），选项仍然可达 ─────────────── */
 @media (max-width: 980px) {
@@ -515,10 +595,11 @@
   .oc-paper { width: 100%; transform: none; }
   .oc-paper-title h2 { font-size: 16px; }
   .oc-write-prose .oc-write-text { font-size: 14px; }
-  .oc-panel { border-left: 0; border-top: 1px solid var(--line, rgba(226, 237, 224, .13)); }
-  .oc-panel-header { min-height: 58px; }
-  .oc-speaker-mark { width: 58px; font-size: 24px; }
-  .oc-story { padding: 12px 12px 16px; }
-  .oc-now { padding-top: 10px; }
-  .oc-choice { font-size: 13px; }
+  .oc-panel { border-left: 0; border-top: 1px solid rgba(0, 0, 0, .7); }
+  .oc-panel-header { min-height: 52px; }
+  .oc-speaker-mark { width: 52px; font-size: 20px; }
+  .oc-story { padding: 16px 16px 20px; }
+  .oc-now { padding-top: 12px; }
+  .oc-beat-text,
+  .oc-choice { font-size: 14.5px; }
 }
